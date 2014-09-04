@@ -1,0 +1,5 @@
+<filter name="circles">
+    <description>porthole</description>
+    <fragment>Porthole.glsl</fragment>
+    <textures input="1" output="1"></textures>
+</filter>

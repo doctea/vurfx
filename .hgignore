@@ -1,0 +1,44 @@
+# Created by http://www.gitignore.io
+
+#!! ERROR: proces is undefined. Use list command to see defined gitignore types !!#
+
+bin/$
+src/data/image-sources$
+bin/data/image-sources$
+
+### Processing ###
+.DS_Store
+applet
+application.linux32
+application.linux64
+application.windows32
+application.windows64
+application.macosx
+
+
+### Eclipse ###
+.metadata
+.gradle
+bin/
+tmp/
+local.properties
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+
+# CDT-specific
+.cproject
+
+# PDT-specific
+.buildpath
+
+# sbteclipse plugin 
+.target
+
+# TeXlipse plugin
+.texlipse
+

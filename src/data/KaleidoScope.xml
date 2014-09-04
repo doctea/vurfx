@@ -1,0 +1,7 @@
+<filter name="kaleidoscope">
+    <description>kaleidoscope</description>
+    <fragment>KaleidoScope.glsl</fragment>
+    <textures input="1" output="1"></textures>
+    <parameter type="int" name="mirror_x" label="Mirror X">1</parameter>
+    <parameter type="int" name="mirror_y" label="Mirror Y">1</parameter>
+</filter>

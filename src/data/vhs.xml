@@ -1,0 +1,10 @@
+﻿<filter name="VHS Damage">
+    <description>vhs damage</description>
+    <fragment>vhs.glsl</fragment>
+    <textures input="1" output="1"></textures>
+    <parameter type="float" name="Power" label="Power">0.7</parameter>
+    <parameter type="float" name="Amount" label="Amount">0.3</parameter>
+    <parameter type="float" name="Seed" label="Seed">0</parameter>
+    <parameter type="float" name="Lines" label="Lines">0</parameter>
+    <parameter type="float" name="Intensity" label="Intensity">0</parameter>
+</filter>

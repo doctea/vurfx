@@ -1,0 +1,6 @@
+<filter name="circles">
+    <description>circles</description>
+    <fragment>Circles.glsl</fragment>
+    <textures input="1" output="1"></textures>
+    <parameter type="array" name="positions" label="Positions">vec2(0.25,0.75) vec2(0.25,0.5) vec2(0.75,0.5)</parameter>
+</filter>

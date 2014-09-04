@@ -1,0 +1,6 @@
+<filter name="swap rgb">
+    <description>rgb drop filters</description>
+    <fragment>DropRGB.glsl</fragment>
+    <textures input="1" output="1"></textures>
+    <parameter type="int" name="swap_mode" label="Swap Mode">0</parameter>
+</filter>

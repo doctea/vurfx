@@ -1,0 +1,8 @@
+<filter name="Phase rgb">
+    <description>rgb swap filters</description>
+    <fragment>PhaseRGB.glsl</fragment>
+    <textures input="1" output="1"></textures>
+    <parameter type="float" name="rshift" label="rshift">0</parameter>
+    <parameter type="float" name="gshift" label="gshift">0</parameter>
+    <parameter type="float" name="bshift" label="bshift">0</parameter>
+</filter>

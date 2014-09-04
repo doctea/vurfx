@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns:ruinwesen="http://ruinwesen.com/" xmlns:bknr="http://bknr.net/" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="stylesheet.css" rel="stylesheet" type="text/css">
+<title>RWMidi - MidiInput - plug</title>
+<body><div class="container">
+<div class="head">
+<a href="http://ruinwesen.com/" title="Ruin &amp; Wesen"><img src="logo2.png" id="logo" alt="Logo"/></a>
+<div id="classnavigation">
+<ul><li><span class="navtitle">RWMIDI Examples</span></li>
+<li><a href="sketch1.html">Sketch 1</a></li>
+</ul>
+<ul>
+<li><span class="navtitle">RWMIDI Classes</span></li><li><a href="Controller.html">Controller</a></li>
+<li><a href="MidiDevice.html">MidiDevice</a></li>
+<li><a href="MidiEvent.html">MidiEvent</a></li>
+<li class="active"><a href="MidiInput.html">MidiInput</a></li>
+<li><a href="MidiInputDevice.html">MidiInputDevice</a></li>
+<li><a href="MidiOutput.html">MidiOutput</a></li>
+<li><a href="MidiOutputDevice.html">MidiOutputDevice</a></li>
+<li><a href="Note.html">Note</a></li>
+<li><a href="ProgramChange.html">ProgramChange</a></li>
+<li><a href="RWMidi.html">RWMidi</a></li>
+<li><a href="SysexMessage.html">SysexMessage</a></li>
+</ul></div></div>
+<div class="rightcontainer">
+<div id="navigation">
+<ul><li><span class="navtitle">Methods:</span></li><li><a href="MidiInput-MidiInput-MidiDevice.html">MidiInput(MidiDevice)</a></li>
+<li><a href="MidiInput-closeMidi.html">closeMidi()</a></li>
+<li><a href="MidiInput-close.html">close()</a></li>
+<li><a href="MidiInput-plug-Object-String-int-int.html">plug(Object, String, int, int)</a></li>
+<li><a href="MidiInput-plug-Object-String.html">plug(Object, String)</a></li>
+<li><a href="MidiInput-plug-Object-String-int.html">plug(Object, String, int)</a></li>
+<li><a href="MidiInput-plug-Object.html">plug(Object)</a></li>
+<li><a href="MidiInput-plug-Object-int.html">plug(Object, int)</a></li>
+</ul></div></div>
+<div class="content"><div class="contenttext"><h3>MidiInput.plug(Object obj, int channel)</h3><hr/><p><b>Object obj</b>: the object with standard callbacks</p><p><b>int channel</b>: the channel on which to receive note and controller change messages</p><p>Register an object with standard midi callbacks on a specific channels. The callbacks are noteOnReceived(Note),
+ noteOffReceived(Note), controllerChangeReceived(Controller), programChangeReceived(ProgramChange) and
+ sysexReceived(SysexMessage).</p></div></div></div></body></html>

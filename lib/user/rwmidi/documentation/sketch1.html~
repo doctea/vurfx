@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns:ruinwesen="http://ruinwesen.com/" xmlns:bknr="http://bknr.net/" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="stylesheet.css" rel="stylesheet" type="text/css">
+<title>RWMidi - RWMidi</title>
+<body><div class="container">
+<div class="head">
+<a href="http://ruinwesen.com/" title="Ruin &amp; Wesen"><img src="logo2.png" id="logo" alt="Logo"/></a>
+<div id="classnavigation">
+<ul><li><span class="navtitle">RWMIDI Classes</span></li><li><a href="Controller.html">Controller</a></li>
+<li><a href="MidiEvent.html">MidiEvent</a></li>
+<li><a href="MidiInput.html">MidiInput</a></li>
+<li><a href="MidiInputDevice.html">MidiInputDevice</a></li>
+<li><a href="MidiOutput.html">MidiOutput</a></li>
+<li><a href="MidiOutputDevice.html">MidiOutputDevice</a></li>
+<li><a href="Note.html">Note</a></li>
+<li><a href="ProgramChange.html">ProgramChange</a></li>
+<li class="active"><a href="RWMidi.html">RWMidi</a></li>
+<li><a href="SysexMessage.html">SysexMessage</a></li>
+</ul></div></div>
+<div class="rightcontainer">
+<div id="navigation">
+<ul><li><span class="navtitle">Methods:</span></li><li><a href="RWMidi-getInputDevices.html">getInputDevices()</a></li>
+<li><a href="RWMidi-getOutputDevices.html">getOutputDevices()</a></li>
+</ul></div></div>
+<div class="content"><div class="contenttext"><h3>Sketch 1</h3><hr/>
+
+<pre>
+import rwmidi.*;
+
+MidiInput input;
+MidiOutput output;
+
+void setup() {
+  input = RWMidi.getInputDevices()[0].createInput(this);
+  output = RWMidi.getOutputDevices()[0].createOutput();
+}
+
+void noteOnReceived(Note note) {
+  println("note on " + note.getPitch());
+}
+
+void sysexReceived(rwmidi.SysexMessage msg) {
+  println("sysex " + msg);
+}
+
+void mousePressed() {
+  int ret =    output.sendNoteOn(0, 3, 3);
+  ret = output.sendSysex(new byte[] {(byte)0xF0, 1, 2, 3, 4, (byte)0xF7});
+}
+
+void draw() {
+}
+</pre>
+
+</div></div></div></body></html>

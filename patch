@@ -1,0 +1,10 @@
+# HG changeset patch
+# User doctea <doctea@gmail.com>
+# Date 1409614566 -3600
+#      Tue Sep 02 00:36:06 2014 +0100
+# Node ID 15551f71d9d579b487426da98d077cb66583066a
+# Parent  6c100ee1af68eed0131235f382a2ecb5dc4e6ed7
+removed output image..
+
+diff -r 6c100ee1af68 -r 15551f71d9d5 output/image-2014-8-15-23-28-53-12490.png
+Binary file output/image-2014-8-15-23-28-53-12490.png has changed

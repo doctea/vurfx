@@ -1,0 +1,8 @@
+<filter name="kaleidoscope">
+    <description>kaleidoscope</description>
+    <vertex>AngularKaleidoScopeVert.glsl</vertex>
+    <fragment>AngularKaleidoScope.glsl</fragment>
+    <textures input="1" output="1"></textures>
+    <parameter type="int" name="angle" label="angle">1</parameter>
+    <parameter type="int" name="width" label="width">30</parameter>
+</filter>
