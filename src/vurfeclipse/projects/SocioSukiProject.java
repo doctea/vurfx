@@ -54,7 +54,7 @@ public class SocioSukiProject extends Project implements Serializable {
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory("doctea").setCurrentIndex(5).setNumBlobs(200).setFilterName("ImageListDrawer1"));
     ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(200).setFilterName("ImageListDrawer2"));
     
-    //ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect"));
+    //ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect").setOutputCanvas("/out"));
     ils1.setCanvas("pix1","/pix1");
     //ils1.addFilter(((OpenNIFilter) new OpenNIFilter(ils1).setFilterName("kinect")).setDepthOutputCanvasName("pix1"));
 

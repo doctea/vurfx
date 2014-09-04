@@ -35,30 +35,42 @@ public class OpenNIFilter extends Filter {
   }
   
   public boolean initialise() {
-    context = new SimpleOpenNI(APP.getApp());
-    if(context.isInit() == false)
-    {
-       System.out.println("Can't init SimpleOpenNI, maybe the camera is not connected!"); 
-       ((VurfEclipse)APP.getApp()).exit();
-       return false;  
-    }
+	  
+	//if (true) return false;
+	if (!initKinect()) return false;
     
-    // disable mirror
-    context.setMirror(false);
-  
-    // enable depthMap generation 
-    context.enableDepth();
-  
-    context.enableRGB();
-    
-    //context.
-   
-    // align depth data to image data
-    context.alternativeViewPointDepthToImage();
-    context.setDepthColorSyncEnabled(true);
-      
+	rt = new ReaderThread();
+	rt.start();    
       
     return true;
+  }
+  
+  public boolean initKinect() {
+
+	    //context = new SimpleOpenNI(APP.getApp(), SimpleOpenNI.RUN_MODE_MULTI_THREADED);
+	  	context = new SimpleOpenNI(APP.getApp());
+	    if(context.isInit() == false)
+	    {
+	       System.out.println("Can't init SimpleOpenNI, maybe the camera is not connected!"); 
+	       ((VurfEclipse)APP.getApp()).exit();
+	       return false;  
+	    }
+	    
+	    // disable mirror
+	    context.setMirror(false);
+	  
+	    // enable depthMap generation 
+	    context.enableDepth();
+	    context.enableRGB();
+	    
+	    //context.
+	   
+	    // align depth data to image data
+	    context.alternativeViewPointDepthToImage();
+	    context.setDepthColorSyncEnabled(true);
+	      
+	    
+	    return context.isInit();
   }
   
   int mode = 0;
@@ -84,16 +96,46 @@ public class OpenNIFilter extends Filter {
   PImage depth;
   
   PImage t = scaled.getSurf().get();
-  public boolean applyMeatToBuffers() { 
+  
+  boolean newFrame = false;
+  
+  class ReaderThread extends Thread {
+	  public void run() {
+		  while (!isMuted()) {
+			  
+			  if (context==null) initKinect();
+			  context.update();
+			  System.out.println("OpenNIFilter ReaderThread loop...");
+			  
+  		      newRgb = context.rgbImage().get();
+  		      
+
+  		      t = rgb = context.rgbImage();
+  		      rgb.setModified(false);  		      
+			  
+  		      newFrame = true;
+  		      
+			  try {
+				  Thread.sleep(500);
+			  } catch (Exception e) {};
+		  }
+	  }
+  }
+  
+  ReaderThread rt;// = new ReaderThread();
+  
+  PImage newRgb;
+  public boolean applyMeatToBuffers() {
+	  if (context==null) return false;
     //drawPointCloud();
-    context.update();
+    //context.update();
+	/*if (rt==null) {
+		rt = new ReaderThread();
+		rt.start();
+	}*/
     
-    PImage newRgb;
-    newRgb = context.rgbImage().get();
-    if (out!=null && rgb!=newRgb && sc!=null) { // && (rgb==null || newRgb.isModified())) {
-      
-      t = rgb = context.rgbImage();
-      rgb.setModified(false);
+    if (newFrame==true && out!=null && rgb!=newRgb && sc!=null) { // && (rgb==null || newRgb.isModified())) {
+      newFrame = false;
      
       //t = rgb.get();//,0,0); //,sc.w,sc.h);
     
@@ -111,16 +153,17 @@ public class OpenNIFilter extends Filter {
       //out.image(context.rgbImage(),0,0);
     }
     
-    
-    PImage newDepth;
-    newDepth = context.depthImage().get();
-    GLGraphicsOffScreen out_depth = sc.getCanvas(depthOutputName).getSurf();
-    if (out_depth!=null && newDepth!=depth && sc!=null) {
-    	t = depth = newDepth;
-    	
-    	//out_depth.image(t,0,0,sc.w,sc.h);
-        out_depth.copy(t, 0, 0, t.width, t.height, 0, 0, out.width, out.height);
-    	newDepth.delete();
+    if (context!=null) {
+	    PImage newDepth;
+	    newDepth = context.depthImage().get();
+	    GLGraphicsOffScreen out_depth = sc.getCanvas(depthOutputName).getSurf();
+	    if (out_depth!=null && newDepth!=depth && sc!=null) {
+	    	t = depth = newDepth;
+	    	
+	    	//out_depth.image(t,0,0,sc.w,sc.h);
+	        out_depth.copy(t, 0, 0, t.width, t.height, 0, 0, out.width, out.height);
+	    	newDepth.delete();
+	    }
     }
     
     return true;
