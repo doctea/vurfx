@@ -84,6 +84,7 @@ public class SwitcherScene extends Scene {
 		  Iterator it = seqs.iterator();
 		  while (it.hasNext()) {
 			  try {
+				  System.out.println(this + "#changeScene() Changing scene");
 				  ((Sequence)it.next()).start();
 			  } catch (NullPointerException e) {
 				  System.out.println("Got NullPointerException 'null' for a sequence for " + sceneName + ": " + e);
