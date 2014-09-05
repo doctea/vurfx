@@ -1,5 +1,6 @@
 package vurfeclipse.scenes.userscenes;
 
+import javafx.scene.canvas.Canvas;
 import vurfeclipse.APP;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.PlainDrawer;
@@ -16,14 +17,20 @@ public class BlenderFX1 extends SimpleScene {
 		setSceneName("BlenderFX1 Instance");
 	}
     
+    public vurfeclipse.Canvas setCanvas(String a, String b) {
+    	return super.setCanvas(a, b);
+    }
+    
     public boolean setupFilters() {
+    	System.out.println(this+"#setupFilters()");
     	Scene bl1 = this;
 	    //bl1.setOutputCanvas("/out");
     	//setCanvas("out","/out");
-	    bl1.addFilter(new PlainDrawer(bl1)).setInputCanvas("/pix0");//getCanvasMapping("pix0"))); //"/pix0"));
-	    bl1.addFilter(new BlendDrawer(bl1).setFilterName("BlendDrawer1")).setInputCanvas("/pix1"); //getCanvasMapping("pix1"))); //"/pix1"));
+	    bl1.addFilter(new PlainDrawer(bl1).setInputCanvas(getCanvasMapping("pix0")));//getCanvasMapping("pix0"))); //"/pix0"));
+	    bl1.addFilter(new PlainDrawer(bl1).setInputCanvas(getCanvasMapping("pix1")));//getCanvasMapping("pix0"))); //"/pix0"));
+	    //bl1.addFilter(new BlendDrawer(bl1).setFilterName("BlendDrawer1")).setInputCanvas(getCanvasMapping("pix1")); //getCanvasMapping("pix1"))); //"/pix1"));
 	    //bl1.addFilter(new MirrorFilter(bl1).setFilterName("Mirror").changeParameterValue("mirror_y", true)).setInputCanvas(bl1.getCanvasMapping("out"));
-	    
+	    //System.exit(0);
 	    return true;
     }
     

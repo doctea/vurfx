@@ -16,7 +16,7 @@ import SimpleOpenNI.*;
 public class OpenNIFilter extends Filter {
 
   SimpleOpenNI context;
-  float        zoomF =0.3f;
+  float        zoomF = 0.3f;
   float        rotX = PApplet.radians(180);  // by default rotate the hole scene 180deg around the x-axis, 
                                      // the data from openni comes upside down
   float        rotY = PApplet.radians(0);
@@ -24,9 +24,11 @@ public class OpenNIFilter extends Filter {
   int          steps = 2;
   
   String depthOutputName;
+  String irOutputName;
   
-  public OpenNIFilter setDepthOutputCanvasName(String n) {
+  public OpenNIFilter setDepthIROutputCanvasName(String n, String o) {
 	  this.depthOutputName = n;
+	  this.irOutputName = o;
 	  return this;
   }
   
@@ -45,6 +47,27 @@ public class OpenNIFilter extends Filter {
     return true;
   }
   
+  class ReaderThread extends Thread {
+	  public void run() {
+		  while (!isMuted()) {
+			  
+			  if (context==null) initKinect();
+			  try {
+			  context.update();
+			  //System.out.println("OpenNIFilter ReaderThread loop...");
+			  
+  		      newRgb = context.rgbImage().get();
+  		      t = rgb = context.rgbImage();
+  		      rgb.setModified(false);  		      
+			  
+  		      newFrame = true;
+  		      
+				  Thread.sleep(50);
+			  } catch (Exception e) {};
+		  }
+	  }
+  }  
+  
   public boolean initKinect() {
 
 	    //context = new SimpleOpenNI(APP.getApp(), SimpleOpenNI.RUN_MODE_MULTI_THREADED);
@@ -62,6 +85,7 @@ public class OpenNIFilter extends Filter {
 	    // enable depthMap generation 
 	    context.enableDepth();
 	    context.enableRGB();
+	    //context.enableIR();
 	    
 	    //context.
 	   
@@ -81,6 +105,20 @@ public class OpenNIFilter extends Filter {
     //enableForMode(mode);
   } 
   
+  public void setParameterDefaults () {
+	    //this.setParameterValue("radius", 10.0);
+	    //this.setParameterValue("rotation", 0.0);
+	    super.setParameterDefaults();
+	    this.addParameter("rgb", new Boolean(true));//, 1.0f, 5.0f);
+	    this.addParameter("depth", new Boolean(false)); //(0), -sc.w/2, sc.w/2);
+	    //this.addParameter("ir", new Boolean(false)); //(0), -sc.w/2, sc.w/2);
+	    //this.addParameter("translate_y", new Integer(0), -sc.h/2, sc.h/2);
+	    /*this.addParameter("tint", new Integer(128), 0, 255);//new Integer(128));
+	     this.addParameter("shape", new Integer(0), 0, b.shapesCount);
+	     this.addParameter("colour", color(random(255),random(255),random(255),128));*/
+	    //this.addParameter("radius", 0.5, 0.01, 20.0);
+	  }    
+  
   /*void initPeasyCam(){
     cam = new PeasyCam(APP, 0, 0, 0, 600);
     cam.setMinimumDistance(1);
@@ -99,32 +137,12 @@ public class OpenNIFilter extends Filter {
   
   boolean newFrame = false;
   
-  class ReaderThread extends Thread {
-	  public void run() {
-		  while (!isMuted()) {
-			  
-			  if (context==null) initKinect();
-			  context.update();
-			  System.out.println("OpenNIFilter ReaderThread loop...");
-			  
-  		      newRgb = context.rgbImage().get();
-  		      
-
-  		      t = rgb = context.rgbImage();
-  		      rgb.setModified(false);  		      
-			  
-  		      newFrame = true;
-  		      
-			  try {
-				  Thread.sleep(500);
-			  } catch (Exception e) {};
-		  }
-	  }
-  }
-  
   ReaderThread rt;// = new ReaderThread();
   
   PImage newRgb;
+  PImage newDepth;
+  //PImage newIR;
+  
   public boolean applyMeatToBuffers() {
 	  if (context==null) return false;
     //drawPointCloud();
@@ -134,40 +152,64 @@ public class OpenNIFilter extends Filter {
 		rt.start();
 	}*/
     
-    if (newFrame==true && out!=null && rgb!=newRgb && sc!=null) { // && (rgb==null || newRgb.isModified())) {
-      newFrame = false;
-     
-      //t = rgb.get();//,0,0); //,sc.w,sc.h);
+	if ((Boolean)this.getParameterValue("rgb")==true) drawRGB();
     
-      //out.image(context.rgbImage(),0,0);
-     
-      
-      //out.image(t,0,0,sc.w,sc.h);//,(float)0,(float)0,(float)sc.w,(float)sc.h);
-      // by jove!
-      //out.copy(rgb, 0, 0, out.width, out.height, 0, 0, rgb.width, rgb.height);
-      out.copy(rgb, 0, 0, rgb.width, rgb.height, 0, 0, out.width, out.height);
-      out.fill(255); out.rect(sc.w/2,sc.h/2,40,40);
-      newRgb.delete();
-      
-      //out.background(t);
-      //out.image(context.rgbImage(),0,0);
-    }
+    if ((Boolean)this.getParameterValue("depth")==true) drawDepth();
     
-    if (context!=null) {
-	    PImage newDepth;
-	    newDepth = context.depthImage().get();
-	    GLGraphicsOffScreen out_depth = sc.getCanvas(depthOutputName).getSurf();
-	    if (out_depth!=null && newDepth!=depth && sc!=null) {
-	    	t = depth = newDepth;
-	    	
-	    	//out_depth.image(t,0,0,sc.w,sc.h);
-	        out_depth.copy(t, 0, 0, t.width, t.height, 0, 0, out.width, out.height);
-	    	newDepth.delete();
-	    }
-    }
+    //if ((Boolean)this.getParameterValue("ir")==true) drawIR();
     
     return true;
   }
+  
+  public void drawRGB() {
+	    if (newFrame==true && out!=null && rgb!=newRgb && sc!=null) { // && (rgb==null || newRgb.isModified())) {
+	        newFrame = false;
+	       
+	        //t = rgb.get();//,0,0); //,sc.w,sc.h);
+	      
+	        //out.image(context.rgbImage(),0,0);
+	       
+	        
+	        //out.image(t,0,0,sc.w,sc.h);//,(float)0,(float)0,(float)sc.w,(float)sc.h);
+	        // by jove!
+	        //out.copy(rgb, 0, 0, out.width, out.height, 0, 0, rgb.width, rgb.height);
+	        out.copy(rgb, 0, 0, rgb.width, rgb.height, 0, 0, out.width, out.height);
+	        out.fill(255); out.rect(sc.w/2,sc.h/2,40,40);
+	        newRgb.delete();
+	        
+	        //out.background(t);
+	        //out.image(context.rgbImage(),0,0);
+	      }	  
+  }
+  
+  
+  public void drawDepth() {
+	    if (context!=null) {
+		    newDepth = context.depthImage().get();
+		    GLGraphicsOffScreen out_depth = sc.getCanvas(depthOutputName).getSurf();
+		    if (out_depth!=null && newDepth!=depth && sc!=null) {
+		    	PImage t = depth = newDepth;
+		    	
+		    	//out_depth.image(t,0,0,sc.w,sc.h);
+		        out_depth.copy(t, 0, 0, t.width, t.height, 0, 0, out.width, out.height);
+		    	newDepth.delete();
+		    }
+	    }	  
+  }
+  
+  /*public void drawIR() {
+	    if (context!=null) {
+		    newIR = context.irImage().get();
+		    GLGraphicsOffScreen out_depth = sc.getCanvas(irOutputName).getSurf();
+		    if (out_depth!=null && newIR!=depth && sc!=null) {
+		    	PImage t = depth = newIR;
+		    	
+		    	//out_depth.image(t,0,0,sc.w,sc.h);
+		        out_depth.copy(t, 0, 0, t.width, t.height, 0, 0, out.width, out.height);
+		    	newIR.delete();
+		    }
+	    }	  
+	}  */
   
   public void drawPointCloud() {
     

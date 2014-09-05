@@ -128,7 +128,7 @@ public class ImageListDrawer extends Filter {
    }*/
 
   public PImage getCurrentImage (ImageRepository IR) {
-    System.out.println("getCurrentImage " + current_image_index);    
+    System.out.println(this + "#getCurrentImage for current_image_index: [" + current_image_index + "/" + filenames.size() + "]");    
     //PImage p = getImageForFilename(filenames.get(current_image_index));
     //if (!images.containsKey(filenames.get(current_image_index))) {
     /*if(!IR.hasCached(filenames.get(current_image_index), sc.w, sc.h)) {
@@ -152,13 +152,13 @@ public class ImageListDrawer extends Filter {
     //return this.image_srcs[current_image_index];
   }
   public void nextImage () {
-    System.out.println("nextImage [" + current_image_index + "/" + filenames.size() + "]");
+    System.out.println(this + "#nextImage [" + current_image_index + "/" + filenames.size() + "]");
     current_image_index++;
     //IR.precache(filenames.get(current_image_index), sc.w, sc.h);
     if (current_image_index >= filenames.size()) 
       current_image_index = 0;
     else if (!ImageRepository.IR.hasCached(filenames.get(current_image_index), sc.w, sc.h)) {
-      System.out.println("haven't got cached " + filenames.get(current_image_index));
+      System.out.println(this + "#nextImage: haven't got cached " + filenames.get(current_image_index));
       current_image_index++;// = 0;//current_image_index--;
     }
 
