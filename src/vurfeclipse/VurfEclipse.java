@@ -4,7 +4,7 @@ package vurfeclipse;
 import java.io.*;
 import java.*;
 
-import processing.core.PApplet;
+import processing.core.*;
 import controlP5.*;
 import processing.opengl.*;
 
