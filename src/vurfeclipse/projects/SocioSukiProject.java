@@ -31,6 +31,7 @@ public class SocioSukiProject extends Project implements Serializable {
     addCanvas("/pix1",  Canvas.makeCanvas(w,h,gfx_mode,"input2"));
     addCanvas("/depth", Canvas.makeCanvas(w,h,gfx_mode,"depth"));
     addCanvas("/rgb",   Canvas.makeCanvas(w,h,gfx_mode,"rgb"));
+    addCanvas("/pointCloud",   Canvas.makeCanvas(w,h,gfx_mode,"pointCloud"));
     addCanvas("/temp1", Canvas.makeCanvas(w,h,gfx_mode,"temp1"));
     addCanvas("/temp2", Canvas.makeCanvas(w,h,gfx_mode,"temp2"));
     
@@ -74,8 +75,9 @@ public class SocioSukiProject extends Project implements Serializable {
     final SimpleScene ks1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("Kinect Input");
     ks1.setOutputCanvas("/rgb");
     ks1.setCanvas("depth", "/depth");
-    ks1.setCanvas("rgb", "/rgb");    
-    ks1.addFilter(new OpenNIFilter(ils2).setDepthIROutputCanvasName("depth","ir").setFilterName("kinect").setOutputCanvas("rgb"));
+    ks1.setCanvas("rgb", "/rgb");
+    ks1.setCanvas("pointCloud", "/pointCloud");
+    ks1.addFilter(new OpenNIFilter(ils2).setFilterName("kinect").setOutputCanvas("rgb"));
     this.addSceneOutputCanvas(ks1,"/rgb");
     
     /*final Scene blendScenergb 	= new BlenderFX1(this,w,h).setOutputCanvas("/out").setInputCanvas("/pix1");
@@ -88,17 +90,17 @@ public class SocioSukiProject extends Project implements Serializable {
 
 
     // SWITCHER  //////////////////////////
-    //final SwitcherScene switcher = (SwitcherScene) this.addSceneOutputCanvas(new SwitcherScene(this, w, h), "/out");    
+    final SwitcherScene switcher = (SwitcherScene) this.addSceneOutputCanvas(new SwitcherScene(this, w, h), "/out");    
         
     
     // BLEND SCENE    
-    final SimpleScene bl1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlendScene");
+    /*final SimpleScene bl1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlendScene");
     bl1.setOutputCanvas("/out");
     bl1.addFilter(new PlainDrawer(bl1).setInputCanvas("/pix0"));
     bl1.addFilter(new BlendDrawer(bl1).setFilterName("BlendDrawer1").setInputCanvas("/pix1"));
     //bl1.addFilter(new MirrorFilter(bl1).setFilterName("Mirror").changeParameterValue("mirror_y", true)).setInputCanvas(bl1.getCanvasMapping("out"));    
     bl1.setMuted(true);
-    this.addSceneOutputCanvas(bl1,"/out"); //sblendresult");//out");//getCanvas("/out"));
+    this.addSceneOutputCanvas(bl1,"/out"); //sblendresult");//out");//getCanvas("/out"));*/
     
     /*
     final BlenderFX1 bl1 = new BlenderFX1(this, w, h);
@@ -123,17 +125,20 @@ public class SocioSukiProject extends Project implements Serializable {
     */
     
 
-    final Scene blendScenedepth = new BlenderFX1(this,w,h).setOutputCanvas("/out");
-    blendScenedepth.setCanvas("pix0","/rgb");
-    blendScenedepth.setCanvas("pix1","/depth");
-    this.addScene(blendScenedepth);
-    
-    //switcher.bindScene("blend scene - kinect", "preset 1", blendScenedepth);
+    final Scene blendScenedepth = new BlenderFX1(this,"Kinect",w,h).setOutputCanvas("/out");
+    blendScenedepth.setCanvas("pix1","/rgb");
+    //blendScenedepth.setCanvas("pix1","/pointCloud");
+    blendScenedepth.setCanvas("pix0","/depth");
+    //this.addScene(blendScenedepth);    
+    switcher.bindScene("blend scene - kinect", "preset 1", blendScenedepth);
             
-    /*final Scene blendScene2 = new BlenderFX1(this,w,h).setOutputCanvas("/out").setInputCanvas("/pix1");
+    
+    /*/// THIS IS A WORKING ONE
+    final Scene blendScene2 = new BlenderFX1(this,"ImageList",w,h).setOutputCanvas("/out").setInputCanvas("/pix1");
     blendScene2.setCanvas("pix0","/pix0");
     blendScene2.setCanvas("pix1","/pix1");
     switcher.bindScene("blend scene", "preset 1", blendScene2);*/
+    
     
     // BLOB SPIRAL SCENE
     /*final Scene blobScene = switcher.bindScene("blob drawer", "preset 1",   new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0"));
@@ -141,9 +146,14 @@ public class SocioSukiProject extends Project implements Serializable {
     final Scene blobScene3 =switcher.bindScene("blob drawer 3", "preset 3", new BlobFX1(this,w,h).setSceneName("BlobScene3").setOutputCanvas("/out").setInputCanvas("/pix0"));
     final Scene blobScene4 =switcher.bindScene("blob drawer 4", "preset 4", new BlobFX1(this,w,h).setSceneName("BlobScene4").setOutputCanvas("/out"));    
     */
+    /*this.addScene(blobScene);
+    this.addScene(blobScene2);
+    this.addScene(blobScene3);
+    this.addScene(blobScene4);*/
+    
     // OUTPUT FILTERS
     
-
+/*
     this.addSceneInputOutputCanvas(
       //os,
       new OutputFX1(this,w,h).setSceneName("OutputShader"),
@@ -176,7 +186,6 @@ public class SocioSukiProject extends Project implements Serializable {
     
     this.addSceneInputOutputCanvas(
   	      new TextFlashScene(this,w,h, new String[] {
-  	        //"Nozstock", "Nozstock: the Hidden Valley",
   	        "Vurf",
   	      }) 
   	        .setSceneName("TextFlash")
@@ -187,7 +196,7 @@ public class SocioSukiProject extends Project implements Serializable {
   	      "/out",
   	      "/out"
   	    );    
-
+*/
     this.addSceneOutputCanvas(
       new DebugScene(this,w,h),
       "/out"

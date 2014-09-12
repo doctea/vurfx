@@ -105,15 +105,20 @@ public class SwitcherScene extends Scene {
 		  Iterator it = seqs.iterator();
 		  while (it.hasNext()) {
 			  //((Sequence)it.next()).setValuesForTime();
-			  if (!((Sequence)it.next()).readyToChange(max_iterations)) ready = false;
-			  break;
+			  if (!((Sequence)it.next()).readyToChange(max_iterations)) {
+				  System.out.println(this+"#readyToChange("+max_iterations+"): not ready to change");
+				  ready = false;
+				  break;				  
+			  }
 		  }
 	  }
 	  return ready;
   }
   
   public void runSequences() {
+	  System.out.println(this+"#runSequences");
 	  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOKOING FOR -- number of loop iterations per sequence
+		  System.out.println(this+"#runSequences(): is readyToChange, calling randomScene()");
 		  randomScene();
 	  }
 	  
@@ -121,15 +126,18 @@ public class SwitcherScene extends Scene {
 	  if (seqs!=null) {
 		  Iterator it = seqs.iterator();
 		  while (it.hasNext()) {
-			  ((Sequence)it.next()).setValuesForTime();
+			  Sequence sq = (Sequence)it.next();
+			  System.out.println(this+"#runSequences(): Setting values on " + sq);
+			  sq.setValuesForTime();
 		  }
 	  }
   }
   
   public boolean setupFilters () {
+	//super.setupFilters();
 	blank = new BlankFilter(this).setOutputCanvas(this.getCanvasMapping("out"));
 	  
-	Collection<Scene> col= scenes.values();
+	Collection<Scene> col = scenes.values();
 	Iterator it = col.iterator();
 	while (it.hasNext()) {
 		((Scene)it.next()).setupFilters();
@@ -141,7 +149,7 @@ public class SwitcherScene extends Scene {
   int frameCount = 0;
   int frameSkip = 1;
   public void applyGL (GLGraphicsOffScreen gfx) {
-	  blank.beginDraw();
+	  blank.beginDraw();	// this is here to blank the buffer before a redraw.  if we disable it, it looks rad as fuck!! and woudl probably where we could put in a motion blur effect too.
 	  blank.applyToBuffers();
 	  blank.endDraw();
 	  

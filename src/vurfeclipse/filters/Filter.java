@@ -543,7 +543,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   }    
  
   int count = 0;
+  boolean controlsSetup = false;
   public synchronized void setupControls(ControlP5 cp5, String tabName) {
+	if (controlsSetup) return;
+	controlsSetup = true;
     System.out.println("                                                       Filter#setupControls() for "  + this + ": " + tabName);
     if (count++>20)
       System.exit(0);

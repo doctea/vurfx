@@ -341,8 +341,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable {
     return true;  
   }
   public abstract boolean setupFilters();
-  
+  boolean initialisedFilters = false;
   public boolean initialiseFilters () {
+	if (initialisedFilters) return true;
     setupFilters();
     for (int i = 0 ; i < this.filters.length ; i ++) {
       if (filters[i]!=null) {
@@ -359,6 +360,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable {
         
       }
     }
+    initialisedFilters = true;
     return true;
   }
   
@@ -652,9 +654,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable {
   
   transient ControlP5 cp5;
   String tabName;
+  boolean doneControls = false;
   public void setupControls(ControlP5 cp5, String tabName) {
     System.out.println("Scene#setupControls() in " + this);
-    
+    if (doneControls) return;
+    doneControls = true;
     this.cp5 = cp5;
     this.tabName = tabName;
     
