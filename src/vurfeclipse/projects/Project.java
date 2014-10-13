@@ -4,6 +4,7 @@ import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.IOUtils;
 import vurfeclipse.VurfEclipse;
+import vurfeclipse.connectors.RestConnector;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 
@@ -154,6 +155,7 @@ public abstract class Project implements Serializable {
     	setupControls();
     //}
     
+    setupRest();
     
     return true;
   }
@@ -170,6 +172,7 @@ public abstract class Project implements Serializable {
       Scene s = (Scene)it.next();
       //System.out.println("Project#getObjectForPath("+path+") checked '" + s.getSceneName() + "' against '" + spl[1] + "'"); //against stored scene " + s.getSceneName());
       if (s.getSceneName().equals(spl[1])) { //getSceneName().equals(s)) {
+    	  //System.out.println("Found " + s.getSceneName());
         //return s;
         // ask it to get the rest of the path for us
         if (spl.length>2)
@@ -421,6 +424,13 @@ public abstract class Project implements Serializable {
       f.updateControl(name, value);
     //else
       //System.out.println(">>>Project#updateControl("+filterPath+","+name+","+value + ") couldn't find a filter!");
+  }
+  
+  
+  RestConnector rsConn;
+  public void setupRest() {
+	  rsConn = new RestConnector(this);
+	  rsConn.start();
   }
   
   public void setupControls() {

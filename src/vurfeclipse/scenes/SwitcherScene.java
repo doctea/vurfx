@@ -117,7 +117,7 @@ public class SwitcherScene extends Scene {
   }
   
   public void runSequences() {
-	  println(this+"#runSequences");
+	  //println(this+"#runSequences");
 	  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOKOING FOR -- number of loop iterations per sequence
 		  println(this+"#runSequences(): is readyToChange, calling randomScene()");
 		  randomScene();
@@ -128,7 +128,7 @@ public class SwitcherScene extends Scene {
 		  Iterator it = seqs.iterator();
 		  while (it.hasNext()) {
 			  Sequence sq = (Sequence)it.next();
-			  println(this+"#runSequences(): Setting values on " + sq);
+			  //println(this+"#runSequences(): Setting values on " + sq);
 			  sq.setValuesForTime();
 		  }
 	  }

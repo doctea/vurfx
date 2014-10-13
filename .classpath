@@ -202,5 +202,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/opengl/jogl.jar"/>
 	<classpathentry kind="lib" path="lib/base/opengl/opengl.jar"/>
+	<classpathentry kind="lib" path="D:/code/vurf-eclipse/lib/user/IceBreakRestServer_1_2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

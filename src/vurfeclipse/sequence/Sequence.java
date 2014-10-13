@@ -104,13 +104,12 @@ abstract public class Sequence {
 		  System.out.println("--got (" + outr + "," + outg + "," + outb + ")");*/
 		  
 		  return APP.getApp().color(outr,outg,outb);
-		  
 	  }
 	  
 	  public int randomColorMinimum(int minimum) {
 		  int tot = 0;
 		  int r=0,g=0,b=0;
-		  while (tot<64) {
+		  while (tot<minimum) {
 			  r = (int)APP.getApp().random(16,255);//, (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);;
 			  g = (int)APP.getApp().random(16,255);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 			  b = (int)APP.getApp().random(16,255);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);

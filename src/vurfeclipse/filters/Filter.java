@@ -554,7 +554,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   public synchronized void setupControls(ControlP5 cp5, String tabName) {
 	if (controlsSetup) return;
 	controlsSetup = true;
-    println("                                                       Filter#setupControls() for "  + this + ": " + tabName);
+    println("Filter#setupControls() for "  + this + ": " + tabName);
     /*if (count++>20) {
       println("Exiting because setupControls count is " + count + " in " + this);
       System.exit(0);
@@ -583,6 +583,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
             .linebreak()
               ;
 
+    cp5.addTextlabel("path_" + tabName + getFilterName(), "Path: " + this.getPath()).setSize(size, size).moveTo(tabName).linebreak();
+    
 
 
     if (parameters==null) 

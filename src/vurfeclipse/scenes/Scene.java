@@ -72,7 +72,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable {
   public void println(String text) {		// debugPrint, printDebug -- you get the idea
 	  if (outputDebug) System.out.println("S " + (text.contains((this.toString()))? text : this+": "+text));
   }
-    
+
   
   String sceneName = null;
   public String getSceneName() {
@@ -98,7 +98,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable {
   public Filter getFilter(String name) {
     for (int i = 0 ; i < filters.length ; i++) {
       if (filters[i]!=null) {
-        //println("Scene#getObjectForPath(" + path + ") checking '" + spl[0] + "' against '" + filters[i].getFilterName() + "'");
+        //println("Scene#getFilter(" + name + ") checking '" + name + "' against '" + filters[i].getFilterName() + "'");
         if (filters[i].getFilterName().equals(name)) {
           return filters[i];
         }
