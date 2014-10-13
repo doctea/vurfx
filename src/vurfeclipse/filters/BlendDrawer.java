@@ -67,7 +67,7 @@ public class BlendDrawer extends Filter {
 
   public void setParameterDefaults () {
     super.setParameterDefaults();
-    //System.out.println("setting defaults");
+    //println("setting defaults");
     //this.changeParameterValue("Opacity", 1.0);
     //this.changeParameterValue("BlendMode", 4);
     addParameter("Opacity", 1.0f, 0.0f, 1.0f);
@@ -95,7 +95,7 @@ public class BlendDrawer extends Filter {
   public GLTextureFilter getFilterNumber(int n) {
     if (this.blendFilters==null) blendFilters = new GLTextureFilter[blendModes.length];
     if (this.blendFilters[n]==null) {
-      System.out.println("BlendDrawer#getFilterNumber(n) initialising GLTextureFilter");
+      println("BlendDrawer#getFilterNumber(n) initialising GLTextureFilter");
       this.blendFilters[n] = new GLTextureFilter(APP.getApp(),blendModes[n]);
     }
     return this.blendFilters[n];
@@ -116,7 +116,7 @@ public class BlendDrawer extends Filter {
   }
   
   public boolean applyMeatToBuffers() {
-    //System.out.println("in applymeattobuffers in pointdrawer (" + this + "), src is " + src);
+    //println("in applymeattobuffers in pointdrawer (" + this + "), src is " + src);
     
     // image draw mode
     //out.getTexture().blend();
@@ -160,7 +160,7 @@ public class BlendDrawer extends Filter {
       
     changeParameterValue("BlendMode", currentBlendMode);
       
-    //System.out.println("Switched to currentBlendMode " + currentBlendMode + " " + blendModes[currentBlendMode]);
+    //println("Switched to currentBlendMode " + currentBlendMode + " " + blendModes[currentBlendMode]);
   }
   
   public void beginDraw() {

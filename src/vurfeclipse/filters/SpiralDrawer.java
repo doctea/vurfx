@@ -166,7 +166,7 @@ public class SpiralDrawer extends Filter {
       out.translate(spiralCenter.x, spiralCenter.y);    // move to the spiral center
 
       //if((Float)getParameterValue("totalRotate")!=0.0) out.rotate(radians((Float)getParameterValue("totalRotate")));
-      //System.out.println("totalRotate is " + totalRotate);
+      //println("totalRotate is " + totalRotate);
       out.rotate(PApplet.radians(totalRotate));  // rotate around the spiral point by the total rotation amount
       
       

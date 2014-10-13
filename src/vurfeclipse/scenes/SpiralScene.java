@@ -27,20 +27,20 @@ public class SpiralScene extends Scene {
   public void setupCallbackPresets () {
     super.setupCallbackPresets();
     final Scene self = this;
-    //System.out.println("adding callback 'spin'");
+    //println("adding callback 'spin'");
     this.callbacks.put("spin_forward", new ParameterCallback() {
        public void call(Object value) {
-         //System.out.println("spin call " + value);
+         //println("spin call " + value);
          int i = Integer.parseInt(value.toString());
          //((SpiralDrawer)self.filters[0]).setParameterValue("rotation", (float)i%360);
          //if(filters[0]!=null) ((SpiralDrawer)self.filters[0]).setParameterValue("totalRotate", (float)i%360);
          changeFilterParameterValue(0,"totalRotate",(float)(i%360));
        }
     });
-    //System.out.println("adding callback 'spin'");
+    //println("adding callback 'spin'");
     this.callbacks.put("spin_back", new ParameterCallback() {
        public void call(Object value) {
-         //System.out.println("spin call " + value);
+         //println("spin call " + value);
          int i = Integer.parseInt(value.toString());
          changeFilterParameterValue(0,"totalRotate",(float)360-(i%360));
          //((SpiralDrawer)self.filters[0]).setParameterValue("rotation", (float)360-(i%360));
@@ -94,7 +94,7 @@ public class SpiralScene extends Scene {
   public boolean setupFilters () {
     //super.initialise();
     filters = new Filter[filterCount];
-    //System.out.println("DemoScene initialised " + this + " - filtercount is " + filterCount);
+    //println("DemoScene initialised " + this + " - filtercount is " + filterCount);
     int i = 0;
     
     //filters[i] = new TextDrawer(this).setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);

@@ -27,7 +27,7 @@ public class DebugScene extends Scene {
     /*host.getStream("test").registerEventListener("test", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("Handler: call(" + value + ")");
+          //println("Handler: call(" + value + ")");
           cf.setParameterValue("test", value); 
         }
       }
@@ -35,7 +35,7 @@ public class DebugScene extends Scene {
     /*host.getStream("beat").registerEventListener("beat", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("beat: call(" + value + ")");
+          //println("beat: call(" + value + ")");
           cf.setParameterValue("beat", value); 
         }
       }
@@ -43,7 +43,7 @@ public class DebugScene extends Scene {
     host.getStream("beat").registerEventListener("bar", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("bar: call(" + value + ")");
+          //println("bar: call(" + value + ")");
           cf.setParameterValue("bar", value); 
         }
       }

@@ -39,7 +39,7 @@ public class KaleidoFilter extends Filter {
       glFilter.setParameterValue("mirror_y",1);
       glFilter.setParameterValue("mirror_x",1);
     } else {
-      System.out.println("wtf");
+      println("wtf");
     }
     
   }
@@ -76,7 +76,7 @@ public class KaleidoFilter extends Filter {
    
   //int[] temp;
   public boolean applyMeatToBuffers() {
-    //System.out.println("in applymeattobuffers in pointdrawer (" + this + "), src is " + src);
+    //println("in applymeattobuffers in pointdrawer (" + this + "), src is " + src);
     t.copy(src.getTexture());
     
     t.filter(glFilter,out.getTexture());

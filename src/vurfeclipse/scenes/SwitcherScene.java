@@ -82,16 +82,16 @@ public class SwitcherScene extends Scene {
 	  ArrayList seqs = switched_sequences.get(sceneName);
 	  if (seqs!=null) {
 		  Iterator it = seqs.iterator();
-		  ((Sequence)it.next()).start();
-		  /*while (it.hasNext()) {
+		  //((Sequence)it.next()).start();
+		  while (it.hasNext()) {
 			  try {
-				  System.out.println(this + "#changeScene() Changing scene");
+				  println(this + "#changeScene() Changing scene");
 				  ((Sequence)it.next()).start();
 			  } catch (NullPointerException e) {
-				  System.out.println("Got NullPointerException 'null' for a sequence for " + sceneName + ": " + e);
+				  System.out.println(this + "#changeScene: Got NullPointerException for a sequence for " + sceneName + ": " + e);
 				  System.exit(1);
 			  }
-		  }*/
+		  }
 	  }
   }
   
@@ -107,7 +107,7 @@ public class SwitcherScene extends Scene {
 		  while (it.hasNext()) {
 			  //((Sequence)it.next()).setValuesForTime();
 			  if (!((Sequence)it.next()).readyToChange(max_iterations)) {
-				  System.out.println(this+"#readyToChange("+max_iterations+"): not ready to change");
+				  //println(this+"#readyToChange("+max_iterations+"): not ready to change");
 				  ready = false;
 				  break;				  
 			  }
@@ -117,9 +117,9 @@ public class SwitcherScene extends Scene {
   }
   
   public void runSequences() {
-	  System.out.println(this+"#runSequences");
+	  println(this+"#runSequences");
 	  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOKOING FOR -- number of loop iterations per sequence
-		  System.out.println(this+"#runSequences(): is readyToChange, calling randomScene()");
+		  println(this+"#runSequences(): is readyToChange, calling randomScene()");
 		  randomScene();
 	  }
 	  
@@ -128,7 +128,7 @@ public class SwitcherScene extends Scene {
 		  Iterator it = seqs.iterator();
 		  while (it.hasNext()) {
 			  Sequence sq = (Sequence)it.next();
-			  System.out.println(this+"#runSequences(): Setting values on " + sq);
+			  println(this+"#runSequences(): Setting values on " + sq);
 			  sq.setValuesForTime();
 		  }
 	  }

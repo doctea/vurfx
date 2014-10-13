@@ -106,6 +106,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   //PGraphics src;
   public transient GLGraphicsOffScreen out;
   public transient GLGraphicsOffScreen src;
+
+  
+  boolean outputDebug = true;
+  public void println(String text) {		// debugPrint, printDebug -- you get the idea
+	  if (outputDebug) System.out.println("F " + (text.contains((this.toString()))? text : this+": "+text));
+  }
+  
   
 
   public Scene sc;
@@ -163,13 +170,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   public String getFilterName () {
     if(filterName.equals("")) {
       filterName = this.getClass().toString() + ((VurfEclipse)APP.getApp()).pr.getGUID();
-      System.out.println("setting empty filter name to " + filterName);
+      println("setting empty filter name to " + filterName);
     }
     return filterName;
   }
 
   public String getPath () {
-    System.out.println("Filter#getPath() for " + toString() + " returning '" + sc.getPath() + "/" + this.getFilterName() +"'");
+    println("Filter#getPath() for " + toString() + " returning '" + sc.getPath() + "/" + this.getFilterName() +"'");
     return sc.getPath() + "/" + this.getFilterName();
   }
 
@@ -199,7 +206,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     return this;    
   }
   public Filter setOutputCanvas(String out) {
-    System.out.println("Filter#setOutputCanvas('" + out + "') in " + this + " replacing '" + this.canvas_out + "'");
+    println("Filter#setOutputCanvas('" + out + "') in " + this + " replacing '" + this.canvas_out + "'");
     this.canvas_out = out;
     Canvas c = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out);
     if (null!=c)
@@ -220,11 +227,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     //this.out = out;
     //this.src = src;
     return this;
-    //System.out.println("Setting out to " + out + " in " + this);
+    //println("Setting out to " + out + " in " + this);
   }
   public Filter setInputBuffer(GLGraphicsOffScreen src) {
     if (src==null) {
-      System.out.println("Passed null input in " + this);
+      println("Passed null input in " + this);
       exit();
     }
     this.src = src;
@@ -232,7 +239,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   }
   public Filter setOutputBuffer(GLGraphicsOffScreen out) {
     if (out==null) {
-      System.out.println("Passed null output in " + this);
+      println("Passed null output in " + this);
       exit();
     }
     this.out = out;
@@ -263,17 +270,17 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   public void beginDraw () {
     //out.loadPixels();
     //src.loadPixels();
-    //System.out.println("beginDraw in " + this + "{");
+    //println("beginDraw in " + this + "{");
     if (out==null) setOutputCanvas(canvas_out);
     if (src==null) setInputCanvas(canvas_in);
     out.beginDraw();
-    //System.out.println("} wrapped beginDraw in " + this);
+    //println("} wrapped beginDraw in " + this);
   }
   public void endDraw () {
-    //System.out.println("endDraw in " + this + "{");
+    //println("endDraw in " + this + "{");
     out.endDraw();    
     //out.updatePixels();
-    //System.out.println("} endDraw in " + this);
+    //println("} endDraw in " + this);
     //out.updatePixels();
   }
 
@@ -330,7 +337,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   public Object getParameterValue(String paramName) {
     if (this.parameters==null) this.setParameterDefaults();
     //if (this.parameters.size()==0) setParameterDefaults();
-    //System.out.println("looking for " + paramName);
+    //println("looking for " + paramName);
     //if (this.parameters.containsKey(paramName)) 
     return this.parameters.get(paramName).value;
     //else
@@ -338,7 +345,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   }
   public Filter setParameterValue(String paramName, Object value) {
     if (this.parameters==null) this.setParameterDefaults();
-    //System.out.println("in " + this + ": setParameterValue ('"+ paramName + "', '" + value + ")");
+    //println("in " + this + ": setParameterValue ('"+ paramName + "', '" + value + ")");
     //if (this.parameters.size()==0) setParameterDefaults();
     //parameters.put(paramName, value);
     //parameters.put(paramName, new Parameter(paramName, value));//, min, max));
@@ -355,7 +362,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     try {
       parameters.get(paramName).setValueFromSin((Float)f);
     } catch (ClassCastException e) {
-      System.out.println("Error - caught trying to set " + paramName + " to a " + f.getClass());
+      println("Error - caught trying to set " + paramName + " to a " + f.getClass());
     }
     return this;
   }
@@ -385,7 +392,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   public Filter addParameter(String paramName, Object value, Object min, Object max) {
     if (this.parameters==null) this.setParameterDefaults();
-    System.out.println(this + "#addParameter(" + paramName + ", " + value + ", " + min + ", " + max + "): " + this.getFilterLabel());
+    println(this + "#addParameter(" + paramName + ", " + value + ", " + min + ", " + max + "): " + this.getFilterLabel());
     parameters.put(paramName, new Parameter(paramName, value, min, max)); 
     updateParameterValue(paramName, value);
     return this;
@@ -414,7 +421,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   }
 
   public void setParameterDefaults () {
-    System.out.println("setParameterDefaults in " + this);
+    println("setParameterDefaults in " + this);
     parameters = new HashMap<String, Parameter>();//String.class,Parameter.class);
   }
 
@@ -501,25 +508,25 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 
   public void controlEvent (CallbackEvent ev) {
-    //System.out.println(this + " got event " + ev + " : " + ev.getController());
+    //println(this + " got event " + ev + " : " + ev.getController());
     if (ev.getAction()==ControlP5.ACTION_RELEASED) {
       if (ev.getController()==this.muteController) {
-        System.out.println("Setting mute state on " + this + " to " + muteController.getState());
+        println("Setting mute state on " + this + " to " + muteController.getState());
         this.setMute(muteController.getState());
       } else if (ev.getController()==this.nextModeButton) {
         this.nextMode();
       } 
       else if (controllers.containsKey(ev.getController())) {
         String paramName = (String)controllers.get(ev.getController());                
-        System.out.println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
+        println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
         Object currentValue = getParameterValue(paramName) ;
         changeValueFor(currentValue,paramName,ev);
       }
     } /*else if (ev.getAction()==ControlP5.ACTION_PRESSED) {
       if (controllers.containsKey(ev.getController())) {
-        System.out.println("getcontroller is " + ev.getController());
+        println("getcontroller is " + ev.getController());
         if (ev.getController() instanceof Slider) {
-          System.out.println("is slider");
+          println("is slider");
           String paramName = (String)controllers.get(ev.getController());        
           Object currentValue = getParameterValue(paramName) ;
           changeValueFor(currentValue,paramName,ev);
@@ -547,9 +554,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   public synchronized void setupControls(ControlP5 cp5, String tabName) {
 	if (controlsSetup) return;
 	controlsSetup = true;
-    System.out.println("                                                       Filter#setupControls() for "  + this + ": " + tabName);
+    println("                                                       Filter#setupControls() for "  + this + ": " + tabName);
     /*if (count++>20) {
-      System.out.println("Exiting because setupControls count is " + count + " in " + this);
+      println("Exiting because setupControls count is " + count + " in " + this);
       System.exit(0);
     }*/
     int size = 20;
@@ -588,7 +595,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       //this.updateParameterValue((String)me.getKey(), me.getValue());
       //Object value = me.getValue();
       Parameter param = (Parameter)me.getValue();
-      System.out.println("Filter#setupControls() in " + toString() + " doing control for " + param.name);
+      println("Filter#setupControls() in " + toString() + " doing control for " + param.name);
       Object value = param.value;
       controlP5.Controller o = 
         value instanceof Float ?
@@ -619,7 +626,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         o.getValueLabel().align(ControlP5.LEFT, ControlP5.RIGHT).setPaddingY(0);      
         o.getCaptionLabel().align(ControlP5.RIGHT, ControlP5.RIGHT).setPaddingY(0);        
         param.setFilterPath(this.getPath());
-        System.out.println("Filter: adding control object for filter with path " + this.getPath());
+        println("Filter: adding control object for filter with path " + this.getPath());
         this.setControllerMapping(param.name,o);
         
         if (!i.hasNext()) o.linebreak();
@@ -627,7 +634,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         /*controllers.put(
           o, (String)me.getKey()
         );*/
-        System.out.println(this + ": set up Control for " + me.getKey() + " (which shouldnt differ from " + param.name + " if iv understood my own code .. )");
+        println(this + ": set up Control for " + me.getKey() + " (which shouldnt differ from " + param.name + " if iv understood my own code .. )");
       }
       // }
     }

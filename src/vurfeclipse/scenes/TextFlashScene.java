@@ -43,7 +43,7 @@ public class TextFlashScene extends Scene {
   
   public void randomWord() {
       String letter = values[(int)((VurfEclipse)APP.getApp()).random(0,values.length)];
-      //System.out.println("got word '" + letter + "'");
+      //println("got word '" + letter + "'");
       //((TextDrawer)filters[0]).setText(values[(int)random(0,values.length)]);
       //((TextDrawer)self.filters[0]).changeParameterValue("text",values[(int)APP.random(0,values.length)]);
       changeFilterParameterValue(0,"text",letter);
@@ -62,7 +62,7 @@ public class TextFlashScene extends Scene {
   public void setupCallbackPresets () {
     super.setupCallbackPresets();
     final Scene self = this;
-    //System.out.println("adding callback 'spin'");
+    //println("adding callback 'spin'");
     
     this.callbacks.put("cycle", new ParameterCallback() {
     	int count = 0;
@@ -75,7 +75,7 @@ public class TextFlashScene extends Scene {
     		int tot = 0; 
     		for (int i = 0 ; i < values.length ; i++) {
     			wordBreaks.put(tot,values[i]);
-    			System.out.println("adding boundary at " + tot + " for " + values[i]);
+    			println("adding boundary at " + tot + " for " + values[i]);
     			tot += values[i].length();
     		}
     		totalLength = tot;
@@ -85,7 +85,7 @@ public class TextFlashScene extends Scene {
     		for (int i = 0 ; i < values.length ; i++) {
     			for (int x = 0 ; x < values[i].length() ; x++) {
     				chars[pointer++] = new Character(values[i].charAt(x)).toString();
-    				System.out.println("added " + chars[pointer-1]);    				
+    				println("added " + chars[pointer-1]);    				
     			}
     		}
     		
@@ -97,7 +97,7 @@ public class TextFlashScene extends Scene {
     		changeFilterParameterValue(0,"text",chars[step]);
     		if (step==0) { //changeFont(count++);
     		 //if (wordBreaks.containsKey(new Integer(step))) {
-    			System.out.println("found boundary at " + step);
+    			println("found boundary at " + step);
     			changeFont(count++);
     		}
     	}
@@ -168,7 +168,7 @@ public class TextFlashScene extends Scene {
   public boolean setupFilters () {
     //super.initialise();
     filters = new Filter[filterCount];
-    //System.out.println("DemoScene initialised " + this + " - filtercount is " + filterCount);
+    //println("DemoScene initialised " + this + " - filtercount is " + filterCount);
     int i = 0;
     
     filters[i] = new TextDrawer(this).setFilterName("TextDrawer").setCanvases(getCanvasMapping("temp"),getCanvasMapping("temp"));//setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);

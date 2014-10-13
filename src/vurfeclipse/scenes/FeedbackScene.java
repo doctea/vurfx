@@ -38,7 +38,7 @@ class FeedbackScene extends Scene {
     Stream stream = host.getStream("test");
     BeatStream beatStream = (BeatStream) host.getStream("beat");
        
-    //System.out.println("DemoScene initialised " + this + " - filtercount is " + filterCount);
+    //println("DemoScene initialised " + this + " - filtercount is " + filterCount);
     int i = 0;
     filters[i] = new BlankFilter(this);
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
@@ -79,7 +79,7 @@ class FeedbackScene extends Scene {
     beatStream.registerEventListener("beat_1", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("Handler: call(" + value + ")");
+          //println("Handler: call(" + value + ")");
           //cf.setParameterValue("test", value); 
           //t.toggleMute();
           tgl.nextMode();
@@ -111,7 +111,7 @@ class FeedbackScene extends Scene {
     beatStream.registerEventListener("bar_2", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("Handler: call(" + value + ")");
+          //println("Handler: call(" + value + ")");
           //cf.setParameterValue("test", value); 
           //t.toggleMute();
           //tgl.nextMode();
@@ -179,7 +179,7 @@ class FeedbackScene extends Scene {
     /*beatStream.registerEventListener("beat_8", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("Handler: call(" + value + ")");
+          //println("Handler: call(" + value + ")");
           //cf.setParameterValue("test", value); 
           t.toggleMute();
         }
@@ -198,7 +198,7 @@ class FeedbackScene extends Scene {
     /*beatStream.registerEventListener("beat_1", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("beat_2 kaleidoscope: call(" + value + ")");
+          //println("beat_2 kaleidoscope: call(" + value + ")");
           //cf.setParameterValue("test", value); 
           fbk.setParameterValue("amp",random(.1,6.));
           fbk.setParameterValue("radio",radians(random(60)));
@@ -231,7 +231,7 @@ class FeedbackScene extends Scene {
     /*beatStream.registerEventListener("bar_1", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("beat_2 kaleidoscope: call(" + value + ")");
+          //println("beat_2 kaleidoscope: call(" + value + ")");
           //cf.setParameterValue("test", value); 
           tk.nextMode();
         }
@@ -240,7 +240,7 @@ class FeedbackScene extends Scene {
 /*    beatStream.registerEventListener("bar_3", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("Handler: call(" + value + ")");
+          //println("Handler: call(" + value + ")");
           //cf.setParameterValue("test", value); 
           tk.toggleMute();
         }
@@ -271,11 +271,11 @@ class FeedbackScene extends Scene {
     beatStream.registerEventListener("beat_2",
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("got beat_2 of " + value + " " + Integer.parseInt(value.toString())%2);
+          //println("got beat_2 of " + value + " " + Integer.parseInt(value.toString())%2);
           int v = Integer.parseInt(value.toString());
           if (v%2==1) {
             //ftd.toggleMute();
-            //System.out.println("toggle");
+            //println("toggle");
             //fc.toggleMute();
             fc.setMute(false);
           } else {
@@ -316,7 +316,7 @@ class FeedbackScene extends Scene {
     stream.registerEventListener("test", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("Handler: call(" + value + ")");
+          //println("Handler: call(" + value + ")");
           cf.setParameterValue("test", value); 
         }
       }
@@ -324,7 +324,7 @@ class FeedbackScene extends Scene {
     beatStream.registerEventListener("beat", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("beat: call(" + value + ")");
+          //println("beat: call(" + value + ")");
           cf.setParameterValue("beat", value); 
         }
       }
@@ -332,7 +332,7 @@ class FeedbackScene extends Scene {
     beatStream.registerEventListener("bar", 
       new ParameterCallback () {
         public void call(Object value) {
-          //System.out.println("bar: call(" + value + ")");
+          //println("bar: call(" + value + ")");
           cf.setParameterValue("bar", value); 
         }
       }

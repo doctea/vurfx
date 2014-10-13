@@ -31,7 +31,7 @@ class KaleidoScene extends Scene {
     
     filters[++i] = new KaleidoFilter(this).setFilterName("KaleidoFilter").setCanvases(getCanvasMapping("out"),getCanvasMapping("out"));//buffers[BUF_OUT],buffers[BUF_OUT]);
     
-    System.out.println ("just created kaleido " + filters[i].getFilterName());
+    println ("just created kaleido " + filters[i].getFilterName());
     //System.exit(0);
     
     
