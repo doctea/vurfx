@@ -1,4 +1,4 @@
-package vurfeclipse.projects;
+package vurfeclipse.user.projects;
 
 import java.io.Serializable;
 
@@ -7,6 +7,7 @@ import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.*;
+import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
 import vurfeclipse.streams.*;
 

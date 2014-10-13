@@ -37,7 +37,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/opengl/gluegen-rt.jar" sourcepath="/home/doctea/vurf-eclipse/lib/base/opengl/gluegen-rt.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/doctea/vurf-eclipse/lib/base/opengl"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="d:/code/vurf-eclipse/lib/base/opengl"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/video/video.jar" sourcepath="D:/code/processing-1.5.1/modes/java/libraries/video/src">

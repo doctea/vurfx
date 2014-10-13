@@ -1,4 +1,4 @@
-package vurfeclipse.scenes.userscenes;
+package vurfeclipse.user.scenes;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;

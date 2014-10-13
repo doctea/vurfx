@@ -18,10 +18,10 @@ import controlP5.*;
   
 
 public abstract class Project implements Serializable {
-  int w,h;
+  public int w,h;
   public String gfx_mode;
   
-  Project(int w, int h, String gfx_mode) {
+  public Project(int w, int h, String gfx_mode) {
     this.w = w;
     this.h = h;
     this.gfx_mode = gfx_mode;

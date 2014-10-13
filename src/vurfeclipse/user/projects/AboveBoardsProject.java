@@ -1,8 +1,9 @@
-package vurfeclipse.projects;
+package vurfeclipse.user.projects;
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.*;
+import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
 
 import java.io.Serializable;
@@ -11,9 +12,9 @@ import java.util.*;
 import processing.core.PApplet;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
-import vurfeclipse.scenes.userscenes.OutputFX1;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.streams.*;
+import vurfeclipse.user.scenes.OutputFX1;
 
 public class AboveBoardsProject extends Project implements Serializable {
   

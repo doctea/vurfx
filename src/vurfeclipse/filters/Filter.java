@@ -548,8 +548,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	if (controlsSetup) return;
 	controlsSetup = true;
     System.out.println("                                                       Filter#setupControls() for "  + this + ": " + tabName);
-    if (count++>20)
+    /*if (count++>20) {
+      System.out.println("Exiting because setupControls count is " + count + " in " + this);
       System.exit(0);
+    }*/
     int size = 20;
     cp5.addCallback(this);
     //cp5.addTextlabel(tabName + this.toString()).setText(getFilterLabel()).linebreak();

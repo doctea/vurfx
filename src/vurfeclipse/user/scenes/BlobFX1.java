@@ -1,4 +1,4 @@
-package vurfeclipse.scenes.userscenes;
+package vurfeclipse.user.scenes;
 
 import java.util.HashMap;
 
@@ -59,7 +59,7 @@ abstract class SpinnerSequence extends Sequence {
 		host.host.getSceneForPath("/OutputShader2").getFilter("BlendDrawer pix0 to out").setMute((APP.getApp().random(0f,1.0f)>=0.25f));
 		
 		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/OutputShader2").getFilter("BlendDrawer pix0 to out").changeParameterValue("BlendMode", getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
-		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/O:hey up dude. fancy hey up utputShader2").getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
+		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/OutputShader2").getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
 		
 		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/TextFlash").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
 		((BlendDrawer)host.host.getSceneForPath("/TextFlash").getFilter("BlendDrawer")).setMute((APP.getApp().random(0f,1.0f)>=0.25f));

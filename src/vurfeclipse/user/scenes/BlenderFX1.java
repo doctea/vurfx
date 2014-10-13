@@ -1,6 +1,6 @@
-package vurfeclipse.scenes.userscenes;
+package vurfeclipse.user.scenes;
 
-import javafx.scene.canvas.Canvas;
+//import javafx.scene.canvas.Canvas;
 import vurfeclipse.APP;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.PlainDrawer;
