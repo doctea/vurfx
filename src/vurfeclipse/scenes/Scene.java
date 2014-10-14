@@ -11,7 +11,7 @@ import vurfeclipse.projects.Project;
 import vurfeclipse.streams.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.Sequence;
-import codeanticode.glgraphics.GLGraphicsOffScreen;
+import codeanticode.glgraphics.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;

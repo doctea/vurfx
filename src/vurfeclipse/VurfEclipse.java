@@ -4,12 +4,18 @@ package vurfeclipse;
 import processing.core.*;
 import controlP5.*;
 
-import javax.media.opengl.GL;
+//import javax.media.j3d.*;
 
 import vurfeclipse.projects.*;
 import vurfeclipse.user.projects.*;
 import codeanticode.glgraphics.*;
 import ddf.minim.*;
+
+import java.util.*;
+
+//import javax.media.opengl.*;
+import processing.opengl.*;
+import javax.media.opengl.GL;
 
 public class VurfEclipse extends PApplet {
 	/*public void setup() {
@@ -226,7 +232,6 @@ public class VurfEclipse extends PApplet {
 		   // found these bits here! https://github.com/pixelpusher/CreativeCode/blob/master/SoundCircle/SoundCircle.pde
 		   gl = pgl.beginGL();
 		   
-		   
 		   pgl.gl.glDisable(GL.GL_DEPTH_TEST);
 		
 		   pgl.gl.setSwapInterval( 1 ); // use value 0 to disable v-sync 
@@ -295,7 +300,8 @@ public class VurfEclipse extends PApplet {
 		   exit();
 		 }
 		 
-		 System.out.println("Finished VurfEclipse setup(); handing off to draw()..."); 
+		 System.out.println("Finished VurfEclipse setup(); handing off to draw()...");
+		 //System.exit(0);
 	}
 	
 	

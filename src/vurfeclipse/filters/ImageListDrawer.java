@@ -3,8 +3,10 @@ package vurfeclipse.filters;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+//import java.nio.file.Files;
+//import java.nio.file.Paths;
+import com.google.common.io.Files;
+//import com.google.common.io.Paths;
 import java.util.*;
 
 import processing.core.PImage;
@@ -96,7 +98,8 @@ public class ImageListDrawer extends Filter {
   }
   
   public void loadDirectory() {
-	  String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
+	  String path = APP.getApp().dataPath("image-sources/" + directory);
+	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
 	  //String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
 	  File folder = new File(path);
 	  System.out.println(this + "#loadDirectory() got path " + path);
