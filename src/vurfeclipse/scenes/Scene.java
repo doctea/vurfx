@@ -16,7 +16,7 @@ import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
 
-public abstract class Scene implements CallbackListener, Serializable, Mutable {
+public abstract class Scene implements CallbackListener, Serializable, Mutable, Targetable {
   // Scene stuff 
   public int w,h;
   
@@ -107,6 +107,15 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable {
     return null;
   }
   
+  public ArrayList<Filter> getFilters () {
+	  ArrayList<Filter> f = new ArrayList<Filter>();
+	  for (int i = 0 ; i < filters.length ; i++) {
+		  if (filters[i]!=null) {
+			  f.add(filters[i]);
+		  }
+	  }
+	  return f;
+  } 
   
   public String getPath() {
     return ((VurfEclipse)APP.getApp()).pr.getPath() + this.getSceneName();
@@ -742,5 +751,17 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable {
         
     
   }
+ 
+  @Override
+  public Object target(String path, Object payload) {
+	  println("#target('"+path+"', '"+payload+"')");
+	  if ("/mute".equals(path.substring(path.length()-5, path.length()))) {
+		  this.toggleMute();
+		  return this.isMuted()?"Muted":"Unmuted";
+	  }
+	  return payload;
+  }
+
+  
   
 }

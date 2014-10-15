@@ -185,6 +185,10 @@ public abstract class Project implements Serializable {
     return null;
   }
   
+  public ArrayList<Scene> getScenes () {
+	  return this.scenes;
+  }
+  
  /* {
     //this.initialiseScenes();
     //return true; 
@@ -394,6 +398,9 @@ public abstract class Project implements Serializable {
       Iterator i = scenes.iterator();
       while(i.hasNext())
         ((Scene)i.next()).sendKeyPressed('-');
+    } else if (key=='p') {
+    	System.out.println(rsConn.getURLs());
+    	System.exit(0);
     } else {
       Scene sc = this.getSelectedScene();
   
@@ -430,7 +437,8 @@ public abstract class Project implements Serializable {
   RestConnector rsConn;
   public void setupRest() {
 	  rsConn = new RestConnector(this);
-	  rsConn.start();
+	  Thread t = new Thread(rsConn);
+	  t.start();
   }
   
   public void setupControls() {

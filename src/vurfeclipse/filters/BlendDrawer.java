@@ -146,9 +146,9 @@ public class BlendDrawer extends Filter {
     return true;
   }
   
-  public String getFilterLabel() {
+  /*public String getFilterLabel() {
     return super.getFilterLabel() + " [" + currentBlendMode + "]:" + blendModes[currentBlendMode];
-  }
+  }*/
   /*public String toString() {
     return super.toString() + " " + blendModes[currentBlendMode];
   }*/
