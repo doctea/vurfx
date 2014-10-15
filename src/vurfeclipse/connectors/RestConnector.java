@@ -63,24 +63,8 @@ public class RestConnector implements Runnable {
 		Iterator it = pr.getScenes().iterator();
 		while (it.hasNext()) {
 			Scene s = (Scene) it.next();
-			// add a 'mute' url for the Scene
-			if (s instanceof Mutable) {
-				urls.put(s.getPath() + "/mute", s);
-				System.out.println(this + ": added Scene's url '" + s.getPath() + "/mute' mapped to " + s);
-			}
-			Iterator fit = s.getFilters().iterator();
-			while (fit.hasNext()) {
-				Filter f = (Filter) fit.next();
-				urls.put(f.getPath() + "/mute", f);
-				urls.put(f.getPath() + "/nextMode", f);
-				System.out.println(this + ": added Filter's url '" + f.getPath() + "/mute' mapped to " + f);
-				Iterator pit = f.getParameters().iterator();
-				while (pit.hasNext()) {
-					Parameter p = (Parameter) pit.next();
-					System.out.println(this + ": added Parameter's 	url '" + p.getPath() + "/mute' mapped to " + p);
-					urls.put(p.getFilterPath() + "/" + p.getName(), p);					
-				}
-			}
+			
+			urls.putAll(s.getTargetURLs());
 		}
 		
 		return urls;

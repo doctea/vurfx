@@ -7,6 +7,7 @@ import java.util.*;
 
 import vurfeclipse.*;
 import vurfeclipse.filters.*;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.streams.*;
 import vurfeclipse.scenes.*;
@@ -760,6 +761,31 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		  return this.isMuted()?"Muted":"Unmuted";
 	  }
 	  return payload;
+  }
+  
+  public HashMap<String, Targetable> getCustomTargetURLs() {
+	  return new HashMap<String,Targetable>();
+  }
+  
+  public HashMap<String,Targetable> getTargetURLs() {
+	HashMap<String, Targetable> urls = new HashMap<String,Targetable>();
+	Scene s = this;
+	// add a 'mute' url for the Scene
+	if (s instanceof Mutable) {
+		urls.put(s.getPath() + "/mute", s);
+		println(this + ": added Scene's url '" + s.getPath() + "/mute' mapped to " + s);
+	}
+	
+	// loop over all the Filters; add the URLs for each Filter
+	Iterator fit = s.getFilters().iterator();
+	while (fit.hasNext()) {
+		Filter f = (Filter) fit.next();
+		urls.putAll(f.getTargetURLs());
+	}
+	
+	urls.putAll(getCustomTargetURLs());
+	
+	return urls;
   }
 
   

@@ -13,6 +13,7 @@ import processing.core.PImage;
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.Pathable;
+import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
@@ -616,7 +617,29 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	  }
 	  return payload;	  
   }
-
   
+  public HashMap<String, Targetable> getCustomTargetURLs() {
+	  return new HashMap<String,Targetable>();
+  }
+  
+  public HashMap<String, Targetable> getTargetURLs() {
+	HashMap<String, Targetable> urls = new HashMap<String,Targetable> ();
+	Filter f = this;
+	
+	urls.put(f.getPath() + "/mute", f);
+	urls.put(f.getPath() + "/nextMode", f);
+	println(this + ": added Filter's url '" + f.getPath() + "/mute' mapped to " + f);
+	
+	Iterator pit = f.getParameters().iterator();
+	while (pit.hasNext()) {
+		Parameter p = (Parameter) pit.next();
+		println(this + ": added Parameter's url '" + p.getPath() + "/mute' mapped to " + p);
+		urls.put(p.getFilterPath() + "/" + p.getName(), p);					
+	}
+	
+	urls.putAll(getCustomTargetURLs());
+	
+	return urls;
+  }
 }
 
