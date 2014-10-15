@@ -51,7 +51,7 @@ public class SwitcherScene extends Scene {
 	  if (seq!=null) 
 		  bindSequence(switchedSceneName, scene.getSequence(sequenceName));
 	  else
-		  throw new NullPointerException("sequenceName " + sequenceName + " passed a null value for scene!");
+		  throw new NullPointerException("sequenceName " + sequenceName + " passed a null value for scene " + switchedSceneName + " and " + scene);
 	  
 	  return scene;
   }
@@ -84,13 +84,16 @@ public class SwitcherScene extends Scene {
 		  Iterator it = seqs.iterator();
 		  //((Sequence)it.next()).start();
 		  while (it.hasNext()) {
-			  try {
+			  Sequence s = ((Sequence)it.next());
+			  //try {
 				  println(this + "#changeScene() Changing scene");
-				  ((Sequence)it.next()).start();
-			  } catch (NullPointerException e) {
-				  System.out.println(this + "#changeScene: Got NullPointerException for a sequence for " + sceneName + ": " + e);
+				  //if (s!=null) 
+					s.start(); 
+				  //else println("Got NullPointerException for a sequence for " + sceneName + ": ");
+			  /*} catch (NullPointerException e) {
+				  System.out.println(this + "#changeScene: Got NullPointerException for a sequence for " + sceneName + ": " + s + ", " + e);
 				  System.exit(1);
-			  }
+			  }*/
 		  }
 	  }
   }

@@ -1,6 +1,8 @@
 package vurfeclipse.connectors;
 
 import java.io.IOException;
+
+import com.google.gson.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,6 +17,8 @@ import IceBreakRestServer.*;
 
 public class RestConnector implements Runnable {
 
+	com.google.gson.Gson gson = new Gson();
+	
 	Project pr;
 	
 	HashMap<String,Targetable> targets;
@@ -83,6 +87,11 @@ public class RestConnector implements Runnable {
 	
 	public Object processRequest(String url, String payload) {
 		if (targets==null) targets = getURLs();
+		
+		if ("/urls".equals(url)) {
+			return gson.toJson(targets.keySet().toArray());
+		}		
+		
 		Targetable t = targets.get(url);
 		System.out.println("looking for url " + url);
 		if (t!=null) {

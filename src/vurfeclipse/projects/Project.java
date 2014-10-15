@@ -166,20 +166,24 @@ public abstract class Project implements Serializable {
   
   public Object getObjectForPath(String path) {
     // loop over the scenes and check for one with the same name as the first part of path; then pass the rest to getObjectForPath() for the second part..
-    String[] spl = path.split("/", 3);
-    Iterator it = scenes.iterator();
-    while (it.hasNext()) {
-      Scene s = (Scene)it.next();
-      //System.out.println("Project#getObjectForPath("+path+") checked '" + s.getSceneName() + "' against '" + spl[1] + "'"); //against stored scene " + s.getSceneName());
-      if (s.getSceneName().equals(spl[1])) { //getSceneName().equals(s)) {
-    	  //System.out.println("Found " + s.getSceneName());
-        //return s;
-        // ask it to get the rest of the path for us
-        if (spl.length>2)
-          return s.getObjectForPath(spl[2]);
-        else
-          return s;
-      }
+    String[] spl = path.split("/",5); //, 3);
+    //System.out.println("spl[1] is " + spl[1]);
+    if ("sc".equals(spl[1])) {
+    	//System.out.println("got sc, looking for " + spl[2]);
+	    Iterator it = scenes.iterator();
+	    while (it.hasNext()) {
+	      Scene s = (Scene)it.next();
+	      //System.out.println("Project#getObjectForPath("+path+") checked '" + s.getSceneName() + "' against '" + spl[1] + "'"); //against stored scene " + s.getSceneName());
+	      if (s.getSceneName().equals(spl[2])) { //getSceneName().equals(s)) {
+	    	//System.out.println("Found " + s.getSceneName());
+	        //return s;
+	        // ask it to get the rest of the path for us
+	        if (spl.length>3) {
+	          return s.getObjectForPath(spl[3]+"/"+spl[4]);
+	        } else
+	          return s;
+	      }
+	    }
     }
     //System.out.println("couldn't find object for path " + path + "!");
     return null;

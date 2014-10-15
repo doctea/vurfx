@@ -207,5 +207,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
+	<classpathentry kind="lib" path="lib/user/gson-2.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

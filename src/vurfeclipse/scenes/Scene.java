@@ -93,7 +93,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     //println("Scene#getObjectForPath(" + path + ")");
     if (path.equals("") || path.equals(this.getSceneName())) return this;
     String spl[] = path.split("/",2);
-    return getFilter(spl[0]);
+    return getFilter(spl[1]);
   }
   
   public Filter getFilter(String name) {
@@ -119,7 +119,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   } 
   
   public String getPath() {
-    return ((VurfEclipse)APP.getApp()).pr.getPath() + this.getSceneName();
+    return ((VurfEclipse)APP.getApp()).pr.getPath() + "sc/" + this.getSceneName();
   }
   
   public Canvas createCanvas(String canvasName) {

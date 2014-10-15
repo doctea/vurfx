@@ -48,23 +48,23 @@ abstract class SpinnerSequence extends Sequence {
 	
 	public void toggleOutputs() {
 		// this bit below shouldnt be here.
-		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/OutputShader").getFilter("Toon").toggleMute();
-		//switcher.host.getSceneForPath("/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-		//switcher.host.getSceneForPath("/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/OutputShader").getFilter("Edges").toggleMute();
-		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/OutputShader2").getFilter("Feedback").toggleMute();
-		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/OutputShader2").getFilter("Kaleido").toggleMute();
+		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader").getFilter("Toon").toggleMute();
+		//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
+		//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
+		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader").getFilter("Edges").toggleMute();
+		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("Feedback").toggleMute();
+		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("Kaleido").toggleMute();
 		
-		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/OutputShader2").getFilter("BlendDrawer pix0 to out").toggleMute();
-		host.host.getSceneForPath("/OutputShader2").getFilter("BlendDrawer pix0 to out").setMute((APP.getApp().random(0f,1.0f)>=0.25f));
+		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").toggleMute();
+		host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").setMute((APP.getApp().random(0f,1.0f)>=0.25f));
 		
-		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/OutputShader2").getFilter("BlendDrawer pix0 to out").changeParameterValue("BlendMode", getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
-		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/OutputShader2").getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
+		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").changeParameterValue("BlendMode", getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
+		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
 		
-		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/TextFlash").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
-		((BlendDrawer)host.host.getSceneForPath("/TextFlash").getFilter("BlendDrawer")).setMute((APP.getApp().random(0f,1.0f)>=0.25f));
+		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/TextFlash").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
+		((BlendDrawer)host.host.getSceneForPath("/sc/TextFlash").getFilter("BlendDrawer")).setMute((APP.getApp().random(0f,1.0f)>=0.25f));
 		
-		host.host.getSceneForPath("/OutputShader2").getFilter("Kaleido").nextMode();    			
+		host.host.getSceneForPath("/sc/OutputShader2").getFilter("Kaleido").nextMode();    			
 	}
 	
 }
