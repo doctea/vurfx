@@ -47,12 +47,27 @@ public class Parameter implements Serializable, Targetable {
 	  return this.name;
   }
   
+  public Object cast(Object payload) {
+	  if (this.datatype == Integer.class) {
+		  return Integer.parseInt(payload.toString());
+	  } else if (this.datatype == Double.class) {
+		  return Double.parseDouble(payload.toString());
+	  } else if (this.datatype == Boolean.class) {
+		  return Boolean.parseBoolean(payload.toString());
+	  } else if (this.datatype == String.class) {
+		  return payload.toString();
+	  }
+	  return null;
+  }
+  
   @Override
   public Object target(String path, Object payload) {
 	  //this.value = this.datatype.cast(payload);
-	  setValue(this.datatype.cast(payload));
+	  setValue(
+			  this.cast(payload)
+	  );
 	  
-	  return (String)this.value;
+	  return this.value.toString();
   }
   
   /*public void setController(controlP5.Controller c) {
