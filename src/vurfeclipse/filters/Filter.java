@@ -117,6 +117,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 
   public Object getObjectForPath(String path) {
+	  System.out.println("getObjectForPath " + path);
+	  System.exit(1);
     String[] spl = path.split("/",2);
     if (this.parameters.containsKey(spl[0])) {
       return this.parameters.get(spl[0]);
@@ -634,7 +636,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	while (pit.hasNext()) {
 		Parameter p = (Parameter) pit.next();
 		println(this + ": added Parameter's url '" + p.getPath() + "/mute' mapped to " + p);
-		urls.put(p.getFilterPath() + "/" + p.getName(), p);					
+		//urls.put(p.getFilterPath() + "/" + p.getName(), p);
+		urls.put(p.getPath(), p);
 	}
 	
 	urls.putAll(getCustomTargetURLs());

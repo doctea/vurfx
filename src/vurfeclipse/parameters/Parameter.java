@@ -41,7 +41,7 @@ public class Parameter implements Serializable, Targetable {
 	  return this.filterPath;
   }
   public String getPath() {
-	  return this.getFilterPath() + "pa/" + name; /// TODO: HALFWAY THROUGH REJIGGING THIS TO USE BREAKERS LIKE THIS.... 
+	  return this.getFilterPath() + "/pa/" + name; /// TODO: HALFWAY THROUGH REJIGGING THIS TO USE BREAKERS LIKE THIS.... 
   }
   public String getName () {
 	  return this.name;
