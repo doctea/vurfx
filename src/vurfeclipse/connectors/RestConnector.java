@@ -6,6 +6,7 @@ import com.google.gson.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import vurfeclipse.Targetable;
 import vurfeclipse.filters.Filter;
@@ -14,6 +15,11 @@ import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 import IceBreakRestServer.*; 
+
+class RestMessage {
+	String value;
+	String action;
+}
 
 public class RestConnector implements Runnable {
 
@@ -50,7 +56,7 @@ public class RestConnector implements Runnable {
 	          //System.out.println(this + ": got request");
 	          //System.exit(1);
 	                     
-	          rest.write (this.processRequest(parseURL(rest.resource,0), rest.payload).toString());
+	          rest.write (this.processRequest(parseURL(rest.resource,0), rest.payload, rest.header).toString());
 	          rest.flush();
 	        }
 	      }
@@ -85,12 +91,21 @@ public class RestConnector implements Runnable {
 		return path;
 	}
 	
-	public Object processRequest(String url, String payload) {
+	public Object processRequest(String url, String payload, Map<String, String> header) {
 		if (targets==null) targets = getURLs();
 		
 		if ("/urls".equals(url)) {
 			return gson.toJson(targets.keySet().toArray());
-		}		
+		}
+		
+		System.out.println("Head is " + header);
+		//System.exit(1);
+		
+		if (!header.containsKey("Content-Type") || header.get("Content-Type").contains("Text")) {
+			// do nothing
+		} else if (header.get("Content-Type").contains("JSON")) {
+			payload = gson.fromJson(payload, RestMessage.class).value;
+		}
 		
 		Targetable t = targets.get(url);
 		System.out.println("looking for url " + url);

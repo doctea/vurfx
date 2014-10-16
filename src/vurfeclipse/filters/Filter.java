@@ -630,13 +630,12 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	
 	urls.put(f.getPath() + "/mute", f);
 	urls.put(f.getPath() + "/nextMode", f);
-	println(this + ": added Filter's url '" + f.getPath() + "/mute' mapped to " + f);
+	println("added Filter's url '" + f.getPath() + "/mute' mapped to " + f);
 	
 	Iterator pit = f.getParameters().iterator();
 	while (pit.hasNext()) {
 		Parameter p = (Parameter) pit.next();
-		println(this + ": added Parameter's url '" + p.getPath() + "/mute' mapped to " + p);
-		//urls.put(p.getFilterPath() + "/" + p.getName(), p);
+		println("added Parameter's url '" + p.getPath() + "/mute' mapped to " + p);
 		urls.put(p.getPath(), p);
 	}
 	
