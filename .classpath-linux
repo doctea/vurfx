@@ -203,10 +203,11 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/doctea/vurf-eclipse/lib/user/SimpleOpenNI/library"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/VurfEclipse/lib/user/SimpleOpenNI/library"/>
+
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/doctea/vurf-eclipse/lib/user/IceBreakRestServer_1_2.jar"/>
+	<classpathentry kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
 	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
