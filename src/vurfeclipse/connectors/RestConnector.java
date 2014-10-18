@@ -1,11 +1,14 @@
 package vurfeclipse.connectors;
 
+import java.awt.Window.Type;
 import java.io.IOException;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import vurfeclipse.Targetable;
@@ -17,8 +20,10 @@ import vurfeclipse.scenes.Scene;
 import IceBreakRestServer.*; 
 
 class RestMessage {
+	String url;
+	
 	String value;
-	String action;
+	//String action;
 }
 
 public class RestConnector implements Runnable {
@@ -94,11 +99,28 @@ public class RestConnector implements Runnable {
 	public Object processRequest(String url, String payload, Map<String, String> header) {
 		if (targets==null) targets = getURLs();
 		
+		if ("/multi".equals(url)) {
+			java.lang.reflect.Type listType = new TypeToken<List<RestMessage>>() {}.getType();
+			List<RestMessage> yourList = gson.fromJson(payload, listType);//mapping.get("servers"), listType);
+			
+			Map<String,String> header2 = new HashMap<String,String> ();
+			header2.put("Content-Type", "Text");
+
+			String output = "Multiple:";
+		
+			Iterator<RestMessage> it = yourList.iterator();			
+			while (it.hasNext()) {
+				RestMessage rm = it.next();
+				output += processRequest(rm.url, rm.value, header2);
+			}
+			return output; //"Processed " + yourList.size();
+		}
+		
 		if ("/urls".equals(url)) {
 			return gson.toJson(targets.keySet().toArray());
 		}
 		
-		System.out.println("Head is " + header);
+		//System.out.println("RestConnector: url is " + url + ", payload is " + payload + ", header is " + header);
 		//System.exit(1);
 		
 		if (!header.containsKey("Content-Type") || header.get("Content-Type").contains("Text")) {
@@ -108,10 +130,8 @@ public class RestConnector implements Runnable {
 		}
 		
 		Targetable t = targets.get(url);
-		System.out.println("looking for url " + url);
 		if (t!=null) {
-			System.out.println("processRequest for " + url + ", " + payload + ", " + t);
-			//System.exit(1);
+			System.out.println("RestConnector: processRequest for " + url + ", " + payload + ", " + t);
 			try {
 				return "Processed " + url + " : " + t.target(url, payload);
 			} catch (Exception e) {
