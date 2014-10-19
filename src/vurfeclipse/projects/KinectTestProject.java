@@ -12,6 +12,7 @@ import processing.core.PApplet;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.Sequence;
+import vurfeclipse.sequence.Sequencer;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;
@@ -90,7 +91,8 @@ public class KinectTestProject extends Project implements Serializable {
 
 
     // SWITCHER  //////////////////////////
-    final SwitcherScene switcher = (SwitcherScene) this.addSceneOutputCanvas(new SwitcherScene(this, w, h), "/out");    
+    //final SwitcherScene switcher = (SwitcherScene) this.addSceneOutputCanvas(new SwitcherScene(this, w, h), "/out");
+    final Sequencer switcher = sequencer;
         
     
     // BLEND SCENE    

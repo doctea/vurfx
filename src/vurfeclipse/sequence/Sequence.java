@@ -3,7 +3,6 @@ package vurfeclipse.sequence;
 import vurfeclipse.APP;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
-import vurfeclipse.scenes.SwitcherScene;
 
 abstract public class Sequence {
 	//Scene sc;

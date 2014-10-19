@@ -13,6 +13,7 @@ import java.util.*;
 
 import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.sequence.Sequencer;
 import vurfeclipse.streams.*;
 import codeanticode.glgraphics.*;
 import controlP5.*;
@@ -89,6 +90,17 @@ public abstract class Project implements Serializable {
     return getCanvas("out");
   }
   
+////// sequencer stuff?
+  boolean enableSequencer = true;
+  protected Sequencer sequencer;
+  
+  public boolean processSequencer(int time) {
+	  if (enableSequencer) {
+		  this.sequencer.runSequences();
+	  }
+	return enableSequencer;
+  }
+  
 /////////// Event stuff
   HashMap streams = new HashMap(); // Stream
   
@@ -146,6 +158,8 @@ public abstract class Project implements Serializable {
     
     setupStreams();
     
+    setupSequencer();
+    
     setupScenes();
     
     initialiseScenes();
@@ -201,6 +215,11 @@ public abstract class Project implements Serializable {
   public abstract boolean setupStreams();
   public abstract boolean setupScenes();
   
+  public boolean setupSequencer() {
+	  sequencer = new Sequencer(this,w,h);
+	  return true;
+  };
+  
   public abstract boolean initialiseBuffers();
   
   public boolean initialiseScenes() {
@@ -219,6 +238,18 @@ public abstract class Project implements Serializable {
     cp5.addCallback(nouveau);
     this.scenes.set(scenes.indexOf(old), nouveau); 
     //old.destroy();
+  }
+  
+  public Scene addBlankerScene (String canvasName) {
+	  Scene sc = new SimpleScene(this, w, h).setSceneName("BlankerScene").setOutputCanvas(canvasName);
+	  BlankFilter bf = (BlankFilter) new BlankFilter(sc).setOutputCanvas(canvasName);
+	  sc.addFilter(bf);
+	  return this.addSceneOutputCanvas(sc, canvasName);
+		//Scene sc = this.addScene();
+/*		  blank.beginDraw();	// this is here to blank the buffer before a redraw.  if we disable it, it looks rad as fuck!! and woudl probably where we could put in a motion blur effect too.
+		  blank.applyToBuffers();
+		  blank.endDraw();*/
+		//return sc;
   }
   
   public Scene addScene(Scene sc) {
@@ -314,22 +345,28 @@ public abstract class Project implements Serializable {
     
     Canvas out = getCanvas(getPath()+"out");
     
+    //out.getSurf().background(0);
+    
+    gfx.background(APP.getApp().random(255));
+    
     Iterator it = scenes.iterator();
     while(it.hasNext()) {
       Scene sc = (Scene) it.next();
-      //System.out.println("Applying to " + sc);
+      System.out.println("Applying to " + sc.toString() + " to " + sc.getSceneName());
       //sc.applyGL(gfx);
       if (shouldDrawScene(sc)) {
+    	System.out.println("Should draw " + sc);
         sc.applyGLtoCanvas(out); //getCanvas(getPath()+"out"));
         //sc.applyGL(buffers[BUF_OUT]);
         //sc.applyGL(off);
       }
     }
-    //gfx.image(buffers[BUF_OUT].getTexture(),0,0,w,h);
+    ////gfx.image(buffers[BUF_OUT].getTexture(),0,0,w,h);
+
     gfx.image(out.getSurf().getTexture(),0,0,w,h);//w,h);
     
-    //gfx.image(buffers[BUF_INP1].getTexture(),0,0,w,h);
-    //gfx.image(off.getTexture(),0,0,w,h);
+    ////gfx.image(buffers[BUF_INP1].getTexture(),0,0,w,h);
+    ////gfx.image(off.getTexture(),0,0,w,h);
   }
 
 

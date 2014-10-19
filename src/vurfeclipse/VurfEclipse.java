@@ -169,6 +169,7 @@ public class VurfEclipse extends PApplet {
 	boolean screenGrab = false;
 	
 	boolean enableStreams = true;
+	boolean enableSequencer = true;	
 	
 	//Scene sc;
 	public static Project pr;
@@ -321,6 +322,10 @@ public class VurfEclipse extends PApplet {
 	
 	 if (enableStreams) 
 	   pr.processStreams(timeMillis);
+	 
+	if (enableSequencer)
+		 pr.processSequencer(timeMillis);
+	 
 	 //offscreen.beginDraw();
 	
 	 //pgl.beginGL();

@@ -7,7 +7,6 @@ import vurfeclipse.filters.PlainDrawer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.scenes.SimpleScene;
-import vurfeclipse.scenes.SwitcherScene;
 import vurfeclipse.sequence.Sequence;
 
 public class BlenderFX1 extends SimpleScene {
