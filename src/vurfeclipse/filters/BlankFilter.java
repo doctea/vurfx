@@ -25,8 +25,26 @@ public class BlankFilter extends Filter {
     // just copy src to out
     //out.image(src,0,0);
     //out.pixels = src.pixels;
-    out.background(bgcolour, alpha);
+    //out.background(bgcolour, alpha);
+	out.fill(bgcolour,alpha);
+	out.rect(0,0,sc.w,sc.h);
     return true;
   }
+  
+  
+  @Override
+  synchronized public void setParameterDefaults () {
+    super.setParameterDefaults();
+    this.addParameter("alpha", new Integer(255), 0, 255);
+    this.addParameter("bgcolour", new Integer(0), 0, 255);//new Integer(128));
+  }
+  
+  @Override
+  synchronized public void updateParameterValue(String paramName, Object value) {
+	if(paramName.equals("alpha"))
+        alpha = (Integer)value;//b.setEdge((Boolean)value); 
+    else if(paramName.equals("bgcolour"))
+        bgcolour = (Integer)value;
+  }  
   
 }
