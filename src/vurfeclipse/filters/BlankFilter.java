@@ -19,7 +19,7 @@ public class BlankFilter extends Filter {
   }
   
   public boolean applyMeatToBuffers() {
-    println("#applyMeattoBuffers (out is " + src + ")");
+    //println("#applyMeattoBuffers (out is " + src + ")");
     //System.exit(1);
     
     // just copy src to out

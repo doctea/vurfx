@@ -1,6 +1,7 @@
 package vurfeclipse.sequence;
 
 import vurfeclipse.APP;
+import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
 
@@ -24,7 +25,15 @@ abstract public class Sequence {
 	public Sequence(int sequenceLengthMillis) {
 		lengthMillis = sequenceLengthMillis;
 	}
-		
+	
+	
+	  boolean outputDebug = true;
+	  public void println(String text) {		// debugPrint, printDebug -- you get the idea
+		  if (outputDebug) System.out.println("Q " + (text.contains((this.toString()))? text : this+": "+text));
+	  }
+	
+	
+	
 	public void start() {
 		onStart();		
 		iteration = 0;
@@ -44,7 +53,7 @@ abstract public class Sequence {
 		
 		int diff = now - startTimeMillis;
 		
-		//System.out.println("got diff " + diff);
+		//println("got diff " + diff);
 				
 		iteration = diff/lengthMillis;
 		if (diff>=lengthMillis) diff = diff % lengthMillis;	// if we've gone past one loop length, reset it
@@ -52,7 +61,7 @@ abstract public class Sequence {
 		// what percent is A diff of B lengthMillis ?
 		
 		double pc = APP.getApp().constrain((float) ((double)diff / (double)lengthMillis), 0.0001f, 0.9999f);
-		//System.out.println("adjusted diff " + diff + "length millis is " + lengthMillis + " and pc is " + pc);		
+		//println("adjusted diff " + diff + "length millis is " + lengthMillis + " and pc is " + pc);		
 		setValuesForNorm(pc,iteration);
 	}
 	
@@ -70,10 +79,6 @@ abstract public class Sequence {
 		return array[(int)APP.getApp().random(0,array.length-1)];
 	}	
 
-	
-	
-	
-	
 
 	  public int lerpcolour (int origin, int dest, double norm) {
 		  int or,og,ob,oa;
@@ -91,7 +96,7 @@ abstract public class Sequence {
 
 		  int diff = (int)((Math.max(or,dr)-Math.min(or, dr)) * norm);
 		  outr = Math.min(or, dr) + diff;
-		  //System.out.println("diff r is " + diff);
+		  //println("diff r is " + diff);
 		  
 		  diff = (int)((Math.max(og,dg)-Math.min(og, dg)) * norm);	  
 		  outg = Math.min(og, dg) + diff;
@@ -99,8 +104,8 @@ abstract public class Sequence {
 		  diff = (int)((Math.max(ob,db)-Math.min(ob, db)) * norm);
 		  outb = Math.min(ob, db) + diff;
 		  
-		  /*System.out.println("Blending between (" + or +","+og+","+ob+") and (" + dr + "," + dg + "," + db + ")");
-		  System.out.println("--got (" + outr + "," + outg + "," + outb + ")");*/
+		  /*println("Blending between (" + or +","+og+","+ob+") and (" + dr + "," + dg + "," + db + ")");
+		  println("--got (" + outr + "," + outg + "," + outb + ")");*/
 		  
 		  return APP.getApp().color(outr,outg,outb);
 	  }

@@ -278,7 +278,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   //HashMap parameters<Parameter> = new HashMap<Parameter> (Parameter.class);// = new HashMap();
   HashMap<String, Parameter> parameters;// = new HashMap<String,Parameter> ();
 
-  public Object getParameterValue(String paramName) {
+  synchronized public Object getParameterValue(String paramName) {
     if (this.parameters==null) this.setParameterDefaults();
     //if (this.parameters.size()==0) setParameterDefaults();
     //println("looking for " + paramName);
@@ -287,7 +287,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     //else
     //  return "unknown";
   }
-  public Filter setParameterValue(String paramName, Object value) {
+  synchronized public Filter setParameterValue(String paramName, Object value) {
     if (this.parameters==null) this.setParameterDefaults();
     //println("in " + this + ": setParameterValue ('"+ paramName + "', '" + value + ")");
     //if (this.parameters.size()==0) setParameterDefaults();
@@ -301,7 +301,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
      }*/
     return this;
   }
-  public Filter setParameterValueFromSin(String paramName, Object f) {
+  synchronized public Filter setParameterValueFromSin(String paramName, Object f) {
     if (this.parameters==null) this.setParameterDefaults();
     try {
       parameters.get(paramName).setValueFromSin((Float)f);
@@ -313,39 +313,39 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   // public void setParameterValue  
 
-  public Filter changeParameterValueFromSin(String paramName, float s) {
+  synchronized public Filter changeParameterValueFromSin(String paramName, float s) {
     setParameterValueFromSin(paramName, s);
     updateParameterValue(paramName, getParameterValue(paramName));
     return this;
   }
-  public Filter changeParameterValue(String paramName) {
+  synchronized public Filter changeParameterValue(String paramName) {
     changeParameterValue(paramName, parameters.get(paramName).value);
     return this;
   }  
-  public Filter changeParameterValue(String paramName, Object value) {
+  synchronized public Filter changeParameterValue(String paramName, Object value) {
     setParameterValue(paramName, value);
     updateParameterValue(paramName, value);    
     return this;
   }
-  public void toggleParameterValue(String paramName) {
+  synchronized public void toggleParameterValue(String paramName) {
 		// TODO Auto-generated method stub
     if (getParameterValue(paramName) instanceof Boolean) {
     	changeParameterValue(paramName, !(Boolean)getParameterValue(paramName));
     }
   }  
 
-  public Filter addParameter(String paramName, Object value, Object min, Object max) {
+  synchronized public Filter addParameter(String paramName, Object value, Object min, Object max) {
     if (this.parameters==null) this.setParameterDefaults();
     println(this + "#addParameter(" + paramName + ", " + value + ", " + min + ", " + max + "): " + this.getFilterLabel());
-    parameters.put(paramName, new Parameter(paramName, value, min, max)); 
+    parameters.put(paramName, new Parameter(paramName, value, min, max));
     updateParameterValue(paramName, value);
     return this;
   }
-  public Filter addParameter(String paramName, Object value) {
+  synchronized public Filter addParameter(String paramName, Object value) {
     return addParameter(paramName, value, -100, 100);
   }
 
-  public void updateAllParameterValues() {
+  synchronized public void updateAllParameterValues() {
     Iterator i = parameters.entrySet().iterator();
     while (i.hasNext ()) {
       Map.Entry me = (Map.Entry)i.next();
@@ -353,7 +353,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     }
   }
 
-  public void updateParameterValue(String paramname, Object value) {
+  synchronized public void updateParameterValue(String paramname, Object value) {
     // set parameter Control
     
 
@@ -364,7 +364,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     }
   }
 
-  public void setParameterDefaults () {
+  synchronized public void setParameterDefaults () {
     println("setParameterDefaults in " + this);
     parameters = new HashMap<String, Parameter>();//String.class,Parameter.class);
   }

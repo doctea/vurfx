@@ -32,7 +32,8 @@ public class BlobDrawer extends SpiralDrawer {
     return this;
   }
   
-  public void setParameterDefaults () {
+  @Override
+  synchronized public void setParameterDefaults () {
     //this.setParameterValue("radius", 10.0);
     //this.setParameterValue("rotation", 0.0);
     super.setParameterDefaults();
@@ -43,7 +44,8 @@ public class BlobDrawer extends SpiralDrawer {
     //this.addParameter("radius", 0.5, 0.01, 20.0);
   }
   
-  public void updateParameterValue(String paramName, Object value) {
+  @Override
+  synchronized public void updateParameterValue(String paramName, Object value) {
     //System.out.println("setting " + paramName + " to " + value);
     /*if(paramName.equals("radius"))
         b.setRadius((Integer)value); 
@@ -73,7 +75,7 @@ public class BlobDrawer extends SpiralDrawer {
   int colourSwitchCount = 0;
   int colourSwitchEvery = 50; // frames
   
-  public void drawActualObject(GLGraphicsOffScreen out, float currRadius, float currentRadian) {
+  synchronized public void drawActualObject(GLGraphicsOffScreen out, float currRadius, float currentRadian) {
 	  
 	/*colourSwitchCount++;
 	if (colourSwitchEvery<=colourSwitchCount) {*/

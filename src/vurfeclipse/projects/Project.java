@@ -3,6 +3,7 @@ package vurfeclipse.projects;
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.IOUtils;
+import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.RestConnector;
 import vurfeclipse.filters.*;
@@ -40,20 +41,20 @@ public abstract class Project implements Serializable {
   HashMap<String,Canvas> canvases = new HashMap<String,Canvas>();
   public void addCanvas(String name, Canvas canvas) {
       canvases.put(name,canvas);
-      System.out.println("Project#addCanvas added " + name);
+      println("Project#addCanvas added " + name);
       //makeBuffersCompatible(name,canvas);
   }
   public Canvas getCanvas(String name) {
     try{
       if (canvases.get(name)==null) {
-        System.out.println("Project#getCanvas couldn't find '" + name + "'!!!!!!!!!!!!!!! - creating!");
+        println("Project#getCanvas couldn't find '" + name + "'!!!!!!!!!!!!!!! - creating!");
         return createCanvas("/"+name,name);
       }
       //System.out.println("Project#getCanvas('" + name + "') returning " + canvases.get(name) + " with buffer " + canvases.get(name).surf);      
       return canvases.get(name);
     } catch (Exception e) {
       //throw new NullPointerException ("Project#getCanvas Couldn't find a canvas for path 'name'!");
-      System.out.println("Project#getCanvas threw " + e.toString() + " for path '" + name + "'!");
+      println("Project#getCanvas threw " + e.toString() + " for path '" + name + "'!");
       //e.printStackTrace();//Couldn't find a canvas for path '" + name + "'!");
       return null;
     }
@@ -78,7 +79,7 @@ public abstract class Project implements Serializable {
     //mappings.put(path + "/" + name, makeCanvas(w,h,gfx_mode,name));
     Canvas c = Canvas.makeCanvas(w,h,gfx_mode,name);
     addCanvas(path, c);
-    System.out.println("Project#createCanvas('" + path + "','" + name + "') got '" + c.getSurf() + "'");
+    println("Project#createCanvas('" + path + "','" + name + "') got '" + c.getSurf() + "'");
     return c;
   }
   
@@ -119,7 +120,7 @@ public abstract class Project implements Serializable {
     if (enableStreams) {
       Iterator i = streams.entrySet().iterator();
       while (i.hasNext()) {
-        //System.out.println("processStreams in " + this);
+        //println("processStreams in " + this);
         Map.Entry e = (Map.Entry) i.next();
         Stream s = (Stream) e.getValue();
         s.processEvents(time);
@@ -151,7 +152,7 @@ public abstract class Project implements Serializable {
   //public abstract boolean initialise ();
   transient GLGraphicsOffScreen off;
   public boolean initialise() {
-	System.out.println("Project#initialise:");
+	println("Project#initialise:");
     
     off = Canvas.createGLBuffer(w,h,gfx_mode);
     initialiseBuffers();
@@ -165,7 +166,7 @@ public abstract class Project implements Serializable {
     initialiseScenes();
     
     //if (cp5!=null) { 
-        System.out.println("Project#initialise about to call setupControls");
+        println("Project#initialise about to call setupControls");
     	setupControls();
     //}
     
@@ -181,15 +182,15 @@ public abstract class Project implements Serializable {
   public Object getObjectForPath(String path) {
     // loop over the scenes and check for one with the same name as the first part of path; then pass the rest to getObjectForPath() for the second part..
     String[] spl = path.split("/",5); //, 3);
-    //System.out.println("spl[1] is " + spl[1]);
+    //println("spl[1] is " + spl[1]);
     if ("sc".equals(spl[1])) {
-    	//System.out.println("got sc, looking for " + spl[2]);
+    	//println("got sc, looking for " + spl[2]);
 	    Iterator it = scenes.iterator();
 	    while (it.hasNext()) {
 	      Scene s = (Scene)it.next();
-	      //System.out.println("Project#getObjectForPath("+path+") checked '" + s.getSceneName() + "' against '" + spl[1] + "'"); //against stored scene " + s.getSceneName());
+	      //println("Project#getObjectForPath("+path+") checked '" + s.getSceneName() + "' against '" + spl[1] + "'"); //against stored scene " + s.getSceneName());
 	      if (s.getSceneName().equals(spl[2])) { //getSceneName().equals(s)) {
-	    	//System.out.println("Found " + s.getSceneName());
+	    	//println("Found " + s.getSceneName());
 	        //return s;
 	        // ask it to get the rest of the path for us
 	        if (spl.length>3) {
@@ -199,7 +200,7 @@ public abstract class Project implements Serializable {
 	      }
 	    }
     }
-    //System.out.println("couldn't find object for path " + path + "!");
+    //println("couldn't find object for path " + path + "!");
     return null;
   }
   
@@ -216,6 +217,8 @@ public abstract class Project implements Serializable {
   public abstract boolean setupScenes();
   
   public boolean setupSequencer() {
+	  println("#setupSequencer");
+	  //System.exit(1);
 	  sequencer = new Sequencer(this,w,h);
 	  return true;
   };
@@ -223,7 +226,7 @@ public abstract class Project implements Serializable {
   public abstract boolean initialiseBuffers();
   
   public boolean initialiseScenes() {
-    System.out.println("== initialiseScenes() in " + this);
+    println("== initialiseScenes() in " + this);
     Iterator it = scenes.iterator();
     while(it.hasNext()) {
       Scene sc = (Scene) it.next();
@@ -300,7 +303,7 @@ public abstract class Project implements Serializable {
   }
   public void selectScene(int index) {
     Scene sc = scenes.get(index);
-    System.out.println("Selecting " + (sc.isMuted()?"MUTED":"LIVE") + " Scene[" + index + "] " + sc);
+    println("Selecting " + (sc.isMuted()?"MUTED":"LIVE") + " Scene[" + index + "] " + sc);
     selectedScene = sc;//scenes.get(index);     
   }
   
@@ -352,10 +355,10 @@ public abstract class Project implements Serializable {
     Iterator it = scenes.iterator();
     while(it.hasNext()) {
       Scene sc = (Scene) it.next();
-      System.out.println("Applying to " + sc.toString() + " to " + sc.getSceneName());
+      //println("Applying to " + sc.toString() + " to " + sc.getSceneName());
       //sc.applyGL(gfx);
       if (shouldDrawScene(sc)) {
-    	System.out.println("Should draw " + sc);
+    	//println("Should draw " + sc);
         sc.applyGLtoCanvas(out); //getCanvas(getPath()+"out"));
         //sc.applyGL(buffers[BUF_OUT]);
         //sc.applyGL(off);
@@ -387,7 +390,7 @@ public abstract class Project implements Serializable {
     saveProject("project-test-2");
   }
   public void saveProject(String filename) {
-    System.out.println("SAVING TO " + filename);
+    println("SAVING TO " + filename);
     
     //saveIndividualParts(filename);
     ((VurfEclipse)APP.getApp()).io.serialize(filename, this); //getSelectedScene().getFilter(2)); //getCanvas("/out"));
@@ -397,7 +400,7 @@ public abstract class Project implements Serializable {
     Iterator it = scenes.iterator();
     while (it.hasNext()) {
       Scene ss = (Scene)it.next();
-      System.out.println("Serialising " + ss + " " + ss.getSceneName());
+      println("Serialising " + ss + " " + ss.getSceneName());
       IOUtils.makeProjectFolder(filename);
       IOUtils.serialize(filename + "/scene" + ss + ".sc", ss);
       for (int i = 0 ; i < ss.filters.length ; i++) {
@@ -407,7 +410,7 @@ public abstract class Project implements Serializable {
           IOUtils.makeProjectFolder(filterName);
           String fn = filterName + "/" + "filter-" + i + "-" + ss.getSceneName() + "-" + f.getFilterLabel() + ".fi";
           //String fn = "test";
-          System.out.println("serialising [" + i + "/" + ss.filters.length + "] " + f + " to " + fn);          
+          println("serialising [" + i + "/" + ss.filters.length + "] " + f + " to " + fn);          
 
           IOUtils.serialize(fn, f);
         }
@@ -422,8 +425,8 @@ public abstract class Project implements Serializable {
     } else if (key==']') {
       selectNextScene();
     } else  if (key=='s') {
-      //System.out.println(this.getSelectedScene().getSelectedFilter().serialize());
-      //System.out.println(this.serialize());
+      //println(this.getSelectedScene().getSelectedFilter().serialize());
+      //println(this.serialize());
       
       saveProject();
     } else/* if (key=='\'') {  // SOLO SCENE
@@ -440,13 +443,13 @@ public abstract class Project implements Serializable {
       while(i.hasNext())
         ((Scene)i.next()).sendKeyPressed('-');
     } else if (key=='p') {
-    	System.out.println(rsConn.getURLs());
+    	println(rsConn.getURLs().toString());
     	System.exit(0);
     } else {
       Scene sc = this.getSelectedScene();
   
       if (sc==null) {
-        System.out.println("No Scene selected in " + this);
+        println("No Scene selected in " + this);
         return;
       }
 
@@ -467,17 +470,18 @@ public abstract class Project implements Serializable {
   
   public void updateControl (String filterPath, String name, Object value) {
     Filter f = (Filter)getObjectForPath(filterPath); 
-    //System.out.println("Project#updateControl("+filterPath+","+name+","+value + ") for filterPath "+ filterPath + " and param " + name + " got " + f);
+    //println("Project#updateControl("+filterPath+","+name+","+value + ") for filterPath "+ filterPath + " and param " + name + " got " + f);
     if (null!=f)
       f.updateControl(name, value);
     //else
-      //System.out.println(">>>Project#updateControl("+filterPath+","+name+","+value + ") couldn't find a filter!");
+      //println(">>>Project#updateControl("+filterPath+","+name+","+value + ") couldn't find a filter!");
   }
   
   
   RestConnector rsConn;
   public void setupRest() {
 	  rsConn = new RestConnector(this);
+	  rsConn.start();
 	  Thread t = new Thread(rsConn);
 	  t.start();
   }
@@ -487,25 +491,25 @@ public abstract class Project implements Serializable {
 
     ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
     
-    System.out.println("Project#setupControls about to get controlwindow");
+    println("Project#setupControls about to get controlwindow");
     ControlWindow cw = ((VurfEclipse)APP.getApp()).getCW();
     
     
-    System.out.println("Project#setupControls about to loop over scenes");
+    println("Project#setupControls about to loop over scenes");
     Iterator i = scenes.iterator();
     int c = 0;
     Scene n;    
     while(i.hasNext()) {
       n = (Scene)i.next();
-      System.out.println(c + ": Project#setupControls() got scene " + n.getSceneName());
+      println(c + ": Project#setupControls() got scene " + n.getSceneName());
       String tabName = "["+c+"] " + n.getSceneName(); //getClass();
       //ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
       cw.addTab(tabName);
-      System.out.println("added tab " + tabName);
+      println("added tab " + tabName);
       //ControllerInterface[] controls = ((Scene)i.next()).getControls();
       cp5.begin(10,40);
       ((Scene)n).setupControls(cp5,tabName);
-      System.out.println("done setupControls for " + n);
+      println("done setupControls for " + n);
       cp5.end();
       /*for (int n = 0 ; n < controls.length ; n++) {
         cp5.getTab("Scene " + c).add(controls[n]).moveTo("Scene " + c); 
@@ -514,7 +518,7 @@ public abstract class Project implements Serializable {
       c++;
       //((Scene)i).setupControls(cp5);
     } 
-    System.out.println("Project#setupControls()----------------------------------------------------------------------------------<END");
+    println("Project#setupControls()----------------------------------------------------------------------------------<END");
   }
   
   
@@ -541,7 +545,7 @@ public abstract class Project implements Serializable {
 
 	  int diff = (int)((Math.max(or,dr)-Math.min(or, dr)) * norm);
 	  outr = Math.min(or, dr) + diff;
-	  //System.out.println("diff r is " + diff);
+	  //println("diff r is " + diff);
 	  
 	  diff = (int)((Math.max(og,dg)-Math.min(og, dg)) * norm);	  
 	  outg = Math.min(og, dg) + diff;
@@ -549,8 +553,8 @@ public abstract class Project implements Serializable {
 	  diff = (int)((Math.max(ob,db)-Math.min(ob, db)) * norm);
 	  outb = Math.min(ob, db) + diff;
 	  
-	  /*System.out.println("Blending between (" + or +","+og+","+ob+") and (" + dr + "," + dg + "," + db + ")");
-	  System.out.println("--got (" + outr + "," + outg + "," + outb + ")");*/
+	  /*println("Blending between (" + or +","+og+","+ob+") and (" + dr + "," + dg + "," + db + ")");
+	  println("--got (" + outr + "," + outg + "," + outb + ")");*/
 	  
 	  return APP.getApp().color(outr,outg,outb);
 	  
@@ -568,5 +572,28 @@ public abstract class Project implements Serializable {
 	  
 	  return APP.getApp().color(r,g,b);
   }
+  public Map<? extends String, ? extends Targetable> getTargetURLs() {
+		HashMap<String, Targetable> urls = new HashMap<String, Targetable>();
+		
+		
+		// get all the Scene urls that are appropriate
+		Iterator<Scene> it = this.getScenes().iterator();
+		while (it.hasNext()) {
+			Scene s = (Scene) it.next();
+			urls.putAll(s.getTargetURLs());
+		}
+		
+		// get all the Sequencer urls
+		urls.putAll(sequencer.getTargetURLs());
+	
+		return urls;
+	}
+  
+  
+  boolean outputDebug = true;
+  public void println(String text) {		// debugPrint, printDebug -- you get the idea
+	  if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
+  }
+  
   
 }
