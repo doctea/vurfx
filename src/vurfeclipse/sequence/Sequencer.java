@@ -99,9 +99,9 @@ public class Sequencer implements Targetable {
 		  muteAllScenes();
 		  getScene(sceneName).setMuted(false);
 		  
-		  ArrayList seqs = switched_sequences.get(sceneName);
+		  ArrayList<Sequence> seqs = switched_sequences.get(sceneName);
 		  if (seqs!=null) {
-			  Iterator it = seqs.iterator();
+			  Iterator<Sequence> it = seqs.iterator();
 			  //((Sequence)it.next()).start();
 			  while (it.hasNext()) {
 				  Sequence s = ((Sequence)it.next());
@@ -124,9 +124,9 @@ public class Sequencer implements Targetable {
 	  
 	  public boolean readyToChange(int max_iterations) {
 		  boolean ready = true;
-		  ArrayList seqs = switched_sequences.get(activeSceneName);
+		  ArrayList<Sequence> seqs = switched_sequences.get(activeSceneName);
 		  if (seqs!=null) {
-			  Iterator it = seqs.iterator();
+			  Iterator<Sequence> it = seqs.iterator();
 			  while (it.hasNext()) {
 				  //((Sequence)it.next()).setValuesForTime();
 				  if (!((Sequence)it.next()).readyToChange(max_iterations)) {
@@ -146,9 +146,9 @@ public class Sequencer implements Targetable {
 			  randomScene();
 		  }
 		  
-		  ArrayList seqs = switched_sequences.get(activeSceneName);
+		  ArrayList<Sequence> seqs = switched_sequences.get(activeSceneName);
 		  if (seqs!=null) {
-			  Iterator it = seqs.iterator();
+			  Iterator<Sequence> it = seqs.iterator();
 			  while (it.hasNext()) {
 				  Sequence sq = (Sequence)it.next();
 				  //println(this+"#runSequences(): Setting values on " + sq);
@@ -198,13 +198,16 @@ public class Sequencer implements Targetable {
 			Iterator<Entry<String, ArrayList<Sequence>>> it = switched_sequences.entrySet().iterator();
 			while (it.hasNext()) {
 				Entry<String, ArrayList<Sequence>> e = it.next();
-				Iterator<Sequence> sit = e.getValue().iterator();
-				int count = 0;
-				while (sit.hasNext()) {
+				//int count = 0;
+				
+				urls.put("/seq/changeTo/" + e.getKey(), this);
+				
+				// this loop processes each Sequence for the current Scene; dont think we need to add a URL for each of em!
+				/*Iterator<Sequence> sit = e.getValue().iterator();
+				   while (sit.hasNext()) {
 					Sequence seq = sit.next();
 					//urls.put("/seq/" + e.getKey() + "/" + count, seq);
-					urls.put("/seq/changeTo/" + e.getKey(), this);
-				}
+				}*/
 			}
 			
 			return urls;

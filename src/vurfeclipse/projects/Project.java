@@ -64,9 +64,9 @@ public abstract class Project implements Serializable {
       setupBufferMappings();
     buffers[(Integer)mappings.get(name)] = canvas.surf;
   } */  
-  HashMap mappings;
+  HashMap<String, Integer> mappings;
   public void setupBufferMappings() {
-    mappings = new HashMap();
+    mappings = new HashMap<String, Integer>();
     mappings.put(getPath()+"out", BUF_OUT);
     mappings.put(getPath()+"inp0", BUF_INP0);
     mappings.put(getPath()+"inp1", BUF_INP1);
@@ -103,7 +103,7 @@ public abstract class Project implements Serializable {
   }
   
 /////////// Event stuff
-  HashMap streams = new HashMap(); // Stream
+  HashMap<String, Stream> streams = new HashMap<String, Stream>(); // Stream
   
   //public abstract boolean initialise();
   boolean enableStreams = true;
@@ -118,7 +118,7 @@ public abstract class Project implements Serializable {
   
   public boolean processStreams(int time) {
     if (enableStreams) {
-      Iterator i = streams.entrySet().iterator();
+      Iterator<?> i = streams.entrySet().iterator();
       while (i.hasNext()) {
         //println("processStreams in " + this);
         Map.Entry e = (Map.Entry) i.next();
@@ -185,7 +185,7 @@ public abstract class Project implements Serializable {
     //println("spl[1] is " + spl[1]);
     if ("sc".equals(spl[1])) {
     	//println("got sc, looking for " + spl[2]);
-	    Iterator it = scenes.iterator();
+	    Iterator<Scene> it = scenes.iterator();
 	    while (it.hasNext()) {
 	      Scene s = (Scene)it.next();
 	      //println("Project#getObjectForPath("+path+") checked '" + s.getSceneName() + "' against '" + spl[1] + "'"); //against stored scene " + s.getSceneName());
@@ -227,7 +227,7 @@ public abstract class Project implements Serializable {
   
   public boolean initialiseScenes() {
     println("== initialiseScenes() in " + this);
-    Iterator it = scenes.iterator();
+    Iterator<Scene> it = scenes.iterator();
     while(it.hasNext()) {
       Scene sc = (Scene) it.next();
       sc.initialise();
@@ -352,7 +352,7 @@ public abstract class Project implements Serializable {
     
     gfx.background(APP.getApp().random(255));
     
-    Iterator it = scenes.iterator();
+    Iterator<Scene> it = scenes.iterator();
     while(it.hasNext()) {
       Scene sc = (Scene) it.next();
       //println("Applying to " + sc.toString() + " to " + sc.getSceneName());
@@ -397,7 +397,7 @@ public abstract class Project implements Serializable {
     //io.serialize("test-serialisation-2", new testsave()); //getCanvas("/out"));
   }    
   public void saveIndividualParts(String filename) {
-    Iterator it = scenes.iterator();
+    Iterator<Scene> it = scenes.iterator();
     while (it.hasNext()) {
       Scene ss = (Scene)it.next();
       println("Serialising " + ss + " " + ss.getSceneName());
@@ -439,7 +439,7 @@ public abstract class Project implements Serializable {
           sc.setMuted(false);
       }
     } else*/ if (key=='-') {
-      Iterator i = scenes.iterator();
+      Iterator<Scene> i = scenes.iterator();
       while(i.hasNext())
         ((Scene)i.next()).sendKeyPressed('-');
     } else if (key=='p') {
@@ -458,7 +458,7 @@ public abstract class Project implements Serializable {
   }
   
   public void finish() {
-    Iterator i = scenes.iterator();
+    Iterator<Scene> i = scenes.iterator();
     while (i.hasNext()) {
       ((Scene)i.next()).finish();
     }
@@ -496,7 +496,7 @@ public abstract class Project implements Serializable {
     
     
     println("Project#setupControls about to loop over scenes");
-    Iterator i = scenes.iterator();
+    Iterator<Scene> i = scenes.iterator();
     int c = 0;
     Scene n;    
     while(i.hasNext()) {

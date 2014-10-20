@@ -16,7 +16,7 @@ public class Parameter implements Serializable, Targetable {
   String filterPath;
   //transient Scene sc;
 
-  Class datatype;
+  Class<? extends Object> datatype;
 
   public Object min, max;
   

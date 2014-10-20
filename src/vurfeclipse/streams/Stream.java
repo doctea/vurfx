@@ -18,10 +18,10 @@ public class Stream implements Serializable {
   }
   // Message >- [targetId] -< Callback
   
- ConcurrentHashMap listeners = new ConcurrentHashMap();
+  ConcurrentHashMap<String, List> listeners = new ConcurrentHashMap<String, List>();
   // targetId -< Callback
   
-  ConcurrentHashMap<String,Collection> messages = new ConcurrentHashMap();
+  ConcurrentHashMap<String,Collection> messages = new ConcurrentHashMap<String, Collection>();
   // targetId -< Message
   
   /*public void finish () {
@@ -35,30 +35,30 @@ public class Stream implements Serializable {
     //or use a string to group them + mark groups for deletion during message processing
     
     System.out.println("in " + this + " - registerEventListener(" + paramName + ", " + callback + ")");
-    List dis = this.getListenerList(paramName);
+    List<Object> dis = this.getListenerList(paramName);
     dis.add((Object)callback);
     dis = this.getListenerList(paramName);
     System.out.println("listsize is now " + dis.size());
     System.out.println("listener size is " + listeners.size());
   }
   
-  synchronized public List getListenerList(String paramName) {
-    List l;
+  synchronized public List<Object> getListenerList(String paramName) {
+    List<?> l;
     if (!listeners.containsKey(paramName)) {
       System.out.println("getListenerList(" + paramName + ") adding new list because isn't set");
-      l = new LinkedList();
+      l = new LinkedList<Object>();
       this.listeners.put(paramName, l);
     }
 
-    return (List) this.listeners.get(paramName);
+    return this.listeners.get(paramName);
   }
-  synchronized public List getMessagesList(String paramName) {
-    List l;
+  synchronized public List<Object> getMessagesList(String paramName) {
+    List<?> l;
     if (!messages.containsKey(paramName)) {
-      l = new LinkedList();
+      l = new LinkedList<Object>();
       this.messages.put(paramName, l);
     }
-    return (List) this.messages.get(paramName);
+    return (List<Object>) this.messages.get(paramName);
   }
   
   synchronized public void addEvent(String paramName, Object value) {
@@ -87,7 +87,7 @@ public class Stream implements Serializable {
   }
 
   synchronized public void deliverEvents () {
-    Iterator p = listeners.entrySet().iterator();
+    Iterator<?> p = listeners.entrySet().iterator();
     
     if (debug) System.out.println("deliverEvents() in " + this);
     if (debug) System.out.println("there are " + listeners.size() + " feeds .. ");
@@ -107,15 +107,15 @@ public class Stream implements Serializable {
 
       /// now loop over all the messages
       //List mess = (List)messages.get(tagName);
-      List mess = getMessagesList(tagName);
+      List<Object> mess = getMessagesList(tagName);
       if (mess!=null) {
-        Iterator m = mess.iterator();
+        Iterator<Object> m = mess.iterator();
         while (m.hasNext()) {
           //Map.Entry in = (Map.Entry)m.next();
           //Object v = in.getValue();
           Object v = m.next();
           
-          Iterator callbacks = ((List)e_l.getValue()).iterator();
+          Iterator<?> callbacks = ((List<?>)e_l.getValue()).iterator();
           while (callbacks.hasNext()) {
             //Map.Entry e_b = (Map.Entry) b.next();  
             ParameterCallback callback = (ParameterCallback) callbacks.next();
