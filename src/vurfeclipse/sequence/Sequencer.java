@@ -68,9 +68,9 @@ public class Sequencer implements Targetable {
 		public Scene bindScene(String name, Scene sc) {	// bind it and all sequences
 			addScene(name,sc);
 			
-			Iterator it = sc.getSequences().entrySet().iterator();
+			Iterator<Entry<String, Sequence>> it = sc.getSequences().entrySet().iterator();
 			while(it.hasNext()) {
-				bindSequence(name, (Sequence)((Entry)it.next()).getValue());
+				bindSequence(name, it.next().getValue());
 			}
 			
 			return sc;

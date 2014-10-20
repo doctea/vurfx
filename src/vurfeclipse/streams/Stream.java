@@ -4,6 +4,7 @@ package vurfeclipse.streams;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.*;
 
 public class Stream implements Serializable {
@@ -18,7 +19,7 @@ public class Stream implements Serializable {
   }
   // Message >- [targetId] -< Callback
   
-  ConcurrentHashMap<String, List> listeners = new ConcurrentHashMap<String, List>();
+  ConcurrentHashMap<String, List<ParameterCallback>> listeners = new ConcurrentHashMap<String, List<ParameterCallback>>();
   // targetId -< Callback
   
   ConcurrentHashMap<String,Collection> messages = new ConcurrentHashMap<String, Collection>();
@@ -35,18 +36,18 @@ public class Stream implements Serializable {
     //or use a string to group them + mark groups for deletion during message processing
     
     System.out.println("in " + this + " - registerEventListener(" + paramName + ", " + callback + ")");
-    List<Object> dis = this.getListenerList(paramName);
-    dis.add((Object)callback);
+    List<ParameterCallback> dis = this.getListenerList(paramName);
+    dis.add(callback);
     dis = this.getListenerList(paramName);
     System.out.println("listsize is now " + dis.size());
     System.out.println("listener size is " + listeners.size());
   }
   
-  synchronized public List<Object> getListenerList(String paramName) {
-    List<?> l;
+  synchronized public List<ParameterCallback> getListenerList(String paramName) {
+    List<ParameterCallback> l;
     if (!listeners.containsKey(paramName)) {
       System.out.println("getListenerList(" + paramName + ") adding new list because isn't set");
-      l = new LinkedList<Object>();
+      l = new LinkedList<ParameterCallback>();
       this.listeners.put(paramName, l);
     }
 
@@ -87,7 +88,7 @@ public class Stream implements Serializable {
   }
 
   synchronized public void deliverEvents () {
-    Iterator<?> p = listeners.entrySet().iterator();
+    Iterator<Entry<String, List<ParameterCallback>>> p = listeners.entrySet().iterator();
     
     if (debug) System.out.println("deliverEvents() in " + this);
     if (debug) System.out.println("there are " + listeners.size() + " feeds .. ");
@@ -97,7 +98,7 @@ public class Stream implements Serializable {
     ////    for each message (C) HashMap
     ////       call B(C)
     while (p.hasNext()) {
-      Map.Entry e_l = (Map.Entry) p.next();
+      Map.Entry<String,List<ParameterCallback>> e_l = (Map.Entry<String,List<ParameterCallback>>) p.next();
       String tagName = (String)e_l.getKey();
       if (debug) System.out.println("For listeners with " + e_l.getKey() + " got " + e_l.getValue());
       
