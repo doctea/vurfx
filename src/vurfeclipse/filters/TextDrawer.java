@@ -20,6 +20,8 @@ public class TextDrawer extends Filter {
   
   int fontSize = 128;
   
+  
+  boolean motionBlur = false;
   boolean continuousDraw = false;
   
   public TextDrawer(Scene sc) {
@@ -46,6 +48,7 @@ public class TextDrawer extends Filter {
     addParameter("rotation", 0, 0, 360);
     addParameter("zrotation", 0, 0, 360);
     addParameter("continuousDraw", new Boolean(true));
+    addParameter("motionBlur", new Boolean(true));
   }
   public void updateParameterValue(String paramName, Object value) {
     if (paramName=="text") {
@@ -61,6 +64,8 @@ public class TextDrawer extends Filter {
       this.setContinuousDraw((Boolean)value);
     } else if (paramName=="zrotation") {
       this.setZRotation((Integer)value);
+    } else if (paramName=="motionBlur") {
+    	this.motionBlur = ((Boolean)value); 
     } else {
       super.updateParameterValue(paramName,value);
     }
@@ -115,19 +120,27 @@ public class TextDrawer extends Filter {
   public String currentCache = "";
   public void drawText() {
     if (t==null) return;
-    String currentTag = this.t + ":" + getFont() + ":" + t.length() + ":" + this.rotation + ":" + this.zrotation + ":" ;
+    String currentTag = this.t + ":" + getFont() + ":" + t.length() + ":" + this.rotation + ":" + this.zrotation + ":" + this.motionBlur ;
     if (continuousDraw || !currentTag.equals(currentCache)) {
       //System.out.println("currentTag drawing " + currentTag + "(cached is " + currentCache + ")");
       int fontHeight = 
     		t.length()==1 ?
     		  fontSize 
     		: 
-		    	  ((VurfEclipse)APP.getApp()).constrain(
+		    	  PApplet.constrain(
 		        h - (((t.length()*t.length())/t.length()/2)*fontSize)
 		        , h/5, h
 		    );
       //int fontHeight = fontSize;
       //System.out.println("fontHeight for '" + t + "' (length " + t.length() + ") is " + fontHeight);
+      
+      //if (!motionBlur) {
+    	//out.background(0,0,0,0);
+      /*} else {
+    	out.fill(0,128);
+      	out.rect(0,0,w,h);
+      }*/
+      
       out.beginDraw();
       //out.clear(0);
       out.background(0,0,0,0);

@@ -133,15 +133,8 @@ public class SocioSukiProject extends Project implements Serializable {
 
     // OUTPUT FILTERS
     
-
-    this.addSceneInputOutputCanvas(
-      //os,
-      new OutputFX1(this,w,h).setSceneName("OutputShader"),
-      "/out",
-      "/out"
-    );    
-
     
+
     //// START PLASMA SCENE    
     final SimpleScene plasmaScene = (SimpleScene) new SimpleScene(this,w,h).setSceneName("PlasmaScene");    
     
@@ -182,6 +175,17 @@ public class SocioSukiProject extends Project implements Serializable {
     this.addSceneOutputCanvas(plasmaScene, "/out");
     
     /// END PLASMA SCENE
+    
+        
+
+    this.addSceneInputOutputCanvas(
+      //os,
+      new OutputFX1(this,w,h).setSceneName("OutputShader"),
+      "/out",
+      "/out"
+    );    
+
+    
     
     // OUTPUT FILTER 2
     final SimpleScene os2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("OutputShader2");    
