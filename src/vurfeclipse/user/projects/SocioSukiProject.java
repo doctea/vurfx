@@ -142,6 +142,47 @@ public class SocioSukiProject extends Project implements Serializable {
     );    
 
     
+    //// START PLASMA SCENE    
+    final SimpleScene plasmaScene = (SimpleScene) new SimpleScene(this,w,h).setSceneName("PlasmaScene");    
+    
+    plasmaScene.setCanvas("out", "/out");
+    //plasmaScene.setCanvas("pix0","/pix0");
+    //os2.setCanvas("blendresult", "/blendresult");
+    plasmaScene.addFilter(new ShaderFilter(plasmaScene,"Plasma.xml") {
+    	@Override
+    	public void setParameterDefaults() {
+    		super.setParameterDefaults();
+    		addParameter("width", new Integer(w/16), 0, plasmaScene.w*2);
+    		addParameter("height", new Integer(h/16), 0, plasmaScene.h*2);
+    		addParameter("u_time_2", new Integer(10), 0, 1000000);
+    	}
+
+    }.setFilterName("Plasma").setCanvases("/temp1", plasmaScene.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+    
+    plasmaScene.addFilter(new BlendDrawer(plasmaScene).setFilterName("BlendDrawer").setInputCanvas("/temp1").setOutputCanvas(plasmaScene.getCanvasMapping("out")));
+    
+    this.getStream("beat").registerEventListener("beat_16", new ParameterCallback() {
+    	@Override
+    	  public void call(Object value) {
+    		if (value instanceof Integer) {
+    			//os2.getFilter("Plasma").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
+				Float limit = (float) (100 * 12.0*Math.PI);
+				Integer adjusted = ((Integer)value%(int)(float)limit);
+    			
+				plasmaScene.getFilter("Plasma").changeParameterValue("u_time_2", 
+    					//value
+    					adjusted
+    			);
+    		}
+    	  }    	    	
+    });
+    /*os2.getFilter("Plasma").addParameter("width", new Integer(w/512), 0, os2.w);
+    os2.getFilter("Plasma").addParameter("height", new Integer(h/512), 0, os2.h);
+    os2.getFilter("Plasma").addParameter("u_time_2", new Integer(10),0, 1000000);*/    
+    this.addSceneOutputCanvas(plasmaScene, "/out");
+    
+    /// END PLASMA SCENE
+    
     // OUTPUT FILTER 2
     final SimpleScene os2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("OutputShader2");    
     
@@ -157,51 +198,24 @@ public class SocioSukiProject extends Project implements Serializable {
     os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("pix0")).setParameterValue("BlendMode",8));
     //os.addFilter(new BlendDrawer(os).setFilterName("BlendDrawer inp0 to out").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0")).setParameterValue("BlendMode",9));
     
-    
-    os2.addFilter(new ShaderFilter(os2,"Plasma.xml") {
-    	@Override
-    	public void setParameterDefaults() {
-    		super.setParameterDefaults();
-    		addParameter("width", new Integer(w/16), 0, os2.w*2);
-    		addParameter("height", new Integer(h/16), 0, os2.h*2);
-    		addParameter("u_time_2", new Integer(10), 0, 1000000);
-    	}
-
-    }.setFilterName("Plasma").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-    
-    this.getStream("beat").registerEventListener("beat_16", new ParameterCallback() {
-    	@Override
-    	  public void call(Object value) {
-    		if (value instanceof Integer) {
-    			//os2.getFilter("Plasma").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
-				Float limit = (float) (100 * 12.0*Math.PI);
-				Integer adjusted = ((Integer)value%(int)(float)limit);
-    			
-    			os2.getFilter("Plasma").changeParameterValue("u_time_2", 
-    					//value
-    					adjusted
-    			);
-    		}
-    	  }    	    	
-    });
-    /*os2.getFilter("Plasma").addParameter("width", new Integer(w/512), 0, os2.w);
-    os2.getFilter("Plasma").addParameter("height", new Integer(h/512), 0, os2.h);
-    os2.getFilter("Plasma").addParameter("u_time_2", new Integer(10),0, 1000000);*/
-
     this.addSceneInputOutputCanvas(
       os2,
       "/out",
       "/out"
-    );    
+    );
+
+    
+    
     
     this.addSceneInputOutputCanvas(
-  	      new TextFlashScene(this,w,h, new String[] {
+  	      new TextFlashScene(this,w,h  /*, new String[] {
   	        //"Nozstock", "Nozstock: the Hidden Valley",
   	        "Vurf",
   	        "Boars Head",
   	        ":)",
   	        ":D"
-  	      })/*.setFonts(new String[] {
+  	      }*/
+  	    		  )/*.setFonts(new String[] {
   	    	"Caveman-128.vlw", "Dinosaur-512.vlw", "DinosBeeline-512.vlw", "LostWorld-128.vlw", "DinosaurJrPlane-256.vlw", "DinosaurSkin-128.vlw"
   	      })  */    
   	        .setSceneName("TextFlash")

@@ -64,6 +64,10 @@ abstract class SpinnerSequence extends Sequence {
 		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/TextFlash").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
 		((BlendDrawer)host.host.getSceneForPath("/sc/TextFlash").getFilter("BlendDrawer")).setMute((APP.getApp().random(0f,1.0f)>=0.25f));
 		
+		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/PlasmaScene").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
+		((BlendDrawer)host.host.getSceneForPath("/sc/PlasmaScene").getFilter("BlendDrawer")).setMute((APP.getApp().random(0f,1.0f)>=0.25f));
+		
+		
 		host.host.getSceneForPath("/sc/OutputShader2").getFilter("Kaleido").nextMode();    			
 	}
 	
