@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.Sequence;
@@ -142,7 +143,7 @@ public class SocioSukiProject extends Project implements Serializable {
 
     
     // OUTPUT FILTER 2
-    SimpleScene os2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("OutputShader2");    
+    final SimpleScene os2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("OutputShader2");    
     
     os2.setCanvas("out", "/out");
     os2.setCanvas("pix0","/pix0");
@@ -155,7 +156,37 @@ public class SocioSukiProject extends Project implements Serializable {
 
     os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("pix0")).setParameterValue("BlendMode",8));
     //os.addFilter(new BlendDrawer(os).setFilterName("BlendDrawer inp0 to out").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0")).setParameterValue("BlendMode",9));
-        
+    
+    
+    os2.addFilter(new ShaderFilter(os2,"Plasma.xml") {
+    	@Override
+    	public void setParameterDefaults() {
+    		super.setParameterDefaults();
+    		addParameter("width", new Integer(w/16), 0, os2.w*2);
+    		addParameter("height", new Integer(h/16), 0, os2.h*2);
+    		addParameter("u_time_2", new Integer(10), 0, 1000000);
+    	}
+
+    }.setFilterName("Plasma").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+    
+    this.getStream("beat").registerEventListener("beat_16", new ParameterCallback() {
+    	@Override
+    	  public void call(Object value) {
+    		if (value instanceof Integer) {
+    			//os2.getFilter("Plasma").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
+				Float limit = (float) (100 * 12.0*Math.PI);
+				Integer adjusted = ((Integer)value%(int)(float)limit);
+    			
+    			os2.getFilter("Plasma").changeParameterValue("u_time_2", 
+    					//value
+    					adjusted
+    			);
+    		}
+    	  }    	    	
+    });
+    /*os2.getFilter("Plasma").addParameter("width", new Integer(w/512), 0, os2.w);
+    os2.getFilter("Plasma").addParameter("height", new Integer(h/512), 0, os2.h);
+    os2.getFilter("Plasma").addParameter("u_time_2", new Integer(10),0, 1000000);*/
 
     this.addSceneInputOutputCanvas(
       os2,

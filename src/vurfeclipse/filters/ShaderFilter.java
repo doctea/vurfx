@@ -1,6 +1,7 @@
 package vurfeclipse.filters;
 
 
+import processing.core.PVector;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
 import codeanticode.glgraphics.GLTexture;
@@ -21,24 +22,47 @@ public class ShaderFilter extends Filter {
     this.offsetx = x;
     this.offsety = y;
   }*/
-  
-  public void setParameterValue(String paramName, int value) {
-    glFilter.setParameterValue(paramName, value); 
+
+  @Override
+  synchronized public void updateParameterValue(String paramName, Object value) {
+
+	//if (!this.parameters.containsKey(paramName)) this.addParameter(paramName, value);
+	super.updateParameterValue(paramName, value);
+	if (glFilter!=null) {
+		//println("glFilter hasParameter("+paramName+") returns " + glFilter.hasParameter(paramName));
+		//System.exit(1);
+		if (value instanceof Float ) {
+			//println("setting GLFilter parameter " + paramName + " " + value);
+			glFilter.setParameterValue(paramName, ((Float)value).floatValue());
+		} else if (value instanceof Integer) { 
+			//println("setting GLFilter parameter " + paramName + " " + value);
+			glFilter.setParameterValue(paramName, ((Integer)value).intValue());
+		} else {
+			println("ShaderFilter#updateParameterValue doesn't know what to do with passed value for " + paramName);
+		}
+	}
+    //return this;
+  }
+    
+  public void initShader(String shaderName) {
+	  glFilter = new GLTextureFilter(APP.getApp(), shaderName);
+	  
+	  //if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
+	  //if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
+	  
   }
   
   GLTextureFilter glFilter;
   public boolean initialise() {
     // set up inital variables or whatevs 
-    temp = new int[sc.w*sc.h];
+    //temp = new int[sc.w*sc.h];
     pixelCount = sc.w*sc.h;
     
     
     //glFilter = new GLTextureFilter();
     //glFilter.setTint((int)random(255)); //random(1),random(1),random(1));
-    glFilter = new GLTextureFilter(APP.getApp(), shaderName); //"Edges.xml");
-    
-    if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
-    if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
+    //glFilter = new GLTextureFilter(APP.getApp(), shaderName); //"Edges.xml");
+    initShader(shaderName);
 
     t = new GLTexture(APP.getApp(),sc.w,sc.h);
     
@@ -48,6 +72,8 @@ public class ShaderFilter extends Filter {
   public void nextMode() {
     mode++;
     if(mode>4) mode = 0;
+    //initShader(shaderName);
+    //this.updateAllParameterValues();
   }
   
   int a_bitshift = 255<<24;

@@ -190,7 +190,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/doctea/vurf-eclipse/lib/user/SimpleOpenNI/library"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/doctea/vurfx/lib/user/IceBreakRestServer_1_2.jar"/>
+	<classpathentry kind="lib" path="D:/code/vurf-eclipse/lib/user/IceBreakRestServer_1_2.jar"/>
 	<classpathentry kind="lib" path="lib/base/opengl-orig/library/opengl.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
@@ -203,7 +203,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/opengl-orig/library/jogl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/windows64"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>

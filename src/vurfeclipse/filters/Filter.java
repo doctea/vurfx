@@ -289,7 +289,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   }
   synchronized public Filter setParameterValue(String paramName, Object value) {
     if (this.parameters==null) this.setParameterDefaults();
-    //println("in " + this + ": setParameterValue ('"+ paramName + "', '" + value + ")");
+    //println("setParameterValue ('"+ paramName + "', '" + value + "')");
     //if (this.parameters.size()==0) setParameterDefaults();
     //parameters.put(paramName, value);
     //parameters.put(paramName, new Parameter(paramName, value));//, min, max));
