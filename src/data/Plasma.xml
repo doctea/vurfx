@@ -1,10 +1,10 @@
 <filter name="Plasma">
     <description>Plasma filter</description>
     <fragment>Plasma.glsl</fragment>
-    <textures input="1" output="1"></textures>
-	<parameters>
-		<parameter type="float" name="width" label="width">640</parameter>
-		<parameter type="float" name="height" label="height">640</parameter>
-		<parameter type="float" name="u_time" label="height">10</parameter>
-	</parameters>
+    <textures output="1"></textures>
+
+		<parameter type="int" name="width" label="width">320.0</parameter>
+		<parameter type="int" name="height" label="height">240.0</parameter>
+		<parameter type="int" name="u_time_2" label="u_time">10.0</parameter>
+
 </filter>

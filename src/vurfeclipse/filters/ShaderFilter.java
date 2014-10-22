@@ -31,10 +31,13 @@ public class ShaderFilter extends Filter {
 	if (glFilter!=null) {
 		//println("glFilter hasParameter("+paramName+") returns " + glFilter.hasParameter(paramName));
 		//System.exit(1);
-		if (value instanceof Float ) {
+		
+		Object current = getParameterValue(paramName);
+		
+		if (current instanceof Float ) {
 			//println("setting GLFilter parameter " + paramName + " " + value);
 			glFilter.setParameterValue(paramName, ((Float)value).floatValue());
-		} else if (value instanceof Integer) { 
+		} else if (current instanceof Integer) { 
 			//println("setting GLFilter parameter " + paramName + " " + value);
 			glFilter.setParameterValue(paramName, ((Integer)value).intValue());
 		} else {
