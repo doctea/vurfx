@@ -36,7 +36,7 @@ public class NumberStream extends Stream implements Serializable {
     this.bpm = bpm;
     
     this.startValue = startValue;
-    this.currentValue = currentValue;
+    this.currentValue = startValue;
     
     startTime = timeMillis;//millis();
     //lastDealtBeatTime = startTime;

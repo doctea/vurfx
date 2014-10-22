@@ -120,8 +120,12 @@ public class RestConnector implements Runnable {
 		
 		if (!header.containsKey("Content-Type") || header.get("Content-Type").contains("Text")) {
 			// do nothing
-		} else if (header.get("Content-Type").contains("JSON")) {
-			payload = gson.fromJson(payload, RestMessage.class).value;
+		} else if (header.get("Content-Type").contains("JSON") && payload!=null && !payload.equals("")) {
+			try { 
+				payload = gson.fromJson(payload, RestMessage.class).value;			
+			} catch (Exception e) {
+				System.out.println("RESTCONNECTOR: caught exception " + e);
+			}
 		}
 		
 		Targetable t = targets.get(url);

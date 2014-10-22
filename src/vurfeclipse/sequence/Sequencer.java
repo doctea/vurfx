@@ -17,6 +17,9 @@ import codeanticode.glgraphics.GLGraphicsOffScreen;
 
 public class Sequencer implements Targetable {
 	public Project host;
+	
+	boolean locked = false;
+	
 	int w,h;
 	  String activeSceneName = "";
 	  HashMap<String,Scene> scenes = new HashMap<String,Scene>();
@@ -123,6 +126,7 @@ public class Sequencer implements Targetable {
 	  }
 	  
 	  public boolean readyToChange(int max_iterations) {
+		  if (locked) return false;
 		  boolean ready = true;
 		  ArrayList<Sequence> seqs = switched_sequences.get(activeSceneName);
 		  if (seqs!=null) {
@@ -137,6 +141,11 @@ public class Sequencer implements Targetable {
 			  }
 		  }
 		  return ready;
+	  }
+	  
+	  public boolean toggleLock() {
+		  this.locked = !this.locked;
+		  return locked;
 	  }
 	  
 	  public void runSequences() {
@@ -193,6 +202,8 @@ public class Sequencer implements Targetable {
 		public HashMap<String, Targetable> getTargetURLs() {
 			HashMap<String, Targetable> urls = new HashMap<String,Targetable>();
 			
+			urls.put("/seq/toggleLock", this);
+			
 			urls.put("/seq/changeTo",  this);
 			
 			Iterator<Entry<String, ArrayList<Sequence>>> it = switched_sequences.entrySet().iterator();
@@ -227,6 +238,8 @@ public class Sequencer implements Targetable {
 					  changeScene(payload.toString());
 				  }
 				  return "Sequencer active scene is currently " + activeSceneName;
+			  } else if (spl[2].equals("toggleLock")) {
+				  return "Lock is " + this.toggleLock();
 			  }
 			  return payload;
 		  }		
