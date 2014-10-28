@@ -445,6 +445,11 @@ public abstract class Project implements Serializable {
     } else if (key=='p') {
     	println(rsConn.getURLs().toString());
     	System.exit(0);
+    } else if (key=='#') {
+    	println("toggling sequencer");
+    	if (this.sequencer!=null) {
+    		println("toggling sequencer " + this.sequencer.toggleLock());
+    	}
     } else {
       Scene sc = this.getSelectedScene();
   
