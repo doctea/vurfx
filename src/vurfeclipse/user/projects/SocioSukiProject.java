@@ -139,7 +139,9 @@ public class SocioSukiProject extends Project implements Serializable {
     //plasmaScene.setupFilters();
     
     plasmaScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
-    this.addSceneOutputCanvas(plasmaScene, "/out");
+    //this.addSceneOutputCanvas(plasmaScene, "/out");
+    switcher.bindScene("plasma", "preset 1", plasmaScene);
+    
     
     /// END PLASMA SCENE
     

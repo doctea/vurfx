@@ -1,5 +1,6 @@
 package vurfeclipse.scenes;
 
+import vurfeclipse.APP;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.KaleidoFilter;
@@ -7,7 +8,9 @@ import vurfeclipse.filters.MirrorFilter;
 import vurfeclipse.filters.PhaseRGBFilter;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.projects.Project;
+import vurfeclipse.sequence.Sequence;
 import vurfeclipse.streams.ParameterCallback;
+import vurfeclipse.user.scenes.BlenderFX1;
 
 public class PlasmaScene extends Scene {
   //int filterCount = 2;
@@ -59,12 +62,12 @@ public class PlasmaScene extends Scene {
 	    
 	    addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setInputCanvas("/temp1").setOutputCanvas(this.getCanvasMapping("out")));
 	    
-	    
-	    addFilter(new PhaseRGBFilter(this).setInputCanvas(getCanvasMapping("out")).setOutputCanvas(getCanvasMapping("out")));
-	    
+	    addFilter(new PhaseRGBFilter(this).setFilterName("PhaseRGB").setInputCanvas(getCanvasMapping("out")).setOutputCanvas(getCanvasMapping("out")));
 	    
 	    return true;
   }
+  
+  
   
   public boolean blah_setupFilters () {
     //super.initialise();
@@ -90,5 +93,31 @@ public class PlasmaScene extends Scene {
     highestFilter = i;
     return true;
   }
+
+  public void setupSequences() {
+		sequences.put("preset 1", new RGBFilterSequence1(this, 2000));
+  }
   
+}
+
+class RGBFilterSequence1 extends Sequence {
+	public RGBFilterSequence1(PlasmaScene plasmaFX1, int i) {
+		// TODO Auto-generated constructor stub
+		super(plasmaFX1,i);
+	}
+	public void setValuesForNorm(double norm, int iteration) {
+		//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
+		if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
+		//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
+		host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm));
+		host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
+		host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(-norm/2));
+	}
+	@Override public void onStart() {
+		//this.setLengthMillis((int)APP.getApp().random(1,5) * 500);
+		/*for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
+			host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
+		for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
+			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
+	}
 }

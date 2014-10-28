@@ -13,7 +13,7 @@ void main() {
 
     vec2 v_coords = gl_TexCoord[0].st;
 
-    float u_time = float(u_time_2)/10.0;
+    float u_time = float(u_time_2)/50.0;///10.0;
 
     float v = 0.0;
     vec2 u_k = vec2(float(width),float(height));
@@ -25,7 +25,8 @@ void main() {
     v += sin(sqrt(c.x*c.x+c.y*c.y+1.0)+u_time);
     v = v/2.0;
 
-    vec3 col = vec3(1, sin(PI*v), cos(PI*v));
+    //vec3 col = vec3(1, sin(PI*v), cos(PI*v));
+    vec3 col = vec3(1,sin(PI*v)/2,v/4);
 
     gl_FragColor = vec4(col*.5 + .5, 1);
 }

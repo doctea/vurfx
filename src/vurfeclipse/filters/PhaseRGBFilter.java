@@ -22,8 +22,8 @@ public class PhaseRGBFilter extends ShaderFilter {
   @Override
   public void setParameterDefaults() {
 	  super.setParameterDefaults();
-	  this.addParameter("rshift", new Float(0.5), 0.0f, 1.0f);
-	  this.addParameter("gshift", new Float(0.5), 0.0f, 1.0f);
-	  this.addParameter("bshift", new Float(0.5), 0.0f, 1.0f);
+	  this.addParameter("rshift", new Float(1), 0.2f, 1.5f);
+	  this.addParameter("gshift", new Float(1), 0.2f, 1.5f);
+	  this.addParameter("bshift", new Float(1), 0.2f, 1.5f);
   }
 }

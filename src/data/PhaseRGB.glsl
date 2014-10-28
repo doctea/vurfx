@@ -16,7 +16,12 @@ void main(void)
 	0
     );
 */
-gl_FragColor = vec4(color.b, color.r, color.g, color.a).rgba;
+gl_FragColor = vec4(
+	0.05 /*+ (rshift/2)*/ + color.r * rshift, 
+	0.05 /*+ (gshift/2)*/ + color.g * gshift, 
+	0.05 /*+ (bshift/2)*/ + color.b * bshift, 
+	color.a
+).rgba;
 
     //gl_FragColor = vec4(0.5,1,1,1);
 

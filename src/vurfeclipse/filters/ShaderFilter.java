@@ -25,7 +25,6 @@ public class ShaderFilter extends Filter {
 
   @Override
   synchronized public void updateParameterValue(String paramName, Object value) {
-
 	//if (!this.parameters.containsKey(paramName)) this.addParameter(paramName, value);
 	super.updateParameterValue(paramName, value);
 	if (glFilter!=null) {
