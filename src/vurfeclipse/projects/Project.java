@@ -245,7 +245,7 @@ public abstract class Project implements Serializable {
   
   public Scene addBlankerScene (String canvasName) {
 	  Scene sc = new SimpleScene(this, w, h).setSceneName("BlankerScene").setOutputCanvas(canvasName);
-	  BlankFilter bf = (BlankFilter) new BlankFilter(sc).setOutputCanvas(canvasName);
+	  BlankFilter bf = (BlankFilter) new BlankFilter(sc).setFilterName("BlankFilter").setOutputCanvas(canvasName);
 	  sc.addFilter(bf);
 	  return this.addSceneOutputCanvas(sc, canvasName);
 		//Scene sc = this.addScene();

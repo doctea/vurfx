@@ -47,7 +47,7 @@ class BlendSequence1 extends Sequence {
 	public void setValuesForNorm(double norm, int iteration) {
 		//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 		if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
-		host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
+		host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 	}
 	@Override public void onStart() {
 		this.setLengthMillis((int)APP.getApp().random(1,5) * 500);
