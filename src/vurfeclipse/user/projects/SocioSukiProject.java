@@ -61,8 +61,8 @@ public class SocioSukiProject extends Project implements Serializable {
     final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
     
-    ils1.addFilter(new ImageListDrawer(ils1).setDirectory("doctea").setCurrentIndex(5).setNumBlobs(200).setFilterName("ImageListDrawer1"));
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(200).setFilterName("ImageListDrawer2"));
+    ils1.addFilter(new ImageListDrawer(ils1).setDirectory("doctea").setCurrentIndex(5).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer1"));
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer2"));
     
     //ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect"));
     ils1.setCanvas("pix1","/pix1");
@@ -133,45 +133,12 @@ public class SocioSukiProject extends Project implements Serializable {
 
     // OUTPUT FILTERS
     
-    
-
-    //// START PLASMA SCENE    
-    final SimpleScene plasmaScene = (SimpleScene) new SimpleScene(this,w,h).setSceneName("PlasmaScene");    
-    
+    PlasmaScene plasmaScene = (PlasmaScene)(new PlasmaScene(this,w,h).setSceneName("PlasmaScene"));
     plasmaScene.setCanvas("out", "/out");
-    //plasmaScene.setCanvas("pix0","/pix0");
-    //os2.setCanvas("blendresult", "/blendresult");
-    plasmaScene.addFilter(new ShaderFilter(plasmaScene,"Plasma.xml") {
-    	@Override
-    	public void setParameterDefaults() {
-    		super.setParameterDefaults();
-    		addParameter("width", new Integer(w/16), 0, plasmaScene.w*2);
-    		addParameter("height", new Integer(h/16), 0, plasmaScene.h*2);
-    		addParameter("u_time_2", new Integer(10), 0, 1000000);
-    	}
-
-    }.setFilterName("Plasma").setCanvases("/temp1", plasmaScene.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
     
-    plasmaScene.addFilter(new BlendDrawer(plasmaScene).setFilterName("BlendDrawer").setInputCanvas("/temp1").setOutputCanvas(plasmaScene.getCanvasMapping("out")));
+    //plasmaScene.setupFilters();
     
-    this.getStream("beat").registerEventListener("beat_16", new ParameterCallback() {
-    	@Override
-    	  public void call(Object value) {
-    		if (value instanceof Integer) {
-    			//os2.getFilter("Plasma").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
-				Float limit = (float) (100 * 12.0*Math.PI);
-				Integer adjusted = ((Integer)value%(int)(float)limit);
-    			
-				plasmaScene.getFilter("Plasma").changeParameterValue("u_time_2", 
-    					//value
-    					adjusted
-    			);
-    		}
-    	  }    	    	
-    });
-    /*os2.getFilter("Plasma").addParameter("width", new Integer(w/512), 0, os2.w);
-    os2.getFilter("Plasma").addParameter("height", new Integer(h/512), 0, os2.h);
-    os2.getFilter("Plasma").addParameter("u_time_2", new Integer(10),0, 1000000);*/    
+    plasmaScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
     this.addSceneOutputCanvas(plasmaScene, "/out");
     
     /// END PLASMA SCENE
