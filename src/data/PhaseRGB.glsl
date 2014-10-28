@@ -3,18 +3,22 @@ uniform float gshift;
 uniform float bshift;
 
 uniform sampler2D src_tex_unit0;
-uniform vec2 src_tex_offset0;
+//uniform vec2 src_tex_offset0;
 
 void main(void)
 {
     //gl_FragColor = vec4(texture2DRect(src_tex_unit0, src_tex_offset0).abrg);
-    vec4 color = texture2D(src_tex_unit0, gl_TexCoord[0].st);
-    gl_FragColor = vec4 (
-	color.r * rshift,
-	color.g * gshift,
-	color.b * bshift,
-	color.a
+    vec4 color = texture2D(src_tex_unit0, gl_TexCoord[0].st).rgba;
+/*    gl_FragColor = vec4 (
+	rshift, //1 + color.r * rshift,
+	gshift, //color.g * gshift,
+	bshift, //color.b * bshift,
+	0
     );
+*/
+gl_FragColor = vec4(color.b, color.r, color.g, color.a).rgba;
+
+    //gl_FragColor = vec4(0.5,1,1,1);
 
     /*if(swap_mode==0)
     	gl_FragColor = vec4(color.brga);

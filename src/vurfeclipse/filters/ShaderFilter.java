@@ -98,8 +98,15 @@ public class ShaderFilter extends Filter {
   }
   
   public void beginDraw() {
-    //System.out.println("beginDraw in " + this);
-  }
+	    /*src.loadPixels();
+	    src.loadTexture();
+	    out.loadTexture();*/
+	    //super.beginDraw();
+	    if (t==null) t = new GLTexture(APP.getApp(),sc.w,sc.h);
+	    if (src==null) setInputCanvas(canvas_in);
+	    if (out==null) setOutputCanvas(canvas_out);
+	    if (glFilter==null) glFilter = new GLTextureFilter(APP.getApp(), shaderName);
+	  }
   public void endDraw() {
     //out.loadPixels(); // makes no difference apparently
     //out.updatePixels(); // stops form working
