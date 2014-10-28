@@ -11,6 +11,8 @@ public class TextDrawer extends Filter {
   
   String t;
   
+  String fontName = "LCDSolid-128.vlw";
+  
   int x = 0, y = 0;
   int w, h;
   
@@ -75,7 +77,7 @@ public class TextDrawer extends Filter {
     this.offsetx = x;
     this.offsety = y;
   }*/
-  
+   
   public void setFont(PFont font) {
 	  this.font = font;
 	  this.fontSize = font.getSize();
@@ -83,7 +85,7 @@ public class TextDrawer extends Filter {
   
   public PFont getFont() {
     if (this.font==null)
-      font = ((VurfEclipse)APP.getApp()).loadFont("LCDSolid-128.vlw");
+      font = ((VurfEclipse)APP.getApp()).loadFont(fontName);
     //System.out.println("returning font " + font);
     return font;
   }

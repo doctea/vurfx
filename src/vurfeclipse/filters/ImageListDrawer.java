@@ -104,11 +104,13 @@ public class ImageListDrawer extends Filter {
 	  //String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
 	  File folder = new File(path);
 	  System.out.println(this + "#loadDirectory() got path " + path);
+	  int count = 0;
 	  for (final File fileEntry : folder.listFiles()) {
 		  if (fileEntry.isDirectory()) {
 			  // skip; maybe recurse tho in future
 		  } else {
 			  filenames.add(directory + "/" + fileEntry.getName());
+			  if (count>=numBlobs) break;
 		  }
 	  }
   }

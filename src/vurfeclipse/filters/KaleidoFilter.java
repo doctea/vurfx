@@ -6,9 +6,9 @@ import vurfeclipse.scenes.Scene;
 import codeanticode.glgraphics.GLTexture;
 import codeanticode.glgraphics.GLTextureFilter;
 
-public class KaleidoFilter extends Filter {
+public class KaleidoFilter extends ShaderFilter {
   boolean flipHorizontal = true, flipVertical = true;
-  String shaderName = "KaleidoScope.xml";
+  static String shaderName = "KaleidoScope.xml";
   
   int d_value = 2;
     
@@ -16,7 +16,7 @@ public class KaleidoFilter extends Filter {
   transient GLTexture t;
     
   public KaleidoFilter(Scene sc) {
-    super(sc);
+    super(sc,shaderName);
   }
   
   /*public void setXYOffset(int x, int y) {
