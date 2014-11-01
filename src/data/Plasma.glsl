@@ -26,7 +26,7 @@ void main() {
     v = v/2.0;
 
     //vec3 col = vec3(1, sin(PI*v), cos(PI*v));
-    vec3 col = vec3(1,sin(PI*v)/2,v/4);
+    vec3 col = vec3(1,sin(PI*v)/2.0,v/4.0);
 
     gl_FragColor = vec4(col*.5 + .5, 1);
 }
