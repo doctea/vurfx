@@ -19,6 +19,13 @@ public class Sequencer implements Targetable {
 	public Project host;
 	
 	boolean locked = false;
+	boolean forward = false;
+	
+	
+	  boolean outputDebug = true;
+	  public void println(String text) {		// debugPrint, printDebug -- you get the idea
+		  if (outputDebug) System.out.println("SQR " + (text.contains((this.toString()))? text : this+": "+text));
+	  }
 	
 	int w,h;
 	  String activeSceneName = "";
@@ -77,7 +84,9 @@ public class Sequencer implements Targetable {
 			}
 			
 			return sc;
-		}  
+		}
+		
+		
 	  
 	  public void randomScene() {
 		  int count = scenes.size();
@@ -109,23 +118,35 @@ public class Sequencer implements Targetable {
 			  while (it.hasNext()) {
 				  Sequence s = ((Sequence)it.next());
 				  //try {
-					  System.out.println(this + "#changeScene() Changing scene to '" + sceneName + "', starting " + s);
+					  println(this + "#changeScene() Changing scene to '" + sceneName + "', starting " + s);
 					  //if (s!=null) 
 						s.start(); 
 					  //else println("Got NullPointerException for a sequence for " + sceneName + ": ");
-				  /*} catch (NullPointerException e) {
-					  System.out.println(this + "#changeScene: Got NullPointerException for a sequence for " + sceneName + ": " + s + ", " + e);
-					  System.exit(1);
-				  }*/
 			  }
 		  }
 	  }
+	  
+	  
+	  /*
+	   		// 
+	  public ArrayList<Sequence> getAllSequences() {
+		  ArrayList<Sequence> seqs = new ArrayList<Sequence> ();
+		  Iterator<ArrayList<Sequence>> it = this.switched_sequences.values().iterator();
+		  while (it.hasNext()) {
+			  seqs.addAll(it.next());
+		  }
+		  return seqs;
+	  }
+	   * public void changeSequence(Sequence seq) {
+		  
+	  }*/
 	  
 	  public Scene getActiveScene () {
 		  return scenes.get(activeSceneName);
 	  }
 	  
 	  public boolean readyToChange(int max_iterations) {
+		  if (forward) { forward = false; return true; };
 		  if (locked) return false;
 		  boolean ready = true;
 		  ArrayList<Sequence> seqs = switched_sequences.get(activeSceneName);
@@ -147,11 +168,14 @@ public class Sequencer implements Targetable {
 		  this.locked = !this.locked;
 		  return locked;
 	  }
+	  public void setForward() {
+		  this.forward = true;
+	  }
 	  
 	  public void runSequences() {
 		  //println(this+"#runSequences");
-		  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOKOING FOR -- number of loop iterations per sequence
-			  System.out.println(this+"#runSequences(): is readyToChange, calling randomScene()");
+		  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
+			  println(this+"#runSequences(): is readyToChange, calling randomScene()");
 			  randomScene();
 		  }
 		  
@@ -227,14 +251,14 @@ public class Sequencer implements Targetable {
 
 		  @Override
 		  public Object target(String path, Object payload) {
-			  System.out.println(this + "#target('"+path+"', '"+payload+"')");
+			  println(this + "#target('"+path+"', '"+payload+"')");
 			  String[] spl = path.split("/",4); // TODO: much better URL and parameter checking.
 			  if (spl[2].equals("changeTo")) {
 				  if (spl.length>3) {
-					  System.out.println ("Sequencer attempting changescene to " + spl[3]);
+					  println ("Sequencer attempting changescene to " + spl[3]);
 					  changeScene(spl[3]);
 				  } else {
-					  System.out.println ("Sequencer attempting changescene to " + payload.toString());
+					  println ("Sequencer attempting changescene to " + payload.toString());
 					  changeScene(payload.toString());
 				  }
 				  return "Sequencer active scene is currently " + activeSceneName;

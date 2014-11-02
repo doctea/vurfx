@@ -27,10 +27,10 @@ abstract public class Sequence {
 	}
 	
 	
-	  boolean outputDebug = true;
-	  public void println(String text) {		// debugPrint, printDebug -- you get the idea
-		  if (outputDebug) System.out.println("Q " + (text.contains((this.toString()))? text : this+": "+text));
-	  }
+	boolean outputDebug = true;
+	public void println(String text) {		// debugPrint, printDebug -- you get the idea
+		if (outputDebug) System.out.println("Q " + (text.contains((this.toString()))? text : this+": "+text));
+	}
 	
 	
 	
