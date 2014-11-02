@@ -16,6 +16,8 @@ public class PlasmaScene extends Scene {
   //int filterCount = 2;
   
   //Filter[] filters;// = new Filter[filterCount];
+	
+  final int colourModeCount = 8;
   
   public PlasmaScene(Project host, int w, int h) {
     super(host, w, h);
@@ -46,16 +48,24 @@ public class PlasmaScene extends Scene {
   
   public boolean setupFilters () {
 	    //// START PLASMA SCENE       
-	    
 	    //plasmaScene.setCanvas("pix0","/pix0");
 	    //os2.setCanvas("blendresult", "/blendresult");
 	    addFilter(new ShaderFilter(this,"Plasma.xml") {
 	    	@Override
 	    	public void setParameterDefaults() {
 	    		super.setParameterDefaults();
+	    		addParameter("colourMode", new Integer(0), 0, colourModeCount);
+	    		
 	    		addParameter("width", new Integer(w/16), 0, w*2);
 	    		addParameter("height", new Integer(h/16), 0, h*2);
 	    		addParameter("u_time_2", new Integer(10), 0, 1000000);
+	    	}
+	    	@Override
+	    	public void nextMode() {
+	    		changeParameterValue("colourMode", new Integer(((Integer)getParameterValue("colourMode")+1)));
+	    		if ((Integer)getParameterValue("colourMode")>colourModeCount) {
+	    			changeParameterValue("colourMode", new Integer(0));
+	    		}
 	    	}
 
 	    }.setFilterName("Plasma").setCanvases("/temp1", this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
@@ -68,31 +78,6 @@ public class PlasmaScene extends Scene {
   }
   
   
-  
-  public boolean blah_setupFilters () {
-    //super.initialise();
-    filters = new Filter[filterCount];
-    int i = 0;
-    
-    /*filters[++i] = new BlankFilter(this);
-    filters[i].setBuffers(buffers[BUF_OUT],buffers[BUF_OUT]);
-    filters[i].initialise();*/
-    
-    //filters[i] = new MirrorFilter(this).setBuffers(buffers[BUF_OUT],buffers[BUF_SRC]);
-    filters[i] = new MirrorFilter(this).setFilterName("MirrorFilter").setCanvases(getCanvasMapping("out"),getCanvasMapping("src")); //buffers[BUF_OUT],buffers[BUF_SRC]);    
-    filters[i].setMute(true);
-    
-    filters[++i] = new KaleidoFilter(this).setFilterName("KaleidoFilter").setCanvases(getCanvasMapping("out"),getCanvasMapping("out"));//buffers[BUF_OUT],buffers[BUF_OUT]);
-    
-    println ("just created kaleido " + filters[i].getFilterName());
-    //System.exit(0);
-    
-    
-    final Filter cf = filters[i];
-    
-    highestFilter = i;
-    return true;
-  }
 
   public void setupSequences() {
 		sequences.put("preset 1", new RGBFilterSequence1(this, 2000));
@@ -111,7 +96,7 @@ class RGBFilterSequence1 extends Sequence {
 		//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
 		host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm));
 		host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
-		host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(-norm/2));
+		host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm*norm*norm));
 	}
 	@Override public void onStart() {
 		//this.setLengthMillis((int)APP.getApp().random(1,5) * 500);
@@ -119,5 +104,9 @@ class RGBFilterSequence1 extends Sequence {
 			host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
 		for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
 			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
+		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) APP.getApp().random(0,((PlasmaScene)this.host).colourModeCount)));
+		
+		host.getFilter("PhaseRGB").setMute(APP.getApp().random(0.0f,1.0f)>=0.33f);
+		
 	}
 }
