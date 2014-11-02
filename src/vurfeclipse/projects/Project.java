@@ -429,6 +429,8 @@ public abstract class Project implements Serializable {
       //println(this.serialize());
       
       saveProject();
+    } else if (key==';') {
+    	if (this.sequencer!=null) this.sequencer.setForward();
     } else/* if (key=='\'') {  // SOLO SCENE
       Iterator i = scenes.iterator();
       while (i.hasNext()) {
@@ -445,7 +447,7 @@ public abstract class Project implements Serializable {
     } else if (key=='p') {
     	println(rsConn.getURLs().toString());
     	System.exit(0);
-    } else if (key=='#') {
+    } else if (key=='£') {
     	println("toggling sequencer");
     	if (this.sequencer!=null) {
     		println("toggling sequencer " + this.sequencer.toggleLock());
