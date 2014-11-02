@@ -6,5 +6,6 @@
 		<parameter type="int" name="width" label="width">320.0</parameter>
 		<parameter type="int" name="height" label="height">240.0</parameter>
 		<parameter type="int" name="u_time_2" label="u_time">10.0</parameter>
+		<parameter type="int" name="colourMode" label="colourMode">0</parameter>
 
 </filter>
