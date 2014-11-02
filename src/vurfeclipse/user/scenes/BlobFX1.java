@@ -27,6 +27,8 @@ public class BlobFX1 extends SimpleScene {
 	    this.addFilter(new BlendDrawer(this).setFilterName("BlendDrawer2").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp3")));
 	    //this.setMuted(true);
 	    
+	    //((BlobDrawer)this.getFilter("BlobDrawer")).loadSVG(APP.getApp().dataPath("image-sources/reindeer.svg"));
+	    
 	    return true;
 	}
 

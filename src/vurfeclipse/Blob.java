@@ -7,9 +7,9 @@ import codeanticode.glgraphics.*;
 public class Blob {
   public int x = 0;
 
-public int y = 0;
+  public int y = 0;
 
-int r=10;
+  int r=10;
   
   int c;
   int tint = 255;
@@ -198,6 +198,7 @@ int r=10;
     } else if (getShape()==SH_COMPOUND) {
       drawCompoundBlob(out, x, y, R, R, 0);
     } else if (getShape()==SH_SVG && svg!=null) {
+    	System.out.println("SVG Draw!");
       drawSVG(out, x, y, R, R, 0);
     } else if (getShape()==SH_IMAGE && imageName!=null && !imageName.equals("")) {
       drawImage(out, x, y, R, R, 0);

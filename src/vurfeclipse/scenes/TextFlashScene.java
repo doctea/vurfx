@@ -156,11 +156,15 @@ public class TextFlashScene extends Scene {
   
   public TextFlashScene(Project host, int w, int h) {
     this(host, w, h, new String[] {      
-          ":)", "MDMA", "LSD-25", "DMT", "2c-b", "2c-c", "2c-d", "4homet", "delysid", "MDA", "303", "909", "808", "take trips", "magic dust", 
-          "nice", "dANCe", "rob0t", "ZX", "(:", "#!", "???", "!!", "!!!", "!", "dont panic", 
+          ";)", ":)", "MDMA", "LSD-25", "DMT", "2c-b", "2c-c", "2c-d", "4homet", "delysid", "MDA", "303", "909", "808", 
+          
+          "take trips", "magic dust", "Socio Suki", 
+          
+          "nice", "dANCe", "rob0t", "ZX", "(:", "#!", "???", "!!", "!!!", "!", "dont panic",
+          
           "(c)", "doctea", "Crack Zombie", "vurf", "gwrx", "greetz",
-          "::vurf::", "V:U:R:F", "SLiPs", "MMXIII", "MCMLXXX", "Sandoz", "cola", "acid", "acidtest", "electric", "kool-aid",
-          "RAVE", "rave", "XtC", "Socio Suki", "science", "drop acid", "make tea", "art?", "peace", "free", "<3 echo", "<3", "mwilk"
+          "::vurf::", "V:U:R:F", "SLiPs", "MMXIV", "MCMLXXX", "Sandoz", "cola", "acid", "acidtest", "electric", "kool-aid",
+          "RAVE", "rave", "XtC", "science", "drop acid", "make tea", "art?", "peace", "free", "<3 echo", "<3", "mwilk"
         }
     );
   }

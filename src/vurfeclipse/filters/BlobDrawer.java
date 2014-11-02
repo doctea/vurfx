@@ -38,9 +38,9 @@ public class BlobDrawer extends SpiralDrawer {
     //this.setParameterValue("rotation", 0.0);
     super.setParameterDefaults();
     this.addParameter("edged", new Boolean(true));
-    this.addParameter("tint", new Integer(128), 0, 255);//new Integer(128));
+    this.addParameter("tint",  new Integer(128), 0, 255);//new Integer(128));
     this.addParameter("shape", new Integer(0), 0, b.shapesCount);
-    this.addParameter("colour", new Integer(255), new Integer(0), new Integer(2^32)); //APP.color(APP.random(255),APP.random(255),APP.random(255),128)));
+    this.addParameter("colour",new Integer(255), new Integer(0), new Integer(2^32)); //APP.color(APP.random(255),APP.random(255),APP.random(255),128)));
     //this.addParameter("radius", 0.5, 0.01, 20.0);
   }
   
@@ -70,7 +70,9 @@ public class BlobDrawer extends SpiralDrawer {
 	    b.setColour(r,g,b2); 
   }
   
-    
+  public void loadSVG(String filename) {
+	  b.loadSVG(filename);
+  }
   
   int colourSwitchCount = 0;
   int colourSwitchEvery = 50; // frames

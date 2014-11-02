@@ -74,7 +74,6 @@ public class SpiralDrawer extends Filter {
   int numSections = 60;*/
     
   public boolean applyMeatToBuffers() {
-    
     //if (src!=out) out.background(0); else out.image(src.getTexture(),0,0,sc.w,sc.h);
     //if (src!=out)
     out.background(0,0,0,0);
@@ -137,20 +136,20 @@ public class SpiralDrawer extends Filter {
       while (currentRadian >= startRadian) {
         //currentRadian += deltaAngle;
         currentRadian -= (double)deltaAngle + 0.0001d;
-        currRadius = ((VurfEclipse)APP.getApp()).map(currentRadian, startRadian, endRadian, startRadius, endRadius) * radius;
-        x = (float) ((double)xRadianMod*(double)((VurfEclipse)APP.getApp()).cos(currentRadian) * ((double)currRadius / (double)radius));// / radius);
-        y = (float) ((double)yRadianMod*(double)((VurfEclipse)APP.getApp()).sin(currentRadian) * (double)((double)currRadius / (double)radius));// / radius);
+        currRadius = PApplet.map(currentRadian, startRadian, endRadian, startRadius, endRadius) * radius;
+        x = (float) ((double)xRadianMod*(double)PApplet.cos(currentRadian) * ((double)currRadius / (double)radius));// / radius);
+        y = (float) ((double)yRadianMod*(double)PApplet.sin(currentRadian) * (double)((double)currRadius / (double)radius));// / radius);
   
         this.drawObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
       }
     } else {
       int n = 0;
       while (n <= numofCircles*10) {
-        this.drawObject(((VurfEclipse)APP.getApp()).abs(((VurfEclipse)APP.getApp()).sin(n)*sc.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
+        this.drawObject(PApplet.abs(PApplet.sin(n)*sc.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
         n++;
       }
       n--;
-      this.drawObject(((VurfEclipse)APP.getApp()).abs(((VurfEclipse)APP.getApp()).sin(n)*sc.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);      
+      this.drawObject(PApplet.abs(PApplet.sin(n)*sc.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);      
     }
       
     return true;

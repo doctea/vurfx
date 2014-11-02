@@ -1,5 +1,6 @@
 package vurfeclipse.user.projects;
 import vurfeclipse.APP;
+import vurfeclipse.Blob;
 import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.*;
@@ -118,11 +119,11 @@ public class SocioSukiProject extends Project implements Serializable {
     
     
     // BLOB SPIRAL SCENE
-    final Scene blobScene =  
-    		switcher.bindScene("blob drawer", "preset 1",   new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0"));
+    final Scene blobScene =  switcher.bindScene("blob drawer",   "preset 1", new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0"));
     final Scene blobScene2 = switcher.bindScene("blob drawer 2", "preset 2", new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out"));
     final Scene blobScene3 = switcher.bindScene("blob drawer 3", "preset 3", new BlobFX1(this,w,h).setSceneName("BlobScene3").setOutputCanvas("/out").setInputCanvas("/pix0"));
     final Scene blobScene4 = switcher.bindScene("blob drawer 4", "preset 4", new BlobFX1(this,w,h).setSceneName("BlobScene4").setOutputCanvas("/out"));    
+    
     
     // event listener to switch the switcher.
     /*getStream("beat").registerEventListener("bar_1", new ParameterCallback() {
@@ -192,13 +193,23 @@ public class SocioSukiProject extends Project implements Serializable {
   	    	"Caveman-128.vlw", "Dinosaur-512.vlw", "DinosBeeline-512.vlw", "LostWorld-128.vlw", "DinosaurJrPlane-256.vlw", "DinosaurSkin-128.vlw"
   	      })  */    
   	        .setSceneName("TextFlash")
-  	        .registerCallbackPreset("beat","beat_1","random")
-  	        .registerCallbackPreset("beat","beat_8","rotate")
+  	        .registerCallbackPreset("beat","beat_1", "random")
+  	        .registerCallbackPreset("beat","beat_8", "rotate")
   	        .registerCallbackPreset("beat","beat_16","swivel")
   	        ,
   	      "/out",
   	      "/out"
   	    );    
+    
+
+    /*SimpleScene bs = new SimpleScene(this,w,h);
+    BlobDrawer bd = (BlobDrawer) new BlobDrawer(bs);//.setOutputCanvas("/out");
+    bd.loadSVG(APP.getApp().dataPath("image-sources/reindeer.svg"));
+    bd.setColour(255, 128, 255);
+    bd.changeParameterValue("shape", Blob.SH_SVG);
+    bs.addFilter(bd);
+    this.addSceneOutputCanvas(bs,"/out");*/
+    
     
     this.addSceneOutputCanvas(
       new DebugScene(this,w,h),
