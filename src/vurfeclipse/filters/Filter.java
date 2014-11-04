@@ -228,15 +228,14 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     //
   }
 
-
-  public boolean isMuted() {
+  @Override public boolean isMuted() {
     return this.muted;
   }
-  public void toggleMute() {
-    this.setMute(!this.isMuted());
+  @Override public void toggleMute() {
+    this.setMuted(!this.isMuted());
     //this.muted = !this.muted;
   }
-  public void setMute(boolean v) {
+  @Override public void setMuted(boolean v) {
     if (v==true && this.isMuted()!=v) {
       this.stop();
     } 
@@ -254,6 +253,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     }
 
     this.muted = v;
+  }
+  @Override public void setMuted() {
+	  this.setMuted(true);
   }
 
   public String serialize() {
@@ -467,7 +469,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     if (ev.getAction()==ControlP5.ACTION_RELEASED) {
       if (ev.getController()==this.muteController) {
         println("Setting mute state on " + this + " to " + muteController.getState());
-        this.setMute(muteController.getState());
+        this.setMuted(muteController.getState());
       } else if (ev.getController()==this.nextModeButton) {
         this.nextMode();
       } 
@@ -643,9 +645,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	urls.put(f.getPath() + "/nextMode", f);
 	println("added Filter's url '" + f.getPath() + "/mute' mapped to " + f);
 	
-	Iterator pit = f.getParameters().iterator();
+	Iterator<Parameter> pit = f.getParameters().iterator();
 	while (pit.hasNext()) {
-		Parameter p = (Parameter) pit.next();
+		Parameter p = pit.next();
 		println("added Parameter's url '" + p.getPath() + "/mute' mapped to " + p);
 		urls.put(p.getPath(), p);
 	}

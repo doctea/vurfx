@@ -106,7 +106,7 @@ class RGBFilterSequence1 extends Sequence {
 			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
 		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) APP.getApp().random(0,((PlasmaScene)this.host).colourModeCount)));
 		
-		host.getFilter("PhaseRGB").setMute(APP.getApp().random(0.0f,1.0f)>=0.33f);
+		host.getFilter("PhaseRGB").setMuted(APP.getApp().random(0.0f,1.0f)>=0.33f);
 		
 	}
 }

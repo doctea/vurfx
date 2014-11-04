@@ -174,7 +174,7 @@ class FeedbackScene extends Scene {
     filters[++i] = new MirrorFilter(this);
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
     final Filter t = filters[i];
     /*beatStream.registerEventListener("beat_8", 
       new ParameterCallback () {
@@ -193,7 +193,7 @@ class FeedbackScene extends Scene {
     filters[i].setFilterName("Feedback");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
     final Filter fbk = filters[i];
     /*beatStream.registerEventListener("beat_1", 
       new ParameterCallback () {
@@ -214,7 +214,7 @@ class FeedbackScene extends Scene {
     filters[i].setFilterName("Edges");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
     filters[i].initialise();    
 
     /*filters[++i] = new ImageWriter(this);
@@ -226,7 +226,7 @@ class FeedbackScene extends Scene {
     //filters[i].setBuffers(buffers[BUF_SRC], buffers[BUF_SRC]);
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
     final Filter tk = filters[i];
     /*beatStream.registerEventListener("bar_1", 
       new ParameterCallback () {

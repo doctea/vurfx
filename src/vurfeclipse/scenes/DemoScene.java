@@ -269,12 +269,12 @@ filters[++i] = new FilterChain(this, "Webcam 1 Image into BUF_SRC");
     filters[++i] = new PlainDrawer(this);
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_TEMP3]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("temp3"));
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
 
     filters[++i] = new MirrorFilter(this);
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
     //final Filter t = filters[i];
     
     /*filters[++i] = new MirrorFilter(this);
@@ -300,7 +300,7 @@ filters[++i] = new FilterChain(this, "Webcam 1 Image into BUF_SRC");
     filters[i].setFilterName("Feedback");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
     final Filter fbk = filters[i];
     /*beatStream.registerEventListener("beat_1", 
       new ParameterCallback () {
@@ -321,7 +321,7 @@ filters[++i] = new FilterChain(this, "Webcam 1 Image into BUF_SRC");
     filters[i].setFilterName("Edges");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
     //filters[i].initialise();    
 
     /*filters[++i] = new ImageWriter(this);

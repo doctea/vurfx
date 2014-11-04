@@ -140,9 +140,9 @@ public class TextFlashScene extends Scene {
         if (i%2==0) {
           //this.toggleMute();
           //changeFilterParameterValue(1
-          if (filters[1]!=null) self.filters[1].setMute(false);
+          if (filters[1]!=null) self.filters[1].setMuted(false);
         } else {
-          if (filters[1]!=null) self.filters[1].setMute(true);
+          if (filters[1]!=null) self.filters[1].setMuted(true);
         }
       }
     });

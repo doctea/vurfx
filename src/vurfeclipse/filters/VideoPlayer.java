@@ -50,7 +50,7 @@ public class VideoPlayer extends Filter {
   }
   
   public void setMuted(boolean on) {
-    super.setMute(on);
+    super.setMuted(on);
     if (!on) {
       stream.loop();
     } else {

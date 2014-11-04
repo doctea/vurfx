@@ -13,7 +13,7 @@ import processing.core.PApplet;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.Sequence;
-import vurfeclipse.sequence.Sequencer;
+import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.OutputFX1;
 
@@ -95,7 +95,8 @@ public class AboveBoardsProject extends Project implements Serializable {
         ,
       "/out",
       "/out"
-    ).setMuted(true);
+    );
+    textFlashScene.setMuted(true);
     
     
     SimpleScene bd = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out");
@@ -155,7 +156,7 @@ public class AboveBoardsProject extends Project implements Serializable {
     // SWITCHER  //////////////////////////
     
     //final SwitcherScene switcher = (SwitcherScene) this.addSceneOutputCanvas(new SwitcherScene(this, w, h), "/out");
-    final Sequencer switcher = sequencer;
+    final SceneSequencer switcher = (SceneSequencer)sequencer;
     
     // BLEND SCENE
     final Scene blendScene = switcher.addScene("blend scene", bl1);

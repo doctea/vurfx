@@ -14,6 +14,7 @@ import java.util.*;
 
 import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.Sequencer;
 import vurfeclipse.streams.*;
 import codeanticode.glgraphics.*;
@@ -219,7 +220,7 @@ public abstract class Project implements Serializable {
   public boolean setupSequencer() {
 	  println("#setupSequencer");
 	  //System.exit(1);
-	  sequencer = new Sequencer(this,w,h);
+	  sequencer = new SceneSequencer(this,w,h);	// default to a SceneSequencer type
 	  return true;
   };
   
@@ -581,7 +582,6 @@ public abstract class Project implements Serializable {
   }
   public Map<? extends String, ? extends Targetable> getTargetURLs() {
 		HashMap<String, Targetable> urls = new HashMap<String, Targetable>();
-		
 		
 		// get all the Scene urls that are appropriate
 		Iterator<Scene> it = this.getScenes().iterator();

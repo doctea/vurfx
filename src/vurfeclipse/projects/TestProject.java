@@ -200,17 +200,15 @@ public class TestProject extends Project {
     
     this.addSceneOutputCanvas(
       new SpiralScene(this,w,h,"/out") //buffers[BUF_OUT])
-        .setMuted(true)
         .registerCallbackPreset("beat", "beat_16", "spin_back")
         .registerCallbackPreset("beat", "beat_16", "unwind"), 
       //buffers[BUF_OUT]
       "/out"
-    );
+    ).setMuted(true);
 
     
     this.addSceneInputOutputCanvas(
       new TextFlashScene(this,w,h)
-        .setMuted(true)
         .registerCallbackPreset("beat", "beat_2", "random")
         .registerCallbackPreset("beat", "beat_4", "toggle")
         .registerCallbackPreset("beat", "beat_8", "swivel")
@@ -219,7 +217,7 @@ public class TestProject extends Project {
       //buffers[BUF_OUT]
       "/inp0",
       "/out"
-    );
+    ).setMuted(true);
     
     
     /*this.addSceneInputOutput(

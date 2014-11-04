@@ -27,7 +27,7 @@ class KaleidoScene extends Scene {
     
     //filters[i] = new MirrorFilter(this).setBuffers(buffers[BUF_OUT],buffers[BUF_SRC]);
     filters[i] = new MirrorFilter(this).setFilterName("MirrorFilter").setCanvases(getCanvasMapping("out"),getCanvasMapping("src")); //buffers[BUF_OUT],buffers[BUF_SRC]);    
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
     
     filters[++i] = new KaleidoFilter(this).setFilterName("KaleidoFilter").setCanvases(getCanvasMapping("out"),getCanvasMapping("out"));//buffers[BUF_OUT],buffers[BUF_OUT]);
     

@@ -1,17 +1,24 @@
 package vurfeclipse.sequence;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
+import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 
-abstract public class Sequence {
+abstract public class Sequence implements Mutable {
 	//Scene sc;
 	
 	int startTimeMillis;
 	int lengthMillis = 2000;
 	
 	int iteration;
+	
+	ArrayList<Mutable> mutables = new ArrayList<Mutable>();
+	
 	
 	protected Scene host;		// TODO: host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..	
 	public Sequence (Scene host, int sequenceLengthMillis) {
@@ -26,6 +33,32 @@ abstract public class Sequence {
 		lengthMillis = sequenceLengthMillis;
 	}
 	
+	
+	public void addMutable(Mutable mut) {
+		this.mutables.add(mut);
+	}
+	@Override
+	public void setMuted() {
+		this.setMuted(false);
+	}
+	@Override
+	public void setMuted(boolean muted) {
+		// TODO Auto-generated method stub
+		Iterator<Mutable> it = this.mutables.iterator();
+		while(it.hasNext()) {
+			it.next().setMuted(muted);
+		}
+	}	
+	@Override public boolean isMuted() {
+		Iterator<Mutable> mit = mutables.iterator();
+		while(mit.hasNext()) {
+			if (mit.next().isMuted()) return true;
+		}
+		return false;
+	}
+	@Override public void toggleMute() {
+		this.setMuted(!this.isMuted());
+	}
 	
 	boolean outputDebug = true;
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
@@ -121,6 +154,6 @@ abstract public class Sequence {
 		  }
 		  
 		  return APP.getApp().color(r,g,b);
-	  }	
-	
+	  }
+
 }

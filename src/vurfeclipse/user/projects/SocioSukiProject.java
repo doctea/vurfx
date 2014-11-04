@@ -15,7 +15,7 @@ import processing.core.PVector;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.Sequence;
-import vurfeclipse.sequence.Sequencer;
+import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;
@@ -49,7 +49,7 @@ public class SocioSukiProject extends Project implements Serializable {
   }
   
   public boolean setupSequencer() {
-	  this.sequencer = new Sequencer(this,w,h);
+	  this.sequencer = new SceneSequencer(this,w,h);
 	  return true;
   }
   
@@ -85,7 +85,7 @@ public class SocioSukiProject extends Project implements Serializable {
     
     // SWITCHER  //////////////////////////
     //final SwitcherScene switcher = (SwitcherScene) this.addSceneOutputCanvas(new SwitcherScene(this, w, h), "/out");
-    Sequencer switcher = sequencer;
+    SceneSequencer switcher = (SceneSequencer)sequencer;
         
 /*    // BLEND SCENE    
     final SimpleScene bl1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlendScene");

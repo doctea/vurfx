@@ -178,10 +178,13 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   public boolean isMuted() {
     return this.muted;
   }
-  public Scene setMuted(boolean m) {
+  public void setMuted() {
+	  this.setMuted(true);
+  }
+  public void setMuted(boolean m) {
     this.muted = m;
     if (null!=muteController) muteController.setValue(isMuted());
-    return this;
+    //return this;
   }
   public void toggleMute() {
     this.setMuted(!this.isMuted());
@@ -250,7 +253,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     for (int i = 0 ; i < filters.length ; i++) {
       if (filters[i]!=null) {
         //filters[i].muted = true;
-        filters[i].setMute(true);
+        filters[i].setMuted(true);
       }
     }
   }

@@ -33,7 +33,7 @@ public class Demo2Scene extends Scene {
     filters[++i] = new MirrorFilter(this);
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
     final Filter t = filters[i];
     
     filters[++i] = new KaleidoFilter(this);
@@ -79,7 +79,7 @@ public class Demo2Scene extends Scene {
     filters[i].setFilterName("Feedback");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));
-    filters[i].setMute(true);
+    filters[i].setMuted(true);
     final Filter fbk = filters[i];
     /*host.getStream("beat").registerEventListener("beat_1", 
       new ParameterCallback () {
