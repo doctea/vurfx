@@ -22,20 +22,20 @@ public class Sequencer implements Targetable {
 	boolean forward = false;
 	
 	
-	  boolean outputDebug = true;
-	  public void println(String text) {		// debugPrint, printDebug -- you get the idea
-		  if (outputDebug) System.out.println("SQR " + (text.contains((this.toString()))? text : this+": "+text));
-	  }
+	boolean outputDebug = true;
+	public void println(String text) {		// debugPrint, printDebug -- you get the idea
+		if (outputDebug) System.out.println("SQR " + (text.contains((this.toString()))? text : this+": "+text));
+	}
 	
 	int w,h;
 	  String activeSceneName = "";
 	  HashMap<String,Scene> scenes = new HashMap<String,Scene>();
-
+	
 	  HashMap<String,ArrayList<Sequence>> switched_sequences = new HashMap<String,ArrayList<Sequence>>();
 	  		// list of Sequences that are applicable for each SceneName
 	  
 	  Filter blank;
-	  
+  
 	  public Sequencer (Project host, int w, int h) {
 	    //super(host, w,h);
 		this.host = host;
@@ -228,7 +228,7 @@ public class Sequencer implements Targetable {
 			
 			urls.put("/seq/toggleLock", this);
 			
-			urls.put("/seq/changeTo",  this);
+			urls.put("/seq/changeTo", this);
 			
 			Iterator<Entry<String, ArrayList<Sequence>>> it = switched_sequences.entrySet().iterator();
 			while (it.hasNext()) {

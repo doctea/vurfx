@@ -10,6 +10,8 @@ import vurfeclipse.VurfEclipse;
 public class Parameter implements Serializable, Targetable {
   String name;
   public Object value;  
+  
+  public Object defaultValue;
   //private transient controlP5.Controller controller;
   //String controllerName;
   
@@ -26,12 +28,18 @@ public class Parameter implements Serializable, Targetable {
   Parameter (String name, Object value) {
     this.name = name;
     this.value = value;
+    this.defaultValue = value;
     this.datatype = value.getClass();
   }
   public Parameter (String name, Object value, Object min, Object max) {
     this(name, value);
     this.min = min;
     this.max = max;
+  }
+  
+  public Object reset () {
+	  setValue(defaultValue);
+	  return defaultValue;
   }
   
   public void setFilterPath(String filterPath) {

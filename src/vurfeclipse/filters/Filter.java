@@ -356,17 +356,28 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   synchronized public void updateParameterValue(String paramname, Object value) {
     // set parameter Control
     
-
     //sc.myTextarea.setText(serialize());
     //sc.updateSerializeBox();
     if(paramname=="muted") {
       this.muted = (Boolean) value;
     }
   }
+  
+  synchronized public void resetParameters() {
+	  Iterator<Parameter> it = parameters.values().iterator();
+	  while (it.hasNext()) {
+		  it.next().reset();
+	  }
+  }
 
+  
   synchronized public void setParameterDefaults () {
     println("setParameterDefaults in " + this);
-    parameters = new HashMap<String, Parameter>();//String.class,Parameter.class);
+    if (this.parameters==null) {
+    	parameters = new HashMap<String, Parameter>();//String.class,Parameter.class);
+    } else {
+    	resetParameters();
+    }
   }
 
   public HashMap<String,Object> getPresetValues () {
