@@ -21,6 +21,20 @@ public class ChainSequence extends Sequence {
 		return addSequence(sc.getSequence(sequenceName));
 	}
 	
+	@Override public void start() {
+		Iterator<Sequence> it = chain.iterator();
+		while(it.hasNext()) {
+			it.next().start();
+		}
+	}
+	@Override public void stop() {
+		Iterator<Sequence> it = chain.iterator();
+		while(it.hasNext()) {
+			it.next().stop();
+		}
+	}
+	
+	
 	@Override
 	public ArrayList<Mutable> getMutables() {
 		ArrayList<Mutable> muts = new ArrayList<Mutable>();

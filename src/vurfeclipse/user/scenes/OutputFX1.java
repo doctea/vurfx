@@ -51,7 +51,6 @@ public class OutputFX1 extends SimpleScene {
 
 	class OutputSequence1 extends Sequence {
 		public OutputSequence1(OutputFX1 outputFX1, int i) {
-			// TODO Auto-generated constructor stub
 			super(outputFX1,i);
 		}
 		@Override
