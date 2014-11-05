@@ -22,17 +22,31 @@ public class ChainSequence extends Sequence {
 	}
 	
 	@Override public void start() {
+		super.start();
 		Iterator<Sequence> it = chain.iterator();
 		while(it.hasNext()) {
 			it.next().start();
 		}
 	}
 	@Override public void stop() {
+		super.stop();
 		Iterator<Sequence> it = chain.iterator();
 		while(it.hasNext()) {
 			it.next().stop();
 		}
 	}
+	
+	@Override
+	public boolean readyToChange(int max_i) {
+		//return iteration>=max_i;
+		// assume ready, unless one of the chained items isnt
+		if (super.readyToChange(max_i)) return true;
+		Iterator<Sequence> it = chain.iterator();
+		while(it.hasNext()) {
+			if (!it.next().readyToChange(max_i)) return false;
+		}
+		return true;
+	}	
 	
 	
 	@Override
@@ -58,21 +72,19 @@ public class ChainSequence extends Sequence {
 	@Override
 	public void onStart() {
 		// TODO Auto-generated method stub
-		Iterator<Sequence> it = chain.iterator();
+		/*Iterator<Sequence> it = chain.iterator();
 		while(it.hasNext()) {
 			it.next().onStart();
-		}
-
+		}*/
 	}
 
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
-		Iterator<Sequence> it = chain.iterator();
+		/*Iterator<Sequence> it = chain.iterator();
 		while(it.hasNext()) {
 			it.next().onStop();
-		}
-
+		}*/
 	}
 
 }

@@ -167,6 +167,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			  this.getActiveSequence().stop();//setMuted(true);		
 		  
 		  this.activeSequenceName = SequenceName;
+
+		  println("Changing to sequence:   " + SequenceName + "  (" + this.getActiveSequence().toString() + ")");
 		  
 		  //muteAllSequences();
 		  this.getActiveSequence().setMuted(false);

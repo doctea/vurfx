@@ -131,7 +131,7 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindSequence("blob1_3", blobScene, "preset 3");
     switcher.bindSequence("blob1_4", blobScene, "preset 4");
     
-    Scene blobScene2 = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
+    Scene blobScene2 = new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out").setInputCanvas("/pix0");
     this.addScene(blobScene2);
     switcher.bindSequence("blob2_1", blobScene2, "preset 1");
     switcher.bindSequence("blob2_2", blobScene2, "preset 2");
@@ -166,8 +166,9 @@ public class SocioSukiProject extends Project implements Serializable {
     
     plasmaScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
-    switcher.bindSequence("plasma", plasmaScene, "preset 1");
-    
+    switcher.bindSequence("plasma_1", plasmaScene, "preset 1");
+    switcher.bindSequence("plasma_2", plasmaScene, "preset 2");
+    switcher.bindSequence("plasma_3", plasmaScene, "preset 3");
     
     /// END PLASMA SCENE
     
@@ -211,6 +212,23 @@ public class SocioSukiProject extends Project implements Serializable {
   	      "/out",
   	      "/out"
   	    );    
+    
+    
+	Sequence doubleSequence = new ChainSequence(2000)
+		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")    	
+		.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
+	;
+    switcher.bindSequence("doubleSequence1", doubleSequence);
+    switcher.bindSequence("doubleSequence2", doubleSequence);
+    switcher.bindSequence("doubleSequence3", doubleSequence);
+    switcher.bindSequence("doubleSequence4", doubleSequence);
+    switcher.bindSequence("doubleSequence5", doubleSequence);
+    switcher.bindSequence("doubleSequence6", doubleSequence);
+    switcher.bindSequence("doubleSequence7", doubleSequence);
+    switcher.bindSequence("doubleSequence8", doubleSequence);
+    switcher.bindSequence("doubleSequence9", doubleSequence);
+
+    
     
     
 
