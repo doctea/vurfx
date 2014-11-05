@@ -47,11 +47,6 @@ class BlendSequence1 extends Sequence {
 		// TODO Auto-generated constructor stub
 		super(blenderFX1,i);
 	}
-	@Override public ArrayList<Mutable> getMutables() {
-		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-		muts.add(host);//.getFilter("BlendDrawer1"));
-		return muts;
-	}
 	public void setValuesForNorm(double norm, int iteration) {
 		//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 		if (iteration%2==0) norm = 1.0f-norm;	// go up and down again

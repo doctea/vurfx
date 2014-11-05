@@ -171,7 +171,7 @@ public class AboveBoardsProject extends Project implements Serializable {
 			for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
 				getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();
 		}
-		@Override public void onStop() {	}		
+		@Override public void onStop() {	}
     });
     
     // TEXT FLASH SCENE

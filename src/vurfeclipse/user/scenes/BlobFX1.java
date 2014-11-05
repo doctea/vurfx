@@ -49,47 +49,11 @@ abstract class SpinnerSequence extends Sequence {
 	public SpinnerSequence(BlobFX1 host, int i) {
 		super((Scene)host,i);
 	}
-	@Override public ArrayList<Mutable> getMutables() {
+	/*@Override public ArrayList<Mutable> getMutables() {
 		ArrayList<Mutable> muts = new ArrayList<Mutable>();
 		muts.add(host);//host.getFilter("BlendDrawer1"));
 		return muts;
-	}	
-	
-	public void toggleOutputs() {
-		// this bit below shouldnt really be here.
-		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader").getFilter("Toon").toggleMute();
-		//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-		//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader").getFilter("Edges").toggleMute();
-		if (APP.getApp().random(0f,1.0f)>=0.5f) {
-			host.host.getSceneForPath("/sc/OutputShader2").getFilter("Feedback").setMuted(false);
-			host.host.getSceneForPath("/sc/BlankerScene")
-				.getFilter("BlankFilter")
-				.changeParameterValue("alpha", (int)16);
-		} else {
-			host.host.getSceneForPath("/sc/OutputShader2").getFilter("Feedback").setMuted(true);
-			host.host.getSceneForPath("/sc/BlankerScene")
-				.getFilter("BlankFilter")
-				.changeParameterValue("alpha", (int)255);			
-		}
-		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("Kaleido").toggleMute();
-		
-		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").toggleMute();
-		host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
-		
-		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").changeParameterValue("BlendMode", getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
-		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
-		
-		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/TextFlash").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
-		((BlendDrawer)host.host.getSceneForPath("/sc/TextFlash").getFilter("BlendDrawer")).setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
-		
-		//if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/PlasmaScene").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
-		//((BlendDrawer)host.host.getSceneForPath("/sc/PlasmaScene").getFilter("BlendDrawer")).setMute((APP.getApp().random(0f,1.0f)>=0.25f));
-		
-		
-		host.host.getSceneForPath("/sc/OutputShader2").getFilter("Kaleido").nextMode();    			
-	}
-	
+	}*/
 	@Override public void onStop() {	}	
 }
 
@@ -149,7 +113,7 @@ class SpinnerSequence1 extends SpinnerSequence {
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",APP.getApp().random(0f,1f));
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("yRadianMod",APP.getApp().random(0f,1f));
 		
-		toggleOutputs();	
+		//toggleOutputs();	
 	}
 }
 
@@ -207,7 +171,7 @@ class SpinnerSequence2 extends SpinnerSequence {
     		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 2,  8, 4} ));
     		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",APP.getApp().random(0f,1f));
     		
-    		toggleOutputs();
+    		//toggleOutputs();
     	}    	
 }
 
@@ -269,7 +233,7 @@ class SpinnerSequence3 extends SpinnerSequence {
 		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 2,  8, 4 } ));
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",APP.getApp().random(0f,1f));
 		
-		toggleOutputs();
+		//toggleOutputs();
 	
 	}    	
 }
@@ -332,7 +296,7 @@ class SpinnerSequence4 extends SpinnerSequence {
 		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 2,  8, 4 } ));
 		//((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",APP.getApp().random(0f,1f));
 		
-		toggleOutputs();
+		//toggleOutputs();
 	
 	}    	
 }

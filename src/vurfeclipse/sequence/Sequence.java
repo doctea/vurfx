@@ -3,6 +3,7 @@ package vurfeclipse.sequence;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
@@ -34,7 +35,7 @@ abstract public class Sequence implements Mutable {
 	}
 
 	
-	public Sequence addMutable(Mutable mut) {
+	/*public Sequence addMutable(Mutable mut) {
 		if (mut==null) {
 			println("passed a null mut");
 		}
@@ -43,6 +44,12 @@ abstract public class Sequence implements Mutable {
 	}	
 	public ArrayList<Mutable> getMutables() {
 		return mutables;
+	}*/
+	//abstract public ArrayList<Mutable> getMutables();
+	public ArrayList<Mutable> getMutables() {
+		ArrayList<Mutable> muts = new ArrayList<Mutable>();
+		if (host!=null) muts.add(host);
+		return muts;
 	}
 
 	
@@ -100,19 +107,26 @@ abstract public class Sequence implements Mutable {
 	}
 	
 	public void setValuesForTime() {
+		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is 
+		
 		int now = APP.getApp().millis();
 		
 		int diff = now - startTimeMillis;
+		double pc;
 		
 		//println("got diff " + diff);
-				
-		iteration = diff/lengthMillis;
-		if (diff>=lengthMillis) diff = diff % lengthMillis;	// if we've gone past one loop length, reset it
-				
-		// what percent is A diff of B lengthMillis ?
-		
-		double pc = APP.getApp().constrain((float) ((double)diff / (double)lengthMillis), 0.0001f, 0.9999f);
-		//println("adjusted diff " + diff + "length millis is " + lengthMillis + " and pc is " + pc);		
+		if (lengthMillis==0) {
+			pc = 0.5f;
+			iteration++;
+		} else {
+			iteration = diff/lengthMillis;
+			if (diff>=lengthMillis) diff = diff % lengthMillis;	// if we've gone past one loop length, reset it
+					
+			// what percent is A diff of B lengthMillis ?
+			
+			pc = PApplet.constrain((float) ((double)diff / (double)lengthMillis), 0.0001f, 0.9999f);
+			//println("adjusted diff " + diff + "length millis is " + lengthMillis + " and pc is " + pc);
+		}
 		setValuesForNorm(pc,iteration);
 	}
 	

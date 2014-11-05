@@ -169,6 +169,74 @@ public class SocioSukiProject extends Project implements Serializable {
     
     /// END PLASMA SCENE
     
+    // this Sequence switches modes on the OutputFX scenes - it should last for zero time and does not need to set any Mutables. 
+    Sequence opSequence = new Sequence(plasmaScene,0) {		// this TODO: this is a 'dummy' Scene so that host.host works.  really this bit should be put into separate Sequences for OutputFX-type objects and chained if necessary.
+    	/*public ArrayList<Mutable> getMutables() {
+    		ArrayList<Mutable> muts = new ArrayList<Mutable>();
+    		return muts;
+    	}*/
+    	public void toggleOutputs() {
+    		// this bit below shouldnt really be here.
+    		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader").getFilter("Toon").toggleMute();
+    		//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
+    		//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
+    		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader").getFilter("Edges").toggleMute();
+    		if (APP.getApp().random(0f,1.0f)>=0.5f) {
+    			host.host.getSceneForPath("/sc/OutputShader2").getFilter("Feedback").setMuted(false);
+    			host.host.getSceneForPath("/sc/BlankerScene")
+    				.getFilter("BlankFilter")
+    				.changeParameterValue("alpha", (int)16);
+    		} else {
+    			host.host.getSceneForPath("/sc/OutputShader2").getFilter("Feedback").setMuted(true);
+    			host.host.getSceneForPath("/sc/BlankerScene")
+    				.getFilter("BlankFilter")
+    				.changeParameterValue("alpha", (int)255);			
+    		}
+    		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("Kaleido").toggleMute();
+    		
+    		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").toggleMute();
+    		host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
+    		
+    		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").changeParameterValue("BlendMode", getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
+    		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
+    		
+    		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/TextFlash").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
+    		((BlendDrawer)host.host.getSceneForPath("/sc/TextFlash").getFilter("BlendDrawer")).setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
+    		
+    		//if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/PlasmaScene").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
+    		//((BlendDrawer)host.host.getSceneForPath("/sc/PlasmaScene").getFilter("BlendDrawer")).setMute((APP.getApp().random(0f,1.0f)>=0.25f));
+    		
+    		
+    		host.host.getSceneForPath("/sc/OutputShader2").getFilter("Kaleido").nextMode();    			
+    	}
+		@Override
+		public void setValuesForNorm(double pc, int iteration) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onStart() {
+			// TODO Auto-generated method stub
+			this.toggleOutputs();
+		}
+
+		@Override
+		public void onStop() {
+			// TODO Auto-generated method stub
+			
+		}
+    	
+    };
+    
+    switcher.bindSequence("outputModeChange1", opSequence);
+    switcher.bindSequence("outputModeChange2", opSequence);
+    switcher.bindSequence("outputModeChange3", opSequence);
+    switcher.bindSequence("outputModeChange4", opSequence);
+    /*switcher.bindSequence("outputModeChange5", opSequence);
+    switcher.bindSequence("outputModeChange6", opSequence);
+    switcher.bindSequence("outputModeChange7", opSequence);
+    switcher.bindSequence("outputModeChange8", opSequence);*/
         
 
     this.addSceneInputOutputCanvas(
