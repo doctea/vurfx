@@ -12,6 +12,7 @@ import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.TextDrawer;
 import vurfeclipse.projects.Project;
+import vurfeclipse.sequence.Sequence;
 import vurfeclipse.streams.ParameterCallback;
 
 public class TextFlashScene extends Scene {
@@ -199,5 +200,35 @@ public class TextFlashScene extends Scene {
     highestFilter = i;
     return true;
   }
+  
+  
+  
+  
+  public void setupSequences() {
+		sequences.put("preset 1", new TextFlashSequence1(this, 0));
+  }
+	
+
+	class TextFlashSequence1 extends Sequence {
+		public TextFlashSequence1(TextFlashScene fx, int i) {
+			// TODO Auto-generated constructor stub
+			super(fx,i);
+		}
+		@Override
+		public ArrayList<Mutable> getMutables() {
+			return new ArrayList<Mutable>();
+		}
+		@Override
+		public void setValuesForNorm(double norm, int iteration) {
+			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
+			//if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
+			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
+		}
+		@Override public void onStart() {
+	   		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
+    		((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
+		}
+		@Override public void onStop() {	}
+	}		  
   
 }

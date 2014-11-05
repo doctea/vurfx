@@ -1,7 +1,11 @@
 package vurfeclipse.user.scenes;
+import java.util.ArrayList;
+
+import vurfeclipse.APP;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
+import vurfeclipse.sequence.Sequence;
  
 public class OutputFX1 extends SimpleScene {
 	public OutputFX1(Project pr, int w, int h) { 
@@ -38,4 +42,35 @@ public class OutputFX1 extends SimpleScene {
       "/out",
       "/out"
     );*/    
+	
+
+    public void setupSequences() {
+		sequences.put("preset 1", new OutputSequence1(this, 0));
+    }
+	
+
+	class OutputSequence1 extends Sequence {
+		public OutputSequence1(OutputFX1 outputFX1, int i) {
+			// TODO Auto-generated constructor stub
+			super(outputFX1,i);
+		}
+		@Override
+		public ArrayList<Mutable> getMutables() {
+			return new ArrayList<Mutable>();
+		}		
+		@Override
+		public void setValuesForNorm(double norm, int iteration) {
+			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
+			//if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
+			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
+		}
+		@Override public void onStart() {
+			if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
+			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
+			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
+			if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Edges").toggleMute();
+		}
+		@Override public void onStop() {	}
+	}	
 }
+

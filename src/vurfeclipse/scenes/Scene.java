@@ -150,10 +150,12 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     println("Scene["+getSceneName()+"]#getCanvas('"+canvasName+"'): returning mapped '" + mapTo + "': " + ((VurfEclipse)APP.getApp()).pr.getCanvas(mapTo));
     return ((VurfEclipse)APP.getApp()).pr.getCanvas(mapTo);
   }
-  public Canvas setCanvas(String canvasName, String canvasPath) {
+  //public Canvas setCanvas(String canvasName, String canvasPath) {
+  public Scene setCanvas(String canvasName, String canvasPath) {
     println("setCanvas in " + this + " setting " + canvasName + " to " + canvasPath);
     buffermap.put(canvasName, canvasPath);
-    return getCanvas(canvasName);
+    //return getCanvas(canvasName);
+    return this;
   }
   
 /*

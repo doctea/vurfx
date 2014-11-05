@@ -14,6 +14,7 @@ import processing.core.PApplet;
 import processing.core.PVector;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
+import vurfeclipse.sequence.ChainSequence;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
@@ -21,6 +22,7 @@ import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;
 import vurfeclipse.user.scenes.OutputFX1;
+import vurfeclipse.user.scenes.OutputFX2;
 
 public class SocioSukiProject extends Project implements Serializable {
   
@@ -169,75 +171,6 @@ public class SocioSukiProject extends Project implements Serializable {
     
     /// END PLASMA SCENE
     
-    // this Sequence switches modes on the OutputFX scenes - it should last for zero time and does not need to set any Mutables. 
-    Sequence opSequence = new Sequence(plasmaScene,0) {		// this TODO: this is a 'dummy' Scene so that host.host works.  really this bit should be put into separate Sequences for OutputFX-type objects and chained if necessary.
-    	/*public ArrayList<Mutable> getMutables() {
-    		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-    		return muts;
-    	}*/
-    	public void toggleOutputs() {
-    		// this bit below shouldnt really be here.
-    		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader").getFilter("Toon").toggleMute();
-    		//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-    		//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-    		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader").getFilter("Edges").toggleMute();
-    		if (APP.getApp().random(0f,1.0f)>=0.5f) {
-    			host.host.getSceneForPath("/sc/OutputShader2").getFilter("Feedback").setMuted(false);
-    			host.host.getSceneForPath("/sc/BlankerScene")
-    				.getFilter("BlankFilter")
-    				.changeParameterValue("alpha", (int)16);
-    		} else {
-    			host.host.getSceneForPath("/sc/OutputShader2").getFilter("Feedback").setMuted(true);
-    			host.host.getSceneForPath("/sc/BlankerScene")
-    				.getFilter("BlankFilter")
-    				.changeParameterValue("alpha", (int)255);			
-    		}
-    		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("Kaleido").toggleMute();
-    		
-    		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").toggleMute();
-    		host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
-    		
-    		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").changeParameterValue("BlendMode", getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
-    		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
-    		
-    		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/TextFlash").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
-    		((BlendDrawer)host.host.getSceneForPath("/sc/TextFlash").getFilter("BlendDrawer")).setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
-    		
-    		//if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath("/sc/PlasmaScene").getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
-    		//((BlendDrawer)host.host.getSceneForPath("/sc/PlasmaScene").getFilter("BlendDrawer")).setMute((APP.getApp().random(0f,1.0f)>=0.25f));
-    		
-    		
-    		host.host.getSceneForPath("/sc/OutputShader2").getFilter("Kaleido").nextMode();    			
-    	}
-		@Override
-		public void setValuesForNorm(double pc, int iteration) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onStart() {
-			// TODO Auto-generated method stub
-			this.toggleOutputs();
-		}
-
-		@Override
-		public void onStop() {
-			// TODO Auto-generated method stub
-			
-		}
-    	
-    };
-    
-    switcher.bindSequence("outputModeChange1", opSequence);
-    switcher.bindSequence("outputModeChange2", opSequence);
-    switcher.bindSequence("outputModeChange3", opSequence);
-    switcher.bindSequence("outputModeChange4", opSequence);
-    /*switcher.bindSequence("outputModeChange5", opSequence);
-    switcher.bindSequence("outputModeChange6", opSequence);
-    switcher.bindSequence("outputModeChange7", opSequence);
-    switcher.bindSequence("outputModeChange8", opSequence);*/
-        
 
     this.addSceneInputOutputCanvas(
       //os,
@@ -249,26 +182,13 @@ public class SocioSukiProject extends Project implements Serializable {
     
     
     // OUTPUT FILTER 2
-    final SimpleScene os2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("OutputShader2");    
-    
-    os2.setCanvas("out", "/out");
-    os2.setCanvas("pix0","/pix0");
-    //os2.setCanvas("blendresult", "/blendresult");
-
-    os2.addFilter(new ShaderFilter(os2,"Feedback.xml").setFilterName("Feedback").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    
-
-    os2.addFilter(new KaleidoFilter(os2).setFilterName("Kaleido").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-    //os.addFilter(new GLColourFilter(os).setFilterName("GLColourFilter"));
-
-    os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("pix0")).setParameterValue("BlendMode",8));
-    //os.addFilter(new BlendDrawer(os).setFilterName("BlendDrawer inp0 to out").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0")).setParameterValue("BlendMode",9));
-    
     this.addSceneInputOutputCanvas(
-      os2,
-      "/out",
-      "/out"
+    		new OutputFX2(this,w,h).setSceneName("OutputShader2").setCanvas("pix0", "/pix0"),
+    		"/out",
+    		"/out"
     );
-
+    
+    
     
     
     
@@ -292,6 +212,25 @@ public class SocioSukiProject extends Project implements Serializable {
   	      "/out"
   	    );    
     
+    
+
+    Sequence cSequence = new ChainSequence(0)
+    	.addSequence(getSceneForPath("/sc/TextFlash"), 	   "preset 1")
+    	.addSequence(getSceneForPath("/sc/OutputShader"),  "preset 1")    	
+    	.addSequence(getSceneForPath("/sc/OutputShader2"), "preset 1")
+    ;
+    
+    
+    switcher.bindSequence("outputModeChange1", cSequence);
+    switcher.bindSequence("outputModeChange2", cSequence);
+    switcher.bindSequence("outputModeChange3", cSequence);
+    switcher.bindSequence("outputModeChange4", cSequence);
+    /*switcher.bindSequence("outputModeChange5", opSequence);
+    switcher.bindSequence("outputModeChange6", opSequence);
+    switcher.bindSequence("outputModeChange7", opSequence);
+    switcher.bindSequence("outputModeChange8", opSequence);*/
+            
+        
 
     /*SimpleScene bs = new SimpleScene(this,w,h);
     BlobDrawer bd = (BlobDrawer) new BlobDrawer(bs);//.setOutputCanvas("/out");
