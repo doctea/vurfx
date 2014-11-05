@@ -32,11 +32,20 @@ abstract public class Sequence implements Mutable {
 	public Sequence(int sequenceLengthMillis) {
 		lengthMillis = sequenceLengthMillis;
 	}
+
 	
-	
-	public void addMutable(Mutable mut) {
+	public Sequence addMutable(Mutable mut) {
+		if (mut==null) {
+			println("passed a null mut");
+		}
 		this.mutables.add(mut);
+		return this;
+	}	
+	public ArrayList<Mutable> getMutables() {
+		return mutables;
 	}
+
+	
 	@Override
 	public void setMuted() {
 		this.setMuted(false);
@@ -44,19 +53,21 @@ abstract public class Sequence implements Mutable {
 	@Override
 	public void setMuted(boolean muted) {
 		// TODO Auto-generated method stub
-		Iterator<Mutable> it = this.mutables.iterator();
+		Iterator<Mutable> it = getMutables().iterator(); //this.mutables.iterator();
 		while(it.hasNext()) {
 			it.next().setMuted(muted);
 		}
 	}	
-	@Override public boolean isMuted() {
-		Iterator<Mutable> mit = mutables.iterator();
+	
+
+	@Override public boolean isMuted() {	// PROBABLY BUGGY AND WONT DO WHAT YOU EXPECT
+		Iterator<Mutable> mit = getMutables().iterator();
 		while(mit.hasNext()) {
 			if (mit.next().isMuted()) return true;
 		}
 		return false;
 	}
-	@Override public void toggleMute() {
+	@Override public void toggleMute() {	// PROBABLY BUGGY AND WONT DO WHAT YOU EXPECT
 		this.setMuted(!this.isMuted());
 	}
 	
@@ -68,10 +79,17 @@ abstract public class Sequence implements Mutable {
 	
 	
 	public void start() {
-		onStart();		
+		onStart();
+		setMuted(false);		
 		iteration = 0;
 		startTimeMillis = APP.getApp().millis();
 	}
+
+	public void stop() {
+		this.setMuted(true);
+		this.onStop();
+	}
+	
 	
 	public boolean readyToChange(int max_i) {
 		return iteration>=max_i;
@@ -104,6 +122,7 @@ abstract public class Sequence implements Mutable {
 	abstract public void setValuesForNorm(double pc, int iteration);
 	
 	abstract public void onStart();
+	abstract public void onStop();
 	
 	public Object getArrayElementForNorm(double pc, Object[] array) {
 		return array[(int)(pc * (array.length-1))];
@@ -155,5 +174,8 @@ abstract public class Sequence implements Mutable {
 		  
 		  return APP.getApp().color(r,g,b);
 	  }
+
+	
+	
 
 }

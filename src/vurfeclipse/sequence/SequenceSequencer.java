@@ -16,11 +16,14 @@ import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.Sequence;
 import codeanticode.glgraphics.GLGraphicsOffScreen;
 
+
+
+
 public class SequenceSequencer extends Sequencer implements Targetable {
 	  String activeSequenceName = "";
 	  HashMap<String,Sequence> sequences = new HashMap<String,Sequence>();
 	
-	  HashMap<String,ArrayList<Sequence>> switched_sequences = new HashMap<String,ArrayList<Sequence>>();
+	  //HashMap<String,ArrayList<Sequence>> switched_sequences = new HashMap<String,ArrayList<Sequence>>();
 	  		// list of Sequences that are applicable for each SequenceName
   
 	  public SequenceSequencer (Project host, int w, int h) {
@@ -36,40 +39,20 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  @Override
 	  public boolean checkReady(int max_iterations) {
-		  boolean ready = true;
-		  ArrayList<Sequence> seqs = switched_sequences.get(activeSequenceName);
-		  if (seqs!=null) {
-			  Iterator<Sequence> it = seqs.iterator();
-			  while (it.hasNext()) {
-				  //((Sequence)it.next()).setValuesForTime();
-				  if (!it.next().readyToChange(max_iterations)) {
-					  //println(this+"#readyToChange("+max_iterations+"): not ready to change");
-					  ready = false;
-					  break;				  
-				  }
-			  }
-		  }
-		  return ready;
+		  return getActiveSequence()==null || getActiveSequence().readyToChange(max_iterations);
 	  }
 	  
 
 	  @Override
 	  public void runSequences() {
 		  //println(this+"#runSequences");
+		  // probably want to move this up to Sequencer and do super.runSequences()
 		  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
 			  println(this+"#runSequences(): is readyToChange, calling randomSequence()");
 			  randomSequence();
 		  }
 		  
-		  ArrayList<Sequence> seqs = switched_sequences.get(activeSequenceName);
-		  if (seqs!=null) {
-			  Iterator<Sequence> it = seqs.iterator();
-			  while (it.hasNext()) {
-				  Sequence sq = it.next();
-				  //println(this+"#runSequences(): Setting values on " + sq);
-				  sq.setValuesForTime();
-			  }
-		  }
+		  getActiveSequence().setValuesForTime();		  
 	  }	
 	  		
 	  
@@ -90,9 +73,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			
 			urls.putAll(super.getTargetURLs());
 			
-			Iterator<Entry<String, ArrayList<Sequence>>> it = switched_sequences.entrySet().iterator();
+			Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
 			while (it.hasNext()) {
-				Entry<String, ArrayList<Sequence>> e = it.next();
+				Entry<String, Sequence> e = it.next();
 				//int count = 0;
 				
 				// todo: move the path generation into Sequence
@@ -117,10 +100,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			  if (spl[2].equals("changeTo")) {
 				  if (spl.length>3) {
 					  println ("Sequencer attempting changeSequence to " + spl[3]);
-					  //changeSequence(spl[3]);
+					  changeSequence(spl[3]);
 				  } else {
 					  println ("Sequencer attempting changeSequence to " + payload.toString());
-					  //changeSequence(payload.toString());
+					  changeSequence(payload.toString());
 				  }
 				  return "Sequencer active Sequence is currently " + activeSequenceName;
 			  } else if (spl[2].equals("toggleLock")) {
@@ -141,6 +124,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  return sc;
 	  }
 	  
+	  public Sequence bindSequence(String nameInSequencer, Sequence seq) {
+		  this.sequences.put(nameInSequencer, seq);
+		  return seq;
+	  }
+	  public Sequence bindSequence(String nameInSequencer, Scene sc, String presetSequenceName) {
+		  return bindSequence(nameInSequencer, sc.getSequence(presetSequenceName));
+	  }
 
 	  /*public Sequence bindSequence(String switchedSequenceName, String sequenceName, Scene sc) {
 		  //addSequence(switchedSequenceName,Sequence);
@@ -169,30 +159,20 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  public void randomSequence() {
 		  int count = sequences.size();
 		  int chosen = (int)APP.getApp().random(0,count);
-//			  changeSequence((String)sequences.keySet().toArray()[chosen]);
+			  changeSequence((String)sequences.keySet().toArray()[chosen]);
 	  }
 	  
-	  /*public void changeSequence(String SequenceName) {
+	  public void changeSequence(String SequenceName) {
+		  if (this.getActiveSequence()!=null) 		// mute the current sequence
+			  this.getActiveSequence().stop();//setMuted(true);		
+		  
 		  this.activeSequenceName = SequenceName;
 		  
-		  muteAllSequences();
-		  getSequence(SequenceName).setMuted(false);
+		  //muteAllSequences();
+		  this.getActiveSequence().setMuted(false);
+		  this.getActiveSequence().start();
+	  }
 		  
-		  ArrayList<Sequence> seqs = switched_sequences.get(SequenceName);
-		  if (seqs!=null) {
-			  Iterator<Sequence> it = seqs.iterator();
-			  //((Sequence)it.next()).start();
-			  while (it.hasNext()) {
-				  Sequence s = ((Sequence)it.next());
-				  //try {
-					  println(this + "#changeSequence() Changing Sequence to '" + SequenceName + "', starting " + s);
-					  //if (s!=null) 
-						s.start(); 
-					  //else println("Got NullPointerException for a sequence for " + SequenceName + ": ");
-			  }
-		  }
-	  }*/
-	  
 	  
 	  /*
 	   		// 

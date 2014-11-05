@@ -1,10 +1,13 @@
 package vurfeclipse.user.scenes;
 
 //import javafx.scene.canvas.Canvas;
+import java.util.ArrayList;
+
 import vurfeclipse.APP;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.PlainDrawer;
 import vurfeclipse.projects.Project;
+import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.scenes.SimpleScene;
 import vurfeclipse.sequence.Sequence;
@@ -44,6 +47,11 @@ class BlendSequence1 extends Sequence {
 		// TODO Auto-generated constructor stub
 		super(blenderFX1,i);
 	}
+	@Override public ArrayList<Mutable> getMutables() {
+		ArrayList<Mutable> muts = new ArrayList<Mutable>();
+		muts.add(host);//.getFilter("BlendDrawer1"));
+		return muts;
+	}
 	public void setValuesForNorm(double norm, int iteration) {
 		//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 		if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
@@ -56,4 +64,5 @@ class BlendSequence1 extends Sequence {
 		for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
 			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
 	}
+	@Override public void onStop() {	}
 }

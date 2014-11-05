@@ -171,6 +171,7 @@ public class AboveBoardsProject extends Project implements Serializable {
 			for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
 				getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();
 		}
+		@Override public void onStop() {	}		
     });
     
     // TEXT FLASH SCENE
@@ -184,6 +185,7 @@ public class AboveBoardsProject extends Project implements Serializable {
     		//System.out.println("did set text " + norm);
     	}
     	public void onStart() {}
+    	@Override public void onStop() {	}    	
     });
     
     
@@ -279,13 +281,14 @@ public class AboveBoardsProject extends Project implements Serializable {
     		if (APP.getApp().random(0f,1.0f)>=0.5f) switcher.host.getSceneForPath("/OutputShader2").getFilter("Kaleido").toggleMute(); 
     		switcher.host.getSceneForPath("/OutputShader2").getFilter("Kaleido").nextMode();    		
     	}
+    	@Override public void onStop() {	}    	
     });
     
 
     final Scene blobScene2 = switcher.addScene("blob drawer 2", bd2);    
     switcher.bindSequence("blob drawer 2", new Sequence(1000) {
     	int colour1, colour2, colour3, colour4;    	
-    	public void setValuesForNorm(double norm, int iteration) {
+    	@Override public void setValuesForNorm(double norm, int iteration) {
     		//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
     		double inv_norm = (iteration%2==0) ? norm : APP.getApp().constrain((float)(1.0f-norm),0.0f,1.0f); //1.0f-norm : norm;// : norm;
     		//System.out.println("norm: " + norm + ", inv_norm: " + inv_norm);
@@ -343,7 +346,7 @@ public class AboveBoardsProject extends Project implements Serializable {
     		
     		
     	}
-    	public void onStart() {
+    	@Override public void onStart() {
     		System.out.println("onStart()!");
     		colour1 = randomColorMinimum(196);// APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
     		colour2 = randomColorMinimum(96);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
@@ -375,6 +378,7 @@ public class AboveBoardsProject extends Project implements Serializable {
     		if (APP.getApp().random(0f,1.0f)>=0.5f) switcher.host.getSceneForPath("/OutputShader2").getFilter("Kaleido").toggleMute(); 
     		//switcher.host.getSceneForPath("/OutputShader2").getFilter("Kaleido").nextMode();    		
     	}
+    	@Override public void onStop() {	}    	
     });    
     
     

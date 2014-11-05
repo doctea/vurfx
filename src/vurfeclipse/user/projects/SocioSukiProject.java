@@ -16,6 +16,7 @@ import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.SceneSequencer;
+import vurfeclipse.sequence.SequenceSequencer;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;
@@ -49,7 +50,8 @@ public class SocioSukiProject extends Project implements Serializable {
   }
   
   public boolean setupSequencer() {
-	  this.sequencer = new SceneSequencer(this,w,h);
+	  //this.sequencer = new SceneSequencer(this,w,h);
+	  this.sequencer = new SequenceSequencer(this,w,h);
 	  return true;
   }
   
@@ -85,7 +87,7 @@ public class SocioSukiProject extends Project implements Serializable {
     
     // SWITCHER  //////////////////////////
     //final SwitcherScene switcher = (SwitcherScene) this.addSceneOutputCanvas(new SwitcherScene(this, w, h), "/out");
-    SceneSequencer switcher = (SceneSequencer)sequencer;
+    SequenceSequencer switcher = (SequenceSequencer)sequencer;
         
 /*    // BLEND SCENE    
     final SimpleScene bl1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlendScene");
@@ -112,17 +114,37 @@ public class SocioSukiProject extends Project implements Serializable {
 		}
     });*/
     
-    final Scene blendScene = new BlenderFX1(this,"pix1 BlenderFX", w,h).setOutputCanvas("/out").setInputCanvas("/pix1");
-    //blendScene.setCanvas("pix0","/pix0");
-    //blendScene.setCanvas("pix1","/pix1");
+    final Scene blendScene = new BlenderFX1(this,"pix1 BlenderFX", w, h).setOutputCanvas("/out").setInputCanvas("/pix1");
+    blendScene.setCanvas("pix0","/pix0");
+    blendScene.setCanvas("pix1","/pix1");
     //switcher.bindScene("blend scene", "preset 1", blendScene);
+    this.addScene(blendScene);
+    switcher.bindSequence("blend", blendScene, "preset 1");
+    
+    
+    Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
+    this.addScene(blobScene);
+    switcher.bindSequence("blob1_1", blobScene, "preset 1");
+    switcher.bindSequence("blob1_2", blobScene, "preset 2");
+    switcher.bindSequence("blob1_3", blobScene, "preset 3");
+    switcher.bindSequence("blob1_4", blobScene, "preset 4");
+    
+    Scene blobScene2 = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
+    this.addScene(blobScene2);
+    switcher.bindSequence("blob2_1", blobScene2, "preset 1");
+    switcher.bindSequence("blob2_2", blobScene2, "preset 2");
+    switcher.bindSequence("blob2_3", blobScene2, "preset 3");
+    switcher.bindSequence("blob2_4", blobScene2, "preset 4");
+    
     
     
     // BLOB SPIRAL SCENE
-    final Scene blobScene =  switcher.bindScene("blob drawer",   "preset 1", new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0"));
-    final Scene blobScene2 = switcher.bindScene("blob drawer 2", "preset 2", new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out"));
-    final Scene blobScene3 = switcher.bindScene("blob drawer 3", "preset 3", new BlobFX1(this,w,h).setSceneName("BlobScene3").setOutputCanvas("/out").setInputCanvas("/pix0"));
-    final Scene blobScene4 = switcher.bindScene("blob drawer 4", "preset 4", new BlobFX1(this,w,h).setSceneName("BlobScene4").setOutputCanvas("/out"));    
+    /*final Scene blobScene =  switcher.bindSequence("blob drawer",   new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0"), "preset 1");
+    final Scene blobScene2 = switcher.bindSequence("blob drawer 2", new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out"), "preset 2");
+    final Scene blobScene3 = switcher.bindSequence("blob drawer 3", new BlobFX1(this,w,h).setSceneName("BlobScene3").setOutputCanvas("/out").setInputCanvas("/pix0"), "preset 3");
+    final Scene blobScene4 = switcher.bindSequence("blob drawer 4", new BlobFX1(this,w,h).setSceneName("BlobScene4").setOutputCanvas("/out"), "preset 4");*/
+    
+    
     
     
     // event listener to switch the switcher.
@@ -137,11 +159,12 @@ public class SocioSukiProject extends Project implements Serializable {
     PlasmaScene plasmaScene = (PlasmaScene)(new PlasmaScene(this,w,h).setSceneName("PlasmaScene"));
     plasmaScene.setCanvas("out", "/out");
     
+    addScene(plasmaScene);
     //plasmaScene.setupFilters();
     
     plasmaScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
-    switcher.bindScene("plasma", "preset 1", plasmaScene);
+    switcher.bindSequence("plasma", plasmaScene, "preset 1");
     
     
     /// END PLASMA SCENE

@@ -1,7 +1,9 @@
 package vurfeclipse.user.scenes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.Blob;
 import vurfeclipse.filters.BlendDrawer;
@@ -47,9 +49,14 @@ abstract class SpinnerSequence extends Sequence {
 	public SpinnerSequence(BlobFX1 host, int i) {
 		super((Scene)host,i);
 	}
+	@Override public ArrayList<Mutable> getMutables() {
+		ArrayList<Mutable> muts = new ArrayList<Mutable>();
+		muts.add(host);//host.getFilter("BlendDrawer1"));
+		return muts;
+	}	
 	
 	public void toggleOutputs() {
-		// this bit below shouldnt be here.
+		// this bit below shouldnt really be here.
 		if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader").getFilter("Toon").toggleMute();
 		//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
 		//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
@@ -83,16 +90,19 @@ abstract class SpinnerSequence extends Sequence {
 		host.host.getSceneForPath("/sc/OutputShader2").getFilter("Kaleido").nextMode();    			
 	}
 	
+	@Override public void onStop() {	}	
 }
 
 class SpinnerSequence1 extends SpinnerSequence {
 	public SpinnerSequence1(BlobFX1 blobFX1, int i) {
 		// TODO Auto-generated constructor stub
 		super(blobFX1, i);
+		
+		
 	}
 	public void setValuesForNorm(double norm, int iteration) {
 		//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
-		double inv_norm = APP.getApp().constrain((float)
+		double inv_norm = PApplet.constrain((float)
 				((iteration%2==0) ? norm : (float)(1.0f-norm)),
 						0.0f,1.0f); //1.0f-norm : norm;// : norm;
 		//System.out.println("norm: " + norm + ", inv_norm: " + inv_norm);
@@ -103,7 +113,7 @@ class SpinnerSequence1 extends SpinnerSequence {
 		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*180.0f);
 		host.getFilter("BlobDrawer2")
 			.setParameterValue("totalRotate", (float)norm*360.0f) // was 720
-			.setParameterValueFromSin("radius", APP.getApp().sin((float)(inv_norm))) ///2f)))
+			.setParameterValueFromSin("radius", PApplet.sin((float)(inv_norm))) ///2f)))
 		;
 		
 		host.getFilter("BlobDrawer2").setParameterValueFromSin("numofCircles", /*APP.getApp().sin(*/(float)inv_norm/*)*/); //0.2f+APP.getApp().sin(iteration_warp/2));
@@ -150,8 +160,8 @@ class SpinnerSequence2 extends SpinnerSequence {
     		super((BlobFX1) scene, i);
     	}
 		public void setValuesForNorm(double norm, int iteration) {
-    		//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
-			double inv_norm = APP.getApp().constrain((float)
+			//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
+			double inv_norm = PApplet.constrain((float)
 					((iteration%2==0) ? norm : (float)(1.0f-norm)),
 							0.0f,1.0f); //1.0f-norm : norm;// : norm;
     		//System.out.println("norm: " + norm + ", inv_norm: " + inv_norm);
@@ -209,7 +219,7 @@ class SpinnerSequence3 extends SpinnerSequence {
 	}
 	public void setValuesForNorm(double norm, int iteration) {
 		//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
-		double inv_norm = APP.getApp().constrain((float)
+		double inv_norm = PApplet.constrain((float)
 				((iteration%2==0) ? norm : (float)(1.0f-norm)),
 						0.0f,1.0f); //1.0f-norm : norm;// : norm;
 		//System.out.println("norm: " + norm + ", inv_norm: " + inv_norm);
@@ -220,7 +230,7 @@ class SpinnerSequence3 extends SpinnerSequence {
 		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*180.0f);
 		host.getFilter("BlobDrawer2")
 			.setParameterValue("totalRotate", (float)norm*180.0f) // was 720
-			.setParameterValueFromSin("radius", APP.getApp().sin((float)(inv_norm))) ///2f)))
+			.setParameterValueFromSin("radius", PApplet.sin((float)(inv_norm))) ///2f)))
 		;
 		
 		int col1 = lerpcolour(colour1, colour2, inv_norm);
@@ -273,7 +283,7 @@ class SpinnerSequence4 extends SpinnerSequence {
 	}
 	public void setValuesForNorm(double norm, int iteration) {
 		//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
-		double inv_norm = APP.getApp().constrain((float)
+		double inv_norm = PApplet.constrain((float)
 				((iteration%2==0) ? norm : (float)(1.0f-norm)),
 						0.0f,1.0f); //1.0f-norm : norm;// : norm;
 		//System.out.println("norm: " + norm + ", inv_norm: " + inv_norm);
@@ -285,7 +295,7 @@ class SpinnerSequence4 extends SpinnerSequence {
 		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)norm*180.0f);
 		host.getFilter("BlobDrawer2")
 			.setParameterValue("totalRotate", (float)norm*180.0f) // was 720
-			.setParameterValueFromSin("radius", APP.getApp().sin((float)(inv_norm))) ///2f)))
+			.setParameterValueFromSin("radius", PApplet.sin((float)(inv_norm))) ///2f)))
 		;
 		
 		int col1 = lerpcolour(colour1, colour2, inv_norm);
