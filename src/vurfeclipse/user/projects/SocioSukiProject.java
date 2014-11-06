@@ -23,6 +23,7 @@ import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;
 import vurfeclipse.user.scenes.OutputFX1;
 import vurfeclipse.user.scenes.OutputFX2;
+import vurfeclipse.user.scenes.TunnelScene;
 
 public class SocioSukiProject extends Project implements Serializable {
   
@@ -249,6 +250,14 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindSequence("outputModeChange8", opSequence);*/
             
         
+    this.addSceneInputOutputCanvas(
+    		new TunnelScene(this, w, h)
+    			//.addFilter(new BlendDrawer()))
+    		
+    		, "/out", "/out"
+    );
+    
+    
 
     /*SimpleScene bs = new SimpleScene(this,w,h);
     BlobDrawer bd = (BlobDrawer) new BlobDrawer(bs);//.setOutputCanvas("/out");

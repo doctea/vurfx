@@ -384,7 +384,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     return true;
   }
   
-  Scene(Project host, int w, int h) {
+  protected Scene(Project host, int w, int h) {
     // constructor 
     this.host = host;
     this.w = w;

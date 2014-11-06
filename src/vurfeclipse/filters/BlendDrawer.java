@@ -72,6 +72,9 @@ public class BlendDrawer extends Filter {
     //this.changeParameterValue("BlendMode", 4);
     addParameter("Opacity", 1.0f, 0.0f, 1.0f);
     addParameter("BlendMode", 4, 0, blendModes.length);
+    addParameter("Zoom", new Float(1.0f), -2.0f, 2.0f);
+    addParameter("X", new Float(0.0f), -2.0f, 2.0f);
+    addParameter("Y", new Float(0.0f), -2.0f, 2.0f);
   }
   
   public void updateParameterValue(String paramName, Object value) {
@@ -125,19 +128,26 @@ public class BlendDrawer extends Filter {
     //out.image(src.getTexture(),x,y,w,h);
     if (t!=null)
       t.clear(0);
+    out.pushMatrix();
+
+    out.translate((Float)getParameterValue("X"), (Float)getParameterValue("Y"));
     if (rotation!=0) {
-      out.pushMatrix();
-      out.rotate(PApplet.radians(rotation));
-    }    
+        out.rotate(PApplet.radians(rotation));
+      }    
+        
+    if ((Float)getParameterValue("Zoom")!=1.0f) {
+    	out.scale((Float)getParameterValue("Zoom"));
+    }
+    
     GLTextureFilter tf = getFilterNumber(currentBlendMode);
     tf.setParameterValue("Opacity", new Float((double)(Float)this.getParameterValue("Opacity"))); 
     tf.apply(new GLTexture[]{src.getTexture(), out.getTexture()}, t); // all are called the same way
     
     out.image(t,x,y,w,h);
     
-    if (rotation!=0) {
+    //if (rotation!=0) {
       out.popMatrix();
-    }    
+    //}    
 
     
     // pixel copy mode
