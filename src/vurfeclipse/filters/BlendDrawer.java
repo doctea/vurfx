@@ -130,7 +130,13 @@ public class BlendDrawer extends Filter {
       t.clear(0);
     out.pushMatrix();
 
-    out.translate((Float)getParameterValue("X"), (Float)getParameterValue("Y"));
+    //println ("x and y are " + (Float)getParameterValue("X") + "," +  (Float)getParameterValue("Y"));
+    
+    x = (int) PApplet.map(((Float)getParameterValue("X")),-2.0f,2.0f,-2*w,2*w);
+    y = (int) PApplet.map(((Float)getParameterValue("Y")),-2.0f,2.0f,-2.0f*h,2.0f*h);
+    
+    //out.translate((Float)getParameterValue("X"), (Float)getParameterValue("Y"));
+
     if (rotation!=0) {
         out.rotate(PApplet.radians(rotation));
       }    
