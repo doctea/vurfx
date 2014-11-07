@@ -152,7 +152,7 @@ public class BlendDrawer extends Filter {
     tf.apply(new GLTexture[]{src.getTexture(), out.getTexture()}, t); // all are called the same way
     
     
-    
+    int im = out.imageMode;// to restore imageMode     
     //out.image(t,x,y,w,h);
     out.imageMode(out.CENTER);
     //out.image(t,x,y);
@@ -161,6 +161,7 @@ public class BlendDrawer extends Filter {
     		//w * (Float)getParameterValue("X"),
     		//h * (Float)getParameterValue("Y")
     );
+    out.imageMode(im);
     
     //if (rotation!=0) {
       out.popMatrix();
