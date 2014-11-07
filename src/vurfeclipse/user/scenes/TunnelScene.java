@@ -1,5 +1,6 @@
 package vurfeclipse.user.scenes;
 
+import processing.core.PApplet;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
@@ -17,6 +18,8 @@ public class TunnelScene extends SimpleScene {
 	public void setupSequences() {
 		//HashMap<String,Sequence> a = super.getSequences();//new HashMap<String,Sequence> ();
 		sequences.put("preset 1", new TunnelPulseSequence(this, 2000));
+		sequences.put("preset 2", new TunnelPulseSequence2(this, 2000, true));
+		sequences.put("preset 3", new TunnelPulseSequence2(this, 2000, false));
 	}
 	
 	class TunnelPulseSequence extends Sequence {
@@ -33,7 +36,7 @@ public class TunnelScene extends SimpleScene {
 			//for (float f = 0.1f ; f < 2.0f ; f+)
 				getFilter("Blend_"+i)
 					.changeParameterValueFromSin("Scale", (float)Math.sin(pc*(2.0f/(float)i))/2.0f)
-					.changeParameterValue("Opacity", 1.0f/i)//(float)Math.sin(pc*(1.0/(float)i))-0.5f) //(float)pc*i)
+					.changeParameterValue("Opacity", (float)(1.0f/i))//(float)Math.sin(pc*(1.0/(float)i))-0.5f) //(float)pc*i)
 				;
 					//(float)(1.0f - (1f/(float)i)));
 			}
@@ -49,6 +52,30 @@ public class TunnelScene extends SimpleScene {
 		public void onStop() {
 			// TODO Auto-generated method stub
 			
+		}
+		
+	}
+	
+	class TunnelPulseSequence2 extends TunnelPulseSequence {
+		boolean loop = true;
+		public TunnelPulseSequence2(TunnelScene tunnelScene, int i, boolean loop) {
+			super(tunnelScene, i);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void setValuesForNorm(double pc, int iteration) {
+			// TODO Auto-generated method stub
+			if (loop) if (iteration%2==0) pc = 1.0f-pc;	// go up and down again
+		
+			for (int i = 1 ; i <= 6 ; i++) {
+			//for (float f = 0.1f ; f < 2.0f ; f+)
+				getFilter("Blend_"+i)
+					.changeParameterValue("Scale", (float)((2.0f/i) + (pc * i))) //(float)Math.sin(pc*(2.0f/(float)i))/2.0f)
+					.changeParameterValue("Opacity", (float)(1.0f/i))//(float)Math.sin(pc*(1.0/(float)i))-0.5f) //(float)pc*i)
+				;
+					//(float)(1.0f - (1f/(float)i)));
+			}
 		}
 		
 	}
