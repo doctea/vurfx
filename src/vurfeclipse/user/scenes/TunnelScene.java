@@ -32,7 +32,7 @@ public class TunnelScene extends SimpleScene {
 			for (int i = 1 ; i < 6 ; i++) {
 			//for (float f = 0.1f ; f < 2.0f ; f+)
 				getFilter("Blend_"+i)
-					.changeParameterValueFromSin("Scale", 0.5f+(float)Math.sin(pc*(2.0f/(float)i))/2.0f)
+					.changeParameterValueFromSin("Scale", (float)Math.sin(pc*(2.0f/(float)i))/2.0f)
 					.changeParameterValue("Opacity", 1.0f/i)//(float)Math.sin(pc*(1.0/(float)i))-0.5f) //(float)pc*i)
 				;
 					//(float)(1.0f - (1f/(float)i)));
