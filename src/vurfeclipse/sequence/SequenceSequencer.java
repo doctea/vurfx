@@ -12,6 +12,7 @@ import vurfeclipse.Targetable;
 import vurfeclipse.filters.BlankFilter;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
+import vurfeclipse.scenes.PlasmaScene;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.Sequence;
 import codeanticode.glgraphics.GLGraphicsOffScreen;
@@ -25,6 +26,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	
 	  //HashMap<String,ArrayList<Sequence>> switched_sequences = new HashMap<String,ArrayList<Sequence>>();
 	  		// list of Sequences that are applicable for each SequenceName
+	  
+	  boolean stopSequencesFlag = true;
   
 	  public SequenceSequencer (Project host, int w, int h) {
 	    //super(host, w,h);
@@ -45,6 +48,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  @Override
 	  public void runSequences() {
+		  if (stopSequencesFlag) {
+			  Iterator<Sequence> it = sequences.values().iterator();
+			  while (it.hasNext()) it.next().stop();
+			  stopSequencesFlag = false;
+		  }
 		  //println(this+"#runSequences");
 		  // probably want to move this up to Sequencer and do super.runSequences()
 		  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
@@ -124,13 +132,24 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  return sc;
 	  }
 	  
-	  public Sequence bindSequence(String nameInSequencer, Sequence seq) {
-		  this.sequences.put(nameInSequencer, seq);
+	  public Sequence bindSequence(String nameInSequencer, Sequence seq, int weight) {
+		  for (int i = 0 ; i < weight ; i++) { 
+			  this.sequences.put(nameInSequencer + "_"+i, seq);
+		  }
 		  return seq;
 	  }
-	  public Sequence bindSequence(String nameInSequencer, Scene sc, String presetSequenceName) {
-		  return bindSequence(nameInSequencer, sc.getSequence(presetSequenceName));
+	  public Sequence bindSequence(String nameInSequencer, Scene sc, String presetSequenceName, int weight) {
+		  return bindSequence(nameInSequencer, sc.getSequence(presetSequenceName), weight);
 	  }
+	  public Sequence bindSequence(String nameInSequencer, Sequence seq) {
+		  return this.bindSequence(nameInSequencer, seq, 1);
+	  }
+
+
+		public Sequence bindSequence(String nameInSequencer, Scene sc, String seqName) {
+			// TODO Auto-generated method stub
+			return this.bindSequence(nameInSequencer,sc,seqName,1);
+		}	  
 
 	  /*public Sequence bindSequence(String switchedSequenceName, String sequenceName, Scene sc) {
 		  //addSequence(switchedSequenceName,Sequence);
@@ -174,6 +193,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  this.getActiveSequence().setMuted(false);
 		  this.getActiveSequence().start();
 	  }
+
 		  
 	  
 	  /*

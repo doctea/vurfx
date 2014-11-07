@@ -39,6 +39,7 @@ public class SocioSukiProject extends Project implements Serializable {
     addCanvas("/pix1",  Canvas.makeCanvas(w,h,gfx_mode,"input2"));
     addCanvas("/temp1", Canvas.makeCanvas(w,h,gfx_mode,"temp1"));
     addCanvas("/temp2", Canvas.makeCanvas(w,h,gfx_mode,"temp2"));
+    addCanvas("/temp3", Canvas.makeCanvas(w,h,gfx_mode,"temp3"));
     
     //addCanvas("/blendresult", Canvas.makeCanvas(w,h,gfx_mode,"temp2"));
     
@@ -219,19 +220,7 @@ public class SocioSukiProject extends Project implements Serializable {
 		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")    	
 		.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
 	;
-    switcher.bindSequence("doubleSequence1", doubleSequence);
-    switcher.bindSequence("doubleSequence2", doubleSequence);
-    switcher.bindSequence("doubleSequence3", doubleSequence);
-    switcher.bindSequence("doubleSequence4", doubleSequence);
-    switcher.bindSequence("doubleSequence5", doubleSequence);
-    switcher.bindSequence("doubleSequence6", doubleSequence);
-    switcher.bindSequence("doubleSequence7", doubleSequence);
-    switcher.bindSequence("doubleSequence8", doubleSequence);
-    switcher.bindSequence("doubleSequence9", doubleSequence);
-
-    
-    
-    
+    switcher.bindSequence("doubleSequence1", doubleSequence, 10);
 
     Sequence cSequence = new ChainSequence(0)
     	.addSequence(getSceneForPath("/sc/TextFlash"), 	   "preset 1")
@@ -240,22 +229,30 @@ public class SocioSukiProject extends Project implements Serializable {
     ;
     
     
-    switcher.bindSequence("outputModeChange1", cSequence);
-    switcher.bindSequence("outputModeChange2", cSequence);
-    switcher.bindSequence("outputModeChange3", cSequence);
-    switcher.bindSequence("outputModeChange4", cSequence);
+    switcher.bindSequence("outputModeChange1", cSequence, 4);
     /*switcher.bindSequence("outputModeChange5", opSequence);
     switcher.bindSequence("outputModeChange6", opSequence);
     switcher.bindSequence("outputModeChange7", opSequence);
     switcher.bindSequence("outputModeChange8", opSequence);*/
-            
-        
-    this.addSceneInputOutputCanvas(
+    TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
     		new TunnelScene(this, w, h).setCanvas("temp", "/temp2")
-    			//.addFilter(new BlendDrawer()))
-    		
-    		, "/out", "/out"
-    );
+			//.addFilter(new BlendDrawer()))
+		, "/pix0", "/out"
+	);
+    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), 20);
+    switcher.bindSequence("tunnel_1_blob_pulse_2", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), 20);
+    /*switcher.bindSequence(
+        	"tunnel_2_pulse",     
+        	*/
+    TunnelScene ts2 = (TunnelScene) this.addSceneInputOutputCanvas(
+	    		new TunnelScene(this, w, h).setCanvas("temp", "/temp3")
+	    			//.addFilter(new BlendDrawer()))
+	    		
+	    		, "/out", "/out"
+	);
+    switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 20);
+    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 20);    
+	//), "preset 1", 20);    
     
     
 

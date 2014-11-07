@@ -148,7 +148,7 @@ public class BlendDrawer extends Filter {
         
     
     GLTextureFilter tf = getFilterNumber(currentBlendMode);
-    tf.setParameterValue("Opacity", new Float((double)(Float)this.getParameterValue("Opacity"))); 
+    tf.setParameterValue("Opacity", new Float((Float)this.getParameterValue("Opacity"))); 
     tf.apply(new GLTexture[]{src.getTexture(), out.getTexture()}, t); // all are called the same way
     
     
