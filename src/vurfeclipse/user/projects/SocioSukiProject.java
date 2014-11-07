@@ -82,8 +82,8 @@ public class SocioSukiProject extends Project implements Serializable {
     );
     this.addSceneOutputCanvas(
       ils2,
-      //"/pix1"
-      "/temp1"
+      "/pix1"
+      //"/temp1"
     );
     
     // MIDDLE LAYER: FX
@@ -118,7 +118,7 @@ public class SocioSukiProject extends Project implements Serializable {
 		}
     });*/
     
-    final Scene blendScene = new BlenderFX1(this,"pix1 BlenderFX", w, h).setOutputCanvas("/out").setInputCanvas("/pix1");
+    final Scene blendScene = new BlenderFX1(this,"pix1 BlenderFX", w, h).setOutputCanvas("/out");//.setInputCanvas("/pix1");
     blendScene.setCanvas("pix0","/pix0");
     blendScene.setCanvas("pix1","/pix1");
     //switcher.bindScene("blend scene", "preset 1", blendScene);
@@ -239,8 +239,9 @@ public class SocioSukiProject extends Project implements Serializable {
 			//.addFilter(new BlendDrawer()))
 		, "/pix0", "/out"
 	);
-    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), 20);
-    switcher.bindSequence("tunnel_1_blob_pulse_2", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), 20);
+    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), 5);
+    switcher.bindSequence("tunnel_1_blob_pulse_2", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), 5);
+    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), 5);    
     /*switcher.bindSequence(
         	"tunnel_2_pulse",     
         	*/
@@ -250,8 +251,12 @@ public class SocioSukiProject extends Project implements Serializable {
 	    		
 	    		, "/out", "/out"
 	);
-    switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 20);
-    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 20);    
+    switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 5);
+    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 5);
+    switcher.bindSequence("tunnel_2_blob_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 5);
+    switcher.bindSequence("tunnel_2_blob_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), 5);
+    switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(doubleSequence), 5);
+    switcher.bindSequence("tunnel_2_blend_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), 25);
 	//), "preset 1", 20);    
     
     

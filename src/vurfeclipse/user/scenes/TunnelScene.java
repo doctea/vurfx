@@ -29,7 +29,7 @@ public class TunnelScene extends SimpleScene {
 		@Override
 		public void setValuesForNorm(double pc, int iteration) {
 			// TODO Auto-generated method stub
-			for (int i = 1 ; i < 6 ; i++) {
+			for (int i = 1 ; i <= 6 ; i++) {
 			//for (float f = 0.1f ; f < 2.0f ; f+)
 				getFilter("Blend_"+i)
 					.changeParameterValueFromSin("Scale", (float)Math.sin(pc*(2.0f/(float)i))/2.0f)
@@ -72,7 +72,7 @@ public class TunnelScene extends SimpleScene {
 				new BlendDrawer(this).setFilterName("Blend_6").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
 					.changeParameterValue("Scale", new Float(2.0f))
 					.changeParameterValue("Opacity", new Float(0.05f))
-					.changeParameterValue("BlendMode", new Integer(2))
+					.changeParameterValue("BlendMode", new Integer(8))
 					//.changeParameterValue("X", new Float(0.5f))
 					//.changeParameterValue("Y", new Float(0.5f))
 		);		
@@ -89,14 +89,13 @@ public class TunnelScene extends SimpleScene {
 				new BlendDrawer(this).setFilterName("Blend_4").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
 					.changeParameterValue("Scale", new Float(0.75f))
 					.changeParameterValue("Opacity", new Float(0.3f))
-					.changeParameterValue("BlendMode", new Integer(3))
+					.changeParameterValue("BlendMode", new Integer(4))
 		);
 		this.addFilter(
 				new BlendDrawer(this).setFilterName("Blend_3").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
 					.changeParameterValue("Scale", new Float(0.5f))
 					.changeParameterValue("Opacity", new Float(0.5f))
 					.changeParameterValue("BlendMode", new Integer(8))
-					.changeParameterValue("BlendMode", new Integer(5))
 		);		
 		this.addFilter(
 				new BlendDrawer(this).setFilterName("Blend_2").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
