@@ -72,9 +72,9 @@ public class BlendDrawer extends Filter {
     //this.changeParameterValue("BlendMode", 4);
     addParameter("Opacity", 1.0f, 0.0f, 1.0f);
     addParameter("BlendMode", 4, 0, blendModes.length);
-    addParameter("Zoom", new Float(1.0f), -2.0f, 2.0f);
-    addParameter("X", new Float(0.0f), -2.0f, 2.0f);
-    addParameter("Y", new Float(0.0f), -2.0f, 2.0f);
+    addParameter("Scale", new Float(1.0f), 0.0f, 4.0f);
+    addParameter("X", new Float(0.0f), -1.0f, 1.0f);
+    addParameter("Y", new Float(0.0f), -1.0f, 1.0f);
   }
   
   public void updateParameterValue(String paramName, Object value) {
@@ -131,25 +131,36 @@ public class BlendDrawer extends Filter {
     out.pushMatrix();
 
     //println ("x and y are " + (Float)getParameterValue("X") + "," +  (Float)getParameterValue("Y"));
+
+    out.translate(w/2, h/2);
+    out.translate(w*(Float)getParameterValue("X"), (Float)getParameterValue("Y"));
     
-    x = (int) PApplet.map(((Float)getParameterValue("X")),-2.0f,2.0f,-2*w,2*w);
-    y = (int) PApplet.map(((Float)getParameterValue("Y")),-2.0f,2.0f,-2.0f*h,2.0f*h);
+    //if ((Float)getParameterValue("Zoom")!=1.0f) {
+    	out.scale((Float)getParameterValue("Scale"));
+    //}
+    /*x = (int) PApplet.map(((Float)getParameterValue("X")),-2.0f,2.0f,-2*w,2*w);
+    y = (int) PApplet.map(((Float)getParameterValue("Y")),-2.0f,2.0f,-2.0f*h,2.0f*h);*/
     
-    //out.translate((Float)getParameterValue("X"), (Float)getParameterValue("Y"));
 
     if (rotation!=0) {
         out.rotate(PApplet.radians(rotation));
       }    
         
-    if ((Float)getParameterValue("Zoom")!=1.0f) {
-    	out.scale((Float)getParameterValue("Zoom"));
-    }
     
     GLTextureFilter tf = getFilterNumber(currentBlendMode);
     tf.setParameterValue("Opacity", new Float((double)(Float)this.getParameterValue("Opacity"))); 
     tf.apply(new GLTexture[]{src.getTexture(), out.getTexture()}, t); // all are called the same way
     
-    out.image(t,x,y,w,h);
+    
+    
+    //out.image(t,x,y,w,h);
+    out.imageMode(out.CENTER);
+    //out.image(t,x,y);
+    out.image(t,
+    		0,0
+    		//w * (Float)getParameterValue("X"),
+    		//h * (Float)getParameterValue("Y")
+    );
     
     //if (rotation!=0) {
       out.popMatrix();

@@ -251,7 +251,7 @@ public class SocioSukiProject extends Project implements Serializable {
             
         
     this.addSceneInputOutputCanvas(
-    		new TunnelScene(this, w, h)
+    		new TunnelScene(this, w, h).setCanvas("temp", "/temp2")
     			//.addFilter(new BlendDrawer()))
     		
     		, "/out", "/out"
