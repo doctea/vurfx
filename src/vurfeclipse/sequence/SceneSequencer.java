@@ -222,5 +222,12 @@ public class SceneSequencer extends Sequencer implements Targetable {
 	  public Scene getActiveScene () {
 		  return scenes.get(activeSceneName);
 	  }
+
+
+	@Override
+	public String getCurrentSequenceName() {
+		return activeSceneName;
+		// TODO Auto-generated method stub
+	}
 	  
 }

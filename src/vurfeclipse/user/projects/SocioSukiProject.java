@@ -280,12 +280,12 @@ public class SocioSukiProject extends Project implements Serializable {
  
 
     
-    this.addSceneOutputCanvas(
-    	    //  new VideoScene(this,w,h,"").setCanvas("src","/out").setCanvas("out", "/out"), //,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
+    /*this.addSceneOutputCanvas(
+    	      //new VideoScene(this,w,h,"").setCanvas("src","/out").setCanvas("out", "/out"), //,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
       		new WebcamScene(this, 640, 480, w, h).setCanvas("src","/out").setCanvas("out", "/pix1"),
     	      //buffers[BUF_INP0]
     	      "/pix0"
-      );           
+      );*/           
     
     
     this.addSceneOutputCanvas(
