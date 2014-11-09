@@ -419,6 +419,11 @@ public abstract class Project implements Serializable {
     }
   }
   
+  public String getSequenceName () {
+	  if (this.sequencer!=null) return this.sequencer.getCurrentSequenceName();
+	  return "none";
+  }
+  
   public void sendKeyPressed(char key) {
     //Scene sc = scenes.iterator().next();//.first();
     if (key=='[') {
@@ -432,6 +437,11 @@ public abstract class Project implements Serializable {
       saveProject();
     } else if (key==';') {
     	if (this.sequencer!=null) this.sequencer.setForward();
+    } else if (key=='l') {
+    	println("toggling sequencer");
+    	if (this.sequencer!=null) {
+    		println("toggling sequencer " + this.sequencer.toggleLock());
+    	}
     } else/* if (key=='\'') {  // SOLO SCENE
       Iterator i = scenes.iterator();
       while (i.hasNext()) {
@@ -448,12 +458,7 @@ public abstract class Project implements Serializable {
     } else if (key=='p') {
     	println(rsConn.getURLs().toString());
     	System.exit(0);
-    } else if (key=='£') {
-    	println("toggling sequencer");
-    	if (this.sequencer!=null) {
-    		println("toggling sequencer " + this.sequencer.toggleLock());
-    	}
-    } else {
+    }  else {
       Scene sc = this.getSelectedScene();
   
       if (sc==null) {
