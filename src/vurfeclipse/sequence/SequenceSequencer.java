@@ -194,6 +194,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  this.getActiveSequence().start();
 	  }
 
+
+	@Override
+	public String getCurrentSequenceName() {
+		return activeSequenceName;
+	}
+
 		  
 	  
 	  /*

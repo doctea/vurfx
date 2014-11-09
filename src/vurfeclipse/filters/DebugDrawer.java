@@ -2,6 +2,7 @@ package vurfeclipse.filters;
 
 
 import processing.core.PApplet;
+import sun.security.krb5.internal.HostAddress;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
@@ -97,6 +98,11 @@ public class DebugDrawer extends Filter {
     out.pushStyle();
     lineCount = 0;
     out.textSize(25);
+    
+    lineCount++;
+    drawDebug("sequence", sc.host.getSequenceName());
+    
+    lineCount++;
     drawDebug("fps", (int)((VurfEclipse)APP.getApp()).frameRate);
     
     if (mode == 3 || mode == 4) {
@@ -104,7 +110,7 @@ public class DebugDrawer extends Filter {
       drawDebug("test", this.getParameterValue("test"));
       
       drawDebug("beat", this.getParameterValue("beat"));
-      drawDebug("bar", this.getParameterValue("bar"));
+      drawDebug("bar",  this.getParameterValue("bar"));
       
       selectedScene = sc.host.getSelectedScene();
       drawDebug("scene", selectedScene);
