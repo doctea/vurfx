@@ -60,7 +60,7 @@ public class SimpleProject extends Project implements Serializable {
     
     //this.addScene(new WebcamScene(this,w,h,0));
 
-    this.addSceneOutputCanvas(
+    /*this.addSceneOutputCanvas(
       new WebcamScene(this,w,h,0),
       //buffers[BUF_INP0]
       //"/inp0"
@@ -71,7 +71,7 @@ public class SimpleProject extends Project implements Serializable {
       //buffers[BUF_INP1]#
       //"inp1"
       "/out"
-    );
+    );*/
     /*this.addSceneOutput(
       new VideoScene(this,w,h,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
       buffers[BUF_INP0]

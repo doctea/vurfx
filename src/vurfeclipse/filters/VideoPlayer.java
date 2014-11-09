@@ -1,6 +1,9 @@
 package vurfeclipse.filters;
 
 
+import java.io.File;
+import java.util.ArrayList;
+
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
@@ -17,6 +20,8 @@ public class VideoPlayer extends Filter {
   
   int mode = 0;
   
+  public ArrayList<String> videos = new ArrayList<String>();
+  
   public void nextMode () {
 /*    long maxMode = 50;//(long)stream.length()/50;
     mode++;
@@ -26,7 +31,7 @@ public class VideoPlayer extends Filter {
       System.out.println("currently at " + stream.frame() + ", seeking to mode " + mode + "/" + maxMode + " at " + seek);
       stream.jump((int)seek);
     }*/
-    String[] videos = new String[] {
+    /*String[] videos = new String[] {
       "video/129-Probe 7 - Over and Out(1)-00.mkv",
       "tworld84.dv.ff.avi",
       "video/129-Probe 7 - Over and Out(1)-10.mkv",      
@@ -37,9 +42,10 @@ public class VideoPlayer extends Filter {
       "video/129-Probe 7 - Over and Out(1)-04.mkv",      
       "video/Life of Brian(XviD).avi",
       //"video/Wilfred.US.S01E02.HDTV.XviD-FQM.Trust"
-    };
+    };*/
       
-    changeVideo(videos[(int)random(0,videos.length)]);
+    //changeVideo(videos[(int)random(0,videos.length)]);
+	  changeVideo(videos.get((int) random(0,videos.size())));
     
     
   }
@@ -74,18 +80,20 @@ public class VideoPlayer extends Filter {
         super.start();
       }
       public void run () {
-        System.out.println("Loaded new..");
+        println("Loaded new.." + filename);
         GSMovie newStream;
         newStream = new GSMovie(APP.getApp(),filename);
         //newTex = new GLTexture(APP, sc.w, sc.h);
         newStream.setPixelDest(tex, true);
         newStream.volume(0);
+        println("Set volume and pixeldest..");
         if (!((VurfEclipse)APP.getApp()).exportMode)
           newStream.loop();
+        //println("about to do ")
         while (!newStream.available()) 
           try { sleep(50); } catch (Exception e) {}
         newStream.read();
-        System.out.println("read from newStream");
+        println("read from newStream");
         //newStream.setPixelDest(tex, true);
         self.newStream = newStream;
         
@@ -93,9 +101,10 @@ public class VideoPlayer extends Filter {
         GSMovie oldStream = stream;
         //GLTexture oldTex = tex;
         self.stream = newStream;
-        System.out.println("Swapping streams to " + filename);
+        println("Swapping streams to " + filename);
         self.setFilterLabel(getFilterName() + filename);  
         //tex = newTex;
+        oldStream.stop();
         oldStream.delete();
         //oldTex.delete();
         self.newStream = null;
@@ -113,6 +122,27 @@ public class VideoPlayer extends Filter {
   }
   
   
+  public void loadDirectory() {
+	  String directory = ""; // dummy
+	  String path = APP.getApp().sketchPath("bin/data/" + directory);	// ffs need this on Windows..
+	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
+	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
+	  //String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
+	  File folder = new File(path);
+	  println(this + "#loadDirectory() got path " + path);
+	  int count = 0;
+	  for (final File fileEntry : folder.listFiles()) {
+		  if (fileEntry.isDirectory()) {
+			  // skip; maybe recurse tho in future
+		  } else {
+			  String fn = fileEntry.getName();
+			  if (fn.contains(".mov"))
+				  videos.add(path + fileEntry.getName());
+			  //if (count>=numBlobs) break;
+		  }
+	  }
+  }
+  
   public boolean initialise() {
     /*try {
       quicktime.QTSession.open();
@@ -122,9 +152,12 @@ public class VideoPlayer extends Filter {
     
     tex = new GLTexture(APP.getApp(),sc.w,sc.h);
     
+    loadDirectory();
+    filename = videos.get(0);
+    
     this.setFilterLabel("VideoPlayer - " + filename);  
     
-    System.out.println("Loading video " + filename);
+    println("Loading video " + filename);
     try {
        stream = new GSMovie(APP.getApp(),filename);
       //stream = new GSMovie(APP,"U:\\videos\\Tomorrows World - sinclair c5\\tworld84.dv.ff.avi");
@@ -134,7 +167,7 @@ public class VideoPlayer extends Filter {
       if (!((VurfEclipse)APP.getApp()).exportMode) 
         stream.loop();
     } catch (Exception e) {
-      System.out.println("got error " + e + " loading " + filename);
+      println("got error " + e + " loading " + filename);
     }      //webcamStream = new Capture(APP, sc.w, sc.h, 30);
     //webcamStream.start();
     
@@ -144,7 +177,7 @@ public class VideoPlayer extends Filter {
   public synchronized boolean  applyMeatToBuffers() {
     if (((VurfEclipse)APP.getApp()).exportMode) {
       //seek to the correct position based on the current frame number ..
-      System.out.println("jumping to frameCount " + ((VurfEclipse)APP.getApp()).frameCount);
+      println("jumping to frameCount " + ((VurfEclipse)APP.getApp()).frameCount);
       //stream.jump(frameCount * (global_fps/stream.getSourceFrameRate()));  
       //stream.jump(timeMillis * (global_fps/stream.getSourceFrameRate()));  
       stream.volume(0);
@@ -169,8 +202,8 @@ public class VideoPlayer extends Filter {
       if (!stream.isSeeking() && stream.available()) {
         stream.volume(0);
   
-        //System.out.println("got webcamstream");
         stream.read();
+        println("got webcamstream read");
         
         /*stream.loadPixels();
         out.loadPixels();
@@ -182,7 +215,9 @@ public class VideoPlayer extends Filter {
         
         //out.getTexture().putPixelsIntoTexture();
         if (tex.putPixelsIntoTexture()) {
+          out.beginDraw();
           out.image(tex,0,0,sc.w,sc.h);
+          out.endDraw();
           return true;
         }
         
@@ -194,12 +229,31 @@ public class VideoPlayer extends Filter {
         out.updatePixels();*/
         return false;
       } else if (!stream.isSeeking()) {  // available
+    	out.beginDraw();
         out.image(tex,0,0,sc.w,sc.h);
+        out.endDraw();
         return true;
       }
     } else {
-      System.out.println("Stream is null!");
+      println("Stream is null!");
     }
     return false; // no new frame available to draw
   }  
+  
+  
+  public void beginDraw () {
+    /*if (!pixelMode)
+      out.loadPixels();
+    else*/
+      //out.beginDraw();
+  }
+  public void endDraw () {
+    /*if (!pixelMode)
+      out.updatePixels();
+    else {*/
+      //out.endDraw();
+      //out.loadPixels();
+      //out.loadTexture();
+    //}
+  }
 }

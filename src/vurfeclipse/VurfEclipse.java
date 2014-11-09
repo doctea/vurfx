@@ -25,9 +25,11 @@ public class VurfEclipse extends PApplet {
 		rect (width/2,height/2,5,5);
 	}*/
 	
-	boolean ultrahiRes = false;
+	boolean hdRes = false;
+	boolean mdRes = true;
+	boolean ultrahiRes = true;
 	boolean hiRes = true;
-	boolean medRes = false;
+	boolean medRes = true;
 	
 	public boolean exportMode = false; //true;
 	
@@ -142,8 +144,8 @@ public class VurfEclipse extends PApplet {
 	
 	//config settings
 	int 
-	desired_width =  ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640, 
-	desired_height = ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480;
+		desired_width =  hdRes ? 1920 : mdRes ? 1600 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640, 
+		desired_height = hdRes ? 1080 : mdRes ? 900 :  ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480;
 	
 	//int output_width = hiRes ? 1280 : 800, output_height = hiRes? 1024 : 600;
 	//int output_width = 1280, output_height = 1024;
@@ -205,6 +207,11 @@ public class VurfEclipse extends PApplet {
 			
 		 if (enablecp5) setupControls();
 			
+		 if (frame != null) {
+			    frame.setResizable(false);
+			    frame.setSize(output_width, output_height);
+		 }		 
+		 
 		 //size(output_width, output_height + gw_height, gfx_mode);
 		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
 		 size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);

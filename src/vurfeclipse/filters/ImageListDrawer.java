@@ -109,7 +109,8 @@ public class ImageListDrawer extends Filter {
 		  if (fileEntry.isDirectory()) {
 			  // skip; maybe recurse tho in future
 		  } else {
-			  filenames.add(directory + "/" + fileEntry.getName());
+			  if (fileEntry.getName().contains(".png") || fileEntry.getName().contains(".jpg"))
+					  filenames.add(directory + "/" + fileEntry.getName());
 			  if (count>=numBlobs) break;
 		  }
 	  }

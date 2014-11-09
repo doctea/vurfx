@@ -58,7 +58,7 @@ public class TestProject extends Project {
     
     //this.addScene(new WebcamScene(this,w,h,0));
 
-    this.addSceneOutputCanvas(
+    /*this.addSceneOutputCanvas(
       new WebcamScene(this,w,h,0),
       //buffers[BUF_INP0]
       "/inp0"
@@ -67,7 +67,7 @@ public class TestProject extends Project {
       new WebcamScene(this,w,h,1),
       "/inp1"
       //buffers[BUF_INP1]
-    );
+    );*/
     this.addSceneOutputCanvas(
       new VideoScene(this,w,h,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
       //buffers[BUF_INP0]

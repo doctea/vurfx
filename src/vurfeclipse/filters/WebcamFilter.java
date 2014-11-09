@@ -14,7 +14,7 @@ public class WebcamFilter extends Filter {
 
   boolean pixelMode = true; // false mode doesnt work?
   
-  int capW, capH;
+  //int capW, capH;
   
   int cameraNumber = 0;
 
@@ -26,7 +26,7 @@ public class WebcamFilter extends Filter {
     this(sc, capW, capH);
     this.cameraNumber = cameraNumber; 
   }
-  WebcamFilter(Scene sc, int capW, int capH) {
+  public WebcamFilter(Scene sc, int capW, int capH) {
     super(sc);
     this.capW = capW;
     this.capH = capH;
@@ -39,7 +39,30 @@ public class WebcamFilter extends Filter {
     this.cameraNumber = cameraNumber;
   }
   
+  int capW = 640, capH = 480;
+  
   public boolean initialise() {
+      webcamStream = new GSCapture(APP.getApp(), capW, capH); //, cameraName); //, global_fps);
+      //webcamStream = new GSCapture(APP, 640, 480, cameraName); //, global_fps);      
+      //webcamStream = new GSCapture(APP, capW, capH, global_fps);
+      
+      System.out.println("WebcamFilter initialised for cameraNumber: " + this.cameraNumber);
+      System.out.println("WebcamFilter OUT is " + out);
+      
+      if (pixelMode) {
+        //tex = new GLTexture(APP.getApp(),sc.w,sc.h);
+    	tex = new GLTexture(APP.getApp(),capW,capH);
+        //webcamStream.setPixelDest(tex);
+        webcamStream.setPixelDest(tex, true);
+        //webcamStream.setPixelDest(out.getTexture());
+      }
+      webcamStream.start();
+      System.out.println("webcam initialise?");
+      //APP.exit();
+      return true;
+  }	  
+  
+  public boolean disable_initialise() {
     /*try {
       quicktime.QTSession.open();
     } catch (quicktime.QTException qte) { 
@@ -60,7 +83,7 @@ public class WebcamFilter extends Filter {
       //webcamStream = new GSCapture(APP, capW, capH, cameraName, global_fps);
       //webcamStream = new GSCapture(APP, capW, capH, cameraName);    
       //webcamStream = new GSCapture(APP, capW, capH);          
-      webcamStream = new GSCapture(APP.getApp(), 640, 480); //, cameraName); //, global_fps);
+      webcamStream = new GSCapture(APP.getApp(), capW, capH); //, cameraName); //, global_fps);
       //webcamStream = new GSCapture(APP, 640, 480, cameraName); //, global_fps);      
       //webcamStream = new GSCapture(APP, capW, capH, global_fps);
       

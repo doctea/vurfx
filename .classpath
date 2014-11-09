@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="lib" path="lib/base/opengl-orig/library/jogl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/linux64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/base/opengl-orig/library/opengl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/linux64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/base/opengl-orig/library/gluegen-rt.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/linux64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/user/gson-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/user/GLGraphics/GLGraphics.jar" sourcepath="D:/code/processing/sketches/libraries/GLGraphics/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/GLGraphics/reference/"/>
@@ -141,7 +157,7 @@
 	<classpathentry kind="lib" path="lib/user/GSVideo/jna.jar" sourcepath="D:/code/processing/sketches/libraries/GSVideo/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/GSVideo/reference/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/GSVideo"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/GSVideo/library/gstreamer"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/kinect/kinect.jar">
@@ -183,30 +199,14 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/doctea/vurf-eclipse/lib/user/SimpleOpenNI/library"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/VurfEclipse/lib/user/SimpleOpenNI/library"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/opengl-orig/library/opengl.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/opengl-orig/library/gluegen-rt.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/opengl-orig/library/jogl.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/windows64"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
-	<classpathentry kind="lib" path="lib/user/gson-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
+	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

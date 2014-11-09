@@ -68,7 +68,7 @@ public class SocioSukiProject extends Project implements Serializable {
     final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
     
-    ils1.addFilter(new ImageListDrawer(ils1).setDirectory("doctea").setCurrentIndex(5).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer1"));
+    ils1.addFilter(new ImageListDrawer(ils1).setDirectory("ds2014").setCurrentIndex(5).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer1"));
     ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer2"));
     
     //ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect"));
@@ -85,6 +85,9 @@ public class SocioSukiProject extends Project implements Serializable {
       "/pix1"
       //"/temp1"
     );
+
+    
+
     
     // MIDDLE LAYER: FX
 
@@ -273,6 +276,16 @@ public class SocioSukiProject extends Project implements Serializable {
     bd.changeParameterValue("shape", Blob.SH_SVG);
     bs.addFilter(bd);
     this.addSceneOutputCanvas(bs,"/out");*/
+    
+ 
+
+    
+    this.addSceneOutputCanvas(
+    	    //  new VideoScene(this,w,h,"").setCanvas("src","/out").setCanvas("out", "/out"), //,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
+      		new WebcamScene(this, 640, 480, w, h).setCanvas("src","/out").setCanvas("out", "/pix1"),
+    	      //buffers[BUF_INP0]
+    	      "/pix0"
+      );           
     
     
     this.addSceneOutputCanvas(
