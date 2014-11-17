@@ -245,10 +245,17 @@ public abstract class Project implements Serializable {
   }
   
   public Scene addBlankerScene (String canvasName) {
+	  return this.addSceneOutputCanvas(
+			  new BlankerScene(this,w,h)
+			  	.setSceneName("BlankerScene")
+			  	.setOutputCanvas(canvasName), canvasName
+			  );
+	  
+	  /*
 	  Scene sc = new SimpleScene(this, w, h).setSceneName("BlankerScene").setOutputCanvas(canvasName);
 	  BlankFilter bf = (BlankFilter) new BlankFilter(sc).setFilterName("BlankFilter").setOutputCanvas(canvasName);
 	  sc.addFilter(bf);
-	  return this.addSceneOutputCanvas(sc, canvasName);
+	  return this.addSceneOutputCanvas(sc, canvasName);*/
 		//Scene sc = this.addScene();
 /*		  blank.beginDraw();	// this is here to blank the buffer before a redraw.  if we disable it, it looks rad as fuck!! and woudl probably where we could put in a motion blur effect too.
 		  blank.applyToBuffers();
