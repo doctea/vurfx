@@ -2,12 +2,12 @@
 <classpath>
 	<classpathentry kind="lib" path="lib/base/opengl-orig/library/jogl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/windows64"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/opengl-orig/library/opengl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/linux64"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/windows64"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/opengl-orig/library/gluegen-rt.jar">
