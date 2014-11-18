@@ -47,7 +47,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  
 
 	  @Override
-	  public void runSequences() {
+	  synchronized public void runSequences() {
 		  if (stopSequencesFlag) {
 			  Iterator<Sequence> it = sequences.values().iterator();
 			  while (it.hasNext()) it.next().stop();
@@ -122,7 +122,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  
 	  
 	  
-	  public Sequence addSequence(String SequenceName, Sequence sc) {
+	  synchronized public Sequence addSequence(String SequenceName, Sequence sc) {
 		  sequences.put(SequenceName, sc);
 		  if (activeSequenceName.equals("")) activeSequenceName = SequenceName;
 		  
@@ -200,6 +200,96 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return activeSequenceName;
 	}
 
+
+	synchronized public void bindAndPermute(String string2, String string, Scene sceneForPath, int length) {
+		
+		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
+		
+		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
+		while(it.hasNext()) {
+			Entry<String,Sequence> ent = it.next();
+			if (ent.getKey().startsWith(string)) { //matches
+				Iterator<Entry<String, Sequence>> sit = sceneForPath.getSequences().entrySet().iterator();
+				while (sit.hasNext()) {
+					Entry<String, Sequence> s = sit.next();
+					toAdd.put(
+							string2 + "_" + ent.getKey() + "_" + s.getKey() + "_PERMUTED", 
+							new ChainSequence(length).addSequence(s.getValue()).addSequence(ent.getValue())
+					);
+					println(string2 + "_" + ent.getKey() + "_" + s.getKey() + "_PERMUTED");
+				}
+			}
+		}
+		
+		sequences.putAll(toAdd);
+	}
+
+	synchronized public void bindAndPermute(String newPrefix, String string, Sequence sequence, int length) {
+		
+		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
+		
+		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
+		while(it.hasNext()) {
+			Entry<String,Sequence> ent = it.next();
+			if (ent.getKey().startsWith(string)) { //matches
+				/*Iterator<Entry<String, Sequence>> sit = sceneForPath.getSequences().entrySet().iterator();
+				while (sit.hasNext()) {
+					Entry<String, Sequence> s = sit.next();*/
+					toAdd.put(
+							newPrefix + "_" + ent.getKey() + "_" + sequence + "_PERMUTED", 
+							new ChainSequence(length).addSequence(sequence).addSequence(ent.getValue())
+					);
+					println(newPrefix + "_" + ent.getKey() + "_" + sequence + "_PERMUTED");
+				//}
+			}
+		}
+		
+		sequences.putAll(toAdd);
+	}
+
+
+	synchronized public void bindAndPermute(String newPrefix, String string, String pattern2, int length) {
+		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
+		
+		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
+		while(it.hasNext()) {
+			Entry<String,Sequence> ent = it.next();
+			if (ent.getKey().startsWith(string)) { //matches
+				Iterator<Entry<String, Sequence>> sit = sequences.entrySet().iterator();
+				while (sit.hasNext()) {
+					Entry<String, Sequence> s = sit.next();
+					if (s.getKey().startsWith(pattern2)) {
+						toAdd.put(
+								newPrefix + "_" + ent.getKey() + "_" + s.getKey() + "_PERMUTED", 
+								new ChainSequence(length).addSequence(s.getValue()).addSequence(ent.getValue())
+						);
+						println(newPrefix + "_" + ent.getKey() + "_" + s.getKey() + "_PERMUTED");
+					}
+				}
+			}
+		}
+		
+		sequences.putAll(toAdd);
+	}
+
+
+	public void bindAndPermute(String newPrefix, Sequence seq,			Scene scene, int length) {
+		// TODO Auto-generated method stub
+
+		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
+		
+				Iterator<Entry<String, Sequence>> sit = scene.getSequences().entrySet().iterator();
+				while (sit.hasNext()) {
+					Entry<String, Sequence> s = sit.next();
+					toAdd.put(
+							newPrefix + "_" +  s.getKey() + "_PERMUTED", 
+							new ChainSequence(length).addSequence(s.getValue()).addSequence(seq)
+					);
+					println(newPrefix + "_" + s.getKey() + "_PERMUTED");
+				}
+		
+		sequences.putAll(toAdd);
+	}
 		  
 	  
 	  /*

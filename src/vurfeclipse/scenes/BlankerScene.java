@@ -91,7 +91,7 @@ public class BlankerScene extends SimpleScene {
 			// TODO Auto-generated constructor stub
 		}
 		@Override public void setValuesForNorm(double norm, int iteration) {
-			getFilter("BlankFilter").changeParameterValue("alpha", (int) (255 * norm));
+			getFilter("BlankFilter").changeParameterValue("alpha", 32 + (int) (200 * norm));
 		}
 		@Override public void onStart() {
 			/*if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
