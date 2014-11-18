@@ -223,7 +223,7 @@ public class SocioSukiProject extends Project implements Serializable {
 		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")    	
 		.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
 	;
-    switcher.bindSequence("doubleSequence1", doubleSequence, 10);
+    switcher.bindSequence("d1:", doubleSequence, 10);
 
     Sequence cSequence = new ChainSequence(0)
     	.addSequence(getSceneForPath("/sc/TextFlash"), 	   "preset 1")
@@ -232,7 +232,7 @@ public class SocioSukiProject extends Project implements Serializable {
     ;
     
     
-    switcher.bindSequence("outputModeChange1", cSequence, 4);
+    //switcher.bindSequence("outputModeChange1", cSequence, 4);
     /*switcher.bindSequence("outputModeChange5", opSequence);
     switcher.bindSequence("outputModeChange6", opSequence);
     switcher.bindSequence("outputModeChange7", opSequence);
@@ -258,23 +258,47 @@ public class SocioSukiProject extends Project implements Serializable {
 	);
     switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 5);
     switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 5);
-    switcher.bindSequence("tunnel_2_blob_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 5);
-    switcher.bindSequence("tunnel_2_blob_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), 5);
+    switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 5);
+    switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), 5);
     switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(doubleSequence), 5);
-    switcher.bindSequence("tunnel_2_blend_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), 10);
-    switcher.bindSequence("tunnel_2_blob_wobble_1", new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 1"), 25);
-    switcher.bindSequence("tunnel_2_blob_wobble_2", new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 3"), 25);
+    switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), 10);
+    switcher.bindSequence("tunnel_2_blob_wobble_1",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 1"), 25);
+    switcher.bindSequence("tunnel_2_blob_wobble_2",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 3"), 25);
     switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene, "preset 4").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), 50);
     
-    switcher.bindSequence("tunnel_2_blob_wobble_3_fade_kaleido", new ChainSequence(2000)
+    //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
+    //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
+    //switcher.bindAndPermute("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), getSceneForPath("/sc/OutputShader2"), 5000);
+    
+    /*switcher.bindSequence("tunnel_2_blob_wobble_3_fade_kaleido", new ChainSequence(2000)
     			.addSequence(ts2, "preset 3")
     			.addSequence(blobScene, "preset 4")
-    			//.addSequence(getSceneForPath("/sc/BlankerScene"), "fade")
-    			//.addSequence(getSceneForPath("/sc/OutputShader2"), "show_kaleido")
-    			.addSequence(getSceneForPath("/sc/OutputShader2"), "show_feedback")
+    			.addSequence(getSceneForPath("/sc/BlankerScene"), "fade")
+    			.addSequence(getSceneForPath("/sc/OutputShader2"), "show_kaleido")
+    			//.addSequence(getSceneForPath("/sc/OutputShader2"), "show_feedback")
     		, 50
-    );    
-	//), "preset 1", 20);    
+    );*/    
+	//), "preset 1", 20);
+    
+    switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader"), 5000);
+    switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader2"), 5000);
+    switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader"), 5000);
+    switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader2"), 5000);
+    
+    //switcher.bindAndPermute("t2:", "tunnel_2_", "t1:", 5000);
+
+    switcher.bindAndPermute("t3_blanker", "t1:", getSceneForPath("/sc/BlankerScene"), 5000);
+    switcher.bindAndPermute("t3_blanker", "t2:", getSceneForPath("/sc/BlankerScene"), 5000);
+
+    //switcher.bindAndPermute("t4", "t3_blanker", getSceneForPath("/sc/BlankerScene"), 5000);
+    
+    switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader"), 5000);
+    switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader2"), 5000);
+    
+    
+    //LIST OF THINGS TO PERMUTE
+    // fade, show_kaleido, show_feedback
+    // 
     
     
 

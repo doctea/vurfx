@@ -5,7 +5,9 @@ import vurfeclipse.APP;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
+import vurfeclipse.sequence.ChainSequence;
 import vurfeclipse.sequence.Sequence;
+import vurfeclipse.sequence.ShowFilterSequence;
  
 public class OutputFX1 extends SimpleScene {
 	public OutputFX1(Project pr, int w, int h) { 
@@ -46,6 +48,19 @@ public class OutputFX1 extends SimpleScene {
 
     public void setupSequences() {
 		sequences.put("preset 1", new OutputSequence1(this, 0));
+		
+		sequences.put("show_toon",  new ShowFilterSequence(this, 0, getPath()+"/fl/Toon"));
+		sequences.put("show_edges", new ShowFilterSequence(this, 0, getPath()+"/fl/Edges"));
+		
+		sequences.put("show_toonandedges", new ChainSequence(0).addSequence(sequences.get("show_toon")).addSequence(sequences.get("show_edges")));
+		
+		
+		//.addSequence(getSequence("show_feedback"))
+			//.addSequence(host.getSceneForPath("/sc/BlankerScene").getSequence("feedback"))
+			//.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Feedback")));
+		
+		
+		
     }
 	
 
@@ -60,8 +75,8 @@ public class OutputFX1 extends SimpleScene {
 		@Override
 		public void setValuesForNorm(double norm, int iteration) {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
-			//if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
-			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
+			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
+			host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 		}
 		@Override public void onStart() {
 			if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
