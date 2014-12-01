@@ -130,6 +130,12 @@ public class VurfEclipse extends PApplet {
 		getCW();    
 	}
 	
+		
+	//@Override
+	boolean resizeRenderer () {
+		return false;
+	}
+	
 	//boolean enablecp5 = false;
 	public static boolean enablecp5 = true;//false;//true; //true;
 	
