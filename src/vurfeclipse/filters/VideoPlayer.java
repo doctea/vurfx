@@ -9,6 +9,7 @@ import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
 import codeanticode.glgraphics.GLTexture;
 import codeanticode.gsvideo.GSMovie;
+import codeanticode.gsvideo.*;
 
 public class VideoPlayer extends Filter {
   transient GSMovie stream;
@@ -136,7 +137,7 @@ public class VideoPlayer extends Filter {
 			  // skip; maybe recurse tho in future
 		  } else {
 			  String fn = fileEntry.getName();
-			  if (fn.contains(".mov"))
+			  if (fn.contains(".ogg"))
 				  videos.add(path + fileEntry.getName());
 			  //if (count>=numBlobs) break;
 		  }
@@ -203,7 +204,7 @@ public class VideoPlayer extends Filter {
         stream.volume(0);
   
         stream.read();
-        println("got webcamstream read");
+        //println("got gsvideo stream read");
         
         /*stream.loadPixels();
         out.loadPixels();
