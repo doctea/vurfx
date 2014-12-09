@@ -201,8 +201,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, Scene sceneForPath, int length) {
-		
+	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, Scene sceneForPath, int length) {		
 		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
 		
 		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
@@ -224,14 +223,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		sequences.putAll(toAdd);
 	}
 
-	synchronized public void bindAndPermute(String newPrefix, String string, Sequence sequence, int length) {
-		
+	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, Sequence sequence, int length) {		
 		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
 		
 		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
 		while(it.hasNext()) {
 			Entry<String,Sequence> ent = it.next();
-			if (ent.getKey().startsWith(string)) { //matches
+			if (ent.getKey().startsWith(matchPrefix)) { //matches
 				/*Iterator<Entry<String, Sequence>> sit = sceneForPath.getSequences().entrySet().iterator();
 				while (sit.hasNext()) {
 					Entry<String, Sequence> s = sit.next();*/
@@ -248,20 +246,22 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	synchronized public void bindAndPermute(String newPrefix, String string, String pattern2, int length) {
+	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, String matchPrefix2, int length) {
 		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
 		
 		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
 		while(it.hasNext()) {
 			Entry<String,Sequence> ent = it.next();
-			if (ent.getKey().startsWith(string)) { //matches
+			if (ent.getKey().startsWith(matchPrefix)) { //matches
 				Iterator<Entry<String, Sequence>> sit = sequences.entrySet().iterator();
 				while (sit.hasNext()) {
 					Entry<String, Sequence> s = sit.next();
-					if (s.getKey().startsWith(pattern2)) {
+					if (s.getKey().startsWith(matchPrefix2)) {
 						toAdd.put(
 								newPrefix + "_" + ent.getKey() + "_" + s.getKey() + "_PERMUTED", 
-								new ChainSequence(length).addSequence(s.getValue()).addSequence(ent.getValue())
+								new ChainSequence(length)
+									.addSequence(s.getValue())
+									.addSequence(ent.getValue())
 						);
 						println(newPrefix + "_" + ent.getKey() + "_" + s.getKey() + "_PERMUTED");
 					}
@@ -273,22 +273,38 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	public void bindAndPermute(String newPrefix, Sequence seq,			Scene scene, int length) {
-		// TODO Auto-generated method stub
-
+	public void bindAndPermute(String newPrefix, Sequence seq, Scene scene, int length) {
 		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
 		
-				Iterator<Entry<String, Sequence>> sit = scene.getSequences().entrySet().iterator();
-				while (sit.hasNext()) {
-					Entry<String, Sequence> s = sit.next();
-					toAdd.put(
-							newPrefix + "_" +  s.getKey() + "_PERMUTED", 
-							new ChainSequence(length).addSequence(s.getValue()).addSequence(seq)
-					);
-					println(newPrefix + "_" + s.getKey() + "_PERMUTED");
-				}
+		Iterator<Entry<String, Sequence>> sit = scene.getSequences().entrySet().iterator();
+		while (sit.hasNext()) {
+			Entry<String, Sequence> s = sit.next();
+			toAdd.put(
+					newPrefix + "_" +  s.getKey() + "_PERMUTED", 
+					new ChainSequence(length).addSequence(s.getValue()).addSequence(seq)
+			);
+			println(newPrefix + "_" + s.getKey() + "_PERMUTED");
+		}
 		
 		sequences.putAll(toAdd);
+	}
+
+
+	public void bindSequences(String prefix, Scene scene) {
+		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
+		
+		Iterator<Entry<String, Sequence>> sit = scene.getSequences().entrySet().iterator();
+		while (sit.hasNext()) {
+			Entry<String, Sequence> s = sit.next();
+			toAdd.put(
+					prefix + "_" +  s.getKey(), 
+					s.getValue()
+					//new ChainSequence(length).addSequence(s.getValue()).addSequence(seq)
+			);
+			//println(prefix + "_" + s.getKey() + "_PERMUTED");
+		}
+		
+		sequences.putAll(toAdd);	
 	}
 		  
 	  

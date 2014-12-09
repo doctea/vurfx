@@ -69,7 +69,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   }
   public Sequence makeChainSequenceFrom(String name,Sequence newSeq) {
 	  Sequence seq = getSequence(name);
-	  return new ChainSequence (seq.getLengthMillis()).addSequence(seq).addSequence(newSeq);			  
+	  return new ChainSequence (newSeq.getLengthMillis()).addSequence(seq).addSequence(newSeq);			  
   }
   
   

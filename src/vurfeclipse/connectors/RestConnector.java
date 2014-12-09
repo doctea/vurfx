@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import vurfeclipse.Targetable;
 import vurfeclipse.filters.Filter;
@@ -32,6 +33,7 @@ public class RestConnector implements Runnable {
 	Project pr;
 	
 	HashMap<String,Targetable> targets;
+	HashMap<String,Targetable> exposed = new HashMap<String,Targetable> ();
 	
 	public RestConnector(Project pr) {
 		this.pr = pr;
@@ -39,7 +41,20 @@ public class RestConnector implements Runnable {
 	
 	public void start() {
 		System.out.println("RestConnector start()");
-		targets = this.getURLs();
+		//targets = this.getURLs();
+	}
+	
+	public HashMap<String,Targetable> getTargets() {
+		if (targets==null) targets = this.getURLs();
+		return targets;
+	}
+	
+	public RestConnector expose(String url) {
+		System.out.println("RestConnector: adding '" + url + "' - " + getTargets().get(url));
+		if (getTargets().get(url)==null)
+			System.exit(0);
+		exposed.put(url, getTargets().get(url));
+		return this;
 	}
 	
 	@Override
@@ -52,6 +67,8 @@ public class RestConnector implements Runnable {
 	        rest.setPort(7777);
 	        System.out.println(this + ": started server...");
 	        //System.exit(1);
+	        
+	        //rest.header.put("Content-Type", "text/html");
 
 	        while (true) {
 	          // Now wait for any HTTP request  
@@ -59,6 +76,7 @@ public class RestConnector implements Runnable {
 	          rest.getHttpRequest();
 	          //System.out.println(this + ": got request");
 	          //System.exit(1);
+	          rest.setContentType("text/html");
 	                     
 	          rest.write (this.processRequest(parseURL(rest.resource,0), rest.payload, rest.header).toString());
 	          rest.flush();
@@ -92,8 +110,14 @@ public class RestConnector implements Runnable {
 	}
 	
 	public Object processRequest(String url, String payload, Map<String, String> header) {
-		if (targets==null) targets = getURLs();
-		
+		//if (targets==null) targets = getURLs();
+
+		if ("/interface".equals(url)) {
+			header.put("Content-Type", "text/html");
+			
+			return getInterfacePage();
+		}
+						
 		if ("/multi".equals(url)) {
 			java.lang.reflect.Type listType = new TypeToken<List<RestMessage>>() {}.getType();
 			List<RestMessage> yourList = gson.fromJson(payload, listType);//mapping.get("servers"), listType);
@@ -112,7 +136,7 @@ public class RestConnector implements Runnable {
 		}
 		
 		if ("/urls".equals(url)) {
-			return gson.toJson(targets.keySet().toArray());
+			return gson.toJson(getTargets().keySet().toArray());
 		}
 		
 		//System.out.println("RestConnector: url is " + url + ", payload is " + payload + ", header is " + header);
@@ -128,7 +152,7 @@ public class RestConnector implements Runnable {
 			}
 		}
 		
-		Targetable t = targets.get(url);
+		Targetable t = getTargets().get(url);
 		if (t!=null) {
 			System.out.println("RestConnector: processRequest for " + url + ", " + payload + ", " + t);
 			try {
@@ -138,6 +162,29 @@ public class RestConnector implements Runnable {
 			}
 		}
 		return "url " + url + " not valid.";
+	}
+
+	private String getInterfacePage() {
+		String h = "<html>";
+		h += "<h1>" + pr.toString()  + "</h1>";
+	
+		//Iterator<Entry<String,Targetable>> tit = targets.entrySet().iterator();
+		Iterator<Entry<String,Targetable>> tit = exposed.entrySet().iterator();
+		while (tit.hasNext()) {
+			Entry<String,Targetable> e = tit.next();
+			//if (e.getKey() instanceof Sequence)
+			String uri = e.getKey();
+			Targetable target = e.getValue();
+			if (uri.startsWith("/seq/changeTo")) {
+				h += "<form action='" + uri + "' method='post'>";
+				h += "<input type='submit' value='" + uri + "' />";
+				h += "</form>";
+				h += "<hr>";
+			}
+		}
+		
+		h += "</html>";
+		return h;
 	}
 	
 }
