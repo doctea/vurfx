@@ -41,7 +41,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   
   boolean outputDebug = true;
   public void println(String text) {		// debugPrint, printDebug -- you get the idea
-	  if (outputDebug) System.out.println("F " + (text.contains((this.toString()))? text : this+": "+text));
+	  if (outputDebug) System.out.println("F " + (text.contains((this.toString())) ? text : /*this + " - " +*/ getPath() + ": "+text));
   }
   
   
@@ -339,7 +339,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   synchronized public Filter addParameter(String paramName, Object value, Object min, Object max) {
     if (this.parameters==null) this.setParameterDefaults();
     println(this + "#addParameter(" + paramName + ", " + value + ", " + min + ", " + max + "): " + this.getFilterLabel());
-    parameters.put(paramName, new Parameter(paramName, value, min, max));
+    parameters.put(paramName, new Parameter(this, paramName, value, min, max));
     updateParameterValue(paramName, value);
     return this;
   }
@@ -575,6 +575,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
           //cp5.addTextfield(tabName + this + me.getKey()).setValue("value from " + me.getKey() + " " + (String)value.toString()).moveTo(tabName).setLabel("error!")
       ;
 
+      param.setFilterPath(this.getPath());
+      println("Filter: adding control object for filter with path " + this.getPath());
 
 
       //o.linebreak();
@@ -584,8 +586,6 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       if (o!=null) {
         o.getValueLabel().align(ControlP5.LEFT, ControlP5.RIGHT).setPaddingY(0);      
         o.getCaptionLabel().align(ControlP5.RIGHT, ControlP5.RIGHT).setPaddingY(0);        
-        param.setFilterPath(this.getPath());
-        println("Filter: adding control object for filter with path " + this.getPath());
         this.setControllerMapping(param.getName(),o);
         
         if (!i.hasNext()) o.linebreak();
@@ -648,8 +648,12 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	Iterator<Parameter> pit = f.getParameters().iterator();
 	while (pit.hasNext()) {
 		Parameter p = pit.next();
-		println("added Parameter's url '" + p.getPath() + "/mute' mapped to " + p);
+		println("added Parameter's url '" + p.getPath() + "' mapped to " + p);
 		urls.put(p.getPath(), p);
+		if (p.getName()=="text") {
+			println("got text!");
+			//System.exit(0);
+		}
 	}
 	
 	urls.putAll(getCustomTargetURLs());
