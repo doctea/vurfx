@@ -15,6 +15,7 @@ import processing.core.PVector;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.ChainSequence;
+import vurfeclipse.sequence.ChangeParameterSequence;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
@@ -198,7 +199,7 @@ public class SocioSukiProject extends Project implements Serializable {
     
     
     
-    ((TextFlashScene)this.addSceneInputOutputCanvas(
+    /*((TextFlashScene)*/this.addSceneInputOutputCanvas(
   	      new TextFlashScene(this,w,h  /*, new String[] {
   	        //"Nozstock", "Nozstock: the Hidden Valley",
   	        "Vurf",
@@ -217,8 +218,10 @@ public class SocioSukiProject extends Project implements Serializable {
   	        ,
   	      "/out",
   	      "/out"
-  	    )
-  	).addSequencesForWords(new String[] { "test", "bob", "alice" } );    
+  	    );
+  	//).addSequencesForWords(new String[] { "test", "bob", "alice" } )
+  	/**/
+  	;    
     
     
 	Sequence doubleSequence = new ChainSequence(2000)
@@ -247,8 +250,8 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), 5);
     switcher.bindSequence("tunnel_1_blob_pulse_2", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), 5);
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_1", new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_2", new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), 25);
+    switcher.bindSequence("tunnel_1_blob_wobble_1",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), 5);
+    switcher.bindSequence("tunnel_1_blob_wobble_2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), 25);
     /*switcher.bindSequence(
         	"tunnel_2_pulse",     
         	*/
@@ -301,11 +304,34 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindAndPermute("e2:", "t",   getSceneForPath("/sc/TextFlash"), 5000);
     
     
+    ((TextFlashScene)getSceneForPath("/sc/TextFlash")).addSequencesForWords(new String[] {
+    		"BABAL",
+    		"Glowpeople",
+    		"Socio Suki",
+    		"what about the pig",
+    		"hold back!",
+    		"lied to me",
+    		"identity",
+    		"dapper little man",
+    		"lazy",
+    		"bad rabbit",
+    		"take trips",
+    		"magic dust",
+    		"merry xmas"
+    }, 0);
+    switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
+    
+    
+    /*switcher.addSequence("word_take_trips", 
+    		new ChangeParameterSequence(getSceneForPath("/sc/TextFlash"), "/sc/TextFlash/fl/TextDrawer", "text", "take trips", 0)
+    );*/
+    //switcher.bindSequence("word_take trips", getSceneForPath("/sc/TextFlash"), "word_take trips");
+    //rsConn.exposeMatches("text_word_take trips");
+
+    
     //LIST OF THINGS TO PERMUTE
     // fade, show_kaleido, show_feedback
     // 
-    
-    
 
     /*SimpleScene bs = new SimpleScene(this,w,h);
     BlobDrawer bd = (BlobDrawer) new BlobDrawer(bs);//.setOutputCanvas("/out");
@@ -336,5 +362,17 @@ public class SocioSukiProject extends Project implements Serializable {
     return true;
   }
   
+  public void setupExposed() {
+	    rsConn.expose("/seq/changeTo/" + "text_word_what about the pig");
+	    rsConn.expose("/seq/changeTo/" + "text_word_hold back!");
+	    rsConn.expose("/seq/changeTo/" + "text_word_lied to me");
+	    rsConn.expose("/seq/changeTo/" + "text_word_identity");
+	    rsConn.expose("/seq/changeTo/" + "text_word_dapper little man");
+	    rsConn.expose("/seq/changeTo/" + "text_word_lazy");
+	    rsConn.expose("/seq/changeTo/" + "text_word_bad rabbit");
+	    rsConn.expose("/seq/changeTo/" + "text_word_take trips");
+	    rsConn.expose("/seq/changeTo/" + "text_word_magic dust");
+	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");
+  }
   
 }

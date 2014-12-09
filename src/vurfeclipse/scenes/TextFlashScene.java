@@ -212,11 +212,11 @@ public class TextFlashScene extends Scene {
   	}
   	
   	
-  	public TextFlashScene addSequencesForWords(String[] words) {
+  	public TextFlashScene addSequencesForWords(String[] words, int length) {
   		for (int i = 0 ; i < words.length ; i++) {
-  			sequences.put("word_" + i + "_"+ words[i],
-  					this.makeChainSequenceFrom("on", 
-  							new ChangeParameterSequence(this, getPath()+"/fl/TextDrawer", "text", words[i], 5000)
+  			sequences.put("word_" /* + i + "_" */ + words[i],
+  					this.makeChainSequenceFrom("preset 1", 
+  							new ChangeParameterSequence(this, getPath()+"/fl/TextDrawer", "text", words[i], length)
   					));
   		}
   		return this;
