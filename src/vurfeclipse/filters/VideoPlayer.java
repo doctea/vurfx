@@ -224,7 +224,6 @@ public class VideoPlayer extends Filter {
         
         //out.image(stream,0,0,sc.w,sc.h);
         
-        
         /*out.loadPixels();
         out.pixels = webcamStream.pixels;
         out.updatePixels();*/

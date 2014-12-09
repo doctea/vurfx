@@ -198,7 +198,7 @@ public class SocioSukiProject extends Project implements Serializable {
     
     
     
-    this.addSceneInputOutputCanvas(
+    ((TextFlashScene)this.addSceneInputOutputCanvas(
   	      new TextFlashScene(this,w,h  /*, new String[] {
   	        //"Nozstock", "Nozstock: the Hidden Valley",
   	        "Vurf",
@@ -210,13 +210,15 @@ public class SocioSukiProject extends Project implements Serializable {
   	    	"Caveman-128.vlw", "Dinosaur-512.vlw", "DinosBeeline-512.vlw", "LostWorld-128.vlw", "DinosaurJrPlane-256.vlw", "DinosaurSkin-128.vlw"
   	      })  */    
   	        .setSceneName("TextFlash")
-  	        .registerCallbackPreset("beat","beat_1", "random")
+  	        //.getSequencesForWords
+  	        //.registerCallbackPreset("beat","beat_1", "random")
   	        .registerCallbackPreset("beat","beat_8", "rotate")
   	        .registerCallbackPreset("beat","beat_16","swivel")
   	        ,
   	      "/out",
   	      "/out"
-  	    );    
+  	    )
+  	).addSequencesForWords(new String[] { "test", "bob", "alice" } );    
     
     
 	Sequence doubleSequence = new ChainSequence(2000)
@@ -225,11 +227,11 @@ public class SocioSukiProject extends Project implements Serializable {
 	;
     switcher.bindSequence("d1:", doubleSequence, 10);
 
-    Sequence cSequence = new ChainSequence(0)
+    /*Sequence cSequence = new ChainSequence(0)
     	.addSequence(getSceneForPath("/sc/TextFlash"), 	   "preset 1")
     	.addSequence(getSceneForPath("/sc/OutputShader"),  "preset 1")    	
     	.addSequence(getSceneForPath("/sc/OutputShader2"), "preset 1")
-    ;
+    ;*/
     
     
     //switcher.bindSequence("outputModeChange1", cSequence, 4);
@@ -295,6 +297,9 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader"), 5000);
     switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader2"), 5000);
     
+    switcher.bindAndPermute("e1:", "d1:", getSceneForPath("/sc/TextFlash"), 5000);
+    switcher.bindAndPermute("e2:", "t",   getSceneForPath("/sc/TextFlash"), 5000);
+    
     
     //LIST OF THINGS TO PERMUTE
     // fade, show_kaleido, show_feedback
@@ -313,13 +318,13 @@ public class SocioSukiProject extends Project implements Serializable {
  
 
     
-    this.addSceneOutputCanvas(
+    /*this.addSceneOutputCanvas(
     	      new VideoScene(this,w,h,"").setCanvas("src","/out").setCanvas("out", "/out"), //,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
       		//new WebcamScene(this, 640, 480, w, h).setCanvas("src","/out").setCanvas("out", "/pix1"),
     	      //buffers[BUF_INP0]
     	      "/pix0"
       );       
-    
+    */
     
     this.addSceneOutputCanvas(
       new DebugScene(this,w,h),

@@ -12,7 +12,9 @@ import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.TextDrawer;
 import vurfeclipse.projects.Project;
+import vurfeclipse.sequence.ChangeParameterSequence;
 import vurfeclipse.sequence.Sequence;
+import vurfeclipse.sequence.ShowSceneSequence;
 import vurfeclipse.streams.ParameterCallback;
 
 public class TextFlashScene extends Scene {
@@ -204,20 +206,31 @@ public class TextFlashScene extends Scene {
   
   
   
-  public void setupSequences() {
+  	public void setupSequences() {
 		sequences.put("preset 1", new TextFlashSequence1(this, 0));
-  }
-	
+		sequences.put("on", 	  new ShowSceneSequence(this,1000));
+  	}
+  	
+  	
+  	public TextFlashScene addSequencesForWords(String[] words) {
+  		for (int i = 0 ; i < words.length ; i++) {
+  			sequences.put("word_" + i + "_"+ words[i],
+  					this.makeChainSequenceFrom("on", 
+  							new ChangeParameterSequence(this, getPath()+"/fl/TextDrawer", "text", words[i], 5000)
+  					));
+  		}
+  		return this;
+  	}
 
 	class TextFlashSequence1 extends Sequence {
 		public TextFlashSequence1(TextFlashScene fx, int i) {
 			// TODO Auto-generated constructor stub
 			super(fx,i);
 		}
-		@Override
+		/*@Override
 		public ArrayList<Mutable> getMutables() {
 			return new ArrayList<Mutable>();
-		}
+		}*/
 		@Override
 		public void setValuesForNorm(double norm, int iteration) {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
@@ -225,8 +238,9 @@ public class TextFlashScene extends Scene {
 			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 		}
 		@Override public void onStart() {
-	   		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
-    		((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
+	   		if (APP.getApp().random(0f,1.0f)>=0.5f) 
+	   			((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
+    		//((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
 		}
 		@Override public void onStop() {	}
 	}		  
