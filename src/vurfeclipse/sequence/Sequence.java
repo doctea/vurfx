@@ -14,7 +14,7 @@ abstract public class Sequence implements Mutable {
 	//Scene sc;
 	
 	int startTimeMillis;
-	int lengthMillis = 2000;
+	private int lengthMillis = 2000;
 	
 	int iteration;
 	
@@ -188,6 +188,10 @@ abstract public class Sequence implements Mutable {
 		  
 		  return APP.getApp().color(r,g,b);
 	  }
+
+	public int getLengthMillis() {
+		return lengthMillis;
+	}
 
 	
 	

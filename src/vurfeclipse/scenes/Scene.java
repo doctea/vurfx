@@ -11,7 +11,7 @@ import vurfeclipse.parameters.Parameter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.streams.*;
 import vurfeclipse.scenes.*;
-import vurfeclipse.sequence.Sequence;
+import vurfeclipse.sequence.*;
 import codeanticode.glgraphics.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
@@ -66,6 +66,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   }
   public Sequence getSequence(String name) {
 	  return getSequences().get(name); 
+  }
+  public Sequence makeChainSequenceFrom(String name,Sequence newSeq) {
+	  Sequence seq = getSequence(name);
+	  return new ChainSequence (seq.getLengthMillis()).addSequence(seq).addSequence(newSeq);			  
   }
   
   

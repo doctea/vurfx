@@ -201,22 +201,22 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	synchronized public void bindAndPermute(String string2, String string, Scene sceneForPath, int length) {
+	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, Scene sceneForPath, int length) {
 		
 		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
 		
 		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
 		while(it.hasNext()) {
 			Entry<String,Sequence> ent = it.next();
-			if (ent.getKey().startsWith(string)) { //matches
+			if (ent.getKey().startsWith(matchPrefix)) { //matches
 				Iterator<Entry<String, Sequence>> sit = sceneForPath.getSequences().entrySet().iterator();
 				while (sit.hasNext()) {
 					Entry<String, Sequence> s = sit.next();
 					toAdd.put(
-							string2 + "_" + ent.getKey() + "_" + s.getKey() + "_PERMUTED", 
+							newPrefix + "_" + s.getKey() + "_" + ent.getKey()  + "_PERMUTED", 
 							new ChainSequence(length).addSequence(s.getValue()).addSequence(ent.getValue())
 					);
-					println(string2 + "_" + ent.getKey() + "_" + s.getKey() + "_PERMUTED");
+					println(newPrefix + "_" + s.getKey() + "_" + ent.getKey() + "_PERMUTED");
 				}
 			}
 		}
