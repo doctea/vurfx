@@ -19,6 +19,7 @@ import vurfeclipse.sequence.ChangeParameterSequence;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
+import vurfeclipse.sequence.ShowSceneSequence;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;
@@ -71,6 +72,31 @@ public class SocioSukiProject extends Project implements Serializable {
     
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory("ds2014").setCurrentIndex(5).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer1"));
     ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer2"));
+    
+    ((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
+    
+    
+    ils1.addSequence("next", new ShowSceneSequence(ils1, 0) {
+		@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+		@Override public void onStop() { super.onStop(); }
+		
+		@Override
+		public void onStart() {
+			super.onStart();
+			ils1.nextFilterMode();
+		}
+	});
+    ils2.addSequence("next", new ShowSceneSequence(ils1, 0) {
+		@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+		@Override public void onStop() { super.onStop(); }
+		
+		@Override
+		public void onStart() {
+			super.onStart();
+			ils2.nextFilterMode();
+		}
+	});    
+    
     
     //ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect"));
     ils1.setCanvas("pix1","/pix1");
@@ -223,7 +249,7 @@ public class SocioSukiProject extends Project implements Serializable {
   	/**/
   	;    
     
-    
+  	
 	Sequence doubleSequence = new ChainSequence(2000)
 		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")    	
 		.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
@@ -319,7 +345,13 @@ public class SocioSukiProject extends Project implements Serializable {
     		"magic dust",
     		"merry xmas"
     }, 0);
+    switcher.setBindToRandom(false);
     switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
+    switcher.setBindToRandom(true);
+
+    switcher.bindSequence("ils1_next", ils1.getSequence("next"), 2+switcher.getSequenceCount()/128);
+    switcher.bindSequence("ils2_next", ils2.getSequence("next"), 2+switcher.getSequenceCount()/128);
+  	    
     
     
     /*switcher.addSequence("word_take_trips", 
