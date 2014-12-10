@@ -27,6 +27,7 @@ public class VurfEclipse extends PApplet {
 	
 	boolean hdRes = false;
 	boolean mdRes = false;
+	boolean projRes = true;
 	boolean ultrahiRes = false;
 	boolean hiRes = true;
 	boolean medRes = true;
@@ -150,13 +151,13 @@ public class VurfEclipse extends PApplet {
 	
 	//config settings
 	int 
-		desired_width =  hdRes ? 1920 : mdRes ? 1600 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640, 
-		desired_height = hdRes ? 1080 : mdRes ? 900 :  ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480;
+		output_width =  hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640, 
+		output_height = hdRes ? 1080 : mdRes ? 900 :  projRes ? 800 : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480;
 	
 	//int output_width = hiRes ? 1280 : 800, output_height = hiRes? 1024 : 600;
 	//int output_width = 1280, output_height = 1024;
-	int output_width = desired_width;
-	int output_height = desired_height;
+	int desired_width = output_width; //(int)(output_width*1.5f);
+	int desired_height = output_height; //(int)(output_height*1.5f);
 	
 	
 	String gfx_mode = GLConstants.GLGRAPHICS;
