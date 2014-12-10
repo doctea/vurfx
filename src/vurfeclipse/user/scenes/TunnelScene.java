@@ -116,7 +116,7 @@ public class TunnelScene extends SimpleScene {
 				new BlendDrawer(this).setFilterName("Blend_4").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
 					.changeParameterValue("Scale", new Float(0.75f))
 					.changeParameterValue("Opacity", new Float(0.3f))
-					.changeParameterValue("BlendMode", new Integer(4))
+					.changeParameterValue("BlendMode", new Integer(3))
 		);
 		this.addFilter(
 				new BlendDrawer(this).setFilterName("Blend_3").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
@@ -133,7 +133,7 @@ public class TunnelScene extends SimpleScene {
 				new BlendDrawer(this).setFilterName("Blend_1").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
 					.changeParameterValue("Scale", new Float(0.1f))
 					.changeParameterValue("Opacity", new Float(0.6f))
-					.changeParameterValue("BlendMode", new Integer(8))
+					.changeParameterValue("BlendMode", new Integer(3))
 		);				
 
 		this.addFilter(
