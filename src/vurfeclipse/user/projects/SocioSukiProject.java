@@ -331,6 +331,8 @@ public class SocioSukiProject extends Project implements Serializable {
     
     
     ((TextFlashScene)getSceneForPath("/sc/TextFlash")).addSequencesForWords(new String[] {
+    		":)",
+    		":D",
     		"BABAL",
     		"Glowpeople",
     		"Socio Suki",
@@ -349,8 +351,8 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
     switcher.setBindToRandom(true);
 
-    switcher.bindSequence("ils1_next", ils1.getSequence("next"), 2+switcher.getSequenceCount()/128);
-    switcher.bindSequence("ils2_next", ils2.getSequence("next"), 2+switcher.getSequenceCount()/128);
+    switcher.bindSequence("ils1_next", ils1.getSequence("next"), 2+switcher.getSequenceCount()/32);
+    switcher.bindSequence("ils2_next", ils2.getSequence("next"), 2+switcher.getSequenceCount()/32);
   	    
     
     
@@ -395,6 +397,11 @@ public class SocioSukiProject extends Project implements Serializable {
   }
   
   public void setupExposed() {
+	  	rsConn.expose("/seq/changeTo/" + "text_word_:)");
+	  	rsConn.expose("/seq/changeTo/" + "text_word_:D");	  
+	  	rsConn.expose("/seq/changeTo/" + "text_word_BABAL");
+	  	rsConn.expose("/seq/changeTo/" + "text_word_Glowpeople");
+	  	rsConn.expose("/seq/changeTo/" + "text_word_Socio Suki");
 	    rsConn.expose("/seq/changeTo/" + "text_word_what about the pig");
 	    rsConn.expose("/seq/changeTo/" + "text_word_hold back!");
 	    rsConn.expose("/seq/changeTo/" + "text_word_lied to me");

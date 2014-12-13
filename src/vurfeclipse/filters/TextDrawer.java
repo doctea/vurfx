@@ -45,7 +45,7 @@ public class TextDrawer extends Filter {
   @Override
   public void setParameterDefaults() {
     super.setParameterDefaults();
-    addParameter("text", "hello");    
+    addParameter("text", ":)");    
     addParameter("colour", 255, 0, 255);
     addParameter("rotation", 0, 0, 360);
     addParameter("zrotation", 0, 0, 360);
