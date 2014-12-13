@@ -78,13 +78,17 @@ public class RestConnector implements Runnable {
 	          //System.exit(1);
 	          rest.setContentType("text/html");
 	                     
-	          rest.write (this.processRequest(parseURL(rest.resource,0), rest.payload, rest.header).toString());
-	          rest.flush();
+	          try {
+	        	  rest.write (this.processRequest(parseURL(rest.resource,0), rest.payload, rest.header).toString());
+	        	  rest.flush();
+	          } catch (Exception e) {
+	        	  System.out.println("RestConnector caught " + e);
+	          }
 	        }
 	      }
-	      catch (IOException ex) {
+	      catch (Exception ex) {
 	        System.out.println(this + ": " + ex.getMessage());
-	        System.exit(1);
+	        //System.exit(1);
 	      }
 	}
 	
