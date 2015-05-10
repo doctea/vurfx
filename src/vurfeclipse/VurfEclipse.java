@@ -1,6 +1,7 @@
 package vurfeclipse;
 
 
+
 import processing.core.*;
 import controlP5.*;
 
@@ -17,6 +18,8 @@ import java.util.*;
 import processing.opengl.*;
 import javax.media.opengl.GL;
 
+import fullscreen.*;
+
 public class VurfEclipse extends PApplet {
 	/*public void setup() {
 	}
@@ -27,12 +30,15 @@ public class VurfEclipse extends PApplet {
 	
 	boolean hdRes = false;
 	boolean mdRes = false;
+	boolean projRes = false;
 	boolean ultrahiRes = false;
-	boolean hiRes = true;
+	boolean hiRes = false;
 	boolean medRes = true;
 	
-	public boolean exportMode = false; //true;
-	
+	public boolean exportMode = false; //true; 
+
+	FullScreen fs;
+	boolean fullscreen = false;
 	
 	///// SYPHON STUFF (choose one - disabled stuff or enabled stuff)
 
@@ -130,6 +136,12 @@ public class VurfEclipse extends PApplet {
 		getCW();    
 	}
 	
+		
+	//@Override
+	boolean resizeRenderer () {
+		return false;
+	}
+	
 	//boolean enablecp5 = false;
 	public static boolean enablecp5 = true;//false;//true; //true;
 	
@@ -144,13 +156,13 @@ public class VurfEclipse extends PApplet {
 	
 	//config settings
 	int 
-		desired_width =  hdRes ? 1920 : mdRes ? 1600 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640, 
-		desired_height = hdRes ? 1080 : mdRes ? 900 :  ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480;
+		output_width =  hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640, 
+		output_height = hdRes ? 1080 : mdRes ? 900 :  projRes ? 800 : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480;
 	
 	//int output_width = hiRes ? 1280 : 800, output_height = hiRes? 1024 : 600;
 	//int output_width = 1280, output_height = 1024;
-	int output_width = desired_width;
-	int output_height = desired_height;
+	int desired_width = output_width; //(int)(output_width*1.5f);
+	int desired_height = output_height; //(int)(output_height*1.5f);
 	
 	
 	String gfx_mode = GLConstants.GLGRAPHICS;
@@ -220,6 +232,10 @@ public class VurfEclipse extends PApplet {
 		 
 		 frameRate(global_fps);
 		
+		 if (fullscreen) {
+			 fs = new FullScreen(this); 
+			 fs.enter();
+		 }
 		
 		 ImageRepository.IR = new ImageRepository();
 		
@@ -288,7 +304,7 @@ public class VurfEclipse extends PApplet {
 		 System.out.println("Instantiating Project at " + desired_width + "x" + desired_height);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 
-		 pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
+		 pr = new SocioSukiVideoProject(desired_width, desired_height, gfx_mode);
 		 
 		 System.out.println("Initialising " + pr);
 		 pr.initialise();

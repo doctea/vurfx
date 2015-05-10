@@ -15,9 +15,11 @@ import processing.core.PVector;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.ChainSequence;
+import vurfeclipse.sequence.ChangeParameterSequence;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
+import vurfeclipse.sequence.ShowSceneSequence;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;
@@ -70,6 +72,31 @@ public class SocioSukiProject extends Project implements Serializable {
     
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory("ds2014").setCurrentIndex(5).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer1"));
     ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer2"));
+    
+    ((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
+    
+    
+    ils1.addSequence("next", new ShowSceneSequence(ils1, 0) {
+		@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+		@Override public void onStop() { super.onStop(); }
+		
+		@Override
+		public void onStart() {
+			super.onStart();
+			ils1.nextFilterMode();
+		}
+	});
+    ils2.addSequence("next", new ShowSceneSequence(ils1, 0) {
+		@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+		@Override public void onStop() { super.onStop(); }
+		
+		@Override
+		public void onStart() {
+			super.onStart();
+			ils2.nextFilterMode();
+		}
+	});    
+    
     
     //ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect"));
     ils1.setCanvas("pix1","/pix1");
@@ -198,7 +225,7 @@ public class SocioSukiProject extends Project implements Serializable {
     
     
     
-    this.addSceneInputOutputCanvas(
+    /*((TextFlashScene)*/this.addSceneInputOutputCanvas(
   	      new TextFlashScene(this,w,h  /*, new String[] {
   	        //"Nozstock", "Nozstock: the Hidden Valley",
   	        "Vurf",
@@ -210,26 +237,30 @@ public class SocioSukiProject extends Project implements Serializable {
   	    	"Caveman-128.vlw", "Dinosaur-512.vlw", "DinosBeeline-512.vlw", "LostWorld-128.vlw", "DinosaurJrPlane-256.vlw", "DinosaurSkin-128.vlw"
   	      })  */    
   	        .setSceneName("TextFlash")
-  	        .registerCallbackPreset("beat","beat_1", "random")
+  	        //.getSequencesForWords
+  	        //.registerCallbackPreset("beat","beat_1", "random")
   	        .registerCallbackPreset("beat","beat_8", "rotate")
   	        .registerCallbackPreset("beat","beat_16","swivel")
   	        ,
   	      "/out",
   	      "/out"
-  	    );    
+  	    );
+  	//).addSequencesForWords(new String[] { "test", "bob", "alice" } )
+  	/**/
+  	;    
     
-    
+  	
 	Sequence doubleSequence = new ChainSequence(2000)
 		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")    	
 		.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
 	;
     switcher.bindSequence("d1:", doubleSequence, 10);
 
-    Sequence cSequence = new ChainSequence(0)
+    /*Sequence cSequence = new ChainSequence(0)
     	.addSequence(getSceneForPath("/sc/TextFlash"), 	   "preset 1")
     	.addSequence(getSceneForPath("/sc/OutputShader"),  "preset 1")    	
     	.addSequence(getSceneForPath("/sc/OutputShader2"), "preset 1")
-    ;
+    ;*/
     
     
     //switcher.bindSequence("outputModeChange1", cSequence, 4);
@@ -245,8 +276,8 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), 5);
     switcher.bindSequence("tunnel_1_blob_pulse_2", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), 5);
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_1", new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_2", new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), 25);
+    switcher.bindSequence("tunnel_1_blob_wobble_1",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), 5);
+    switcher.bindSequence("tunnel_1_blob_wobble_2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), 25);
     /*switcher.bindSequence(
         	"tunnel_2_pulse",     
         	*/
@@ -295,12 +326,46 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader"), 5000);
     switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader2"), 5000);
     
+    switcher.bindAndPermute("e1:", "d1:", getSceneForPath("/sc/TextFlash"), 5000);
+    switcher.bindAndPermute("e2:", "t",   getSceneForPath("/sc/TextFlash"), 5000);
+    
+    
+    ((TextFlashScene)getSceneForPath("/sc/TextFlash")).addSequencesForWords(new String[] {
+    		":)",
+    		":D",
+    		"BABAL",
+    		"Glowpeople",
+    		"Socio Suki",
+    		"what about the pig",
+    		"hold back!",
+    		"lied to me",
+    		"identity",
+    		"dapper little man",
+    		"lazy",
+    		"bad rabbit",
+    		"take trips",
+    		"magic dust",
+    		"merry xmas"
+    }, 0);
+    switcher.setBindToRandom(false);
+    switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
+    switcher.setBindToRandom(true);
+
+    switcher.bindSequence("ils1_next", ils1.getSequence("next"), 2+switcher.getSequenceCount()/32);
+    switcher.bindSequence("ils2_next", ils2.getSequence("next"), 2+switcher.getSequenceCount()/32);
+  	    
+    
+    
+    /*switcher.addSequence("word_take_trips", 
+    		new ChangeParameterSequence(getSceneForPath("/sc/TextFlash"), "/sc/TextFlash/fl/TextDrawer", "text", "take trips", 0)
+    );*/
+    //switcher.bindSequence("word_take trips", getSceneForPath("/sc/TextFlash"), "word_take trips");
+    //rsConn.exposeMatches("text_word_take trips");
+
     
     //LIST OF THINGS TO PERMUTE
     // fade, show_kaleido, show_feedback
     // 
-    
-    
 
     /*SimpleScene bs = new SimpleScene(this,w,h);
     BlobDrawer bd = (BlobDrawer) new BlobDrawer(bs);//.setOutputCanvas("/out");
@@ -317,8 +382,8 @@ public class SocioSukiProject extends Project implements Serializable {
     	      new VideoScene(this,w,h,"").setCanvas("src","/out").setCanvas("out", "/out"), //,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
       		//new WebcamScene(this, 640, 480, w, h).setCanvas("src","/out").setCanvas("out", "/pix1"),
     	      //buffers[BUF_INP0]
-    	      "/pix0"
-      );       */
+    	      "/out"//"/pix0"
+      );*/       
     
     
     this.addSceneOutputCanvas(
@@ -331,5 +396,22 @@ public class SocioSukiProject extends Project implements Serializable {
     return true;
   }
   
+  public void setupExposed() {
+	  	rsConn.expose("/seq/changeTo/" + "text_word_:)");
+	  	rsConn.expose("/seq/changeTo/" + "text_word_:D");	  
+	  	rsConn.expose("/seq/changeTo/" + "text_word_BABAL");
+	  	rsConn.expose("/seq/changeTo/" + "text_word_Glowpeople");
+	  	rsConn.expose("/seq/changeTo/" + "text_word_Socio Suki");
+	    rsConn.expose("/seq/changeTo/" + "text_word_what about the pig");
+	    rsConn.expose("/seq/changeTo/" + "text_word_hold back!");
+	    rsConn.expose("/seq/changeTo/" + "text_word_lied to me");
+	    rsConn.expose("/seq/changeTo/" + "text_word_identity");
+	    rsConn.expose("/seq/changeTo/" + "text_word_dapper little man");
+	    rsConn.expose("/seq/changeTo/" + "text_word_lazy");
+	    rsConn.expose("/seq/changeTo/" + "text_word_bad rabbit");
+	    rsConn.expose("/seq/changeTo/" + "text_word_take trips");
+	    rsConn.expose("/seq/changeTo/" + "text_word_magic dust");
+	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");
+  }
   
 }

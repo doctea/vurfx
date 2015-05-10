@@ -5,6 +5,7 @@ import java.io.Serializable;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
+import vurfeclipse.filters.Filter;
 
 
 public class Parameter implements Serializable, Targetable {
@@ -16,6 +17,7 @@ public class Parameter implements Serializable, Targetable {
   //String controllerName;
   
   String filterPath;
+  Filter filter;
   //transient Scene sc;
 
   Class<? extends Object> datatype;
@@ -25,14 +27,15 @@ public class Parameter implements Serializable, Targetable {
   Parameter () {
     //this.controller = cp5.getController(this.controllerName);
   }
-  Parameter (String name, Object value) {
+  Parameter (Filter filter, String name, Object value) {
+	this.filter = filter;
     this.name = name;
     this.value = value;
     this.defaultValue = value;
     this.datatype = value.getClass();
   }
-  public Parameter (String name, Object value, Object min, Object max) {
-    this(name, value);
+  public Parameter (Filter filter, String name, Object value, Object min, Object max) {
+    this(filter, name, value);
     this.min = min;
     this.max = max;
   }
@@ -43,6 +46,10 @@ public class Parameter implements Serializable, Targetable {
   }
   
   public void setFilterPath(String filterPath) {
+	  if (filterPath==null) {
+		  System.out.println("no filterpath set!");
+		  System.exit(0);
+	  }
     this.filterPath = filterPath;
   }
   public String getFilterPath() {
@@ -74,6 +81,8 @@ public class Parameter implements Serializable, Targetable {
 	  setValue(
 			  this.cast(payload)
 	  );
+	  
+	  filter.updateParameterValue(name, this.cast(payload));
 	  
 	  return this.value.toString();
   }
