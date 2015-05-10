@@ -55,8 +55,10 @@ public class BlobDrawer extends SpiralDrawer {
         b.setEdge((Boolean)value); 
     else if(paramName.equals("tint"))
         b.setTint((Integer)value); 
-    else if(paramName.equals("shape"))    // there goes my hero <3
+    else if(paramName.equals("shape")) {   // there goes my hero <3
+    	if (src!=null) b.setInput(src.getTexture());
         b.setShape((Integer)value);
+    }
     else if(paramName.equals("colour"))
         b.setColour((Integer)value);
     else
