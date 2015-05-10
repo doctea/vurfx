@@ -122,12 +122,12 @@ public class SocioSukiVideo2Project extends Project implements Serializable {
     //ils2.addFilter(new ImageListDrawer(ils2).setFileList("files_wp.lst").setNumBlobs(200).setFilterName("ImageListDrawer")); 
     //ils2.addFilter(new MirrorFilter(ils2).setFilterName("mirror").setInputCanvas(ils2.getCanvasMapping("out")).setOutputCanvas(ils2.getCanvasMapping("out")));
 
-    VideoPlayer vp = new VideoPlayer(ils1,"");
+    VideoPlayer vp = new VideoPlayer(ils1, "");
     vp.loadDirectory("video-sources/");
     ils1.addFilter(vp);
     
-    VideoPlayer vp2 = new VideoPlayer(ils2,"");
-    vp.loadDirectory("video-sources/");
+    VideoPlayer vp2 = new VideoPlayer(ils2, "");
+    vp2.loadDirectory("video-sources/");
     ils2.addFilter(vp2);
 
     
@@ -439,47 +439,6 @@ public class SocioSukiVideo2Project extends Project implements Serializable {
       }
     );
     
-    getStream("beatMaster").registerEventListener("beat_4",
-      new ParameterCallback() {
-        public void call (Object value) {
-          int v = (Integer)value;
-/*          if ((int)APP.random(0,10)<8) {
-            getSceneForPath("/OutputShader").setMuted(true);
-            //((Filter)getObjectForPath("/OutputShader/Edges")).setMute(true);
-          } else {
-            //((Filter)getObjectForPath("/OutputShader/Edges")).setMute(false);
-            getSceneForPath("/OutputShader").setMuted(false);
-          }
-          if ((int)APP.random(0,10)<8) {
-            ((Filter)getObjectForPath("/OutputShader/Kaleido")).setMute(true);
-          } else {
-            ((Filter)getObjectForPath("/OutputShader/Kaleido")).setMute(false);
-          }*/
-          
-          ((Filter)getObjectForPath("/OutputShader/PlainDrawer")).setParameterValue("Opacity", (float)v%255); //(float)APP.random(255));
-          
-          if(v%2==0) {
-            //getSceneForPath("/SpiralScene2").toggleMute();
-            
-            //((Filter)getObjectForPath("/SpiralScene2/BlendDrawer")).nextMode();
-            ((Filter)getObjectForPath("/SpiralScene2/SpiralDrawer")).nextMode();
-          }
-          if((v/10)%3==0) {
-            ((Filter)getObjectForPath("/EyeScene/BlobDrawer")).setParameterValue("rotation", (float)v);
-          } else if((v/10)%3==1) {
-            ((Filter)getObjectForPath("/EyeScene/BlobDrawer")).setParameterValue("rotation", (float)-v);            
-          }
-          ((Filter)getObjectForPath("/EyeScene/BlobDrawer")).setParameterValueFromSin("colour", PApplet.sin(PApplet.radians(v))); //*((2^24)<<8));
-            
-          //System.out.println("setting rotation " + v%360);
-          //((TextDrawer)getObjectForPath("/TextFlash/TextDrawer")).setParameterValue("rotation", -v);
-          
-          ((Filter)getObjectForPath("/BlobScene/BlendDrawer")).setParameterValueFromSin("Opacity", PApplet.sin(PApplet.radians(v/10)));
-          
-        }      
-      }
-    );  
-
     
     this.addSceneInputOutputCanvas(
       new SpiralScene(this,w,h,"/out").setSceneName("SpiralScene2") //buffers[BUF_INP0])

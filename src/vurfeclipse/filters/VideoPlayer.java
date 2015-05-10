@@ -74,6 +74,7 @@ public class VideoPlayer extends Filter {
   public synchronized void changeVideo(String fn) {
     if (changing) return;
     final String filename = fn;
+    if (filename=="") return;
     this.filename = filename;
     changing = true;
     final VideoPlayer self = this;
