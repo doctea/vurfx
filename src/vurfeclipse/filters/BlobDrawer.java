@@ -56,6 +56,7 @@ public class BlobDrawer extends SpiralDrawer {
     else if(paramName.equals("tint"))
         b.setTint((Integer)value); 
     else if(paramName.equals("shape")) {   // there goes my hero <3
+    	if (src==null) src = sc.getCanvas("pix1").getSurf();
     	if (src!=null) b.setInput(src.getTexture());
         b.setShape((Integer)value);
     }
@@ -87,6 +88,7 @@ public class BlobDrawer extends SpiralDrawer {
 		/*	colourSwitchEvery = (int) ((VurfEclipse)APP.getApp()).frameRate;
 			colourSwitchCount = 0;
 	}*/
+	  
 	b.setShape((Integer)getParameterValue("shape"));
     //b.setTint(255);
     b.setInput(src.getTexture());

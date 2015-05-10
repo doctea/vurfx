@@ -23,8 +23,8 @@ public class BlobFX1 extends SimpleScene {
 		//SimpleScene this = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out");
 		super.setupFilters();
 		//Scene this = this;
-	    this.addFilter(new BlobDrawer(this)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer").setCanvases(this.getCanvasMapping("temp2"),this.getCanvasMapping("inp0")));
-	    this.addFilter(new BlobDrawer(this)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer2").changeParameterValue("shape", 2).setCanvases(this.getCanvasMapping("temp3"),this.getCanvasMapping("temp2")));
+	    this.addFilter(new BlobDrawer(this)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer").setCanvases(this.getCanvasMapping("temp2"),this.getCanvasMapping("pix0")));
+	    this.addFilter(new BlobDrawer(this)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer2").changeParameterValue("shape", 2).setCanvases(this.getCanvasMapping("temp3"),this.getCanvasMapping("pix1")));
 	    this.addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp2")));
 	    this.addFilter(new BlendDrawer(this).setFilterName("BlendDrawer2").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp3")));
 	    //this.setMuted(true);
@@ -36,6 +36,7 @@ public class BlobFX1 extends SimpleScene {
 
 	public void setupSequences() {
 		//HashMap<String,Sequence> a = super.getSequences();//new HashMap<String,Sequence> ();
+		sequences.put("texture", new TextureSequence((BlobFX1)this, 2000));
 		sequences.put("preset 1", new SpinnerSequence1((BlobFX1)this, 2000));
 		sequences.put("preset 2", new SpinnerSequence2((Scene)this, 1000));
 		sequences.put("preset 3", new SpinnerSequence3((Scene)this, 1000));
@@ -43,6 +44,34 @@ public class BlobFX1 extends SimpleScene {
 	}
 	
 }
+
+
+
+class TextureSequence extends Sequence {
+	int colour1, colour2, colour3, colour4;    	
+	public TextureSequence(BlobFX1 host, int i) {
+		super((Scene)host,i);
+	}
+	/*@Override public ArrayList<Mutable> getMutables() {
+		ArrayList<Mutable> muts = new ArrayList<Mutable>();
+		muts.add(host);//host.getFilter("BlendDrawer1"));
+		return muts;
+	}*/
+	@Override public void onStart () { 
+		host.getFilter("BlobDrawer").setInputCanvas(host.getCanvasMapping("pix0"));
+		host.getFilter("BlobDrawer").changeParameterValue("shape", Blob.SH_TEXTURE);
+		host.getFilter("BlobDrawer2").setInputCanvas(host.getCanvasMapping("pix1"));
+		host.getFilter("BlobDrawer2").changeParameterValue("shape", Blob.SH_TEXTURE);
+	}
+	@Override public void onStop() {	}
+	@Override
+	public void setValuesForNorm(double pc, int iteration) {
+		// TODO Auto-generated method stub
+		
+	}	
+}
+
+
 
 abstract class SpinnerSequence extends Sequence {
 	int colour1, colour2, colour3, colour4;    	
