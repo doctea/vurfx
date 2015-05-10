@@ -1,6 +1,7 @@
 package vurfeclipse;
 
 
+
 import processing.core.*;
 import controlP5.*;
 
@@ -17,6 +18,8 @@ import java.util.*;
 import processing.opengl.*;
 import javax.media.opengl.GL;
 
+import fullscreen.*;
+
 public class VurfEclipse extends PApplet {
 	/*public void setup() {
 	}
@@ -27,13 +30,15 @@ public class VurfEclipse extends PApplet {
 	
 	boolean hdRes = false;
 	boolean mdRes = false;
-	boolean projRes = true;
+	boolean projRes = false;
 	boolean ultrahiRes = false;
 	boolean hiRes = true;
 	boolean medRes = true;
 	
-	public boolean exportMode = false; //true;
-	
+	public boolean exportMode = false; //true; 
+
+	FullScreen fs;
+	boolean fullscreen = false;
 	
 	///// SYPHON STUFF (choose one - disabled stuff or enabled stuff)
 
@@ -227,6 +232,10 @@ public class VurfEclipse extends PApplet {
 		 
 		 frameRate(global_fps);
 		
+		 if (fullscreen) {
+			 fs = new FullScreen(this); 
+			 fs.enter();
+		 }
 		
 		 ImageRepository.IR = new ImageRepository();
 		
@@ -295,7 +304,7 @@ public class VurfEclipse extends PApplet {
 		 System.out.println("Instantiating Project at " + desired_width + "x" + desired_height);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 
-		 pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
+		 pr = new SocioSukiVideo2Project(desired_width, desired_height, gfx_mode);
 		 
 		 System.out.println("Initialising " + pr);
 		 pr.initialise();

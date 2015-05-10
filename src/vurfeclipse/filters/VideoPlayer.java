@@ -53,7 +53,8 @@ public class VideoPlayer extends Filter {
   
   public VideoPlayer(Scene sc, String filename) {
     super(sc);
-    this.filename = filename;
+    //this.filename = filename;
+    videos.add(filename);
   }
   
   public void setMuted(boolean on) {
@@ -122,9 +123,11 @@ public class VideoPlayer extends Filter {
     }.start();
   }
   
-  
   public void loadDirectory() {
-	  String directory = ""; // dummy
+	  loadDirectory("");
+  }
+  public void loadDirectory(String directory) {
+	  //String directory = ""; // dummy
 	  String path = APP.getApp().sketchPath("bin/data/" + directory);	// ffs need this on Windows..
 	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
 	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
