@@ -98,6 +98,10 @@ public class ImageListDrawer extends Filter {
   }
   
   public void loadDirectory() {
+	  loadDirectory(this.directory);
+  }
+  
+  public void loadDirectory(String directory) {
 	  String path = APP.getApp().sketchPath("bin/data/image-sources/" + directory);	// ffs need this on Windows..
 	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
 	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;

@@ -9,6 +9,7 @@ import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
 import codeanticode.glgraphics.GLTexture;
 import codeanticode.gsvideo.GSMovie;
+import codeanticode.gsvideo.*;
 
 public class VideoPlayer extends Filter {
   transient GSMovie stream;
@@ -52,7 +53,8 @@ public class VideoPlayer extends Filter {
   
   public VideoPlayer(Scene sc, String filename) {
     super(sc);
-    this.filename = filename;
+    //this.filename = filename;
+    if (filename!="") videos.add(filename);
   }
   
   public void setMuted(boolean on) {
@@ -121,9 +123,11 @@ public class VideoPlayer extends Filter {
     }.start();
   }
   
-  
   public void loadDirectory() {
-	  String directory = ""; // dummy
+	  loadDirectory("");
+  }
+  public void loadDirectory(String directory) {
+	  //String directory = ""; // dummy
 	  String path = APP.getApp().sketchPath("bin/data/" + directory);	// ffs need this on Windows..
 	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
 	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
@@ -136,7 +140,7 @@ public class VideoPlayer extends Filter {
 			  // skip; maybe recurse tho in future
 		  } else {
 			  String fn = fileEntry.getName();
-			  if (fn.contains(".mov"))
+			  if (fn.contains(".ogg"))
 				  videos.add(path + fileEntry.getName());
 			  //if (count>=numBlobs) break;
 		  }
@@ -203,7 +207,7 @@ public class VideoPlayer extends Filter {
         stream.volume(0);
   
         stream.read();
-        println("got webcamstream read");
+        //println("got gsvideo stream read");
         
         /*stream.loadPixels();
         out.loadPixels();
@@ -222,7 +226,6 @@ public class VideoPlayer extends Filter {
         }
         
         //out.image(stream,0,0,sc.w,sc.h);
-        
         
         /*out.loadPixels();
         out.pixels = webcamStream.pixels;

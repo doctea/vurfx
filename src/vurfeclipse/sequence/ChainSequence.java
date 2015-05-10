@@ -14,7 +14,7 @@ public class ChainSequence extends Sequence {
 		super(i);
 	}
 	public ChainSequence addSequence(Sequence seq) {
-		seq.setLengthMillis(lengthMillis);
+		seq.setLengthMillis(this.getLengthMillis());
 		chain.add(seq);
 		return this;
 	}

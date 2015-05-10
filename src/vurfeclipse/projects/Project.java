@@ -173,6 +173,8 @@ public abstract class Project implements Serializable {
     
     setupRest();
     
+    setupExposed();
+    
     return true;
   }
   
@@ -283,7 +285,7 @@ public abstract class Project implements Serializable {
   }
 
   public Scene addSceneInputOutputCanvas(Scene sc, String ic, String oc) {
-    //or setINputBUffer / setOutputBuffer for compaitiblity ..     
+    //or setINputBUffer / setOutputBuffer for compatiblity ..     
     sc.setInputCanvas(ic);
     sc.setOutputCanvas(oc);
     this.addScene(sc);
@@ -498,12 +500,16 @@ public abstract class Project implements Serializable {
   }
   
   
-  RestConnector rsConn;
+  public RestConnector rsConn = new RestConnector(this);
   public void setupRest() {
-	  rsConn = new RestConnector(this);
+	  //rsConn = new RestConnector(this);
 	  rsConn.start();
 	  Thread t = new Thread(rsConn);
 	  t.start();
+  }
+  
+  public void setupExposed() {
+
   }
   
   public void setupControls() {

@@ -14,7 +14,7 @@ abstract public class Sequence implements Mutable {
 	//Scene sc;
 	
 	int startTimeMillis;
-	int lengthMillis = 2000;
+	private int lengthMillis = 2000;
 	
 	int iteration;
 	
@@ -28,11 +28,19 @@ abstract public class Sequence implements Mutable {
 	}
 	
 	public Sequence() {
-		
+		lengthMillis = 0;
 	}
 	public Sequence(int sequenceLengthMillis) {
 		lengthMillis = sequenceLengthMillis;
 	}
+	public int getLengthMillis() {
+		return lengthMillis;
+	}
+	public void setLengthMillis(int length) {
+		lengthMillis = length;
+	}
+	
+
 
 	
 	/*public Sequence addMutable(Mutable mut) {
@@ -102,10 +110,7 @@ abstract public class Sequence implements Mutable {
 		return iteration>=max_i;
 	}
 	
-	public void setLengthMillis(int length) {
-		lengthMillis = length;
-	}
-	
+
 	public void setValuesForTime() {
 		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is 
 		
