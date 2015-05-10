@@ -92,7 +92,7 @@ public class TempSocioSukiVideoProject extends Project implements Serializable {
 			ils1.nextFilterMode();
 		}
 	});
-    ils2.addSequence("next", new ShowSceneSequence(ils1, 0) {
+    ils2.addSequence("next", new ShowSceneSequence(ils2, 0) {
 		@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
 		@Override public void onStop() { super.onStop(); }
 		
@@ -105,17 +105,18 @@ public class TempSocioSukiVideoProject extends Project implements Serializable {
     
     
     //ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect"));
-    ils1.setCanvas("pix1","/pix1");
+    ils1.setCanvas("pix0","/pix0");
+    ils2.setCanvas("pix1","/pix1");
     //ils1.addFilter(((OpenNIFilter) new OpenNIFilter(ils1).setFilterName("kinect")).setDepthOutputCanvasName("pix1"));
 
 
     this.addSceneOutputCanvas(
       ils1,
-      "/pix0"
+      "pix0"
     );
     this.addSceneOutputCanvas(
       ils2,
-      "/pix1"
+      "pix1"
       //"/temp1"
     );
 
@@ -154,27 +155,38 @@ public class TempSocioSukiVideoProject extends Project implements Serializable {
 		}
     });*/
     
-    final Scene blendScene = new BlenderFX1(this,"pix1 BlenderFX", w, h).setOutputCanvas("/out");//.setInputCanvas("/pix1");
+    final Scene blendScene = new BlenderFX1(this, "pix1 BlenderFX", w, h).setOutputCanvas("/out");//.setInputCanvas("/pix1");
     blendScene.setCanvas("pix0","/pix0");
     blendScene.setCanvas("pix1","/pix1");
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
     switcher.bindSequence("blend", blendScene, "preset 1");
     
-    
     Scene blobScene = new BlobFX1(this,w,h) {
-    	@Override public boolean initialiseFilters() {
-    		super.initialiseFilters();
-    	    this.getFilter("BlobDrawer").setParameterValue("shape", Blob.SH_TEXTURE);
-    	    this.getFilter("BlobDrawer").setInputCanvas("pix0");
-    	    this.getFilter("BlobDrawer2").setParameterValue("shape", Blob.SH_TEXTURE);
+    	@Override public boolean setupFilters() {
+    		super.setupFilters();
+    	    this.getFilter("BlobDrawer").setInputCanvas("pix1");
+    		this.getFilter("BlobDrawer").setParameterValue("shape", Blob.SH_TEXTURE);
     	    this.getFilter("BlobDrawer2").setInputCanvas("pix0");
+    		this.getFilter("BlobDrawer2").setParameterValue("shape", Blob.SH_TEXTURE);
     	    return true;
     	}
-    }.setSceneName("BlobScene").setOutputCanvas("/out").setCanvas("pix0","/pix0");
+    }.setSceneName("BlobScene")
+    	.setOutputCanvas("/out")
+    	.setCanvas("pix0","/pix0")
+    	.setCanvas("pix1","/pix1");
+    	//.setCanvas("temp0","/pix1")
     this.addScene(blobScene);
-    /*switcher.bindSequence("blob1_1", blobScene, "preset 1");
-    switcher.bindSequence("blob1_2", blobScene, "preset 2");
+    //blobScene.setOutputCanvas("/out").setInputCanvas("pix0");
+
+    //this.addSceneInputCanvas(blobScene, "inp0");
+    //switcher.bindSequence("blob1_1", blobScene, "preset 1");
+    
+    switcher.bindSequence("tex_blob", new ChainSequence(5000)
+		.addSequence(getSceneForPath("/sc/BlobScene"), 	"texture")
+		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1"));
+    
+    /*switcher.bindSequence("blob1_2", blobScene, "preset 2");
     switcher.bindSequence("blob1_3", blobScene, "preset 3");
     switcher.bindSequence("blob1_4", blobScene, "preset 4");*/
     
@@ -198,11 +210,12 @@ public class TempSocioSukiVideoProject extends Project implements Serializable {
     });*/
 
     // OUTPUT FILTERS
-    
+    /*
     PlasmaScene plasmaScene = (PlasmaScene)(new PlasmaScene(this,w,h).setSceneName("PlasmaScene"));
     plasmaScene.setCanvas("out", "/out");
     
     addScene(plasmaScene);
+    
     //plasmaScene.setupFilters();
     
     plasmaScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
@@ -210,16 +223,16 @@ public class TempSocioSukiVideoProject extends Project implements Serializable {
     switcher.bindSequence("plasma_1", plasmaScene, "preset 1");
     switcher.bindSequence("plasma_2", plasmaScene, "preset 2");
     switcher.bindSequence("plasma_3", plasmaScene, "preset 3");
-    
+    */
     /// END PLASMA SCENE
     
 
-    this.addSceneInputOutputCanvas(
+    /*this.addSceneInputOutputCanvas(
       //os,
       new OutputFX1(this,w,h).setSceneName("OutputShader"),
       "/out",
       "/out"
-    );    
+    );*/    
 
     
     
@@ -238,8 +251,8 @@ public class TempSocioSukiVideoProject extends Project implements Serializable {
     
   	
 	Sequence doubleSequence = new ChainSequence(2000)
-		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")    	
-		.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
+		//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")    	
+		//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
 	;
     switcher.bindSequence("d1:", doubleSequence, 10);
 
@@ -255,7 +268,7 @@ public class TempSocioSukiVideoProject extends Project implements Serializable {
     switcher.bindSequence("outputModeChange6", opSequence);
     switcher.bindSequence("outputModeChange7", opSequence);
     switcher.bindSequence("outputModeChange8", opSequence);*/
-    TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
+    /*TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
     		new TunnelScene(this, w, h).setCanvas("temp", "/temp2")
 			//.addFilter(new BlendDrawer()))
 		, "/pix0", "/out"
@@ -265,6 +278,7 @@ public class TempSocioSukiVideoProject extends Project implements Serializable {
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), 5);
     switcher.bindSequence("tunnel_1_blob_wobble_1",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), 5);
     switcher.bindSequence("tunnel_1_blob_wobble_2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), 25);
+    */
     /*switcher.bindSequence(
         	"tunnel_2_pulse",     
         	*/
