@@ -54,7 +54,7 @@ public class VideoPlayer extends Filter {
   public VideoPlayer(Scene sc, String filename) {
     super(sc);
     //this.filename = filename;
-    videos.add(filename);
+    if (filename!="") videos.add(filename);
   }
   
   public void setMuted(boolean on) {
