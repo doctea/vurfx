@@ -30,7 +30,9 @@ public class VideoScene extends Scene {
     
     filters[i] = new FilterChain(this, "VideoPlayer for " + filename); //VideoPlayer(this, filename); //"data/video/129-Probe 7 - Over and Out(1)-00.mkv");
     filters[i].setCanvases(getCanvasMapping("out"),getCanvasMapping("out"));//setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
-    ((FilterChain)filters[i]).addFilterDefaults(new VideoPlayer(this, filename));
+    final VideoPlayer vs = (VideoPlayer) new VideoPlayer(this, filename).setFilterName("video");
+    vs.loadDirectory("video-sources/");
+    ((FilterChain)filters[i]).addFilterDefaults(vs);
     //((FilterChain)filters[i]).addFilterDefaults(new MirrorFilter(this)); /// hmmm including this here gives mad mirror-flicker... wonder if this is because the webcam is slower than the draw() loop..?
     //((FilterChain)filters[i]).addFilter((new PlainDrawer(this)).setBuffers(buffers[BUF_TEMP],buffers[BUF_SRC]));
     //((FilterChain)filters[i]).addFilter((new ColourFilter(this)).setBuffers(buffers[BUF_TEMP],buffers[BUF_SRC]));
