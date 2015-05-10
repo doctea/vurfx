@@ -123,12 +123,12 @@ public class SocioSukiVideo2Project extends Project implements Serializable {
     //ils2.addFilter(new MirrorFilter(ils2).setFilterName("mirror").setInputCanvas(ils2.getCanvasMapping("out")).setOutputCanvas(ils2.getCanvasMapping("out")));
 
     VideoPlayer vp = new VideoPlayer(ils1,"");
-    vp.loadDirectory("video-sources");
+    vp.loadDirectory("video-sources/");
     ils1.addFilter(vp);
     
-    VideoPlayer vp = new VideoPlayer(ils2,"");
-    vp.loadDirectory("video-sources");
-    ils1.addFilter(vp);
+    VideoPlayer vp2 = new VideoPlayer(ils2,"");
+    vp.loadDirectory("video-sources/");
+    ils2.addFilter(vp2);
 
     
     /*getStream("midi").registerEventListener("note",
@@ -245,23 +245,35 @@ public class SocioSukiVideo2Project extends Project implements Serializable {
            
            
           mode = ((int)v/1000)%4;
-          GLColourFilter cf = ((GLColourFilter)getObjectForPath("/OutputShader/GLColourFilter")); 
-          if (mode==0) cf.setRedGreenBlueShift(PApplet.abs(PApplet.sin(v/10)), 1.0f, 1.0f);
-          if (mode==1) cf.setRedGreenBlueShift(1.0f, PApplet.abs(PApplet.sin(v/10)), 1.0f);        
-          if (mode==2) cf.setRedGreenBlueShift(1.0f, 1.0f, PApplet.abs(PApplet.sin(v/10)));        
-          if (mode==3) cf.setRedGreenBlueShift(1.0f, 1.0f, 1.0f); //abs(sin(v/10)));                  
-    
-          if ((v/10)%2==0) {
-            ((Filter)getObjectForPath("/TextFlash/TextDrawer")).setParameterValueFromSin("zrotation", PApplet.sin(PApplet.radians(v%360)));
-          } else {
-            ((Filter)getObjectForPath("/TextFlash/TextDrawer")).setParameterValue("zrotation", 0); 
+          try {
+	          GLColourFilter cf = ((GLColourFilter)getObjectForPath("/OutputShader/GLColourFilter")); 
+	          if (mode==0) cf.setRedGreenBlueShift(PApplet.abs(PApplet.sin(v/10)), 1.0f, 1.0f);
+	          if (mode==1) cf.setRedGreenBlueShift(1.0f, PApplet.abs(PApplet.sin(v/10)), 1.0f);        
+	          if (mode==2) cf.setRedGreenBlueShift(1.0f, 1.0f, PApplet.abs(PApplet.sin(v/10)));        
+	          if (mode==3) cf.setRedGreenBlueShift(1.0f, 1.0f, 1.0f); //abs(sin(v/10)));
+          } catch (Exception e) {
+        	  System.out.println("Caught exception " + e + " in rgb shifter snippet");
           }
-          if ((v/10)%3==0) {
-            ((Filter)getObjectForPath("/SpiralScene2/SpiralDrawer")).setParameterValueFromSin("zRotate", PApplet.sin(v%360));
-          } else {
-            ((Filter)getObjectForPath("/SpiralScene2/SpiralDrawer")).setParameterValue("zRotate", 0.0f); 
-          }          
+    
+          try {
+	          if ((v/10)%2==0) {
+	            ((Filter)getObjectForPath("/TextFlash/TextDrawer")).setParameterValueFromSin("zrotation", PApplet.sin(PApplet.radians(v%360)));
+	          } else {
+	            ((Filter)getObjectForPath("/TextFlash/TextDrawer")).setParameterValue("zrotation", 0); 
+	          }
+          } catch (Exception e) {
+        	  System.out.println("Caught exception " + e + " in textdrawer rotator snippet");
+          }
           
+          try {
+	          if ((v/10)%3==0) {
+	            ((Filter)getObjectForPath("/SpiralScene2/SpiralDrawer")).setParameterValueFromSin("zRotate", PApplet.sin(v%360));
+	          } else {
+	            ((Filter)getObjectForPath("/SpiralScene2/SpiralDrawer")).setParameterValue("zRotate", 0.0f); 
+	          }
+          } catch (Exception e) {
+        	  System.out.println("Caught exception " + e + " in spiraldrawer rotator snippet");
+          }        
           
         }
       }
@@ -312,94 +324,6 @@ public class SocioSukiVideo2Project extends Project implements Serializable {
       "/temp",//buffers[BUF_OUT],
       "/out"//buffers[BUF_OUT]
     );
-    
-    SimpleScene daves2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlendDave2");
-    daves2.setCanvas("out", "/out");
-    daves2.setCanvas("inp0","/inp1");
-    //os.addFilter(new ShaderFilter(os,"Feedback.xml").setFilterName("Edges").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-    daves2.addFilter(new KaleidoFilter(daves2).setFilterName("Kaleido").setCanvases(daves2.getCanvasMapping("temp0"), daves2.getCanvasMapping("inp0"))); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-    daves2.addFilter(new BlendDrawer(daves2).setFilterName("Blend").setCanvases(daves2.getCanvasMapping("out"),daves2.getCanvasMapping("temp0")).setParameterValue("Opacity",0.25f));
-    //os.addFilter(new GLColourFilter(os).setFilterName("GLColourFilter"));
-    this.addSceneInputOutputCanvas(
-      daves2,
-      "/inp1",
-      "/out"
-      //buffers[BUF_OUT]
-    );        
-
-    this.addSceneInputOutputCanvas(
-      new TextFlashScene(this,w,h, new String[] {
-        "Boars Head", "PsychNight",
-        "Socio Suki", "Phullopium\nDude", "Retinal\nCircus", "DAVE\nSIMPSON", 
-        "vurf",
-        "=)", ":)", "(:", "(=", ";)"
-      }).setSceneName("TextFlash")
-        .registerCallbackPreset("beatIII","beat_4","random")
-        .registerCallbackPreset("beatIII","beat_2","rotate"),
-      "/out",//buffers[BUF_OUT],
-      "/out"//buffers[BUF_OUT]
-    );
-    
-    SimpleScene bd = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out");
-    bd.addFilter(new BlobDrawer(bd).setImage("ds2014/dseye.png").setFilterName("BlobDrawer").setCanvases(bd.getCanvasMapping("temp2"),bd.getCanvasMapping("inp0"))); //.setCanvases(bd.getCanvasMapping("out"), bd.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-    //os.addFilter(new KaleidoFilter(os).setFilterName("Kaleido").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0"))); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-    bd.addFilter(new BlendDrawer(bd).setFilterName("BlendDrawer").setCanvases(bd.getCanvasMapping("out"),bd.getCanvasMapping("temp2")));
-    this.addSceneInputOutputCanvas(
-      bd,
-        //.setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0")))
-      //os,
-      "/out",
-      "/out"
-      //buffers[BUF_OUT]
-    );    
-    getStream("beat").registerEventListener("beat_32", new ParameterCallback () {
-      public void call (Object value) {
-        int v = (Integer)value * 100;
-        //System.out.println("called " + v);        
-        if ((v/10)%10>5) {
-          ((Filter)getObjectForPath("/BlobScene/BlobDrawer")).setParameterValue("totalRotate", PApplet.radians(v/10));
-          ((Filter)getObjectForPath("/BlobScene/BlobDrawer")).setParameterValue("rotation", -PApplet.radians(v/10/2));
-        } else {
-          ((Filter)getObjectForPath("/BlobScene/BlobDrawer")).setParameterValue("totalRotate", -PApplet.radians(v/10));
-          ((Filter)getObjectForPath("/BlobScene/BlobDrawer")).setParameterValue("rotation", PApplet.radians(v/10/2));
-        }          
-        
-        if((v/10)%4==0) {
-          ((Filter)getObjectForPath("/BlobScene/BlobDrawer")).setParameterValueFromSin("zRotate", PApplet.radians(v));
-        }        
-      } 
-    });
-    
-    SimpleScene eyescene = (SimpleScene) new SimpleScene(this,w,h).setSceneName("EyeScene").setOutputCanvas("/out");
-    BlobDrawer eyedrawer = (BlobDrawer) new BlobDrawer(eyescene).setImage("ds2014/dseye.png").setFilterName("BlobDrawer").setCanvases(eyescene.getCanvasMapping("temp2"),"/inp1"); //eyescene.getCanvasMapping("inp0"));
-    eyedrawer.setParameterValue("shape", 7).setParameterValue("numSections",45.0f).setParameterValue("numofCircles",1.5f);
-    eyescene.addFilter(eyedrawer); //.setCanvases(bd.getCanvasMapping("out"), bd.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-    //os.addFilter(new KaleidoFilter(os).setFilterName("Kaleido").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0"))); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-    eyescene.addFilter(new BlendDrawer(eyescene).setFilterName("BlendDrawer").setCanvases(eyescene.getCanvasMapping("out"),eyescene.getCanvasMapping("temp2")));
-    this.addSceneInputOutputCanvas(
-      eyescene,
-        //.setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0")))
-      //os,
-      "/out",
-      "/out"
-      //buffers[BUF_OUT]
-    );    
-    getStream("beat").registerEventListener("beat_32", new ParameterCallback () {
-      public void call (Object value) {
-        int v = (Integer)value/10;
-        //System.out.println("called " + v);        
-        //((Filter)getObjectForPath("/EyeScene/BlobDrawer")).setParameterValue("totalRotate", radians(v/10));
-        //((Filter)getObjectForPath("/EyeScene/BlobDrawer")).setParameterValue("rotation", -radians(v/10/2));
-        
-        if((v/10)%4==0) {
-          ((Filter)getObjectForPath("/EyeScene/BlobDrawer")).setParameterValueFromSin("zRotate", PApplet.sin(PApplet.radians(v)));
-          ((Filter)getObjectForPath("/EyeScene/BlobDrawer")).setParameterValueFromSin("radius", PApplet.sin(PApplet.radians(v)));
-        } else {
-          ((Filter)getObjectForPath("/EyeScene/BlobDrawer")).setParameterValueFromSin("zRotate", 0.0f);          
-          ((Filter)getObjectForPath("/EyeScene/BlobDrawer")).setParameterValueFromSin("radius", 1.0f);
-        }  
-      } 
-    });    
     
     SimpleScene os = (SimpleScene) new SimpleScene(this,w,h).setSceneName("OutputShader");
     os.setCanvas("out", "/out");
@@ -552,61 +476,10 @@ public class SocioSukiVideo2Project extends Project implements Serializable {
           
           ((Filter)getObjectForPath("/BlobScene/BlendDrawer")).setParameterValueFromSin("Opacity", PApplet.sin(PApplet.radians(v/10)));
           
-          ((Filter)getObjectForPath("/BlendDave2/Blend")).setParameterValueFromSin("Opacity", PApplet.sin(PApplet.radians(v/10)));
-          
         }      
       }
     );  
 
-    getStream("beat").registerEventListener("bar_1",
-      new ParameterCallback() {
-        public void call (Object value) {
-          int v = (Integer)value;
-
-          
-          if (v%2==0) {
-          }          
-          if (v%4==0) {          
-            //getSceneForPath("/Kaleidoscope").toggleMute();
-            ((Filter)getObjectForPath("/EyeScene/BlobDrawer")).setParameterValue("shape",((VurfEclipse)APP.getApp()).random(0,10)>5?7:4);            
-          }
-          if (v%5==0) {
-            ((Filter)getObjectForPath("/Kaleidoscope/KaleidoFilter")).nextMode();
-            ((Filter)getObjectForPath("/BlobScene/BlendDrawer")).nextMode();            
-          }
-          if (v%6==0) {
-            ((Filter)getObjectForPath("/BlobScene/BlobDrawer")).nextMode();
-          }         
-          if (v%7==0) {
-            ((Filter)getObjectForPath("/BlendScene/BlendDrawer1")).nextMode();
-          }      
-          if (v%9==0) {
-            ((Filter)getObjectForPath("/BlobScene/BlobDrawer")).setParameterValue("edged",((VurfEclipse)APP.getApp()).random(0,1)>0.5f?true:false);
-          }                      
-          if (v%12==0) {
-            //((Filter)getObjectForPath("/EyeScene/BlobDrawer")).nextMode();             
-            //((Filter)getObjectForPath("/OutputShader/Kaleido")).toggleMute();
-          }       
-          if (v%13==0) {
-            //((Scene)getObjectForPath("/BlobScene")).toggleMute();
-          }
-        }
-      }
-    );        
-
-    SimpleScene daves = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlendDave");
-    daves.setCanvas("out", "/out");
-    daves.setCanvas("inp0","/inp0");
-    //os.addFilter(new ShaderFilter(os,"Feedback.xml").setFilterName("Edges").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-    daves.addFilter(new KaleidoFilter(daves).setFilterName("Kaleido").setCanvases(daves.getCanvasMapping("temp0"), daves.getCanvasMapping("inp0"))); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-    daves.addFilter(new BlendDrawer(daves).setFilterName("Blend").setCanvases(daves.getCanvasMapping("out"),daves.getCanvasMapping("temp0")));
-    //os.addFilter(new GLColourFilter(os).setFilterName("GLColourFilter"));
-    this.addSceneInputOutputCanvas(
-      daves,
-      "/inp0",
-      "/out"
-      //buffers[BUF_OUT]
-    );    
     
     this.addSceneInputOutputCanvas(
       new SpiralScene(this,w,h,"/out").setSceneName("SpiralScene2") //buffers[BUF_INP0])

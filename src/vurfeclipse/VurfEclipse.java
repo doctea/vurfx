@@ -32,7 +32,7 @@ public class VurfEclipse extends PApplet {
 	boolean mdRes = false;
 	boolean projRes = false;
 	boolean ultrahiRes = false;
-	boolean hiRes = true;
+	boolean hiRes = false;
 	boolean medRes = true;
 	
 	public boolean exportMode = false; //true; 
@@ -304,7 +304,7 @@ public class VurfEclipse extends PApplet {
 		 System.out.println("Instantiating Project at " + desired_width + "x" + desired_height);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 
-		 pr = new SocioSukiVideo2Project(desired_width, desired_height, gfx_mode);
+		 pr = new SocioSukiVideoProject(desired_width, desired_height, gfx_mode);
 		 
 		 System.out.println("Initialising " + pr);
 		 pr.initialise();
