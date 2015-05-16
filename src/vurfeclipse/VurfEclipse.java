@@ -28,10 +28,10 @@ public class VurfEclipse extends PApplet {
 		rect (width/2,height/2,5,5);
 	}*/
 	
-	boolean hdRes = false;
-	boolean mdRes = false;
+	boolean hdRes = true;
+	boolean mdRes = true;
 	boolean projRes = true;
-	boolean ultrahiRes = false;
+	boolean ultrahiRes = true;
 	boolean hiRes = true;
 	boolean medRes = true;
 	
@@ -209,6 +209,14 @@ public class VurfEclipse extends PApplet {
 		//PApplet.main(new String[] { "vurfeclipse.VurfEclipse" });
 	}
 	
+	int sizeCount = 0;
+	@Override
+	public void size(int w, int h, String gfx) {
+		sizeCount++;
+		//if (sizeCount>=2) return;
+		super.size(w,h,gfx);
+	}
+	
 	@Override
 	public void setup () {
 		 APP.setApp(this);
@@ -224,6 +232,8 @@ public class VurfEclipse extends PApplet {
 			    frame.setSize(output_width, output_height);
 		 }		 
 		 
+	     this.delaySetup();
+
 		 //size(output_width, output_height + gw_height, gfx_mode);
 		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
 		 size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
@@ -240,44 +250,10 @@ public class VurfEclipse extends PApplet {
 		 ImageRepository.IR = new ImageRepository();
 		
 		 io = new IOUtils();
+		 
+		 initialiseGraphics();
 		
-		 if (gfx_mode==GLConstants.GLGRAPHICS) {
-		   System.out.println("Setting up in GLConstants.GLGRAPHICS mode, so have to do some funky GL shit..");
-		   offscreen = new GLGraphicsOffScreen(this, width, height); //, true, 4);
-		   offscreen.beginDraw(); 
-		   offscreen.setDepthMask(true);
-		   //offscreen.background(0);
-		   offscreen.endDraw();
-		   System.out.println("==== offscreen is " + offscreen);
-		   pgl = (GLGraphics) g;
-		   //pgl.beginDraw(); pgl.endDraw();
-		   //gl = offscreen.gl;
-		   //gl = pgl.gl;
-		   // found these bits here! https://github.com/pixelpusher/CreativeCode/blob/master/SoundCircle/SoundCircle.pde
-		   gl = pgl.beginGL();
-		   
-		   pgl.gl.glDisable(GL.GL_DEPTH_TEST);
-		
-		   pgl.gl.setSwapInterval( 1 ); // use value 0 to disable v-sync 
-		   pgl.background(0);
-		   pgl.endGL();
-		   System.out.println("..Finished funky GL shit.");
-		 }
-		
-		 //pgl = (PGraphicsOpenGL) g;
-		 gl = pgl.gl;
-		 if (syphon) {
-		   initSyphon(gl, "Vurf");
-		 }
-		
-		 try {
-			 int sleepTime = 1000;
-			 System.out.println("Pausing for " + sleepTime + " milliseconds to wait for stuff to catch up..");
-			 Thread.sleep(sleepTime);
-		 } catch (Exception e) {
-			 System.out.println("Caught " + e);
-		 }
-		 System.out.println("Finished pausing.");
+		 delaySetup();
 		
 		
 		 //colorMode(ARGB);
@@ -310,7 +286,7 @@ public class VurfEclipse extends PApplet {
 		 
 		 System.out.println("Initialising " + pr);
 		 pr.initialise();
-		
+		 
 		 //gw = new GwrxInterface(APP, pr);
 		
 		 //pr.setupControls();
@@ -332,6 +308,61 @@ public class VurfEclipse extends PApplet {
 	
 	
 	
+	private void delaySetup() {
+		 /*try {
+			 int sleepTime = 1000;
+			 System.out.println("Pausing for " + sleepTime + " milliseconds to wait for stuff to catch up..");
+			 Thread.sleep(sleepTime);
+		 } catch (Exception e) {
+			 System.out.println("Caught " + e);
+		 }
+		 System.out.println("Finished pausing.");*/
+
+	}
+	private void initialiseGraphics() {
+		 if (gfx_mode==GLConstants.GLGRAPHICS) {
+			   System.out.println("Setting up in GLConstants.GLGRAPHICS mode, so have to do some funky GL shit..");
+			   
+			   offscreen = new GLGraphicsOffScreen(this, width, height); //, true, 4);
+			   this.delaySetup();
+
+			   offscreen.beginDraw(); 
+			   offscreen.setDepthMask(true);
+			   this.delaySetup();
+			   //offscreen.background(0);
+			   offscreen.endDraw();
+			   
+			   this.delaySetup();
+			   
+			   System.out.println("==== offscreen is " + offscreen);
+			   pgl = (GLGraphics) g;
+			   //pgl.beginDraw(); pgl.endDraw();
+			   //gl = offscreen.gl;
+			   //gl = pgl.gl;
+			   // found these bits here! https://github.com/pixelpusher/CreativeCode/blob/master/SoundCircle/SoundCircle.pde
+			   gl = pgl.beginGL();
+			   this.delaySetup();
+
+			   pgl.gl.glDisable(GL.GL_DEPTH_TEST);
+			
+			   pgl.gl.setSwapInterval( 1 ); // use value 0 to disable v-sync 
+			   pgl.background(0);
+			   
+			   this.delaySetup();
+
+			   pgl.endGL();
+			   System.out.println("..Finished funky GL shit.");
+			   this.delaySetup();
+
+		 }
+			
+		 //pgl = (PGraphicsOpenGL) g;
+		 gl = pgl.gl;
+		 if (syphon) {
+		   initSyphon(gl, "Vurf");
+		 }
+	}
+
 	/*******
 	*
 	* DRAW()
