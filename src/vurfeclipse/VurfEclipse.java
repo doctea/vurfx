@@ -213,7 +213,10 @@ public class VurfEclipse extends PApplet {
 	@Override
 	public void size(int w, int h, String gfx) {
 		sizeCount++;
-		//if (sizeCount>=2) return;
+		if (sizeCount>=2) {
+			System.out.println("size(): ignoring " + sizeCount + "th call so as not to trigger GL error.");
+			return;
+		}
 		super.size(w,h,gfx);
 	}
 	
