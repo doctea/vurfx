@@ -333,7 +333,7 @@ public class SocioSukiProject extends Project implements Serializable {
     ((TextFlashScene)getSceneForPath("/sc/TextFlash")).addSequencesForWords(new String[] {
     		":)",
     		":D",
-    		"BABAL",
+    		/*"BABAL",
     		"Glowpeople",
     		"Socio Suki",
     		"what about the pig",
@@ -345,7 +345,7 @@ public class SocioSukiProject extends Project implements Serializable {
     		"bad rabbit",
     		"take trips",
     		"magic dust",
-    		"merry xmas"
+    		"merry xmas"*/
     }, 0);
     switcher.setBindToRandom(false);
     switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
@@ -399,7 +399,7 @@ public class SocioSukiProject extends Project implements Serializable {
   public void setupExposed() {
 	  	rsConn.expose("/seq/changeTo/" + "text_word_:)");
 	  	rsConn.expose("/seq/changeTo/" + "text_word_:D");	  
-	  	rsConn.expose("/seq/changeTo/" + "text_word_BABAL");
+	  	/*rsConn.expose("/seq/changeTo/" + "text_word_BABAL");
 	  	rsConn.expose("/seq/changeTo/" + "text_word_Glowpeople");
 	  	rsConn.expose("/seq/changeTo/" + "text_word_Socio Suki");
 	    rsConn.expose("/seq/changeTo/" + "text_word_what about the pig");
@@ -411,7 +411,7 @@ public class SocioSukiProject extends Project implements Serializable {
 	    rsConn.expose("/seq/changeTo/" + "text_word_bad rabbit");
 	    rsConn.expose("/seq/changeTo/" + "text_word_take trips");
 	    rsConn.expose("/seq/changeTo/" + "text_word_magic dust");
-	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");
+	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");*/
   }
   
 }
