@@ -12,7 +12,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/opengl-orig/library/gluegen-rt.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/linux64"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/gson-2.3.jar"/>
@@ -136,12 +136,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/flob"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/fullscreen/fullscreen.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/fullscreen/reference/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/fullscreen"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/kinect/kinect.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/kinect"/>
@@ -190,16 +184,13 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
 	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
-	<classpathentry kind="lib" path="lib/user/GSVideo-macosx/library/gstreamer-java.jar">
+	<classpathentry kind="lib" path="lib/user/GSVideo-linux/jna.jar"/>
+	<classpathentry kind="lib" path="lib/user/GSVideo-linux/GSVideo.jar"/>
+	<classpathentry kind="lib" path="lib/user/GSVideo-linux/gstreamer-java.jar"/>
+	<classpathentry kind="lib" path="lib/user/fullscreen/library/fullscreen.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/GSVideo-macosx/library/gstreamer/macosx64"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/fullscreen/library"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/GSVideo-macosx/library/GSVideo.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/GSVideo-macosx/library/gstreamer/macosx64"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/GSVideo-macosx/library/jna.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

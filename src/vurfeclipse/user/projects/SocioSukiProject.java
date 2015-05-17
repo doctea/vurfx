@@ -71,9 +71,14 @@ public class SocioSukiProject extends Project implements Serializable {
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
     
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory("ds2014").setCurrentIndex(5).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer1"));
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer2"));
+    //ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer2"));
     
-    ((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
+    //((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
+    
+    VideoPlayer vp2 = new VideoPlayer(ils2,"");
+    vp2.loadDirectory("video-sources/");
+    vp2.setOutputCanvas("out");
+    ils2.addFilter(vp2);    
     
     
     ils1.addSequence("next", new ShowSceneSequence(ils1, 0) {
@@ -244,7 +249,7 @@ public class SocioSukiProject extends Project implements Serializable {
   	        ,
   	      "/out",
   	      "/out"
-  	    );
+  	    ).setMuted(true);
   	//).addSequencesForWords(new String[] { "test", "bob", "alice" } )
   	/**/
   	;    
@@ -326,13 +331,13 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader"), 5000);
     switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader2"), 5000);
     
-    switcher.bindAndPermute("e1:", "d1:", getSceneForPath("/sc/TextFlash"), 5000);
-    switcher.bindAndPermute("e2:", "t",   getSceneForPath("/sc/TextFlash"), 5000);
+    /*switcher.bindAndPermute("e1:", "d1:", getSceneForPath("/sc/TextFlash"), 5000);
+    switcher.bindAndPermute("e2:", "t",   getSceneForPath("/sc/TextFlash"), 5000);*/
     
     
-    ((TextFlashScene)getSceneForPath("/sc/TextFlash")).addSequencesForWords(new String[] {
-    		":)",
-    		":D",
+    //((TextFlashScene)getSceneForPath("/sc/TextFlash")).addSequencesForWords(new String[] {
+    //		":)",
+    //		":D",
     		/*"BABAL",
     		"Glowpeople",
     		"Socio Suki",
@@ -346,10 +351,10 @@ public class SocioSukiProject extends Project implements Serializable {
     		"take trips",
     		"magic dust",
     		"merry xmas"*/
-    }, 0);
-    switcher.setBindToRandom(false);
-    switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
-    switcher.setBindToRandom(true);
+    //}, 0);
+    //switcher.setBindToRandom(false);
+    //switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
+    //switcher.setBindToRandom(true);
 
     switcher.bindSequence("ils1_next", ils1.getSequence("next"), 2+switcher.getSequenceCount()/32);
     switcher.bindSequence("ils2_next", ils2.getSequence("next"), 2+switcher.getSequenceCount()/32);
@@ -397,8 +402,8 @@ public class SocioSukiProject extends Project implements Serializable {
   }
   
   public void setupExposed() {
-	  	rsConn.expose("/seq/changeTo/" + "text_word_:)");
-	  	rsConn.expose("/seq/changeTo/" + "text_word_:D");	  
+	  	//rsConn.expose("/seq/changeTo/" + "text_word_:)");
+	  	//rsConn.expose("/seq/changeTo/" + "text_word_:D");	  
 	  	/*rsConn.expose("/seq/changeTo/" + "text_word_BABAL");
 	  	rsConn.expose("/seq/changeTo/" + "text_word_Glowpeople");
 	  	rsConn.expose("/seq/changeTo/" + "text_word_Socio Suki");

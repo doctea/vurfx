@@ -409,6 +409,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     return true;
   }
   public boolean start() {  // stop processing when eg unmuted REMEMBER TO FIGURE OUT WHERE WE HAVE TO CALL THIS IN OUR PROCESSING LOOPS..!
+	println("start()");
+	this.setInputCanvas(this.canvas_in);
+	this.setOutputCanvas(this.canvas_out);
     return true;
   }
 

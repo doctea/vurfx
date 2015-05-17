@@ -14,7 +14,7 @@ import vurfeclipse.sequence.Sequence;
 
 public class BlobFX1 extends SimpleScene {
 
-	public BlobFX1(Project pr, int w, int h) { 
+	public BlobFX1(Project pr, int w, int h) {
 		super(pr,w,h); 
 		setSceneName("BlobFX1 Instance");
 	}
@@ -36,7 +36,7 @@ public class BlobFX1 extends SimpleScene {
 
 	public void setupSequences() {
 		//HashMap<String,Sequence> a = super.getSequences();//new HashMap<String,Sequence> ();
-		sequences.put("texture", new TextureSequence((BlobFX1)this, 2000));
+		sequences.put("texture",  new TextureSequence((BlobFX1)this, 2000));
 		sequences.put("preset 1", new SpinnerSequence1((BlobFX1)this, 2000));
 		sequences.put("preset 2", new SpinnerSequence2((Scene)this, 1000));
 		sequences.put("preset 3", new SpinnerSequence3((Scene)this, 1000));
@@ -58,9 +58,10 @@ class TextureSequence extends Sequence {
 		return muts;
 	}*/
 	@Override public void onStart () { 
-		host.getFilter("BlobDrawer").setInputCanvas(host.getCanvasMapping("pix0"));
+		this.println("texture sequence starting .. ");
+		host.getFilter("BlobDrawer").setInputCanvas(host.getCanvasMapping("pix0"));//host.getCanvasMapping("pix0"));
 		host.getFilter("BlobDrawer").changeParameterValue("shape", Blob.SH_TEXTURE);
-		host.getFilter("BlobDrawer2").setInputCanvas(host.getCanvasMapping("pix1"));
+		host.getFilter("BlobDrawer2").setInputCanvas(host.getCanvasMapping("pix1")); //host.getCanvasMapping("pix1"));
 		host.getFilter("BlobDrawer2").changeParameterValue("shape", Blob.SH_TEXTURE);
 	}
 	@Override public void onStop() {	}
