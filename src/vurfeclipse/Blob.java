@@ -68,6 +68,7 @@ public class Blob {
   public void setShape (int s) {
     this.shape = PApplet.constrain(s,0,shapesCount);
     if (this.shape==SH_TEXTURE && src==null) {
+      System.out.println("Blob: SH_TEXTURE but src is null :(");
       nextShape();//setShape(s+1);
     }
   }
@@ -193,7 +194,7 @@ public class Blob {
       out.pushMatrix();
       out.translate(-new_w/2,-new_h/2);
       out.image(src,0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
-      System.out.println("BLOB>>>drawing texture " + out);
+      if ((int)((VurfEclipse)APP.getApp()).random(100)==0) System.out.println("BLOB>>>drawing texture " + this.src);
       //out.image(src.getTexture(),0,0,new_w,new_h);
       out.popMatrix();
     } else if (getShape()==SH_COMPOUND) {
