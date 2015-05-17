@@ -312,14 +312,14 @@ public class VurfEclipse extends PApplet {
 	
 	
 	private void delaySetup() {
-		 /*try {
+		 try {
 			 int sleepTime = 1000;
 			 System.out.println("Pausing for " + sleepTime + " milliseconds to wait for stuff to catch up..");
 			 Thread.sleep(sleepTime);
 		 } catch (Exception e) {
 			 System.out.println("Caught " + e);
 		 }
-		 System.out.println("Finished pausing.");*/
+		 System.out.println("Finished pausing.");
 
 	}
 	private void initialiseGraphics() {
@@ -327,36 +327,24 @@ public class VurfEclipse extends PApplet {
 			   System.out.println("Setting up in GLConstants.GLGRAPHICS mode, so have to do some funky GL shit..");
 			   
 			   offscreen = new GLGraphicsOffScreen(this, width, height); //, true, 4);
-			   this.delaySetup();
-
 			   offscreen.beginDraw(); 
 			   offscreen.setDepthMask(true);
-			   this.delaySetup();
 			   //offscreen.background(0);
-			   offscreen.endDraw();
-			   
-			   this.delaySetup();
-			   
+			   offscreen.endDraw();			   
 			   System.out.println("==== offscreen is " + offscreen);
+			   
 			   pgl = (GLGraphics) g;
 			   //pgl.beginDraw(); pgl.endDraw();
 			   //gl = offscreen.gl;
 			   //gl = pgl.gl;
 			   // found these bits here! https://github.com/pixelpusher/CreativeCode/blob/master/SoundCircle/SoundCircle.pde
 			   gl = pgl.beginGL();
-			   this.delaySetup();
-
 			   pgl.gl.glDisable(GL.GL_DEPTH_TEST);
 			
 			   pgl.gl.setSwapInterval( 1 ); // use value 0 to disable v-sync 
 			   pgl.background(0);
-			   
-			   this.delaySetup();
-
 			   pgl.endGL();
 			   System.out.println("..Finished funky GL shit.");
-			   this.delaySetup();
-
 		 }
 			
 		 //pgl = (PGraphicsOpenGL) g;
