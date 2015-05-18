@@ -70,8 +70,8 @@ public class ParadoxProject extends Project implements Serializable {
     final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
     
-    ils1.addFilter(new ImageListDrawer(ils1).setDirectory("paradox").setCurrentIndex(5).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer1"));
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("paradox").setCurrentIndex(0).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer2"));
+    ils1.addFilter(new ImageListDrawer(ils1).setDirectory("paradox").setCurrentIndex(25).setNumBlobs(50/*200*/).setFilterName("ImageListDrawer1"));
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("paradox").setCurrentIndex(0).setNumBlobs(50/*200*/).setFilterName("ImageListDrawer2"));
     
     //((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
     
@@ -91,7 +91,7 @@ public class ParadoxProject extends Project implements Serializable {
 			ils1.nextFilterMode();
 		}
 	});
-    ils2.addSequence("next", new ShowSceneSequence(ils1, 0) {
+    ils2.addSequence("next", new ShowSceneSequence(ils2, 0) {
 		@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
 		@Override public void onStop() { super.onStop(); }
 		
@@ -104,9 +104,11 @@ public class ParadoxProject extends Project implements Serializable {
     
     
     //ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect"));
-    ils1.setCanvas("pix1","/pix1");
+    ils1.setCanvas("pix1","/pix0");
+    ils1.setCanvas("pix0",  "/pix1");
     //ils1.addFilter(((OpenNIFilter) new OpenNIFilter(ils1).setFilterName("kinect")).setDepthOutputCanvasName("pix1"));
-
+    ils2.setCanvas("pix0","/pix0");
+    ils2.setCanvas("pix1","/pix1");
 
     this.addSceneOutputCanvas(
       ils1,
@@ -290,7 +292,7 @@ public class ParadoxProject extends Project implements Serializable {
 	    		new TunnelScene(this, w, h).setCanvas("temp", "/temp3")
 	    			//.addFilter(new BlendDrawer()))
 	    		
-	    		, "/out", "/out"
+	    		, "/out" /*"/pix1"*/, "/out"
 	);
     switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 5);
     switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 5);
@@ -356,8 +358,8 @@ public class ParadoxProject extends Project implements Serializable {
     //switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
     //switcher.setBindToRandom(true);
 
-    switcher.bindSequence("ils1_next", ils1.getSequence("next"), 2+switcher.getSequenceCount()/16);
-    switcher.bindSequence("ils2_next", ils2.getSequence("next"), 2+switcher.getSequenceCount()/16);
+    switcher.bindSequence("ils1_next", ils1.getSequence("next"), 2+(switcher.getSequenceCount()/8));
+    switcher.bindSequence("ils2_next", ils2.getSequence("next"), 2+(switcher.getSequenceCount()/8));
   	    
     
     
