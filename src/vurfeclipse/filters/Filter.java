@@ -368,8 +368,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   synchronized public void resetParameters() {
 	  Iterator<Parameter> it = parameters.values().iterator();
 	  while (it.hasNext()) {
-		  it.next().reset();
+		  Parameter p = it.next();//
+		  p.reset();
 	  }
+	  this.updateAllParameterValues();
   }
 
   
