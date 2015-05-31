@@ -1,7 +1,7 @@
 package vurfeclipse.user.scenes;
 
 import processing.core.PApplet;
-import vurfeclipse.filters.BlendDrawer;
+import vurfeclipse.filters.*;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.scenes.SimpleScene;
@@ -18,6 +18,7 @@ public class TunnelScene extends SimpleScene {
 	public void setupSequences() {
 		//HashMap<String,Sequence> a = super.getSequences();//new HashMap<String,Sequence> ();
 		sequences.put("preset 1", new TunnelPulseSequence(this, 2000));
+		sequences.put("fixed", new TunnelFixedSequence(this, 2000));		
 		sequences.put("preset 2", new TunnelPulseSequence2(this, 2000, true));
 		sequences.put("preset 3", new TunnelPulseSequence2(this, 2000, false));
 	}
@@ -65,7 +66,6 @@ public class TunnelScene extends SimpleScene {
 
 		@Override
 		public void setValuesForNorm(double pc, int iteration) {
-			// TODO Auto-generated method stub
 			if (loop) if (iteration%2==0) pc = 1.0f-pc;	// go up and down again
 		
 			for (int i = 1 ; i <= 6 ; i++) {
@@ -78,6 +78,30 @@ public class TunnelScene extends SimpleScene {
 			}
 		}
 		
+	}
+	
+	class TunnelFixedSequence extends TunnelPulseSequence {
+
+		public TunnelFixedSequence(TunnelScene tunnelScene, int i) {
+			super(tunnelScene, i);
+			// TODO Auto-generated constructor stub
+		}
+		
+		@Override
+		public void setValuesForNorm(double pc, int iteration) {
+			super.setValuesForNorm(1f, iteration);
+		}
+		
+		@Override
+		public void onStart() {
+			super.onStart();
+			// TODO Auto-generated method stub
+			for (int i = 1 ; i <= 6 ; i++) {
+			//for (float f = 0.1f ; f < 2.0f ; f+)
+				getFilter("Blend_"+i).resetParameters();
+				getFilter("Blend_"+i).changeParameterValue("Opacity", ((100f/6f)*i));
+			}
+		}
 	}
 
 	@Override

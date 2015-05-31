@@ -75,12 +75,12 @@ public class SocioSukiVideoProject extends Project implements Serializable {
 
     VideoPlayer vp = new VideoPlayer(ils1,"");
     vp.loadDirectory("video-sources/");
-    vp.setOutputCanvas("out");
+    vp.setOutputCanvas("/pix0");
     ils1.addFilter(vp);
     
     VideoPlayer vp2 = new VideoPlayer(ils2,"");
     vp2.loadDirectory("video-sources/");
-    vp2.setOutputCanvas("out");
+    vp2.setOutputCanvas("/pix1");
     ils2.addFilter(vp2);
     
     //ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer2"));
@@ -193,7 +193,7 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     //s.initialise();
     final SpiralDrawer sd = (SpiralDrawer) new SpiralDrawer(blobScene2)
       //.setBuffers(s.buffers[s.BUF_TEMP],buffers[BUF_INP2]) //OUT]) //TEMP1])
-      .setCanvases(blobScene2.getCanvasMapping("pix0")/*"temp"*/, "/inp2")
+      .setCanvases(blobScene2.getCanvasMapping("pix0")/*"temp"*/, "/pix0")
       //.registerCallbackPreset("beat", "beat_16", "spin"))
       ;        
     blobScene2.addFilter(sd);
@@ -254,52 +254,29 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     );
     
     
-    
-    
-    
-   
-  	/*
-	Sequence doubleSequence = new ChainSequence(2000)
-		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")    	
-		.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
-	;
-    switcher.bindSequence("d1:", doubleSequence, 10);*/
-
-    /*Sequence cSequence = new ChainSequence(0)
-    	.addSequence(getSceneForPath("/sc/TextFlash"), 	   "preset 1")
-    	.addSequence(getSceneForPath("/sc/OutputShader"),  "preset 1")    	
-    	.addSequence(getSceneForPath("/sc/OutputShader2"), "preset 1")
-    ;*/
-    
-    
-    //switcher.bindSequence("outputModeChange1", cSequence, 4);
-    /*switcher.bindSequence("outputModeChange5", opSequence);
-    switcher.bindSequence("outputModeChange6", opSequence);
-    switcher.bindSequence("outputModeChange7", opSequence);
-    switcher.bindSequence("outputModeChange8", opSequence);*/
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
     		new TunnelScene(this, w, h).setCanvas("temp", "/pix0")
 			//.addFilter(new BlendDrawer()))
 		, "/pix0", "/out"
 	);
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), 5);
-    switcher.bindSequence("tunnel_1_blob_pulse_2", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), 5);
-    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_1",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), 25);
+    switcher.bindSequence("tunnel_1_blob_fixed_2", new ChainSequence(2000).addSequence(ts1, "fixed").addSequence(blobScene, "preset 2"), 5);
+    switcher.bindSequence("tunnel_1_blob_fixed_1", new ChainSequence(2000).addSequence(ts1, "fixed").addSequence(blobScene, "preset 3"), 5);
+    switcher.bindSequence("tunnel_1_blob_fixed_wobble_1",new ChainSequence(2000).addSequence(ts1, "fixed").addSequence(blobScene, "preset 3"), 5);
+    switcher.bindSequence("tunnel_1_blob_fixed_wobble_2",new ChainSequence(2000).addSequence(ts1, "fixed").addSequence(blendScene, "preset 1"), 25);
     /*switcher.bindSequence(
         	"tunnel_2_pulse",     
         	*/
     TunnelScene ts2 = (TunnelScene) this.addSceneInputOutputCanvas(
-	    		new TunnelScene(this, w, h).setCanvas("temp", "/pix1")
+	    		new TunnelScene(this, w, h)
 	    			//.addFilter(new BlendDrawer()))
 	    		
 	    		, "/out", "/out"
 	);
     switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 5);
-    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 5);
+    switcher.bindSequence("tunnel_2_plasma_fixed_2", new ChainSequence(2000).addSequence(ts2, "fixed").addSequence(plasmaScene, "preset 2"), 5);
     switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 5);
-    switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), 5);
+    switcher.bindSequence("tunnel_2_blob_fixed_2",   new ChainSequence(2000).addSequence(ts2, "fixed").addSequence(blobScene2, "preset 2"), 5);
     //switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(doubleSequence), 5);
     /*switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), 10);
     switcher.bindSequence("tunnel_2_blob_wobble_1",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 1"), 25);
@@ -319,6 +296,8 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     		, 50
     );*/    
 	//), "preset 1", 20);
+    
+    switcher.bindAndPermute("t1:", "tunnel_", ts2, 5000);
     
     switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader"), 5000);
     switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader2"), 5000);
