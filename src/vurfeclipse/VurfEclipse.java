@@ -30,7 +30,7 @@ public class VurfEclipse extends PApplet {
 	
 	boolean hdRes = false;
 	boolean mdRes = false;
-	boolean projRes = true;
+	boolean projRes = false;
 	boolean ultrahiRes = true;
 	boolean hiRes = true;
 	boolean medRes = true;
@@ -156,9 +156,9 @@ public class VurfEclipse extends PApplet {
 	
 	//config settings
 	int 
-		output_width =  hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640, 
-		output_height = hdRes ? 1080 : mdRes ? 900 :  projRes ? 960 : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480;
-	
+		//output_width =  hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640, 
+		//output_height = hdRes ? 1080 : mdRes ? 900 :  projRes ? 960 : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480;
+		output_width = 1280; int output_height = 1024;;;;
 	//int output_width = hiRes ? 1280 : 800, output_height = hiRes? 1024 : 600;
 	//int output_width = 1280, output_height = 1024;
 	int desired_width = output_width; //(int)(output_width*1.5f);
@@ -283,7 +283,7 @@ public class VurfEclipse extends PApplet {
 		 System.out.println("Instantiating Project at " + desired_width + "x" + desired_height);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 
-		 pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
+		 pr = new ParadoxProject(desired_width, desired_height, gfx_mode); 
 		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
 		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
 		 //pr = new TempSocioSukiVideoProject(desired_width, desired_height, gfx_mode);

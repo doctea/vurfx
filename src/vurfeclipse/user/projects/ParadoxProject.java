@@ -293,7 +293,7 @@ public class ParadoxProject extends Project implements Serializable {
 	    			//.addFilter(new BlendDrawer()))
 	    		
 	    		, "/out" /*"/pix1"*/, "/out"
-	);
+	); 
     switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 5);
     switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 5);
     switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 5);
