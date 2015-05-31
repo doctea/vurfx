@@ -26,6 +26,11 @@ public class TunnelScene extends SimpleScene {
 		sequences.put("angled 30", new ChainSequence(5000).addSequence(new TunnelFixedSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 30)));
 		sequences.put("angled 15", new ChainSequence(5000).addSequence(new TunnelFixedSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 15)));
 		sequences.put("angled 10", new ChainSequence(5000).addSequence(new TunnelFixedSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 10)));
+		sequences.put("p1 angled 60", new ChainSequence(5000).addSequence(new TunnelPulseSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 60)));
+		sequences.put("p1 angled 45", new ChainSequence(5000).addSequence(new TunnelPulseSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 45)));
+		sequences.put("p1 angled 30", new ChainSequence(5000).addSequence(new TunnelPulseSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 30)));
+		sequences.put("p2 angled 45", new ChainSequence(5000).addSequence(new TunnelPulseSequence2(this, 5000,false)).addSequence(new TunnelAngledSequence(this, 5000, 45)));
+		sequences.put("p2 angled 30", new ChainSequence(5000).addSequence(new TunnelPulseSequence2(this, 5000,true)).addSequence(new TunnelAngledSequence(this, 5000, 30)));
 		sequences.put("f2 angled 60", new ChainSequence(5000).addSequence(new TunnelFixedSequence2(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 60)));
 		sequences.put("f2 angled 45", new ChainSequence(5000).addSequence(new TunnelFixedSequence2(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 45)));
 		sequences.put("f2 angled 30", new ChainSequence(5000).addSequence(new TunnelFixedSequence2(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 30)));
