@@ -75,6 +75,7 @@ public class BlendDrawer extends Filter {
     addParameter("Scale", new Float(1.0f), 0.0f, 4.0f);
     addParameter("X", new Float(0.0f), -1.0f, 1.0f);
     addParameter("Y", new Float(0.0f), -1.0f, 1.0f);
+    addParameter("Rotate", new Integer(0), 0, 360);
   }
   
   public void updateParameterValue(String paramName, Object value) {
@@ -141,7 +142,7 @@ public class BlendDrawer extends Filter {
     /*x = (int) PApplet.map(((Float)getParameterValue("X")),-2.0f,2.0f,-2*w,2*w);
     y = (int) PApplet.map(((Float)getParameterValue("Y")),-2.0f,2.0f,-2.0f*h,2.0f*h);*/
     
-
+    rotation = (Integer) getParameterValue("Rotate");
     if (rotation!=0) {
         out.rotate(PApplet.radians(rotation));
       }    
