@@ -5,6 +5,7 @@ import vurfeclipse.filters.*;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.scenes.SimpleScene;
+import vurfeclipse.sequence.ChainSequence;
 import vurfeclipse.sequence.Sequence;
 
 public class TunnelScene extends SimpleScene {
@@ -19,6 +20,17 @@ public class TunnelScene extends SimpleScene {
 		//HashMap<String,Sequence> a = super.getSequences();//new HashMap<String,Sequence> ();
 		sequences.put("preset 1", new TunnelPulseSequence(this, 2000));
 		sequences.put("fixed", new TunnelFixedSequence(this, 2000));		
+		sequences.put("fixed 2", new TunnelFixedSequence2(this, 5000));
+		sequences.put("angled 60", new ChainSequence(5000).addSequence(new TunnelFixedSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 60)));
+		sequences.put("angled 45", new ChainSequence(5000).addSequence(new TunnelFixedSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 45)));
+		sequences.put("angled 30", new ChainSequence(5000).addSequence(new TunnelFixedSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 30)));
+		sequences.put("angled 15", new ChainSequence(5000).addSequence(new TunnelFixedSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 15)));
+		sequences.put("angled 10", new ChainSequence(5000).addSequence(new TunnelFixedSequence(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 10)));
+		sequences.put("f2 angled 60", new ChainSequence(5000).addSequence(new TunnelFixedSequence2(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 60)));
+		sequences.put("f2 angled 45", new ChainSequence(5000).addSequence(new TunnelFixedSequence2(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 45)));
+		sequences.put("f2 angled 30", new ChainSequence(5000).addSequence(new TunnelFixedSequence2(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 30)));
+		sequences.put("f2 angled 15", new ChainSequence(5000).addSequence(new TunnelFixedSequence2(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 15)));
+		sequences.put("f2 angled 5", new ChainSequence(5000).addSequence(new TunnelFixedSequence2(this, 5000)).addSequence(new TunnelAngledSequence(this, 5000, 5)));
 		sequences.put("preset 2", new TunnelPulseSequence2(this, 2000, true));
 		sequences.put("preset 3", new TunnelPulseSequence2(this, 2000, false));
 	}
@@ -46,7 +58,10 @@ public class TunnelScene extends SimpleScene {
 		@Override
 		public void onStart() {
 			// TODO Auto-generated method stub
-			
+			for (int i = 1 ; i <= 6 ; i++) {
+				getFilter("Blend_"+i).changeParameterValue("Rotate", 0);
+				getFilter("Blend_"+i).updateAllParameterValues();
+			}
 		}
 
 		@Override
@@ -81,7 +96,6 @@ public class TunnelScene extends SimpleScene {
 	}
 	
 	class TunnelFixedSequence extends TunnelPulseSequence {
-
 		public TunnelFixedSequence(TunnelScene tunnelScene, int i) {
 			super(tunnelScene, i);
 			// TODO Auto-generated constructor stub
@@ -89,7 +103,7 @@ public class TunnelScene extends SimpleScene {
 		
 		@Override
 		public void setValuesForNorm(double pc, int iteration) {
-			super.setValuesForNorm(1f, iteration);
+			//super.setValuesForNorm(1f, iteration);
 		}
 		
 		@Override
@@ -99,7 +113,64 @@ public class TunnelScene extends SimpleScene {
 			for (int i = 1 ; i <= 6 ; i++) {
 			//for (float f = 0.1f ; f < 2.0f ; f+)
 				getFilter("Blend_"+i).resetParameters();
-				getFilter("Blend_"+i).changeParameterValue("Opacity", ((100f/6f)*i));
+				getFilter("Blend_"+i).changeParameterValue("Opacity", 0.1f + ((6-i)*0.125f));
+				//getFilter("Blend_"+i).changeParameterValue("Rotate", i); //45 * i-1); //(i-1)*(/6));
+				getFilter("Blend_"+i).changeParameterValue("BlendMode", (i%2==0?8:3));
+				getFilter("Blend_"+i).updateAllParameterValues();
+			}
+		}
+	}
+	
+	class TunnelFixedSequence2 extends TunnelPulseSequence {
+		public TunnelFixedSequence2(TunnelScene tunnelScene, int i) {
+			super(tunnelScene, i);
+			// TODO Auto-generated constructor stub
+		}
+		
+		@Override
+		public void setValuesForNorm(double pc, int iteration) {
+			//super.setValuesForNorm(1f, iteration);
+		}
+		
+		@Override
+		public void onStart() {
+			super.onStart();
+			// TODO Auto-generated method stub
+			for (int i = 1 ; i <= 6 ; i++) {
+			//for (float f = 0.1f ; f < 2.0f ; f+)
+				getFilter("Blend_"+i).resetParameters();
+				getFilter("Blend_"+i).changeParameterValue("Opacity", 0.1f + ((i)*0.125f));
+				//getFilter("Blend_"+i).changeParameterValue("Rotate", i); //45 * i-1); //(i-1)*(/6));
+				getFilter("Blend_"+i).changeParameterValue("BlendMode", (i%2==0?8:3));
+				getFilter("Blend_"+i).updateAllParameterValues();
+			}
+		}
+	}	
+	
+	class TunnelAngledSequence extends TunnelPulseSequence {
+		int angle;
+		
+		public TunnelAngledSequence(TunnelScene tunnelScene, int i, int angle) {
+			super(tunnelScene, i);
+			this.angle = angle;
+			// TODO Auto-generated constructor stub
+		}
+		
+		@Override
+		public void setValuesForNorm(double pc, int iteration) {
+			//super.setValuesForNorm(1f, iteration);
+		}
+		
+		@Override
+		public void onStart() {
+			super.onStart();
+			// TODO Auto-generated method stub
+			for (int i = 1 ; i <= 6 ; i++) {
+			//for (float f = 0.1f ; f < 2.0f ; f+)
+				getFilter("Blend_"+i).resetParameters();	
+				getFilter("Blend_"+i).changeParameterValue("Rotate", i * angle); //45 * i-1); //(i-1)*(/6));
+				getFilter("Blend_"+i).changeParameterValue("BlendMode", (i%2==0?8:3));
+				getFilter("Blend_"+i).updateAllParameterValues();
 			}
 		}
 	}
