@@ -76,6 +76,7 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     VideoPlayer vp = new VideoPlayer(ils1,"");
     vp.loadDirectory("video-sources/");
     vp.setOutputCanvas("/pix0");
+    vp.setStartDelay(250);
     ils1.addFilter(vp);
     
     VideoPlayer vp2 = new VideoPlayer(ils2,"");

@@ -71,6 +71,7 @@ public class VideoPlayer extends Filter {
   
   transient GSMovie newStream;
   boolean changing = false;
+private int startDelay;
   public synchronized void changeVideo(String fn) {
     if (changing) return;
     final String filename = fn;
@@ -169,6 +170,10 @@ public class VideoPlayer extends Filter {
       //stream.setPixelDest(out.getTexture());
       stream.setPixelDest(tex, true);
       stream.volume(0);
+      
+      if (this.startDelay>0) 
+    	  Thread.sleep(startDelay);
+      
       if (!((VurfEclipse)APP.getApp()).exportMode) 
         stream.loop();
     } catch (Exception e) {
@@ -261,4 +266,8 @@ public class VideoPlayer extends Filter {
       //out.loadTexture();
     //}
   }
+
+public void setStartDelay(int i) {
+	this.startDelay = i;
+}
 }

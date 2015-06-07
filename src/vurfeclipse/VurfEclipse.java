@@ -28,7 +28,7 @@ public class VurfEclipse extends PApplet {
 		rect (width/2,height/2,5,5);
 	}*/
 	
-	boolean hdRes = false;
+	boolean hdRes = true;
 	boolean mdRes = false;
 	boolean projRes = false;
 	boolean ultrahiRes = true;
@@ -139,6 +139,7 @@ public class VurfEclipse extends PApplet {
 		
 	//@Override
 	boolean resizeRenderer () {
+		System.out.println("resizeRenderer() returning false");
 		return false;
 	}
 	
@@ -156,9 +157,9 @@ public class VurfEclipse extends PApplet {
 	
 	//config settings
 	int 
-		//output_width =  hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640, 
-		//output_height = hdRes ? 1080 : mdRes ? 900 :  projRes ? 960 : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480;
-		output_width = 1280; int output_height = 1024;;;;
+		output_width =  hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640, 
+		output_height = hdRes ? 1080 : mdRes ? 900 :  projRes ? 960  : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480;
+		//output_width = 1280; int output_height = 1024;;;;
 	//int output_width = hiRes ? 1280 : 800, output_height = hiRes? 1024 : 600;
 	//int output_width = 1280, output_height = 1024;
 	int desired_width = output_width; //(int)(output_width*1.5f);
