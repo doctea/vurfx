@@ -38,8 +38,8 @@ public class OutputFX2 extends SimpleScene {
 		
 	    os2.addFilter(new ShaderFilter(os2,"SyncEffect.xml")
 	    		.setFilterName("SyncEffect").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))
-				.addParameter("step_x", 0.0f, -0.5f, 0.5f)
-				.addParameter("step_y", 0.0f, -0.5f, 0.5f)
+				.addParameter("step_x", 0.0f, -10.0f, 10.0f)
+				.addParameter("step_y", 0.0f, -10.0f, 10.0f)
 	    );
 
 	    
