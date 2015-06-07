@@ -81,7 +81,7 @@ public class OutputFX2 extends SimpleScene {
 		
 		//sequences.put("show_blend", new ShowFilterSequence(this, 0, host.getSceneForPath(getPath()).getFilter("Kaleido")));
 		
-		//sequences.put("show_sync", new SyncSequence(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
+		sequences.put("show_sync", new SyncSequence(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
     }
 	
 
@@ -149,7 +149,7 @@ public class OutputFX2 extends SimpleScene {
 		}		
 	}
 	
-	/*class SyncSequence extends Sequence {
+	class SyncSequence extends Sequence {
 		public SyncSequence(OutputFX2 outputFX2, int i) {
 			// TODO Auto-generated constructor stub
 			super(outputFX2, i);
@@ -172,6 +172,6 @@ public class OutputFX2 extends SimpleScene {
 			// TODO Auto-generated method stub
 			
 		}		
-	}	*/
+	}	
 	
 }

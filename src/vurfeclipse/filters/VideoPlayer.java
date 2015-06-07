@@ -226,7 +226,7 @@ private int startDelay;
         //out.getTexture().putPixelsIntoTexture();
         if (tex.putPixelsIntoTexture()) {
           out.beginDraw();
-          if ((int)((VurfEclipse)APP.getApp()).random(100)<20)  println("VideoPlayer>>>video writing to " + out);
+          //if ((int)((VurfEclipse)APP.getApp()).random(100)<20)  println("VideoPlayer>>>video writing to " + out);
           out.image(tex,0,0,sc.w,sc.h);
           out.endDraw();
           return true;
