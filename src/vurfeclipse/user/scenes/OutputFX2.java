@@ -36,6 +36,13 @@ public class OutputFX2 extends SimpleScene {
 	    os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("pix0")).setParameterValue("BlendMode",8));
 	    //os.addFilter(new BlendDrawer(os).setFilterName("BlendDrawer inp0 to out").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0")).setParameterValue("BlendMode",9));
 		
+	    os2.addFilter(new ShaderFilter(os2,"SyncEffect.xml")
+	    		.setFilterName("SyncEffect").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))
+				.addParameter("step_x", 0.0f, -0.5f, 0.5f)
+				.addParameter("step_y", 0.0f, -0.5f, 0.5f)
+	    );
+
+	    
 	    return true;
 	}
 	
@@ -73,6 +80,8 @@ public class OutputFX2 extends SimpleScene {
 		sequences.put("show_blend", new ShowFilterSequence(this, 0, getPath()+"/fl/BlendDrawer pix0 to out"));		
 		
 		//sequences.put("show_blend", new ShowFilterSequence(this, 0, host.getSceneForPath(getPath()).getFilter("Kaleido")));
+		
+		//sequences.put("show_sync", new SyncSequence(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
     }
 	
 
@@ -139,5 +148,30 @@ public class OutputFX2 extends SimpleScene {
 			
 		}		
 	}
+	
+	/*class SyncSequence extends Sequence {
+		public SyncSequence(OutputFX2 outputFX2, int i) {
+			// TODO Auto-generated constructor stub
+			super(outputFX2, i);
+		}
+
+		@Override
+		public void setValuesForNorm(double pc, int iteration) {
+			// TODO Auto-generated method stub
+			getFilter("SyncEffect").setParameterValueFromSin("step_x", pc);
+		}
+
+		@Override
+		public void onStart() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onStop() {
+			// TODO Auto-generated method stub
+			
+		}		
+	}	*/
 	
 }
