@@ -1,0 +1,7 @@
+<filter name="SyncEffect">
+    <description>SyncEffect</description>
+    <fragment>SyncEffect.glsl</fragment>
+    <textures input="1" output="1"></textures>
+    <parameter type="float" name="step_x" label="Step X">0.01</parameter>
+    <parameter type="float" name="step_y" label="Step Y">0.01</parameter>
+</filter>
