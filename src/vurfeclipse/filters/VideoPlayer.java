@@ -8,7 +8,7 @@ import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
 import codeanticode.glgraphics.GLTexture;
-import codeanticode.gsvideo.GSMovie;
+import codeanticode.glgraphics.GLTextureParameters;
 import codeanticode.gsvideo.*;
 
 public class VideoPlayer extends Filter {
@@ -156,7 +156,10 @@ private int startDelay;
       qte.printStackTrace();
     }*/
     
-    tex = new GLTexture(APP.getApp(),sc.w,sc.h);
+    GLTextureParameters params = new GLTextureParameters();
+    params.wrappingU = GLTextureParameters.REPEAT;
+    params.wrappingV = GLTextureParameters.REPEAT;  
+    tex = new GLTexture(APP.getApp(),sc.w,sc.h, params);
     
     loadDirectory();
     filename = videos.get(0);
