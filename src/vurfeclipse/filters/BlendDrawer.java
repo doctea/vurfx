@@ -6,6 +6,7 @@ import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
 import codeanticode.glgraphics.GLTexture;
 import codeanticode.glgraphics.GLTextureFilter;
+import codeanticode.glgraphics.GLTextureParameters;
 
 public class BlendDrawer extends Filter {
   
@@ -110,7 +111,10 @@ public class BlendDrawer extends Filter {
     // set up inital variables or whatevs 
     
     //this.glFilter = new GLTextureFilter(APP,blendModes[currentBlendMode]);//"BlendColor.xml");
-    this.t = new GLTexture(APP.getApp(),sc.w,sc.h);
+    GLTextureParameters params = new GLTextureParameters();
+    params.wrappingU = GLTextureParameters.REPEAT;
+    params.wrappingV = GLTextureParameters.REPEAT;  
+    this.t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
     
     for (int i = 0 ; i < blendModes.length ; i++) {
       getFilterNumber(i);
@@ -197,7 +201,12 @@ public class BlendDrawer extends Filter {
     //out.loadPixels();
     if (out==null) setOutputCanvas(canvas_out);
     if (src==null) setInputCanvas(canvas_in);
-    if (t==null) this.t = new GLTexture(APP.getApp(),sc.w,sc.h);
+    if (t==null) {
+        GLTextureParameters params = new GLTextureParameters();
+        params.wrappingU = GLTextureParameters.REPEAT;
+        params.wrappingV = GLTextureParameters.REPEAT;  
+    	this.t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
+    }
     out.beginDraw();
   }
   

@@ -31,6 +31,7 @@ public class GLColourFilter extends Filter {
     //glFilter = new GLTextureFilter();
     //glFilter.setTint((int)random(255)); //random(1),random(1),random(1));
     //glFilter = new GLTextureFilter(APP, "SwapRGB.xml");
+	  
     glFilter = new GLTextureFilter(APP.getApp(), "PhaseRGB.xml");
 
     //t = new GLTexture(APP,sc.w,sc.h);

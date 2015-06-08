@@ -1,11 +1,15 @@
 package vurfeclipse.filters;
 
-
 import processing.core.PVector;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
 import codeanticode.glgraphics.GLTexture;
 import codeanticode.glgraphics.GLTextureFilter;
+import codeanticode.glgraphics.GLTextureParameters;
+import codeanticode.glgraphics.*;
+import processing.opengl.*;
+
+
 
 public class ShaderFilter extends Filter {
   
@@ -65,8 +69,12 @@ public class ShaderFilter extends Filter {
     //glFilter.setTint((int)random(255)); //random(1),random(1),random(1));
     //glFilter = new GLTextureFilter(APP.getApp(), shaderName); //"Edges.xml");
     initShader(shaderName);
+    
+    GLTextureParameters params = new GLTextureParameters();
+    params.wrappingU = GLTextureParameters.REPEAT;
+    params.wrappingV = GLTextureParameters.REPEAT;    
 
-    t = new GLTexture(APP.getApp(),sc.w,sc.h);
+    t = new GLTexture(APP.getApp(),sc.w,sc.h, params);
     
     return true;
   }
@@ -101,7 +109,14 @@ public class ShaderFilter extends Filter {
 	    src.loadTexture();
 	    out.loadTexture();*/
 	    //super.beginDraw();
-	    if (t==null) t = new GLTexture(APP.getApp(),sc.w,sc.h);
+	  
+	    if (t==null) {
+	        GLTextureParameters params = new GLTextureParameters();
+	        params.wrappingU = GLTextureParameters.REPEAT;
+	        params.wrappingV = GLTextureParameters.REPEAT;  
+	    	t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
+	    	
+	    }
 	    if (src==null) setInputCanvas(canvas_in);
 	    if (out==null) setOutputCanvas(canvas_out);
 	    if (glFilter==null) glFilter = new GLTextureFilter(APP.getApp(), shaderName);
