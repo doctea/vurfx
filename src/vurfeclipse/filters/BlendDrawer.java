@@ -49,12 +49,17 @@ public class BlendDrawer extends Filter {
     this.w = sc.w;
     this.h = sc.h;
   }
-  BlendDrawer(Scene sc, int x, int y, int w, int h) {
+  public BlendDrawer(Scene sc, int x, int y, int w, int h) {
     this(sc);
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
+  }
+  public BlendDrawer(Scene sc, int w, int h) {
+	  this(sc);
+	  this.w = w;
+	  this.h = h;
   }
   BlendDrawer(Scene sc, int rotation) {
     this(sc);
@@ -138,7 +143,10 @@ public class BlendDrawer extends Filter {
     //println ("x and y are " + (Float)getParameterValue("X") + "," +  (Float)getParameterValue("Y"));
 
     out.translate(w/2, h/2);
-    out.translate(w*(Float)getParameterValue("X"), (Float)getParameterValue("Y"));
+    out.translate(
+    		w*(Float)getParameterValue("X"), 
+    		h*(Float)getParameterValue("Y")
+    );
     
     //if ((Float)getParameterValue("Zoom")!=1.0f) {
     	out.scale((Float)getParameterValue("Scale"));
@@ -163,6 +171,7 @@ public class BlendDrawer extends Filter {
     //out.image(t,x,y);
     out.image(t,
     		0,0
+    		,w,h	// added to try and support hi-res display of blobs 2015-07-12
     		//w * (Float)getParameterValue("X"),
     		//h * (Float)getParameterValue("Y")
     );

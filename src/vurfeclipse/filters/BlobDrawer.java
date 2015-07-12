@@ -20,6 +20,10 @@ public class BlobDrawer extends SpiralDrawer {
     super(sc);
   }
   
+  public BlobDrawer(Scene sc, int ov_w, int ov_h) {
+	super(sc, ov_w, ov_h);
+  }
+
   public boolean initialise () {
     //b.setInput(src.getTexture());
     //b.loadSVG("output/ds2014/dseye.svg");

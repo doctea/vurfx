@@ -6,6 +6,7 @@ import java.util.HashMap;
 import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.Blob;
+import vurfeclipse.Canvas;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.BlobDrawer;
 import vurfeclipse.projects.Project;
@@ -23,10 +24,23 @@ public class BlobFX1 extends SimpleScene {
 		//SimpleScene this = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out");
 		super.setupFilters();
 		//Scene this = this;
-	    this.addFilter(new BlobDrawer(this)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer").setCanvases(this.getCanvasMapping("temp2"),this.getCanvasMapping("pix0")));
-	    this.addFilter(new BlobDrawer(this)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer2").changeParameterValue("shape", 2).setCanvases(this.getCanvasMapping("temp3"),this.getCanvasMapping("pix1")));
-	    this.addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp2")));
-	    this.addFilter(new BlendDrawer(this).setFilterName("BlendDrawer2").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp3")));
+		
+		// oversize
+		boolean oversize = false;		
+		int ov_w = oversize ? w*2 : w;
+		int ov_h = oversize ? h*2 : h;
+		if (oversize) {
+			Canvas temp = createCanvas("temp2", ov_w, ov_h);
+			setCanvas("temp2", getPath()+"/temp2");
+			Canvas temp2 = createCanvas("temp3", ov_w, ov_h);
+			setCanvas("temp3", getPath()+"/temp3");
+			//setCanvas("out", getPath()+"/out");
+		}
+		
+	    this.addFilter(new BlobDrawer(this,ov_w,ov_h)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer").setCanvases(this.getCanvasMapping("temp2"),this.getCanvasMapping("pix0")));
+	    this.addFilter(new BlobDrawer(this,ov_w,ov_h)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer2").changeParameterValue("shape", 2).setCanvases(this.getCanvasMapping("temp3"),this.getCanvasMapping("pix1")));
+	    this.addFilter(new BlendDrawer(this,ov_w,ov_h/*ov_w,ov_h*/).setFilterName("BlendDrawer").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp2")));
+	    this.addFilter(new BlendDrawer(this,ov_w,ov_h/*,ov_w,ov_h*/).setFilterName("BlendDrawer2").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp3")));
 	    //this.setMuted(true);
 	    
 	    //((BlobDrawer)this.getFilter("BlobDrawer")).loadSVG(APP.getApp().dataPath("image-sources/reindeer.svg"));

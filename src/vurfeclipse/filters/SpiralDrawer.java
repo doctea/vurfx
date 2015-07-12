@@ -11,13 +11,20 @@ import codeanticode.glgraphics.GLGraphicsOffScreen;
 public class SpiralDrawer extends Filter {
   
   boolean continuousDraw = false;
-  
+  int w, h;
 
   public SpiralDrawer(Scene sc) {
     super(sc);
-    //this.w = sc.w;
-    //this.h = sc.h;
+    this.w = sc.w;
+    this.h = sc.h;
   }
+  
+  public SpiralDrawer(Scene sc, int w, int h) {
+    super(sc);
+    this.w = sc.w;
+    this.h = sc.h;
+  }
+
   
   public boolean initialise () {
     super.initialise();
@@ -34,7 +41,7 @@ public class SpiralDrawer extends Filter {
   
   public void setParameterDefaults() {
     super.setParameterDefaults();
-    addParameter("spiralCenter", new PVector(sc.w/2,sc.h/2));
+    addParameter("spiralCenter", new PVector(this.w/2,this.h/2));
     addParameter("rotation", 90.0f, 0.0f, 360.0f);
     addParameter("numofCircles", 5.0f, 1.0f, 20.0f); //4.5);
     addParameter("startRadius", 300, 10, 500);
@@ -145,11 +152,11 @@ public class SpiralDrawer extends Filter {
     } else {
       int n = 0;
       while (n <= numofCircles*10) {
-        this.drawObject(PApplet.abs(PApplet.sin(n)*sc.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
+        this.drawObject(PApplet.abs(PApplet.sin(n)*this.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
         n++;
       }
       n--;
-      this.drawObject(PApplet.abs(PApplet.sin(n)*sc.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);      
+      this.drawObject(PApplet.abs(PApplet.sin(n)*this.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);      
     }
       
     return true;

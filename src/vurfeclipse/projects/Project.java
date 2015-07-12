@@ -76,12 +76,18 @@ public abstract class Project implements Serializable {
     mappings.put(getPath()+"temp2", BUF_TEMP2);            
   }
   
-  public Canvas createCanvas(String path, String name) {
-    //mappings.put(path + "/" + name, makeCanvas(w,h,gfx_mode,name));
-    Canvas c = Canvas.makeCanvas(w,h,gfx_mode,name);
-    addCanvas(path, c);
-    println("Project#createCanvas('" + path + "','" + name + "') got '" + c.getSurf() + "'");
-    return c;
+  public Canvas createCanvas(String path, String canvasName, int width, int height) {
+	    //mappings.put(path + "/" + name, makeCanvas(w,h,gfx_mode,name));
+		//int w = this.w, h = this.h;
+		println("createCanvas for '" + canvasName + "'");
+	    Canvas c = Canvas.makeCanvas(width,height,gfx_mode,canvasName);
+	    addCanvas(path, c);
+	    println("Project#createCanvas('" + path + "','" + canvasName + "') got '" + c.getSurf() + "'");
+	    return c;
+	}
+  
+  public Canvas createCanvas(String path, String canvasName) {
+	  return this.createCanvas(path, canvasName, this.w, this.h);
   }
   
   //GLGraphicsOffScreen buffers[] = new GLGraphicsOffScreen[8];
@@ -619,6 +625,7 @@ public abstract class Project implements Serializable {
   public void println(String text) {		// debugPrint, printDebug -- you get the idea
 	  if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
   }
+
   
   
 }
