@@ -1,6 +1,7 @@
 package vurfeclipse.user.scenes;
 
 import processing.core.PApplet;
+import vurfeclipse.Canvas;
 import vurfeclipse.filters.*;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
@@ -195,7 +196,14 @@ public class TunnelScene extends SimpleScene {
 		bl1.changeParameterValue("Y", new Float(0.33f));
 		this.addFilter(bl1);*/
 				
-		this.addFilter(
+		//Canvas temp = createCanvas("temp", w*2, h*2);
+		//Canvas out = createCanvas("out", w*2, h*2);
+		//setCanvas("temp", getPath()+"/temp");
+		//setCanvas("out", getPath()+"/out");
+		
+		//this.w = w*2; this.h = h*2;
+		
+		this.addFilter(	//,0,0,w*2,h*2
 				new BlendDrawer(this).setFilterName("Blend_6").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
 					.changeParameterValue("Scale", new Float(2.0f))
 					.changeParameterValue("Opacity", new Float(0.05f))
