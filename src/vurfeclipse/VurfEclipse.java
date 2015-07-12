@@ -28,7 +28,7 @@ public class VurfEclipse extends PApplet {
 		rect (width/2,height/2,5,5);
 	}*/
 	
-	boolean hdRes = true;
+	boolean hdRes = false;
 	boolean mdRes = false;
 	boolean projRes = false;
 	boolean ultrahiRes = true;
