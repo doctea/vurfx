@@ -47,7 +47,7 @@ public class ImageListDrawer extends Filter {
 	  this.directory = directory;
 	  return this;
   }
-  
+
   public ImageListDrawer setFileList(String src_file) {
     this.src_file = src_file;
     return this;
@@ -84,10 +84,10 @@ public class ImageListDrawer extends Filter {
         l = reader.readLine();
         if (l!=null && !l.equals("")) {
           filenames.add(l);
-          //filenames[c] = l; 
+          //filenames[c] = l;
           c++;
         }
-      } 
+      }
       catch (IOException e) {
         l = null;
       }
@@ -96,11 +96,11 @@ public class ImageListDrawer extends Filter {
       }
     }
   }
-  
+
   public void loadDirectory() {
 	  loadDirectory(this.directory);
   }
-  
+
   public void loadDirectory(String directory) {
 	  String path = APP.getApp().sketchPath("bin/data/image-sources/" + directory);	// ffs need this on Windows..
 	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
@@ -114,6 +114,7 @@ public class ImageListDrawer extends Filter {
 			  // skip; maybe recurse tho in future
 		  } else {
 			  if (fileEntry.getName().contains(".png") || fileEntry.getName().contains(".jpg"))
+			  	if (!fileEntry.getName().contains("_small"))
 					  filenames.add(directory + "/" + fileEntry.getName());
 			  if (count>=numBlobs) break;
 		  }
@@ -125,7 +126,7 @@ public class ImageListDrawer extends Filter {
   }
 
 
-  /*  
+  /*
    PImage p = images.get(fn);
    if (null==p) {*/
   /*new Thread() {
@@ -139,19 +140,19 @@ public class ImageListDrawer extends Filter {
    }*/
 
   public PImage getCurrentImage (ImageRepository IR) {
-    System.out.println(this + "#getCurrentImage for current_image_index: [" + current_image_index + "/" + filenames.size() + "]");    
+    System.out.println(this + "#getCurrentImage for current_image_index: [" + current_image_index + "/" + filenames.size() + "]");
     //PImage p = getImageForFilename(filenames.get(current_image_index));
     //if (!images.containsKey(filenames.get(current_image_index))) {
     /*if(!IR.hasCached(filenames.get(current_image_index), sc.w, sc.h)) {
      current_image_index = 0;
      }*/
     if (filenames.size()==0)
-      return null;//current_image_index) 
+      return null;//current_image_index)
     //return IR.getImageForFilename(filenames.get(current_image_index), sc.w, sc.h);
     if (current_image_index>=filenames.size()) return null;
     return IR.getImageForFilename(filenames.get(current_image_index), sc.w, sc.h);
 
-    /*if (this.image_srcs[current_image_index]==null) 
+    /*if (this.image_srcs[current_image_index]==null)
      current_image_index = 1; //return this.image_srcs[1];*/
 
     /*PImage c = this.image_srcs[current_image_index];
@@ -167,7 +168,7 @@ public class ImageListDrawer extends Filter {
     System.out.println(this + "#nextImage [" + current_image_index + "/" + filenames.size() + "]");
     current_image_index++;
     //IR.precache(filenames.get(current_image_index), sc.w, sc.h);
-    if (current_image_index >= filenames.size()) 
+    if (current_image_index >= filenames.size())
       current_image_index = 0;
     else if (!ImageRepository.IR.hasCached(filenames.get(current_image_index), sc.w, sc.h)) {
       System.out.println(this + "#nextImage: haven't got cached " + filenames.get(current_image_index));
@@ -196,11 +197,11 @@ public class ImageListDrawer extends Filter {
      this.addParameter("shape", new Integer(0), 0, b.shapesCount);
      this.addParameter("colour", color(random(255),random(255),random(255),128));*/
     //this.addParameter("radius", 0.5, 0.01, 20.0);
-  }  
+  }
 
 
   public boolean initialise() {
-    // set up inital variables or whatevs 
+    // set up inital variables or whatevs
     //image_src = new GLTexture(APP,sc.w,sc.h);
     //PImage im = loadImage(fileName); //"image48173.40247.jpg");
     //image_src.putImage(im);
@@ -240,10 +241,10 @@ public class ImageListDrawer extends Filter {
      sc.h - (sc.h/2 * map((Float)getParameterValue("scale"),1.0f,5.0f,0.0f,1.0f))
      );*/
     /*      out.translate(
-     sc.w*0.5f+(map(5.0-(Float)getParameterValue("scale"),1.0f,5.0f,-0.5f,0.5f)), 
+     sc.w*0.5f+(map(5.0-(Float)getParameterValue("scale"),1.0f,5.0f,-0.5f,0.5f)),
      sc.h*0.5f+(map(5.0-(Float)getParameterValue("scale"),1.0f,5.0f,-0.5f,0.5f))
      );      */
-    out.translate((Integer)getParameterValue("translate_x"), (Integer)getParameterValue("translate_y"));     
+    out.translate((Integer)getParameterValue("translate_x"), (Integer)getParameterValue("translate_y"));
     out.scale((Float)getParameterValue("scale"));//random(0,100));
 
     //p = getCurrentImage(IR);
@@ -255,14 +256,14 @@ public class ImageListDrawer extends Filter {
       //out.translate((Integer)getParameterValue("translate_x"), (Integer)getParameterValue("translate_y"));
       if ((Integer)getParameterValue("translate_x")<0) {
         out.image(p, sc.w, 0, sc.w, sc.h);
-      } 
+      }
       else if ((Integer)getParameterValue("translate_x")>0) {
         out.image(p, 0-sc.w, 0, sc.w, sc.h);
       }
     }
     p = null;
     out.popMatrix();
-    //fileChanged = false; 
+    //fileChanged = false;
     //}
 
 
@@ -276,7 +277,7 @@ public class ImageListDrawer extends Filter {
    //out.loadPixels();
    out.beginDraw();
    }
-   
+
    public void endDraw() {
    //out.updatePixels();
    out.endDraw();
