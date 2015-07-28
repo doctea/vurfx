@@ -20,7 +20,7 @@ void main(void)
     
     
     //tex_coord.xy = vec2(tex_coord.x * step_x, tex_coord.y * step_y);
-   		// ^^ this one for straightforward 'grid' 
+   	// ^^ this one for straightforward 'grid' 
    
     
     //float ang = atan2(tex_coord.xy);
@@ -30,8 +30,8 @@ void main(void)
     //tex_coord.y = cos(ang) * (d + step_x);
     
     vec2 new_coord = vec2(0.0,0.0);
-    new_coord.x = 0.5 + sin(cos(tex_coord.x) * step_x);
-    new_coord.y = 0.5 + cos(tan(tex_coord.y) * step_y);
+    new_coord.x = sin(cos(tex_coord.x) * step_x);
+    new_coord.y = cos(tan(tex_coord.y) * step_y);
     tex_coord.xy = new_coord.xy;
     // ^^^ this one for sin-wavey wibblewobbly-ness
     

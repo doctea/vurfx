@@ -28,6 +28,13 @@ public class OutputFX2 extends SimpleScene {
 	    //os2.setCanvas("pix0","/pix0");
 	    //os2.setCanvas("blendresult", "/blendresult");
 
+	    os2.addFilter(new ShaderFilter(os2,"SyncEffect.xml")
+		    	.setFilterName("SyncEffect").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))
+					.addParameter("step_x", 2.5f, 0.0f, 40.0f)
+					.addParameter("step_y", 2.5f, 0.0f, 40.0f)
+		    );
+
+	    
 	    os2.addFilter(new ShaderFilter(os2,"Feedback.xml").setFilterName("Feedback").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    
 
 	    os2.addFilter(new KaleidoFilter(os2).setFilterName("Kaleido").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
@@ -36,11 +43,6 @@ public class OutputFX2 extends SimpleScene {
 	    os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("pix0")).setParameterValue("BlendMode",8));
 	    //os.addFilter(new BlendDrawer(os).setFilterName("BlendDrawer inp0 to out").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0")).setParameterValue("BlendMode",9));
 		
-	    os2.addFilter(new ShaderFilter(os2,"SyncEffect.xml")
-	    	.setFilterName("SyncEffect").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))
-				.addParameter("step_x", 2.5f, -20.0f, 20.0f)
-				.addParameter("step_y", 2.5f, -20.0f, 20.0f)
-	    );
 
 	    
 	    return true;
@@ -158,8 +160,8 @@ public class OutputFX2 extends SimpleScene {
 		@Override
 		public void setValuesForNorm(double pc, int iteration) {
 			// TODO Auto-generated method stub
-			getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/10.0));
-			getFilter("SyncEffect").changeParameterValueFromSin("step_y", (float)Math.sin(pc/10.0));
+			getFilter("SyncEffect").changeParameterValueFromSin("step_x", Math.abs((float)Math.sin(pc)));
+			getFilter("SyncEffect").changeParameterValueFromSin("step_y", (float)Math.sin(pc));
 		}
 
 		@Override
