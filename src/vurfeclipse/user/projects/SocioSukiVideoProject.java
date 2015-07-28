@@ -41,7 +41,7 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     addCanvas("/pix1",  Canvas.makeCanvas(w,h,gfx_mode,"input2"));
     addCanvas("/temp1", Canvas.makeCanvas(w,h,gfx_mode,"temp1"));
     addCanvas("/temp2", Canvas.makeCanvas(w*2,h*2,gfx_mode,"temp2"));	//w*2,h*2 etc for oversize
-    addCanvas("/temp3", Canvas.makeCanvas(w,h,gfx_mode,"temp3"));
+    addCanvas("/temp3", Canvas.makeCanvas(w*2,h*2,gfx_mode,"temp3"));
     
     //addCanvas("/blendresult", Canvas.makeCanvas(w,h,gfx_mode,"temp2"));
     
@@ -272,7 +272,7 @@ public class SocioSukiVideoProject extends Project implements Serializable {
         	"tunnel_2_pulse",     
         	*/
     TunnelScene ts2 = (TunnelScene) this.addSceneInputOutputCanvas(
-	    		new TunnelScene(this, w, h)
+	    		new TunnelScene(this, w*2, h*2).setCanvas("temp", "/temp2")
 	    			//.addFilter(new BlendDrawer()))
 	    		, "/out", "/out"
     );
@@ -304,6 +304,8 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     
     switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader"), 5000);
     switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader2"), 5000);
+    
+    switcher.bindAndPermute("sync:", "tunnel_1_", getSceneForPath("/sc/OutputShader2").getSequence("show_sync"), 5000, 5000);
     //switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader"), 5000);
     //switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader2"), 5000);
     
