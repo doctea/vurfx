@@ -2,6 +2,8 @@ package vurfeclipse;
 
 import java.io.Serializable;
 
+import processing.core.PVector;
+
 import codeanticode.glgraphics.GLGraphicsOffScreen;
 
 public class Canvas implements Serializable /*implements Pathable*/ {
@@ -64,6 +66,12 @@ public class Canvas implements Serializable /*implements Pathable*/ {
   
   public static Canvas makeCanvas(int w, int h, String gfx_mode, String canvasName) {
     return new Canvas(w,h,gfx_mode,canvasName);
+  }
+
+  PVector size;
+  public PVector getSize() {
+	  if (size!=null) size = new PVector(this.w,this.h);
+	  return size;
   }
     
   

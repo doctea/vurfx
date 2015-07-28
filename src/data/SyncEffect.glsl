@@ -17,7 +17,7 @@ void main(void)
       tex_coord.xy = vec2(tex_coord.x, 1.0-tex_coord.y);
     }*/
     
-    //tex_coord.xy = vec2(tex_coord.x * step_x, tex_coord.y * step_y);
+    tex_coord.xy = vec2(tex_coord.x * step_x, tex_coord.y * step_y);
     
     //float ang = atan2(tex_coord.xy);
     //float d = distance(vec2(0.0,0.0),tex_coord.xy);  

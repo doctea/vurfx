@@ -115,6 +115,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     return sc.getPath() + "/fl/" + this.getFilterName();
   }
 
+  
+  public String toString() {
+	  return this.getPath();
+  }
 
   public Object getObjectForPath(String path) {
 	  System.out.println("getObjectForPath " + path);

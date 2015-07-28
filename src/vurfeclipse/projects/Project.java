@@ -77,13 +77,13 @@ public abstract class Project implements Serializable {
   }
   
   public Canvas createCanvas(String path, String canvasName, int width, int height) {
-	    //mappings.put(path + "/" + name, makeCanvas(w,h,gfx_mode,name));
+	  //mappings.put(path + "/" + name, makeCanvas(w,h,gfx_mode,name));
 		//int w = this.w, h = this.h;
 		println("createCanvas for '" + canvasName + "'");
-	    Canvas c = Canvas.makeCanvas(width,height,gfx_mode,canvasName);
-	    addCanvas(path, c);
-	    println("Project#createCanvas('" + path + "','" + canvasName + "') got '" + c.getSurf() + "'");
-	    return c;
+	  Canvas c = Canvas.makeCanvas(width,height,gfx_mode,canvasName);
+	  addCanvas(path, c);
+	  println("Project#createCanvas('" + path + "','" + canvasName + "') got '" + c.getSurf() + "'");
+	  return c;
 	}
   
   public Canvas createCanvas(String path, String canvasName) {

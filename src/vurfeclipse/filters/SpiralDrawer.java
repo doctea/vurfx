@@ -44,7 +44,8 @@ public class SpiralDrawer extends Filter {
     addParameter("spiralCenter", new PVector(this.w/2,this.h/2));
     addParameter("rotation", 90.0f, 0.0f, 360.0f);
     addParameter("numofCircles", 5.0f, 1.0f, 20.0f); //4.5);
-    addParameter("startRadius", 300, 10, 500);
+    //addParameter("startRadius", 300, 10, 500);
+    addParameter("startRadius", this.h, 10, this.h*2);
     addParameter("endRadius", 1.0f, 0.2f, 20.0f); //5 //20
     addParameter("numSections", 60.0f, 1.0f, 120.0f);
     addParameter("totalRotate", 0.0f, 0.0f, 360.0f);
