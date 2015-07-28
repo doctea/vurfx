@@ -40,7 +40,7 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     addCanvas("/pix0",  Canvas.makeCanvas(w,h,gfx_mode,"input1"));
     addCanvas("/pix1",  Canvas.makeCanvas(w,h,gfx_mode,"input2"));
     addCanvas("/temp1", Canvas.makeCanvas(w,h,gfx_mode,"temp1"));
-    addCanvas("/temp2", Canvas.makeCanvas(w,h,gfx_mode,"temp2"));
+    addCanvas("/temp2", Canvas.makeCanvas(w*2,h*2,gfx_mode,"temp2"));	//w*2,h*2 etc for oversize
     addCanvas("/temp3", Canvas.makeCanvas(w,h,gfx_mode,"temp3"));
     
     //addCanvas("/blendresult", Canvas.makeCanvas(w,h,gfx_mode,"temp2"));
@@ -63,9 +63,9 @@ public class SocioSukiVideoProject extends Project implements Serializable {
   
   public boolean setupScenes () {      
 	  
-	this.addBlankerScene("/out");	  
+  	this.addBlankerScene("/out");	  
 	  
-	/// INPUT SCENES
+  	/// INPUT SCENES
 	  
     final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
@@ -75,13 +75,13 @@ public class SocioSukiVideoProject extends Project implements Serializable {
 
     VideoPlayer vp = new VideoPlayer(ils1,"");
     vp.loadDirectory("video-sources/");
-    vp.setOutputCanvas("/pix0");
+    vp.setOutputCanvas("/pix0");	// think this should also be "pix0" ... ?
     vp.setStartDelay(250);
     ils1.addFilter(vp);
     
     VideoPlayer vp2 = new VideoPlayer(ils2,"");
     vp2.loadDirectory("video-sources/");
-    vp2.setOutputCanvas("/pix1");
+    vp2.setOutputCanvas("/pix1"); // think this should also be "pix1" ... ?
     ils2.addFilter(vp2);
     
     //ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(10/*200*/).setFilterName("ImageListDrawer2"));
@@ -90,15 +90,15 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     
     
     ils1.addSequence("next", new ShowSceneSequence(ils1, 0) {
-		@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
-		@Override public void onStop() { super.onStop(); }
-		
-		@Override
-		public void onStart() {
-			super.onStart();
-			ils1.nextFilterMode();
-		}
-	});
+			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+			@Override public void onStop() { super.onStop(); }
+			
+			@Override
+			public void onStart() {
+				super.onStart();
+				ils1.nextFilterMode();
+			}
+		});
     ils2.addSequence("next", new ShowSceneSequence(ils1, 0) {
 		@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
 		@Override public void onStop() { super.onStop(); }
@@ -170,11 +170,13 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     
     
     Scene blobScene = new BlobFX1(this,w,h)
-    	.setSceneName("BlobScene")
-    	.setOutputCanvas("/out")
+  		.setSceneName("BlobScene")    
     	.setCanvas("pix0", "/pix0")
     	.setCanvas("pix1", "/pix1")
-    	.setInputCanvas("pix0");
+    	.setInputCanvas("/pix0")
+    	.setOutputCanvas("/out")	// was "out" but reckon that was wrong
+    	//.setCanvas("out", "/out")
+    ;
 
     this.addScene(blobScene);
     switcher.bindSequence("blob1_1", blobScene, "texture");
@@ -183,11 +185,12 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     //switcher.bindSequence("blob1_4", blobScene, "preset 4");
     
     Scene blobScene2 = new BlobFX1(this,w,h)
-		.setSceneName("BlobScene")
-		.setOutputCanvas("/out")
-		.setCanvas("pix0", "/pix0")
-		.setCanvas("pix1", "/pix1")
-		.setInputCanvas("pix0")
+		  .setSceneName("BlobScene")
+		  .setCanvas("pix0", "/pix0")
+		  .setCanvas("pix1", "/pix1")
+		  .setInputCanvas("/pix0")
+		  .setOutputCanvas("/out") // was "/ut" but reckon that was wrong
+		  //.setCanvas("out", "/out")
 		;
     blobScene2.initialise();
     //SimpleScene s = new SimpleScene(this,w,h);
@@ -256,10 +259,10 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     
     
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
-    		new TunnelScene(this, w, h).setCanvas("temp", "/pix0")
-			//.addFilter(new BlendDrawer()))
-		, "/pix0", "/out"
-	);
+    		new TunnelScene(this, w*2, h*2).setCanvas("temp", "/temp2") ///pix0")
+    		//.addFilter(new BlendDrawer()))
+    		, "/pix0", "/out"
+    );
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), 5);
     switcher.bindSequence("tunnel_1_blob_fixed_2", new ChainSequence(2000).addSequence(ts1, "fixed").addSequence(blobScene, "preset 2"), 5);
     switcher.bindSequence("tunnel_1_blob_fixed_1", new ChainSequence(2000).addSequence(ts1, "fixed").addSequence(blobScene, "preset 3"), 5);
@@ -271,9 +274,8 @@ public class SocioSukiVideoProject extends Project implements Serializable {
     TunnelScene ts2 = (TunnelScene) this.addSceneInputOutputCanvas(
 	    		new TunnelScene(this, w, h)
 	    			//.addFilter(new BlendDrawer()))
-	    		
 	    		, "/out", "/out"
-	);
+    );
     switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 5);
     switcher.bindSequence("tunnel_2_plasma_fixed_2", new ChainSequence(2000).addSequence(ts2, "fixed").addSequence(plasmaScene, "preset 2"), 5);
     switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 5);

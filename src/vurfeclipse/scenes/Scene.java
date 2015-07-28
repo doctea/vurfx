@@ -5,6 +5,8 @@ import vurfeclipse.*;
 import java.io.*;
 import java.util.*;
 
+import processing.core.PVector;
+
 import vurfeclipse.*;
 import vurfeclipse.filters.*;
 import vurfeclipse.parameters.Parameter;
@@ -156,6 +158,17 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     }
     return mapTo;
   }    
+  
+  public PVector getCanvasMappingSize(String canvasMappingName) {
+	  Canvas canvas = this.getCanvas(this.getCanvasMapping(canvasMappingName));
+	  return canvas.getSize(); 
+  }  
+  protected int getCanvasMappingH(String canvasMappingName) {
+  	return (int)getCanvasMappingSize(canvasMappingName).x;
+  }	
+	protected int getCanvasMappingW(String canvasMappingName) {
+		return (int)getCanvasMappingSize(canvasMappingName).y;
+	}
   
   public Canvas getCanvas(String canvasName) {
     String mapTo = getCanvasMapping(canvasName);

@@ -245,7 +245,7 @@ public class TunnelScene extends SimpleScene {
 		);				
 
 		this.addFilter(
-				new BlendDrawer(this).setFilterName("Blend_7").setInputCanvas(getCanvasMapping("temp")).setOutputCanvas(getCanvasMapping("out"))
+				new BlendDrawer(this, host.w, host.h).setFilterName("Blend_7").setInputCanvas(getCanvasMapping("temp")).setOutputCanvas(getCanvasMapping("out"))
 				.changeParameterValue("Opacity", new Float(0.5f)));
 
 		
