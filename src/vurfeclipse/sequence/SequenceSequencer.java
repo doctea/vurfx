@@ -142,14 +142,19 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  }
 	  
 	  public void bindAll(HashMap<String,Sequence> seqs) {
-		  sequences.putAll(seqs);
-		  if (isBindToRandom()==true) this.randomPool.addAll(seqs.keySet());
+	  	this.bindAll(seqs, 1);
+	  }
+	  public void bindAll(HashMap<String,Sequence> seqs, int weight) {
+	  	for (int i = 0 ; i<weight ; i++) {
+	  		sequences.putAll(seqs);
+	  		if (isBindToRandom()==true) this.randomPool.addAll(seqs.keySet());
+	  	}
 	  }
 	  
 	  public Sequence bindSequence(String nameInSequencer, Sequence seq, int weight) {
 		  for (int i = 0 ; i < weight ; i++) { 
 			  this.sequences.put(nameInSequencer+"_"+i, seq);
-			if (isBindToRandom()==true) this.randomPool.add(nameInSequencer+"_"+i);
+			  if (isBindToRandom()==true) this.randomPool.add(nameInSequencer+"_"+i);
 		  }
 		  return seq;
 	  }
@@ -217,8 +222,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return activeSequenceName;
 	}
 
-
-	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, Scene sceneForPath, int length) {		
+	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, Scene sceneForPath, int length) {
+		this.bindAndPermute(newPrefix, matchPrefix, sceneForPath, length, 1);
+	}
+	
+	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, Scene sceneForPath, int length, int weight) {		
 		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
 		
 		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
@@ -238,10 +246,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 		
 		//sequences.putAll(toAdd);
-		bindAll(toAdd);
+		bindAll(toAdd, weight);
 	}
 
-	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, Sequence sequence, int length) {		
+	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, Sequence sequence, int length) {
+		this.bindAndPermute(newPrefix, matchPrefix, sequence, length, 1);
+	}
+	
+	synchronized public void bindAndPermute(String newPrefix, String matchPrefix, Sequence sequence, int length, int weight) {		
 		HashMap<String,Sequence> toAdd = new HashMap<String,Sequence>();
 		
 		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
@@ -261,7 +273,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 		
 		//sequences.putAll(toAdd);
-		bindAll(toAdd);
+		bindAll(toAdd, weight);
 	}
 
 
@@ -343,6 +355,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	public void setBindToRandom(boolean bindToRandom) {
 		this.bindToRandom = bindToRandom;
 	}
+
+
 		  
 	  
 	  /*

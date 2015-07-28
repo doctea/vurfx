@@ -17,7 +17,7 @@ void main(void)
       tex_coord.xy = vec2(tex_coord.x, 1.0-tex_coord.y);
     }*/
     
-    tex_coord.xy = vec2(tex_coord.x * step_x, tex_coord.y * step_y);
+    //tex_coord.xy = vec2(tex_coord.x * step_x, tex_coord.y * step_y);
     
     //float ang = atan2(tex_coord.xy);
     //float d = distance(vec2(0.0,0.0),tex_coord.xy);  
@@ -25,9 +25,11 @@ void main(void)
     //tex_coord.x = sin(ang) * (d + step_x);
     //tex_coord.y = cos(ang) * (d + step_x);
     
-    ////new_coord.x = sin(cos(tex_coord.x) * step_x);
-    ////new_coord.y = cos(tan(tex_coord.y) * step_y);
-    //tex_coord.xy = new_coord.xy;
+    vec2 new_coord = vec2(0.0,0.0);
+    
+    new_coord.x = sin(cos(tex_coord.x * step_x));
+    new_coord.y = cos(tan(tex_coord.y * step_y));
+    tex_coord.xy = new_coord.xy;
     
     gl_FragColor = vec4( texture2D(src_tex_unit0, tex_coord).rgba );
     
