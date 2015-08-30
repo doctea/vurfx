@@ -30,8 +30,10 @@ public class OutputFX3 extends SimpleScene {
 
 	    os2.addFilter(new ShaderFilter(os2,"SyncEffect.xml")
 		    	.setFilterName("SyncEffect").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))
-					.addParameter("step_x", 2.5f, 1.0f, 10.0f)
-					.addParameter("step_y", 2.5f, 1.0f, 10.0f)
+					.addParameter("step_x", 2.5f, 0.1f, 10.0f)
+					.addParameter("step_y", 2.5f, 0.1f, 10.0f)
+					.addParameter("offset_x", 0f, -4.0f, 4.0f)
+					.addParameter("offset_y", 0f, -4.0f, 4.0f)
 		    );
 
 
@@ -74,7 +76,6 @@ public class OutputFX3 extends SimpleScene {
 
 			@Override
 			public void setValuesForNorm(double pc, int iteration) {
-				// TODO Auto-generated method stub
 				getFilter("SyncEffect").changeParameterValueFromSin("step_x", Math.abs((float)Math.sin(pc)));
 				getFilter("SyncEffect").changeParameterValueFromSin("step_y", (float)Math.sin(pc));
 			}
@@ -100,9 +101,11 @@ public class OutputFX3 extends SimpleScene {
 
 			@Override
 			public void setValuesForNorm(double pc, int iteration) {
-				// TODO Auto-generated method stub
 				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/3.0*10));
 				getFilter("SyncEffect").changeParameterValueFromSin("step_y", (float)Math.sin(pc/3.0*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", (float)Math.sin(pc/3.0*10));
+
 			}
 
 			@Override
