@@ -3,6 +3,7 @@ import vurfeclipse.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.Slider;
 import codeanticode.glgraphics.*;
 
 import java.io.Serializable;
@@ -38,13 +39,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   public transient GLGraphicsOffScreen out;
   public transient GLGraphicsOffScreen src;
 
-  
+
   boolean outputDebug = true;
   public void println(String text) {		// debugPrint, printDebug -- you get the idea
 	  if (outputDebug) System.out.println("F " + (text.contains((this.toString())) ? text : /*this + " - " +*/ getPath() + ": "+text));
   }
-  
-  
+
+
 
   public Scene sc;
 
@@ -64,7 +65,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   Filter(Scene sc) {
     this.sc = sc;
-  }  
+  }
   /*Filter(Scene sc, GLGraphicsOffScreen out, GLGraphicsOffScreen src) { //  //Filter(Scene sc, PGraphics out, PGraphics src) {
     //this.sc = sc;
     this(sc);
@@ -86,7 +87,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   Filter(Scene sc, String filterLabel) {
     this(sc);
     this.filterLabel = filterLabel;
-    this.filterName = filterLabel;    
+    this.filterName = filterLabel;
   }
 
   public void setFilterLabel (String fl) {
@@ -105,7 +106,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     }
     return filterName;
   }
-  
+
   public Collection<Parameter> getParameters () {
 	  return this.parameters.values();
   }
@@ -115,7 +116,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     return sc.getPath() + "/fl/" + this.getFilterName();
   }
 
-  
+
   public String toString() {
 	  return this.getPath();
   }
@@ -138,13 +139,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     /*this.canvas_out = out;
     this.canvas_in = in;*/
     return this;
-  }  
+  }
   public Filter setInputCanvas(String in) {
     this.canvas_in = in;
     Canvas c = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_in);
-    if (null!=c)    
+    if (null!=c)
       this.src = c.getSurf();
-    return this;    
+    return this;
   }
   public Filter setOutputCanvas(String out) {
     println("Filter#setOutputCanvas('" + out + "') in " + this + " replacing '" + this.canvas_out + "'");
@@ -152,15 +153,15 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     Canvas c = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out);
     if (null!=c)
       this.out = c.getSurf(); //pr.getCanvas(canvas_out).getSurf();
-    return this;    
+    return this;
   }
 
   /*
   *   BUFFERS AND DRAWING
    */
 
-  /* 
-   setBuffers - sets the buffer objects out and src (you can use more than this in your filters if needed (eg Depth buffer for Kinect camera or multiple in/outs), but most filters will use just this.out and this.src) 
+  /*
+   setBuffers - sets the buffer objects out and src (you can use more than this in your filters if needed (eg Depth buffer for Kinect camera or multiple in/outs), but most filters will use just this.out and this.src)
    */
   /*public Filter setBuffers(GLGraphicsOffScreen out, GLGraphicsOffScreen src) {
     setOutputBuffer(out);
@@ -186,9 +187,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     this.out = out;
     return this;
   }*/
-  
-  /* 
-  * CANVASES 
+
+  /*
+  * CANVASES
   */
   /*public Filter setCanvases(Canvas out, Canvas src) {
     setOutputBuffer(out.surf);
@@ -219,7 +220,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   }
   public void endDraw () {
     //println("endDraw in " + this + "{");
-    out.endDraw();    
+    out.endDraw();
     //out.updatePixels();
     //println("} endDraw in " + this);
     //out.updatePixels();
@@ -242,7 +243,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   @Override public void setMuted(boolean v) {
     if (v==true && this.isMuted()!=v) {
       this.stop();
-    } 
+    }
     else if (v==false && this.isMuted()!=v) {
       this.start();
     }
@@ -272,8 +273,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         s += "{ " + me.getKey() + " : " + ((Parameter)me.getValue()).value + "}, ";
       }
     }
-    s += "}"; 
-    return s;   
+    s += "}";
+    return s;
     //return "not implemented";
   }
 
@@ -288,7 +289,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     if (this.parameters==null) this.setParameterDefaults();
     //if (this.parameters.size()==0) setParameterDefaults();
     //println("looking for " + paramName);
-    //if (this.parameters.containsKey(paramName)) 
+    //if (this.parameters.containsKey(paramName))
     return this.parameters.get(paramName).value;
     //else
     //  return "unknown";
@@ -317,7 +318,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     return this;
   }
 
-  // public void setParameterValue  
+  // public void setParameterValue
 
   synchronized public Filter changeParameterValueFromSin(String paramName, float s) {
     setParameterValueFromSin(paramName, s);
@@ -327,10 +328,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   synchronized public Filter changeParameterValue(String paramName) {
     changeParameterValue(paramName, parameters.get(paramName).value);
     return this;
-  }  
+  }
   synchronized public Filter changeParameterValue(String paramName, Object value) {
     setParameterValue(paramName, value);
-    updateParameterValue(paramName, value);    
+    updateParameterValue(paramName, value);
     return this;
   }
   synchronized public void toggleParameterValue(String paramName) {
@@ -338,7 +339,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     if (getParameterValue(paramName) instanceof Boolean) {
     	changeParameterValue(paramName, !(Boolean)getParameterValue(paramName));
     }
-  }  
+  }
 
   synchronized public Filter addParameter(String paramName, Object value, Object min, Object max) {
     if (this.parameters==null) this.setParameterDefaults();
@@ -361,14 +362,14 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   synchronized public void updateParameterValue(String paramname, Object value) {
     // set parameter Control
-    
+
     //sc.myTextarea.setText(serialize());
     //sc.updateSerializeBox();
     if(paramname=="muted") {
       this.muted = (Boolean) value;
     }
   }
-  
+
   synchronized public void resetParameters() {
 	  Iterator<Parameter> it = parameters.values().iterator();
 	  while (it.hasNext()) {
@@ -378,7 +379,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	  this.updateAllParameterValues();
   }
 
-  
+
   synchronized public void setParameterDefaults () {
     println("setParameterDefaults in " + this);
     if (this.parameters==null) {
@@ -401,7 +402,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 
   /*
-  * INIT 
+  * INIT
    */
   //abstract public boolean initialise ();
   public boolean initialise () {
@@ -423,12 +424,12 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 
   // {
-  //return true; 
+  //return true;
   //}
 
   //abstract public void applyMeat();
   // {
-  // do nothing in this superclass 
+  // do nothing in this superclass
   //}
 
   public PImage getFinalImage() {
@@ -444,21 +445,21 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     out.fill(255);
     out.text(label, x-149, (lineCount*20)+1);
     out.fill(0);
-    out.text(label, x-148, (lineCount*20)+2); 
+    out.text(label, x-148, (lineCount*20)+2);
     out.popStyle();
   }
 
 
   public String getFilterLabel() {
     if (this.filterLabel=="") filterLabel = this.getClass().toString() + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();//.replace("@","-");
-    
+
     return this.filterLabel==""?this.toString():this.filterLabel;
   }
   public String getDescription () {
-    return (this.filterLabel!=""?"'"+filterLabel+"': ":"") + 
-      this.toString() + " " + (this.isMuted()?"MUTED":"") + 
+    return (this.filterLabel!=""?"'"+filterLabel+"': ":"") +
+      this.toString() + " " + (this.isMuted()?"MUTED":"") +
       " (out: " + out + ", src: " + src + ")";
-  }  
+  }
 
   public void dispose() {
     this.stop();
@@ -475,25 +476,27 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   public void controlEvent (CallbackEvent ev) {
     //println(this + " got event " + ev + " : " + ev.getController());
-    if (ev.getAction()==ControlP5.ACTION_RELEASED) {
-      if (ev.getController()==this.muteController) {
+    if (ev.getController()==this.muteController &&
+    		/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
+    		ev.getAction()==ControlP5.ACTION_PRESSED) {
         println("Setting mute state on " + this + " to " + muteController.getState());
         this.setMuted(muteController.getState());
-      } else if (ev.getController()==this.nextModeButton) {
+    } else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_PRESSED) {
         this.nextMode();
-      } 
-      else if (controllers.containsKey(ev.getController())) {
-        String paramName = (String)controllers.get(ev.getController());                
+    } else if (controllers.containsKey(ev.getController()) &&
+    		(ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || ev.getAction()==ControlP5.ACTION_PRESSED )
+    	) {
+        String paramName = (String)controllers.get(ev.getController());
         println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
         Object currentValue = getParameterValue(paramName) ;
         changeValueFor(currentValue,paramName,ev);
       }
-    } /*else if (ev.getAction()==ControlP5.ACTION_PRESSED) {
+     /*else if (ev.getAction()==ControlP5.ACTION_PRESSED) {
       if (controllers.containsKey(ev.getController())) {
         println("getcontroller is " + ev.getController());
         if (ev.getController() instanceof Slider) {
           println("is slider");
-          String paramName = (String)controllers.get(ev.getController());        
+          String paramName = (String)controllers.get(ev.getController());
           Object currentValue = getParameterValue(paramName) ;
           changeValueFor(currentValue,paramName,ev);
         }
@@ -503,18 +506,18 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   public void changeValueFor(Object currentValue, String paramName, CallbackEvent ev) {
         if (currentValue instanceof Boolean) {
           this.changeParameterValue(paramName, ev.getController().getValue()==1.0f);
-        } 
+        }
         else if (currentValue instanceof Float) {
           this.changeParameterValue(paramName, (Float)ev.getController().getValue());
-        } 
+        }
         else if (currentValue instanceof Integer) {
           this.changeParameterValue(paramName, (int)ev.getController().getValue());
-        } 
+        }
         else {
           this.changeParameterValue(paramName, ev.getController().getValue());
         }
-  }    
- 
+  }
+
   int count = 0;
   boolean controlsSetup = false;
   public synchronized void setupControls(ControlP5 cp5, String tabName) {
@@ -550,10 +553,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
               ;
 
     cp5.addTextlabel("path_" + tabName + getFilterName(), "Path: " + this.getPath()).setSize(size, size).moveTo(tabName).linebreak();
-    
 
 
-    if (parameters==null) 
+
+    if (parameters==null)
       setParameterDefaults();
 
     Iterator i = parameters.entrySet().iterator();
@@ -565,12 +568,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       Parameter param = (Parameter)me.getValue();
       println("Filter#setupControls() in " + toString() + " doing control for " + param.getName());
       Object value = param.value;
-      controlP5.Controller o = 
+      controlP5.Controller o =
         value instanceof Float ?
           cp5.addSlider(tabName + this + me.getKey()).setValue(
         		  (Float)(Float)value).setLabel(me.getKey().toString())
+          		.setSliderMode(Slider.FLEXIBLE)
         		  .setRange(
-        				  new Float((Float)param.min), 
+        				  new Float((Float)param.min),
         				  new Float((Float)param.max)
         				  )
         				  .moveTo(tabName).setSize(size*5, size) : //.addCallback(this) :
@@ -593,10 +597,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       //param.setController(o);
       //o.addCallback(this);
       if (o!=null) {
-        o.getValueLabel().align(ControlP5.LEFT, ControlP5.RIGHT).setPaddingY(0);      
-        o.getCaptionLabel().align(ControlP5.RIGHT, ControlP5.RIGHT).setPaddingY(0);        
+        o.getValueLabel().align(ControlP5.LEFT, ControlP5.RIGHT).setPaddingY(0);
+        o.getCaptionLabel().align(ControlP5.RIGHT, ControlP5.RIGHT).setPaddingY(0);
         this.setControllerMapping(param.getName(),o);
-        
+
         if (!i.hasNext()) o.linebreak();
         o.linebreak();
         /*controllers.put(
@@ -608,28 +612,28 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     }
     //cp5.linebreak();
   }
-  
+
   public void setControllerMapping(String paramName, controlP5.Controller o) {
     if (controllerMapping==null) controllerMapping = new HashMap<String,controlP5.Controller> ();
     controllerMapping.put(paramName, o);
     controllers.put(o, paramName);
-  } 
-  
+  }
+
   public void updateControl (String name, Object value) {
     //(((controlP5.Controller)controllerMapping.get(name))).setValue(value);
-    if (controllerMapping==null) controllerMapping = new HashMap<String,controlP5.Controller> ();    
+    if (controllerMapping==null) controllerMapping = new HashMap<String,controlP5.Controller> ();
     controlP5.Controller c = (controlP5.Controller)controllerMapping.get(name);
     if (c!=null) {
         if (value instanceof Float)
           c.setValue((Float)value);
-        else if (value instanceof Integer) 
+        else if (value instanceof Integer)
           c.setValue((Integer)value);
         else if (value instanceof Boolean)
-          c.setValue((Boolean)value?1.0f:0.0f);    
+          c.setValue((Boolean)value?1.0f:0.0f);
     }
   }
 
-  
+
   public Object target(String path, Object payload) {
 	  println("#target('"+path+"', '"+payload+"'");
 	  if ("/mute".equals(path.substring(path.length()-5, path.length()))) {
@@ -639,21 +643,21 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		  this.nextMode();
 		  return "nextMode on " + this;
 	  }
-	  return payload;	  
+	  return payload;
   }
-  
+
   public HashMap<String, Targetable> getCustomTargetURLs() {
 	  return new HashMap<String,Targetable>();
   }
-  
+
   public HashMap<String, Targetable> getTargetURLs() {
 	HashMap<String, Targetable> urls = new HashMap<String,Targetable> ();
 	Filter f = this;
-	
+
 	urls.put(f.getPath() + "/mute", f);
 	urls.put(f.getPath() + "/nextMode", f);
 	println("added Filter's url '" + f.getPath() + "/mute' mapped to " + f);
-	
+
 	Iterator<Parameter> pit = f.getParameters().iterator();
 	while (pit.hasNext()) {
 		Parameter p = pit.next();
@@ -664,9 +668,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			//System.exit(0);
 		}
 	}
-	
+
 	urls.putAll(getCustomTargetURLs());
-	
+
 	return urls;
   }
 }
