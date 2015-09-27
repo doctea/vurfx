@@ -30,10 +30,11 @@ public class OutputFX3 extends SimpleScene {
 
 	    os2.addFilter(new ShaderFilter(os2,"SyncEffect.xml")
 		    	.setFilterName("SyncEffect").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))
-					.addParameter("step_x", 2.5f, 0.1f, 10.0f)
-					.addParameter("step_y", 2.5f, 0.1f, 10.0f)
-					.addParameter("offset_x", 0f, -4.0f, 4.0f)
-					.addParameter("offset_y", 0f, -4.0f, 4.0f)
+					.addParameter("step_x", 2.5f, 1.0f, 16.0f)
+					.addParameter("step_y", 2.5f, 1.0f, 16.0f)
+					.addParameter("offset_x", 2.0f, -4.0f, 4.0f)
+					.addParameter("offset_y", 2.0f, -4.0f, 4.0f)
+					.addParameter("sin_mode", new Integer(0), new Integer(0), new Integer(1))
 		    );
 
 
