@@ -21,6 +21,8 @@ public class VideoPlayer extends Filter {
 
   int mode = 0;
 
+  int volume = 255;
+
   public ArrayList<String> videos = new ArrayList<String>();
 
   public void nextMode () {
@@ -93,7 +95,7 @@ public class VideoPlayer extends Filter {
         newStream = new GSMovie(APP.getApp(),filename);
         //newTex = new GLTexture(APP, sc.w, sc.h);
         newStream.setPixelDest(tex, true);
-        newStream.volume(0);
+        newStream.volume(volume);
         println("Set volume and pixeldest..");
         if (!((VurfEclipse)APP.getApp()).exportMode)
           newStream.loop();
@@ -177,7 +179,7 @@ public class VideoPlayer extends Filter {
       //stream = new GSMovie(APP,"U:\\videos\\Tomorrows World - sinclair c5\\tworld84.dv.ff.avi");
       //stream.setPixelDest(out.getTexture());
       stream.setPixelDest(tex, true);
-      //stream.volume(0);
+      stream.volume(volume);
 
       if (this.startDelay>0)
     	  Thread.sleep(startDelay);
@@ -198,7 +200,7 @@ public class VideoPlayer extends Filter {
       println("jumping to frameCount " + ((VurfEclipse)APP.getApp()).frameCount);
       //stream.jump(frameCount * (global_fps/stream.getSourceFrameRate()));
       //stream.jump(timeMillis * (global_fps/stream.getSourceFrameRate()));
-      stream.volume(0);
+      stream.volume(volume);
       stream.play();
       stream.jump((float)((VurfEclipse)APP.getApp()).timeMillis/1000);
       stream.pause();
@@ -218,7 +220,7 @@ public class VideoPlayer extends Filter {
     }*/
     if (stream!=null ) {
       if (!stream.isSeeking() && stream.available()) {
-        stream.volume(0);
+        stream.volume(volume);
 
         stream.read();
         //println("got gsvideo stream read");
