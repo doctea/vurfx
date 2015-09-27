@@ -141,6 +141,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     return this;
   }
   public Filter setInputCanvas(String in) {
+    println("Filter#setInputCanvas('" + src + "') in " + this + " replacing '" + this.canvas_in + "' with '" + in + "'");
     this.canvas_in = in;
     Canvas c = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_in);
     if (null!=c)
@@ -148,7 +149,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     return this;
   }
   public Filter setOutputCanvas(String out) {
-    println("Filter#setOutputCanvas('" + out + "') in " + this + " replacing '" + this.canvas_out + "'");
+    println("Filter#setOutputCanvas('" + out + "') in " + this + " replacing '" + this.canvas_out + "' with '" + out + "'");
     this.canvas_out = out;
     Canvas c = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out);
     if (null!=c)
