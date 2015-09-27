@@ -72,34 +72,11 @@ public class MagicDustProject extends Project implements Serializable {
   	/// INPUT SCENES
     final SimpleScene video1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("VideoScene1");//.setOutputBuffer(getCanvas("inp0").surf);
 
-    final VideoPlayer au1 = new VideoPlayer(video1,"Magic Dust Mix_02 (master).wav");
-    au1.setOutputCanvas("/temp0");
-    //vp1.loadDirectory("video-sources/");
-    //vp2.setOutputCanvas("/pix1"); // think this should also be "pix1" ... ?
-    video1.addFilter(au1);
-
-    final VideoPlayer vp1 = new VideoPlayer(video1,"video-sources/you're all the same.ogg");
+    final VideoPlayer vp1 = new VideoPlayer(video1,"video-sources/Magic Dust intermediate.ogv");
     vp1.setOutputCanvas("/pix0");
-    //vp1.loadDirectory("video-sources/");
-    //vp2.setOutputCanvas("/pix1"); // think this should also be "pix1" ... ?
-    video1.addFilter(vp1);
-
-    final VideoPlayer vp2 = new VideoPlayer(video1,"video-sources/Socio Suki - Magic Dust (live at The Bridge Inn, Worcester - 25th January 14)-sw6u78no5f4.ogg");
-    vp2.setOutputCanvas("/pix1");
     //vp2.loadDirectory("video-sources/");
     //vp2.setOutputCanvas("/pix1"); // think this should also be "pix1" ... ?
-    video1.addFilter(vp2);
-
-    /*video1.addSequence("next", new ShowSceneSequence(video1, 0) {
-			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
-			@Override public void onStop() { super.onStop(); }
-
-			@Override
-			public void onStart() {
-				super.onStart();
-				vp2.nextMode();
-			}
-		});*/
+    video1.addFilter(vp1);
 
     final PlainDrawer pd = (PlainDrawer)new PlainDrawer(video1).setFilterName("Source Switcher").setInputCanvas("/pix0");
     video1.addFilter(pd);
@@ -116,17 +93,6 @@ public class MagicDustProject extends Project implements Serializable {
 				pd.setInputCanvas("/pix0");
 			}
     });
-    video1.addSequence("select_pix1", new ShowSceneSequence(video1, 0) {
-			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
-			@Override public void onStop() { super.onStop(); }
-
-			@Override
-			public void onStart() {
-				super.onStart();
-				//vp2.nextMode();
-				pd.setInputCanvas("/pix1");
-			}
-    });
 
     this.addSceneOutputCanvas(
         video1,
@@ -135,9 +101,7 @@ public class MagicDustProject extends Project implements Serializable {
 
     //switcher.bindAll(video1.getSequences());
 
-    switcher.addListSequence("select_pix0", new ChainSequence(500).addSequence(video1.getSequence("select_pix0")));
     switcher.addListSequence("select_pix0", new ChainSequence(5000).addSequence(video1.getSequence("select_pix0")));
-    switcher.addListSequence("select_pix1", new ChainSequence(2000).addSequence(video1.getSequence("select_pix1")));
 
 
 
