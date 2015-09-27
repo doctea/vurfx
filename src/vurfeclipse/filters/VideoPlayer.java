@@ -80,6 +80,9 @@ public class VideoPlayer extends Filter {
     this.filename = filename;
     changing = true;
     final VideoPlayer self = this;
+
+    println("got changeVideo('"+fn+"'");
+
     this.changerThread = new Thread () {
       public void start () {
         super.start();
@@ -174,7 +177,7 @@ public class VideoPlayer extends Filter {
       //stream = new GSMovie(APP,"U:\\videos\\Tomorrows World - sinclair c5\\tworld84.dv.ff.avi");
       //stream.setPixelDest(out.getTexture());
       stream.setPixelDest(tex, true);
-      stream.volume(0);
+      //stream.volume(0);
 
       if (this.startDelay>0)
     	  Thread.sleep(startDelay);

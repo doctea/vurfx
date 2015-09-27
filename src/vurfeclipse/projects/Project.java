@@ -104,9 +104,13 @@ public abstract class Project implements Serializable {
 
   public boolean processSequencer(int time) {
 	  if (enableSequencer) {
-		  this.sequencer.runSequences();
+	  	try {
+	  		this.sequencer.runSequences();
+	  	} catch (Exception e) {
+	  		println("processSequencer("+time+") caught " + e);
+	  	}
 	  }
-	return enableSequencer;
+	  return enableSequencer;
   }
 
 /////////// Event stuff
