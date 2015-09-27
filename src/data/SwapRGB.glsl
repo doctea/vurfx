@@ -8,9 +8,9 @@ void main(void)
     //gl_FragColor = vec4(texture2DRect(src_tex_unit0, src_tex_offset0).abrg);
     vec4 color = texture2D(src_tex_unit0, gl_TexCoord[0].st);
 
-    if(swap_mode==0)
+    if(swap_mode==0.0)
     	gl_FragColor = vec4(color.brga);
-    else if (swap_mode==1)
+    else if (swap_mode==1.0)
 	gl_FragColor = vec4(color.rbga);
     else if (swap_mode==2)
         gl_FragColor = vec4(color.gbra);
@@ -27,5 +27,5 @@ void main(void)
 	if((1.0*float(swap_mode)/5.0)>1.0) gl_FragColor.b = 0.0;
     }*/
 
-       
+
 }
