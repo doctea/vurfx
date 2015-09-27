@@ -2,6 +2,8 @@
 
 uniform sampler2D src_tex_unit0;
 
+uniform int sin_mode;
+
 uniform float step_x;
 uniform float step_y;
 
@@ -43,24 +45,29 @@ void main(void)
 	//tex_coord.x += 1.0; //0.5;
 	//tex_coord.y += 1.0; //0.5;
 
-	if (tex_coord.x >= 0.5) {
-		new_coord.x = 0.5 - (tex_coord.x/2.0);
-		new_coord.y = (tex_coord.y/2.0);
+	if (tex_coord.x >= 1.0/offset_x) {
+		new_coord.x = (1.0/offset_x) - (tex_coord.x/offset_x);
+		new_coord.y = (tex_coord.y/offset_y);
 
 		new_coord.x = new_coord.x * step_x;
     	new_coord.y = new_coord.y * step_y;
 
-		new_coord.x = (new_coord.x*2.0); //+ 0.5;
-		new_coord.y = (new_coord.y*2.0); //+ 0.5;
+		new_coord.x = (new_coord.x*offset_x); //+ 0.5;
+		new_coord.y = (new_coord.y*offset_y); //+ 0.5;
     } else {
-		new_coord.x = (tex_coord.x/2.0);
-		new_coord.y = (tex_coord.y/2.0);
+		new_coord.x = (tex_coord.x/offset_x);
+		new_coord.y = (tex_coord.y/offset_y);
 
 		new_coord.x = new_coord.x * step_x;
     	new_coord.y = new_coord.y * step_y;
 
-		new_coord.x = (new_coord.x*2.0); //+ 0.5;
-		new_coord.y = (new_coord.y*2.0); //+ 0.5;
+		new_coord.x = (new_coord.x*offset_x); //+ 0.5;
+		new_coord.y = (new_coord.y*offset_y); //+ 0.5;
+	}
+
+	if (sin_mode==0) {
+		tex_coord.x = asin(tex_coord.x)+0.5;
+		tex_coord.y = acos(tex_coord.y)+0.5;
 	}
 
     tex_coord.xy = new_coord.xy; //, vec2(offset_x,offset_y);

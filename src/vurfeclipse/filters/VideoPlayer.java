@@ -14,15 +14,15 @@ import codeanticode.gsvideo.*;
 public class VideoPlayer extends Filter {
   transient GSMovie stream;
   String filename;
-  
+
   transient GLTexture tex;
-  
+
   transient GLTexture newTex;
-  
+
   int mode = 0;
-  
+
   public ArrayList<String> videos = new ArrayList<String>();
-  
+
   public void nextMode () {
 /*    long maxMode = 50;//(long)stream.length()/50;
     mode++;
@@ -35,28 +35,28 @@ public class VideoPlayer extends Filter {
     /*String[] videos = new String[] {
       "video/129-Probe 7 - Over and Out(1)-00.mkv",
       "tworld84.dv.ff.avi",
-      "video/129-Probe 7 - Over and Out(1)-10.mkv",      
-      
-      "video/129-Probe 7 - Over and Out(1)-01.mkv",      
-      "video/129-Probe 7 - Over and Out(1)-02.mkv",      
-      "video/129-Probe 7 - Over and Out(1)-03.mkv",      
-      "video/129-Probe 7 - Over and Out(1)-04.mkv",      
+      "video/129-Probe 7 - Over and Out(1)-10.mkv",
+
+      "video/129-Probe 7 - Over and Out(1)-01.mkv",
+      "video/129-Probe 7 - Over and Out(1)-02.mkv",
+      "video/129-Probe 7 - Over and Out(1)-03.mkv",
+      "video/129-Probe 7 - Over and Out(1)-04.mkv",
       "video/Life of Brian(XviD).avi",
       //"video/Wilfred.US.S01E02.HDTV.XviD-FQM.Trust"
     };*/
-      
+
     //changeVideo(videos[(int)random(0,videos.length)]);
 	  changeVideo(videos.get((int) random(0,videos.size())));
-    
-    
+
+
   }
-  
+
   public VideoPlayer(Scene sc, String filename) {
     super(sc);
     //this.filename = filename;
     if (filename!="") videos.add(filename);
   }
-  
+
   public void setMuted(boolean on) {
     super.setMuted(on);
     if (!on) {
@@ -65,13 +65,14 @@ public class VideoPlayer extends Filter {
       stream.pause();
     }
   }
-  
+
   //Thread loader =  new Thread() {
-     
-  
+
+
   transient GSMovie newStream;
   boolean changing = false;
-private int startDelay;
+  Thread changerThread;
+  private int startDelay;
   public synchronized void changeVideo(String fn) {
     if (changing) return;
     final String filename = fn;
@@ -79,7 +80,7 @@ private int startDelay;
     this.filename = filename;
     changing = true;
     final VideoPlayer self = this;
-    new Thread () {
+    this.changerThread = new Thread () {
       public void start () {
         super.start();
       }
@@ -94,27 +95,27 @@ private int startDelay;
         if (!((VurfEclipse)APP.getApp()).exportMode)
           newStream.loop();
         //println("about to do ")
-        while (!newStream.available()) 
+        while (!newStream.available())
           try { sleep(50); } catch (Exception e) {}
         newStream.read();
         println("read from newStream");
         //newStream.setPixelDest(tex, true);
         self.newStream = newStream;
-        
-          
+
+
         GSMovie oldStream = stream;
         //GLTexture oldTex = tex;
         self.stream = newStream;
         println("Swapping streams to " + filename);
-        self.setFilterLabel(getFilterName() + filename);  
+        self.setFilterLabel(getFilterName() + filename);
         //tex = newTex;
         oldStream.stop();
         oldStream.delete();
         //oldTex.delete();
         self.newStream = null;
-        //newTex = null;      
+        //newTex = null;
         self.changing = false;
-        
+
         /*GSMovie tempStream = stream;
         stream = newStream;
         System.out.println("Swapping stream..");
@@ -122,9 +123,10 @@ private int startDelay;
         stream = null;*/
         //changing = false;
       }
-    }.start();
+    };
+    this.changerThread.start();
   }
-  
+
   public void loadDirectory() {
 	  loadDirectory("");
   }
@@ -148,24 +150,24 @@ private int startDelay;
 		  }
 	  }
   }
-  
+
   public boolean initialise() {
     /*try {
       quicktime.QTSession.open();
-    } catch (quicktime.QTException qte) { 
+    } catch (quicktime.QTException qte) {
       qte.printStackTrace();
     }*/
-    
+
     GLTextureParameters params = new GLTextureParameters();
     params.wrappingU = GLTextureParameters.REPEAT;
-    params.wrappingV = GLTextureParameters.REPEAT;  
+    params.wrappingV = GLTextureParameters.REPEAT;
     tex = new GLTexture(APP.getApp(),sc.w,sc.h, params);
-    
+
     loadDirectory();
     filename = videos.get(0);
-    
-    this.setFilterLabel("VideoPlayer - " + filename);  
-    
+
+    this.setFilterLabel("VideoPlayer - " + filename);
+
     println("Loading video " + filename);
     try {
        stream = new GSMovie(APP.getApp(),filename);
@@ -173,26 +175,26 @@ private int startDelay;
       //stream.setPixelDest(out.getTexture());
       stream.setPixelDest(tex, true);
       stream.volume(0);
-      
-      if (this.startDelay>0) 
+
+      if (this.startDelay>0)
     	  Thread.sleep(startDelay);
-      
-      if (!((VurfEclipse)APP.getApp()).exportMode) 
+
+      if (!((VurfEclipse)APP.getApp()).exportMode)
         stream.loop();
     } catch (Exception e) {
       println("got error " + e + " loading " + filename);
     }      //webcamStream = new Capture(APP, sc.w, sc.h, 30);
     //webcamStream.start();
-    
+
     return true;
   }
-  
+
   public synchronized boolean  applyMeatToBuffers() {
     if (((VurfEclipse)APP.getApp()).exportMode) {
       //seek to the correct position based on the current frame number ..
       println("jumping to frameCount " + ((VurfEclipse)APP.getApp()).frameCount);
-      //stream.jump(frameCount * (global_fps/stream.getSourceFrameRate()));  
-      //stream.jump(timeMillis * (global_fps/stream.getSourceFrameRate()));  
+      //stream.jump(frameCount * (global_fps/stream.getSourceFrameRate()));
+      //stream.jump(timeMillis * (global_fps/stream.getSourceFrameRate()));
       stream.volume(0);
       stream.play();
       stream.jump((float)((VurfEclipse)APP.getApp()).timeMillis/1000);
@@ -207,25 +209,25 @@ private int startDelay;
       oldStream.delete();
       //oldTex.delete();
       newStream = null;
-      //newTex = null;      
+      //newTex = null;
       changing = false;
-      this.setFilterLabel("VideoPlayer - " + filename);  
+      this.setFilterLabel("VideoPlayer - " + filename);
     }*/
-    if (stream!=null ) { 
+    if (stream!=null ) {
       if (!stream.isSeeking() && stream.available()) {
         stream.volume(0);
-  
+
         stream.read();
         //println("got gsvideo stream read");
-        
+
         /*stream.loadPixels();
         out.loadPixels();
         //out.pixels = webcamStream.pixels;
         arrayCopy(stream.pixels, out.pixels);
         out.updatePixels();*/
-        
-        
-        
+
+
+
         //out.getTexture().putPixelsIntoTexture();
         if (tex.putPixelsIntoTexture()) {
           out.beginDraw();
@@ -234,9 +236,9 @@ private int startDelay;
           out.endDraw();
           return true;
         }
-        
+
         //out.image(stream,0,0,sc.w,sc.h);
-        
+
         /*out.loadPixels();
         out.pixels = webcamStream.pixels;
         out.updatePixels();*/
@@ -251,9 +253,9 @@ private int startDelay;
       println("Stream is null!");
     }
     return false; // no new frame available to draw
-  }  
-  
-  
+  }
+
+
   public void beginDraw () {
     /*if (!pixelMode)
       out.loadPixels();
