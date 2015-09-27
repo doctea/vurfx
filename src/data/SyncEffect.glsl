@@ -2,7 +2,7 @@
 
 uniform sampler2D src_tex_unit0;
 
-uniform int sin_mode;
+//uniform float sin_mode;
 
 uniform float step_x;
 uniform float step_y;
@@ -65,10 +65,14 @@ void main(void)
 		new_coord.y = (new_coord.y*offset_y); //+ 0.5;
 	}
 
-	if (sin_mode==0) {
+	/*if (sin_mode==0.0) {
 		tex_coord.x = asin(tex_coord.x)+0.5;
 		tex_coord.y = acos(tex_coord.y)+0.5;
-	}
+	}*/
+
+    /*new_coord.x = sin(new_coord.x * (step_x/8.0));
+    new_coord.y = cos(new_coord.y * (step_y/8.0));*/
+    //new_coord = new_coord * vec2(sin(step_x),cos(step_x)); // weird warping
 
     tex_coord.xy = new_coord.xy; //, vec2(offset_x,offset_y);
 
