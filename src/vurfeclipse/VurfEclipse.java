@@ -288,9 +288,11 @@ public class VurfEclipse extends PApplet {
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
-		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-		 pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
+		 pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
+		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
 		 //pr = new TempSocioSukiVideoProject(desired_width, desired_height, gfx_mode);
+
+		 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 
 		 System.out.println("Initialising " + pr);
 		 pr.initialise();

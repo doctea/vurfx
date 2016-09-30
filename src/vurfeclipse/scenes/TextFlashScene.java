@@ -19,13 +19,13 @@ import vurfeclipse.streams.ParameterCallback;
 
 public class TextFlashScene extends Scene {
   //int filterCount = 2;
-  
+
   //Filter[] filters;// = new Filter[filterCount];
-  
+
   String values[];
-  
+
   HashMap<String,PFont> fonts = new HashMap<String,PFont>();
-  
+
   public TextFlashScene setTextValues(String[] values) {
     this.values = values;
     return this;
@@ -43,7 +43,7 @@ public class TextFlashScene extends Scene {
 		  ((TextDrawer)getObjectForPath("TextDrawer")).setFont((PFont)pf[v]);
 	  }
   }
-  
+
   public void randomWord() {
       String letter = values[(int)((VurfEclipse)APP.getApp()).random(0,values.length)];
       //println("got word '" + letter + "'");
@@ -59,42 +59,42 @@ public class TextFlashScene extends Scene {
 	  if (index<0) index = 0;
 	  changeFilterParameterValue(0,"text",values[index]);
   }
-  
-  
-  
+
+
+
   public void setupCallbackPresets () {
     super.setupCallbackPresets();
     final Scene self = this;
     //println("adding callback 'spin'");
-    
+
     this.callbacks.put("cycle", new ParameterCallback() {
     	int count = 0;
-    	
+
     	int totalLength;
     	String[] chars;
     	HashMap<Integer,String> wordBreaks = new HashMap<Integer,String>();
-    	   	
-    	public ParameterCallback setup () {        	
-    		int tot = 0; 
+
+    	public ParameterCallback setup () {
+    		int tot = 0;
     		for (int i = 0 ; i < values.length ; i++) {
     			wordBreaks.put(tot,values[i]);
     			println("adding boundary at " + tot + " for " + values[i]);
     			tot += values[i].length();
     		}
     		totalLength = tot;
-    		
+
     		chars = new String[totalLength];
     		int pointer = 0;
     		for (int i = 0 ; i < values.length ; i++) {
     			for (int x = 0 ; x < values[i].length() ; x++) {
     				chars[pointer++] = new Character(values[i].charAt(x)).toString();
-    				println("added " + chars[pointer-1]);    				
+    				println("added " + chars[pointer-1]);
     			}
     		}
-    		
+
     		return this;
     	}
-    	
+
     	public void call(Object value) {
     		int step = ((Integer)value)%totalLength;
     		changeFilterParameterValue(0,"text",chars[step]);
@@ -105,7 +105,7 @@ public class TextFlashScene extends Scene {
     		}
     	}
     }.setup());
-    
+
     this.callbacks.put("random", new ParameterCallback() {
        //String[] values = getParameterValue("values");
        public void call(Object value) {
@@ -113,7 +113,7 @@ public class TextFlashScene extends Scene {
         randomWord();
        }
     });
-    
+
     this.callbacks.put("swivel", new ParameterCallback() {
        //String[] values = getParameterValue("values");
        public void call(Object value) {
@@ -124,7 +124,7 @@ public class TextFlashScene extends Scene {
         //fbd.setMute(false);
        }
     });
-    
+
     this.callbacks.put("rotate", new ParameterCallback() {
        //String[] values = getParameterValue("values");
        public void call(Object value) {
@@ -135,8 +135,8 @@ public class TextFlashScene extends Scene {
         //fbd.setMute(false);
        }
     });
-        
-    
+
+
     this.callbacks.put("toggle", new ParameterCallback() {
       public void call(Object value) {
         int i = Integer.parseInt(value.toString());
@@ -150,41 +150,41 @@ public class TextFlashScene extends Scene {
       }
     });
   }
-  
+
   public TextFlashScene(Project host, int w, int h, String[] values) {
     super(host,w,h);
     this.filterCount = 4;
-    this.values = values; 
+    this.values = values;
   }
-  
+
   public TextFlashScene(Project host, int w, int h) {
-    this(host, w, h, new String[] {      
-          ";)", ":)", "MDMA", "LSD-25", "DMT", "2c-b", "2c-c", "2c-d", "4homet", "delysid", "MDA", "303", "909", "808", 
-          
-          "take trips", "magic dust", "Socio Suki", 
-          
+    this(host, w, h, new String[] {
+          ";)", ":)", "MDMA", "LSD-25", "DMT", "2c-b", "2c-c", "2c-d", "4homet", "delysid", "MDA", "303", "909", "808",
+
+          "take trips", "magic dust", "Socio Suki",
+
           "nice", "dANCe", "rob0t", "ZX", "(:", "#!", "???", "!!", "!!!", "!", "dont panic",
-          
+
           "(c)", "doctea", "Crack Zombie", "vurf", "gwrx", "greetz",
           "::vurf::", "V:U:R:F", "SLiPs", "MMXIV", "MCMLXXX", "Sandoz", "cola", "acid", "acidtest", "electric", "kool-aid",
           "RAVE", "rave", "XtC", "science", "drop acid", "make tea", "art?", "peace", "free", "<3 echo", "<3", "mwilk"
         }
     );
   }
-  
+
   public boolean setupFilters () {
     //super.initialise();
     filters = new Filter[filterCount];
     //println("DemoScene initialised " + this + " - filtercount is " + filterCount);
     int i = 0;
-    
+
     filters[i] = new TextDrawer(this).setFilterName("TextDrawer").setCanvases(getCanvasMapping("temp"),getCanvasMapping("temp"));//setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);
     final TextDrawer ftd = (TextDrawer) filters[i];
 
     filters[++i] = new BlendDrawer(this).setFilterName("BlendDrawer").setCanvases(getCanvasMapping("out"),getCanvasMapping("temp")); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
     final BlendDrawer fbd = (BlendDrawer) filters[i];
     ((BlendDrawer)filters[i]).setBlendMode(9);
-    
+
     /*host.getStream("beat").registerEventListener("beat_8",
       new ParameterCallback () {
         public void call(Object value) {
@@ -196,26 +196,26 @@ public class TextFlashScene extends Scene {
         }
       }
     );*/
-    
-    
-    
+
+
+
     highestFilter = i;
     return true;
   }
-  
-  
-  
-  
+
+
+
+
   	public void setupSequences() {
 		sequences.put("preset 1", new TextFlashSequence1(this, 0));
 		sequences.put("on", 	  new ShowSceneSequence(this,1000));
   	}
-  	
-  	
+
+
   	public TextFlashScene addSequencesForWords(String[] words, int length) {
   		for (int i = 0 ; i < words.length ; i++) {
   			sequences.put("word_" /* + i + "_" */ + words[i],
-  					this.makeChainSequenceFrom("preset 1", 
+  					this.makeChainSequenceFrom("preset 1",
   							new ChangeParameterSequence(this, getPath()+"/fl/TextDrawer", "text", words[i], length)
   					));
   		}
@@ -238,11 +238,11 @@ public class TextFlashScene extends Scene {
 			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 		}
 		@Override public void onStart() {
-	   		if (APP.getApp().random(0f,1.0f)>=0.5f) 
+	   		if (APP.getApp().random(0f,1.0f)>=0.5f)
 	   			((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
     		//((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
 		}
 		@Override public void onStop() {	}
-	}		  
-  
+	}
+
 }

@@ -4,16 +4,16 @@ import vurfeclipse.scenes.Scene;
 
 
 public class FilterChain extends Filter {
-  
+
   int numFilters = 8;
   Filter[] filters = new Filter[numFilters];
 
-  /*** 
-   **  CONSTRUCTORS 
-  ****/  
-  
+  /***
+   **  CONSTRUCTORS
+  ****/
+
   public FilterChain(Scene sc) {
-    super(sc); 
+    super(sc);
   }
   public FilterChain(Scene sc, String filterLabel) {
     this(sc);
@@ -23,7 +23,7 @@ public class FilterChain extends Filter {
 
 
 
-  
+
   int fCount = 0;
   public void addFilter(Filter f) {
     filters[fCount] = f;
@@ -34,16 +34,17 @@ public class FilterChain extends Filter {
     f.setCanvases(canvas_out,canvas_in);
     this.addFilter(f);
   }
-  
-  public void nextMode () {
+
+  public Filter nextMode () {
     //quick nasty hack implementation - does a nextMode on all the subfilters too
     for (int i = 0 ; i < filters.length ; i++) {
       if (filters[i]!=null)
         filters[i].nextMode();
-    } 
+    }
+    return this;
   }
-    
-  
+
+
   public boolean initialise () {
     for (int i = 0 ; i < filters.length ; i++) {
       if (filters[i]!=null && !filters[i].initialise()) return false;
@@ -53,7 +54,7 @@ public class FilterChain extends Filter {
     //return this.start();
     return true;
   }
-    
+
   public boolean applyMeatToBuffers() {
     boolean frameExited = true;
     for (int i = 0 ; i < filters.length && frameExited ; i++) {
@@ -70,10 +71,10 @@ public class FilterChain extends Filter {
     }
     return true;
   }
-  
+
   public void beginDraw() {}
   public void endDraw() {}
-  
+
   public void meat_beginDraw() {
     for (int i = 0 ; i < filters.length ; i++) {
       if (filters[i]!=null) {
@@ -81,7 +82,7 @@ public class FilterChain extends Filter {
       }
     }
   }
-  
+
   public void meat_endDraw() {
     for (int i = 0 ; i < filters.length ; i++) {
       if (filters[i]!=null) {
@@ -89,5 +90,5 @@ public class FilterChain extends Filter {
       }
     }
   }
-  
+
 }

@@ -63,7 +63,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     return ((VurfEclipse)APP.getApp()).random(l, h);
   }
 
-  Filter(Scene sc) {
+  protected Filter(Scene sc) {
     this.sc = sc;
   }
   /*Filter(Scene sc, GLGraphicsOffScreen out, GLGraphicsOffScreen src) { //  //Filter(Scene sc, PGraphics out, PGraphics src) {
@@ -230,8 +230,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   /*
   *  MODES
    */
-  public void nextMode() {
+  public Filter nextMode() {
     //
+  	return this;
   }
 
   @Override public boolean isMuted() {
