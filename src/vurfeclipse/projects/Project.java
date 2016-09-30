@@ -104,11 +104,11 @@ public abstract class Project implements Serializable {
 
   public boolean processSequencer(int time) {
 	  if (enableSequencer) {
-	  	try {
+	  	//try {
 	  		this.sequencer.runSequences();
-	  	} catch (Exception e) {
-	  		println("processSequencer("+time+") caught " + e);
-	  	}
+	  	//} catch (Exception e) {
+	  		//println("processSequencer("+time+") caught " + e + " " + e.getStackTrace());
+	  	//}
 	  }
 	  return enableSequencer;
   }
@@ -629,9 +629,17 @@ public abstract class Project implements Serializable {
 
 
   boolean outputDebug = true;
+	protected double timeScale = 1.0d;
   public void println(String text) {		// debugPrint, printDebug -- you get the idea
 	  if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
   }
+	public double getTimeScale() {
+		return this.timeScale; //1.0d;
+	}
+	public void setTimeScale(double f) {
+		this.timeScale = f;
+	// TODO Auto-generated method stub
+	}
 
 
 

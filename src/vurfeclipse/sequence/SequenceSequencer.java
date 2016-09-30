@@ -391,6 +391,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	public void setRandomMode(boolean b) {
 		// TODO Auto-generated method stub
 		this.randomMode = b;
+		this.seqList = this.randomPool;
 	}
 
 

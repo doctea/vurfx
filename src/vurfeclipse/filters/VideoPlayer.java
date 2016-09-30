@@ -25,7 +25,7 @@ public class VideoPlayer extends Filter {
 
   public ArrayList<String> videos = new ArrayList<String>();
 
-  public void nextMode () {
+  public Filter nextMode () {
 /*    long maxMode = 50;//(long)stream.length()/50;
     mode++;
     if (mode>=maxMode) mode = 0;
@@ -50,7 +50,7 @@ public class VideoPlayer extends Filter {
     //changeVideo(videos[(int)random(0,videos.length)]);
 	  changeVideo(videos.get((int) random(0,videos.size())));
 
-
+	  return this;
   }
 
   public VideoPlayer(Scene sc, String filename) {

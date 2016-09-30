@@ -35,28 +35,33 @@ public class ImageRepository {
   }
 
   public PImage getReversePImage( PImage image ) {
-	  PImage reverse = new PImage( image.width, image.height );
-	  image.loadPixels();
-	  reverse.updatePixels();
-	  reverse.loadPixels();
-	  System.out.println("ImageRepository#getReversePImage: reversing " + image);
-	   /*for (int i = 0; i < image.width; i++) {
-		     // Begin loop for height
-		     for (int j = 0; j < image.height; j++) {
-		       reverse.pixels[j*image.width+i] = image.pixels[(image.width - i - 1) + j*image.width]; // Reversing x to mirror the image
-		     }
-		   }*/
-	  for (int y = 0 ; y < image.height ; y++) {
-		  for (int x = 0 ; x < image.width ; x++) {
-			  //reverse.pixels[(y * image.width) + x] = image.pixels[(image.height-y-1) + image.height*x];
-			  int y_offset = y*image.width;
-			  int dest_offset = (image.height-y-1) * image.width;
+  	try {
+		  PImage reverse = new PImage( image.width, image.height );
+		  image.loadPixels();
+		  reverse.updatePixels();
+		  reverse.loadPixels();
+		  System.out.println("ImageRepository#getReversePImage: reversing " + image);
+		   /*for (int i = 0; i < image.width; i++) {
+			     // Begin loop for height
+			     for (int j = 0; j < image.height; j++) {
+			       reverse.pixels[j*image.width+i] = image.pixels[(image.width - i - 1) + j*image.width]; // Reversing x to mirror the image
+			     }
+			   }*/
+		  for (int y = 0 ; y < image.height ; y++) {
+			  for (int x = 0 ; x < image.width ; x++) {
+				  //reverse.pixels[(y * image.width) + x] = image.pixels[(image.height-y-1) + image.height*x];
+				  int y_offset = y*image.width;
+				  int dest_offset = (image.height-y-1) * image.width;
 
-			  reverse.pixels[y_offset + x] = image.pixels[dest_offset + x];
+				  reverse.pixels[y_offset + x] = image.pixels[dest_offset + x];
+			  }
 		  }
-	  }
-	  reverse.updatePixels();
-	  return reverse;
+		  reverse.updatePixels();
+		  return reverse;
+  	} catch (Exception e) {
+  		System.out.println("ImageRepository#getReversePImage caught " + e + ", returning null");
+  		return null;
+  	}
   }
 
   public PImage cacheLoad(final String fn, final int w, final int h) {

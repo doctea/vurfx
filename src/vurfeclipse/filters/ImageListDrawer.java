@@ -220,7 +220,7 @@ public class ImageListDrawer extends Filter {
     return true;
   }
 
-  public void nextMode () {
+  public Filter nextMode () {
     nextImage();
     /*
     current_image_index++;
@@ -229,6 +229,7 @@ public class ImageListDrawer extends Filter {
      System.out.println("loading image from " + image_srcs[current_image_index] + " (index " + current_image_index + ")");
      current_image.putImage(image_srcs[current_image_index]);
      System.out.println("Set current_image to " + current_image + " for index " + current_image_index);*/
+    return this;
   }
 
   PImage p;

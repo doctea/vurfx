@@ -20,13 +20,13 @@ import controlP5.CallbackListener;
 import controlP5.ControlP5;
 
 public abstract class Scene implements CallbackListener, Serializable, Mutable, Targetable {
-  // Scene stuff 
+  // Scene stuff
   public int w,h;
-  
+
   boolean muted = false;
-  
+
   public transient Project host;
-  
+
   int BUF_SRC = 0;
   int BUF_SRC0 = BUF_SRC;
   int BUF_SRC1 = 1;
@@ -38,27 +38,27 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   int BUF_TEMP2 = 6;
   int BUF_TEMP3 = 7;
   int BUF_TEMP4 = 8;
-  
+
   int BUF_OUT = 9;
   public int BUF_MAX = 10;
-  
-  //PGraphics[] buffers = new PGraphics[BUF_MAX];  
-  //GLGraphicsOffScreen[] buffers = new GLGraphicsOffScreen[BUF_MAX];  
-  
+
+  //PGraphics[] buffers = new PGraphics[BUF_MAX];
+  //GLGraphicsOffScreen[] buffers = new GLGraphicsOffScreen[BUF_MAX];
+
   //Canvas[] canvases = new Canvas[BUF_MAX];
-  
+
   // localname, projectpath
   HashMap<String,String> buffermap = new HashMap<String,String>();
-  
+
   //Canvas[] canvases = new Canvas[BUF_MAX];
-    
+
   protected int filterCount;
-  
-  //transient 
+
+  //transient
     public Filter[] filters;// = new Filter[filterCount];
-  
+
   protected HashMap<String,Sequence> sequences = new HashMap<String,Sequence>();
-    
+
   public HashMap<String,Sequence> getSequences() {
 	  if (sequences.size()==0) setupSequences();
 	  return this.sequences;
@@ -67,28 +67,28 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
   }
   public Sequence getSequence(String name) {
-	  return getSequences().get(name); 
+	  return getSequences().get(name);
   }
   public Sequence makeChainSequenceFrom(String name,Sequence newSeq) {
 	  Sequence seq = getSequence(name);
-	  return new ChainSequence (newSeq.getLengthMillis()).addSequence(seq).addSequence(newSeq);			  
+	  return new ChainSequence (newSeq.getLengthMillis()).addSequence(seq).addSequence(newSeq);
   }
-  
+
 
   public Scene addSequence(String string, Sequence sequence) {
-	getSequences().put(string, sequence);
-	return this;
+		getSequences().put(string, sequence);
+		return this;
   }
-  
+
   boolean outputDebug = true;
   public void println(String text) {		// debugPrint, printDebug -- you get the idea
 	  if (outputDebug) System.out.println("S " + (text.contains((this.toString()))? text : this+": "+text));
   }
 
-  
+
   String sceneName = null;
   public String getSceneName() {
-    if (this.sceneName==null) 
+    if (this.sceneName==null)
       //return this.getClass().toString();//.toString(;
       this.sceneName = this.getClass().toString() + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();
     return sceneName;
@@ -98,15 +98,15 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     this.sceneName = sn;
     return this;
   }
-  
-  
+
+
   public Object getObjectForPath(String path) {
     //println("Scene#getObjectForPath(" + path + ")");
     if (path.equals("") || path.equals(this.getSceneName())) return this;
     String spl[] = path.split("/",2);
     return getFilter(spl[1]);
   }
-  
+
   public Filter getFilter(String name) {
     for (int i = 0 ; i < filters.length ; i++) {
       if (filters[i]!=null) {
@@ -118,7 +118,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     }
     return null;
   }
-  
+
   public ArrayList<Filter> getFilters () {
 	  ArrayList<Filter> f = new ArrayList<Filter>();
 	  for (int i = 0 ; i < filters.length ; i++) {
@@ -127,52 +127,52 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		  }
 	  }
 	  return f;
-  } 
-  
+  }
+
   public String getPath() {
     return ((VurfEclipse)APP.getApp()).pr.getPath() + "sc/" + this.getSceneName();
   }
-  
+
   public Canvas createCanvas(String canvasName) {
 	return this.createCanvas(canvasName, this.w, this.h);
   }
-  
+
   public Canvas createCanvas(String canvasName, int width, int height) {
 	    String path = getPath()+"/"+canvasName;
-	     
+
 	    Canvas c = ((VurfEclipse)APP.getApp()).pr.createCanvas(path, canvasName, width, height);
 	    setCanvas(canvasName, path);
-	    
+
 	    return c;
-  }  
+  }
 
   public String getCanvasMapping(String canvasName) {
-    String mapTo = (String)buffermap.get(canvasName); 
+    String mapTo = (String)buffermap.get(canvasName);
     if (mapTo==null) {
       println ("Scene["+getSceneName()+"]#getCanvasMapping('"+canvasName+"'): mapTo isn't set for '" + canvasName + "'");
 
-      mapTo = getPath()+"/"+canvasName;      
-      println ("Scene["+getSceneName()+"]#getCanvasMapping('"+canvasName+"'): Creating canvas at path '" + mapTo + "' for '" + canvasName + "' in " + this);      
+      mapTo = getPath()+"/"+canvasName;
+      println ("Scene["+getSceneName()+"]#getCanvasMapping('"+canvasName+"'): Creating canvas at path '" + mapTo + "' for '" + canvasName + "' in " + this);
       ((VurfEclipse)APP.getApp()).pr.createCanvas(mapTo, canvasName);
       buffermap.put(canvasName, mapTo); //pr.createCanvas(getPath()+"/"+canvasName, canvasName));//makeCanvas(w,h,gfx_mode,canvasName)));
     }
     return mapTo;
-  }    
-  
+  }
+
   public PVector getCanvasMappingSize(String canvasMappingName) {
 	  Canvas canvas = this.getCanvas(this.getCanvasMapping(canvasMappingName));
-	  return canvas.getSize(); 
-  }  
+	  return canvas.getSize();
+  }
   protected int getCanvasMappingH(String canvasMappingName) {
   	return (int)getCanvasMappingSize(canvasMappingName).x;
-  }	
+  }
 	protected int getCanvasMappingW(String canvasMappingName) {
 		return (int)getCanvasMappingSize(canvasMappingName).y;
 	}
-  
+
   public Canvas getCanvas(String canvasName) {
     String mapTo = getCanvasMapping(canvasName);
-    
+
     println("Scene["+getSceneName()+"]#getCanvas('"+canvasName+"'): returning mapped '" + mapTo + "': " + ((VurfEclipse)APP.getApp()).pr.getCanvas(mapTo));
     return ((VurfEclipse)APP.getApp()).pr.getCanvas(mapTo);
   }
@@ -183,7 +183,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     //return getCanvas(canvasName);
     return this;
   }
-  
+
 /*
   //// new drawing code
   GLTexture outTex;
@@ -191,9 +191,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   public void generateTexture() {
     if (outTex==null) outTex = new GLTexture(APP,w,h);
     if (off==null) off = createGLBuffer(w,h,gfx_mode);
-    
+
     applyGL(off);
-    outTex.copy(off.getTexture());     
+    outTex.copy(off.getTexture());
   }
   public GLTexture getTexture() {
     return this.outTex;
@@ -202,7 +202,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 */
 
 
-  
+
   public boolean isMuted() {
     return this.muted;
   }
@@ -217,8 +217,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   public void toggleMute() {
     this.setMuted(!this.isMuted());
   }
-  
-  
+
+
   public Scene addFilter(Filter f) {
     if (this.filters==null) this.filters = new Filter[filterCount];
     int filterNumber = -1;
@@ -233,18 +233,18 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
       println("addFilter error - no free filters to add " + f);
     } else {
       filters[filterNumber] = f;
-      
-      f.sc = this;  // 
-      
+
+      f.sc = this;  //
+
       //if (f.src==null) f.src = filters[filterNumber-1].out;  // set the source to the previous
       //if (f.out==null) f.out = filters[filterNumber-1].out;
-      
+
       if (highestFilter<filterNumber) highestFilter = filterNumber;
     }
     return this;
   }
-  
-  
+
+
   int highestFilter = filterCount;
   public int selectedFilter = 0;
   public void selectFilter(int sf) {
@@ -288,29 +288,29 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   public void nextFilterMode() {
     this.filters[this.selectedFilter].nextMode();
   }
-  
+
   public void selectNext() {
     this.selectFilter(this.selectedFilter+1);
   }
   public void selectPrevious() {
     this.selectFilter(this.selectedFilter-1);
   }
-  
+
   public void swapFiltersUp() {
     int swap = this.selectedFilter+1;
     if (swap>filters.length) swap = 1;
-    
+
     Filter temp;
     temp = filters[this.selectedFilter];
     filters[this.selectedFilter] = filters[swap];
     filters[swap] = temp;
     this.selectNext();
   }
-  
+
   public void swapFiltersDown() {
     int swap = this.selectedFilter-1;
     if (swap<0) swap = 0;
-    
+
     Filter temp;
     temp = filters[this.selectedFilter];
     filters[this.selectedFilter] = filters[swap];
@@ -323,22 +323,22 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     return this;
   }*/
   public Scene setOutputCanvas(String path) {
-    //this.buffermap.put("out", path);    
+    //this.buffermap.put("out", path);
     this.setCanvas("out", path);
     //setOutputBuffer(pr.getCanvas(path).surf);
     //setOutputCanvas(pr.getCanvas(path));
     return this;
   }
   /*public Scene setInputCanvas(Canvas canvas) {
-    /// err should ste a hashmap with the 
+    /// err should ste a hashmap with the
     //setInputBuffer (canvas.surf);
   }*/
   public Scene setInputCanvas(String path) {
     setCanvas("src", path);
-    //this.buffermap.put("out", path);        
+    //this.buffermap.put("out", path);
     //setInputCanvas (pr.getCanvas(path));
     return this;
-  }   
+  }
   /*public Scene setOutputBuffer(GLGraphicsOffScreen ob) {
     //println("setOutputBuffer to " + ob + " on " + this);
     //if (buffers[BUF_OUT]!=null) buffers[BUF_OUT].dispose();
@@ -359,15 +359,15 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     buffers[index] = b;
     return this;
   }*/
-  
+
   public boolean initialise () {
     // do some setup, return true/false
     //println("initialise scene " + this);
-    
+
 /*    for (int i=0;i<buffers.length;i++) {
       //buffers[i] = Buffer.createGraphics(sc.w, sc.h, P3D);
       //println("creating buffer " + i);
-      
+
       //buffers[i] = createBuffer(sc.w,sc.h,gfx_mode);\
       if (buffers[i]==null) {
         buffers[i] = createGLBuffer(w,h,gfx_mode);
@@ -380,11 +380,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
       }
     }*/
     //initialiseFilters();
-	  
+
 	/*Canvas blank = createCanvas("blank");
 	blank.getSurf().background(0);*/
-	  
-    return true;  
+
+    return true;
   }
   public abstract boolean setupFilters();
   boolean initialisedFilters = false;
@@ -394,29 +394,29 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     for (int i = 0 ; i < this.filters.length ; i ++) {
       if (filters[i]!=null) {
         filters[i].initialise();
-        
+
         /*if (filters[i].out==null) filters[i].out = buffers[BUF_OUT];
         if (filters[i].src==null) filters[i].src = buffers[BUF_SRC];*/
-        
+
         //if (filters[i].out==null) filters[i].out = getCanvas("out").getSurf();
         //if (filters[i].src==null) filters[i].src = getCanvas("src").getSurf(); //setInputCanvas(getCanvas("src"));
-        
+
         if (filters[i].out==null) filters[i].setOutputCanvas(getCanvasMapping("out"));
         if (filters[i].src==null) filters[i].setInputCanvas(getCanvasMapping("src"));
-        
+
       }
     }
     initialisedFilters = true;
     return true;
   }
-  
+
   protected Scene(Project host, int w, int h) {
-    // constructor 
+    // constructor
     this.host = host;
     this.w = w;
     this.h = h;
   }
-  
+
   public void toggleMute(int filterNumber) {
     //this.filters[filterNumber].muted=!this.fmuted;
     this.filters[filterNumber].toggleMute();
@@ -425,22 +425,22 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     }
 
   }
-      
+
   // Scene should look after two (or more) buffers.  which buffer the filter draws to/from is set in each filter (in eg DemoScene).
   // two (or more) buffers held - visible buffer to pass to next layer, source data to pass to next layer, depth buffer, overlay buffers..
   // so WebcamFilter would be set to write to the source data layer, with optional write to visible layer
   // MirrorFilter would flip the source data layer AND/OR the visible layer
-  // PointDrawer would read from source and write to visible layer  
+  // PointDrawer would read from source and write to visible layer
   // multiple outputs per filter - write data to source layer(s) and/or visible layer
   // copy visible layer at end to scene output frame
-  
+
   int prof_loadbegintimes = 0;
   int prof_filtertimes[] = new int[filterCount];
-  
+
   public void applyGLtoCanvas(Canvas canvas) {
     applyGL(canvas.getSurf());
   }
-  
+
   public void applyGL(GLGraphicsOffScreen gfx) {
     //int start_mils = millis();
     //gfx.background(0,0,0,255);
@@ -478,8 +478,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     gfx.image(buffers[BUF_OUT].getTexture(),0,0);
     gfx.endDraw();*/
   }
- 
-  
+
+
   public String getProfileDescription () {
     String ret = "";
     //for (int i = 0 ; i<prof_loadbegintimes.length ; i++) {
@@ -489,24 +489,24 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     }
     //ret += prof_loadbegintimes[i];
     //ret += (String)prof_loadbegintimes;
-    
-    return ret;    
+
+    return ret;
   }
-  
+
   /////////// Callbacks stuff
 
   public void changeFilterParameterValue(int index, String paramName, Object value) {
     if (null!=filters)
      if (null!=filters[index])
-       filters[index].changeParameterValue(paramName,value); 
+       filters[index].changeParameterValue(paramName,value);
   }
   public void changeFilterParameterValueFromSin(int index, String paramName, float s) {
      if(null!=filters)
       if (null!=filters[index])
-        filters[index].changeParameterValueFromSin(paramName,s);     
+        filters[index].changeParameterValueFromSin(paramName,s);
   }
-    
-  
+
+
   HashMap<String,ParameterCallback> callbacks;//<String,ParameterCallback>; //<String,ParameterCallback>;
   public void setupCallbackPresets () {
     this.callbacks = new HashMap<String,ParameterCallback> ();
@@ -524,33 +524,33 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
         }
       }
     });
-    
+
   }
   public ParameterCallback getCallbackPreset(String callbackName) {
-    if (this.callbacks==null) this.setupCallbackPresets(); 
+    if (this.callbacks==null) this.setupCallbackPresets();
     //println("getting callbackName " + callbackName);
-    return (ParameterCallback) this.callbacks.get(callbackName);    
+    return (ParameterCallback) this.callbacks.get(callbackName);
   }
   public Scene registerCallbackPreset(Stream s, String eventName, String callbackName) {
     ParameterCallback cb = getCallbackPreset(callbackName);
     s.registerEventListener(eventName, cb);
     return this;
-  }  
-  public Scene registerCallbackPreset(String streamName, String eventName, String callbackName) {
-    return this.registerCallbackPreset(((VurfEclipse)APP.getApp()).pr.getStream(streamName), eventName, callbackName); 
   }
-  
+  public Scene registerCallbackPreset(String streamName, String eventName, String callbackName) {
+    return this.registerCallbackPreset(((VurfEclipse)APP.getApp()).pr.getStream(streamName), eventName, callbackName);
+  }
+
   ////////// end Callbacks stuff
-  
-  
-  
+
+
+
   public void finish() {
     if (filters!=null)
       for (int i = 0 ; i < filterCount ; i++) {
         if (filters[i]!=null) filters[i].dispose();
-      } 
+      }
   }
-  
+
   public void sendKeyPressed(char key) {
     Scene sc = this;
     if (key=='\\') {
@@ -560,31 +560,31 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     /*if (key=='p') {
       sc.nextFilterMode();
       println("Switched filter mode on " + sc.getSelectedFilterDescription());
-    } 
+    }
     else if (key=='a') {
       sc.selectNext();
       println("Selected sc " + sc.getSelectedFilterDescription());
-    } 
+    }
     else if (key=='q') {
       sc.selectPrevious();
       println("Selected sc " + sc.getSelectedFilterDescription());
-    } 
+    }
     else if (key=='`') {
       sc.toggleMuteSelected();
       println("Toggled to " + (sc.selectedMuteStatus()?"MUTED":"LIVE") + " for " + sc.getSelectedFilterDescription()); //+ " (is now " + (sc.selectedMuteStatus()?"MUTED":"LIVE") + ")");
-    } 
+    }
     else if (key=='_') {
       sc.muteAll();
       println("Muted all");
-    } 
+    }
     else if (key=='n') {
       sc.swapFiltersUp();
       println("Swapped filters up!");
-    } 
+    }
     else if (key=='m') {
       sc.swapFiltersDown();
       println("Swapped filters down!");
-    } 
+    }
     else if (key>='0' && key<='9') {
       int numkey = int(key+""); //Integer.parseInt(new String(key));
       //sc.filters[numkey].muted = !sc.filters[numkey].muted;
@@ -605,9 +605,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
       sc.selectFilter(sc.highestFilter);
       println("Selected sc " + sc.getSelectedFilterDescription());
     }
-    
+
   }
-  
+
 
 
   public HashMap[] getSerializedMap () {
@@ -640,7 +640,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
       println("error loading preset " + filename + ": " + e);
     }
   }
-  
+
   public void updateSerializeBox() {
     /*String s = "";
     for (int i = 0 ; i < this.filters.length ; i ++) {
@@ -651,14 +651,14 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     }
     myTextarea.setText(s);*/
   }
-  
+
   public String toString() {
     return super.toString();// + " BUF_OUT:" + getCanvasMapping("out"); //buffers[BUF_OUT];
   }
-  
+
   /*public ControllerInterface[] getControls() {
     return new ControllerInterface[] {
-      new Slider(cp5, null, "slider for " + this.toString(), 0, 10, 5, 10, 10, 100, 20) //, int theX, int theY, int theWidth, int theHeight) 
+      new Slider(cp5, null, "slider for " + this.toString(), 0, 10, 5, 10, 10, 100, 20) //, int theX, int theY, int theWidth, int theHeight)
     };
 
   }*/
@@ -667,10 +667,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   transient controlP5.Textfield myTextarea;
   transient controlP5.Textfield saveFilenameController;
   transient controlP5.Button saveButton;
-  transient controlP5.Button loadButton;  
-  
+  transient controlP5.Button loadButton;
+
   public void controlEvent (CallbackEvent ev) {
-    //println("controlevent in " + this);    
+    //println("controlevent in " + this);
     if (ev.getAction()==ControlP5.ACTION_RELEASED) {
       if (ev.getController()==this.muteController) {
         this.setMuted(muteController.getState());
@@ -679,14 +679,14 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
         println("save preset " + getSceneName());
         //this.savePreset(saveFilenameController.getText(), getSerializedMap());
         this.savePreset(getSceneName());
-      }     
+      }
       else if (ev.getController()==this.loadButton) {
         println("load preset");
-        this.loadPreset2(getSceneName()); //saveFilenameController.getText()); 
+        this.loadPreset2(getSceneName()); //saveFilenameController.getText());
       }
     }
   }
-  
+
   public void savePreset(String filename) {
 	  ((VurfEclipse)APP.getApp()).io.serialize(filename, this);
   }
@@ -697,7 +697,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     this.setupControls(cp5, tabName);
     ((VurfEclipse)APP.getApp()).pr.replaceScene(cp5, this, s);
   }
-  
+
   transient ControlP5 cp5;
   String tabName;
   boolean doneControls = false;
@@ -707,14 +707,14 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     doneControls = true;
     this.cp5 = cp5;
     this.tabName = tabName;
-    
+
     int margin = 5;
     int lm = 10;
     int topMargin = 40;
     int size = 20;
-    
+
     int currentY = topMargin;
-    
+
     this.muteController = cp5.addToggle("mute_"+tabName)
       .setSize(size,size)
       .setValue(isMuted())
@@ -735,7 +735,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
           .moveTo(tabName)
             //.plugTo(this)
             //.addCallback(this)
-            //.addCallback(this)            
+            //.addCallback(this)
             .linebreak()
               ;
 
@@ -746,12 +746,12 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
             //.plugTo(this)
             ///.setId(1)
             //.addCallback(this)
-            //.addCallback(this)            
+            //.addCallback(this)
             .linebreak()
 
-              ;              
+              ;
     //cp5.register(this, 0, loadButton);
-    
+
     //cp5.addCallback(this, new controlP5.Controller[] { saveButton, loadButton });
     cp5.addCallback(this);
 
@@ -776,14 +776,14 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
            ;*/
         filters[i].setupControls(cp5,tabName);
         println("<<<<<<<<<<<<<<<<did setupcontorls for " + filters[i]);
-        
+
       }
     }
-    
-        
-    
+
+
+
   }
- 
+
   @Override
   public Object target(String path, Object payload) {
 	  println("#target('"+path+"', '"+payload+"')");
@@ -793,11 +793,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	  }
 	  return payload;
   }
-  
+
   public HashMap<String, Targetable> getCustomTargetURLs() {
 	  return new HashMap<String,Targetable>();
   }
-  
+
   public HashMap<String,Targetable> getTargetURLs() {
 	HashMap<String, Targetable> urls = new HashMap<String,Targetable>();
 	Scene s = this;
@@ -806,19 +806,23 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		urls.put(s.getPath() + "/mute", s);
 		println(this + ": added Scene's url '" + s.getPath() + "/mute' mapped to " + s);
 	}
-	
+
 	// loop over all the Filters; add the URLs for each Filter
 	Iterator fit = s.getFilters().iterator();
 	while (fit.hasNext()) {
 		Filter f = (Filter) fit.next();
 		urls.putAll(f.getTargetURLs());
 	}
-	
+
 	urls.putAll(getCustomTargetURLs());
-	
+
 	return urls;
   }
+	public double getTimeScale() {
+		// TODO Auto-generated method stub
+		return host.getTimeScale();
+	}
 
-  
-  
+
+
 }
