@@ -74,7 +74,7 @@ public class SocioSukiProject extends Project implements Serializable {
 	  	@Override
 	  	public void runSequences() {
 	  		seq_count++;
-	  		if ((1+(count%100))>5 && (seq_count%(count+1)==0)) {
+	  		if ((1+(count%10))>5 && (seq_count%(count+1)<2)) {
 	  			this.nextSequence();
 	  		}
 	  		if (seq_count>10000) seq_count = 0;
@@ -94,8 +94,8 @@ public class SocioSukiProject extends Project implements Serializable {
     final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
 
-    ils1.addFilter(new ImageListDrawer(ils1).setDirectory("vurf"/*"ds2014"*/).setCurrentIndex(5).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer1").nextMode());
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory(/*"vurf"*/"ds2014").setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
+    ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"ds2014").setCurrentIndex(5).setNumBlobs(50/*200*/).setFilterName("ImageListDrawer1").nextMode());
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("vurf"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
 
     //((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
     //((ImageListDrawer)ils2.getFilter("ImageListDrawer2")).setOutputCanvas("out");
@@ -187,12 +187,12 @@ public class SocioSukiProject extends Project implements Serializable {
 
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
     this.addScene(blobScene);
-    switcher.bindSequence("blob1_1", blobScene, "preset 1");
-    switcher.bindSequence("blob1_2", blobScene, "preset 2");
-    switcher.bindSequence("blob1_3", blobScene, "preset 3");
-    switcher.bindSequence("blob1_4", blobScene, "preset 4");
+    switcher.bindSequence("blob1_1", blobScene, "preset 1", 10);
+    switcher.bindSequence("blob1_2", blobScene, "preset 2", 10);
+    switcher.bindSequence("blob1_3", blobScene, "preset 3", 10);
+    switcher.bindSequence("blob1_4", blobScene, "preset 4", 10);
 
-    Scene blobScene2 = new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out").setInputCanvas("/pix1");
+    Scene blobScene2 = new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out").setInputCanvas("/out");
     this.addScene(blobScene2);
     switcher.bindSequence("blob2_1", blobScene2, "preset 1");
     switcher.bindSequence("blob2_2", blobScene2, "preset 2");
