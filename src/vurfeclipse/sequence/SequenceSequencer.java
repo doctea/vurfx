@@ -213,6 +213,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  int count = randomPool.size();
 		  try {
 			  int chosen = (int)APP.getApp().random(0,count);
+			  if (chosen<seqList.size()) seq_pos = chosen; // set list index
 			  //changeSequence((String)sequences.keySet().toArray()[chosen]);
 			  println("Chose random element " + chosen + " of " + count + "('" + (String)randomPool.get(chosen) + "')");
 			  changeSequence((String)randomPool.toArray()[chosen]);
@@ -226,7 +227,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  		randomSequence();
 	  	} else {
 	  		println("Moving to seqList index " + seq_pos++);
-	  		if (seq_pos>seqList.size()) {
+	  		if (seq_pos>=seqList.size()) {
 	  			seq_pos = 0;
 	  			println("Resetting index to 0 because sequence list reached " + seqList.size());
 	  		}

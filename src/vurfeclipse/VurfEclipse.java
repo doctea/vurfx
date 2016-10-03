@@ -28,10 +28,10 @@ public class VurfEclipse extends PApplet {
 		rect (width/2,height/2,5,5);
 	}*/
 
-	boolean hdRes = true;
+	boolean hdRes = false;//true;
 	boolean mdRes = false;
 	boolean projRes = false;
-	boolean ultrahiRes = true;
+	boolean ultrahiRes = false;//true;
 	boolean hiRes = true;
 	boolean medRes = true;
 
@@ -156,7 +156,7 @@ public class VurfEclipse extends PApplet {
 	}
 
 	//config settings
-	int title_adjust = -100;
+	int title_adjust = -50; //-100;
 	int
 		output_width =  (hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640),
 		output_height = title_adjust + (hdRes ? 1080 : mdRes ? 900 :  projRes ? 960  : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480);
