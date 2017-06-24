@@ -36,8 +36,8 @@ String dateStamp () {
 }
 
 // config settings
-int 
-desired_width =  hiRes ? 1024 : medRes ? 800 : 640, 
+int
+desired_width =  hiRes ? 1024 : medRes ? 800 : 640,
 desired_height = hiRes ? 768  : medRes ? 600 : 480;
 
 //int output_width = hiRes ? 1280 : 800, output_height = hiRes? 1024 : 600;
@@ -100,7 +100,7 @@ void setup () {
 
   if (gfx_mode==GLConstants.GLGRAPHICS) {
     offscreen = new GLGraphicsOffScreen(this, width, height); //, true, 4);
-    offscreen.beginDraw(); 
+    offscreen.beginDraw();
     offscreen.setDepthMask(true);
     //offscreen.background(0);
     offscreen.endDraw();
@@ -113,7 +113,7 @@ void setup () {
     gl = pgl.beginGL();
     pgl.gl.glDisable(GL.GL_DEPTH_TEST);
 
-    pgl.gl.setSwapInterval( 1 ); // use value 0 to disable v-sync 
+    pgl.gl.setSwapInterval( 1 ); // use value 0 to disable v-sync
     pgl.background(0);
     pgl.endGL();
   }
@@ -137,10 +137,10 @@ void setup () {
 
   lastSecond = exportMode?0:millis();
 
-  //pr = new TestProject(desired_width, desired_height, gfx_mode);
+  pr = new TestProject(desired_width, desired_height, gfx_mode);
   //pr = new SimpleProject(desired_width, desired_height, gfx_mode);
   pr = new PsychNightProject(desired_width, desired_height, gfx_mode);
-  //pr = new PostProject(desired_width, desired_height, gfx_mode);  
+  //pr = new PostProject(desired_width, desired_height, gfx_mode);
   pr.initialise(cp5);
 
   //gw = new GwrxInterface(APP, pr);
@@ -185,7 +185,7 @@ void draw () {
   if (exportMode)
     System.out.println("For frameCount " + frameCount + ", got timeMillis " + timeMillis);
 
-  if (enableStreams) 
+  if (enableStreams)
     pr.processStreams(timeMillis);
   //offscreen.beginDraw();
 
@@ -201,8 +201,8 @@ void draw () {
   }*/
 
   //GLTexture tex = offscreen.getTexture();
-  //image(tex, 0, 0, output_width, output_height);  
-  //server.publishFrameTexture(tex.getTextureID(), tex.getTextureTarget(), 0, 0, tex.width, tex.height, tex.width, tex.height, false); 
+  //image(tex, 0, 0, output_width, output_height);
+  //server.publishFrameTexture(tex.getTextureID(), tex.getTextureTarget(), 0, 0, tex.width, tex.height, tex.width, tex.height, false);
   //if (syphon)
   //renderTexture(gl);
 
@@ -245,23 +245,23 @@ void draw () {
  mySyphon = new JSyphonServer();
  mySyphon.test();
  mySyphon.initWithName(theName);
- 
+
  // copy to texture, to send to Syphon.
  texID = new int[1];
- 
+
  gl.glGenTextures(1, texID, 0);
  gl.glBindTexture(gl.GL_TEXTURE_RECTANGLE_EXT, texID[0]);
  gl.glTexImage2D(gl.GL_TEXTURE_RECTANGLE_EXT, 0, gl.GL_RGBA8, width, height, 0, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, null);
- } 
- 
+ }
+
  void renderTexture(GL gl) {
  gl.glBindTexture(gl.GL_TEXTURE_RECTANGLE_EXT, texID[0]);
- gl.glCopyTexSubImage2D(gl.GL_TEXTURE_RECTANGLE_EXT, 0, 0, 0, 0, 0, width, height); 
+ gl.glCopyTexSubImage2D(gl.GL_TEXTURE_RECTANGLE_EXT, 0, 0, 0, 0, 0, width, height);
  mySyphon.publishFrameTexture(texID[0], gl.GL_TEXTURE_RECTANGLE_EXT, 0, 0, width, height, width, height, false);
  }
  //// end Syphon stuff
- 
- 
+
+
  */
 
 /*
@@ -271,7 +271,7 @@ int saveincr = 0;
  delay(100); // give the buffer enough time to catch up. 50 is too slow, 250 works
  loadPixels();
  PImage s = createImage(width, height, ARGB);
- s.loadPixels();  
+ s.loadPixels();
  for (int i = 0 ; i < pixels.length ; i++) {
  s.pixels[i] = pixels[i];//get(i, i*width);
  }
@@ -299,7 +299,7 @@ void fileSelectedProject (File selection) {
       setupControls(cp5);
       pr.initialise(cp5);
     }
-  } 
+  }
   catch (Exception e) {
   }
 }
@@ -309,10 +309,10 @@ void keyPressed() {
   try {
     if (key == ' ') {
       screenGrab = true;
-    } 
+    }
     else if (key=='/') {
       enableStreams = !enableStreams;
-    } 
+    }
     else if (key=='l') {
       //pr.cp5.destroy();
       destroyControls(cp5);
@@ -325,11 +325,11 @@ void keyPressed() {
       setupControls(cp5);
       pr.initialise(cp5);
       //selectInput("Choose a project file to load", "fileSelectedProject");
-    } 
+    }
     else {
       pr.sendKeyPressed(key);
     }
-  } 
+  }
   catch (Exception e) {
   }
 }

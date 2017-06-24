@@ -25,11 +25,14 @@ import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;
 import vurfeclipse.user.scenes.OutputFX1;
 import vurfeclipse.user.scenes.OutputFX2;
+import vurfeclipse.user.scenes.OutputFX3;
 import vurfeclipse.user.scenes.TunnelScene;
 
 public class SocioSukiProject extends Project implements Serializable {
 
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
+	
+	float tempo = 150.0f;
 
   public SocioSukiProject(int w, int h, String gfx_mode) {
     super(w,h,gfx_mode);
@@ -49,7 +52,7 @@ public class SocioSukiProject extends Project implements Serializable {
   }
 
   public boolean setupStreams () {
-    BeatStream beatStream = new BeatStream("Beat Stream", 150.0f, APP.getApp().millis());
+    BeatStream beatStream = new BeatStream("Beat Stream", tempo, APP.getApp().millis());
     this.addStream("beat", beatStream);
 
     return true;
@@ -95,36 +98,39 @@ public class SocioSukiProject extends Project implements Serializable {
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
 
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"ds2014").setCurrentIndex(5).setNumBlobs(50/*200*/).setFilterName("ImageListDrawer1").nextMode());
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("vurf"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
+    //ils2.addFilter(new ImageListDrawer(ils2).setDirectory("vurf"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
 
     //((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
     //((ImageListDrawer)ils2.getFilter("ImageListDrawer2")).setOutputCanvas("out");
 
-    /*VideoPlayer vp2 = new VideoPlayer(ils2,"");
+    VideoPlayer vp2 = new VideoPlayer(ils2,"");
     vp2.loadDirectory("video-sources/");
-    vp2.setOutputCanvas("out");
-    ils2.addFilter(vp2);*/
+    vp2.setOutputCanvas("/pix1");
+    ils2.addFilter(vp2);
+    
+    final PlainDrawer pd = (PlainDrawer)new PlainDrawer(ils2).setFilterName("Source Switcher").setInputCanvas("/pix1");
+    ils2.addFilter(pd);
 
     ils1.addSequence("next", new ShowSceneSequence(ils1, 0) {
-		@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
-		@Override public void onStop() { super.onStop(); }
-
-		@Override
-		public void onStart() {
-			super.onStart();
-			ils1.nextFilterMode();
-		}
-	});
+			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+			@Override public void onStop() { super.onStop(); }
+	
+			@Override
+			public void onStart() {
+				super.onStart();
+				ils1.nextFilterMode();
+			}
+		});
     ils2.addSequence("next", new ShowSceneSequence(ils1, 0) {
-		@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
-		@Override public void onStop() { super.onStop(); }
-
-		@Override
-		public void onStart() {
-			super.onStart();
-			ils2.nextFilterMode();
-		}
-	});
+			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+			@Override public void onStop() { super.onStop(); }
+	
+			@Override
+			public void onStart() {
+				super.onStart();
+				ils2.nextFilterMode();
+			}
+		});
 
 
     //ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect"));
@@ -250,7 +256,11 @@ public class SocioSukiProject extends Project implements Serializable {
     		"/out"
     );
 
-
+    this.addSceneInputOutputCanvas(
+    		new OutputFX3(this,w,h).setSceneName("OutputShader3").setCanvas("pix0", "/pix0"),
+    		"/out",
+    		"/out"
+    ).setMuted();
 
 
 
@@ -414,6 +424,7 @@ public class SocioSukiProject extends Project implements Serializable {
     bs.addFilter(bd);
     this.addSceneOutputCanvas(bs,"/out");*/
 
+    switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader3"), 5000, 100);
 
 
 
