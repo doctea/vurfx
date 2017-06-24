@@ -15,7 +15,7 @@ import vurfeclipse.user.scenes.OutputFX1.OutputSequence1;
 public class OutputFX3 extends SimpleScene {
 	public OutputFX3(Project pr, int w, int h) {
 		super(pr, w, h);
-		setSceneName("OutputFX2 Instance");
+		setSceneName("OutputFX3 Instance");
 	}
 
 	public boolean setupFilters() {

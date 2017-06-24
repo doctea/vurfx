@@ -62,7 +62,7 @@ public class VideoPlayer extends Filter {
   public void setMuted(boolean on) {
     super.setMuted(on);
     if (!on) {
-      stream.loop();
+      stream.play();
     } else {
       stream.pause();
     }
@@ -70,12 +70,15 @@ public class VideoPlayer extends Filter {
 
   //Thread loader =  new Thread() {
 
-
+  transient GSMovie oldStream;
   transient GSMovie newStream;
   boolean changing = false;
   Thread changerThread;
   private int startDelay;
   public synchronized void changeVideo(String fn) {
+
+  	if (true) return; // dirty hack 2016-12-1? to only play once?!?!?
+
     if (changing) return;
     final String filename = fn;
     if (filename=="") return;
@@ -86,19 +89,25 @@ public class VideoPlayer extends Filter {
     println("got changeVideo('"+fn+"'");
 
     this.changerThread = new Thread () {
+    	boolean alreadyRun = false;
+
       public void start () {
         super.start();
       }
-      public void run () {
+      public synchronized void run () {
+      	if (alreadyRun) return;
+      	alreadyRun = true;
+
         println("Loaded new.." + filename);
-        GSMovie newStream;
+        //GSMovie newStream;
+        if (newStream!=null) { newStream.stop(); newStream.delete(); }
         newStream = new GSMovie(APP.getApp(),filename);
         //newTex = new GLTexture(APP, sc.w, sc.h);
         newStream.setPixelDest(tex, true);
         newStream.volume(volume);
         println("Set volume and pixeldest..");
         if (!((VurfEclipse)APP.getApp()).exportMode)
-          newStream.loop();
+          newStream.play();
         //println("about to do ")
         while (!newStream.available())
           try { sleep(50); } catch (Exception e) {}
@@ -108,15 +117,19 @@ public class VideoPlayer extends Filter {
         self.newStream = newStream;
 
 
-        GSMovie oldStream = stream;
+        //GSMovie oldStream = stream;
         //GLTexture oldTex = tex;
         self.stream = newStream;
         println("Swapping streams to " + filename);
         self.setFilterLabel(getFilterName() + filename);
         //tex = newTex;
-        oldStream.stop();
-        oldStream.delete();
-        //oldTex.delete();
+        if (oldStream!=null) {
+	        oldStream.pause();
+	        oldStream.stop();
+	        oldStream.delete();
+	        oldStream = null;
+	        //oldTex.delete();
+        }
         self.newStream = null;
         //newTex = null;
         self.changing = false;
@@ -127,6 +140,7 @@ public class VideoPlayer extends Filter {
         stream.delete();
         stream = null;*/
         //changing = false;
+        return;
       }
     };
     this.changerThread.start();
@@ -137,8 +151,8 @@ public class VideoPlayer extends Filter {
   }
   public void loadDirectory(String directory) {
 	  //String directory = ""; // dummy
-	  String path = APP.getApp().sketchPath("bin/data/" + directory);	// ffs need this on Windows..
-	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
+	  //String path = APP.getApp().sketchPath("bin/data/" + directory);	// ffs need this on Windows..
+  	String path = APP.getApp().dataPath(/*"bin/data/" + */directory);		// ffs but seem to need this on tohers
 	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
 	  //String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
 	  File folder = new File(path);
@@ -149,8 +163,14 @@ public class VideoPlayer extends Filter {
 			  // skip; maybe recurse tho in future
 		  } else {
 			  String fn = fileEntry.getName();
-			  if (fn.contains(".ogg"))
+			  if (fn.contains(".ogg") 
+			  		//|| fn.contains(".mov") || fn.contains(".mp4")
+			  ) {
 				  videos.add(path + fileEntry.getName());
+				  this.println("adding .ogg video " + fileEntry.getName());
+			  } else {
+			  	this.println("skipping file " + fileEntry.getName());
+			  }
 			  //if (count>=numBlobs) break;
 		  }
 	  }
@@ -169,6 +189,8 @@ public class VideoPlayer extends Filter {
     tex = new GLTexture(APP.getApp(),sc.w,sc.h, params);
 
     loadDirectory();
+    if (videos.size()==0) return true;
+    
     filename = videos.get(0);
 
     this.setFilterLabel("VideoPlayer - " + filename);
@@ -185,7 +207,7 @@ public class VideoPlayer extends Filter {
     	  Thread.sleep(startDelay);
 
       if (!((VurfEclipse)APP.getApp()).exportMode)
-        stream.loop();
+        stream.play();
     } catch (Exception e) {
       println("got error " + e + " loading " + filename);
     }      //webcamStream = new Capture(APP, sc.w, sc.h, 30);
