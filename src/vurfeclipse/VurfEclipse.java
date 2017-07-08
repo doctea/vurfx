@@ -289,6 +289,7 @@ public class VurfEclipse extends PApplet {
 
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 		 pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
+		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
 		 //pr = new PharmacyProject(desired_width, desired_height, gfx_mode);
 		 //pr = new TempSocioSukiVideoProject(desired_width, desired_height, gfx_mode);

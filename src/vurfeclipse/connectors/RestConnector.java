@@ -197,15 +197,16 @@ public class RestConnector implements Runnable {
 	
 		h += "<h2>Info</h2>";
 		h += "<b>Current sequence:</b> " + pr.getSequenceName() + "<br>";
-		h += pr.getSequencer().isLocked() ? "<b>Sequencer is locked</b> (ie sequencer preset won't change automatically)" : "Sequencer is not locked" + "<br>";
-		h += !pr.isSequencerEnabled() ? "<b>Sequencer is disabled!</b> (ie paused)" : "Sequencer is enabled" + "<br>"; 
+		h += pr.getSequencer().isLocked() ? "<b>Sequencer is locked</b> (ie sequencer preset won't change automatically)<br>" : "Sequencer is not locked" + "<br>";
+		h += !pr.isSequencerEnabled() ? "<b>Sequencer is disabled!</b> (ie paused)<br>" : "Sequencer is enabled" + "<br>";
+		h += !pr.isStreamsEnabled() ? "<b>Streams are disabled!</b><br>" :" Streams are enabled" + "<br>";
 		
 		h += "<hr>";
 		
 		h += "<h2>Exposed routes</h2>";
 		//Iterator<Entry<String,Targetable>> tit = targets.entrySet().iterator();
 		Iterator<Entry<String,Targetable>> tit = exposed.entrySet().iterator();
-		if (!tit.hasNext()) h+= "<i>no routes exposed in this project</i>";
+		if (!tit.hasNext()) h+= "<i>no routes exposed in this project</i><br>";
 		while (tit.hasNext()) {
 			Entry<String,Targetable> e = tit.next();
 			//if (e.getKey() instanceof Sequence)
@@ -221,7 +222,7 @@ public class RestConnector implements Runnable {
 		h += "<hr>";
 		
 		h += "<h2>send keys</h2>";
-		String keys = ";-l/'";		///keys from project onkeypressed 
+		String keys = "-lm';";		///keys from project onkeypressed 
 		for (char c : keys.toCharArray()) {
 			try {
 				h += "<a target='sendkeys' href='/sendkey/" + java.net.URLEncoder.encode(""+c,"UTF-8") +"'>" + "[ send "+c+" ]" + "</a>";

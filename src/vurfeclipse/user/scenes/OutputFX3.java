@@ -67,7 +67,10 @@ public class OutputFX3 extends SimpleScene {
     public void setupSequences() {
 			sequences.put("show_sync", new SyncSequence(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
 			sequences.put("show_sync2", new SyncSequence2(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
+			sequences.put("show_sync3", new SyncSequence3(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
+			sequences.put("show_sync4", new SyncSequence4(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
     }
+    
 
 		class SyncSequence extends Sequence {
 			public SyncSequence(OutputFX3 outputFX2, int i) {
@@ -84,7 +87,8 @@ public class OutputFX3 extends SimpleScene {
 			@Override
 			public void onStart() {
 				// TODO Auto-generated method stub
-
+				getFilter("SyncEffect").changeParameterValueFromSin("offset_x", 0);
+				getFilter("SyncEffect").changeParameterValueFromSin("offset_y", 0);
 			}
 
 			@Override
@@ -112,7 +116,8 @@ public class OutputFX3 extends SimpleScene {
 			@Override
 			public void onStart() {
 				// TODO Auto-generated method stub
-
+				getFilter("SyncEffect").changeParameterValueFromSin("offset_x", 0);
+				getFilter("SyncEffect").changeParameterValueFromSin("offset_y", 0);
 			}
 
 			@Override
@@ -122,4 +127,64 @@ public class OutputFX3 extends SimpleScene {
 			}
 		}
 
+		class SyncSequence3 extends Sequence {
+			public SyncSequence3(OutputFX3 outputFX2, int i) {
+				// TODO Auto-generated constructor stub
+				super(outputFX2, i);
+			}
+
+			@Override
+			public void setValuesForNorm(double pc, int iteration) {
+				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/3.0*10));
+				getFilter("SyncEffect").changeParameterValueFromSin("step_y", -(float)Math.sin(pc/3.0*10));
+				getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
+				getFilter("SyncEffect").changeParameterValueFromSin("offset_y", -(float)Math.sin(pc/3.0*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", (float)Math.sin(pc/3.0*10));
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onStop() {
+				// TODO Auto-generated method stub
+
+			}
+		}
+		
+		class SyncSequence4 extends Sequence {
+			public SyncSequence4(OutputFX3 outputFX2, int i) {
+				// TODO Auto-generated constructor stub
+				super(outputFX2, i);
+			}
+
+			@Override
+			public void setValuesForNorm(double pc, int iteration) {
+				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/1.5*10));
+				getFilter("SyncEffect").changeParameterValueFromSin("step_y", -(float)Math.sin(pc/1.5*10));
+				getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/1.5*10));
+				getFilter("SyncEffect").changeParameterValueFromSin("offset_y", -(float)Math.sin(pc/1.5*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", (float)Math.sin(pc/3.0*10));
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onStop() {
+				// TODO Auto-generated method stub
+
+			}
+		}
+		
 }

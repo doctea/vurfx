@@ -73,7 +73,7 @@ public class OpenNIFilter extends Filter {
 
 
 	  		      if ((Boolean)getParameterValue("depth")==true) {
-	  		    	  newDepth = context.depthImage().get();
+	  		    	  newDepth = depth = context.depthImage().get();
 
 	    		      newFrame = true;
 	  		      }
@@ -99,8 +99,8 @@ public class OpenNIFilter extends Filter {
 	    context.setMirror(false);
 
 	    // enable depthMap generation
-	    context.enableDepth();
-	    context.enableRGB();
+	    context.enableDepth(); //320,240,10);
+	    context.enableRGB(320,240,10);
 	    //context.enableIR();
 
 	    //context.
@@ -108,7 +108,6 @@ public class OpenNIFilter extends Filter {
 	    // align depth data to image data
 	    context.alternativeViewPointDepthToImage();
 	    context.setDepthColorSyncEnabled(true);
-
 
 	    return context.isInit();
   }
@@ -184,9 +183,12 @@ public class OpenNIFilter extends Filter {
 	    if (newFrame==true && out!=null && rgb!=null && /*rgb!=newRgb &&*/ sc!=null) { // && (rgb==null || newRgb.isModified())) {
 	        newFrame = false;
 
+			    //GLGraphicsOffScreen out = sc.getCanvas("rgb").getSurf();
+	        
 	        //t = rgb.get();//,0,0); //,sc.w,sc.h);
 
 	        //out.image(context.rgbImage(),0,0);
+			    //GLGraphicsOffScreen out_depth = sc.getCanvas("depth").getSurf();
 
 
 	        //out.image(t,0,0,sc.w,sc.h);//,(float)0,(float)0,(float)sc.w,(float)sc.h);
@@ -207,15 +209,25 @@ public class OpenNIFilter extends Filter {
 	    if (context!=null) {
 		    //newDepth = context.depthImage().get();
 		    GLGraphicsOffScreen out_depth = sc.getCanvas("depth").getSurf();
+		    
+		    //println("depth is " + sc.getCanvas("/depth").toString());
 
-
-		    if (out_depth!=null && newDepth!=depth && sc!=null) {
+		    if (out_depth!=null && newDepth!=null && /*newDepth!=depth &&*/ sc!=null) {
 		        //out_depth.fill(255);
 		        //out_depth.rect(100,100,40,40);
 
 		    	//PImage t = depth = newDepth;
 		    	//out_depth.image(t,0,0,sc.w,sc.h);
-		        out_depth.copy(newDepth, 0, 0, newDepth.width, newDepth.height, 0, 0, out_depth.width, out_depth.height);
+		      out_depth.copy(newDepth, 0, 0, newDepth.width, newDepth.height, 0, 0, out_depth.width, out_depth.height);
+		      //out_depth.rect(40, 40, 20, 20);
+		      //out_depth.textSize(100);
+		      //out.textFont(getFont(), 11); //256);
+		      //out_depth.text("DEPTH", 200, 200);
+		      
+		      //out.textSize(100);
+		      //out.text("OUT", 200, 200);
+		      //out.rect(20, 20, 20, 20);;
+		    	//out_depth.copy(depth, 0, 0, depth.width, depth.height, 0, 0, out_depth.width, out_depth.height);
 		    	newDepth.delete();
 		    }
 	    }
