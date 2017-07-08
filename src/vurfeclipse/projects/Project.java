@@ -151,6 +151,9 @@ public abstract class Project implements Serializable {
   public void toggleStreams() {
     this.enableStreams = !this.enableStreams;
   }
+  public boolean isStreamsEnabled() {
+  	return this.enableStreams;
+  }
 /////////////// end Event stuff
 
 
@@ -468,6 +471,9 @@ public abstract class Project implements Serializable {
     } else if (key=='\'') {
     	this.enableSequencer = !this.enableSequencer;
     	println("toggled enableSequencer to " + this.enableSequencer);
+    } else if (key=='m') {
+    	this.toggleStreams();
+    	println("toggled enableStraems to " + this.enableStreams);
     } else/* if (key=='\'') {  // SOLO SCENE
       Iterator i = scenes.iterator();
       while (i.hasNext()) {

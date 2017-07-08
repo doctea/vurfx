@@ -55,13 +55,13 @@ public class KinectTestProject extends Project implements Serializable {
     final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
     
-    ils1.addFilter(new ImageListDrawer(ils1).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(200).setFilterName("ImageListDrawer1"));
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(200).setFilterName("ImageListDrawer2"));
+    ils1.addFilter(new ImageListDrawer(ils1).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(5/*200*/).setFilterName("ImageListDrawer1"));
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("doctea").setCurrentIndex(0).setNumBlobs(5/*200*/).setFilterName("ImageListDrawer2"));
     
     //ils2.setCanvas("pix0","/pix0");
     //ils1.setCanvas("pix1","/pix1");
-    //ils1.addFilter(((OpenNIFilter) new OpenNIFilter(ils1).setFilterName("kinect")).setDepthOutputCanvasName("pix1"));
-
+    ils1.addFilter(((OpenNIFilter) new OpenNIFilter(ils1).setOutputCanvas("/rgb").setFilterName("kinect")));//.setDepthOutputCanvasName("pix1"));
+    ils1.setCanvas("depth", "/depth");
 
     this.addSceneOutputCanvas(
       ils1,
@@ -128,7 +128,7 @@ public class KinectTestProject extends Project implements Serializable {
     
 
     final Scene blendScenedepth = new BlenderFX1(this,"Kinect",w,h).setOutputCanvas("/out");
-    blendScenedepth.setCanvas("pix1","/rgb");
+    blendScenedepth.setCanvas("pix1","/rgb"); //rgb");
     //blendScenedepth.setCanvas("pix1","/pointCloud");
     blendScenedepth.setCanvas("pix0","/depth");
     //this.addScene(blendScenedepth);    
