@@ -52,5 +52,9 @@ abstract public class Sequencer implements Targetable {
 			return urls;
 		}
 		abstract public String getCurrentSequenceName() ;
+		
+		public boolean isLocked() {
+			return this.locked;
+		}
 
 }

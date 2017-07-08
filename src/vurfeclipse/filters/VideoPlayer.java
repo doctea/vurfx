@@ -49,6 +49,7 @@ public class VideoPlayer extends Filter {
 
     //changeVideo(videos[(int)random(0,videos.length)]);
 	  changeVideo(videos.get((int) random(0,videos.size())));
+	  println("Changing video!");
 
 	  return this;
   }
@@ -77,7 +78,7 @@ public class VideoPlayer extends Filter {
   private int startDelay;
   public synchronized void changeVideo(String fn) {
 
-  	if (true) return; // dirty hack 2016-12-1? to only play once?!?!?
+  	//if (true) return; // dirty hack 2016-12-1? to only play once?!?!?
 
     if (changing) return;
     final String filename = fn;
