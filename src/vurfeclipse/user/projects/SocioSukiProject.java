@@ -32,7 +32,7 @@ public class SocioSukiProject extends Project implements Serializable {
 
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
 	
-	float tempo = 150.0f;
+	float tempo = 150.0f; //10.0f; //150.0f;
 
   public SocioSukiProject(int w, int h, String gfx_mode) {
     super(w,h,gfx_mode);
@@ -96,8 +96,10 @@ public class SocioSukiProject extends Project implements Serializable {
 
     final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
+    
+    int BLOBCOUNT = 5; // set to 50 for production, 5 makes for quick loading!
 
-    ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"ds2014").setCurrentIndex(5).setNumBlobs(50/*200*/).setFilterName("ImageListDrawer1").nextMode());
+    ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"ds2014").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
     //ils2.addFilter(new ImageListDrawer(ils2).setDirectory("vurf"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
 
     //((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
@@ -295,7 +297,7 @@ public class SocioSukiProject extends Project implements Serializable {
 		.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
 	;
     switcher.bindSequence("d1:", doubleSequence, 10);
-
+    
   	Sequence doubleSequence2 = new ChainSequence(2000)
   			//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
   			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 2")
@@ -346,6 +348,10 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindSequence("tunnel_2_blob_wobble_2",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 2"), 5);
     switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene, "preset 4").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), 50);
 
+    
+    switcher.bindAndPermute("wat1_", "d1", ts1, 20000);
+    switcher.bindAndPermute("wat2_", "d2", ts2, 20000);
+    
     //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
     //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
     //switcher.bindAndPermute("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), getSceneForPath("/sc/OutputShader2"), 5000);
@@ -424,7 +430,7 @@ public class SocioSukiProject extends Project implements Serializable {
     bs.addFilter(bd);
     this.addSceneOutputCanvas(bs,"/out");*/
 
-    switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader3"), 5000, 100);
+    switcher.bindAndPermute("t1:", ""/*"tunnel_1_"*/, getSceneForPath("/sc/OutputShader3"), 5000, 100);
 
 
 

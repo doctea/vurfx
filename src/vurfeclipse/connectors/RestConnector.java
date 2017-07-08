@@ -1,6 +1,7 @@
 package vurfeclipse.connectors;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
@@ -106,15 +107,37 @@ public class RestConnector implements Runnable {
 		String path = "";
 		
 		String[] splits = url.split("/");
-        for (int i = 0 ; i < splits.length-trim ; i++) {
-      	  path += splits[i] + (i<splits.length-(1+trim)?"/":"");
-        }
-        path = path.replace("%20", " ");	// quick and dirty URL decoding
+    for (int i = 0 ; i < splits.length-trim ; i++) {
+  	  path += splits[i] + (i<splits.length-(1+trim)?"/":"");
+    }
+    try {
+			path = java.net.URLDecoder.decode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return path;
 	}
 	
 	public Object processRequest(String url, String payload, Map<String, String> header) {
 		//if (targets==null) targets = getURLs();
+		
+		if ("/sendkey".equals(url)) {
+			pr.println("RestConnector received sendkey '" + payload.charAt(0) + "'!");
+			pr.sendKeyPressed(payload.charAt(0));
+			header.put("Location","/interface");
+			return "";
+		}
+		
+		if (url.startsWith("/sendkey/")) {
+			String keys = url.replace("/sendkey/", "");
+			for (int i = 0 ; i < keys.length() ; i++) {
+				pr.println(this.toString() + " sending " + keys.charAt(i));
+				pr.sendKeyPressed(keys.charAt(i));
+			}
+			header.put("Location","/interface");
+			return "<a href='/interface'>[back]</a> (send "+keys+")";
+		}
 
 		if ("/interface".equals(url)) {
 			header.put("Content-Type", "text/html");
@@ -170,10 +193,19 @@ public class RestConnector implements Runnable {
 
 	private String getInterfacePage() {
 		String h = "<html>";
-		h += "<h1>" + pr.toString()  + "</h1>";
+		h += "<h1><a href='/interface'>" + pr.toString()  + "</a></h1>";
 	
+		h += "<h2>Info</h2>";
+		h += "<b>Current sequence:</b> " + pr.getSequenceName() + "<br>";
+		h += pr.getSequencer().isLocked() ? "<b>Sequencer is locked</b> (ie sequencer preset won't change automatically)" : "Sequencer is not locked" + "<br>";
+		h += !pr.isSequencerEnabled() ? "<b>Sequencer is disabled!</b> (ie paused)" : "Sequencer is enabled" + "<br>"; 
+		
+		h += "<hr>";
+		
+		h += "<h2>Exposed routes</h2>";
 		//Iterator<Entry<String,Targetable>> tit = targets.entrySet().iterator();
 		Iterator<Entry<String,Targetable>> tit = exposed.entrySet().iterator();
+		if (!tit.hasNext()) h+= "<i>no routes exposed in this project</i>";
 		while (tit.hasNext()) {
 			Entry<String,Targetable> e = tit.next();
 			//if (e.getKey() instanceof Sequence)
@@ -186,9 +218,26 @@ public class RestConnector implements Runnable {
 				h += "<hr>";
 			}
 		}
+		h += "<hr>";
+		
+		h += "<h2>send keys</h2>";
+		String keys = ";-l/'";		///keys from project onkeypressed 
+		for (char c : keys.toCharArray()) {
+			try {
+				h += "<a target='sendkeys' href='/sendkey/" + java.net.URLEncoder.encode(""+c,"UTF-8") +"'>" + "[ send "+c+" ]" + "</a>";
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			h += " | ";
+		}
+		
+		h += "<iframe name='sendkeys'>...sendkeys target</iframe>";
+		
+		h += "<hr>";
 		
 		h += "</html>";
-		return h;
+		return h.toString();
 	}
 	
 }

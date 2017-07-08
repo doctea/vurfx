@@ -442,6 +442,10 @@ public abstract class Project implements Serializable {
 	  if (this.sequencer!=null) return this.sequencer.getCurrentSequenceName();
 	  return "none";
   }
+  
+  public Sequencer getSequencer() {
+  	return this.sequencer;
+  }
 
   public void sendKeyPressed(char key) {
     //Scene sc = scenes.iterator().next();//.first();
@@ -477,10 +481,10 @@ public abstract class Project implements Serializable {
       Iterator<Scene> i = scenes.iterator();
       while(i.hasNext())
         ((Scene)i.next()).sendKeyPressed('-');
-    } else if (key=='p') {
+    } /*else if (key=='p') {
     	println(rsConn.getURLs().toString());
     	System.exit(0);
-    }  else {
+    } */ else {
       Scene sc = this.getSelectedScene();
 
       if (sc==null) {
@@ -640,7 +644,10 @@ public abstract class Project implements Serializable {
 		this.timeScale = f;
 	// TODO Auto-generated method stub
 	}
-
+	public boolean isSequencerEnabled() {
+		// TODO Auto-generated method stub
+		return this.enableSequencer;
+	}
 
 
 }
