@@ -12,6 +12,7 @@ import vurfeclipse.user.projects.*;
 import codeanticode.glgraphics.*;
 import ddf.minim.*;
 
+import java.awt.BorderLayout;
 import java.util.*;
 
 //import javax.media.opengl.*;
@@ -30,15 +31,17 @@ public class VurfEclipse extends PApplet {
 
 	boolean hdRes = false;//true;
 	boolean mdRes = false;
-	boolean projRes = false;
-	boolean ultrahiRes = false;//true;
-	boolean hiRes = true;
-	boolean medRes = true;
+	boolean projRes = false; //true;
+	boolean ultrahiRes = false; //false;//true;
+	boolean hiRes = true; //true;
+	boolean medRes = false; //true;
 
 	public boolean exportMode = false; //true;
 
 	FullScreen fs;
-	boolean fullscreen = false;
+	SoftFullScreen sfs;
+	boolean fullscreen = false; //true;
+	boolean softfullscreen = false;//true
 
 	///// SYPHON STUFF (choose one - disabled stuff or enabled stuff)
 
@@ -158,7 +161,7 @@ public class VurfEclipse extends PApplet {
 	//config settings
 	int title_adjust = -50; //-100;
 	int
-		output_width =  (hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640),
+		output_width 	=  							 (hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640),
 		output_height = title_adjust + (hdRes ? 1080 : mdRes ? 900 :  projRes ? 960  : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480);
 		//output_width = 1280; int output_height = 1024;;;;
 	//int output_width = hiRes ? 1280 : 800, output_height = hiRes? 1024 : 600;
@@ -214,10 +217,15 @@ public class VurfEclipse extends PApplet {
 	}
 
 	int sizeCount = 0;
+
 	@Override
 	public void size(int w, int h, String gfx) {
 		sizeCount++;
-		if (sizeCount>=2) {
+		/*if (sizeCount==1) {
+			println("size(): ignoring 0th call...?");
+			return;
+		}*/
+		if (sizeCount>=3) {
 			System.out.println("size(): ignoring " + sizeCount + "th call so as not to trigger GL error.");
 			return;
 		}
@@ -234,12 +242,17 @@ public class VurfEclipse extends PApplet {
 
 		 if (enablecp5) setupControls();
 
-		 if (frame != null) {
-			    frame.setResizable(false);
-			    frame.setSize(output_width, output_height);
+		 if (!softfullscreen && !fullscreen && frame != null) {
+			 println("Frame isn't null, so doing frame.setSize stuff..?");
+			    frame.setResizable(true); //false);
+			    frame.setLayout(new BorderLayout());
+			    //frame.setSize(output_width, output_height);
+			    //frame.setMenuBar(null);;
+			    //frame.pack();
+			 println("did frame.setting stuff.");
 		 }
 
-	     this.delaySetup();
+	   this.delaySetup();
 
 		 //size(output_width, output_height + gw_height, gfx_mode);
 		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
@@ -252,7 +265,11 @@ public class VurfEclipse extends PApplet {
 		 if (fullscreen) {
 			 fs = new FullScreen(this);
 			 fs.enter();
+		 } else if (softfullscreen) {
+			 sfs = new SoftFullScreen(this);
+			 sfs.enter();
 		 }
+		 
 
 		 ImageRepository.IR = new ImageRepository();
 
