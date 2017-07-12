@@ -232,29 +232,37 @@ public class VurfEclipse extends PApplet {
 		super.size(w,h,gfx);
 	}
 
+	int refCount = 0;
+	
 	@Override
 	public void setup () {
+		 refCount++;
+		 System.out.println("setup() in " + this.toString());
 		 APP.setApp(this);
 
 		 System.out.println("-------------==================== \\\\/URF/ ===================--------------");
 		 System.out.println("Working Directory = " +
 		     System.getProperty("user.dir"));
 
-		 if (enablecp5) setupControls();
+		 if (enablecp5) {
+			 //delaySetup();
+			 setupControls();
+			 //delaySetup();
+		 }		 
 
 		 if (!softfullscreen && !fullscreen && frame != null) {
 			 println("Frame isn't null, so doing frame.setSize stuff..?");
 			 frame.setResizable(true); //false);
-			 delaySetup();
+			 //delaySetup();
 			 frame.setLayout(new BorderLayout());
-			 delaySetup();
+			 //delaySetup();
 			    //frame.setSize(output_width, output_height);
 			    //frame.setMenuBar(null);;
 			    //frame.pack();
 			 println("did frame.setting stuff.");
 		 }
 
-	   this.delaySetup();
+	   //this.delaySetup();
 
 		 //size(output_width, output_height + gw_height, gfx_mode);
 		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
@@ -280,6 +288,9 @@ public class VurfEclipse extends PApplet {
 		 initialiseGraphics();
 
 		 delaySetup();
+		 
+		 if (refCount==2) 
+			 this.stop();
 
 
 		 //colorMode(ARGB);
