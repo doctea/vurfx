@@ -87,7 +87,7 @@ public class SocioSukiProject extends Project implements Serializable {
 	  			this.nextSequence();
 	  		}*/
 	  		this.host.setTimeScale(0.1f);
-	  		if (seq_count>10000) seq_count = 0;
+	  		//if (seq_count>10000) seq_count = 0;
 	  		super.runSequences();
 	  	}
 	  };
@@ -261,7 +261,19 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindSequence("plasma_3", plasmaScene, "preset 3");
 
     /// END PLASMA SCENE
+    
+    /// START Quasicrystal SCENE
+    QuasicrystalScene quasicrystalScene = (QuasicrystalScene)(new QuasicrystalScene(this,w,h).setSceneName("QuasicrystalScene"));
+    quasicrystalScene.setCanvas("out", "/out");
 
+    addScene(quasicrystalScene);
+    //plasmaScene.setupFilters();
+
+    quasicrystalScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
+    //this.addSceneOutputCanvas(plasmaScene, "/out");
+    switcher.bindSequence("quasicrystal_1", quasicrystalScene, "preset 1");
+
+    /// END Quasicrystal SCENE
 
     this.addSceneInputOutputCanvas(
       //os,
@@ -312,21 +324,29 @@ public class SocioSukiProject extends Project implements Serializable {
   switcher.setBindToRandom(true);
 
 
-	Sequence doubleSequence = new ChainSequence(2000)
-		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
-		//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
-		.addSequence(blendScene, "preset 1")
-	;
-    switcher.bindSequence("d1:", doubleSequence, 100);
+		Sequence doubleSequence = new ChainSequence(2000)
+			.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
+			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
+			.addSequence(blendScene, "preset 1")
+		;
+    switcher.bindSequence("d1:", doubleSequence, 10);
     
   	Sequence doubleSequence2 = new ChainSequence(2000)
   			//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
   			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 2")
   			.addSequence(blendScene, "preset 1")
   			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 3")
-  			.addSequence(blendScene, "preset 1")
+  			//.addSequence(blendScene, "preset 1")
   		;
-  	switcher.bindSequence("d2:", doubleSequence2, 100);
+  	switcher.bindSequence("d2:", doubleSequence2, 5);
+  	
+  	Sequence doubleSequence3 = new ChainSequence(2000)
+  			.addSequence(getSceneForPath("/sc/QuasicrystalScene"), "preset 1")
+  			//.addSequence(blendScene, "preset 1")
+  	;
+  	switcher.bindSequence("d2:", doubleSequence3, 5);
+  	
+  	//switcher.bindSequence("blend:",  blendScene, "preset 1", 10);
 
 
     /*Sequence cSequence = new ChainSequence(0)

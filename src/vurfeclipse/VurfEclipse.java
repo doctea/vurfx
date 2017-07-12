@@ -244,8 +244,10 @@ public class VurfEclipse extends PApplet {
 
 		 if (!softfullscreen && !fullscreen && frame != null) {
 			 println("Frame isn't null, so doing frame.setSize stuff..?");
-			    frame.setResizable(true); //false);
-			    frame.setLayout(new BorderLayout());
+			 frame.setResizable(true); //false);
+			 delaySetup();
+			 frame.setLayout(new BorderLayout());
+			 delaySetup();
 			    //frame.setSize(output_width, output_height);
 			    //frame.setMenuBar(null);;
 			    //frame.pack();

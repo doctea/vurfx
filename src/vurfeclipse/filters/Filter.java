@@ -123,7 +123,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   public Object getObjectForPath(String path) {
 	  System.out.println("getObjectForPath " + path);
-	  System.exit(1);
+	  //System.exit(1);
     String[] spl = path.split("/",2);
     if (this.parameters.containsKey(spl[0])) {
       return this.parameters.get(spl[0]);
@@ -578,8 +578,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         		  .setRange(
         				  new Float((Float)param.min),
         				  new Float((Float)param.max)
-        				  )
-        				  .moveTo(tabName).setSize(size*5, size) : //.addCallback(this) :
+        			)
+        			.moveTo(tabName).setSize(size*5, size) : //.addCallback(this) :
         value instanceof Integer ?
           cp5.addSlider(tabName + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.min, (Integer)param.max).moveTo(tabName).setSize(size*5, size) : //addCallback(this) :
         value instanceof Boolean ?
