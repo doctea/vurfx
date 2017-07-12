@@ -38,6 +38,8 @@ public class BlenderFX1 extends SimpleScene {
     
     public void setupSequences() {
 		sequences.put("preset 1", new BlendSequence1(this, 2000));
+		sequences.put("preset 2", new BlendSequence1(this, 2000));
+
     }
     
 }
@@ -60,4 +62,24 @@ class BlendSequence1 extends Sequence {
 			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
 	}
 	@Override public void onStop() {	}
+}
+
+class BlendSequence2 extends Sequence {
+	public BlendSequence2(BlenderFX1 blenderFX1, int i) {
+		// TODO Auto-generated constructor stub
+		super(blenderFX1,i);
+	}
+	@Override public void onStart() {
+		host.getFilter("BlendDrawer1").nextMode();
+	}
+	@Override
+	public void setValuesForNorm(double pc, int iteration) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		
+	}
 }
