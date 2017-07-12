@@ -65,10 +65,14 @@ public class OutputFX3 extends SimpleScene {
 
 
     public void setupSequences() {
-			sequences.put("show_sync", new SyncSequence(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
-			sequences.put("show_sync2", new SyncSequence2(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
-			sequences.put("show_sync3", new SyncSequence3(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
-			sequences.put("show_sync4", new SyncSequence4(this, 2000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
+			sequences.put("show_sync", new SyncSequence(this, 5000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
+			sequences.put("show_sync2", new SyncSequence2(this, 5000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
+			//sequences.put("show_sync3", new SyncSequence3(this, 5000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
+			//sequences.put("show_sync4", new SyncSequence4(this, 5000)); //.addSequence(this.getFilter("SyncEffect").getSequence("horizontal_sin")
+			
+			for (int i = 2 ; i < 10 ; i+=2) {
+				sequences.put("show_gridsync_"+i, new GridSyncSequence(this, 5000, i));
+			}
     }
     
 
@@ -87,8 +91,8 @@ public class OutputFX3 extends SimpleScene {
 			@Override
 			public void onStart() {
 				// TODO Auto-generated method stub
-				getFilter("SyncEffect").changeParameterValueFromSin("offset_x", 0);
-				getFilter("SyncEffect").changeParameterValueFromSin("offset_y", 0);
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", 0);
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", 0);
 			}
 
 			@Override
@@ -116,8 +120,8 @@ public class OutputFX3 extends SimpleScene {
 			@Override
 			public void onStart() {
 				// TODO Auto-generated method stub
-				getFilter("SyncEffect").changeParameterValueFromSin("offset_x", 0);
-				getFilter("SyncEffect").changeParameterValueFromSin("offset_y", 0);
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", 0);
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", 0);
 			}
 
 			@Override
@@ -137,8 +141,8 @@ public class OutputFX3 extends SimpleScene {
 			public void setValuesForNorm(double pc, int iteration) {
 				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/3.0*10));
 				getFilter("SyncEffect").changeParameterValueFromSin("step_y", -(float)Math.sin(pc/3.0*10));
-				getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
-				getFilter("SyncEffect").changeParameterValueFromSin("offset_y", -(float)Math.sin(pc/3.0*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", -(float)Math.sin(pc/3.0*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", (float)Math.sin(pc/3.0*10));
 
@@ -165,10 +169,43 @@ public class OutputFX3 extends SimpleScene {
 
 			@Override
 			public void setValuesForNorm(double pc, int iteration) {
-				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/1.5*10));
-				getFilter("SyncEffect").changeParameterValueFromSin("step_y", -(float)Math.sin(pc/1.5*10));
-				getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/1.5*10));
-				getFilter("SyncEffect").changeParameterValueFromSin("offset_y", -(float)Math.sin(pc/1.5*10));
+				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/6*10));
+				getFilter("SyncEffect").changeParameterValueFromSin("step_y", -(float)Math.sin(pc/6*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/1.5*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", -(float)Math.sin(pc/1.5*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", (float)Math.sin(pc/3.0*10));
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onStop() {
+				// TODO Auto-generated method stub
+
+			}
+		}
+		
+		class GridSyncSequence extends Sequence {
+			private int grid;
+
+			public GridSyncSequence(OutputFX3 outputFX2, int i, int grid) {
+				// TODO Auto-generated constructor stub
+				super(outputFX2, i);
+				this.grid = grid;
+			}
+
+			@Override
+			public void setValuesForNorm(double pc, int iteration) {
+				getFilter("SyncEffect").changeParameterValue("step_x", (float)grid); //(float)Math.sin(pc/1.5*10));
+				getFilter("SyncEffect").changeParameterValue("step_y", (float)grid); //-(float)Math.sin(pc/1.5*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/1.5*10));
+				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", -(float)Math.sin(pc/1.5*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", (float)Math.sin(pc/3.0*10));
 
