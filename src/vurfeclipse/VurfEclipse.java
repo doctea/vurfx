@@ -39,6 +39,9 @@ public class VurfEclipse extends PApplet {
 
 	FullScreen fs;
 	boolean fullscreen = false;
+	
+  boolean ready = false;
+
 
 	///// SYPHON STUFF (choose one - disabled stuff or enabled stuff)
 
@@ -224,15 +227,26 @@ public class VurfEclipse extends PApplet {
 		super.size(w,h,gfx);
 	}
 
+	int refCount = 0;
+	
 	@Override
 	public void setup () {
+		 refCount++;
 		 APP.setApp(this);
 
-		 System.out.println("-------------==================== \\\\/URF/ ===================--------------");
+		 //size(output_width, output_height + gw_height, gfx_mode);
+		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
+		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
+		 
+		 System.out.println(refCount + ": -------------==================== \\\\/URF/ ===================--------------");
 		 System.out.println("Working Directory = " +
 		     System.getProperty("user.dir"));
+		 
+		 if (refCount==1) {
+			 System.out.println("returning from setup() because refCount is " + refCount); 
+			 return;
+		 }
 
-		 if (enablecp5) setupControls();
 
 		 if (frame != null) {
 			    frame.setResizable(false);
@@ -241,9 +255,10 @@ public class VurfEclipse extends PApplet {
 
 	     this.delaySetup();
 
-		 //size(output_width, output_height + gw_height, gfx_mode);
-		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
-		 size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
+			 if (enablecp5) setupControls();
+
+	     
+
 
 		 //System.exit(1);
 
@@ -315,6 +330,7 @@ public class VurfEclipse extends PApplet {
 		 }
 
 		 System.out.println("Finished VurfEclipse setup(); handing off to draw()...");
+		 this.ready = true;
 		 //System.exit(0);
 	}
 
@@ -372,6 +388,9 @@ public class VurfEclipse extends PApplet {
 	@Override
 	public void draw () {
 	//System.out.println("Draw!");
+		
+	if (!ready) return;
+		
 	 timeMillis = (exportMode?timeMillis+=(1000/global_fps):millis());
 	 if (exportMode)
 	   System.out.println("For frameCount " + frameCount + ", got timeMillis " + timeMillis);

@@ -66,9 +66,9 @@ public class SocioSukiProject extends Project implements Serializable {
 	  	@Override
 	  	public void nextSequence() {
 	  		count++;
-	  		if (count>15) this.setRandomMode(count%8==0);
+	  		//if (count%8==0) this.setRandomMode(!this.randtrue);//count%8==0);
 	  		if ((count%50)==0)
-	  			this.host.setTimeScale(((count%80)==0)?2.0f:0.5f); //getTimeScale()
+	  			this.host.setTimeScale(((count%10)==0)?1.0f:0.25f); //getTimeScale()
 	  		else
 	  			this.host.setTimeScale(1.0f);
 	  		if (count>1000) count = 0;
