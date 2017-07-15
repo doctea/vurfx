@@ -37,7 +37,7 @@ public class QuasicrystalScene extends Scene {
 	    	  public void call(Object value) {
 		    		if (value instanceof Integer) {
 		    			//os2.getFilter("Plasma").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
-							Float limit = (float) (100 * 12.0*Math.PI);
+							//Float limit = (float) (100 * 12.0*Math.PI);
 							Float adjusted = new Float(((Integer) value).floatValue()); //%(int)(float)limit);
 	
 							self.getFilter("Quasicrystal").changeParameterValue("time",
@@ -53,7 +53,7 @@ public class QuasicrystalScene extends Scene {
 	    //// START PLASMA SCENE
 	    //plasmaScene.setCanvas("pix0","/pix0");
 	    //os2.setCanvas("blendresult", "/blendresult");
-	    addFilter(new ShaderFilter(this,"Quasicrystal.xml") {
+	    addFilter(new ShaderFilter(this,"Swirl.xml") {
 	    	@Override
 	    	public void setParameterDefaults() {
 	    		super.setParameterDefaults();
@@ -61,7 +61,11 @@ public class QuasicrystalScene extends Scene {
 
 	    		addParameter("width", new Integer(w/16), 0, w*2);
 	    		addParameter("height", new Integer(h/16), 0, h*2);*/
-	    		addParameter("time", new Float(10.0f), 0.0f, 1000000.0f);
+	    		addParameter("time", new Float(0.0f),0.0f, 100000.0f);
+	    		//addParameter("iGlobalTime", new Integer(0), 0, 1000000);
+	    		//addParameter("time", new Float(10.0f), 0.0f, 1000000.0f);
+	    		//addParameter("u_time_2", new Integer(10), 0, 1000000);
+
 	    	}
 	    	/*@Override
 	    	public Filter nextMode() {
@@ -72,9 +76,9 @@ public class QuasicrystalScene extends Scene {
 	    		return this;
 	    	}*/
 
-	    }.setFilterName("Quasicrystal").setCanvases("temp1", this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    }.setFilterName("Quasicrystal").setCanvases("/temp1", this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
-	    addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setInputCanvas("temp1").setOutputCanvas(this.getCanvasMapping("out")));
+	    addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setInputCanvas("/temp1").setOutputCanvas(this.getCanvasMapping("out")));
 
 	    addFilter(new PhaseRGBFilter(this).setFilterName("PhaseRGB").setInputCanvas(getCanvasMapping("out")).setOutputCanvas(getCanvasMapping("out")));
 

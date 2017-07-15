@@ -61,7 +61,6 @@ public class OutputFX1 extends SimpleScene {
 					.addSequence(new ChangeParameterSequence(this, getPath()+"/fl/Edges", "pixel_size", 4.0f, 2000))
 			);
 	
-	
 			//.addSequence(getSequence("show_feedback"))
 				//.addSequence(host.getSceneForPath("/sc/BlankerScene").getSequence("feedback"))
 				//.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Feedback")));

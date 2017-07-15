@@ -214,8 +214,8 @@ public class SocioSukiProject extends Project implements Serializable {
     
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
-    switcher.bindSequence("blend", blendScene, "preset 1", 10);
-    switcher.bindSequence("blend", blendScene, "preset 2", 10);
+    switcher.bindSequence("blend", blendScene, "preset 1", 100);
+    switcher.bindSequence("blend", blendScene, "preset 2", 100);
 
 
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
@@ -267,7 +267,7 @@ public class SocioSukiProject extends Project implements Serializable {
     /// END PLASMA SCENE
     
     /// START Quasicrystal SCENE
-    QuasicrystalScene quasicrystalScene = (QuasicrystalScene)(new QuasicrystalScene(this,w,h).setSceneName("QuasicrystalScene"));
+    /*QuasicrystalScene quasicrystalScene = (QuasicrystalScene)(new QuasicrystalScene(this,w,h).setSceneName("QuasicrystalScene"));
     quasicrystalScene.setCanvas("out", "/out");
 
     addScene(quasicrystalScene);
@@ -275,8 +275,8 @@ public class SocioSukiProject extends Project implements Serializable {
 
     quasicrystalScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
-    switcher.bindSequence("quasicrystal_1", quasicrystalScene, "preset 1",1000);
-
+    switcher.bindSequence("quasicrystal_1", quasicrystalScene, "preset 1", 1000);
+		*/
     /// END Quasicrystal SCENE
 
     this.addSceneInputOutputCanvas(
@@ -325,7 +325,8 @@ public class SocioSukiProject extends Project implements Serializable {
   	/**/
   	;
 
-  //switcher.setBindToRandom(true);
+    //switcher.setBindToRandom(true);
+    //switcher.setRandomMode(true);
 
 
 		Sequence doubleSequence = new ChainSequence(2000)
@@ -344,11 +345,11 @@ public class SocioSukiProject extends Project implements Serializable {
   		;
   	switcher.bindSequence("d2:", doubleSequence2, 5);
   	
-  	Sequence doubleSequence3 = new ChainSequence(2000)
+  	/*Sequence doubleSequence3 = new ChainSequence(2000)
   			.addSequence(getSceneForPath("/sc/QuasicrystalScene"), "preset 1")
   			//.addSequence(blendScene, "preset 1")
   	;
-  	switcher.bindSequence("d2:", doubleSequence3, 5);
+  	switcher.bindSequence("d2:", doubleSequence3, 5);*/
   	
   	//switcher.bindSequence("blend:",  blendScene, "preset 1", 10);
 
@@ -371,10 +372,13 @@ public class SocioSukiProject extends Project implements Serializable {
 		, "/pix0", "/out"
 	);
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), 5);
-    switcher.bindSequence("tunnel_1_blob_pulse_2", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), 5);
-    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_1",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), 25);
+    switcher.bindSequence("tunnel_1_blob_preset_2_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), 5);
+    switcher.bindSequence("tunnel_1_blob_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), 5);
+    switcher.bindSequence("tunnel_1_blob_wobble_preset3",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), 5);
+    switcher.bindSequence("tunnel_1_blend_wobble_preset2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), 5);
+    
+    switcher.bindSequence("tunnel_1_blend_angled_2",new ChainSequence(2000).addSequence(ts1, "f2 angled 60").addSequence(blendScene, "preset 1"), 5);
+    
     /*switcher.bindSequence(
         	"tunnel_2_pulse",
         	*/
@@ -384,10 +388,10 @@ public class SocioSukiProject extends Project implements Serializable {
 
 	    		, "/out", "/out"
 	);
-    switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 50);
-    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 50);
-    switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
-    switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), 50);
+    switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 25);
+    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 25);
+    switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 25);
+    switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), 25);
     switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(doubleSequence), 5);
     switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), 10);
     switcher.bindSequence("tunnel_2_blob_wobble_1",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 1"), 25);
