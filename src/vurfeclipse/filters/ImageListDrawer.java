@@ -113,7 +113,7 @@ public class ImageListDrawer extends Filter {
 		  if (fileEntry.isDirectory()) {
 			  // skip; maybe recurse tho in future
 		  } else {
-			  if (fileEntry.getName().contains(".png") || fileEntry.getName().contains(".jpg"))
+			  if (fileEntry.getName().endsWith(".png") || fileEntry.getName().endsWith(".jpg") || fileEntry.getName().endsWith(".jpeg") || fileEntry.getName().endsWith(".png"))
 			  	if (!fileEntry.getName().contains("_small")) {
 			  		count++;
 					  filenames.add(directory + "/" + fileEntry.getName());

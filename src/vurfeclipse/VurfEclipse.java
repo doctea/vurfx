@@ -12,6 +12,7 @@ import vurfeclipse.user.projects.*;
 import codeanticode.glgraphics.*;
 import ddf.minim.*;
 
+import java.awt.BorderLayout;
 import java.util.*;
 
 //import javax.media.opengl.*;
@@ -234,28 +235,31 @@ public class VurfEclipse extends PApplet {
 		 refCount++;
 		 APP.setApp(this);
 
-		 //size(output_width, output_height + gw_height, gfx_mode);
-		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
-		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
 		 
 		 System.out.println(refCount + ": -------------==================== \\\\/URF/ ===================--------------");
 		 System.out.println("Working Directory = " +
 		     System.getProperty("user.dir"));
 		 
-		 if (refCount==1) {
+		 /*if (refCount==1) {
 			 System.out.println("returning from setup() because refCount is " + refCount); 
 			 return;
-		 }
+		 }*/
+		 
+		 if (enablecp5) setupControls();
+		 
 
+		 //size(output_width, output_height + gw_height, gfx_mode);
+		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
+		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
 
 		 if (frame != null) {
-			    frame.setResizable(false);
-			    frame.setSize(output_width, output_height);
+			    frame.setResizable(true);
+			    frame.setLayout(new BorderLayout());
+			    //frame.setSize(output_width, output_height);
 		 }
 
 	     this.delaySetup();
 
-			 if (enablecp5) setupControls();
 
 	     
 
@@ -369,8 +373,10 @@ public class VurfEclipse extends PApplet {
 			   pgl.gl.setSwapInterval( 1 ); // use value 0 to disable v-sync
 			   pgl.background(0);
 			   pgl.endGL();
+			   		   
 			   System.out.println("..Finished funky GL shit.");
 		 }
+		 
 
 		 //pgl = (PGraphicsOpenGL) g;
 		 gl = pgl.gl;
@@ -385,11 +391,18 @@ public class VurfEclipse extends PApplet {
 	*
 	********/
 	public int timeMillis;
+	GLTextureWindow texWin;
 	@Override
 	public void draw () {
 	//System.out.println("Draw!");
 		
 	if (!ready) return;
+	
+		/*if (texWin==null) {
+			GLTextureWindow texWin = new GLTextureWindow(this, 0, 0, this.desired_width, this.desired_height);
+			texWin.setTexture(offscreen.getTexture());
+			texWin.init();
+		}*/
 		
 	 timeMillis = (exportMode?timeMillis+=(1000/global_fps):millis());
 	 if (exportMode)
