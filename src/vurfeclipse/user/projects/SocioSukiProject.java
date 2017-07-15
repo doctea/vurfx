@@ -67,11 +67,16 @@ public class SocioSukiProject extends Project implements Serializable {
 	  	public void nextSequence() {
 	  		count++;
 	  		//if (count%8==0) this.setRandomMode(!this.randtrue);//count%8==0);
+	  		if (count%16==0) {
+	  			super.randomSequence();
+	  			return;
+	  		}
 	  		if ((count%50)==0)
 	  			this.host.setTimeScale(((count%10)==0)?1.0f:0.25f); //getTimeScale()
 	  		else
 	  			this.host.setTimeScale(1.0f);
 	  		if (count>1000) count = 0;
+	  		//this.host.setTimeScale(0.01f);
 	  		super.nextSequence();
 	  	}
 	  	@Override
@@ -82,10 +87,11 @@ public class SocioSukiProject extends Project implements Serializable {
 	  			println("Fastforwarding sequence " + this.getCurrentSequenceName() + " because it contains '_next_'..");
 	  			this.nextSequence();
 	  		}
-	  		if ((1+(count%10))>5 && (seq_count%(count+1)<2)) {
+	  		/*if ((1+(count%10))>5 && (seq_count%(count+1)<2)) {
 	  			this.nextSequence();
-	  		}
-	  		if (seq_count>10000) seq_count = 0;
+	  		}*/
+	  		this.host.setTimeScale(0.1f);
+	  		//if (seq_count>10000) seq_count = 0;
 	  		super.runSequences();
 	  	}
 	  };
@@ -105,7 +111,7 @@ public class SocioSukiProject extends Project implements Serializable {
     int BLOBCOUNT = 5; // set to 50 for production, 5 makes for quick loading!
 
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"ds2014").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("vurf"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("cabinet"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
 
     //((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
     //((ImageListDrawer)ils2.getFilter("ImageListDrawer2")).setOutputCanvas("out");
@@ -208,15 +214,16 @@ public class SocioSukiProject extends Project implements Serializable {
     
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
-    switcher.bindSequence("blend", blendScene, "preset 1");
+    switcher.bindSequence("blend", blendScene, "preset 1", 10);
+    switcher.bindSequence("blend", blendScene, "preset 2", 10);
 
 
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
     this.addScene(blobScene);
-    switcher.bindSequence("blob1_1", blobScene, "preset 1", 10);
-    switcher.bindSequence("blob1_2", blobScene, "preset 2", 10);
-    switcher.bindSequence("blob1_3", blobScene, "preset 3", 10);
-    switcher.bindSequence("blob1_4", blobScene, "preset 4", 10);
+    switcher.bindSequence("blob1_1", blobScene, "preset 1");
+    switcher.bindSequence("blob1_2", blobScene, "preset 2");
+    switcher.bindSequence("blob1_3", blobScene, "preset 3");
+    switcher.bindSequence("blob1_4", blobScene, "preset 4");
 
     Scene blobScene2 = new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out").setInputCanvas("/out");
     this.addScene(blobScene2);
@@ -258,7 +265,19 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindSequence("plasma_3", plasmaScene, "preset 3");
 
     /// END PLASMA SCENE
+    
+    /// START Quasicrystal SCENE
+    QuasicrystalScene quasicrystalScene = (QuasicrystalScene)(new QuasicrystalScene(this,w,h).setSceneName("QuasicrystalScene"));
+    quasicrystalScene.setCanvas("out", "/out");
 
+    addScene(quasicrystalScene);
+    //plasmaScene.setupFilters();
+
+    quasicrystalScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
+    //this.addSceneOutputCanvas(plasmaScene, "/out");
+    switcher.bindSequence("quasicrystal_1", quasicrystalScene, "preset 1");
+
+    /// END Quasicrystal SCENE
 
     this.addSceneInputOutputCanvas(
       //os,
@@ -266,8 +285,6 @@ public class SocioSukiProject extends Project implements Serializable {
       "/out",
       "/out"
     );
-
-
 
     // OUTPUT FILTER 2
     this.addSceneInputOutputCanvas(
@@ -308,21 +325,32 @@ public class SocioSukiProject extends Project implements Serializable {
   	/**/
   	;
 
+  //switcher.setBindToRandom(true);
 
 
-	Sequence doubleSequence = new ChainSequence(2000)
-		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
-		.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
-	;
+		Sequence doubleSequence = new ChainSequence(2000)
+			.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
+			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
+			.addSequence(blendScene, "preset 1")
+		;
     switcher.bindSequence("d1:", doubleSequence, 10);
     
   	Sequence doubleSequence2 = new ChainSequence(2000)
   			//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
   			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 2")
-  			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 3")
   			.addSequence(blendScene, "preset 1")
+  			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 3")
+  			//.addSequence(blendScene, "preset 1")
   		;
-  	switcher.bindSequence("d2:", doubleSequence2, 100);
+  	switcher.bindSequence("d2:", doubleSequence2, 5);
+  	
+  	Sequence doubleSequence3 = new ChainSequence(2000)
+  			.addSequence(getSceneForPath("/sc/QuasicrystalScene"), "preset 1")
+  			//.addSequence(blendScene, "preset 1")
+  	;
+  	switcher.bindSequence("d2:", doubleSequence3, 5);
+  	
+  	//switcher.bindSequence("blend:",  blendScene, "preset 1", 10);
 
 
     /*Sequence cSequence = new ChainSequence(0)
@@ -398,8 +426,9 @@ public class SocioSukiProject extends Project implements Serializable {
     switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader2"), 5000);
     switcher.bindAndPermute("d2:", doubleSequence2, getSceneForPath("/sc/OutputShader"), 5000);
     switcher.bindAndPermute("d2:", doubleSequence2, getSceneForPath("/sc/OutputShader2"), 5000);
-    switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader3"), 5000);
-    switcher.bindAndPermute("t3:", "d", getSceneForPath("/sc/OutputShader3"), 5000);
+    
+    //switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader3"), 5000);
+    //switcher.bindAndPermute("t3:", "d", getSceneForPath("/sc/OutputShader3"), 5000);
 
     
     /*switcher.bindAndPermute("e1:", "d1:", getSceneForPath("/sc/TextFlash"), 5000);
@@ -428,19 +457,28 @@ public class SocioSukiProject extends Project implements Serializable {
     //switcher.setBindToRandom(true);
 
 
-    for (int l = 1 ; l < 10 ; l ++ ) {
-    	switcher.bindAndPermute("wat1_", "d", ts1, 50*(10*l^2));
-    	switcher.bindAndPermute("t3", "d", ts1, 50*(10*l^2));
+    for (int l = 1 ; l < 3 ; l ++ ) {
+    	//switcher.bindAndPermute("wat1_", "d", ts1, 50*(10*l^2));
+    	//switcher.bindAndPermute("t3", "d", ts1, 50*(10*l^2));
     	/*switcher.bindAndPermute("wat2_", "d", ts2, 75*l);
     	switcher.bindAndPermute("wat3_", "t", ts1, 250*l);
     	switcher.bindAndPermute("wat3_", "t", ts2, 500*l);*/
-    	switcher.bindAndPermute("t1:", "d", getSceneForPath("/sc/OutputShader3"), 50*(l^2));
+    	switcher.bindAndPermute("vd1"+l+":", "d1", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("vd2"+l+":", "d2", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("vt1"+l+":", "t1:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("vt2"+l+":", "t2:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	
+    	switcher.bindAndPermute("bv3"+l+":", "blob", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("bv2"+l+":", "blob", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
+    	switcher.bindAndPermute("bb2"+l+":", "blend", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
+    	switcher.bindAndPermute("bb3"+l+":", "blend", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
     }
 
     
 
     switcher.bindSequence("ils1_next", ils1.getSequence("next"), 2+switcher.getSequenceCount()/4);//32);
     switcher.bindSequence("ils2_next", ils2.getSequence("next"), 2+switcher.getSequenceCount()/4);//32);
+   
 
     /*switcher.addSequence("word_take_trips",
     		new ChangeParameterSequence(getSceneForPath("/sc/TextFlash"), "/sc/TextFlash/fl/TextDrawer", "text", "take trips", 0)
