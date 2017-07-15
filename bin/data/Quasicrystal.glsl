@@ -1,8 +1,7 @@
-precision mediump float;
+//precision mediump float;
 
 varying vec2 position;
-//uniform float time;
-uniform int time;
+uniform float time;
 
 float wave(vec2 p, float angle) {
   vec2 direction = vec2(cos(angle), sin(angle));

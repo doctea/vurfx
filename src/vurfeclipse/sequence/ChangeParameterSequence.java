@@ -2,6 +2,7 @@ package vurfeclipse.sequence;
 
 import java.util.ArrayList;
 
+import vurfeclipse.APP;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
@@ -35,7 +36,9 @@ public class ChangeParameterSequence extends Sequence {
 	@Override
 	public void setValuesForNorm(double pc, int iteration) {
 		// TODO Auto-generated method stub
-
+		((Filter)host.host
+				.getObjectForPath(filterPath))
+				.changeParameterValueFromSin(parameterName, (float)Math.sin(pc));		
 	}
 
 	@Override
@@ -48,7 +51,9 @@ public class ChangeParameterSequence extends Sequence {
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
-
+		((Filter)host.host
+				.getObjectForPath(filterPath))
+				.changeParameterValue(parameterName, value);
 	}
 
 }

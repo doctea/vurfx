@@ -6,6 +6,7 @@ import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.ChainSequence;
+import vurfeclipse.sequence.ChangeParameterSequence;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.ShowFilterSequence;
 
@@ -17,7 +18,7 @@ public class OutputFX1 extends SimpleScene {
 
 	public boolean setupFilters() {
 
-	    this.addFilter(new ShaderFilter(this,"Invert.xml").setFilterName("Edges").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    this.addFilter(new ShaderFilter(this,"Pixelate.xml").addParameter("pixel_size", new Float(5.0f)).setFilterName("Edges").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 	    this.addFilter(new ShaderFilter(this,"Toon.xml").setFilterName("Toon").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
 	    return true;
@@ -47,20 +48,23 @@ public class OutputFX1 extends SimpleScene {
 
 
     public void setupSequences() {
-		sequences.put("preset 1", new OutputSequence1(this, 0));
-
-		sequences.put("show_toon",  new ShowFilterSequence(this, 0, getPath()+"/fl/Toon"));
-		sequences.put("show_edges", new ShowFilterSequence(this, 0, getPath()+"/fl/Edges"));
-
-		sequences.put("show_toonandedges", new ChainSequence(0).addSequence(sequences.get("show_toon")).addSequence(sequences.get("show_edges")));
-
-
-		//.addSequence(getSequence("show_feedback"))
-			//.addSequence(host.getSceneForPath("/sc/BlankerScene").getSequence("feedback"))
-			//.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Feedback")));
-
-
-
+			sequences.put("preset 1", new OutputSequence1(this, 0));
+	
+			sequences.put("show_toon",  new ShowFilterSequence(this, 0, getPath()+"/fl/Toon"));
+			sequences.put("show_edges", new ShowFilterSequence(this, 0, getPath()+"/fl/Edges"));
+	
+			sequences.put("show_toonandedges", new ChainSequence(0).addSequence(sequences.get("show_toon")).addSequence(sequences.get("show_edges")));
+			
+			sequences.put("pixel_size",  new ChainSequence(2000)
+					.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Toon"))
+					.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Edges"))
+					.addSequence(new ChangeParameterSequence(this, getPath()+"/fl/Edges", "pixel_size", 4.0f, 2000))
+			);
+	
+	
+			//.addSequence(getSequence("show_feedback"))
+				//.addSequence(host.getSceneForPath("/sc/BlankerScene").getSequence("feedback"))
+				//.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Feedback")));
     }
 
 

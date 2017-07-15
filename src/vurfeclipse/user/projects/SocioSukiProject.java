@@ -83,8 +83,8 @@ public class SocioSukiProject extends Project implements Serializable {
 	  	public void runSequences() {
 	  		seq_count++;
 	  		if (this.getCurrentSequenceName().contains("_next_")) {
-	  			super.runSequences();
 	  			println("Fastforwarding sequence " + this.getCurrentSequenceName() + " because it contains '_next_'..");
+	  			super.runSequences();
 	  			this.nextSequence();
 	  		}
 	  		/*if ((1+(count%10))>5 && (seq_count%(count+1)<2)) {
@@ -275,7 +275,7 @@ public class SocioSukiProject extends Project implements Serializable {
 
     quasicrystalScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
-    switcher.bindSequence("quasicrystal_1", quasicrystalScene, "preset 1");
+    switcher.bindSequence("quasicrystal_1", quasicrystalScene, "preset 1",1000);
 
     /// END Quasicrystal SCENE
 

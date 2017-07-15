@@ -3,13 +3,16 @@ uniform vec2 src_tex_offset0;
 
 uniform vec4 dest_color;
 
-uniform vec2 mpos;
-uniform float mdist;
+//uniform vec2 mpos;
+//uniform float mdist;
 
 void main(void)
 {
     vec2 tex_coord = gl_TexCoord[0].st;
     vec4 color0 = texture2D(src_tex_unit0, tex_coord);
+
+    vec2 mpos = vec2(0.5);
+    float mdist = 0.3;
 
     float dist = distance(mpos, tex_coord / src_tex_offset0);
  

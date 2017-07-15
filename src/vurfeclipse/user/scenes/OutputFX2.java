@@ -72,7 +72,7 @@ public class OutputFX2 extends SimpleScene {
 				.addSequence(host.getSceneForPath("/sc/BlankerScene").getSequence("feedback"))
 				.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Feedback")));
 
-			sequences.put("show_blend", new ShowFilterSequence(this, 0, getPath()+"/fl/BlendDrawer pix0 to out"));
+			//sequences.put("show_blend", new ShowFilterSequence(this, 0, getPath()+"/fl/BlendDrawer pix0 to out"));
 
 			//sequences.put("show_blend", new ShowFilterSequence(this, 0, host.getSceneForPath(getPath()).getFilter("Kaleido")));
     }

@@ -9,6 +9,6 @@
 		<parameter type="int" name="colourMode" label="colourMode">0</parameter>
 		-->
 
-		<parameter type="inT" name="time" label="time">0.0</parameter>
+		<parameter type="float" name="time" label="time">0.0</parameter>
 
 </filter>
