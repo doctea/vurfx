@@ -63,18 +63,22 @@ public class SocioSukiProject extends Project implements Serializable {
 	  this.sequencer = new SequenceSequencer((Project)this,w,h) {
 	  	int count = 1;
 	  	int seq_count = 1;
-	  	/*@Override
+	  	@Override
 	  	public void nextSequence() {
 	  		count++;
-	  		if (count>15) this.setRandomMode(count%8==0);
+	  		//if (count%8==0) this.setRandomMode(!this.randtrue);//count%8==0);
+	  		if (count%16==0) {
+	  			super.randomSequence();
+	  			return;
+	  		}
 	  		if ((count%50)==0)
-	  			this.host.setTimeScale(((count%80)==0)?2.0f:0.5f); //getTimeScale()
+	  			this.host.setTimeScale(((count%10)==0)?1.0f:0.25f); //getTimeScale()
 	  		else
 	  			this.host.setTimeScale(1.0f);
 	  		if (count>1000) count = 0;
 	  		//this.host.setTimeScale(0.01f);
 	  		super.nextSequence();
-	  	}*/
+	  	}
 	  	@Override
 	  	public void runSequences() {
 	  		seq_count++;
@@ -107,7 +111,7 @@ public class SocioSukiProject extends Project implements Serializable {
     int BLOBCOUNT = 5; // set to 50 for production, 5 makes for quick loading!
 
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"ds2014").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("vurf"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("cabinet"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
 
     //((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
     //((ImageListDrawer)ils2.getFilter("ImageListDrawer2")).setOutputCanvas("out");
@@ -321,7 +325,7 @@ public class SocioSukiProject extends Project implements Serializable {
   	/**/
   	;
 
-  switcher.setBindToRandom(true);
+  //switcher.setBindToRandom(true);
 
 
 		Sequence doubleSequence = new ChainSequence(2000)

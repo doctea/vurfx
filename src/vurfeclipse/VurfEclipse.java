@@ -12,7 +12,6 @@ import vurfeclipse.user.projects.*;
 import codeanticode.glgraphics.*;
 import ddf.minim.*;
 
-import java.awt.BorderLayout;
 import java.util.*;
 
 //import javax.media.opengl.*;
@@ -31,17 +30,18 @@ public class VurfEclipse extends PApplet {
 
 	boolean hdRes = false;//true;
 	boolean mdRes = false;
-	boolean projRes = false; //true;
-	boolean ultrahiRes = false; //false;//true;
-	boolean hiRes = true; //true;
-	boolean medRes = false; //true;
+	boolean projRes = false;
+	boolean ultrahiRes = false;//true;
+	boolean hiRes = true;
+	boolean medRes = true;
 
 	public boolean exportMode = false; //true;
 
 	FullScreen fs;
-	SoftFullScreen sfs;
-	boolean fullscreen = false; //true;
-	boolean softfullscreen = false;//true
+	boolean fullscreen = false;
+	
+  boolean ready = false;
+
 
 	///// SYPHON STUFF (choose one - disabled stuff or enabled stuff)
 
@@ -161,7 +161,7 @@ public class VurfEclipse extends PApplet {
 	//config settings
 	int title_adjust = -50; //-100;
 	int
-		output_width 	=  							 (hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640),
+		output_width =  (hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640),
 		output_height = title_adjust + (hdRes ? 1080 : mdRes ? 900 :  projRes ? 960  : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480);
 		//output_width = 1280; int output_height = 1024;;;;
 	//int output_width = hiRes ? 1280 : 800, output_height = hiRes? 1024 : 600;
@@ -217,15 +217,10 @@ public class VurfEclipse extends PApplet {
 	}
 
 	int sizeCount = 0;
-
 	@Override
 	public void size(int w, int h, String gfx) {
 		sizeCount++;
-		/*if (sizeCount==1) {
-			println("size(): ignoring 0th call...?");
-			return;
-		}*/
-		if (sizeCount>=3) {
+		if (sizeCount>=2) {
 			System.out.println("size(): ignoring " + sizeCount + "th call so as not to trigger GL error.");
 			return;
 		}
@@ -237,36 +232,33 @@ public class VurfEclipse extends PApplet {
 	@Override
 	public void setup () {
 		 refCount++;
-		 System.out.println("setup() in " + this.toString());
 		 APP.setApp(this);
-
-		 System.out.println("-------------==================== \\\\/URF/ ===================--------------");
-		 System.out.println("Working Directory = " +
-		     System.getProperty("user.dir"));
-
-		 if (enablecp5) {
-			 //delaySetup();
-			 setupControls();
-			 //delaySetup();
-		 }		 
-
-		 if (!softfullscreen && !fullscreen && frame != null) {
-			 println("Frame isn't null, so doing frame.setSize stuff..?");
-			 frame.setResizable(true); //false);
-			 //delaySetup();
-			 frame.setLayout(new BorderLayout());
-			 //delaySetup();
-			    //frame.setSize(output_width, output_height);
-			    //frame.setMenuBar(null);;
-			    //frame.pack();
-			 println("did frame.setting stuff.");
-		 }
-
-	   //this.delaySetup();
 
 		 //size(output_width, output_height + gw_height, gfx_mode);
 		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
-		 size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
+		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
+		 
+		 System.out.println(refCount + ": -------------==================== \\\\/URF/ ===================--------------");
+		 System.out.println("Working Directory = " +
+		     System.getProperty("user.dir"));
+		 
+		 if (refCount==1) {
+			 System.out.println("returning from setup() because refCount is " + refCount); 
+			 return;
+		 }
+
+
+		 if (frame != null) {
+			    frame.setResizable(false);
+			    frame.setSize(output_width, output_height);
+		 }
+
+	     this.delaySetup();
+
+			 if (enablecp5) setupControls();
+
+	     
+
 
 		 //System.exit(1);
 
@@ -275,11 +267,7 @@ public class VurfEclipse extends PApplet {
 		 if (fullscreen) {
 			 fs = new FullScreen(this);
 			 fs.enter();
-		 } else if (softfullscreen) {
-			 sfs = new SoftFullScreen(this);
-			 sfs.enter();
 		 }
-		 
 
 		 ImageRepository.IR = new ImageRepository();
 
@@ -288,9 +276,6 @@ public class VurfEclipse extends PApplet {
 		 initialiseGraphics();
 
 		 delaySetup();
-		 
-		 if (refCount==2) 
-			 this.stop();
 
 
 		 //colorMode(ARGB);
@@ -345,6 +330,7 @@ public class VurfEclipse extends PApplet {
 		 }
 
 		 System.out.println("Finished VurfEclipse setup(); handing off to draw()...");
+		 this.ready = true;
 		 //System.exit(0);
 	}
 
@@ -402,6 +388,9 @@ public class VurfEclipse extends PApplet {
 	@Override
 	public void draw () {
 	//System.out.println("Draw!");
+		
+	if (!ready) return;
+		
 	 timeMillis = (exportMode?timeMillis+=(1000/global_fps):millis());
 	 if (exportMode)
 	   System.out.println("For frameCount " + frameCount + ", got timeMillis " + timeMillis);
