@@ -78,7 +78,7 @@ public class OpenNIFilter extends Filter {
 	    		      newFrame = true;
 	  		      }
 
-				  Thread.sleep(10);
+				  Thread.sleep((int)1000/30);
 			  } catch (Exception e) {};
 		  }
 	  }
@@ -100,7 +100,8 @@ public class OpenNIFilter extends Filter {
 
 	    // enable depthMap generation
 	    context.enableDepth(); //320,240,10);
-	    context.enableRGB(320,240,10);
+	    //context.enableRGB(320,240,10);
+	    context.enableRGB(); //320,240,10);
 	    //context.enableIR();
 
 	    //context.

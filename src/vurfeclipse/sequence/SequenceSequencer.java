@@ -72,7 +72,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			  println(this+"#runSequences(): is readyToChange, calling randomSequence()");
 			  nextSequence();
 		  }
+		  if (getActiveSequence()==null) nextSequence();
 
+		  host.setTimeScale(0.1f);
+		  
 		  getActiveSequence().setValuesForTime();
 	  }
 
