@@ -42,3 +42,8 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
+syntax:glob
+*.mov
+*.mp4
+*.ogg
+*.orig

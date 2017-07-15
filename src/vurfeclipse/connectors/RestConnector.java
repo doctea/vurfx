@@ -52,8 +52,10 @@ public class RestConnector implements Runnable {
 	
 	public RestConnector expose(String url) {
 		System.out.println("RestConnector: adding '" + url + "' - " + getTargets().get(url));
-		if (getTargets().get(url)==null)
+		if (getTargets().get(url)==null) {
+			System.out.println ("RestConnector#expose('"+url+"') couldn't find a Target with that url!");
 			System.exit(0);
+		}
 		exposed.put(url, getTargets().get(url));
 		return this;
 	}

@@ -34,16 +34,16 @@ public class PlasmaScene extends Scene {
 	    this.callbacks.put("warp", new ParameterCallback() {
 	    	@Override
 	    	  public void call(Object value) {
-	    		if (value instanceof Integer) {
-	    			//os2.getFilter("Plasma").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
-					Float limit = (float) (100 * 12.0*Math.PI);
-					Integer adjusted = ((Integer)value%(int)(float)limit);
-
-					self.getFilter("Plasma").changeParameterValue("u_time_2",
-	    					//value
-	    					adjusted
-	    			);
-	    		}
+		    		if (value instanceof Integer) {
+		    			//os2.getFilter("Plasma").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
+							Float limit = (float) (100 * 12.0*Math.PI);
+							Integer adjusted = ((Integer)value%(int)(float)limit);
+		
+							self.getFilter("Plasma").changeParameterValue("u_time_2",
+			    					//value
+			    					adjusted
+			    		);
+		    		}
 	    	  }
 	    });
   }
