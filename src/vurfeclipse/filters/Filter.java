@@ -351,6 +351,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     return this;
   }
   synchronized public Filter addParameter(String paramName, Object value) {
+  	if (value instanceof Float) {
+  		return addParameter(paramName, value, -50.0f, 50.0f);
+  	}
     return addParameter(paramName, value, -100, 100);
   }
 
