@@ -181,7 +181,7 @@ public class OpenNIFilter extends Filter {
   }
 
   public void drawRGB() {
-	    if (newFrame==true && out!=null && rgb!=null && /*rgb!=newRgb &&*/ sc!=null) { // && (rgb==null || newRgb.isModified())) {
+	    if (newFrame==true && rgb.isModified() && out!=null && rgb!=null && /*rgb!=newRgb &&*/ sc!=null) { // && (rgb==null || newRgb.isModified())) {
 	        newFrame = false;
 
 			    //GLGraphicsOffScreen out = sc.getCanvas("rgb").getSurf();
@@ -196,7 +196,7 @@ public class OpenNIFilter extends Filter {
 	        // by jove!
 	        //out.copy(rgb, 0, 0, out.width, out.height, 0, 0, rgb.width, rgb.height);
 	        out.copy(rgb, 0, 0, rgb.width, rgb.height, 0, 0, out.width, out.height);
-	        out.fill(255);
+	        out.fill(255);	// why this???
 	        //out.rect(sc.w/2,sc.h/2,40,40);
 	        newRgb.delete();
 
@@ -213,7 +213,7 @@ public class OpenNIFilter extends Filter {
 		    
 		    //println("depth is " + sc.getCanvas("/depth").toString());
 
-		    if (out_depth!=null && newDepth!=null && /*newDepth!=depth &&*/ sc!=null) {
+		    if (newFrame==true && out_depth!=null && /*depth.isModified() &&*/ newDepth!=null && /*newDepth!=depth &&*/ sc!=null) {
 		        //out_depth.fill(255);
 		        //out_depth.rect(100,100,40,40);
 
@@ -229,6 +229,7 @@ public class OpenNIFilter extends Filter {
 		      //out.text("OUT", 200, 200);
 		      //out.rect(20, 20, 20, 20);;
 		    	//out_depth.copy(depth, 0, 0, depth.width, depth.height, 0, 0, out_depth.width, out_depth.height);
+		      
 		    	newDepth.delete();
 		    }
 	    }

@@ -234,6 +234,11 @@ public class VurfEclipse extends PApplet {
 		 refCount++;
 		 APP.setApp(this);
 
+
+
+		 if (enablecp5) setupControls();
+
+		 
 		 //size(output_width, output_height + gw_height, gfx_mode);
 		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
 		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
@@ -254,9 +259,6 @@ public class VurfEclipse extends PApplet {
 		 }
 
 	     this.delaySetup();
-
-			 if (enablecp5) setupControls();
-
 	     
 
 
