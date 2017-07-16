@@ -108,7 +108,7 @@ public class SocioSukiProject extends Project implements Serializable {
     final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
     
-    int BLOBCOUNT = 5; // set to 50 for production, 5 makes for quick loading!
+    int BLOBCOUNT = 20; // set to 50 for production, 5 makes for quick loading!
 
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"cabinet").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
     ils2.addFilter(new ImageListDrawer(ils2).setDirectory("cabinet"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
@@ -215,7 +215,7 @@ public class SocioSukiProject extends Project implements Serializable {
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
     switcher.bindSequence("blend", blendScene, "preset 1", 100);
-    switcher.bindSequence("blend", blendScene, "preset 2", 100);
+    switcher.bindSequence("blend2", blendScene, "preset 2", 100);
 
 
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
@@ -371,13 +371,14 @@ public class SocioSukiProject extends Project implements Serializable {
 			//.addFilter(new BlendDrawer()))
 		, "/pix0", "/out"
 	);
-    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), 5);
-    switcher.bindSequence("tunnel_1_blob_preset_2_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), 5);
-    switcher.bindSequence("tunnel_1_blob_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_preset3",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blend_wobble_preset2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), 5);
+    int tunnel_weight = 1;
+    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_1_blob_preset_2_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), tunnel_weight);
+    switcher.bindSequence("tunnel_1_blob_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), tunnel_weight);
+    switcher.bindSequence("tunnel_1_blob_wobble_preset3",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), tunnel_weight);
+    switcher.bindSequence("tunnel_1_blend_wobble_preset2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), tunnel_weight);
     
-    switcher.bindSequence("tunnel_1_blend_angled_2",new ChainSequence(2000).addSequence(ts1, "f2 angled 60").addSequence(blendScene, "preset 1"), 5);
+    switcher.bindSequence("tunnel_1_blend_angled_2",new ChainSequence(2000).addSequence(ts1, "f2 angled 60").addSequence(blendScene, "preset 1"), tunnel_weight);
     
     /*switcher.bindSequence(
         	"tunnel_2_pulse",
@@ -388,15 +389,16 @@ public class SocioSukiProject extends Project implements Serializable {
 
 	    		, "/out", "/out"
 	);
-    switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 25);
-    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 25);
-    switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 25);
-    switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), 25);
-    switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(doubleSequence), 5);
-    switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), 10);
-    switcher.bindSequence("tunnel_2_blob_wobble_1",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 1"), 25);
-    switcher.bindSequence("tunnel_2_blob_wobble_2",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 2"), 5);
-    switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene, "preset 4").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), 50);
+    tunnel_weight = 5;
+    switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(doubleSequence), tunnel_weight/5);
+    switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_blob_wobble_1",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_blob_wobble_2",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 2"), tunnel_weight/5);
+    switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene, "preset 4").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), tunnel_weight*2);
 
     
     

@@ -107,7 +107,7 @@ abstract public class Sequence implements Mutable {
 
 
 	public boolean readyToChange(int max_i) {
-		return iteration>=max_i;
+		return Math.abs(iteration)>=max_i;
 	}
 
 
