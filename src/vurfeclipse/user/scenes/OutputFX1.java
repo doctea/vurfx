@@ -79,7 +79,7 @@ public class OutputFX1 extends SimpleScene {
 		public void setValuesForNorm(double norm, int iteration) {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
-			host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
+			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 		}
 		@Override public void onStart() {
 			if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();

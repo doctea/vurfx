@@ -260,9 +260,10 @@ public class SocioSukiProject extends Project implements Serializable {
 
     plasmaScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
-    switcher.bindSequence("plasma_1", plasmaScene, "preset 1");
-    switcher.bindSequence("plasma_2", plasmaScene, "preset 2");
-    switcher.bindSequence("plasma_3", plasmaScene, "preset 3");
+    switcher.bindSequence("plasma_1", plasmaScene, "preset 1",10);
+    switcher.bindSequence("plasma_2", plasmaScene, "preset 2",10);
+    switcher.bindSequence("plasma_3", plasmaScene, "preset 3",10);
+    //switcher.bindSequence("plasma_4", plasmaScene, "preset 4",10);
 
     /// END PLASMA SCENE
     
@@ -345,11 +346,11 @@ public class SocioSukiProject extends Project implements Serializable {
   		;
   	switcher.bindSequence("d2:", doubleSequence2, 5);
   	
-  	/*Sequence doubleSequence3 = new ChainSequence(2000)
-  			.addSequence(getSceneForPath("/sc/QuasicrystalScene"), "preset 1")
-  			//.addSequence(blendScene, "preset 1")
+  	Sequence doubleSequence3 = new ChainSequence(2000)
+  			.addSequence(getSceneForPath("/sc/BlobScene2"), "preset 1")
+  			.addSequence(blendScene, "preset 1")
   	;
-  	switcher.bindSequence("d2:", doubleSequence3, 5);*/
+  	switcher.bindSequence("d2:", doubleSequence3, 5);
   	
   	//switcher.bindSequence("blend:",  blendScene, "preset 1", 10);
 
@@ -470,14 +471,14 @@ public class SocioSukiProject extends Project implements Serializable {
     	switcher.bindAndPermute("wat3_", "t", ts1, 250*l);
     	switcher.bindAndPermute("wat3_", "t", ts2, 500*l);*/
     	switcher.bindAndPermute("vd1"+l+":", "d1", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-    	switcher.bindAndPermute("vd2"+l+":", "d2", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-    	switcher.bindAndPermute("vt1"+l+":", "t1:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-    	switcher.bindAndPermute("vt2"+l+":", "t2:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("vd2_"+l+":", "d2", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("vt1_"+l+":", "t1:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("vt2_"+l+":", "t2:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
     	
-    	switcher.bindAndPermute("bv3"+l+":", "blob", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-    	switcher.bindAndPermute("bv2"+l+":", "blob", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
-    	switcher.bindAndPermute("bb2"+l+":", "blend", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
-    	switcher.bindAndPermute("bb3"+l+":", "blend", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("bv3_"+l+":", "blob", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("bv2_"+l+":", "blob", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
+    	switcher.bindAndPermute("bb2_"+l+":", "blend", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
+    	switcher.bindAndPermute("bb3_"+l+":", "blend", getSceneForPath("/sc/OutputShader"), 2000*(l*l));
     }
 
     
@@ -509,7 +510,7 @@ public class SocioSukiProject extends Project implements Serializable {
 
 
     /*this.addSceneOutputCanvas(
-    	      new VideoScene(this,w,h,"").setCanvas("src","/out").setCanvas("out", "/out"), //,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
+    	      new VideoScene(this,w,h,"").setCopenanvas("src","/out").setCanvas("out", "/out"), //,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
       		//new WebcamScene(this, 640, 480, w, h).setCanvas("src","/out").setCanvas("out", "/pix1"),
     	      //buffers[BUF_INP0]
     	      "/out"//"/pix0"

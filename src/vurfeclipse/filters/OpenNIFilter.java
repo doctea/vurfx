@@ -44,13 +44,16 @@ public class OpenNIFilter extends Filter {
 
   public boolean initialise() {
 
-	//if (true) return false;
-	if (!initKinect()) return false;
-
-	rt = new ReaderThread();
-	rt.start();
-
-
+  	println("Initialising OpenNIFilter...");
+		//if (true) return false;
+		if (!initKinect()) {
+			println("Initialisation failed!");
+			return false;
+		}
+		println("Initialisation succeeded - starting reader thread...");
+		rt = new ReaderThread();
+		rt.start();
+		println("Started reader thread...!");
 
     return true;
   }
@@ -90,8 +93,8 @@ public class OpenNIFilter extends Filter {
 	  	context = new SimpleOpenNI(APP.getApp());
 	    if(context.isInit() == false)
 	    {
-	       System.out.println("Can't init SimpleOpenNI, maybe the camera is not connected!");
-	       ((VurfEclipse)APP.getApp()).exit();
+	       System.out.println("Can't init SimpleOpenNI, maybe the camera is not connected - used to exit early here!!");
+	       //((VurfEclipse)APP.getApp()).exit();
 	       return false;
 	    }
 

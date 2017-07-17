@@ -162,8 +162,8 @@ public class VurfEclipse extends PApplet {
 	//config settings
 	int title_adjust = -50; //-100;
 	int
-		output_width =  (hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640),
-		output_height = title_adjust + (hdRes ? 1080 : mdRes ? 900 :  projRes ? 960  : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480);
+		output_width =  								(hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640),
+		output_height = title_adjust + 	(hdRes ? 1080 : mdRes ? 900 :  projRes ? 960  : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480);
 		//output_width = 1280; int output_height = 1024;;;;
 	//int output_width = hiRes ? 1280 : 800, output_height = hiRes? 1024 : 600;
 	//int output_width = 1280, output_height = 1024;
@@ -255,6 +255,7 @@ public class VurfEclipse extends PApplet {
 		 if (frame != null) {
 			    frame.setResizable(true);
 			    frame.setLayout(new BorderLayout());
+			    frame.setLocation(0, 0);
 			    //frame.setSize(output_width, output_height);
 		 }
 
