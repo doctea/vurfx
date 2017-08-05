@@ -114,12 +114,15 @@ public class VurfEclipse extends PApplet {
 	  if (controlWindow==null) {
 		  System.out.println("VurfEclipse#getCW initialising controlWindow");
 	  	  ControlP5 cp5 = getCP5();
+	  	  //cp5.window().setLocation(1024, 0);
 	  	  System.out.println("VurfEclipse#getCW about to do addControlWindow()");
 		  controlWindow = cp5.addControlWindow("controlP5window", 300, 0, 800, 800, JAVA2D, 20);
 		  System.out.println("VurfEclipse#getCW about to do hideCoordinates");
 		  controlWindow.hideCoordinates();
 		  System.out.println("VurfEclipse#getCW about to do setBackground");
 		  controlWindow.setBackground(color(40));
+		  
+		  controlWindow.setLocation(800, 20);		//NOZSTOCK ADDITION
 	  }
 	  //if (controlWindow==null) setupControls(getCP5());
 	  return controlWindow;

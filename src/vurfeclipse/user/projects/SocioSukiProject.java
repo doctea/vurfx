@@ -20,6 +20,7 @@ import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
 import vurfeclipse.sequence.ShowSceneSequence;
+import vurfeclipse.sequence.SimpleSequence;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;
@@ -113,6 +114,13 @@ public class SocioSukiProject extends Project implements Serializable {
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"cabinet").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
     ils2.addFilter(new ImageListDrawer(ils2).setDirectory("cabinet"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
 
+    /*ils2.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
+    ils2.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
+
+    /*ils2.addFilter(new OpenNIFilter(ils2,1).setOutputCanvas("/pix0").setFilterName("kinect"));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    ils2.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
+    */
+    
     //((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
     //((ImageListDrawer)ils2.getFilter("ImageListDrawer2")).setOutputCanvas("out");
 
@@ -206,16 +214,49 @@ public class SocioSukiProject extends Project implements Serializable {
     });*/
 
     final Scene blendScene = new BlenderFX1(this,"pix1 BlenderFX", w, h).setOutputCanvas("/out");//.setInputCanvas("/pix1");
-    blendScene.setCanvas("pix0","/pix0");
-    blendScene.setCanvas("pix1","/pix1");
+    blendScene.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
+    blendScene.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
     
-    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(ils1).setOutputCanvas("/pix0").setFilterName("kinect")));//.setDepthOutputCanvasName("pix1"));
-    blendScene.setCanvas("depth", "/pix1");
+    //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(ils1,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(ils1,0).setOutputCanvas("/pix0").setFilterName("Kinect1")));
+    blendScene.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
+    
+    /*blendScene.addSequence("_next_camera", new SimpleSequence() {
+    	int camera = 0;
+    	int max_camera = 2;
+			@Override
+			public void onStart() {
+				super.onStart();
+				int current_camera = camera;
+				
+				OpenNIFilter old = (OpenNIFilter)blendScene.getFilter("kinect"+camera);
+				//old.setCanvases("depth", "/NULL").setOutputCanvas("/NULL"); //setMuted(true);
+				old.changeParameterValue("depth", new Boolean(false));
+				old.changeParameterValue("rgb", new Boolean(false));
+				camera++;
+				if (camera>=max_camera) camera = 0;
+				//blendScene.getFilter("kinect"+camera).setOutputsetMuted(false);
+				old = (OpenNIFilter)blendScene.getFilter("kinect"+camera);
+				old.changeParameterValue("depth", new Boolean(true));
+				old.changeParameterValue("rgb", new Boolean(true));
+				
+			}
+			
+			public void onStop() {
+				//blendScene.getFilter("kinect"+camera).setMuted(true);
+			}
+			
+			@Override
+			public boolean readyToChange(int max_i) {
+				return true;				
+			}
+    });*/
     
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
     switcher.bindSequence("blend", blendScene, "preset 1", 100);
     switcher.bindSequence("blend2", blendScene, "preset 2", 100);
+    //switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
 
 
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");

@@ -14,6 +14,7 @@ import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.scenes.SimpleScene;
 import SimpleOpenNI.*;
 import SimpleOpenNI.*;
 
@@ -28,6 +29,7 @@ public class OpenNIFilter extends Filter {
   float        rotY = PApplet.radians(0);
   PShape       pointCloud;
   int          steps = 2;
+	private int cameraId = 0;
 
 /*  String depthOutputName;
   String irOutputName;
@@ -42,7 +44,13 @@ public class OpenNIFilter extends Filter {
     super(sc);
   }
 
-  public boolean initialise() {
+  public OpenNIFilter(SimpleScene ils1, int cameraId) {
+  	super(ils1);
+		// TODO Auto-generated constructor stub
+  	this.cameraId = cameraId;
+	}
+
+	public boolean initialise() {
 
   	println("Initialising OpenNIFilter...");
 		//if (true) return false;
@@ -59,6 +67,7 @@ public class OpenNIFilter extends Filter {
   }
 
   class ReaderThread extends Thread {
+  	long lastDepthTimeStamp = -1;
 	  public void run() {
 		  while (!isMuted()) {
 			  if (context==null) initKinect();
@@ -75,11 +84,15 @@ public class OpenNIFilter extends Filter {
 				  }
 
 
+				  if (lastDepthTimeStamp <= context.depthImageTimeStamp()) {
+				  		//lastDepthTimeStamp = context.depthImageTimeStamp();
+
 	  		      if ((Boolean)getParameterValue("depth")==true) {
 	  		    	  newDepth = depth = context.depthImage().get();
 
 	    		      newFrame = true;
 	  		      }
+				  }
 
 				  Thread.sleep((int)1000/30);
 			  } catch (Exception e) {};
@@ -90,10 +103,12 @@ public class OpenNIFilter extends Filter {
   public boolean initKinect() {
 
 	    //context = new SimpleOpenNI(APP.getApp(), SimpleOpenNI.RUN_MODE_MULTI_THREADED);
-	  	context = new SimpleOpenNI(APP.getApp());
+	  	//context = new SimpleOpenNI(this.cameraId, APP.getApp());
+	  	context = new SimpleOpenNI(this.cameraId, APP.getApp(), SimpleOpenNI.RUN_MODE_MULTI_THREADED);
+	  	//context = new SimpleOpenNI();
 	    if(context.isInit() == false)
 	    {
-	       System.out.println("Can't init SimpleOpenNI, maybe the camera is not connected - used to exit early here!!");
+	       System.out.println("Can't init SimpleOpenNI for cameraId " + this.cameraId + ", maybe the camera is not connected - used to exit early here!!");
 	       //((VurfEclipse)APP.getApp()).exit();
 	       return false;
 	    }
@@ -106,7 +121,7 @@ public class OpenNIFilter extends Filter {
 	    //context.enableRGB(320,240,10);
 	    context.enableRGB(); //320,240,10);
 	    //context.enableIR();
-
+	    
 	    //context.
 
 	    // align depth data to image data
@@ -173,7 +188,7 @@ public class OpenNIFilter extends Filter {
 		rt.start();
 	}*/
 
-	if ((Boolean)this.getParameterValue("rgb")==true) drawRGB();
+	  if ((Boolean)this.getParameterValue("rgb")==true) drawRGB();
 
     if ((Boolean)this.getParameterValue("depth")==true) drawDepth();
 
