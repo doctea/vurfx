@@ -38,7 +38,7 @@ public class BlenderFX1 extends SimpleScene {
     
     public void setupSequences() {
 		sequences.put("preset 1", new BlendSequence1(this, 2000));
-		sequences.put("preset 2", new BlendSequence1(this, 2000));
+		sequences.put("preset 2_next_", new BlendSequence2(this, 2000));
 
     }
     
