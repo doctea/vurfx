@@ -6,24 +6,29 @@ a rough and hacky java-based VJ/music video/trippy visuals application using Pro
 
 ==== TODO ====
 
-preset history / backwards button
+proper docs/instructions
 
-delete items from history
+sequencer features
+	DONE preset history / backwards button (j/k)
+	delete items from history
+	save/load history to file
+	set presets for favourites
+	quick-cut button with no-restart mode for sequences
+	stutter time button
 
-save/load history to file
+effects/shaders
+	fractal
+	rounded pixel effect
+	vertical stripes effect
 
-set presets for favourites
+streaming/sharing
+	turbojpg stream output / stream to&from tcpsyphon/tcpspout/ofxpimapper?
 
-quick-cut button with no-restart mode
+big bugs
+	fix problems and figure out how to make a true fullscreen version
+	make run as an Application reliably
 
-stutter time button
-
-fractal
-
-rounded pixel effect
-
-vertical stripes
-
-turbojpg stream output
-
+improve features
+	better midi support
+	better REST/web interface
 
