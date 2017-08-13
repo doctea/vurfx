@@ -15,6 +15,7 @@ import java.util.*;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.SceneSequencer;
+import vurfeclipse.sequence.SequenceSequencer;
 import vurfeclipse.sequence.Sequencer;
 import vurfeclipse.streams.*;
 import codeanticode.glgraphics.*;
@@ -461,8 +462,16 @@ public abstract class Project implements Serializable {
       //println(this.serialize());
 
       saveProject();
-    } else if (key==';') {
+    } else if (key==';' || key=='f') {		// FORWARDS
     	if (this.sequencer!=null) this.sequencer.setForward();
+    } else if (key=='j' ) {	// HISTORY BACK
+    	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
+    		((SequenceSequencer)this.sequencer).histPreviousSequence(1);
+    	}
+    } else if (key=='k' ) { // HISTORY FORWARD
+    	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
+    		((SequenceSequencer)this.sequencer).histNextSequence(1);
+    	}
     } else if (key=='l') {
     	println("toggling sequencer");
     	if (this.sequencer!=null) {
@@ -487,10 +496,11 @@ public abstract class Project implements Serializable {
       Iterator<Scene> i = scenes.iterator();
       while(i.hasNext())
         ((Scene)i.next()).sendKeyPressed('-');
-    } /*else if (key=='p') {
+    /* }else if (key=='p') {
     	println(rsConn.getURLs().toString());
     	System.exit(0);
-    } */ else {
+    } */ 
+  	} else {
       Scene sc = this.getSelectedScene();
 
       if (sc==null) {
