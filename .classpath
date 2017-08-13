@@ -5,7 +5,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/opengl-orig/library/opengl.jar">
+	<classpathentry exported="true" kind="lib" path="lib/base/opengl-orig/library/opengl.jar" sourcepath="lib/base/opengl/glgraphics-code/src/codeanticode/glgraphics">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
 		</attributes>
