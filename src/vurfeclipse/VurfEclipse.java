@@ -13,6 +13,8 @@ import codeanticode.glgraphics.*;
 import ddf.minim.*;
 
 import java.awt.BorderLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.util.*;
 
 //import javax.media.opengl.*;
@@ -145,11 +147,17 @@ public class VurfEclipse extends PApplet {
 
 
 	//@Override
-	boolean resizeRenderer () {
+	/*boolean resizeRenderer () {
 		System.err.println("resizeRenderer() returning false");
 		return false;
+	}*/
+	
+	@Override
+	public void resize(int x, int y) {
+	  super.resize(x,y);
+	  System.err.println("Resized applet to new dimensions: " + x + ", " + y);
 	}
-
+	
 	//boolean enablecp5 = false;
 	public static boolean enablecp5 = true;//false;//true; //true;
 
@@ -256,13 +264,28 @@ public class VurfEclipse extends PApplet {
 		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
 
 		 if (frame != null) {
-			    frame.setResizable(true);
-			    frame.setLayout(new BorderLayout());
+			    frame.setResizable(false);
+			    frame.setLayout(new BorderLayout() /*{
+			    	@Override public void {
+			    		
+			    		
+			    	}
+			    }*/);
 			    frame.setLocation(0, 0);
+			    	    
 			    //frame.setSize(output_width, output_height);
+			    frame.addWindowStateListener(new WindowStateListener() {
+			      public void windowStateChanged(WindowEvent arg0) {
+			         System.out.println(arg0);
+			      }
+			   });
+			   //frame.dispose();
+			   //frame = null;
+			   frame.setUndecorated(true);
+			   frame.setMenuBar(null);
 		 }
 
-	     this.delaySetup();
+	   this.delaySetup();
 
 
 	     
@@ -415,7 +438,7 @@ public class VurfEclipse extends PApplet {
 	 if (enableStreams)
 	   pr.processStreams(timeMillis);
 
-	if (enableSequencer)
+	 if (enableSequencer)
 		 pr.processSequencer(timeMillis);
 
 	 //offscreen.beginDraw();
