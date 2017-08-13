@@ -35,6 +35,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  private boolean bindToRandom = true;
 	  private boolean randomMode = true;
+		private ArrayList<String> historySequenceNames = new ArrayList<String>();
+		private int historyCursor;
 
 	  public SequenceSequencer (Project host, int w, int h) {
 	    //super(host, w,h);
@@ -49,6 +51,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  @Override
 	  public boolean checkReady(int max_iterations) {
+	  	if (getActiveSequence()!=null && getActiveSequence().getLengthMillis()<100) {
+	  		host.println("SequenceSequencer is " + this.toString() + ": " + getActiveSequence() + " has " + getActiveSequence().getLengthMillis() + " length..?");
+	  	}
 		  return getActiveSequence()==null || getActiveSequence().readyToChange(max_iterations);
 	  }
 
@@ -69,12 +74,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  //println(this+"#runSequences");
 		  // probably want to move this up to Sequencer and do super.runSequences()
 		  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
-			  println(this+"#runSequences(): is readyToChange, calling randomSequence()");
+			  println(this+"#runSequences(): is readyToChange from "+this.activeSequenceName + ", calling randomSequence()");
 			  nextSequence();
 		  }
 		  if (getActiveSequence()==null) nextSequence();
 
-		  host.setTimeScale(0.1f);
+		  //host.setTimeScale(0.1f);
 		  
 		  getActiveSequence().setValuesForTime();
 	  }
@@ -226,7 +231,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  }
 
 	  public void nextSequence() {
-		if (randomMode) {
+	  	if (randomMode) {
 	  		randomSequence();
 	  	} else {
 	  		println("Moving to seqList index " + seq_pos++);
@@ -234,22 +239,76 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  			seq_pos = 0;
 	  			println("Resetting index to 0 because sequence list reached " + seqList.size());
 	  		}
-	  		changeSequence(seqList.get(seq_pos));
+	  		String newSequenceName = seqList.get(seq_pos); 
+	  		changeSequence(newSequenceName);
+
 	  	}
 	  }
+	  
+	  public void histPreviousSequence(int distance) {
+	  	int size = this.historySequenceNames.size();
+	  	historyCursor-=distance;
+	  	if (historyCursor<0) historyCursor = 0;
+	  	if (this.historySequenceNames.get(historyCursor)!=null) {
+	  		host.println("SequenceSequencer moving history cursor to " + historyCursor);
+	  		String previousSequenceName = this.historySequenceNames.get(historyCursor);
+	  		
+	  		changeSequence(previousSequenceName, false, true);
+	  		//if (size>1) this.historySequenceNames.remove(size-1);
+	  	}
+	  }
+	  public void histNextSequence(int distance) {
+	  	int size = this.historySequenceNames.size();
+  		
+	  	historyCursor+=distance;
+	  	if (historyCursor>size-1) historyCursor = size-1;
 
-	  public void changeSequence(String SequenceName) {
-		  if (this.getActiveSequence()!=null) 		// mute the current sequence
-			  this.getActiveSequence().stop();//setMuted(true);
+  		host.println("SequenceSequencer moving history cursor to " + historyCursor);
+  		String previousSequenceName = this.historySequenceNames.get(historyCursor);
+	  	
+  		changeSequence(previousSequenceName, false, true);
+	  }
+	  
+	  public void changeSequence(String sequenceName) {
+	  	this.changeSequence(sequenceName,true,true);
+	  }
+
+	  public void changeSequence(String SequenceName, boolean remember, boolean restart) {
+		  if (this.getActiveSequence()!=null) {		// mute the current sequence 
+			  if (restart) this.getActiveSequence().stop();//setMuted(true);
+			  // check if this is already the top of the sequence history, if so don't add it again 
+		  }
 
 		  this.activeSequenceName = SequenceName;
 
-		  println("Changing to sequence:   " + SequenceName + "  (" + this.getActiveSequence().toString() + ")");
-
+		  println("Changing to sequence: " + SequenceName + "  (" + this.getActiveSequence().toString() + ")");
+		  if (remember && this.shouldRemember(SequenceName)) {
+		  	this.addHistorySequenceName(SequenceName);
+		  	//if (historyCursor==this.historySequenceNames.size()-1)	// if the cursor is already tracking the history then set cursor to most recent item so that 'j' does jump to the most recent sequence 
+	  		historyCursor = this.historySequenceNames.size()-1;
+		  }
 		  //muteAllSequences();
 		  this.getActiveSequence().setMuted(false);
-		  this.getActiveSequence().start();
+		  if (restart) this.getActiveSequence().start();
 	  }
+
+
+	private boolean shouldRemember(String sequenceName) {
+			// TODO Auto-generated method stub
+		  if (sequenceName.contains("_next_")) {
+		  	return false;
+		  }
+		  if (getSequence(sequenceName).readyToChange(0)) {
+		  	host.println(this.toString() + ": " + sequenceName +" is ready to change for 0, not remembering!");;
+		  }
+			return true;
+		}
+
+
+	private void addHistorySequenceName(String activeSequenceName2) {
+			println("Added " + activeSequenceName2 + " as the " + this.historySequenceNames.size() + "th history item");
+			historySequenceNames.add(activeSequenceName2);
+	}
 
 
 	@Override

@@ -254,8 +254,8 @@ public class SocioSukiProject extends Project implements Serializable {
     
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
-    switcher.bindSequence("blend", blendScene, "preset 1", 100);
-    switcher.bindSequence("blend2", blendScene, "preset 2", 100);
+    switcher.bindSequence("blend", blendScene, "preset 1", 100).setLengthMillis(1000);
+    switcher.bindSequence("blend2_next_", blendScene, "preset 2_next_", 100).setLengthMillis(0);
     //switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
 
 
