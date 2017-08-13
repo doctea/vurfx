@@ -4,6 +4,8 @@ by Tristan Rowley (c) 2012-present (except where using code copyright others or 
 
 a rough and hacky java-based VJ/music video/trippy visuals application using Processing 1.5.1 and GLGraphics library.  With glsl shaders, SimpleOpenNI/Kinect rgb and depth support.
 
+example output and more info can be found at https://facebook.com/vurfx and https://instagram.com/vurfx
+
 ==== TODO ====
 
 proper docs/instructions
