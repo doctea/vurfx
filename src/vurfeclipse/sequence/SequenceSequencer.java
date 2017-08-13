@@ -245,7 +245,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  	}
 	  }
 	  
-	  public void histPreviousSequence(int distance) {
+	  /*public void histPreviousSequence(int distance) {
+	  	this.histPreviousSequence(distance, true);
+	  }*/
+	  
+	  public void histPreviousSequence(int distance, boolean restart) {
 	  	int size = this.historySequenceNames.size();
 	  	historyCursor-=distance;
 	  	if (historyCursor<0) historyCursor = 0;
@@ -253,11 +257,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  		host.println("SequenceSequencer moving history cursor to " + historyCursor);
 	  		String previousSequenceName = this.historySequenceNames.get(historyCursor);
 	  		
-	  		changeSequence(previousSequenceName, false, true);
+	  		changeSequence(previousSequenceName, false, restart);
 	  		//if (size>1) this.historySequenceNames.remove(size-1);
 	  	}
 	  }
-	  public void histNextSequence(int distance) {
+	  public void histNextSequence(int distance, boolean restart) {
 	  	int size = this.historySequenceNames.size();
   		
 	  	historyCursor+=distance;
@@ -266,7 +270,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
   		host.println("SequenceSequencer moving history cursor to " + historyCursor);
   		String previousSequenceName = this.historySequenceNames.get(historyCursor);
 	  	
-  		changeSequence(previousSequenceName, false, true);
+  		changeSequence(previousSequenceName, false, restart);
 	  }
 	  
 	  public void changeSequence(String sequenceName) {
@@ -458,7 +462,24 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
+	public void restartSequence() {
+		println("restarting" + activeSequenceName);
+		this.getActiveSequence().iteration = 0;
+		this.getActiveSequence().start();
+	}
 
+
+	int sequenceDistance = 1;
+	public void cutSequence() {
+		// go up and down cursor alternately; if nothing to switch to, do a random mahfucker?
+		if (sequenceDistance>0) {
+			this.histNextSequence(sequenceDistance,false);
+		} else {
+			this.histPreviousSequence(-sequenceDistance,false);
+		}
+			
+		if (sequenceDistance == 1) sequenceDistance = -1; else if (sequenceDistance == -1) sequenceDistance = 1; 
+	}
 
 	  /*
 	   		//

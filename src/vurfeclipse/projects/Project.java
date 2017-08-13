@@ -466,16 +466,25 @@ public abstract class Project implements Serializable {
     	if (this.sequencer!=null) this.sequencer.setForward();
     } else if (key=='j' ) {	// HISTORY BACK
     	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
-    		((SequenceSequencer)this.sequencer).histPreviousSequence(1);
+    		((SequenceSequencer)this.sequencer).histPreviousSequence(1,true);
     	}
     } else if (key=='k' ) { // HISTORY FORWARD
     	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
-    		((SequenceSequencer)this.sequencer).histNextSequence(1);
+    		((SequenceSequencer)this.sequencer).histNextSequence(1,true);
+    	}
+    } else if (key=='O' ) { // RESTART CURRENT SEQUENCE (stutter effect)
+    	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
+    		((SequenceSequencer)this.sequencer).restartSequence();
+    	}
+    } else if (key=='o') { // HISTORY 'cut' between cursor/next (or do random if at end?)
+    	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
+    		((SequenceSequencer)this.sequencer).cutSequence();
     	}
     } else if (key=='l') {
-    	println("toggling sequencer");
     	if (this.sequencer!=null) {
-    		println("toggling sequencer " + this.sequencer.toggleLock());
+    		println("toggling sequencer lock " + this.sequencer.toggleLock());
+    	} else {
+    		println("no sequencer to toggle lock no!"); //toggling sequencer lock");
     	}
     } else if (key=='\'') {
     	this.enableSequencer = !this.enableSequencer;
