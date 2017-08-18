@@ -21,11 +21,15 @@ abstract public class Sequence implements Mutable {
 	ArrayList<Mutable> mutables = new ArrayList<Mutable>();
 
 
-	protected Scene host;		// TODO: host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
+	protected Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
 	public Sequence (Scene host, int sequenceLengthMillis) {
 		this(sequenceLengthMillis);
 		this.host = host;
 	}
+	/*public Sequence(Scene sc, int sequenceLengthMillis) {
+		this(sequenceLengthMillis);
+		this.host = sc.host;
+	}*/
 
 	public Sequence() {
 		lengthMillis = 0;
@@ -33,6 +37,11 @@ abstract public class Sequence implements Mutable {
 	public Sequence(int sequenceLengthMillis) {
 		lengthMillis = sequenceLengthMillis;
 	}
+
+	public void setHost(Scene host) {
+		this.host = host;
+	}
+
 	public int getLengthMillis() {
 		return lengthMillis;
 	}
@@ -56,7 +65,7 @@ abstract public class Sequence implements Mutable {
 	//abstract public ArrayList<Mutable> getMutables();
 	public ArrayList<Mutable> getMutables() {
 		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-		if (host!=null) muts.add(host);
+		if (host!=null) muts.add((Mutable) host);
 		return muts;
 	}
 
@@ -114,24 +123,30 @@ abstract public class Sequence implements Mutable {
 	public void setValuesForTime() {
 		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is
 
-		int now = (int) ((double)APP.getApp().millis() * ( (null!=this.host) ? this.host.getTimeScale() : 1.0d) );
+		int now = APP.getApp().millis();
+		double scale = 1.000f; //1.0f; //0.1f; //( (null!=this.host) ? this.host.getTimeScale() : 1.0d ); 
 
 		int diff = now - startTimeMillis;
+		now = (int) (((double)now) * scale);
 		double pc;
 
+		diff *= scale;
+		
 		//println("got diff " + diff);
 		if (lengthMillis==0) {
 			pc = 0.5f;
 			iteration++;
 		} else {
-			iteration = diff/lengthMillis;
-			if (diff>=lengthMillis) diff = diff % lengthMillis;	// if we've gone past one loop length, reset it
+			iteration = diff/(lengthMillis);
+			if ((diff)>=(lengthMillis)) 
+				diff = diff % lengthMillis;	// if we've gone past one loop length, reset it
 
 			// what percent is A diff of B lengthMillis ?
 
-			pc = PApplet.constrain((float) ((double)diff / (double)lengthMillis), 0.0001f, 0.9999f);
+			pc = PApplet.constrain((float) ((double)(diff) / (double)lengthMillis), 0.0001f, 0.9999f);
 			//println("adjusted diff " + diff + "length millis is " + lengthMillis + " and pc is " + pc);
 		}
+		//println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
 		setValuesForNorm(pc,iteration);
 	}
 
