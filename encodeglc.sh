@@ -1,0 +1,1 @@
+../encodeglc.sh
