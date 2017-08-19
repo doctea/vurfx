@@ -22,18 +22,19 @@ extend functionality/customise fx through preset callbacks and/or overriding met
 
 === Keyboard controls ===
 
-| key | action | likely to change in future? |
-| - | show/hide debug layer |
-| l | lock sequencer (don't change when sequence is ready) |
-| ' | stop sequencer (sequence values don't update, sequencer doesn't change when ready) |
-| ; | next sequence (ie next in sequencer playlist or random etc depending on behaviour of the sequencer) |
-| j,J | previous sequence in playlist history (J does not restart the sequence) |
-| k,K | next sequence in playlist history (K does not restart the sequence) |
-| o | cut between current and next playlist history without restarting sequence |
-| O | restart currently playing sequence | * |
-| q | increase sequence timescale by 0.1 | * |
-| space | take screenshot |
-| m | pause/stop streams |
+|| key | action | likely to change in future? ||
+|| - | show/hide debug layer ||
+|| l | lock sequencer (don't change when sequence is ready) ||
+|| ' | stop sequencer (sequence values don't update, sequencer doesn't change when ready) ||
+|| ; | next sequence (ie next in sequencer playlist or random etc depending on behaviour of the sequencer) ||
+|| j,J | previous sequence in playlist history (J does not restart the sequence) ||
+|| k,K | next sequence in playlist history (K does not restart the sequence) ||
+|| o | cut between current and next playlist history without restarting sequence ||
+|| O | restart currently playing sequence | * ||
+|| q | increase sequence timescale by 0.1 | * ||
+|| a | decrease sequence timescale by 0.1 | * ||
+|| space | take screenshot ||
+|| m | pause/stop streams ||
 
 sequence playlist history / backwards buttons (j/k to go back/fore, J/K to go back/fore without restarting the Sequence. o)
 
