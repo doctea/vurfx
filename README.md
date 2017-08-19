@@ -39,21 +39,23 @@ extend functionality/customise fx through preset callbacks and/or overriding met
 
 sequence playlist history / backwards buttons (j/k to go back/fore, J/K to go back/fore without restarting the Sequence. o)
 
-#### STRUCTURE 
+#### CODE/CLASS/OBJECT STRUCTURE 
 
 VurfEclipse is the main(), setup and render loop
-	has one instantiated user.Project
-		has one Sequencer
-			has many Sequences
-				interacts with Filters and Scenes
-		has many Scenes
-			has many Filters
-				has many Presets
-				has many Parameters
-			has many Sequences
-		Scenes and Filters each have many Canvases
+	has one instantiated **Project**
+		has many **Streams**
+			callbacks interact with **Filter**s and **Scene**s
+		has one **Sequencer**
+			has many **Sequences**
+				interacts with **Filter**s and **Scene**s via overriding methods
+		has many **Scenes**
+			has many **Filter**s
+				has many **Presets**
+				has many **Parameters**
+			has many **Sequences*8
+		**Scenes** and *Filters** each have many Canvases
 
-##### TODO
+## TODO
 
 proper docs/instructions
 
