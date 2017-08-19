@@ -1,8 +1,8 @@
-====== VurfX docs (?) ======
+# VurfX docs (?)
 
-by Tristan Rowley (c) 2012-present (except where using code copyright others or public domain!)
+by Tristan Rowley (c) 2012-present (except where using code copyright others or public domain!), doctea@gmail.com
 
-a rough and hacky java-based VJ/music video/trippy visuals application using Processing 1.5.1 and GLGraphics library.  With glsl shaders, SimpleOpenNI/Kinect rgb and depth support.
+a rough and hacky java-based VJ/music video/trippy visuals application thing using Processing 1.5.1 and GLGraphics library.  With glsl shaders, SimpleOpenNI/Kinect rgb and depth support.
 
 uses cp5, many other libraries I'm sure - TODO: ADD LINKS AND STUFF
 
@@ -10,7 +10,8 @@ example output and more info can be found at https://facebook.com/vurfx and http
 
 You haven't slept for over 60 hours, you're in no fit state!
 
-==== FEATURES ====
+## FEATURES
+--------
 
 ...it does lots of stuff... not always very well or clearly
 randomise sequence/playlist mode
@@ -18,9 +19,9 @@ ImageListDrawer loads a directory of images to use as sources
 BeatStream for locking fx to a beat
 extend functionality/customise fx through preset callbacks and/or overriding methods 
 
-==== HAVE YOU BEEN AT THE CONTROLS? ====
+### HAVE YOU BEEN AT THE CONTROLS?
 
-=== Keyboard controls ===
+#### Keyboard controls
 
 || key | action | likely to change in future? ||
 || - | show/hide debug layer ||
@@ -38,10 +39,13 @@ extend functionality/customise fx through preset callbacks and/or overriding met
 
 sequence playlist history / backwards buttons (j/k to go back/fore, J/K to go back/fore without restarting the Sequence. o)
 
-==== STRUCTURE ====
+#### STRUCTURE 
 
 VurfEclipse is the main(), setup and render loop
 	has one instantiated user.Project
+		has one Sequencer
+			has many Sequences
+				interacts with Filters and Scenes
 		has many Scenes
 			has many Filters
 				has many Presets
@@ -49,7 +53,7 @@ VurfEclipse is the main(), setup and render loop
 			has many Sequences
 		Scenes and Filters each have many Canvases
 
-==== TODO ====
+##### TODO
 
 proper docs/instructions
 
