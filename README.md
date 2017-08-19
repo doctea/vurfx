@@ -41,19 +41,19 @@ sequence playlist history / backwards buttons (j/k to go back/fore, J/K to go ba
 
 #### CODE/CLASS/OBJECT STRUCTURE 
 
-**VurfEclipse** is the main(), setup, and render loop
---has one instantiated **Project**
-----has many **Streams**
-------callbacks interact with **Filter**s and **Scene**s
---------has one **Sequencer**
-----------has many **Sequences**
-------------interacts with **Filter**s and **Scene**s via overriding methods
---------has many **Scenes**
-------------has many **Filter**s
-----------------has many **Presets**
-----------------has many **Parameters**
-------------has many **Sequences**
---------**Scenes** and **Filters** each have many **Canvas**es
+* VurfEclipse** is the main(), setup, and render loop
+  * has one instantiated **Project**
+    * has many **Streams**
+      * callbacks interact with **Filter**s and **Scene**s
+    * has one **Sequencer**
+      * has many **Sequences**
+        * interacts with **Filter**s and **Scene**s via overriding methods
+    * has many **Scenes**
+      * has many **Sequences**
+      * has many **Filter**s
+        * has many **Presets**
+        * has many **Parameters**
+    * **Scenes** and **Filters** each have many **Canvas**es
 
 ## TODO
 
