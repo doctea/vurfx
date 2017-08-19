@@ -124,7 +124,7 @@ abstract public class Sequence implements Mutable {
 		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is
 
 		int now = APP.getApp().millis();
-		double scale = 1.000f; //1.0f; //0.1f; //( (null!=this.host) ? this.host.getTimeScale() : 1.0d ); 
+		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d ); 
 
 		int diff = now - startTimeMillis;
 		now = (int) (((double)now) * scale);
@@ -143,10 +143,10 @@ abstract public class Sequence implements Mutable {
 
 			// what percent is A diff of B lengthMillis ?
 
-			pc = PApplet.constrain((float) ((double)(diff) / (double)lengthMillis), 0.0001f, 0.9999f);
+			pc = PApplet.constrain((float) ((double)(diff) / (double)lengthMillis), 0.000000001f, 0.999999999f);
 			//println("adjusted diff " + diff + "length millis is " + lengthMillis + " and pc is " + pc);
 		}
-		//println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
+		println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
 		setValuesForNorm(pc,iteration);
 	}
 

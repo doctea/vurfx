@@ -462,15 +462,17 @@ public abstract class Project implements Serializable {
       //println(this.serialize());
 
       saveProject();
+    } else if (key=='q') {
+    	setTimeScale(getTimeScale()+0.1d);
     } else if (key==';' || key=='f') {		// FORWARDS
     	if (this.sequencer!=null) this.sequencer.setForward();
-    } else if (key=='j' ) {	// HISTORY BACK
+    } else if (key=='j' || key=='J') {	// HISTORY BACK
     	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
-    		((SequenceSequencer)this.sequencer).histPreviousSequence(1,true);
+    		((SequenceSequencer)this.sequencer).histPreviousSequence(1,key=='j'?true:false);
     	}
-    } else if (key=='k' ) { // HISTORY FORWARD
+    } else if (key=='k' || key=='K') { // HISTORY FORWARD
     	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
-    		((SequenceSequencer)this.sequencer).histNextSequence(1,true);
+    		((SequenceSequencer)this.sequencer).histNextSequence(1,key=='k'?true:false);
     	}
     } else if (key=='O' ) { // RESTART CURRENT SEQUENCE (stutter effect)
     	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
@@ -666,6 +668,10 @@ public abstract class Project implements Serializable {
 		return this.timeScale; //1.0d;
 	}
 	public void setTimeScale(double f) {
+		//println("setTimeScale(" + f + ")");;
+		/*if (f>2.0d) {
+			println ("setting timescale to " + f + "!");
+		}*/
 		this.timeScale = f;
 	// TODO Auto-generated method stub
 	}

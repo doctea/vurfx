@@ -252,25 +252,33 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  public void histPreviousSequence(int distance, boolean restart) {
 	  	int size = this.historySequenceNames.size();
 	  	historyCursor-=distance;
-	  	if (historyCursor<0) historyCursor = 0;
-	  	if (this.historySequenceNames.get(historyCursor)!=null) {
-	  		host.println("SequenceSequencer moving history cursor to " + historyCursor);
-	  		String previousSequenceName = this.historySequenceNames.get(historyCursor);
+	  	if (historyCursor<0) {
+	  		historyCursor = 0;
+	  		host.println("SequenceSequencer already at start of history");
+	  	} else {
+	  		if (this.historySequenceNames.get(historyCursor)!=null) {
+	  			host.println("SequenceSequencer moving history cursor to " + historyCursor);
+	  			String previousSequenceName = this.historySequenceNames.get(historyCursor);
 	  		
-	  		changeSequence(previousSequenceName, false, restart);
-	  		//if (size>1) this.historySequenceNames.remove(size-1);
+	  			changeSequence(previousSequenceName, false, restart);
+	  			//if (size>1) this.historySequenceNames.remove(size-1);
+	  		}
 	  	}
 	  }
 	  public void histNextSequence(int distance, boolean restart) {
 	  	int size = this.historySequenceNames.size();
   		
 	  	historyCursor+=distance;
-	  	if (historyCursor>size-1) historyCursor = size-1;
-
-  		host.println("SequenceSequencer moving history cursor to " + historyCursor);
-  		String previousSequenceName = this.historySequenceNames.get(historyCursor);
+	  	if (historyCursor>size-1) {
+	  		historyCursor = size-1;
+	  		
+	  		host.println("SequenceSequencer already at end of history");
+	  	} else {
+	  		host.println("SequenceSequencer moving history cursor to " + historyCursor);
+	  		String previousSequenceName = this.historySequenceNames.get(historyCursor);
 	  	
-  		changeSequence(previousSequenceName, false, restart);
+	  		changeSequence(previousSequenceName, false, restart);
+	  	}
 	  }
 	  
 	  public void changeSequence(String sequenceName) {

@@ -72,8 +72,12 @@ public class MutanteProject extends Project implements Serializable {
 	  			super.randomSequence();
 	  			return;
 	  		}
-	  		if ((count%50)==0)
-	  			this.host.setTimeScale(((count%10)==0)?1.0f:0.25f); //getTimeScale()
+	  		if ((count%2)==0)
+	  			this.host.setTimeScale(
+	  					((count%3)==0)?
+	  							2.0d:
+	  							0.1d
+	  		); //getTimeScale()
 	  		else
 	  			this.host.setTimeScale(1.0f);
 	  		if (count>1000) count = 0;
@@ -91,7 +95,7 @@ public class MutanteProject extends Project implements Serializable {
 	  		/*if ((1+(count%10))>5 && (seq_count%(count+1)<2)) {
 	  			this.nextSequence();
 	  		}*/
-	  		this.host.setTimeScale(0.1f);
+	  		//this.host.setTimeScale(0.1f); // twat
 	  		//if (seq_count>10000) seq_count = 0;
 	  		super.runSequences();
 	  	}

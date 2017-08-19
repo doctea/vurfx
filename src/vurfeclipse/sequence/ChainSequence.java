@@ -10,11 +10,15 @@ public class ChainSequence extends Sequence {
 
 	ArrayList<Sequence> chain = new ArrayList<Sequence>();
 	
+	public ChainSequence(Scene host, int i) {
+		super(host,i);
+	}
 	public ChainSequence(int i) {
 		super(i);
 	}
 	public ChainSequence addSequence(Sequence seq) {
 		seq.setLengthMillis(this.getLengthMillis());
+		if (this.host==null) this.host = seq.host;
 		chain.add(seq);
 		return this;
 	}
