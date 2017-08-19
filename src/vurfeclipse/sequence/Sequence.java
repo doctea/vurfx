@@ -146,7 +146,7 @@ abstract public class Sequence implements Mutable {
 			pc = PApplet.constrain((float) ((double)(diff) / (double)lengthMillis), 0.000000001f, 0.999999999f);
 			//println("adjusted diff " + diff + "length millis is " + lengthMillis + " and pc is " + pc);
 		}
-		println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
+		//println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
 		setValuesForNorm(pc,iteration);
 	}
 
