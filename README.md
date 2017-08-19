@@ -57,46 +57,37 @@ sequence playlist history / backwards buttons (j/k to go back/fore, J/K to go ba
 
 ## TODO
 
-proper docs/instructions
+* proper docs/instructions
+* sequencer features
+  * delete items from history
+  * save/load history to file
+  * set presets for favourites
+  * quick-cut button with no-restart mode for sequences
+  * stutter time button
+  * locking timescale and start of sequence changes to beat tempo/triggers
+* UI features
+  * map cp5 sliders to Filter Parameters ('proxy' Parameters?)
+  * map MIDI controls to sliders
+  * map functions to sliders
+  * map game controllers to sliders
+* effects/shaders
+  * fractal
+  * rounded pixel effect
+  * vertical stripes effect
+  * mask effect to cut out borders
+* streaming/texture sharing
+  * turbojpg stream output / stream to&from tcpsyphon/tcpspout/ofxpimapper?
+* big bugs
+  * fix problems and figure out how to make a true fullscreen version
+  * make run as an Application reliably rather than an Applet, to help remove some window border
+* improve features
+  * better MIDI support
+  * better REST/web interface
 
-sequencer features
-	DONE 
-	delete items from history
-	save/load history to file
-	set presets for favourites
-	quick-cut button with no-restart mode for sequences
-	stutter time button
-	locking timescale and start of sequence changes to beat tempo/triggers
-
-UI features
-	map cp5 sliders to Filter Parameters ('proxy' Parameters?)
-	map MIDI controls to sliders
-	map functions to sliders
-	map game controllers to sliders
-
-effects/shaders
-	fractal
-	rounded pixel effect
-	vertical stripes effect
-	mask effect to cut out borders
-
-streaming/texture sharing
-	turbojpg stream output / stream to&from tcpsyphon/tcpspout/ofxpimapper?
-
-big bugs
-	fix problems and figure out how to make a true fullscreen version
-	make run as an Application reliably rather than an Applet, to help remove some window border
-
-improve features
-	better MIDI support
-		has very very rough support already
-	better REST/web interface
-
-future plans
+### future plans
 	port to Processing 3 or to some other platform or package
 	learn OSC and interface with that
 	improve Kinect performance
 	better multi-Kinect support
-
-get some more wine
+	get some more wine
 
