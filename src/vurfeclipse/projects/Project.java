@@ -463,7 +463,9 @@ public abstract class Project implements Serializable {
 
       saveProject();
     } else if (key=='q') {
-    	setTimeScale(getTimeScale()+0.1d);
+    	setTimeScale(getTimeScale()+0.01d);
+    } else if (key=='a') {
+    	setTimeScale(getTimeScale()-0.01d);
     } else if (key==';' || key=='f') {		// FORWARDS
     	if (this.sequencer!=null) this.sequencer.setForward();
     } else if (key=='j' || key=='J') {	// HISTORY BACK
