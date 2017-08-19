@@ -62,4 +62,6 @@ syntax:glob
 *.jpeg
 *.log
 
+*.xmle
+
 lib/user/GSVideo-*
