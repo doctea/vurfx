@@ -495,7 +495,7 @@ public abstract class Project implements Serializable {
     	println("toggled enableSequencer to " + this.enableSequencer);
     } else if (key=='m') {
     	this.toggleStreams();
-    	println("toggled enableStraems to " + this.enableStreams);
+    	println("toggled enableStreams to " + this.enableStreams);
     } else/* if (key=='\'') {  // SOLO SCENE
       Iterator i = scenes.iterator();
       while (i.hasNext()) {
