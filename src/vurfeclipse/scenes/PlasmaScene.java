@@ -34,16 +34,16 @@ public class PlasmaScene extends Scene {
 	    this.callbacks.put("warp", new ParameterCallback() {
 	    	@Override
 	    	  public void call(Object value) {
-	    		if (value instanceof Integer) {
-	    			//os2.getFilter("Plasma").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
-					Float limit = (float) (100 * 12.0*Math.PI);
-					Integer adjusted = ((Integer)value%(int)(float)limit);
-
-					self.getFilter("Plasma").changeParameterValue("u_time_2",
-	    					//value
-	    					adjusted
-	    			);
-	    		}
+		    		if (value instanceof Integer) {
+		    			//os2.getFilter("Plasma").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
+							Float limit = (float) (100 * 12.0*Math.PI);
+							Integer adjusted = ((Integer)value%(int)(float)limit);
+		
+							self.getFilter("Plasma").changeParameterValue("u_time_2",
+			    					//value
+			    					adjusted
+			    		);
+		    		}
 	    	  }
 	    });
   }
@@ -109,14 +109,14 @@ class RGBFilterSequence1 extends Sequence {
 		host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm*norm*norm));
 	}
 	@Override public void onStart() {
-		//this.setLengthMillis((int)APP.getApp().random(1,5) * 500);
-		/*for (int i = 0 ; i < APP.getApp().random(2,10) ; i++)
+		//this.setLengthMillis((int)random(1,5) * 500);
+		/*for (int i = 0 ; i < random(2,10) ; i++)
 			host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
-		for (int i = 0 ; i < APP.getApp().random(2,10) ; i++)
+		for (int i = 0 ; i < random(2,10) ; i++)
 			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
-		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) APP.getApp().random(0,((PlasmaScene)this.host).colourModeCount)));
+		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) random(0,((PlasmaScene)this.host).colourModeCount)));
 
-		host.getFilter("PhaseRGB").setMuted(APP.getApp().random(0.0f,1.0f)>=0.33f);
+		host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
 
 	}
 	@Override public void onStop() {	}
@@ -141,14 +141,14 @@ class RGBFilterSequence2 extends Sequence {
 		host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
 	}
 	@Override public void onStart() {
-		//this.setLengthMillis((int)APP.getApp().random(1,5) * 500);
-		/*for (int i = 0 ; i < APP.getApp().random(2,10) ; i++)
+		//this.setLengthMillis((int)random(1,5) * 500);
+		/*for (int i = 0 ; i < random(2,10) ; i++)
 			host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
-		for (int i = 0 ; i < APP.getApp().random(2,10) ; i++)
+		for (int i = 0 ; i < random(2,10) ; i++)
 			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
-		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) APP.getApp().random(0,((PlasmaScene)this.host).colourModeCount)));
+		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int)random(0,((PlasmaScene)this.host).colourModeCount)));
 
-		host.getFilter("PhaseRGB").setMuted(APP.getApp().random(0.0f,1.0f)>=0.33f);
+		host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
 
 	}
 	@Override public void onStop() {	}
@@ -173,14 +173,14 @@ class RGBFilterSequence3 extends Sequence {
 		host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
 	}
 	@Override public void onStart() {
-		//this.setLengthMillis((int)APP.getApp().random(1,5) * 500);
-		/*for (int i = 0 ; i < APP.getApp().random(2,10) ; i++)
+		//this.setLengthMillis((int)random(1,5) * 500);
+		/*for (int i = 0 ; i < random(2,10) ; i++)
 			host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
-		for (int i = 0 ; i < APP.getApp().random(2,10) ; i++)
+		for (int i = 0 ; i < random(2,10) ; i++)
 			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
-		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) APP.getApp().random(0,((PlasmaScene)this.host).colourModeCount)));
+		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) random(0,((PlasmaScene)this.host).colourModeCount)));
 
-		host.getFilter("PhaseRGB").setMuted(APP.getApp().random(0.0f,1.0f)>=0.33f);
+		host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
 
 	}
 	@Override public void onStop() {	}

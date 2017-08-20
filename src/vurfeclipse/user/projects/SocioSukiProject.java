@@ -20,6 +20,7 @@ import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
 import vurfeclipse.sequence.ShowSceneSequence;
+import vurfeclipse.sequence.SimpleSequence;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;
@@ -63,31 +64,35 @@ public class SocioSukiProject extends Project implements Serializable {
 	  this.sequencer = new SequenceSequencer((Project)this,w,h) {
 	  	int count = 1;
 	  	int seq_count = 1;
-	  	/*@Override
+	  	@Override
 	  	public void nextSequence() {
 	  		count++;
-	  		if (count>15) this.setRandomMode(count%8==0);
+	  		//if (count%8==0) this.setRandomMode(!this.randtrue);//count%8==0);
+	  		if (count%16==0) {
+	  			super.randomSequence();
+	  			return;
+	  		}
 	  		if ((count%50)==0)
-	  			this.host.setTimeScale(((count%80)==0)?2.0f:0.5f); //getTimeScale()
+	  			this.host.setTimeScale(((count%10)==0)?1.0f:0.25f); //getTimeScale()
 	  		else
 	  			this.host.setTimeScale(1.0f);
 	  		if (count>1000) count = 0;
 	  		//this.host.setTimeScale(0.01f);
 	  		super.nextSequence();
-	  	}*/
+	  	}
 	  	@Override
 	  	public void runSequences() {
 	  		seq_count++;
 	  		if (this.getCurrentSequenceName().contains("_next_")) {
-	  			super.runSequences();
 	  			println("Fastforwarding sequence " + this.getCurrentSequenceName() + " because it contains '_next_'..");
+	  			super.runSequences();
 	  			this.nextSequence();
 	  		}
 	  		/*if ((1+(count%10))>5 && (seq_count%(count+1)<2)) {
 	  			this.nextSequence();
 	  		}*/
 	  		this.host.setTimeScale(0.1f);
-	  		if (seq_count>10000) seq_count = 0;
+	  		//if (seq_count>10000) seq_count = 0;
 	  		super.runSequences();
 	  	}
 	  };
@@ -104,11 +109,18 @@ public class SocioSukiProject extends Project implements Serializable {
     final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
     
-    int BLOBCOUNT = 5; // set to 50 for production, 5 makes for quick loading!
+    int BLOBCOUNT = 20; // set to 50 for production, 5 makes for quick loading!
 
-    ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"ds2014").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("vurf"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
+    ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"cabinet").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("cabinet"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
 
+    /*ils2.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
+    ils2.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
+
+    /*ils2.addFilter(new OpenNIFilter(ils2,1).setOutputCanvas("/pix0").setFilterName("kinect"));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    ils2.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
+    */
+    
     //((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
     //((ImageListDrawer)ils2.getFilter("ImageListDrawer2")).setOutputCanvas("out");
 
@@ -202,16 +214,49 @@ public class SocioSukiProject extends Project implements Serializable {
     });*/
 
     final Scene blendScene = new BlenderFX1(this,"pix1 BlenderFX", w, h).setOutputCanvas("/out");//.setInputCanvas("/pix1");
-    blendScene.setCanvas("pix0","/pix0");
-    blendScene.setCanvas("pix1","/pix1");
+    blendScene.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
+    blendScene.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
     
-    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(ils1).setOutputCanvas("/pix0").setFilterName("kinect")));//.setDepthOutputCanvasName("pix1"));
-    blendScene.setCanvas("depth", "/pix1");
+    //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(ils1,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(ils1,0).setOutputCanvas("/pix0").setFilterName("Kinect1")));
+    blendScene.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
+    
+    /*blendScene.addSequence("_next_camera", new SimpleSequence() {
+    	int camera = 0;
+    	int max_camera = 2;
+			@Override
+			public void onStart() {
+				super.onStart();
+				int current_camera = camera;
+				
+				OpenNIFilter old = (OpenNIFilter)blendScene.getFilter("kinect"+camera);
+				//old.setCanvases("depth", "/NULL").setOutputCanvas("/NULL"); //setMuted(true);
+				old.changeParameterValue("depth", new Boolean(false));
+				old.changeParameterValue("rgb", new Boolean(false));
+				camera++;
+				if (camera>=max_camera) camera = 0;
+				//blendScene.getFilter("kinect"+camera).setOutputsetMuted(false);
+				old = (OpenNIFilter)blendScene.getFilter("kinect"+camera);
+				old.changeParameterValue("depth", new Boolean(true));
+				old.changeParameterValue("rgb", new Boolean(true));
+				
+			}
+			
+			public void onStop() {
+				//blendScene.getFilter("kinect"+camera).setMuted(true);
+			}
+			
+			@Override
+			public boolean readyToChange(int max_i) {
+				return true;				
+			}
+    });*/
     
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
-    switcher.bindSequence("blend", blendScene, "preset 1", 10);
-    switcher.bindSequence("blend", blendScene, "preset 2", 10);
+    switcher.bindSequence("blend", blendScene, "preset 1", 100).setLengthMillis(1000);
+    switcher.bindSequence("blend2_next_", blendScene, "preset 2_next_", 100).setLengthMillis(0);
+    //switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
 
 
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
@@ -256,12 +301,25 @@ public class SocioSukiProject extends Project implements Serializable {
 
     plasmaScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
-    switcher.bindSequence("plasma_1", plasmaScene, "preset 1");
-    switcher.bindSequence("plasma_2", plasmaScene, "preset 2");
-    switcher.bindSequence("plasma_3", plasmaScene, "preset 3");
+    switcher.bindSequence("plasma_1", plasmaScene, "preset 1",10);
+    switcher.bindSequence("plasma_2", plasmaScene, "preset 2",10);
+    switcher.bindSequence("plasma_3", plasmaScene, "preset 3",10);
+    //switcher.bindSequence("plasma_4", plasmaScene, "preset 4",10);
 
     /// END PLASMA SCENE
+    
+    /// START Quasicrystal SCENE
+    /*QuasicrystalScene quasicrystalScene = (QuasicrystalScene)(new QuasicrystalScene(this,w,h).setSceneName("QuasicrystalScene"));
+    quasicrystalScene.setCanvas("out", "/out");
 
+    addScene(quasicrystalScene);
+    //plasmaScene.setupFilters();
+
+    quasicrystalScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
+    //this.addSceneOutputCanvas(plasmaScene, "/out");
+    switcher.bindSequence("quasicrystal_1", quasicrystalScene, "preset 1", 1000);
+		*/
+    /// END Quasicrystal SCENE
 
     this.addSceneInputOutputCanvas(
       //os,
@@ -309,24 +367,33 @@ public class SocioSukiProject extends Project implements Serializable {
   	/**/
   	;
 
-  switcher.setBindToRandom(true);
+    //switcher.setBindToRandom(true);
+    //switcher.setRandomMode(true);
 
 
-	Sequence doubleSequence = new ChainSequence(2000)
-		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
-		//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
-		.addSequence(blendScene, "preset 1")
-	;
-    switcher.bindSequence("d1:", doubleSequence, 100);
+		Sequence doubleSequence = new ChainSequence(2000)
+			.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
+			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
+			.addSequence(blendScene, "preset 1")
+		;
+    switcher.bindSequence("d1:", doubleSequence, 10);
     
   	Sequence doubleSequence2 = new ChainSequence(2000)
   			//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
   			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 2")
   			.addSequence(blendScene, "preset 1")
   			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 3")
-  			.addSequence(blendScene, "preset 1")
+  			//.addSequence(blendScene, "preset 1")
   		;
-  	switcher.bindSequence("d2:", doubleSequence2, 100);
+  	switcher.bindSequence("d2:", doubleSequence2, 5);
+  	
+  	Sequence doubleSequence3 = new ChainSequence(2000)
+  			.addSequence(getSceneForPath("/sc/BlobScene2"), "preset 1")
+  			.addSequence(blendScene, "preset 1")
+  	;
+  	switcher.bindSequence("d2:", doubleSequence3, 5);
+  	
+  	//switcher.bindSequence("blend:",  blendScene, "preset 1", 10);
 
 
     /*Sequence cSequence = new ChainSequence(0)
@@ -346,11 +413,15 @@ public class SocioSukiProject extends Project implements Serializable {
 			//.addFilter(new BlendDrawer()))
 		, "/pix0", "/out"
 	);
-    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), 5);
-    switcher.bindSequence("tunnel_1_blob_pulse_2", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), 5);
-    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_1",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), 5);
-    switcher.bindSequence("tunnel_1_blob_wobble_2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), 25);
+    int tunnel_weight = 1;
+    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_1_blob_preset_2_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), tunnel_weight);
+    switcher.bindSequence("tunnel_1_blob_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), tunnel_weight);
+    switcher.bindSequence("tunnel_1_blob_wobble_preset3",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), tunnel_weight);
+    switcher.bindSequence("tunnel_1_blend_wobble_preset2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), tunnel_weight);
+    
+    switcher.bindSequence("tunnel_1_blend_angled_2",new ChainSequence(2000).addSequence(ts1, "f2 angled 60").addSequence(blendScene, "preset 1"), tunnel_weight);
+    
     /*switcher.bindSequence(
         	"tunnel_2_pulse",
         	*/
@@ -360,15 +431,16 @@ public class SocioSukiProject extends Project implements Serializable {
 
 	    		, "/out", "/out"
 	);
-    switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), 50);
-    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), 50);
-    switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
-    switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), 50);
-    switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(doubleSequence), 5);
-    switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), 10);
-    switcher.bindSequence("tunnel_2_blob_wobble_1",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 1"), 25);
-    switcher.bindSequence("tunnel_2_blob_wobble_2",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 2"), 5);
-    switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene, "preset 4").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), 50);
+    tunnel_weight = 5;
+    switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(doubleSequence), tunnel_weight/5);
+    switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_blob_wobble_1",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_blob_wobble_2",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 2"), tunnel_weight/5);
+    switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene, "preset 4").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), tunnel_weight*2);
 
     
     
@@ -440,14 +512,14 @@ public class SocioSukiProject extends Project implements Serializable {
     	switcher.bindAndPermute("wat3_", "t", ts1, 250*l);
     	switcher.bindAndPermute("wat3_", "t", ts2, 500*l);*/
     	switcher.bindAndPermute("vd1"+l+":", "d1", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-    	switcher.bindAndPermute("vd2"+l+":", "d2", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-    	switcher.bindAndPermute("vt1"+l+":", "t1:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-    	switcher.bindAndPermute("vt2"+l+":", "t2:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("vd2_"+l+":", "d2", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("vt1_"+l+":", "t1:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("vt2_"+l+":", "t2:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
     	
-    	switcher.bindAndPermute("bv3"+l+":", "blob", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-    	switcher.bindAndPermute("bv2"+l+":", "blob", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
-    	switcher.bindAndPermute("bb2"+l+":", "blend", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
-    	switcher.bindAndPermute("bb3"+l+":", "blend", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("bv3_"+l+":", "blob", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	switcher.bindAndPermute("bv2_"+l+":", "blob", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
+    	switcher.bindAndPermute("bb2_"+l+":", "blend", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
+    	switcher.bindAndPermute("bb3_"+l+":", "blend", getSceneForPath("/sc/OutputShader"), 2000*(l*l));
     }
 
     
@@ -479,7 +551,7 @@ public class SocioSukiProject extends Project implements Serializable {
 
 
     /*this.addSceneOutputCanvas(
-    	      new VideoScene(this,w,h,"").setCanvas("src","/out").setCanvas("out", "/out"), //,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
+    	      new VideoScene(this,w,h,"").setCopenanvas("src","/out").setCanvas("out", "/out"), //,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
       		//new WebcamScene(this, 640, 480, w, h).setCanvas("src","/out").setCanvas("out", "/pix1"),
     	      //buffers[BUF_INP0]
     	      "/out"//"/pix0"
