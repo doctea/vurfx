@@ -9,6 +9,7 @@ import vurfeclipse.connectors.RestConnector;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -457,62 +458,41 @@ public abstract class Project implements Serializable {
       selectPreviousScene();
     } else if (key==']') {
       selectNextScene();
-    } else  if (key=='s') {
-      //println(this.getSelectedScene().getSelectedFilter().serialize());
-      //println(this.serialize());
-
-      saveProject();
     } else if (key=='q') {
     	setTimeScale(getTimeScale()+0.01d);
     } else if (key=='a') {
     	setTimeScale(getTimeScale()-0.01d);
-    } else if (key==';' || key=='f') {		// FORWARDS
-    	if (this.sequencer!=null) this.sequencer.setForward();
-    } else if (key=='j' || key=='J') {	// HISTORY BACK
-    	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
-    		((SequenceSequencer)this.sequencer).histPreviousSequence(1,key=='j'?true:false);
-    	}
-    } else if (key=='k' || key=='K') { // HISTORY FORWARD
-    	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
-    		((SequenceSequencer)this.sequencer).histNextSequence(1,key=='k'?true:false);
-    	}
-    } else if (key=='O' ) { // RESTART CURRENT SEQUENCE (stutter effect)
-    	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
-    		((SequenceSequencer)this.sequencer).restartSequence();
-    	}
-    } else if (key=='o') { // HISTORY 'cut' between cursor/next (or do random if at end?)
-    	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
-    		((SequenceSequencer)this.sequencer).cutSequence();
-    	}
-    } else if (key=='l') {
-    	if (this.sequencer!=null) {
-    		println("toggling sequencer lock " + this.sequencer.toggleLock());
-    	} else {
-    		println("no sequencer to toggle lock on!"); //toggling sequencer lock");
-    	}
     } else if (key=='\'') {
     	this.enableSequencer = !this.enableSequencer;
     	println("toggled enableSequencer to " + this.enableSequencer);
     } else if (key=='m') {
     	this.toggleStreams();
     	println("toggled enableStreams to " + this.enableStreams);
-    } else/* if (key=='\'') {  // SOLO SCENE
-      Iterator i = scenes.iterator();
-      while (i.hasNext()) {
-        Scene sc = (Scene)i.next();
-        if (sc!=this.getSelectedScene())
-          sc.setMuted(true);
-        else
-          sc.setMuted(false);
-      }
-    } else*/ if (key=='-') {
+    } else if (key=='-') {
       Iterator<Scene> i = scenes.iterator();
       while(i.hasNext())
         ((Scene)i.next()).sendKeyPressed('-');
-    /* }else if (key=='p') {
-    	println(rsConn.getURLs().toString());
-    	System.exit(0);
-    } */ 
+	    /* if (key=='\'') {  // SOLO SCENE
+	      Iterator i = scenes.iterator();
+	      while (i.hasNext()) {
+	        Scene sc = (Scene)i.next();
+	        if (sc!=this.getSelectedScene())
+	          sc.setMuted(true);
+	        else
+	          sc.setMuted(false);
+	      }
+	    } else*/ 
+	    /* }else if (key=='p') {
+	    	println(rsConn.getURLs().toString());
+	    	System.exit(0);
+	    } */ 
+      /*} else  if (key=='s') {
+      //println(this.getSelectedScene().getSelectedFilter().serialize());
+      //println(this.serialize());
+
+      saveProject(); */
+    } else if (this.sequencer.sendKeyPressed(key)) {
+    	println ("Key " + key + " handled by sequencer!");
   	} else {
       Scene sc = this.getSelectedScene();
 

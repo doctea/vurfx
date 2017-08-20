@@ -1,5 +1,12 @@
 package vurfeclipse.sequence;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,15 +47,42 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  public SequenceSequencer (Project host, int w, int h) {
 	    //super(host, w,h);
-		this.host = host;
-		this.w = w;
-		this.h = h;
+			this.host = host;
+			this.w = w;
+			this.h = h;
 
 	    //this.filterCount = 16;
 	    //this.filters = new Filter[filterCount];
 	  }
 
 
+	  public void saveHistory() throws IOException {
+	  	this.saveHistory("history.txt");
+	  }
+		public void saveHistory(String fileName) throws IOException {
+			FileOutputStream fos = new FileOutputStream(fileName);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(this.historySequenceNames);
+			oos.close();
+		}
+		
+		public void loadHistory()throws IOException {
+			// TODO Auto-generated method stub
+			loadHistory("history.txt");
+		}
+		public void loadHistory(String fileName) throws IOException {
+			FileInputStream fis = new FileInputStream(fileName);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			try {
+				this.historySequenceNames = (ArrayList<String>) ois.readObject();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ois.close();
+		}
+
+	  
 	  @Override
 	  public boolean checkReady(int max_iterations) {
 	  	if (getActiveSequence()!=null && getActiveSequence().getLengthMillis()<100) {
@@ -489,6 +523,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		if (sequenceDistance == 1) sequenceDistance = -1; else if (sequenceDistance == -1) sequenceDistance = 1; 
 	}
 
+
 	  /*
 	   		//
 	  public ArrayList<Sequence> getAllSequences() {
@@ -502,5 +537,33 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	   * public void changeSequence(Sequence seq) {
 
 	  }*/
+	
+	@Override public boolean sendKeyPressed(char key) {
+		if (key=='s') {
+    	try {
+    			saveHistory();
+    	} catch (IOException e) {
+    		System.out.println("Couldn't save history! " + e);
+    	}
+    } /*else if (key=='l') {
+    	try {
+    			loadHistory();
+    	} catch (IOException e) {
+    		System.out.println("Couldn't load history! " + e);
+    	}
+    } */else if (key=='j' || key=='J') {	// HISTORY BACK
+      histPreviousSequence(1,key=='j'?true:false);
+    } else if (key=='k' || key=='K') { // HISTORY FORWARD
+      histNextSequence(1,key=='k'?true:false);
+    } else if (key=='O' ) { // RESTART CURRENT SEQUENCE (stutter effect)
+      restartSequence();
+    } else if (key=='o') { // HISTORY 'cut' between cursor/next (or do random if at end?)
+      cutSequence();
+    } else if (super.sendKeyPressed(key)) {
+    } else {
+    	return false;
+    }
+		return true;
+	}
 
 }
