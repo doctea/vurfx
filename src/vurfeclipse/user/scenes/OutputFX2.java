@@ -107,10 +107,10 @@ public class OutputFX2 extends SimpleScene {
     		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Kaleido").toggleMute();
 
     		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").toggleMute();
-    		host.host.getSceneForPath(getPath()).getFilter("BlendDrawer pix0 to out").setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
+    		host.host.getSceneForPath(getPath()).getFilter("BlendDrawer pix0 to out").setMuted((random(0f,1.0f)>=0.25f));
 
     		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").changeParameterValue("BlendMode", getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
-    		if (APP.getApp().random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
+    		if (random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
 
     		host.host.getSceneForPath(getPath()).getFilter("Kaleido").nextMode();
 		}

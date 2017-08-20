@@ -2,6 +2,7 @@ package vurfeclipse.sequence;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import processing.core.PApplet;
 import vurfeclipse.APP;
@@ -12,6 +13,9 @@ import vurfeclipse.scenes.Scene;
 
 abstract public class Sequence implements Mutable {
 	//Scene sc;
+	
+	Random rng = new Random();
+	long seed = rng.nextLong();
 
 	int startTimeMillis;
 	private int lengthMillis = 2000;
@@ -49,6 +53,23 @@ abstract public class Sequence implements Mutable {
 		lengthMillis = length;
 	}
 
+
+	public float random(float max) {
+		float ret = (float) (this.rng.nextDouble()*max);
+		println("random(" + max + ") returning " + ret);
+		return ret;
+	}
+	public float random(float min, float max) {
+		float ret = min + (this.rng.nextFloat()*max);
+		println("random(" + min + "f, " + max + "f returning " + ret + "f");
+		return ret;
+	}
+	public int random(int min, int max) {
+		int random = this.rng.nextInt((max-min));
+		int ret = min + random;
+		println ("random(" + min + ","+max+ ") returning " + ret);
+		return ret;
+	}
 
 
 
@@ -103,6 +124,7 @@ abstract public class Sequence implements Mutable {
 
 
 	public void start() {
+		this.rng.setSeed(seed);
 		onStart();
 		setMuted(false);
 		iteration = 0;
@@ -162,7 +184,7 @@ abstract public class Sequence implements Mutable {
 		return array[(int)(pc * (array.length-1))];
 	}
 	public Object getRandomArrayElement(Object[] array) {
-		return array[(int)APP.getApp().random(0,array.length-1)];
+		return array[random(0,array.length-1)];
 	}
 
 
@@ -200,9 +222,9 @@ abstract public class Sequence implements Mutable {
 		  int tot = 0;
 		  int r=0,g=0,b=0;
 		  while (tot<minimum) {
-			  r = (int)APP.getApp().random(16,255);//, (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);;
-			  g = (int)APP.getApp().random(16,255);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
-			  b = (int)APP.getApp().random(16,255);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
+			  r = (int)random(16,255);//, (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);;
+			  g = (int)random(16,255);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
+			  b = (int)random(16,255);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 			  tot = r+g+b;
 		  }
 

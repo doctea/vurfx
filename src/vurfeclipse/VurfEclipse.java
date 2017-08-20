@@ -30,7 +30,7 @@ public class VurfEclipse extends PApplet {
 	}*/
 
 	boolean hdRes = false;//true;
-	boolean mdRes = false;
+	boolean mdRes = true;
 	boolean projRes = false;
 	boolean ultrahiRes = false;//true;
 	boolean hiRes = true;
@@ -557,8 +557,4 @@ public class VurfEclipse extends PApplet {
 	/*public PGraphics createBuffer (int width, int height, String mode) {
 	return (PGraphics) createGraphics(w, h, gfx_mode);
 	}*/
-
-
-
-
 }
