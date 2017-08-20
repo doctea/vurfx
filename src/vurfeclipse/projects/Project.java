@@ -488,7 +488,7 @@ public abstract class Project implements Serializable {
     	if (this.sequencer!=null) {
     		println("toggling sequencer lock " + this.sequencer.toggleLock());
     	} else {
-    		println("no sequencer to toggle lock no!"); //toggling sequencer lock");
+    		println("no sequencer to toggle lock on!"); //toggling sequencer lock");
     	}
     } else if (key=='\'') {
     	this.enableSequencer = !this.enableSequencer;
