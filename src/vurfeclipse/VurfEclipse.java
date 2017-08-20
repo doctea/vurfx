@@ -41,7 +41,7 @@ public class VurfEclipse extends PApplet {
 	FullScreen fs;
 	boolean fullscreen = false;
 	
-  boolean ready = false;
+  	boolean ready = false;
 
 
 	///// SYPHON STUFF (choose one - disabled stuff or enabled stuff)
@@ -114,7 +114,7 @@ public class VurfEclipse extends PApplet {
 	  if (controlWindow==null) {
 		  System.out.println("VurfEclipse#getCW initialising controlWindow");
 	  	  ControlP5 cp5 = getCP5();
-	  	  //cp5.window().setLocation(1024, 0);
+	  	  cp5.window().setLocation(1024, 0);
 	  	  System.out.println("VurfEclipse#getCW about to do addControlWindow()");
 		  controlWindow = cp5.addControlWindow("controlP5window", 300, 0, 800, 800, JAVA2D, 20);
 		  System.out.println("VurfEclipse#getCW about to do hideCoordinates");
@@ -262,7 +262,7 @@ public class VurfEclipse extends PApplet {
 			    //frame.setSize(output_width, output_height);
 		 }
 
-	     this.delaySetup();
+	     	this.delaySetup();
 
 
 	     
