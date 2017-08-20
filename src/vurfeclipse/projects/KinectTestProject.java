@@ -117,10 +117,10 @@ public class KinectTestProject extends Project implements Serializable {
     	}
 		@Override public void onStart() {
 			System.out.println("Starting blend onStart()..");
-			this.setLengthMillis((int)APP.getApp().random(1,5) * 500);
-			for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
+			this.setLengthMillis((int)random(1,5) * 500);
+			for (int i = 0 ; i < random(2,10) ; i++) 
 				getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
-			for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
+			for (int i = 0 ; i < random(2,10) ; i++) 
 				getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();
 		}
     });

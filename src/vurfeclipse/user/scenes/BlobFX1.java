@@ -169,8 +169,8 @@ class SpinnerSequence1 extends SpinnerSequence {
 		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { /*2, 4, 8, */4} ));
 		//((BlendDrawer)switcher.getScene("blob drawer").getFilter("BlendDrawer")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 3, 7, 12, 0, 1 } ));
 		//((BlendDrawer)switcher.getScene("blob drawer").getFilter("BlendDrawer")).nextMode();
-		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",APP.getApp().random(0f,1f));
-		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("yRadianMod",APP.getApp().random(0f,1f));
+		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",random(0f,1f));
+		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("yRadianMod",random(0f,1f));
 		
 		//toggleOutputs();	
 	}
@@ -228,7 +228,7 @@ class SpinnerSequence2 extends SpinnerSequence {
     		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { 0, 1, 4 })); //, Blob.SH_TEXTURE } ));
     		
     		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 2,  8, 4} ));
-    		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",APP.getApp().random(0f,1f));
+    		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",random(0f,1f));
     		
     		//toggleOutputs();
     	}    	
@@ -276,12 +276,10 @@ class SpinnerSequence3 extends SpinnerSequence {
 		colour3 = randomColorMinimum(96) * 2;
 		colour4 = randomColorMinimum(196);
 		
-		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",APP.getApp().random(1)>=0.5f);
-		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",APP.getApp().random(1)>=0.5f);
-
-		
-		
-		this.setLengthMillis(250 * (int)(APP.getApp().random(1,5)));
+		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",random(1)>=0.5f);
+		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",random(1)>=0.5f);
+	
+		//this.setLengthMillis(250 * (int)(APP.getApp().random(1,5)));
 		
 		((BlobDrawer)host.getFilter("BlobDrawer")).setParameterDefaults();
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterDefaults();
@@ -290,7 +288,7 @@ class SpinnerSequence3 extends SpinnerSequence {
 		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_TEXTURE, Blob.SH_RECT, Blob.SH_POLY } ));
 		
 		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 2,  8, 4 } ));
-		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",APP.getApp().random(0f,1f));
+		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",random(0f,1f));
 		
 		//toggleOutputs();
 	
@@ -346,8 +344,8 @@ class SpinnerSequence4 extends SpinnerSequence {
 		((BlobDrawer)host.getFilter("BlobDrawer")).setParameterDefaults();
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterDefaults();
 		
-		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",APP.getApp().random(1)>=0.5f);
-		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",APP.getApp().random(1)>=0.5f);
+		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",random(1)>=0.5f);
+		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",random(1)>=0.5f);
 		
 		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_COMPOUND, Blob.SH_CIRCLE, Blob.SH_FLOWER } ));
 		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_RECT, Blob.SH_RECT, Blob.SH_POLY } ));
