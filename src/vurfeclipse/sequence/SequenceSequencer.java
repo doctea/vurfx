@@ -74,7 +74,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  }
 		  if (getActiveSequence()==null) nextSequence();
 
-		  host.setTimeScale(0.1f);
+		  //host.setTimeScale(0.1f);
 		  
 		  getActiveSequence().setValuesForTime();
 	  }
