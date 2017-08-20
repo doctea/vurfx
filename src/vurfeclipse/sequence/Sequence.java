@@ -15,6 +15,7 @@ abstract public class Sequence implements Mutable {
 	//Scene sc;
 	
 	Random rng = new Random();
+	long seed = rng.nextLong();
 
 	int startTimeMillis;
 	private int lengthMillis = 2000;
@@ -54,14 +55,22 @@ abstract public class Sequence implements Mutable {
 
 
 	public float random(float max) {
-		return (float) (this.rng.nextDouble()*max);
-	}
-	public int random(int min, int max) {
-		return min + this.rng.nextInt((max-min));
+		float ret = (float) (this.rng.nextDouble()*max);
+		println("random(" + max + ") returning " + ret);
+		return ret;
 	}
 	public float random(float min, float max) {
-		return min + (this.rng.nextFloat()*max);
+		float ret = min + (this.rng.nextFloat()*max);
+		println("random(" + min + "f, " + max + "f returning " + ret + "f");
+		return ret;
 	}
+	public int random(int min, int max) {
+		int random = this.rng.nextInt((max-min));
+		int ret = min + random;
+		println ("random(" + min + ","+max+ ") returning " + ret);
+		return ret;
+	}
+
 
 
 	/*public Sequence addMutable(Mutable mut) {
@@ -115,7 +124,7 @@ abstract public class Sequence implements Mutable {
 
 
 	public void start() {
-		this.rng.setSeed(0);
+		this.rng.setSeed(seed);
 		onStart();
 		setMuted(false);
 		iteration = 0;
