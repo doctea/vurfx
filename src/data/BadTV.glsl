@@ -24,7 +24,9 @@
  * </info>
  */
 
-#define iResolution vec2(1024.0,768.0)
+//#define iResolution vec2(1024.0,768.0)
+uniform float iResolutionX;
+uniform float iResolutionY;
 
 //uniform vec3 iResolution;           // viewport resolution (in pixels)
 uniform float iTime;          // shader playback time (in seconds)
@@ -131,6 +133,7 @@ float staticV(vec2 uv) {
 
 void mainImage( inout vec4 fragColor, in vec2 fragCoord )
 {
+	vec2 iResolution = vec2(iResolutionX,iResolutionY);
 
 	vec2 uv =  fragCoord.xy/iResolution.xy;
 	

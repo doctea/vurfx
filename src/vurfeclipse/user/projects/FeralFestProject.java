@@ -563,6 +563,10 @@ public class FeralFestProject extends Project implements Serializable {
 
 
     //switcher.setRandomMode(false);
+    this.addSceneOutputCanvas(
+    		new BadTVScene(this,w,h).registerCallbackPreset(getStream("beat"), "beat_8", "warp"),
+    		"/out"
+    );
 
     this.addSceneOutputCanvas(
       new DebugScene(this,w,h),
