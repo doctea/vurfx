@@ -131,10 +131,12 @@ public class TextDrawer extends Filter {
     		t.length()==1 ?
     		  fontSize 
     		: 
-		    	  PApplet.constrain(
+		    	  /*PApplet.constrain(
 		        h - (((t.length()*t.length())/t.length()/2)*fontSize)
 		        , h/5, h
-		    );
+		       )*/
+    			96
+		    ;
       //int fontHeight = fontSize;
       //System.out.println("fontHeight for '" + t + "' (length " + t.length() + ") is " + fontHeight);
       

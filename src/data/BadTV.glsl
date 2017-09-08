@@ -49,12 +49,12 @@ float scalinesOpt = 1.0;
 float rgbOffsetOpt = 1.0;
 float horzFuzzOpt = 1.0;*/
 
-#define vertJerkOpt 1.0
-#define vertMovementOpt 1.0
+#define vertJerkOpt 0.5
+#define vertMovementOpt 0.5
 #define bottomStaticOpt 1.0
 #define scalinesOpt 1.0
-#define rgbOffsetOpt 1.0
-#define horzFuzzOpt 1.0
+#define rgbOffsetOpt 0.5
+#define horzFuzzOpt 0.5
 
 // Noise generation functions borrowed from: 
 // https://github.com/ashima/webgl-noise/blob/master/src/noise2D.glsl

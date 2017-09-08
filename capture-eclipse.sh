@@ -1,2 +1,3 @@
 #!/bin/bash
-glc-capture -i --disable-audio /home/doctea/eclipse/java-neon/eclipse/eclipse
+export SWT_GTK3=0
+glc-capture -i --disable-audio /home/doctea/eclipse/java-oxygen/eclipse/eclipse
