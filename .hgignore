@@ -65,3 +65,6 @@ syntax:glob
 *.xmle
 
 lib/user/GSVideo-*
+
+syntax: regexp
+\.glc$

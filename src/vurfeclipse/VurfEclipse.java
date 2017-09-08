@@ -256,10 +256,11 @@ public class VurfEclipse extends PApplet {
 		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
 
 		 if (frame != null) {
-			    frame.setResizable(true);
+			    frame.setResizable(false);
 			    frame.setLayout(new BorderLayout());
 			    frame.setLocation(0, 0);
 			    //frame.setSize(output_width, output_height);
+			    frame.setMenuBar(null);
 		 }
 
 	     this.delaySetup();
@@ -402,7 +403,7 @@ public class VurfEclipse extends PApplet {
 	public void draw () {
 	//System.out.println("Draw!");
 		
-	if (!ready) return;
+		if (!ready) return;
 	
 		/*if (texWin==null) {
 			GLTextureWindow texWin = new GLTextureWindow(this, 0, 0, this.desired_width, this.desired_height);
@@ -426,6 +427,7 @@ public class VurfEclipse extends PApplet {
 
 	 if (frameCount>25) {	// skip rendering first 25 frames
 	   pr.applyGL(offscreen, output_width, output_height);
+	   //texWin.render();
 	 }
 	 //offscreen.endDraw();
 
