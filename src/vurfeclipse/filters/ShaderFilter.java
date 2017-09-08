@@ -29,24 +29,24 @@ public class ShaderFilter extends Filter {
 
   @Override
   synchronized public void updateParameterValue(String paramName, Object value) {
-	//if (!this.parameters.containsKey(paramName)) this.addParameter(paramName, value);
-	super.updateParameterValue(paramName, value);
-	if (glFilter!=null) {
-		//println("glFilter hasParameter("+paramName+") returns " + glFilter.hasParameter(paramName));
-		//System.exit(1);
-
-		Object current = getParameterValue(paramName);
-
-		if (current instanceof Float ) {
-			//println("setting GLFilter parameter " + paramName + " " + value);
-			glFilter.setParameterValue(paramName, ((Float)value).floatValue());
-		} else if (current instanceof Integer) {
-			//println("setting GLFilter parameter " + paramName + " " + value);
-			glFilter.setParameterValue(paramName, ((Integer)value).intValue());
-		} else {
-			println("ShaderFilter#updateParameterValue doesn't know what to do with passed value for " + paramName);
+		//if (!this.parameters.containsKey(paramName)) this.addParameter(paramName, value);
+		super.updateParameterValue(paramName, value);
+		if (glFilter!=null) {
+			//println("glFilter hasParameter("+paramName+") returns " + glFilter.hasParameter(paramName));
+			//System.exit(1);
+	
+			Object current = getParameterValue(paramName);
+	
+			if (current instanceof Float ) {
+				//println("setting GLFilter parameter " + paramName + " " + value);
+				glFilter.setParameterValue(paramName, ((Float)value).floatValue());
+			} else if (current instanceof Integer) {
+				//println("setting GLFilter parameter " + paramName + " " + value);
+				glFilter.setParameterValue(paramName, ((Integer)value).intValue());
+			} else {
+				println("ShaderFilter#updateParameterValue doesn't know what to do with passed value for " + paramName);
+			}
 		}
-	}
     //return this;
   }
 
@@ -82,8 +82,8 @@ public class ShaderFilter extends Filter {
   public Filter nextMode() {
     mode++;
     if(mode>4) mode = 0;
-    //initShader(shaderName);
-    //this.updateAllParameterValues();
+    initShader(shaderName);
+    this.updateAllParameterValues();
     return this;
   }
 

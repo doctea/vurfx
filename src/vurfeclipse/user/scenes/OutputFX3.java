@@ -36,7 +36,8 @@ public class OutputFX3 extends SimpleScene {
 					.addParameter("offset_y", 2.0f, -4.0f, 4.0f)
 					.addParameter("sin_mode", new Integer(0), new Integer(0), new Integer(1))
 		    );
-
+	    
+	    //os2.addFilter(new ShaderFilter(os2,"BadTV.xml").addParameter("iTime", new Float(1.0f), new Float(1.0f), new Float(10000.0f)).setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out")));
 
 	    return true;
 	}

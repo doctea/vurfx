@@ -1,0 +1,8 @@
+<filter name="badtv">
+    <description>badtv filter</description>
+    <fragment>BadTV.glsl</fragment>
+    <textures input="1" output="1"></textures>
+    <parameter type="float" name="iTime" label="iTime">1.0</parameter>
+    <parameter type="float" name="iResolutionX" label="iTime">1.0</parameter>
+    <parameter type="float" name="iResolutionY" label="iTime">1.0</parameter>    
+</filter>
