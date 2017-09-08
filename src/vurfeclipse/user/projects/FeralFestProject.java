@@ -361,12 +361,12 @@ public class FeralFestProject extends Project implements Serializable {
   	        .setSceneName("TextFlash")
   	        //.getSequencesForWords
   	        //.registerCallbackPreset("beat","beat_1", "random")
-  	        .registerCallbackPreset("beat","beat_8", "rotate")
+  	        //.registerCallbackPreset("beat","beat_8", "rotate")
   	        .registerCallbackPreset("beat","beat_16","swivel")
   	        ,
   	      "/out",
   	      "/out"
-  	    ).setMuted(true);
+  	    ).setMuted(false);
   	//).addSequencesForWords(new String[] { "test", "bob", "alice" } )
   	/**/
   	;
@@ -400,11 +400,11 @@ public class FeralFestProject extends Project implements Serializable {
   	//switcher.bindSequence("blend:",  blendScene, "preset 1", 10);
 
 
-    /*Sequence cSequence = new ChainSequence(0)
+    Sequence cSequence = new ChainSequence(0)
     	.addSequence(getSceneForPath("/sc/TextFlash"), 	   "preset 1")
-    	.addSequence(getSceneForPath("/sc/OutputShader"),  "preset 1")
-    	.addSequence(getSceneForPath("/sc/OutputShader2"), "preset 1")
-    ;*/
+    	//.addSequence(getSceneForPath("/sc/OutputShader"),  "preset 1")
+    	//.addSequence(getSceneForPath("/sc/OutputShader2"), "preset 1")
+    ;
 
 
     //switcher.bindSequence("outputModeChange1", cSequence, 4);
@@ -487,9 +487,12 @@ public class FeralFestProject extends Project implements Serializable {
     switcher.bindAndPermute("e2:", "t",   getSceneForPath("/sc/TextFlash"), 5000);*/
 
 
-    //((TextFlashScene)getSceneForPath("/sc/TextFlash")).addSequencesForWords(new String[] {
-    //		":)",
-    //		":D",
+    ((TextFlashScene)getSceneForPath("/sc/TextFlash")).addSequencesForWords(new String[] {
+    		"end is near",
+    		//"the blunders"
+    		//"  FolkTheSystem  ",
+    		//"  DubTheEarth  "
+    		//"etc",
     		/*"BABAL",
     		"Glowpeople",
     		"Socio Suki",
@@ -503,9 +506,9 @@ public class FeralFestProject extends Project implements Serializable {
     		"take trips",
     		"magic dust",
     		"merry xmas"*/
-    //}, 0);
-    //switcher.setBindToRandom(false);
-    //switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
+    }, 0);
+    switcher.setBindToRandom(false);
+    switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
     //switcher.setBindToRandom(true);
 
 

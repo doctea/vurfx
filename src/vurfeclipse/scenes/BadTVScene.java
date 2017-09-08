@@ -98,6 +98,7 @@ public class BadTVScene extends Scene {
 		@Override public ArrayList<Mutable> getMutables() {
 			ArrayList<Mutable> muts = new ArrayList<Mutable>();
 			muts.add(host);//.getFilter("BlendDrawer1"));
+								host.getFilter("BadTV").setMuted(!host.getFilter("BadTV").isMuted());
 			return muts;
 		}
 		public void setValuesForNorm(double norm, int iteration) {
