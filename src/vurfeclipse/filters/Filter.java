@@ -217,6 +217,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     if (out==null) setOutputCanvas(canvas_out);
     if (src==null) setInputCanvas(canvas_in);
     out.beginDraw();
+    /*if (!out.displayable()) {
+    	println("can't draw to out " + out +"!");
+    }*/
     //println("} wrapped beginDraw in " + this);
   }
   public void endDraw () {

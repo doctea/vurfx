@@ -13,6 +13,8 @@ import codeanticode.glgraphics.*;
 import ddf.minim.*;
 
 import java.awt.BorderLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.util.*;
 
 //import javax.media.opengl.*;
@@ -248,7 +250,7 @@ public class VurfEclipse extends PApplet {
 			 return;
 		 }*/
 		 
-		 if (enablecp5) setupControls();
+		 //if (enablecp5 && refCount==1) setupControls();
 		 
 
 		 //size(output_width, output_height + gw_height, gfx_mode);
@@ -256,11 +258,30 @@ public class VurfEclipse extends PApplet {
 		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
 
 		 if (frame != null) {
+			 frame.removeNotify();
+			 		frame.setVisible(false);
 			    frame.setResizable(false);
-			    frame.setLayout(new BorderLayout());
+			    frame.setLayout(new BorderLayout() /*{
+			    	@Override public void {
+			    		
+			    		
+			    	}
+			    }*/);
 			    frame.setLocation(0, 0);
 			    //frame.setSize(output_width, output_height);
-			    frame.setMenuBar(null);
+			    frame.addWindowStateListener(new WindowStateListener() {
+			      public void windowStateChanged(WindowEvent arg0) {
+			         System.out.println(arg0);
+			      }
+			   });
+			 	frame.setUndecorated(true);
+
+			   frame.setVisible(true);
+			   frame.addNotify();
+			   //frame.dispose();
+			   //frame = null;
+			   //frame.setUndecorated(true);
+			   frame.setMenuBar(null);
 		 }
 
 	     this.delaySetup();
