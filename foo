@@ -1,0 +1,27 @@
+diff -r 26de880af15f .classpath
+--- a/.classpath	Sun Aug 13 21:05:50 2017 +0100
++++ b/.classpath	Sun Aug 13 21:15:39 2017 +0100
+@@ -5,7 +5,7 @@
+ 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
+ 		</attributes>
+ 	</classpathentry>
+-	<classpathentry exported="true" kind="lib" path="lib/base/opengl-orig/library/opengl.jar">
++	<classpathentry exported="true" kind="lib" path="lib/base/opengl-orig/library/opengl.jar" sourcepath="lib/base/opengl/glgraphics-code/src/codeanticode/glgraphics">
+ 		<attributes>
+ 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
+ 		</attributes>
+diff -r 26de880af15f .hgignore
+--- a/.hgignore	Sun Aug 13 21:05:50 2017 +0100
++++ b/.hgignore	Sun Aug 13 21:15:39 2017 +0100
+@@ -2,6 +2,11 @@
+ 
+ #!! ERROR: proces is undefined. Use list command to see defined gitignore types !!#
+ 
++## library src
++lib/*/*/*/
++lib/*/*/
++lib/*/
++
+ bin/$
+ src/data/image-sources$
+ bin/data/image-sources$

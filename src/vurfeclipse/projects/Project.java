@@ -9,6 +9,7 @@ import vurfeclipse.connectors.RestConnector;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -457,49 +458,41 @@ public abstract class Project implements Serializable {
       selectPreviousScene();
     } else if (key==']') {
       selectNextScene();
-    } else  if (key=='s') {
-      //println(this.getSelectedScene().getSelectedFilter().serialize());
-      //println(this.serialize());
-
-      saveProject();
-    } else if (key==';' || key=='f') {		// FORWARDS
-    	if (this.sequencer!=null) this.sequencer.setForward();
-    } else if (key=='j' ) {	// HISTORY BACK
-    	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
-    		((SequenceSequencer)this.sequencer).histPreviousSequence(1);
-    	}
-    } else if (key=='k' ) { // HISTORY FORWARD
-    	if (this.sequencer!=null && this.sequencer instanceof SequenceSequencer) {
-    		((SequenceSequencer)this.sequencer).histNextSequence(1);
-    	}
-    } else if (key=='l') {
-    	println("toggling sequencer");
-    	if (this.sequencer!=null) {
-    		println("toggling sequencer " + this.sequencer.toggleLock());
-    	}
+    } else if (key=='q') {
+    	setTimeScale(getTimeScale()+0.01d);
+    } else if (key=='a') {
+    	setTimeScale(getTimeScale()-0.01d);
     } else if (key=='\'') {
     	this.enableSequencer = !this.enableSequencer;
     	println("toggled enableSequencer to " + this.enableSequencer);
     } else if (key=='m') {
     	this.toggleStreams();
-    	println("toggled enableStraems to " + this.enableStreams);
-    } else/* if (key=='\'') {  // SOLO SCENE
-      Iterator i = scenes.iterator();
-      while (i.hasNext()) {
-        Scene sc = (Scene)i.next();
-        if (sc!=this.getSelectedScene())
-          sc.setMuted(true);
-        else
-          sc.setMuted(false);
-      }
-    } else*/ if (key=='-') {
+    	println("toggled enableStreams to " + this.enableStreams);
+    } else if (key=='-') {
       Iterator<Scene> i = scenes.iterator();
       while(i.hasNext())
         ((Scene)i.next()).sendKeyPressed('-');
-    /* }else if (key=='p') {
-    	println(rsConn.getURLs().toString());
-    	System.exit(0);
-    } */ 
+	    /* if (key=='\'') {  // SOLO SCENE
+	      Iterator i = scenes.iterator();
+	      while (i.hasNext()) {
+	        Scene sc = (Scene)i.next();
+	        if (sc!=this.getSelectedScene())
+	          sc.setMuted(true);
+	        else
+	          sc.setMuted(false);
+	      }
+	    } else*/ 
+	    /* }else if (key=='p') {
+	    	println(rsConn.getURLs().toString());
+	    	System.exit(0);
+	    } */ 
+      /*} else  if (key=='s') {
+      //println(this.getSelectedScene().getSelectedFilter().serialize());
+      //println(this.serialize());
+
+      saveProject(); */
+    } else if (this.sequencer.sendKeyPressed(key)) {
+    	println ("Key " + key + " handled by sequencer!");
   	} else {
       Scene sc = this.getSelectedScene();
 
@@ -657,6 +650,10 @@ public abstract class Project implements Serializable {
 		return this.timeScale; //1.0d;
 	}
 	public void setTimeScale(double f) {
+		//println("setTimeScale(" + f + ")");;
+		/*if (f>2.0d) {
+			println ("setting timescale to " + f + "!");
+		}*/
 		this.timeScale = f;
 	// TODO Auto-generated method stub
 	}

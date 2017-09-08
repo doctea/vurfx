@@ -1,5 +1,12 @@
 package vurfeclipse.sequence;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,15 +47,42 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  public SequenceSequencer (Project host, int w, int h) {
 	    //super(host, w,h);
-		this.host = host;
-		this.w = w;
-		this.h = h;
+			this.host = host;
+			this.w = w;
+			this.h = h;
 
 	    //this.filterCount = 16;
 	    //this.filters = new Filter[filterCount];
 	  }
 
 
+	  public void saveHistory() throws IOException {
+	  	this.saveHistory("history.txt");
+	  }
+		public void saveHistory(String fileName) throws IOException {
+			FileOutputStream fos = new FileOutputStream(fileName);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(this.historySequenceNames);
+			oos.close();
+		}
+		
+		public void loadHistory()throws IOException {
+			// TODO Auto-generated method stub
+			loadHistory("history.txt");
+		}
+		public void loadHistory(String fileName) throws IOException {
+			FileInputStream fis = new FileInputStream(fileName);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			try {
+				this.historySequenceNames = (ArrayList<String>) ois.readObject();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ois.close();
+		}
+
+	  
 	  @Override
 	  public boolean checkReady(int max_iterations) {
 	  	if (getActiveSequence()!=null && getActiveSequence().getLengthMillis()<100) {
@@ -219,8 +253,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  public void randomSequence() {
 		  int count = randomPool.size();
+		  int chosen;
 		  try {
-			  int chosen = (int)APP.getApp().random(0,count);
+			  chosen = (int)APP.getApp().random(0,count);
 			  if (chosen<seqList.size()) seq_pos = chosen; // set list index
 			  //changeSequence((String)sequences.keySet().toArray()[chosen]);
 			  println("Chose random element " + chosen + " of " + count + "('" + (String)randomPool.get(chosen) + "')");
@@ -245,28 +280,40 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  	}
 	  }
 	  
-	  public void histPreviousSequence(int distance) {
+	  /*public void histPreviousSequence(int distance) {
+	  	this.histPreviousSequence(distance, true);
+	  }*/
+	  
+	  public void histPreviousSequence(int distance, boolean restart) {
 	  	int size = this.historySequenceNames.size();
 	  	historyCursor-=distance;
-	  	if (historyCursor<0) historyCursor = 0;
-	  	if (this.historySequenceNames.get(historyCursor)!=null) {
-	  		host.println("SequenceSequencer moving history cursor to " + historyCursor);
-	  		String previousSequenceName = this.historySequenceNames.get(historyCursor);
+	  	if (historyCursor<0) {
+	  		historyCursor = 0;
+	  		host.println("SequenceSequencer already at start of history");
+	  	} else {
+	  		if (this.historySequenceNames.get(historyCursor)!=null) {
+	  			host.println("SequenceSequencer moving history cursor to " + historyCursor);
+	  			String previousSequenceName = this.historySequenceNames.get(historyCursor);
 	  		
-	  		changeSequence(previousSequenceName, false, true);
-	  		//if (size>1) this.historySequenceNames.remove(size-1);
+	  			changeSequence(previousSequenceName, false, restart);
+	  			//if (size>1) this.historySequenceNames.remove(size-1);
+	  		}
 	  	}
 	  }
-	  public void histNextSequence(int distance) {
+	  public void histNextSequence(int distance, boolean restart) {
 	  	int size = this.historySequenceNames.size();
   		
 	  	historyCursor+=distance;
-	  	if (historyCursor>size-1) historyCursor = size-1;
-
-  		host.println("SequenceSequencer moving history cursor to " + historyCursor);
-  		String previousSequenceName = this.historySequenceNames.get(historyCursor);
+	  	if (historyCursor>size-1) {
+	  		historyCursor = size-1;
+	  		
+	  		host.println("SequenceSequencer already at end of history");
+	  	} else {
+	  		host.println("SequenceSequencer moving history cursor to " + historyCursor);
+	  		String previousSequenceName = this.historySequenceNames.get(historyCursor);
 	  	
-  		changeSequence(previousSequenceName, false, true);
+	  		changeSequence(previousSequenceName, false, restart);
+	  	}
 	  }
 	  
 	  public void changeSequence(String sequenceName) {
@@ -458,6 +505,24 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
+	public void restartSequence() {
+		println("restarting" + activeSequenceName);
+		this.getActiveSequence().iteration = 0;
+		this.getActiveSequence().start();
+	}
+
+
+	int sequenceDistance = 1;
+	public void cutSequence() {
+		// go up and down cursor alternately; if nothing to switch to, do a random mahfucker?
+		if (sequenceDistance>0) {
+			this.histNextSequence(sequenceDistance,false);
+		} else {
+			this.histPreviousSequence(-sequenceDistance,false);
+		}
+			
+		if (sequenceDistance == 1) sequenceDistance = -1; else if (sequenceDistance == -1) sequenceDistance = 1; 
+	}
 
 
 	  /*
@@ -473,5 +538,33 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	   * public void changeSequence(Sequence seq) {
 
 	  }*/
+	
+	@Override public boolean sendKeyPressed(char key) {
+		if (key=='s') {
+    	try {
+    			saveHistory();
+    	} catch (IOException e) {
+    		System.out.println("Couldn't save history! " + e);
+    	}
+    } /*else if (key=='l') {
+    	try {
+    			loadHistory();
+    	} catch (IOException e) {
+    		System.out.println("Couldn't load history! " + e);
+    	}
+    } */else if (key=='j' || key=='J') {	// HISTORY BACK
+      histPreviousSequence(1,key=='j'?true:false);
+    } else if (key=='k' || key=='K') { // HISTORY FORWARD
+      histNextSequence(1,key=='k'?true:false);
+    } else if (key=='O' ) { // RESTART CURRENT SEQUENCE (stutter effect)
+      restartSequence();
+    } else if (key=='o') { // HISTORY 'cut' between cursor/next (or do random if at end?)
+      cutSequence();
+    } else if (super.sendKeyPressed(key)) {
+    } else {
+    	return false;
+    }
+		return true;
+	}
 
 }

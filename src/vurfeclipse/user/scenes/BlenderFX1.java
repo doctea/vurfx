@@ -37,9 +37,8 @@ public class BlenderFX1 extends SimpleScene {
     }
     
     public void setupSequences() {
-		sequences.put("preset 1", new BlendSequence1(this, 2000));
-		sequences.put("preset 2_next_", new BlendSequence2(this, 2000));
-
+			sequences.put("preset 1", new BlendSequence1(this, 2000));
+			sequences.put("preset 2_next_", new BlendSequence2(this, 2000));
     }
     
 }
@@ -55,7 +54,7 @@ class BlendSequence1 extends Sequence {
 		host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 	}
 	@Override public void onStart() {
-		this.setLengthMillis((int)APP.getApp().random(1,5) * 500);
+		//this.setLengthMillis((int)random(1,5) * 500);
 		/*for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
 			host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
 		for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 

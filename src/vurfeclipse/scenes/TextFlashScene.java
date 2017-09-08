@@ -159,7 +159,7 @@ public class TextFlashScene extends Scene {
 
   public TextFlashScene(Project host, int w, int h) {
     this(host, w, h, new String[] {
-          ";)", ":)", "MDMA", "LSD-25", "DMT", "2c-b", "2c-c", "2c-d", "4homet", "delysid", "MDA", "303", "909", "808",
+          ";)", ":P", "MDMA", "LSD-25", "DMT", "2c-b", "2c-c", "2c-d", "4homet", "delysid", "MDA", "303", "909", "808",
 
           "take trips", "magic dust", "Socio Suki",
 
@@ -238,9 +238,10 @@ public class TextFlashScene extends Scene {
 			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 		}
 		@Override public void onStart() {
-	   		if (APP.getApp().random(0f,1.0f)>=0.5f)
+			((TextDrawer)(host.host.getSceneForPath(getPath()).getFilter("BlendDrawer"))).setText("FeralFest");
+	   		if (random(0f,1.0f)>=0.5f)
 	   			((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
-    		//((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setMuted((APP.getApp().random(0f,1.0f)>=0.25f));
+    		//((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setMuted((random(0f,1.0f)>=0.25f));
 		}
 		@Override public void onStop() {	}
 	}

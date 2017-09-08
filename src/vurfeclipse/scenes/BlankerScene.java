@@ -55,10 +55,10 @@ public class BlankerScene extends SimpleScene {
 			// TODO Auto-generated constructor stub
 		}
 		@Override public void onStart() {
-			/*if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
-			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-			if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Edges").toggleMute();*/
+			/*if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
+			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((random(0f,1.0f)>=0.2f));
+			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((random(0f,1.0f)>=0.2f));
+			if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Edges").toggleMute();*/
 			getFilter("BlankFilter").changeParameterValue("alpha", 255);
 		}
 		@Override public void onStop() {	}
@@ -71,10 +71,10 @@ public class BlankerScene extends SimpleScene {
 		}
 				
 		@Override public void onStart() {
-			/*if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
-			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-			if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Edges").toggleMute();*/
+			/*if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
+			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((random(0f,1.0f)>=0.2f));
+			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((random(0f,1.0f)>=0.2f));
+			if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Edges").toggleMute();*/
 			getFilter("BlankFilter").changeParameterValue("alpha", 16);
 		}
 
@@ -94,10 +94,10 @@ public class BlankerScene extends SimpleScene {
 			getFilter("BlankFilter").changeParameterValue("alpha", 32 + (int) (200 * norm));
 		}
 		@Override public void onStart() {
-			/*if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
-			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-			if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Edges").toggleMute();*/
+			/*if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
+			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((random(0f,1.0f)>=0.2f));
+			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((random(0f,1.0f)>=0.2f));
+			if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Edges").toggleMute();*/
 			//getFilter("BlankFilter").changeParameterValue("alpha", 16);
 		}
 		@Override public void onStop() {	

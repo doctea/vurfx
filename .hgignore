@@ -2,6 +2,11 @@
 
 #!! ERROR: proces is undefined. Use list command to see defined gitignore types !!#
 
+## library src
+lib/*/*/*/
+lib/*/*/
+lib/*/
+
 bin/$
 src/data/image-sources$
 bin/data/image-sources$
@@ -57,4 +62,9 @@ syntax:glob
 *.jpeg
 *.log
 
+*.xmle
+
 lib/user/GSVideo-*
+
+syntax: regexp
+\.glc$
