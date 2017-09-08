@@ -147,17 +147,11 @@ public class VurfEclipse extends PApplet {
 
 
 	//@Override
-	/*boolean resizeRenderer () {
+	boolean resizeRenderer () {
 		System.err.println("resizeRenderer() returning false");
 		return false;
-	}*/
-	
-	@Override
-	public void resize(int x, int y) {
-	  super.resize(x,y);
-	  System.err.println("Resized applet to new dimensions: " + x + ", " + y);
 	}
-	
+
 	//boolean enablecp5 = false;
 	public static boolean enablecp5 = true;//false;//true; //true;
 
@@ -256,7 +250,7 @@ public class VurfEclipse extends PApplet {
 			 return;
 		 }*/
 		 
-		 if (enablecp5) setupControls();
+		 //if (enablecp5 && refCount==1) setupControls();
 		 
 
 		 //size(output_width, output_height + gw_height, gfx_mode);
@@ -264,6 +258,8 @@ public class VurfEclipse extends PApplet {
 		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
 
 		 if (frame != null) {
+			 frame.removeNotify();
+			 		frame.setVisible(false);
 			    frame.setResizable(false);
 			    frame.setLayout(new BorderLayout() /*{
 			    	@Override public void {
@@ -272,20 +268,23 @@ public class VurfEclipse extends PApplet {
 			    	}
 			    }*/);
 			    frame.setLocation(0, 0);
-			    	    
 			    //frame.setSize(output_width, output_height);
 			    frame.addWindowStateListener(new WindowStateListener() {
 			      public void windowStateChanged(WindowEvent arg0) {
 			         System.out.println(arg0);
 			      }
 			   });
+			 	frame.setUndecorated(true);
+
+			   frame.setVisible(true);
+			   frame.addNotify();
 			   //frame.dispose();
 			   //frame = null;
-			   frame.setUndecorated(true);
+			   //frame.setUndecorated(true);
 			   frame.setMenuBar(null);
 		 }
 
-	   this.delaySetup();
+	     this.delaySetup();
 
 
 	     
@@ -334,7 +333,9 @@ public class VurfEclipse extends PApplet {
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
-		 pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
+		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
+		 //pr = new MutanteProject(desired_width, desired_height, gfx_mode);
+		 pr = new FeralFestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
 		 //pr = new PharmacyProject(desired_width, desired_height, gfx_mode);
@@ -423,7 +424,7 @@ public class VurfEclipse extends PApplet {
 	public void draw () {
 	//System.out.println("Draw!");
 		
-	if (!ready) return;
+		if (!ready) return;
 	
 		/*if (texWin==null) {
 			GLTextureWindow texWin = new GLTextureWindow(this, 0, 0, this.desired_width, this.desired_height);
@@ -438,7 +439,7 @@ public class VurfEclipse extends PApplet {
 	 if (enableStreams)
 	   pr.processStreams(timeMillis);
 
-	 if (enableSequencer)
+	if (enableSequencer)
 		 pr.processSequencer(timeMillis);
 
 	 //offscreen.beginDraw();
@@ -447,6 +448,7 @@ public class VurfEclipse extends PApplet {
 
 	 if (frameCount>25) {	// skip rendering first 25 frames
 	   pr.applyGL(offscreen, output_width, output_height);
+	   //texWin.render();
 	 }
 	 //offscreen.endDraw();
 
@@ -579,8 +581,4 @@ public class VurfEclipse extends PApplet {
 	/*public PGraphics createBuffer (int width, int height, String mode) {
 	return (PGraphics) createGraphics(w, h, gfx_mode);
 	}*/
-
-
-
-
 }
