@@ -1,6 +1,7 @@
 //precision mediump float;
 
-varying vec2 position;
+//varying vec2 position;
+#define position gl_TexCoord[0].st
 uniform float time;
 
 float wave(vec2 p, float angle) {
@@ -23,7 +24,7 @@ void main() {
   brightness = wrap(brightness);
 
   gl_FragColor.rgb = vec3(brightness);
-  gl_FragColor.r = 1.;
+  /*gl_FragColor.r = 1.;
   gl_FragColor.g = 0.5;
-  gl_FragColor.a = 1.;
+  gl_FragColor.a = 1.;*/
 }

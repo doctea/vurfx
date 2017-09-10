@@ -44,8 +44,8 @@ public class OpenNIFilter extends Filter {
     super(sc);
   }
 
-  public OpenNIFilter(SimpleScene ils1, int cameraId) {
-  	super(ils1);
+  public OpenNIFilter(Scene sc, int cameraId) {
+  	super(sc);
 		// TODO Auto-generated constructor stub
   	this.cameraId = cameraId;
 	}
@@ -121,10 +121,9 @@ public class OpenNIFilter extends Filter {
 	    //context.enableRGB(320,240,10);
 	    context.enableRGB(); //320,240,10);
 	    //context.enableIR();
-	    
-	    //context.
-
+   
 	    // align depth data to image data
+	    
 	    context.alternativeViewPointDepthToImage();
 	    context.setDepthColorSyncEnabled(true);
 
@@ -147,6 +146,12 @@ public class OpenNIFilter extends Filter {
 	    this.addParameter("rgb", new Boolean(true));//, 1.0f, 5.0f);
 	    this.addParameter("depth", new Boolean(true)); //(0), -sc.w/2, sc.w/2);
 	    this.addParameter("pointCloud", new Boolean(false)); //(0), -sc.w/2, sc.w/2);
+	    
+	    this.addParameter("pc_rot_x", new Integer(0), new Integer(0), new Integer(360));
+	    this.addParameter("pc_rot_y", new Integer(0), new Integer(0), new Integer(360));
+	    this.addParameter("pc_rot_z", new Integer(0), new Integer(0), new Integer(360));
+	    this.addParameter("pc_zoom", new Integer(-1600), new Integer(-10000), new Integer(10000));
+	    
 	    //this.addParameter("ir", new Boolean(false)); //(0), -sc.w/2, sc.w/2);
 	    //this.addParameter("translate_y", new Integer(0), -sc.h/2, sc.h/2);
 	    /*this.addParameter("tint", new Integer(128), 0, 255);//new Integer(128));
@@ -192,7 +197,7 @@ public class OpenNIFilter extends Filter {
 
     if ((Boolean)this.getParameterValue("depth")==true) drawDepth();
 
-    //if ((Boolean)this.getParameterValue("pointCloud")==true) drawPointCloud();
+    if ((Boolean)this.getParameterValue("pointCloud")==true) drawPointCloud();
 
     //if ((Boolean)this.getParameterValue("ir")==true) drawIR();
     return true;
@@ -271,38 +276,42 @@ public class OpenNIFilter extends Filter {
   public void drawPointCloud() {
 	  out.perspective(APP.getApp().radians(45),
               (float)out.width/(float)out.height,
-              10,150000);
+              10,15000);
 
-	  System.out.println(this+"#drawPointCloud()");
-	  // update the cam
+	  //System.out.println(this+"#drawPointCloud()");
+	  // update the cam    
 	  //context.update();
 
-	  GLGraphicsOffScreen out = sc.getCanvas("pointCloud").getSurf();
+	  //GLGraphicsOffScreen out = sc.getCanvas("pointCloud").getSurf();
 
 	  out.pushMatrix();
-	  //out.background(random(255),0,0);
+	  out.background(random(255),0,0);
 	  out.fill(random(255));
-	  out.stroke(random(255));
-	  out.rect(0,out.width/2,0,out.height/2);
+	  //out.stroke(random(255));
+	  //out.rect(0,out.width/2,0,out.height/2);
 
 	  //if (true) return;
 
 	  out.translate(out.width/2, out.height/2, 0);
 	  out.rotateX(rotX);
 	  out.rotateY(rotY);
-	  out.scale(zoomF);
+	  //out.scale(zoomF);
 
 	  PImage  rgbImage = context.rgbImage();
 	  //rgbImage.loadPixels();
 	  int[]   depthMap = context.depthMap();
-	  int     steps   = 4;  // to speed up the drawing, draw every third point
+	  int     steps   = 8;  // to speed up the drawing, draw every third point
 	  int     index;
 	  PVector realWorldPoint;
 	  int pixelColor;
 
 	  out.strokeWeight((float)steps/2);
 
-	  out.translate(0,0,-1000);  // set the rotation center of the scene 1000 infront of the camera
+	  /*out.rotateX((float) Math.toRadians((Integer)this.getParameterValue("pc_rot_x")));
+	  out.rotateY((float) Math.toRadians((Integer)this.getParameterValue("pc_rot_y")));
+	  out.rotateZ((float) Math.toRadians((Integer)this.getParameterValue("pc_rot_z")));*/
+	  
+	  out.translate(0,0,(Integer)this.getParameterValue("pc_zoom"));  // set the rotation center of the scene 1000 infront of the camera
 
 	  PVector[] realWorldMap = context.depthMapRealWorld();
 	  out.beginShape(processing.core.PConstants.POINTS);
@@ -316,12 +325,21 @@ public class OpenNIFilter extends Filter {
 	        // get the color of the point
 	        pixelColor = rgbImage.pixels[index];
 	        out.stroke(pixelColor);
-	        out.stroke(255);//haxxx
+	        //out.stroke(255);//haxxx
 
 	        // draw the projected point
 	        realWorldPoint = realWorldMap[index];
-	        out.vertex(realWorldPoint.x,realWorldPoint.y,realWorldPoint.z);  // make realworld z negative, in the 3d drawing coordsystem +z points in the direction of the eye
-
+	        //realWorldPoint.rotate((float) Math.toRadians((Integer)this.getParameterValue("pc_rot_x")), (float) Math.toRadians((Integer)this.getParameterValue("pc_rot_y")), (float) Math.toRadians((Integer)this.getParameterValue("pc_rot_z")));
+	        out.vertex(
+	        		(float) (realWorldPoint.x * Math.sin(Math.toRadians((Integer)this.getParameterValue("pc_rot_x")))),
+	        		(float) (realWorldPoint.y * Math.sin(Math.toRadians((Integer)this.getParameterValue("pc_rot_y")))),
+	        		(float) (realWorldPoint.z * Math.sin(Math.toRadians((Integer)this.getParameterValue("pc_rot_z"))))
+	        		
+	        		/*(float) (realWorldPoint.x * (Integer)this.getParameterValue("pc_rot_x")),
+	        		(float) (realWorldPoint.y * (Integer)this.getParameterValue("pc_rot_y")),
+	        		(float) (realWorldPoint.z * (Integer)this.getParameterValue("pc_rot_z"))*/
+	        );  // make realworld z negative, in the 3d drawing coordsystem +z points in the direction of the eye
+	        	        
 	        System.out.println("drawing one at " + realWorldPoint);
 	      } else {
 	    	  //System.out.println("Skipped 'cos depth is >0");
@@ -332,11 +350,11 @@ public class OpenNIFilter extends Filter {
 
 	  out.popMatrix();
 
-	  out.rect(out.width/2,out.height/2,20,20);
+	  //out.rect(out.width/2,out.height/2,20,20);
 
 	  // draw the kinect cam
-	  out.strokeWeight(1);
-	  context.drawCamFrustum();
+	  //out.strokeWeight(1);
+	  //context.drawCamFrustum();
 
 
   }

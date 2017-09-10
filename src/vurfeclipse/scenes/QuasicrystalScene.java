@@ -42,7 +42,7 @@ public class QuasicrystalScene extends Scene {
 	
 							self.getFilter("Quasicrystal").changeParameterValue("time",
 			    					//value
-			    					adjusted
+			    					adjusted/2000
 			    		);
 			    	}
 		    	}
@@ -53,7 +53,7 @@ public class QuasicrystalScene extends Scene {
 	    //// START PLASMA SCENE
 	    //plasmaScene.setCanvas("pix0","/pix0");
 	    //os2.setCanvas("blendresult", "/blendresult");
-	    addFilter(new ShaderFilter(this,"Swirl.xml") {
+	    addFilter(new ShaderFilter(this,"Quasicrystal.xml") {
 	    	@Override
 	    	public void setParameterDefaults() {
 	    		super.setParameterDefaults();
