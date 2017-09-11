@@ -117,11 +117,11 @@ public class MinimalProject extends Project implements Serializable {
     blendScene.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
     blendScene.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
     
-    //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
     blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setOutputCanvas("/pix0").setFilterName("kinect1")));
     blendScene.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
     
-    /*blendScene.addSequence("_next_camera", new SimpleSequence() {
+    blendScene.addSequence("_next_camera", new SimpleSequence() {
     	int camera = 0;
     	int max_camera = 2;
 			@Override
@@ -150,13 +150,13 @@ public class MinimalProject extends Project implements Serializable {
 			public boolean readyToChange(int max_i) {
 				return true;				
 			}
-    });*/
+    });
     
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
     switcher.bindSequence("blend", blendScene, "preset 1", 100).setLengthMillis(1000);
     switcher.bindSequence("blend2_next_", blendScene, "preset 2_next_", 100).setLengthMillis(0);
-    //switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
+    switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
 
 
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
@@ -190,7 +190,7 @@ public class MinimalProject extends Project implements Serializable {
 
     // OUTPUT FILTERS
 
-    PlasmaScene plasmaScene = (PlasmaScene)(new PlasmaScene(this,w,h).setSceneName("PlasmaScene"));
+    /*PlasmaScene plasmaScene = (PlasmaScene)(new PlasmaScene(this,w,h).setSceneName("PlasmaScene"));
     plasmaScene.setCanvas("out", "/out");
 
     addScene(plasmaScene);
@@ -203,7 +203,7 @@ public class MinimalProject extends Project implements Serializable {
     switcher.bindSequence("plasma_3", plasmaScene, "preset 3",10);
     //switcher.bindSequence("plasma_4", plasmaScene, "preset 4",10);
 
-    /// END PLASMA SCENE
+    /// END PLASMA SCENE*/
     
     /// START Quasicrystal SCENE
     QuasicrystalScene quasicrystalScene = (QuasicrystalScene)(new QuasicrystalScene(this,w,h).setSceneName("QuasicrystalScene"));
@@ -218,55 +218,28 @@ public class MinimalProject extends Project implements Serializable {
 		
     /// END Quasicrystal SCENE
 
-    this.addSceneInputOutputCanvas(
+    /*this.addSceneInputOutputCanvas(
       //os,
       new OutputFX1(this,w,h).setSceneName("OutputShader").setCanvas("pix0", "/pix0").setCanvas("pix1", "/pix1"),
       "/out",
       "/out"
     );
+    */
 
     // OUTPUT FILTER 2
+    /*
     this.addSceneInputOutputCanvas(
     		new OutputFX2(this,w,h).setSceneName("OutputShader2").setCanvas("pix0", "/pix0").setCanvas("pix1", "/pix1"),
     		"/out",
     		"/out"
     );
+    */
 
     this.addSceneInputOutputCanvas(
     		new OutputFX3(this,w,h).setSceneName("OutputShader3").setCanvas("pix0", "/pix0"),
     		"/out",
     		"/out"
     ).setMuted();
-
-
-
-    /*((TextFlashScene)*/this.addSceneInputOutputCanvas(
-  	      new TextFlashScene(this,w,h  /*, new String[] {
-  	        //"Nozstock", "Nozstock: the Hidden Valley",
-  	        "Vurf",
-  	        "Boars Head",
-  	        ":)",
-  	        ":D"
-  	      }*/
-  	    		  )/*.setFonts(new String[] {
-  	    	"Caveman-128.vlw", "Dinosaur-512.vlw", "DinosBeeline-512.vlw", "LostWorld-128.vlw", "DinosaurJrPlane-256.vlw", "DinosaurSkin-128.vlw"
-  	      })  */
-  	        .setSceneName("TextFlash")
-  	        //.getSequencesForWords
-  	        //.registerCallbackPreset("beat","beat_1", "random")
-  	        //.registerCallbackPreset("beat","beat_8", "rotate")
-  	        .registerCallbackPreset("beat","beat_16","swivel")
-  	        ,
-  	      "/out",
-  	      "/out"
-  	    ).setMuted(false);
-  	//).addSequencesForWords(new String[] { "test", "bob", "alice" } )
-  	/**/
-  	;
-
-    //switcher.setBindToRandom(true);
-    //switcher.setRandomMode(true);
-
 
 		Sequence doubleSequence = new ChainSequence(2000)
 			.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
@@ -275,41 +248,35 @@ public class MinimalProject extends Project implements Serializable {
 		;
     switcher.bindSequence("d1:", doubleSequence, 10);
     
-  	Sequence doubleSequence2 = new ChainSequence(2000)
+  	/*Sequence doubleSequence2 = new ChainSequence(2000)
   			//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
   			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 2")
   			.addSequence(blendScene, "preset 1")
   			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 3")
   			//.addSequence(blendScene, "preset 1")
   		;
-  	switcher.bindSequence("d2:", doubleSequence2, 5);
+  	switcher.bindSequence("d2:", doubleSequence2, 5);*/
   	
   	Sequence doubleSequence3 = new ChainSequence(2000)
   			.addSequence(getSceneForPath("/sc/BlobScene2"), "preset 1")
   			.addSequence(blendScene, "preset 1")
   	;
-  	switcher.bindSequence("d2:", doubleSequence3, 5);
+  	switcher.bindSequence("d1:", doubleSequence3, 5);
   	
   	//switcher.bindSequence("blend:",  blendScene, "preset 1", 10);
 
 
-    Sequence cSequence = new ChainSequence(0)
+    /*Sequence cSequence = new ChainSequence(0)
     	.addSequence(getSceneForPath("/sc/TextFlash"), 	   "preset 1")
     	//.addSequence(getSceneForPath("/sc/OutputShader"),  "preset 1")
     	//.addSequence(getSceneForPath("/sc/OutputShader2"), "preset 1")
-    ;
+    ;*/
 
-
-    //switcher.bindSequence("outputModeChange1", cSequence, 4);
-    /*switcher.bindSequence("outputModeChange5", opSequence);
-    switcher.bindSequence("outputModeChange6", opSequence);
-    switcher.bindSequence("outputModeChange7", opSequence);
-    switcher.bindSequence("outputModeChange8", opSequence);*/
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
     		new TunnelScene(this, w, h).setCanvas("temp", "/temp2")
 			//.addFilter(new BlendDrawer()))
 		, "/pix0", "/out"
-	);
+);
     int tunnel_weight = 1;
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blobScene, "preset 2"), tunnel_weight);
     switcher.bindSequence("tunnel_1_blob_preset_2_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 2"), tunnel_weight);
@@ -329,8 +296,8 @@ public class MinimalProject extends Project implements Serializable {
 	    		, "/out", "/out"
 	);
     tunnel_weight = 5;
-    switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(plasmaScene, "preset 1"), tunnel_weight);
-    switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(plasmaScene, "preset 2"), tunnel_weight);
+    //switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(plasmaScene, "preset 1"), tunnel_weight);
+    //switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(plasmaScene, "preset 2"), tunnel_weight);
     switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene2, "preset 1"), tunnel_weight);
     switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene2, "preset 2"), tunnel_weight);
     switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(doubleSequence), tunnel_weight/5);
@@ -339,69 +306,27 @@ public class MinimalProject extends Project implements Serializable {
     switcher.bindSequence("tunnel_2_blob_wobble_2",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene, "preset 2"), tunnel_weight/5);
     switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 3").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), tunnel_weight*2);
 
-    
-    
-    //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
-    //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
-    //switcher.bindAndPermute("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), getSceneForPath("/sc/OutputShader2"), 5000);
-
-    /*switcher.bindSequence("tunnel_2_blob_wobble_3_fade_kaleido", new ChainSequence(2000)
-    			.addSequence(ts2, "preset 3")
-    			.addSequence(blobScene, "preset 4")
-    			.addSequence(getSceneForPath("/sc/BlankerScene"), "fade")
-    			.addSequence(getSceneForPath("/sc/OutputShader2"), "show_kaleido")
-    			//.addSequence(getSceneForPath("/sc/OutputShader2"), "show_feedback")
-    		, 50
-    );*/
-	//), "preset 1", 20);
-
-    switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader"), 5000);
+    /*switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader"), 5000);
     switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader2"), 5000);
     switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader"), 5000);
-    switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader2"), 5000);
+    switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader2"), 5000);*/
 
     //switcher.bindAndPermute("t2:", "tunnel_2_", "t1:", 5000);
 
-    switcher.bindAndPermute("t3_blanker", "t1:", getSceneForPath("/sc/BlankerScene"), 5000);
-    switcher.bindAndPermute("t3_blanker", "t2:", getSceneForPath("/sc/BlankerScene"), 5000);
+    switcher.bindAndPermute("t3_blanker", "t", getSceneForPath("/sc/BlankerScene"), 5000);
+    switcher.bindAndPermute("t3_blanker", "t", getSceneForPath("/sc/BlankerScene"), 5000);
 
     //switcher.bindAndPermute("t4", "t3_blanker", getSceneForPath("/sc/BlankerScene"), 5000);
 
-    switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader"), 5000);
-    switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader2"), 5000);
-    switcher.bindAndPermute("d2:", doubleSequence2, getSceneForPath("/sc/OutputShader"), 5000);
-    switcher.bindAndPermute("d2:", doubleSequence2, getSceneForPath("/sc/OutputShader2"), 5000);
+    //switcher.bindAndPermute("d", doubleSequence, getSceneForPath("/sc/OutputShader"), 5000);
+    //switcher.bindAndPermute("d", doubleSequence, getSceneForPath("/sc/OutputShader2"), 5000);
+    //switcher.bindAndPermute("d2:", doubleSequence2, getSceneForPath("/sc/OutputShader"), 5000);
+    //switcher.bindAndPermute("d2:", doubleSequence2, getSceneForPath("/sc/OutputShader2"), 5000);
     
     //switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader3"), 5000);
     //switcher.bindAndPermute("t3:", "d", getSceneForPath("/sc/OutputShader3"), 5000);
-
-    
-    /*switcher.bindAndPermute("e1:", "d1:", getSceneForPath("/sc/TextFlash"), 5000);
-    switcher.bindAndPermute("e2:", "t",   getSceneForPath("/sc/TextFlash"), 5000);*/
-
-
-    ((TextFlashScene)getSceneForPath("/sc/TextFlash")).addSequencesForWords(new String[] {
-    		//"end is near",
-    		//"the blunders"
-    		//"  FolkTheSystem  ",
-    		//"  DubTheEarth  "
-    		//"etc",
-    		/*"BABAL",
-    		"Glowpeople",
-    		"Socio Suki",
-    		"what about the pig",
-    		"hold back!",
-    		"lied to me",
-    		"identity",
-    		"dapper little man",
-    		"lazy",
-    		"bad rabbit",
-    		"take trips",
-    		"magic dust",
-    		"merry xmas"*/
-    }, 0);
+  
     switcher.setBindToRandom(false);
-    switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
     //switcher.setBindToRandom(true);
 
 
@@ -411,7 +336,7 @@ public class MinimalProject extends Project implements Serializable {
     	/*switcher.bindAndPermute("wat2_", "d", ts2, 75*l);
     	switcher.bindAndPermute("wat3_", "t", ts1, 250*l);
     	switcher.bindAndPermute("wat3_", "t", ts2, 500*l);*/
-    	switcher.bindAndPermute("vd1"+l+":", "d1", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+    	/*switcher.bindAndPermute("vd1"+l+":", "d1", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
     	switcher.bindAndPermute("vd2_"+l+":", "d2", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
     	switcher.bindAndPermute("vt1_"+l+":", "t1:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
     	switcher.bindAndPermute("vt2_"+l+":", "t2:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
@@ -419,14 +344,8 @@ public class MinimalProject extends Project implements Serializable {
     	switcher.bindAndPermute("bv3_"+l+":", "blob", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
     	switcher.bindAndPermute("bv2_"+l+":", "blob", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
     	switcher.bindAndPermute("bb2_"+l+":", "blend", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
-    	switcher.bindAndPermute("bb3_"+l+":", "blend", getSceneForPath("/sc/OutputShader"), 2000*(l*l));
+    	switcher.bindAndPermute("bb3_"+l+":", "blend", getSceneForPath("/sc/OutputShader"), 2000*(l*l));*/
     }
-
-    //switcher.setRandomMode(false);
-    this.addSceneOutputCanvas(
-    		new BadTVScene(this,w,h).registerCallbackPreset(getStream("beat"), "beat_8", "warp"),
-    		"/out"
-    );
 
     this.addSceneOutputCanvas(
       new DebugScene(this,w,h),
@@ -439,21 +358,6 @@ public class MinimalProject extends Project implements Serializable {
   }
 
   public void setupExposed() {
-	  	//rsConn.expose("/seq/changeTo/" + "text_word_:)");
-	  	//rsConn.expose("/seq/changeTo/" + "text_word_:D");
-	  	/*rsConn.expose("/seq/changeTo/" + "text_word_BABAL");
-	  	rsConn.expose("/seq/changeTo/" + "text_word_Glowpeople");
-	  	rsConn.expose("/seq/changeTo/" + "text_word_Socio Suki");
-	    rsConn.expose("/seq/changeTo/" + "text_word_what about the pig");
-	    rsConn.expose("/seq/changeTo/" + "text_word_hold back!");
-	    rsConn.expose("/seq/changeTo/" + "text_word_lied to me");
-	    rsConn.expose("/seq/changeTo/" + "text_word_identity");
-	    rsConn.expose("/seq/changeTo/" + "text_word_dapper little man");
-	    rsConn.expose("/seq/changeTo/" + "text_word_lazy");
-	    rsConn.expose("/seq/changeTo/" + "text_word_bad rabbit");
-	    rsConn.expose("/seq/changeTo/" + "text_word_take trips");
-	    rsConn.expose("/seq/changeTo/" + "text_word_magic dust");
-	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");*/
   }
 
 }

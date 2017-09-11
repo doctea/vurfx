@@ -681,5 +681,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 	return urls;
   }
+	public void randomiseParameters(String[] parameters) {
+		for (String p : parameters ) {
+			println("Randomising parameter " + p + " in " + this.toString());
+			this.setParameterValueFromSin(p, this.random(0f, 2f)-1f);
+		}		
+	}
 }
 

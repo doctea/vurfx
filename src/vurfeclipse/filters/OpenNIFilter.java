@@ -132,8 +132,11 @@ public class OpenNIFilter extends Filter {
 
   int mode = 0;
   public Filter nextMode() {
-    mode++;
-    if (mode>3) mode = 0;
+    /*mode++;
+    if (mode>3) mode = 0;*/
+  	
+  	//context.close();
+  	this.initKinect();
 
     //enableForMode(mode);
     return this;

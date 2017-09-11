@@ -92,6 +92,8 @@ class TextureSequence extends Sequence {
 		host.getFilter("BlobDrawer").changeParameterValue("shape", Blob.SH_TEXTURE);
 		host.getFilter("BlobDrawer2").setInputCanvas(host.getCanvasMapping("pix1")); //host.getCanvasMapping("pix1"));
 		host.getFilter("BlobDrawer2").changeParameterValue("shape", Blob.SH_TEXTURE);
+		
+
 	}
 	@Override public void onStop() {	}
 	@Override
@@ -113,7 +115,22 @@ abstract class SpinnerSequence extends Sequence {
 		muts.add(host);//host.getFilter("BlendDrawer1"));
 		return muts;
 	}*/
-	@Override public void onStop() {	}	
+	@Override public void onStop() {	}
+	
+	@Override public void onStart() {
+
+		host.getFilter("BlobDrawer2").randomiseParameters(new String[] {
+				"numofCircles", "yRadianMod", "xRadianMod", //"numSections", 
+				"endRadius"
+		});
+		
+
+		host.getFilter("BlobDrawer").randomiseParameters(new String[] {
+				"numofCircles", "yRadianMod", "xRadianMod", //"numSections", 
+				"endRadius"
+		});		
+		
+	}
 }
 
 class SpinnerSequence1 extends SpinnerSequence {
@@ -140,6 +157,7 @@ class SpinnerSequence1 extends SpinnerSequence {
 		;
 		
 		host.getFilter("BlobDrawer2").setParameterValueFromSin("numofCircles", /*APP.getApp().sin(*/(float)inv_norm/*)*/); //0.2f+APP.getApp().sin(iteration_warp/2));
+		
 
 		int col1 = lerpcolour(colour1, colour2, inv_norm);
 		int col2 = lerpcolour(colour3, colour4, inv_norm);
@@ -158,7 +176,8 @@ class SpinnerSequence1 extends SpinnerSequence {
 		
 	}
 	public void onStart() {
-		System.out.println("onStart() " + this);
+		super.onStart();
+		println("onStart() " + this);
 		colour1 = randomColorMinimum(196);// APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 		colour2 = randomColorMinimum(96);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 		colour3 = randomColorMinimum(96); //APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
@@ -171,6 +190,10 @@ class SpinnerSequence1 extends SpinnerSequence {
 		//((BlendDrawer)switcher.getScene("blob drawer").getFilter("BlendDrawer")).nextMode();
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",random(0f,1f));
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("yRadianMod",random(0f,1f));
+		
+		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("yRadianMod",random(0f,1f));
+		
+
 		
 		//toggleOutputs();	
 	}
@@ -216,7 +239,8 @@ class SpinnerSequence2 extends SpinnerSequence {
     				(int)APP.getApp().blue(col2));
     	}
     	public void onStart() {
-    		System.out.println("onStart() " + this);
+    		super.onStart();
+    		println("onStart() " + this);
     		colour1 = randomColorMinimum(196);
     		colour2 = randomColorMinimum(96);
     		colour3 = randomColorMinimum(96);
@@ -270,7 +294,8 @@ class SpinnerSequence3 extends SpinnerSequence {
 				(int)APP.getApp().blue(col2));
 	}
 	public void onStart() {
-		System.out.println("onStart() " + this);
+		super.onStart();
+		println("onStart() " + this);
 		colour1 = randomColorMinimum(196);
 		colour2 = randomColorMinimum(96) * 2; // brighter
 		colour3 = randomColorMinimum(96) * 2;
@@ -333,7 +358,8 @@ class SpinnerSequence4 extends SpinnerSequence {
 				(int)APP.getApp().blue(col2));
 	}
 	public void onStart() {
-		System.out.println("onStart() " + this);
+		super.onStart();
+		println("onStart() " + this);
 		colour1 = randomColorMinimum(196);
 		colour2 = randomColorMinimum(96) * 2; // brighter
 		colour3 = randomColorMinimum(96) * 2;

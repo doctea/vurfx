@@ -184,6 +184,7 @@ abstract public class Sequence implements Mutable {
 		return array[(int)(pc * (array.length-1))];
 	}
 	public Object getRandomArrayElement(Object[] array) {
+		if (array.length==1) return array[0];
 		return array[random(0,array.length-1)];
 	}
 

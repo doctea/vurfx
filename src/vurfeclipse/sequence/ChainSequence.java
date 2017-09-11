@@ -77,7 +77,7 @@ public class ChainSequence extends Sequence {
 	@Override
 	public void onStart() {
 		// TODO Auto-generated method stub
-		/*Iterator<Sequence> it = chain.iterator();
+	  /*Iterator<Sequence> it = chain.iterator();
 		while(it.hasNext()) {
 			it.next().onStart();
 		}*/
