@@ -7,6 +7,7 @@ import vurfeclipse.filters.*;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
 
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.*;
 
@@ -258,7 +259,15 @@ public class MutanteProject extends Project implements Serializable {
     //switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
 
 
+    Integer[] palette = new Integer[] {
+    		APP.getApp().color(255,0,0,255),	//red
+    		APP.getApp().color(0,255,0,255),	//green
+    		APP.getApp().color(0,0,255,255),	//blue
+    		APP.getApp().color(255,255,255,255), // white
+    };
+    
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
+    blobScene.setPalette(palette);
     this.addScene(blobScene);
     switcher.bindSequence("blob1_1", blobScene, "preset 1");
     switcher.bindSequence("blob1_2", blobScene, "preset 2");
@@ -266,6 +275,7 @@ public class MutanteProject extends Project implements Serializable {
     switcher.bindSequence("blob1_4", blobScene, "preset 4");
 
     Scene blobScene2 = new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out").setInputCanvas("/out");
+    blobScene.setPalette(palette);
     this.addScene(blobScene2);
     switcher.bindSequence("blob2_1", blobScene2, "preset 1");
     switcher.bindSequence("blob2_2", blobScene2, "preset 2");

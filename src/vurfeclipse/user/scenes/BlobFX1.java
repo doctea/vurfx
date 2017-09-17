@@ -92,8 +92,6 @@ class TextureSequence extends Sequence {
 		host.getFilter("BlobDrawer").changeParameterValue("shape", Blob.SH_TEXTURE);
 		host.getFilter("BlobDrawer2").setInputCanvas(host.getCanvasMapping("out")); //host.getCanvasMapping("pix1"));
 		host.getFilter("BlobDrawer2").changeParameterValue("shape", Blob.SH_TEXTURE);
-		
-
 	}
 	@Override public void onStop() {	}
 	@Override
@@ -183,7 +181,7 @@ class SpinnerSequence1 extends SpinnerSequence {
 		colour3 = randomColorMinimum(96); //APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 		colour4 = randomColorMinimum(196); //APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, /*4, 5, 6, 7 */} ));
-		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, Blob.SH_TEXTURE, /*5, 6,*/ 7 } ));
+		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, } )); //Blob.SH_TEXTURE, /*5, 6,*/ 7 } ));
 		
 		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { /*2, 4, 8, */4} ));
 		//((BlendDrawer)switcher.getScene("blob drawer").getFilter("BlendDrawer")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 3, 7, 12, 0, 1 } ));
@@ -222,8 +220,8 @@ class SpinnerSequence2 extends SpinnerSequence {
     			.setParameterValueFromSin("radius", APP.getApp().sin((float)(inv_norm))) ///2f)))
     		;
    		
-    		int col1 = colour1; //lerpcolour(colour1, colour2, inv_norm);
-    		int col2 = colour3; //lerpcolour(colour3, colour4, inv_norm);
+    		int col1 = lerpcolour(colour1, colour2, inv_norm);
+    		int col2 = lerpcolour(colour3, colour4, inv_norm);
     		
     		((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
     				(int)APP.getApp().red(col1),
@@ -282,8 +280,8 @@ class SpinnerSequence3 extends SpinnerSequence {
 		host.getFilter("BlobDrawer2").setParameterValueFromSin("numofCircles", /*APP.getApp().sin(*/(float)inv_norm/*)*/); //0.2f+APP.getApp().sin(iteration_warp/2));
 
 		
-		int col1 = lerpcolour(colour2, colour4, inv_norm);
-		int col2 = lerpcolour(colour3, colour1, norm);
+		int col1 = lerpcolour(colour1, colour2, inv_norm);
+		int col2 = lerpcolour(colour2, colour4, norm);
 		
 		((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
 				(int)APP.getApp().red(col1),
@@ -299,19 +297,19 @@ class SpinnerSequence3 extends SpinnerSequence {
 		super.onStart();
 		println("onStart() " + this);
 		colour1 = randomColorMinimum(196);
-		colour2 = randomColorMinimum(96) * 2; // brighter
+		colour2 = randomColorMinimum(96) * 2; // brighter;;
 		colour3 = randomColorMinimum(96) * 2;
 		colour4 = randomColorMinimum(196);
 		
-		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",random(1)>=0.5f);
-		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",random(1)>=0.5f);
+		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",random(1.0f)>=0.5f);
+		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",random(1.0f)>=0.5f);
 	
 		//this.setLengthMillis(250 * (int)(APP.getApp().random(1,5)));
 		
 		((BlobDrawer)host.getFilter("BlobDrawer")).setParameterDefaults();
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterDefaults();
 		
-		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_COMPOUND, Blob.SH_CIRCLE, Blob.SH_FLOWER } )); //, Blob.SH_TEXTURE} ));
+		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_COMPOUND, Blob.SH_CIRCLE, Blob.SH_FLOWER , Blob.SH_TEXTURE} ));
 		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_TEXTURE, Blob.SH_RECT, Blob.SH_POLY } ));
 		
 		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 10,  8, 4 } ));

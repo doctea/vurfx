@@ -32,7 +32,7 @@ public class VurfEclipse extends PApplet {
 	}*/
 
 	boolean hdRes = false;//true;
-	boolean mdRes = false;
+	boolean mdRes = true;
 	boolean projRes = false;
 	boolean ultrahiRes = false;
 	boolean hiRes = true;

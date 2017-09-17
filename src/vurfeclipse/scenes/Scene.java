@@ -701,6 +701,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   transient ControlP5 cp5;
   String tabName;
   boolean doneControls = false;
+
+	private Integer[] palette;
   public void setupControls(ControlP5 cp5, String tabName) {
     println("Scene#setupControls() in " + this);
     if (doneControls) return;
@@ -822,6 +824,18 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		// TODO Auto-generated method stub
 		return host.getTimeScale();
 	}
+	public boolean hasPalette() {
+		// TODO Auto-generated method stub
+		return this.palette!=null;
+	}
+	public Integer[] getPalette() {
+		// TODO Auto-generated method stub
+		return this.palette;
+	}
+	public void setPalette(Integer[] intColourArray) {
+		this.palette = intColourArray;
+	}
+
 
 
 

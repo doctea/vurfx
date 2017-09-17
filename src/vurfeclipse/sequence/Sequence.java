@@ -71,9 +71,9 @@ abstract public class Sequence implements Mutable {
 		return ret;
 	}
 	public int random(int min, int max) {
-		int random = this.rng.nextInt((max-min));
+		int random = this.rng.nextInt((1+max-min));
 		int ret = min + random;
-		println ("random(" + min + ","+max+ ") returning " + ret);
+		println("random(" + min + ","+max+ ") returning " + ret);
 		return ret;
 	}
 
@@ -123,6 +123,7 @@ abstract public class Sequence implements Mutable {
 	}
 
 	boolean outputDebug = true;
+	private Object[] palette;
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("Q " + (text.contains((this.toString()))? text : this+": "+text));
 	}
@@ -192,11 +193,22 @@ abstract public class Sequence implements Mutable {
 	}
 	public Object getRandomArrayElement(Object[] array) {
 		if (array.length==1) return array[0];
-		return array[random(0,array.length-1)];
+		return array[random(0,array.length-1)];	// -1 ?
 	}
-
-
+	
+	public Color mixColors(Color color1, Color color2, double percent){
+		//percent *= 10.0;
+	  double inverse_percent = 1.0 - percent;
+	  int redPart = (int) ((color1.getRed()*percent) + (color2.getRed()*inverse_percent));
+	  int greenPart = (int) ((color1.getGreen()*percent) + (color2.getGreen()*inverse_percent));
+	  int bluePart = (int) ((color1.getBlue()*percent) + (color2.getBlue()*inverse_percent));
+	  return new Color(redPart, greenPart, bluePart); //, 255);
+	}
+	
 	  public int lerpcolour (int origin, int dest, double norm) {
+	  	//if (true) return origin;
+	  	if (true) return mixColors(new Color(origin), new Color(dest), norm).getRGB();
+	  	
 		  int or,og,ob,oa;
 		  int dr,dg,db,da;
 		  or = (int)APP.getApp().red(origin);//(origin>>24) & 0xFF;//(int)APP.getApp().red(origin);
@@ -210,15 +222,24 @@ abstract public class Sequence implements Mutable {
 
 		  int outr, outg, outb;
 
-		  int diff = (int)((Math.max(or,dr)-Math.min(or, dr)) * norm);
-		  outr = Math.min(or, dr) + diff;
-		  //println("diff r is " + diff);
+		  int diff; 
+		  //diff = (int)((Math.max(or,dr)-Math.min(or, dr)) * norm);
+		  diff = (int) ((or-dr) * norm);
+		  //outr = Math.min(or,dr) + diff;
+		  outr = Math.abs(or + diff);
+		  println("diff r is " + diff);
 
-		  diff = (int)((Math.max(og,dg)-Math.min(og, dg)) * norm);
-		  outg = Math.min(og, dg) + diff;
+		  //diff = (int)((Math.max(og,dg)-Math.min(og, dg)) * norm);
+		  diff = (int) ((og-dg) * norm);
+		  //outg = Math.min(og,dg) + diff;
+		  outg = Math.abs(og + diff);
+		  println("diff g is " + diff);
 
-		  diff = (int)((Math.max(ob,db)-Math.min(ob, db)) * norm);
-		  outb = Math.min(ob, db) + diff;
+		  //diff = (int)((Math.max(ob,db)-Math.min(ob, db)) * norm);
+		  diff = (int) ((ob-db) * norm);
+		  //outb = Math.min(ob, db) + Math.abs(diff);
+		  outb = Math.abs(ob + diff);
+		  println("diff b is " + diff);
 
 		  println("Blending between (" + or +","+og+","+ob+") and (" + dr + "," + dg + "," + db + ") @ " + norm + " ::: got (" + outr + "," + outg + "," + outb + ")");
 
@@ -236,8 +257,14 @@ abstract public class Sequence implements Mutable {
 		  }
 		  return APP.getApp().color(r,g,b);
 		  */
+  		//if (true) return -255 * 65546; //255 * 256 * 256;
+
+	  	if (host.hasPalette()) {
+	  		//return 255 * 255 * 255;
+	  		return (Integer)this.getRandomArrayElement(host.getPalette());
+	  	}	  	
 		  
-		//to get rainbow, pastel colors
+	  	//to get rainbow, pastel colors
 		  //Random random = new Random();
 		  final float hue = this.random(1.0f);
 		  final float saturation = this.random(0.5f,0.9f);//1.0 for brilliant, 0.0 for dull
@@ -247,6 +274,11 @@ abstract public class Sequence implements Mutable {
 		  //int rgb = Color.
 		  return rgb;
 	  }
+
+		private boolean hasPalette() {
+			// TODO Auto-generated method stub
+			return this.palette!=null;
+		}
 
 
 
