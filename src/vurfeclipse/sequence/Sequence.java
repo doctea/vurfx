@@ -1,5 +1,6 @@
 package vurfeclipse.sequence;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -146,26 +147,27 @@ abstract public class Sequence implements Mutable {
 		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is
 
 		int now = APP.getApp().millis();
-		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d ); 
+		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d );
+		scale /= 10.0;
 
-		int diff = now - startTimeMillis;
+		int elapsed = now - startTimeMillis;
 		now = (int) (((double)now) * scale);
 		double pc;
 
-		diff *= scale;
+		elapsed *= scale;
 		
 		//println("got diff " + diff);
 		if (lengthMillis==0) {
 			pc = 0.5f;
 			iteration++;
 		} else {
-			iteration = diff/(lengthMillis);
-			if ((diff)>=(lengthMillis)) 
-				diff = diff % lengthMillis;	// if we've gone past one loop length, reset it
+			iteration = elapsed/(lengthMillis);
+			if ((elapsed)>=(lengthMillis)) 
+				elapsed = elapsed % lengthMillis;	// if we've gone past one loop length, reset it
 
 			// what percent is A diff of B lengthMillis ?
 
-			pc = PApplet.constrain((float) ((double)(diff) / (double)lengthMillis), 0.000000001f, 0.999999999f);
+			pc = PApplet.constrain((float) ((double)(elapsed) / (double)lengthMillis), 0.000000001f, 0.999999999f);
 			//println("adjusted diff " + diff + "length millis is " + lengthMillis + " and pc is " + pc);
 		}
 		//println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
@@ -220,7 +222,7 @@ abstract public class Sequence implements Mutable {
 	  }
 
 	  public int randomColorMinimum(int minimum) {
-		  int tot = 0;
+		  /*int tot = 0;
 		  int r=0,g=0,b=0;
 		  while (tot<minimum) {
 			  r = (int)random(16,255);//, (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);;
@@ -228,8 +230,18 @@ abstract public class Sequence implements Mutable {
 			  b = (int)random(16,255);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 			  tot = r+g+b;
 		  }
-
 		  return APP.getApp().color(r,g,b);
+		  */
+		  
+		//to get rainbow, pastel colors
+		  //Random random = new Random();
+		  final float hue = this.random(1.0f);
+		  final float saturation = 0.9f;//1.0 for brilliant, 0.0 for dull
+		  final float luminance = 1.0f; //1.0 for brighter, 0.0 for black
+		  int rgb = Color.HSBtoRGB(hue, saturation, luminance); //Color.getHSBColor(hue, saturation, luminance).getRGB();
+		  //int rgb = 0xFFFF;
+		  //int rgb = Color.
+		  return rgb;
 	  }
 
 
