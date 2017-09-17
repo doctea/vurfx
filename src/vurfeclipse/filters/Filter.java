@@ -492,13 +492,16 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     } else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_PRESSED) {
         this.nextMode();
     } else if (controllers.containsKey(ev.getController()) &&
-    		(ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || ev.getAction()==ControlP5.ACTION_PRESSED )
+    		(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || ev.getAction()==ControlP5.ACTION_PRESSED)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
     	) {
         String paramName = (String)controllers.get(ev.getController());
         println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
         Object currentValue = getParameterValue(paramName) ;
         changeValueFor(currentValue,paramName,ev);
-      }
+    } else if (controllers.containsKey(ev.getController()) && ev.getController().isUserInteraction()) {
+      String paramName = (String)controllers.get(ev.getController());
+      //println("UNHANDLED CONTROL EVENT in " + this + "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue() + " action is " + ev.getAction());
+    }
      /*else if (ev.getAction()==ControlP5.ACTION_PRESSED) {
       if (controllers.containsKey(ev.getController())) {
         println("getcontroller is " + ev.getController());
