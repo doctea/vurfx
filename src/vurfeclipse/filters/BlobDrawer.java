@@ -109,7 +109,8 @@ public class BlobDrawer extends SpiralDrawer {
     //b.setColour((Integer)this.getParameterValue("colour"));
     //b.setColour(0);
     b.setRadius((int)currRadius);// * (int)random(5));
-    b.setRotation((int)currentRadian);
+    b.setRotation((int)Math.toRadians((currentRadian)));
+    //System.out.println("currentRadian is " + currentRadian);
     //b.setTint(128);
     b.draw(out,src);
     //out.tint(128);

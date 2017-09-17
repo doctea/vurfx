@@ -34,7 +34,7 @@ public class VurfEclipse extends PApplet {
 	boolean hdRes = false;//true;
 	boolean mdRes = false;
 	boolean projRes = false;
-	boolean ultrahiRes = true;
+	boolean ultrahiRes = false;
 	boolean hiRes = true;
 	boolean medRes = true;
 
@@ -334,7 +334,7 @@ public class VurfEclipse extends PApplet {
 
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-		 //pr = new MutanteProject(desired_width, desired_height, gfx_mode);
+		 pr = new MutanteProject(desired_width, desired_height, gfx_mode);
 		 //pr = new FeralFestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
@@ -343,7 +343,7 @@ public class VurfEclipse extends PApplet {
 
 		 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 		 
-		 pr = new MinimalProject(desired_width, desired_height, gfx_mode);
+		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
 
 		 System.out.println("Initialising " + pr);
 		 pr.initialise();

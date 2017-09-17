@@ -119,13 +119,13 @@ abstract class SpinnerSequence extends Sequence {
 	
 	@Override public void onStart() {
 
-		host.getFilter("BlobDrawer2").randomiseParameters(new String[] {
+		host.getFilter("BlobDrawer2").randomiseParameters(this,new String[] {
 				"numofCircles", "yRadianMod", "xRadianMod", //"numSections", 
 				"endRadius"
 		});
 		
 
-		host.getFilter("BlobDrawer").randomiseParameters(new String[] {
+		host.getFilter("BlobDrawer").randomiseParameters(this,new String[] {
 				"numofCircles", "yRadianMod", "xRadianMod", //"numSections", 
 				"endRadius"
 		});		
@@ -159,18 +159,18 @@ class SpinnerSequence1 extends SpinnerSequence {
 		host.getFilter("BlobDrawer2").setParameterValueFromSin("numofCircles", /*APP.getApp().sin(*/(float)inv_norm/*)*/); //0.2f+APP.getApp().sin(iteration_warp/2));
 		
 
-		int col1 = lerpcolour(colour1, colour2, inv_norm);
-		int col2 = lerpcolour(colour3, colour4, norm);
+		int col1 = lerpcolour(colour1, colour2, norm); //0.5); //inv_norm);
+		int col2 = lerpcolour(colour3, colour4, norm); //0.5); //norm);
 		
 		((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
 				(int)APP.getApp().red(col1),
-				(int)APP.getApp().green(col1 << 16),
-				(int)APP.getApp().blue(col1 << 8));
+				(int)APP.getApp().green(col1),
+				(int)APP.getApp().blue(col1));
 
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
 				(int)APP.getApp().red(col2),
-				(int)APP.getApp().green(col2 << 16),
-				(int)APP.getApp().blue(col2) << 8);
+				(int)APP.getApp().green(col2),
+				(int)APP.getApp().blue(col2));
 
 
 		
@@ -216,6 +216,7 @@ class SpinnerSequence2 extends SpinnerSequence {
     		
     		host.getFilter("BlobDrawer").setParameterValue("totalRotate", (float)-norm*360.0f); //PApplet.radians((float)norm*360));
     		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*360.0f);
+    		//host.getFilter("BlobDrawer2").setParameterValue("rotation", (float)-norm*360.0f);
     		host.getFilter("BlobDrawer2")
     			.setParameterValue("totalRotate", (float)norm*180.0f) // was 720
     			.setParameterValueFromSin("radius", APP.getApp().sin((float)(inv_norm))) ///2f)))
@@ -339,7 +340,7 @@ class SpinnerSequence4 extends SpinnerSequence {
 
 		
 		host.getFilter("BlobDrawer").setParameterValue("totalRotate", (float)norm*360.0f); //PApplet.radians((float)norm*360));
-		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)norm*180.0f);
+		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*180.0f);
 		host.getFilter("BlobDrawer2")
 			.setParameterValue("totalRotate", PApplet.abs((float)norm*180.0f)) // was 720
 			.setParameterValueFromSin("radius", PApplet.sin((float)(inv_norm))) ///2f)))

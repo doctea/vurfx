@@ -76,7 +76,7 @@ public class MutanteProject extends Project implements Serializable {
 	  			this.host.setTimeScale(
 	  					((count%3)==0)?
 	  							2.0d:
-	  							0.1d
+	  							0.5d
 	  		); //getTimeScale()
 	  		else
 	  			this.host.setTimeScale(1.0f);
@@ -116,7 +116,7 @@ public class MutanteProject extends Project implements Serializable {
     int BLOBCOUNT = 20; // set to 50 for production, 5 makes for quick loading!
 
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"mutante").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("mutante"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("mutante"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(50/*200*/).setFilterName("ImageListDrawer2").nextMode());
 
     /*ils2.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
     ils2.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
@@ -169,11 +169,6 @@ public class MutanteProject extends Project implements Serializable {
 		});
 
 
-    //ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect"));
-    //ils1.setCanvas("pix1","/pix1");
-    //ils1.addFilter(((OpenNIFilter) new OpenNIFilter(ils1).setFilterName("kinect")).setDepthOutputCanvasName("pix1"));
-
-
     this.addSceneOutputCanvas(
       ils1,
       "/pix0"
@@ -222,8 +217,8 @@ public class MutanteProject extends Project implements Serializable {
     blendScene.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
     
     //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(ils1,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
-    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(ils1,0).setOutputCanvas("/pix0").setFilterName("Kinect1")));
-    blendScene.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
+    //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(ils1,0).setOutputCanvas("/pix0").setFilterName("Kinect1")));
+    //blendScene.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
     
     /*blendScene.addSequence("_next_camera", new SimpleSequence() {
     	int camera = 0;

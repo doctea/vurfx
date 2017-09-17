@@ -15,7 +15,7 @@ import vurfeclipse.scenes.Scene;
 abstract public class Sequence implements Mutable {
 	//Scene sc;
 	
-	Random rng = new Random();
+	public Random rng = new Random();
 	long seed = rng.nextLong();
 
 	int startTimeMillis;
@@ -30,11 +30,16 @@ abstract public class Sequence implements Mutable {
 	public Sequence (Scene host, int sequenceLengthMillis) {
 		this(sequenceLengthMillis);
 		this.host = host;
+		this.setup();
 	}
 	/*public Sequence(Scene sc, int sequenceLengthMillis) {
 		this(sequenceLengthMillis);
 		this.host = sc.host;
 	}*/
+	
+	public void setup() {
+		//
+	}
 
 	public Sequence() {
 		lengthMillis = 0;
@@ -215,8 +220,7 @@ abstract public class Sequence implements Mutable {
 		  diff = (int)((Math.max(ob,db)-Math.min(ob, db)) * norm);
 		  outb = Math.min(ob, db) + diff;
 
-		  /*println("Blending between (" + or +","+og+","+ob+") and (" + dr + "," + dg + "," + db + ")");
-		  println("--got (" + outr + "," + outg + "," + outb + ")");*/
+		  println("Blending between (" + or +","+og+","+ob+") and (" + dr + "," + dg + "," + db + ") @ " + norm + " ::: got (" + outr + "," + outg + "," + outb + ")");
 
 		  return APP.getApp().color(outr,outg,outb);
 	  }
@@ -236,8 +240,8 @@ abstract public class Sequence implements Mutable {
 		//to get rainbow, pastel colors
 		  //Random random = new Random();
 		  final float hue = this.random(1.0f);
-		  final float saturation = 0.9f;//1.0 for brilliant, 0.0 for dull
-		  final float luminance = 1.0f; //1.0 for brighter, 0.0 for black
+		  final float saturation = this.random(0.5f,0.9f);//1.0 for brilliant, 0.0 for dull
+		  final float luminance = this.random(0.6f,0.8f); //1.0 for brighter, 0.0 for black
 		  int rgb = Color.HSBtoRGB(hue, saturation, luminance); //Color.getHSBColor(hue, saturation, luminance).getRGB();
 		  //int rgb = 0xFFFF;
 		  //int rgb = Color.
