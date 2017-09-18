@@ -16,7 +16,9 @@ public class NewJourneyProject extends SimpleProject {
 		@Override
 		public boolean applyMeatToBuffers() {
 			// TODO Auto-generated method stub
+			out.fill((int) (Math.random()*255));
 			out.rect(50, 50, 50, 50);
+			out.background((int) (Math.random()*255));
 			return false;
 		}
 
@@ -34,6 +36,9 @@ public class NewJourneyProject extends SimpleProject {
 		Scene s = new SimpleScene(this, w, h);
 		s.addFilter(new Doobie(s));
 		this.addScene(s);
+		
+		//((SequenceSequencer)this.sequencer)
+		
 		return true;
 	}
 
