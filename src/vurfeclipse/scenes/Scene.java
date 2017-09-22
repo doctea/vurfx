@@ -726,11 +726,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
       .plugTo(this, "setMuted")
       //.addCallback(this)
       .moveTo(tabName)
-      .linebreak();
+      .linebreak()
       ;
     currentY += size + margin;
-
-
+    this.muteController.getCaptionLabel().alignY(ControlP5.CENTER);
 
     /*this.saveButton = cp5.addButton("save_" + tabName)
       .setLabel("save")
@@ -779,7 +778,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
            ;*/
         filters[i].setupControls(cp5,tab);
         
-        println("<<<<<<<<<<<<<<<<did setupcontorls for " + filters[i]);
+        println("<<<<<<<<<<<<<<<<did setupcontrols for " + filters[i]);
 
       }
     }
@@ -837,8 +836,4 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	public void setPalette(Integer[] intColourArray) {
 		this.palette = intColourArray;
 	}
-
-
-
-
 }
