@@ -114,10 +114,10 @@ public class MutanteProject extends Project implements Serializable {
     final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
     final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
     
-    int BLOBCOUNT = 20; // set to 50 for production, 5 makes for quick loading!
+    int BLOBCOUNT = 5; //20; // set to 50 for production, 5 makes for quick loading!
 
     ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"mutante").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("mutante"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(50/*200*/).setFilterName("ImageListDrawer2").nextMode());
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("mutante"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer2").nextMode());
 
     /*ils2.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
     ils2.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE

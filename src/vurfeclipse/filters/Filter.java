@@ -3,7 +3,9 @@ import vurfeclipse.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.Group;
 import controlP5.Slider;
+import controlP5.Tab;
 import codeanticode.glgraphics.*;
 
 import java.io.Serializable;
@@ -532,10 +534,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   int count = 0;
   boolean controlsSetup = false;
-  public synchronized void setupControls(ControlP5 cp5, String tabName) {
-	if (controlsSetup) return;
-	controlsSetup = true;
-    println("Filter#setupControls() for "  + this + ": " + tabName);
+  public synchronized void setupControls(ControlP5 cp5, Tab tab) {
+  	if (controlsSetup) return;
+  	controlsSetup = true;
+    println("Filter#setupControls() for "  + this + ": " + tab.getName());
     /*if (count++>20) {
       println("Exiting because setupControls count is " + count + " in " + this);
       System.exit(0);
@@ -543,28 +545,42 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     int size = 20;
     cp5.addCallback(this);
     //cp5.addTextlabel(tabName + this.toString()).setText(getFilterLabel()).linebreak();
-
-    this.muteController = cp5.addToggle("mute_" + tabName + getFilterName())
+       
+    Group grp = cp5.addGroup("group_" + tab.getName() + "_" + getFilterName()).moveTo(tab);
+    grp.setLabel(getFilterName());
+    /*grp.setBarHeight(50);
+    grp.showBar();
+    grp.showArrow();
+    grp.enableCollapse();*/
+    cp5.addTextlabel("label " + grp.getName(), getFilterName()).setGroup(grp).moveTo(grp).linebreak()
+    		.setText("ffs?").setLabel("wtaf?").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+    
+    grp.setTitle("asdfasdf");
+    
+    this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
       .setLabel("Mute " + this.getFilterLabel())
         .setSize(size*2, size)
           .setValue(this.isMuted())
             //.setPosition(lm, currentY+=(size+margin))
             //.plugTo(this, "setMuted")
             //.plugTo(this)
-            .moveTo(tabName)
+            .moveTo(grp)
               //.addCallback(this)
               ;
+    
+    this.muteController.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingY(2*cp5.getFont().getHeight());
+    this.muteController.getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setPaddingY(2*cp5.getFont().getHeight());//.setPaddingY(cp5.getFont().getHeight());
 
-    this.nextModeButton = cp5.addButton("nextmode_" + tabName + getFilterName())
+    this.nextModeButton = cp5.addButton("nextmode_" + tab.getName() + getFilterName())
       .setLabel(">|")
         .setSize(size, size)
-          .moveTo(tabName)
+          .moveTo(grp)
             //.plugTo(this)
             //.addCallback(this)
             .linebreak()
               ;
 
-    cp5.addTextlabel("path_" + tabName + getFilterName(), "Path: " + this.getPath()).setSize(size, size).moveTo(tabName).linebreak();
+    //cp5.addTextlabel("path_" + tab.getName() + getFilterName(), "Path: " + this.getPath()).setSize(size, size).moveTo(grp);//.linebreak();
 
 
 
@@ -582,18 +598,18 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       Object value = param.value;
       controlP5.Controller o =
         value instanceof Float ?
-          cp5.addSlider(tabName + this + me.getKey()).setValue(
+          cp5.addSlider(tab.getName() + this + me.getKey()).setValue(
         		  (Float)(Float)value).setLabel(me.getKey().toString())
           		.setSliderMode(Slider.FLEXIBLE)
         		  .setRange(
         				  new Float((Float)param.min),
         				  new Float((Float)param.max)
         			)
-        			.moveTo(tabName).setSize(size*5, size) : //.addCallback(this) :
+        			.moveTo(grp).setSize(size*5, size) : //.addCallback(this) :
         value instanceof Integer ?
-          cp5.addSlider(tabName + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.min, (Integer)param.max).moveTo(tabName).setSize(size*5, size) : //addCallback(this) :
+          cp5.addSlider(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.min, (Integer)param.max).moveTo(grp).setSize(size*5, size) : //addCallback(this) :
         value instanceof Boolean ?
-          cp5.addToggle(tabName + this + me.getKey()).setState((Boolean)value).setLabel(me.getKey().toString()).moveTo(tabName).setSize(size, size) : //.addCallback(this) :
+          cp5.addToggle(tab.getName() + this + me.getKey()).setState((Boolean)value).setLabel(me.getKey().toString()).moveTo(grp).setSize(size, size) : //.addCallback(this) :
           /*          value instanceof PVector ?
            cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :*/
           null
@@ -609,16 +625,19 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       //param.setController(o);
       //o.addCallback(this);
       if (o!=null) {
-        o.getValueLabel().align(ControlP5.LEFT, ControlP5.RIGHT).setPaddingY(0);
-        o.getCaptionLabel().align(ControlP5.RIGHT, ControlP5.RIGHT).setPaddingY(0);
+        o.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingY(2*cp5.getFont().getHeight());
+        o.getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE);//.setPaddingY(cp5.getFont().getHeight());
         this.setControllerMapping(param.getName(),o);
 
-        if (!i.hasNext()) o.linebreak();
-        o.linebreak();
+        if (o.getAbsolutePosition().x+(o.getWidth()*2) >= o.getControlWindow().getFrame().getWidth()) // fuzzy linebreak if gonna go off the edge of the window  
+        	o.linebreak();
+        if (!i.hasNext()) { o.linebreak();}// add a linebreak if its the last one
+
+        //o.linebreak();	// removed 2017-09-22 to make layout loads better !!!
         /*controllers.put(
           o, (String)me.getKey()
         );*/
-        println(this + ": set up Control for " + me.getKey() + " (which shouldnt differ from " + param.getName() + " if iv understood my own code .. )");
+        println(this + ": set up Control for " + me.getKey()); // + " (which shouldnt differ from " + param.getName() + " if i've understood my own code .. )");
       }
       // }
     }

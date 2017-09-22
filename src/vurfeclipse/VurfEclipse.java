@@ -118,7 +118,7 @@ public class VurfEclipse extends PApplet {
 	  	  ControlP5 cp5 = getCP5();
 	  	  //cp5.window().setLocation(1024, 0);
 	  	  System.out.println("VurfEclipse#getCW about to do addControlWindow()");
-		  controlWindow = cp5.addControlWindow("controlP5window", 300, 0, 800, 800, JAVA2D, 20);
+		  controlWindow = cp5.addControlWindow("controlP5window", 300, 0, 1000, 800, JAVA2D, 30);
 		  System.out.println("VurfEclipse#getCW about to do hideCoordinates");
 		  controlWindow.hideCoordinates();
 		  System.out.println("VurfEclipse#getCW about to do setBackground");
