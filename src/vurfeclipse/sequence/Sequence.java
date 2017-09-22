@@ -1,5 +1,6 @@
 package vurfeclipse.sequence;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -14,7 +15,7 @@ import vurfeclipse.scenes.Scene;
 abstract public class Sequence implements Mutable {
 	//Scene sc;
 	
-	Random rng = new Random();
+	public Random rng = new Random();
 	long seed = rng.nextLong();
 
 	int startTimeMillis;
@@ -29,11 +30,16 @@ abstract public class Sequence implements Mutable {
 	public Sequence (Scene host, int sequenceLengthMillis) {
 		this(sequenceLengthMillis);
 		this.host = host;
+		this.setup();
 	}
 	/*public Sequence(Scene sc, int sequenceLengthMillis) {
 		this(sequenceLengthMillis);
 		this.host = sc.host;
 	}*/
+	
+	public void setup() {
+		//
+	}
 
 	public Sequence() {
 		lengthMillis = 0;
@@ -65,9 +71,9 @@ abstract public class Sequence implements Mutable {
 		return ret;
 	}
 	public int random(int min, int max) {
-		int random = this.rng.nextInt((max-min));
+		int random = this.rng.nextInt((1+max-min));
 		int ret = min + random;
-		println ("random(" + min + ","+max+ ") returning " + ret);
+		println("random(" + min + ","+max+ ") returning " + ret);
 		return ret;
 	}
 
@@ -117,6 +123,7 @@ abstract public class Sequence implements Mutable {
 	}
 
 	boolean outputDebug = true;
+	private Object[] palette;
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("Q " + (text.contains((this.toString()))? text : this+": "+text));
 	}
@@ -146,26 +153,27 @@ abstract public class Sequence implements Mutable {
 		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is
 
 		int now = APP.getApp().millis();
-		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d ); 
+		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d );
+		scale /= 10.0;
 
-		int diff = now - startTimeMillis;
+		int elapsed = now - startTimeMillis;
 		now = (int) (((double)now) * scale);
 		double pc;
 
-		diff *= scale;
+		elapsed *= scale;
 		
 		//println("got diff " + diff);
 		if (lengthMillis==0) {
 			pc = 0.5f;
 			iteration++;
 		} else {
-			iteration = diff/(lengthMillis);
-			if ((diff)>=(lengthMillis)) 
-				diff = diff % lengthMillis;	// if we've gone past one loop length, reset it
+			iteration = elapsed/(lengthMillis);
+			if ((elapsed)>=(lengthMillis)) 
+				elapsed = elapsed % lengthMillis;	// if we've gone past one loop length, reset it
 
 			// what percent is A diff of B lengthMillis ?
 
-			pc = PApplet.constrain((float) ((double)(diff) / (double)lengthMillis), 0.000000001f, 0.999999999f);
+			pc = PApplet.constrain((float) ((double)(elapsed) / (double)lengthMillis), 0.000000001f, 0.999999999f);
 			//println("adjusted diff " + diff + "length millis is " + lengthMillis + " and pc is " + pc);
 		}
 		//println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
@@ -185,11 +193,22 @@ abstract public class Sequence implements Mutable {
 	}
 	public Object getRandomArrayElement(Object[] array) {
 		if (array.length==1) return array[0];
-		return array[random(0,array.length-1)];
+		return array[random(0,array.length-1)];	// -1 ?
 	}
-
-
+	
+	public Color mixColors(Color color1, Color color2, double percent){
+		//percent *= 10.0;
+	  double inverse_percent = 1.0 - percent;
+	  int redPart = (int) ((color1.getRed()*percent) + (color2.getRed()*inverse_percent));
+	  int greenPart = (int) ((color1.getGreen()*percent) + (color2.getGreen()*inverse_percent));
+	  int bluePart = (int) ((color1.getBlue()*percent) + (color2.getBlue()*inverse_percent));
+	  return new Color(redPart, greenPart, bluePart); //, 255);
+	}
+	
 	  public int lerpcolour (int origin, int dest, double norm) {
+	  	//if (true) return origin;
+	  	if (true) return mixColors(new Color(origin), new Color(dest), norm).getRGB();
+	  	
 		  int or,og,ob,oa;
 		  int dr,dg,db,da;
 		  or = (int)APP.getApp().red(origin);//(origin>>24) & 0xFF;//(int)APP.getApp().red(origin);
@@ -203,24 +222,32 @@ abstract public class Sequence implements Mutable {
 
 		  int outr, outg, outb;
 
-		  int diff = (int)((Math.max(or,dr)-Math.min(or, dr)) * norm);
-		  outr = Math.min(or, dr) + diff;
-		  //println("diff r is " + diff);
+		  int diff; 
+		  //diff = (int)((Math.max(or,dr)-Math.min(or, dr)) * norm);
+		  diff = (int) ((or-dr) * norm);
+		  //outr = Math.min(or,dr) + diff;
+		  outr = Math.abs(or + diff);
+		  println("diff r is " + diff);
 
-		  diff = (int)((Math.max(og,dg)-Math.min(og, dg)) * norm);
-		  outg = Math.min(og, dg) + diff;
+		  //diff = (int)((Math.max(og,dg)-Math.min(og, dg)) * norm);
+		  diff = (int) ((og-dg) * norm);
+		  //outg = Math.min(og,dg) + diff;
+		  outg = Math.abs(og + diff);
+		  println("diff g is " + diff);
 
-		  diff = (int)((Math.max(ob,db)-Math.min(ob, db)) * norm);
-		  outb = Math.min(ob, db) + diff;
+		  //diff = (int)((Math.max(ob,db)-Math.min(ob, db)) * norm);
+		  diff = (int) ((ob-db) * norm);
+		  //outb = Math.min(ob, db) + Math.abs(diff);
+		  outb = Math.abs(ob + diff);
+		  println("diff b is " + diff);
 
-		  /*println("Blending between (" + or +","+og+","+ob+") and (" + dr + "," + dg + "," + db + ")");
-		  println("--got (" + outr + "," + outg + "," + outb + ")");*/
+		  println("Blending between (" + or +","+og+","+ob+") and (" + dr + "," + dg + "," + db + ") @ " + norm + " ::: got (" + outr + "," + outg + "," + outb + ")");
 
 		  return APP.getApp().color(outr,outg,outb);
 	  }
 
 	  public int randomColorMinimum(int minimum) {
-		  int tot = 0;
+		  /*int tot = 0;
 		  int r=0,g=0,b=0;
 		  while (tot<minimum) {
 			  r = (int)random(16,255);//, (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);;
@@ -228,9 +255,30 @@ abstract public class Sequence implements Mutable {
 			  b = (int)random(16,255);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 			  tot = r+g+b;
 		  }
-
 		  return APP.getApp().color(r,g,b);
+		  */
+  		//if (true) return -255 * 65546; //255 * 256 * 256;
+
+	  	if (host.hasPalette()) {
+	  		//return 255 * 255 * 255;
+	  		return (Integer)this.getRandomArrayElement(host.getPalette());
+	  	}	  	
+		  
+	  	//to get rainbow, pastel colors
+		  //Random random = new Random();
+		  final float hue = this.random(1.0f);
+		  final float saturation = this.random(0.5f,0.9f);//1.0 for brilliant, 0.0 for dull
+		  final float luminance = this.random(0.6f,0.8f); //1.0 for brighter, 0.0 for black
+		  int rgb = Color.HSBtoRGB(hue, saturation, luminance); //Color.getHSBColor(hue, saturation, luminance).getRGB();
+		  //int rgb = 0xFFFF;
+		  //int rgb = Color.
+		  return rgb;
 	  }
+
+		private boolean hasPalette() {
+			// TODO Auto-generated method stub
+			return this.palette!=null;
+		}
 
 
 

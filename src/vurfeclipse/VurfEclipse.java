@@ -32,9 +32,9 @@ public class VurfEclipse extends PApplet {
 	}*/
 
 	boolean hdRes = false;//true;
-	boolean mdRes = false;
+	boolean mdRes = true;
 	boolean projRes = false;
-	boolean ultrahiRes = false;//true;
+	boolean ultrahiRes = false;
 	boolean hiRes = true;
 	boolean medRes = true;
 
@@ -118,7 +118,7 @@ public class VurfEclipse extends PApplet {
 	  	  ControlP5 cp5 = getCP5();
 	  	  //cp5.window().setLocation(1024, 0);
 	  	  System.out.println("VurfEclipse#getCW about to do addControlWindow()");
-		  controlWindow = cp5.addControlWindow("controlP5window", 300, 0, 800, 800, JAVA2D, 20);
+		  controlWindow = cp5.addControlWindow("controlP5window", 300, 0, 1000, 800, JAVA2D, 30);
 		  System.out.println("VurfEclipse#getCW about to do hideCoordinates");
 		  controlWindow.hideCoordinates();
 		  System.out.println("VurfEclipse#getCW about to do setBackground");
@@ -334,7 +334,7 @@ public class VurfEclipse extends PApplet {
 
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-		 //pr = new MutanteProject(desired_width, desired_height, gfx_mode);
+		 pr = new MutanteProject(desired_width, desired_height, gfx_mode);
 		 //pr = new FeralFestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
@@ -343,7 +343,7 @@ public class VurfEclipse extends PApplet {
 
 		 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 		 
-		 pr = new MinimalProject(desired_width, desired_height, gfx_mode);
+		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
 
 		 System.out.println("Initialising " + pr);
 		 pr.initialise();

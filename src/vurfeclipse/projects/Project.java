@@ -556,11 +556,11 @@ public abstract class Project implements Serializable {
       println(c + ": Project#setupControls() got scene " + n.getSceneName());
       String tabName = "["+c+"] " + n.getSceneName(); //getClass();
       //ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
-      cw.addTab(tabName);
+      Tab tab = cw.addTab(tabName);
       println("added tab " + tabName);
       //ControllerInterface[] controls = ((Scene)i.next()).getControls();
       cp5.begin(10,40);
-      ((Scene)n).setupControls(cp5,tabName);
+      ((Scene)n).setupControls(cp5,tab);
       println("done setupControls for " + n);
       cp5.end();
       /*for (int n = 0 ; n < controls.length ; n++) {

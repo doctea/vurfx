@@ -44,9 +44,9 @@ public class BlobDrawer extends SpiralDrawer {
     //this.setParameterValue("rotation", 0.0);
     super.setParameterDefaults();
     this.addParameter("edged", new Boolean(true));
-    this.addParameter("tint",  new Integer(128), 0, 255);//new Integer(128));
+    this.addParameter("tint",  new Integer(255), 0, 255);//new Integer(128));
     this.addParameter("shape", new Integer(0), 0, b.shapesCount);
-    this.addParameter("colour",new Integer(255), new Integer(0), new Integer(2^32)); //APP.color(APP.random(255),APP.random(255),APP.random(255),128)));
+    //this.addParameter("colour",new Integer(255), new Integer(0), new Integer(2^32)); //APP.color(APP.random(255),APP.random(255),APP.random(255),128)));
 
     this.addParameter("spiralCenter", new PVector(this.w/2, this.h/2));
 
@@ -67,7 +67,7 @@ public class BlobDrawer extends SpiralDrawer {
     else if(paramName.equals("tint"))
         b.setTint((Integer)value);
     else if(paramName.equals("shape")) {   // there goes my hero <3
-    	if (src==null) src = sc.getCanvas("pix1").getSurf();
+    	if (src==null) src = sc.getCanvas("pix0").getSurf();
     	if (src!=null) b.setInput(src.getTexture());
         b.setShape((Integer)value);
     }
@@ -100,16 +100,18 @@ public class BlobDrawer extends SpiralDrawer {
 			colourSwitchCount = 0;
 	}*/
 
-	b.setShape((Integer)getParameterValue("shape"));
+  	b.setShape((Integer)getParameterValue("shape"));
     //b.setTint(255);
 	//if ((int)((VurfEclipse)APP.getApp()).random(100)==0) println("BlobDrawer is setting blob texture to " + src.getTexture());
-    b.setInput(src.getTexture());
+    //b.setInput(sc.host.getCanvas("/out").getSurf().getTexture()); //src.getTexture());
+  	b.setInput(sc.getCanvas("temp3").getSurf().getTexture());
     //b.setColour(255); //new Integer((int)APP.random(255) << (int)APP.random(255) << (int)APP.random(255) << 255));
     //b.setColour((int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255));
     //b.setColour((Integer)this.getParameterValue("colour"));
     //b.setColour(0);
     b.setRadius((int)currRadius);// * (int)random(5));
-    b.setRotation((int)currentRadian);
+    b.setRotation((int)Math.toRadians((currentRadian)));
+    //System.out.println("currentRadian is " + currentRadian);
     //b.setTint(128);
     b.draw(out,src);
     //out.tint(128);

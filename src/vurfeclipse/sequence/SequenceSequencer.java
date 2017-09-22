@@ -253,17 +253,17 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  public void randomSequence() {
 		  int count = randomPool.size();
-		  int chosen;
-		  try {
+		  int chosen = 0;
+		  //try {
 			  chosen = (int)APP.getApp().random(0,count);
 			  if (chosen<seqList.size()) seq_pos = chosen; // set list index
 			  if (chosen<0) chosen = 0;
 			  //changeSequence((String)sequences.keySet().toArray()[chosen]);
 			  println("Chose random element " + chosen + " of " + count + "('" + (String)randomPool.get(chosen) + "')");
 			  changeSequence((String)randomPool.toArray()[chosen]);
-		  } catch (Exception e) {
-		  	this.println("randomSequence() caught " + e);
-		  }
+		  /*} catch (Exception e) {
+		  	this.println("randomSequence() with chosen " + chosen + " (of count " + count + ") caught " + e);
+		  }*/
 		}
 
 	  public void nextSequence() {

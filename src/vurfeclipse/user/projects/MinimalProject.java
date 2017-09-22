@@ -68,18 +68,18 @@ public class MinimalProject extends Project implements Serializable {
 	  	public void nextSequence() {
 	  		count++;
 	  		//if (count%8==0) this.setRandomMode(!this.randtrue);//count%8==0);
+	  		if ((count%2)==0)
+	  			this.host.setTimeScale(
+	  					((count%4)==0)?
+	  							2.0d:
+	  							0.5d
+	  		); //getTimeScale()
+	  		else
+	  			this.host.setTimeScale(1.0f);
 	  		if (count%16==0) {
 	  			super.randomSequence();
 	  			return;
 	  		}
-	  		if ((count%2)==0)
-	  			this.host.setTimeScale(
-	  					((count%3)==0)?
-	  							2.0d:
-	  							0.1d
-	  		); //getTimeScale()
-	  		else
-	  			this.host.setTimeScale(1.0f);
 	  		if (count>1000) count = 0;
 	  		//this.host.setTimeScale(0.01f);
 	  		super.nextSequence();
@@ -154,24 +154,24 @@ public class MinimalProject extends Project implements Serializable {
     
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
-    switcher.bindSequence("blend", blendScene, "preset 1", 100).setLengthMillis(1000);
-    switcher.bindSequence("blend2_next_", blendScene, "preset 2_next_", 100).setLengthMillis(0);
-    switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
+    switcher.bindSequence("blendp1", blendScene, "preset 1", 100).setLengthMillis(1000);
+    switcher.bindSequence("blendp2_next_", blendScene, "preset 2_next_", 100).setLengthMillis(0);
+    switcher.bindSequence("blend_next_camera", blendScene, "_next_camera", 50);
 
 
-    Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
+    Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/out");
     this.addScene(blobScene);
-    switcher.bindSequence("blob1_1", blobScene, "preset 1");
-    switcher.bindSequence("blob1_2", blobScene, "preset 2");
-    switcher.bindSequence("blob1_3", blobScene, "preset 3");
-    switcher.bindSequence("blob1_4", blobScene, "preset 4");
+    switcher.bindSequence("blob1[p1]", blobScene, "preset 1");
+    switcher.bindSequence("blob1[p2]", blobScene, "preset 2");
+    switcher.bindSequence("blob1[p3]", blobScene, "preset 3");
+    switcher.bindSequence("blob1[p4]", blobScene, "preset 4");
 
     Scene blobScene2 = new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out").setInputCanvas("/out");
     this.addScene(blobScene2);
-    switcher.bindSequence("blob2_1", blobScene2, "preset 1");
-    switcher.bindSequence("blob2_2", blobScene2, "preset 2");
-    switcher.bindSequence("blob2_3", blobScene2, "preset 3");
-    switcher.bindSequence("blob2_4", blobScene2, "preset 4");
+    switcher.bindSequence("blob2[p1]", blobScene2, "preset 1");
+    switcher.bindSequence("blob2[p2]", blobScene2, "preset 2");
+    switcher.bindSequence("blob2[p3]", blobScene2, "preset 3");
+    switcher.bindSequence("blob2[p4]", blobScene2, "preset 4");
 
 
 
@@ -190,7 +190,7 @@ public class MinimalProject extends Project implements Serializable {
 
     // OUTPUT FILTERS
 
-    /*PlasmaScene plasmaScene = (PlasmaScene)(new PlasmaScene(this,w,h).setSceneName("PlasmaScene"));
+    PlasmaScene plasmaScene = (PlasmaScene)(new PlasmaScene(this,w,h).setSceneName("PlasmaScene"));
     plasmaScene.setCanvas("out", "/out");
 
     addScene(plasmaScene);
@@ -198,15 +198,15 @@ public class MinimalProject extends Project implements Serializable {
 
     plasmaScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
-    switcher.bindSequence("plasma_1", plasmaScene, "preset 1",10);
-    switcher.bindSequence("plasma_2", plasmaScene, "preset 2",10);
-    switcher.bindSequence("plasma_3", plasmaScene, "preset 3",10);
+    switcher.bindSequence("plasma[p1]", plasmaScene, "preset 1",10);
+    switcher.bindSequence("plasma[p2]", plasmaScene, "preset 2",10);
+    switcher.bindSequence("plasma[p3]", plasmaScene, "preset 3",10);
     //switcher.bindSequence("plasma_4", plasmaScene, "preset 4",10);
 
-    /// END PLASMA SCENE*/
+    /// END PLASMA SCENE
     
     /// START Quasicrystal SCENE
-    QuasicrystalScene quasicrystalScene = (QuasicrystalScene)(new QuasicrystalScene(this,w,h).setSceneName("QuasicrystalScene"));
+    /*QuasicrystalScene quasicrystalScene = (QuasicrystalScene)(new QuasicrystalScene(this,w,h).setSceneName("QuasicrystalScene"));
     quasicrystalScene.setCanvas("out", "/out");
 
     addScene(quasicrystalScene);
@@ -215,53 +215,53 @@ public class MinimalProject extends Project implements Serializable {
     quasicrystalScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
     switcher.bindSequence("quasicrystal_1", quasicrystalScene, "preset 1", 1000);
-		
+		*/
     /// END Quasicrystal SCENE
 
-    /*this.addSceneInputOutputCanvas(
+    this.addSceneInputOutputCanvas(
       //os,
       new OutputFX1(this,w,h).setSceneName("OutputShader").setCanvas("pix0", "/pix0").setCanvas("pix1", "/pix1"),
       "/out",
       "/out"
     );
-    */
+    
 
     // OUTPUT FILTER 2
-    /*
+    
     this.addSceneInputOutputCanvas(
     		new OutputFX2(this,w,h).setSceneName("OutputShader2").setCanvas("pix0", "/pix0").setCanvas("pix1", "/pix1"),
     		"/out",
     		"/out"
     );
-    */
+    
 
     this.addSceneInputOutputCanvas(
-    		new OutputFX3(this,w,h).setSceneName("OutputShader3").setCanvas("pix0", "/pix0"),
+    		new OutputFX3(this,w,h).setSceneName("OutputShader3").setCanvas("pix0", "/pix0").setCanvas("out", "/out"),
     		"/out",
     		"/out"
     ).setMuted();
 
 		Sequence doubleSequence = new ChainSequence(2000)
 			.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
-			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
+			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
 			.addSequence(blendScene, "preset 1")
 		;
-    switcher.bindSequence("d1:", doubleSequence, 10);
+    switcher.bindSequence("double1:blob1[p1],plasma[p1],blend[p1]", doubleSequence, 10);
     
-  	/*Sequence doubleSequence2 = new ChainSequence(2000)
+    Sequence doubleSequence2 = new ChainSequence(2000)
   			//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
   			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 2")
   			.addSequence(blendScene, "preset 1")
   			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 3")
   			//.addSequence(blendScene, "preset 1")
   		;
-  	switcher.bindSequence("d2:", doubleSequence2, 5);*/
+  	switcher.bindSequence("d2:", doubleSequence2, 5);
   	
   	Sequence doubleSequence3 = new ChainSequence(2000)
   			.addSequence(getSceneForPath("/sc/BlobScene2"), "preset 1")
-  			.addSequence(blendScene, "preset 1")
+  			//.addSequence(blendScene, "preset 1")
   	;
-  	switcher.bindSequence("d1:", doubleSequence3, 5);
+  	switcher.bindSequence("double3:blob2[p1]", doubleSequence3, 5);
   	
   	//switcher.bindSequence("blend:",  blendScene, "preset 1", 10);
 
@@ -273,24 +273,24 @@ public class MinimalProject extends Project implements Serializable {
     ;*/
 
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
-    		new TunnelScene(this, w, h).setCanvas("temp", "/temp2")
-			//.addFilter(new BlendDrawer()))
-		, "/pix0", "/out"
-);
+    		new TunnelScene(this, w, h).setCanvas("temp", "/pix0")
+    		//.addFilter(new BlendDrawer()))
+    		, "/out", "/out"
+    );
     int tunnel_weight = 1;
-    switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blobScene, "preset 2"), tunnel_weight);
-    switcher.bindSequence("tunnel_1_blob_preset_2_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 2"), tunnel_weight);
-    switcher.bindSequence("tunnel_1_blob_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blobScene, "preset 3"), tunnel_weight);
-    switcher.bindSequence("tunnel_1_blob_wobble_preset3",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), tunnel_weight);
-    switcher.bindSequence("tunnel_1_blend_wobble_preset2",new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blendScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel1[p2],blob1[p2]", new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blobScene, "preset 2"), tunnel_weight);
+    switcher.bindSequence("tunnel1[p3],blob[p2]", new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 2"), tunnel_weight);
+    switcher.bindSequence("tunnel1[p2]_blob[p3]", new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blobScene, "preset 3"), tunnel_weight);
+    switcher.bindSequence("tunnel1[p3]_blob[p3]",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), tunnel_weight);
+    switcher.bindSequence("tunnel1[p1]_blend[p1]",new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blendScene, "preset 1"), tunnel_weight);
     
-    switcher.bindSequence("tunnel_1_blend_angled_2",new ChainSequence(2000).addSequence(ts1, "f2 angled 60").addSequence(blendScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel1[f2_angled_60],blend[p1]",new ChainSequence(2000).addSequence(ts1, "f2 angled 60").addSequence(blendScene, "preset 1"), tunnel_weight);
     
     /*switcher.bindSequence(
         	"tunnel_2_pulse",
         	*/
     TunnelScene ts2 = (TunnelScene) this.addSceneInputOutputCanvas(
-	    		new TunnelScene(this, w, h).setCanvas("temp", "/temp3")
+	    		new TunnelScene(this, w, h).setCanvas("temp", "/pix0")
 	    			//.addFilter(new BlendDrawer()))
 
 	    		, "/out", "/out"
@@ -298,14 +298,18 @@ public class MinimalProject extends Project implements Serializable {
     tunnel_weight = 5;
     //switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(plasmaScene, "preset 1"), tunnel_weight);
     //switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(plasmaScene, "preset 2"), tunnel_weight);
-    switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene2, "preset 1"), tunnel_weight);
-    switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene2, "preset 2"), tunnel_weight);
-    switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(doubleSequence), tunnel_weight/5);
-    switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blendScene, "preset 1"), tunnel_weight);
-    switcher.bindSequence("tunnel_2_blob_wobble_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene, "preset 1"), tunnel_weight);
-    switcher.bindSequence("tunnel_2_blob_wobble_2",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene, "preset 2"), tunnel_weight/5);
-    switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 3").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), tunnel_weight*2);
+    switcher.bindSequence("tunnel2[p3],blob2[p1]",   	new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene2, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel2[p3],blob2[p2]",   	new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene2, "preset 2"), tunnel_weight);
+    switcher.bindSequence("tunnel2[p2],double", 		 	new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(doubleSequence), tunnel_weight/5);
+    switcher.bindSequence("tunnel2[p3],blend[p1]",  	new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blendScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel2[p1],blob[p1]",  		new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel2[p1],blob[p2]",  		new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene, "preset 2"), tunnel_weight/5);
+    switcher.bindSequence("tunnel2[p2],blob[p3],blank[fade]", new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 3").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), tunnel_weight*2);
 
+    switcher.bindAndPermute("blobfx1:", "tunnel", getSceneForPath("/sc/BlobScene"), 5000);
+    switcher.bindAndPermute("blobfx1:", "tunnel", getSceneForPath("/sc/BlobScene2"), 5000);
+    switcher.bindAndPermute("plasma:", "tunnel", plasmaScene, 5000);
+    
     /*switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader"), 5000);
     switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader2"), 5000);
     switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader"), 5000);
@@ -313,8 +317,8 @@ public class MinimalProject extends Project implements Serializable {
 
     //switcher.bindAndPermute("t2:", "tunnel_2_", "t1:", 5000);
 
-    switcher.bindAndPermute("t3_blanker", "t", getSceneForPath("/sc/BlankerScene"), 5000);
-    switcher.bindAndPermute("t3_blanker", "t", getSceneForPath("/sc/BlankerScene"), 5000);
+    //switcher.bindAndPermute("t3_blanker", "t", getSceneForPath("/sc/BlankerScene"), 5000);
+    //switcher.bindAndPermute("t3_blanker", "t", getSceneForPath("/sc/BlankerScene"), 5000);
 
     //switcher.bindAndPermute("t4", "t3_blanker", getSceneForPath("/sc/BlankerScene"), 5000);
 

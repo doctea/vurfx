@@ -42,7 +42,7 @@ public class QuasicrystalScene extends Scene {
 	
 							self.getFilter("Quasicrystal").changeParameterValue("time",
 			    					//value
-			    					adjusted/2000
+			    					adjusted/200
 			    		);
 			    	}
 		    	}

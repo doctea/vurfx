@@ -23,7 +23,7 @@ public class Blob {
   public static int SH_TEXTURE = 5;
   public static int SH_SVG = 6;
   public static int SH_IMAGE = 7;  
-  public int shapesCount = 8;
+  public int shapesCount = 7; //8;
   public int SH_RANDOM = shapesCount;
   
   int rot = 0;
@@ -157,7 +157,7 @@ public class Blob {
       
 //System.out.println("draw shape radius " + R + " shape " + shape);
     int oldShape = getShape();
-    if (oldShape==SH_RANDOM) setShape((int)((VurfEclipse)APP.getApp()).random(SH_RANDOM-3));
+    //if (oldShape==SH_RANDOM) setShape((int)((VurfEclipse)APP.getApp()).random(SH_RANDOM-3));
     if (getShape()==SH_CIRCLE) {
       //out.ellipse(x,y,r,r);
       out.ellipse(0,0,R,R);
@@ -197,6 +197,8 @@ public class Blob {
       //;;if ((int)((VurfEclipse)APP.getApp()).random(100)==0) System.out.println("BLOB>>>drawing texture " + this.src);
       //out.image(src.getTexture(),0,0,new_w,new_h);
       out.popMatrix();
+      //out.rect(0,0,R/2,R/2);
+
     } else if (getShape()==SH_COMPOUND) {
       drawCompoundBlob(out, x, y, R, R, 0);
     } else if (getShape()==SH_SVG && svg!=null) {

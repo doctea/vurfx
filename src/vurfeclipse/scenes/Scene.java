@@ -18,6 +18,7 @@ import codeanticode.glgraphics.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.Tab;
 
 public abstract class Scene implements CallbackListener, Serializable, Mutable, Targetable {
   // Scene stuff
@@ -674,7 +675,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     if (ev.getAction()==ControlP5.ACTION_RELEASED) {
       if (ev.getController()==this.muteController) {
         this.setMuted(muteController.getState());
-      }
+      }/*
       else if (ev.getController()==this.saveButton) {
         println("save preset " + getSceneName());
         //this.savePreset(saveFilenameController.getText(), getSerializedMap());
@@ -683,11 +684,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
       else if (ev.getController()==this.loadButton) {
         println("load preset");
         this.loadPreset2(getSceneName()); //saveFilenameController.getText());
-      }
+      }*/
     }
   }
 
-  public void savePreset(String filename) {
+  /*public void savePreset(String filename) {
 	  ((VurfEclipse)APP.getApp()).io.serialize(filename, this);
   }
   public void loadPreset2(String filename) {
@@ -696,17 +697,19 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     cp5.remove(this.tabName);
     this.setupControls(cp5, tabName);
     ((VurfEclipse)APP.getApp()).pr.replaceScene(cp5, this, s);
-  }
+  }*/
 
   transient ControlP5 cp5;
   String tabName;
   boolean doneControls = false;
-  public void setupControls(ControlP5 cp5, String tabName) {
+
+	private Integer[] palette;
+  public void setupControls(ControlP5 cp5, Tab tab) {
     println("Scene#setupControls() in " + this);
     if (doneControls) return;
     doneControls = true;
     this.cp5 = cp5;
-    this.tabName = tabName;
+    this.tabName = tab.getName();
 
     int margin = 5;
     int lm = 10;
@@ -714,7 +717,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     int size = 20;
 
     int currentY = topMargin;
-
+    
     this.muteController = cp5.addToggle("mute_"+tabName)
       .setSize(size,size)
       .setValue(isMuted())
@@ -723,13 +726,12 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
       .plugTo(this, "setMuted")
       //.addCallback(this)
       .moveTo(tabName)
-      .linebreak();
+      .linebreak()
       ;
     currentY += size + margin;
+    this.muteController.getCaptionLabel().alignY(ControlP5.CENTER);
 
-
-
-    this.saveButton = cp5.addButton("save_" + tabName)
+    /*this.saveButton = cp5.addButton("save_" + tabName)
       .setLabel("save")
         .setSize(size, size)
           .moveTo(tabName)
@@ -748,14 +750,14 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
             //.addCallback(this)
             //.addCallback(this)
             .linebreak()
-
               ;
+    */
     //cp5.register(this, 0, loadButton);
 
     //cp5.addCallback(this, new controlP5.Controller[] { saveButton, loadButton });
     cp5.addCallback(this);
 
-    saveFilenameController = cp5.addTextfield("filename for saving " + tabName + this).setSize(size*10,size*5).setValue("value from ").moveTo(tabName).setLabel("error!").setPosition(size*20,currentY);
+    //saveFilenameController = cp5.addTextfield("filename for saving " + tabName + this).setSize(size*10,size*5).setValue("value from ").moveTo(tabName).setLabel("error!").setPosition(size*20,currentY);
 
     //cp5.addSlider("test " + this.toString()).setPosition(5,20).moveTo(tabName);
  //   for (int i = 0 ; i < filterCount ; i ++) {
@@ -774,8 +776,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
            .addCallback(filters[i])
            .linebreak()
            ;*/
-        filters[i].setupControls(cp5,tabName);
-        println("<<<<<<<<<<<<<<<<did setupcontorls for " + filters[i]);
+        filters[i].setupControls(cp5,tab);
+        
+        println("<<<<<<<<<<<<<<<<did setupcontrols for " + filters[i]);
 
       }
     }
@@ -822,7 +825,15 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		// TODO Auto-generated method stub
 		return host.getTimeScale();
 	}
-
-
-
+	public boolean hasPalette() {
+		// TODO Auto-generated method stub
+		return this.palette!=null;
+	}
+	public Integer[] getPalette() {
+		// TODO Auto-generated method stub
+		return this.palette;
+	}
+	public void setPalette(Integer[] intColourArray) {
+		this.palette = intColourArray;
+	}
 }

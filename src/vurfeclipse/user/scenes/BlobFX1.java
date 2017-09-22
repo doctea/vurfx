@@ -65,7 +65,7 @@ public class BlobFX1 extends SimpleScene {
 
 	public void setupSequences() {
 		//HashMap<String,Sequence> a = super.getSequences();//new HashMap<String,Sequence> ();
-		sequences.put("texture",  new TextureSequence((BlobFX1)this, 2000));
+		//sequences.put("texture",  new TextureSequence((BlobFX1)this, 2000));
 		sequences.put("preset 1", new SpinnerSequence1((BlobFX1)this, 2000));
 		sequences.put("preset 2", new SpinnerSequence2((Scene)this, 1000));
 		sequences.put("preset 3", new SpinnerSequence3((Scene)this, 1000));
@@ -90,10 +90,8 @@ class TextureSequence extends Sequence {
 		this.println("texture sequence starting .. ");
 		host.getFilter("BlobDrawer").setInputCanvas(host.getCanvasMapping("pix0"));//host.getCanvasMapping("pix0"));
 		host.getFilter("BlobDrawer").changeParameterValue("shape", Blob.SH_TEXTURE);
-		host.getFilter("BlobDrawer2").setInputCanvas(host.getCanvasMapping("pix1")); //host.getCanvasMapping("pix1"));
+		host.getFilter("BlobDrawer2").setInputCanvas(host.getCanvasMapping("out")); //host.getCanvasMapping("pix1"));
 		host.getFilter("BlobDrawer2").changeParameterValue("shape", Blob.SH_TEXTURE);
-		
-
 	}
 	@Override public void onStop() {	}
 	@Override
@@ -119,13 +117,13 @@ abstract class SpinnerSequence extends Sequence {
 	
 	@Override public void onStart() {
 
-		host.getFilter("BlobDrawer2").randomiseParameters(new String[] {
+		host.getFilter("BlobDrawer2").randomiseParameters(this,new String[] {
 				"numofCircles", "yRadianMod", "xRadianMod", //"numSections", 
 				"endRadius"
 		});
 		
 
-		host.getFilter("BlobDrawer").randomiseParameters(new String[] {
+		host.getFilter("BlobDrawer").randomiseParameters(this,new String[] {
 				"numofCircles", "yRadianMod", "xRadianMod", //"numSections", 
 				"endRadius"
 		});		
@@ -150,7 +148,7 @@ class SpinnerSequence1 extends SpinnerSequence {
 		//float iteration_warp = (float)(1.0f/(float)iteration)*(float)norm;
 		
 		host.getFilter("BlobDrawer").setParameterValue("totalRotate", (float)norm*360.0f); //PApplet.radians((float)norm*360));
-		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*180.0f);
+		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)+norm*180.0f);
 		host.getFilter("BlobDrawer2")
 			.setParameterValue("totalRotate", (float)norm*360.0f) // was 720
 			.setParameterValueFromSin("radius", PApplet.sin((float)(inv_norm))) ///2f)))
@@ -159,8 +157,8 @@ class SpinnerSequence1 extends SpinnerSequence {
 		host.getFilter("BlobDrawer2").setParameterValueFromSin("numofCircles", /*APP.getApp().sin(*/(float)inv_norm/*)*/); //0.2f+APP.getApp().sin(iteration_warp/2));
 		
 
-		int col1 = lerpcolour(colour1, colour2, inv_norm);
-		int col2 = lerpcolour(colour3, colour4, inv_norm);
+		int col1 = lerpcolour(colour1, colour2, norm); //0.5); //inv_norm);
+		int col2 = lerpcolour(colour3, colour4, norm); //0.5); //norm);
 		
 		((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
 				(int)APP.getApp().red(col1),
@@ -183,7 +181,7 @@ class SpinnerSequence1 extends SpinnerSequence {
 		colour3 = randomColorMinimum(96); //APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 		colour4 = randomColorMinimum(196); //APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, /*4, 5, 6, 7 */} ));
-		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, Blob.SH_TEXTURE, /*5, 6,*/ 7 } ));
+		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, } )); //Blob.SH_TEXTURE, /*5, 6,*/ 7 } ));
 		
 		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { /*2, 4, 8, */4} ));
 		//((BlendDrawer)switcher.getScene("blob drawer").getFilter("BlendDrawer")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 3, 7, 12, 0, 1 } ));
@@ -200,7 +198,7 @@ class SpinnerSequence1 extends SpinnerSequence {
 }
 
 class SpinnerSequence2 extends SpinnerSequence {
-    	int colour1, colour2, colour3, colour4;    	
+    	//int colour1, colour2, colour3, colour4;    	
     	public SpinnerSequence2(Scene scene, int i) {
     		// TODO Auto-generated constructor stub
     		super((BlobFX1) scene, i);
@@ -215,7 +213,8 @@ class SpinnerSequence2 extends SpinnerSequence {
     		//float iteration_warp = (float)(1.0f/(float)iteration)*(float)norm;
     		
     		host.getFilter("BlobDrawer").setParameterValue("totalRotate", (float)-norm*360.0f); //PApplet.radians((float)norm*360));
-    		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*180.0f);
+    		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*360.0f);
+    		//host.getFilter("BlobDrawer2").setParameterValue("rotation", (float)-norm*360.0f);
     		host.getFilter("BlobDrawer2")
     			.setParameterValue("totalRotate", (float)norm*180.0f) // was 720
     			.setParameterValueFromSin("radius", APP.getApp().sin((float)(inv_norm))) ///2f)))
@@ -228,15 +227,13 @@ class SpinnerSequence2 extends SpinnerSequence {
     				(int)APP.getApp().red(col1),
     				(int)APP.getApp().green(col1),
     				(int)APP.getApp().blue(col1),
-    				/*(col1 >> 24) & 0xFF,
-    				(col1 >> 16) & 0xFF,
-    				(col1 >> 8) & 0xFF,*/
     				255);
 
     		((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
     				(int)APP.getApp().red(col2),
     				(int)APP.getApp().green(col2),
-    				(int)APP.getApp().blue(col2));
+    				(int)APP.getApp().blue(col2),
+    				255);
     	}
     	public void onStart() {
     		super.onStart();
@@ -259,7 +256,7 @@ class SpinnerSequence2 extends SpinnerSequence {
 }
 
 class SpinnerSequence3 extends SpinnerSequence {
-	int colour1, colour2, colour3, colour4;    	
+	//int colour1, colour2, colour3, colour4;    	
 	public SpinnerSequence3(Scene scene, int i) {
 		// TODO Auto-generated constructor stub
 		super((BlobFX1) scene, i);
@@ -276,12 +273,15 @@ class SpinnerSequence3 extends SpinnerSequence {
 		host.getFilter("BlobDrawer").setParameterValue("totalRotate", (float)-norm*360.0f); //PApplet.radians((float)norm*360));
 		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*180.0f);
 		host.getFilter("BlobDrawer2")
-			.setParameterValue("totalRotate", (float)norm*180.0f) // was 720
+			.setParameterValue("totalRotate", (float)norm*360.0f) // was 720
 			.setParameterValueFromSin("radius", PApplet.sin((float)(inv_norm))) ///2f)))
 		;
 		
+		host.getFilter("BlobDrawer2").setParameterValueFromSin("numofCircles", /*APP.getApp().sin(*/(float)inv_norm/*)*/); //0.2f+APP.getApp().sin(iteration_warp/2));
+
+		
 		int col1 = lerpcolour(colour1, colour2, inv_norm);
-		int col2 = lerpcolour(colour3, colour4, norm);
+		int col2 = lerpcolour(colour2, colour4, norm);
 		
 		((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
 				(int)APP.getApp().red(col1),
@@ -297,22 +297,22 @@ class SpinnerSequence3 extends SpinnerSequence {
 		super.onStart();
 		println("onStart() " + this);
 		colour1 = randomColorMinimum(196);
-		colour2 = randomColorMinimum(96) * 2; // brighter
+		colour2 = randomColorMinimum(96) * 2; // brighter;;
 		colour3 = randomColorMinimum(96) * 2;
 		colour4 = randomColorMinimum(196);
 		
-		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",random(1)>=0.5f);
-		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",random(1)>=0.5f);
+		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",random(1.0f)>=0.5f);
+		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",random(1.0f)>=0.5f);
 	
 		//this.setLengthMillis(250 * (int)(APP.getApp().random(1,5)));
 		
 		((BlobDrawer)host.getFilter("BlobDrawer")).setParameterDefaults();
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterDefaults();
 		
-		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_COMPOUND, Blob.SH_CIRCLE, Blob.SH_FLOWER } ));
+		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_COMPOUND, Blob.SH_CIRCLE, Blob.SH_FLOWER , Blob.SH_TEXTURE} ));
 		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_TEXTURE, Blob.SH_RECT, Blob.SH_POLY } ));
 		
-		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 2,  8, 4 } ));
+		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 10,  8, 4 } ));
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",random(0f,1f));
 		
 		//toggleOutputs();
@@ -322,7 +322,7 @@ class SpinnerSequence3 extends SpinnerSequence {
 
 
 class SpinnerSequence4 extends SpinnerSequence {
-	int colour1, colour2, colour3, colour4;    	
+	//int colour1, colour2, colour3, colour4;    	
 	public SpinnerSequence4(Scene scene, int i) {
 		// TODO Auto-generated constructor stub
 		super((BlobFX1) scene, i);
@@ -338,9 +338,9 @@ class SpinnerSequence4 extends SpinnerSequence {
 
 		
 		host.getFilter("BlobDrawer").setParameterValue("totalRotate", (float)norm*360.0f); //PApplet.radians((float)norm*360));
-		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)norm*180.0f);
+		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*180.0f);
 		host.getFilter("BlobDrawer2")
-			.setParameterValue("totalRotate", (float)norm*180.0f) // was 720
+			.setParameterValue("totalRotate", PApplet.abs((float)norm*180.0f)) // was 720
 			.setParameterValueFromSin("radius", PApplet.sin((float)(inv_norm))) ///2f)))
 		;
 		
@@ -349,11 +349,12 @@ class SpinnerSequence4 extends SpinnerSequence {
 		
 		((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
 				(int)APP.getApp().red(col1),
-				(int)APP.getApp().green(-col1),
-				(int)APP.getApp().blue(col1));
+				(int)APP.getApp().green(col1),
+				(int)APP.getApp().blue(col1)
+		);
 
 		((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
-				(int)APP.getApp().red(-col2),
+				(int)APP.getApp().red(col2),
 				(int)APP.getApp().green(col2),
 				(int)APP.getApp().blue(col2));
 	}
