@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.BlankFilter;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
@@ -23,6 +24,10 @@ import vurfeclipse.scenes.PlasmaScene;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.Sequence;
 import codeanticode.glgraphics.GLGraphicsOffScreen;
+import controlP5.Bang;
+import controlP5.CallbackEvent;
+import controlP5.ControlP5;
+import controlP5.Controller;
 
 
 
@@ -42,6 +47,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  private boolean bindToRandom = true;
 	  private boolean randomMode = true;
+		private boolean historyMode = false;
+
 		private ArrayList<String> historySequenceNames = new ArrayList<String>();
 		private int historyCursor;
 
@@ -62,12 +69,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		public void saveHistory(String fileName) throws IOException {
 			FileOutputStream fos = new FileOutputStream(fileName);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			//oos.writeObject(this.historySequenceNames);
-			for (String seqname : this.historySequenceNames) {
+			oos.writeObject(this.historySequenceNames);
+			/*for (String seqname : this.historySequenceNames) {
 				oos.writeObject(seqname);
-				oos.writeChars("\n");
-			}
+				oos.writeChars("\r\n");
+			}*/
 			oos.close();
+			println("Saved sequencer history to " + fileName + "!");
 		}
 		
 		public void loadHistory()throws IOException {
@@ -79,6 +87,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			try {
 				this.historySequenceNames = (ArrayList<String>) ois.readObject();
+				println("Loaded sequencer history from " + fileName + "!");
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -271,7 +280,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 
 	  public void nextSequence() {
-	  	if (randomMode) {
+	  	if (historyMode) {
+	  		this.histNextSequence(1, true);
+	  	} else if (randomMode) {
 	  		randomSequence();
 	  	} else {
 	  		println("Moving to seqList index " + seq_pos++);
@@ -289,36 +300,32 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  	this.histPreviousSequence(distance, true);
 	  }*/
 	  
-	  public void histPreviousSequence(int distance, boolean restart) {
+	  public void histMoveCursor(int distance, boolean restart) {
 	  	int size = this.historySequenceNames.size();
-	  	historyCursor-=distance;
+	  	historyCursor+=distance;
 	  	if (historyCursor<0) {
 	  		historyCursor = 0;
 	  		host.println("SequenceSequencer already at start of history");
+	  	} else if (historyCursor>size-1) {
+	  		historyCursor = size - 1;
+	  		
+	  		host.println("SequenceSequencer already at end of history");
 	  	} else {
 	  		if (this.historySequenceNames.get(historyCursor)!=null) {
-	  			host.println("SequenceSequencer moving history cursor to " + historyCursor);
+	  			host.println("SequenceSequencer moving history cursor to " + historyCursor + " with restart of " + restart);
 	  			String previousSequenceName = this.historySequenceNames.get(historyCursor);
 	  		
 	  			changeSequence(previousSequenceName, false, restart);
 	  			//if (size>1) this.historySequenceNames.remove(size-1);
 	  		}
-	  	}
+	  	}	  
+	  }
+	  
+	  public void histPreviousSequence(int distance, boolean restart) {
+	  	this.histMoveCursor(-distance, restart);
 	  }
 	  public void histNextSequence(int distance, boolean restart) {
-	  	int size = this.historySequenceNames.size();
-  		
-	  	historyCursor+=distance;
-	  	if (historyCursor>size-1) {
-	  		historyCursor = size-1;
-	  		
-	  		host.println("SequenceSequencer already at end of history");
-	  	} else {
-	  		host.println("SequenceSequencer moving history cursor to " + historyCursor);
-	  		String previousSequenceName = this.historySequenceNames.get(historyCursor);
-	  	
-	  		changeSequence(previousSequenceName, false, restart);
-	  	}
+	  	this.histMoveCursor(distance, restart);
 	  }
 	  
 	  public void changeSequence(String sequenceName) {
@@ -545,13 +552,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  }*/
 	
 	@Override public boolean sendKeyPressed(char key) {
-		if (key=='s') {
+		/*if (key=='w') {
     	try {
     			saveHistory();
     	} catch (IOException e) {
     		System.out.println("Couldn't save history! " + e);
     	}
-    } else if (key=='a') {
+    } else */if (key=='e') {
     	try {
     			loadHistory();
     	} catch (IOException e) {
@@ -565,11 +572,57 @@ public class SequenceSequencer extends Sequencer implements Targetable {
       restartSequence();
     } else if (key=='o') { // HISTORY 'cut' between cursor/next (or do random if at end?)
       cutSequence();
+    } else if (key=='p') {
+    	this.historyMode = !this.historyMode;
+    	println ("historyMode set to " + historyMode);
     } else if (super.sendKeyPressed(key)) {
     } else {
     	return false;
     }
 		return true;
 	}
+	
+	protected Bang saveHistoryButton;
+	protected Bang loadHistoryButton;
+
+	@Override public void setupControls (ControlP5 cp5, String tabName) {
+    this.saveHistoryButton = cp5.addBang("SAVE sequencer history").moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab()).linebreak();
+    this.loadHistoryButton = cp5.addBang("LOAD sequencer history").moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab()).linebreak();
+    cp5.addCallback(this);
+	}
+	
+  @Override public void controlEvent (CallbackEvent ev) {
+    //println("controlevent in " + this);
+    if (ev.getAction()==ControlP5.ACTION_RELEASED) {
+    	Controller c = ev.getController();
+      if (ev.getController()==this.saveHistoryButton) {
+        try {
+					this.saveHistory();
+				} catch (IOException e) {
+					println("Problem saving history!");
+					e.printStackTrace();
+				}
+      } else if (ev.getController()==this.loadHistoryButton) {
+        try {
+					this.loadHistory();
+				} catch (IOException e) {
+					println("Problem load history!");
+					e.printStackTrace();
+				}
+      }
+      /*else if (ev.getController()==this.saveButton) {
+        println("save preset " + getSceneName());
+        //this.savePreset(saveFilenameController.getText(), getSerializedMap());
+        this.savePreset(getSceneName());
+      }
+      else if (ev.getController()==this.loadButton) {
+        println("load preset");
+        this.loadPreset2(getSceneName()); //saveFilenameController.getText());
+      }*/
+    } else {
+    	super.controlEvent(ev);
+    }
+  }
+
 
 }

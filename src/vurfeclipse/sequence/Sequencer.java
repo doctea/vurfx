@@ -7,10 +7,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import controlP5.Bang;
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
+import controlP5.ControlP5;
 import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
 
-abstract public class Sequencer implements Targetable {
+abstract public class Sequencer implements Targetable, CallbackListener {
 	public Project host;
 
 	boolean locked = false;
@@ -80,5 +84,28 @@ abstract public class Sequencer implements Targetable {
     }
 		return true;
 	}
+
+	public void setupControls(ControlP5 cp5, String string) {
+		// TODO Auto-generated method stub
+
+	}
+
+  public void controlEvent (CallbackEvent ev) {
+    //println("controlevent in " + this);
+    /*if (ev.getAction()==ControlP5.ACTION_RELEASED) {
+      if (ev.getController()==this.saveHistoryButton) {
+        
+      }
+      else if (ev.getController()==this.saveButton) {
+        println("save preset " + getSceneName());
+        //this.savePreset(saveFilenameController.getText(), getSerializedMap());
+        this.savePreset(getSceneName());
+      }
+      else if (ev.getController()==this.loadButton) {
+        println("load preset");
+        this.loadPreset2(getSceneName()); //saveFilenameController.getText());
+      }
+    }*/
+  }
 
 }
