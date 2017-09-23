@@ -62,7 +62,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		public void saveHistory(String fileName) throws IOException {
 			FileOutputStream fos = new FileOutputStream(fileName);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(this.historySequenceNames);
+			//oos.writeObject(this.historySequenceNames);
+			for (String seqname : this.historySequenceNames) {
+				oos.writeObject(seqname);
+				oos.writeChars("\n");
+			}
 			oos.close();
 		}
 		
@@ -547,13 +551,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     	} catch (IOException e) {
     		System.out.println("Couldn't save history! " + e);
     	}
-    } /*else if (key=='l') {
+    } else if (key=='a') {
     	try {
     			loadHistory();
     	} catch (IOException e) {
     		System.out.println("Couldn't load history! " + e);
     	}
-    } */else if (key=='j' || key=='J') {	// HISTORY BACK
+    } else if (key=='j' || key=='J') {	// HISTORY BACK
       histPreviousSequence(1,key=='j'?true:false);
     } else if (key=='k' || key=='K') { // HISTORY FORWARD
       histNextSequence(1,key=='k'?true:false);
