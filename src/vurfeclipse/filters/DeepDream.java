@@ -3,8 +3,8 @@ package vurfeclipse.filters;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Scene;
 
-import org.bytedeco.javacpp.*;
-import org.bytedeco.javacpp.presets.caffe;
+//import org.bytedeco.javacpp.*;
+//import org.bytedeco.javacpp.presets.caffe;
 
 public class DeepDream extends Filter {
 
