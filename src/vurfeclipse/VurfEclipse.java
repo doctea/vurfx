@@ -9,6 +9,7 @@ import controlP5.*;
 
 import vurfeclipse.projects.*;
 import vurfeclipse.user.projects.*;
+import vurfeclipse.user.projects.TestProject;
 import codeanticode.glgraphics.*;
 import ddf.minim.*;
 
@@ -32,7 +33,7 @@ public class VurfEclipse extends PApplet {
 	}*/
 
 	boolean hdRes = false;//true;
-	boolean mdRes = true;
+	boolean mdRes = false; //true;
 	boolean projRes = false;
 	boolean ultrahiRes = false;
 	boolean hiRes = true;
@@ -334,12 +335,14 @@ public class VurfEclipse extends PApplet {
 
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-		 pr = new MutanteProject(desired_width, desired_height, gfx_mode);
+		 //pr = new MutanteProject(desired_width, desired_height, gfx_mode);
 		 //pr = new FeralFestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
 		 //pr = new PharmacyProject(desired_width, desired_height, gfx_mode);
 		 //pr = new TempSocioSukiVideoProject(desired_width, desired_height, gfx_mode);
+		 
+		 pr = new TestProject(desired_width, desired_height, gfx_mode);
 
 		 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 		 
@@ -356,7 +359,7 @@ public class VurfEclipse extends PApplet {
 		   timeMillis = 500;
 		   lastSecond = timeMillis;
 		   noLoop();
-		   while (true && frameCount< (60*global_fps)) {
+		   while (true && frameCount < (60*global_fps)) {
 		     System.out.println("exportMode: about to call redraw()");
 		     draw();
 		   }

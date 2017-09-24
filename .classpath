@@ -1,174 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/base/opengl-orig/library/jogl.jar">
+	<classpathentry kind="lib" path="lib/base/opengl-orig/library/jogl.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/opengl-orig/library/opengl.jar" sourcepath="lib/base/opengl/glgraphics-code/src/codeanticode/glgraphics">
+	<classpathentry kind="lib" path="lib/base/opengl-orig/library/opengl.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/opengl-orig/library/gluegen-rt.jar">
+	<classpathentry kind="lib" path="lib/base/opengl-orig/library/gluegen-rt.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/linux64"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/gson-2.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/user/GLGraphics/GLGraphics.jar" sourcepath="D:/code/processing/sketches/libraries/GLGraphics/src">
+	<classpathentry kind="lib" path="lib/user/gson-2.3.jar"/>
+	<classpathentry kind="lib" path="lib/user/GLGraphics/GLGraphics.jar" sourcepath="D:/code/processing/sketches/libraries/GLGraphics/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/GLGraphics/reference/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/GLGraphics/library"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/minim/jl1.0.jar">
+	<classpathentry kind="lib" path="lib/base/minim/jl1.0.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/minim/jsminim.jar">
+	<classpathentry kind="lib" path="lib/base/minim/jsminim.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/minim/minim-spi.jar">
+	<classpathentry kind="lib" path="lib/base/minim/minim-spi.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/minim/minim.jar">
+	<classpathentry kind="lib" path="lib/base/minim/minim.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/minim/mp3spi1.9.4.jar">
+	<classpathentry kind="lib" path="lib/base/minim/mp3spi1.9.4.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/minim/tritonus_aos.jar">
+	<classpathentry kind="lib" path="lib/base/minim/tritonus_aos.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/minim/tritonus_share.jar">
+	<classpathentry kind="lib" path="lib/base/minim/tritonus_share.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/video/video.jar" sourcepath="D:/code/processing-1.5.1/modes/java/libraries/video/src">
+	<classpathentry kind="lib" path="lib/base/video/video.jar" sourcepath="D:/code/processing-1.5.1/modes/java/libraries/video/src">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/video"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/core/ant-launcher.jar">
+	<classpathentry kind="lib" path="lib/base/core/ant-launcher.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/core"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/core/ant.jar">
+	<classpathentry kind="lib" path="lib/base/core/ant.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/core"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/core/core.jar">
+	<classpathentry kind="lib" path="lib/base/core/core.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/core"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/base/core/jna.jar">
+	<classpathentry kind="lib" path="lib/base/core/jna.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/core"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/audioutils/audioutils.jar">
+	<classpathentry kind="lib" path="lib/user/audioutils/audioutils.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/audioutils"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/candy/candy.jar">
+	<classpathentry kind="lib" path="lib/user/candy/candy.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/candy"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/colorutils/colorutils.jar">
+	<classpathentry kind="lib" path="lib/user/colorutils/colorutils.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/colorutils"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/controlP5/controlP5.jar" sourcepath="lib/user/controlP5/src/controlP5">
+	<classpathentry kind="lib" path="lib/user/controlP5/controlP5.jar" sourcepath="D:/code/processing/sketches/libraries/controlP5/src">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/home/doctea/vurf-eclipse/lib/user/controlP5/reference/"/>
+			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/controlP5/reference/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/controlP5"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/datautils/datautils.jar">
+	<classpathentry kind="lib" path="lib/user/datautils/datautils.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/datautils"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/dLibs_freenect/dLibs_freenect.jar" sourcepath="D:/code/processing/sketches/libraries/dLibs_freenect/src">
+	<classpathentry kind="lib" path="lib/user/dLibs_freenect/dLibs_freenect.jar" sourcepath="D:/code/processing/sketches/libraries/dLibs_freenect/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/dLibs_freenect/reference/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/dLibs_freenect"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/dLibs_freenect/jna.jar" sourcepath="D:/code/processing/sketches/libraries/dLibs_freenect/src">
+	<classpathentry kind="lib" path="lib/user/dLibs_freenect/jna.jar" sourcepath="D:/code/processing/sketches/libraries/dLibs_freenect/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/dLibs_freenect/reference/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/dLibs_freenect"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/eyetracking/eyetracking.jar">
+	<classpathentry kind="lib" path="lib/user/eyetracking/eyetracking.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/eyetracking"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/eyetracking/text20.jar">
+	<classpathentry kind="lib" path="lib/user/eyetracking/text20.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/eyetracking"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/flob/flob.jar" sourcepath="D:/code/processing/sketches/libraries/flob/src">
+	<classpathentry kind="lib" path="lib/user/flob/flob.jar" sourcepath="D:/code/processing/sketches/libraries/flob/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/flob/reference/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/flob"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/kinect/kinect.jar">
+	<classpathentry kind="lib" path="lib/user/kinect/kinect.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/kinect"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/layers/layers.jar" sourcepath="D:/code/processing/sketches/libraries/layers/src">
+	<classpathentry kind="lib" path="lib/user/layers/layers.jar" sourcepath="D:/code/processing/sketches/libraries/layers/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/layers/reference/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/layers"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/openkinect/openkinect.jar">
+	<classpathentry kind="lib" path="lib/user/openkinect/openkinect.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/openkinect"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/peasycam/peasycam.jar" sourcepath="D:/code/processing/sketches/libraries/peasycam/src">
+	<classpathentry kind="lib" path="lib/user/peasycam/peasycam.jar" sourcepath="D:/code/processing/sketches/libraries/peasycam/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/peasycam/reference/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/peasycam"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/proxml/proxml.jar" sourcepath="D:/code/processing/sketches/libraries/proxml/src">
+	<classpathentry kind="lib" path="lib/user/proxml/proxml.jar" sourcepath="D:/code/processing/sketches/libraries/proxml/src">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/proxml"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/rwmidi/rwmidi.jar" sourcepath="D:/code/processing/sketches/libraries/rwmidi/src">
+	<classpathentry kind="lib" path="lib/user/rwmidi/rwmidi.jar" sourcepath="D:/code/processing/sketches/libraries/rwmidi/src">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/rwmidi"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/themidibus/themidibus.jar" sourcepath="D:/code/processing/sketches/libraries/themidibus/src">
+	<classpathentry kind="lib" path="lib/user/themidibus/themidibus.jar" sourcepath="D:/code/processing/sketches/libraries/themidibus/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/themidibus/reference/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/themidibus"/>
@@ -177,31 +177,16 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry exported="true" kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar">
+	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/VurfEclipse/lib/user/SimpleOpenNI/library"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/user/guava/guava-18.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/user/GSVideo-linux/jna.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/user/GSVideo-linux/GSVideo.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/doctea/vurf-eclipse/lib/user/GSVideo-linux/library/gstreamer"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/user/GSVideo-linux/gstreamer-java.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/user/fullscreen/library/fullscreen.jar" sourcepath="lib/user/fullscreen/reference">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/fullscreen/library"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/classes"/>
-	<classpathentry kind="lib" path="lib/user/javacpp.jar"/>
-	<classpathentry kind="lib" path="lib/user/oscP5/library/oscP5.jar" sourcepath="lib/user/oscP5/src">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/home/doctea/vurf-eclipse/lib/user/oscP5/reference/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
+	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
+	<classpathentry kind="lib" path="lib/user/GSVideo/library/gstreamer-java.jar"/>
+	<classpathentry kind="lib" path="lib/user/GSVideo/library/GSVideo.jar"/>
+	<classpathentry kind="lib" path="lib/user/GSVideo/library/jna.jar"/>
+	<classpathentry kind="lib" path="lib/user/fullscreen/library/fullscreen.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
