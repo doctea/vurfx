@@ -272,10 +272,10 @@ public class VurfEclipse extends PApplet {
 			    //frame.setSize(output_width, output_height);
 			    frame.addWindowStateListener(new WindowStateListener() {
 			      public void windowStateChanged(WindowEvent arg0) {
-			         System.out.println(arg0);
+			         System.out.println("Caught windowStateChanged " + arg0);
 			      }
 			   });
-			 	frame.setUndecorated(true);
+			   //frame.setUndecorated(true);
 
 			   frame.setVisible(true);
 			   frame.addNotify();

@@ -172,6 +172,7 @@ public class SceneSequencer extends Sequencer implements Targetable {
 	/*	  if (getActiveScene().isMuted()) 
 			  randomScene();	// danger - will recurse if there isn't an available unmuted scene to pick
 		  else*/
+		  if (count > 0)
 			  changeScene((String)scenes.keySet().toArray()[chosen]);
 	  }
 	  
