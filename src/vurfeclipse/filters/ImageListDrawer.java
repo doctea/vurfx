@@ -109,6 +109,7 @@ public class ImageListDrawer extends Filter {
 	  File folder = new File(path);
 	  System.out.println(this + "#loadDirectory() got path " + path);
 	  int count = 0;
+	  if (!folder.exists()) return;
 	  for (final File fileEntry : folder.listFiles()) {
 		  if (fileEntry.isDirectory()) {
 			  // skip; maybe recurse tho in future
