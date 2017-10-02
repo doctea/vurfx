@@ -43,16 +43,19 @@ public class ImageListDrawer extends Filter {
     this.src_file = src_file;
   }
 
+  @Deprecated
   public ImageListDrawer setDirectory(String directory) {
 	  this.directory = directory;
 	  return this;
   }
 
+  @Deprecated
   public ImageListDrawer setFileList(String src_file) {
     this.src_file = src_file;
     return this;
   }
 
+  @Deprecated
   public ImageListDrawer setCurrentIndex (int index) {
     this.current_image_index = index;
     return this;
@@ -64,8 +67,18 @@ public class ImageListDrawer extends Filter {
    }*/
 
   //HashMap<String,PImage> images = new HashMap<String,PImage>();
+  @Deprecated
   ArrayList<String> filenames = new ArrayList<String>();
+  
+  @Deprecated
+  public ArrayList<String> getFilenames() {
+  	if (filenames == null) {
+  		this.loadDirectory();
+  	}
+  	return this.filenames;
+  }
 
+  @Deprecated
   public void loadFilenames() {
     //filenames = new String[numBlobs];
     //image_srcs = new GLTexture[numBlobs];
@@ -97,10 +110,12 @@ public class ImageListDrawer extends Filter {
     }
   }
 
+  @Deprecated
   public void loadDirectory() {
 	  loadDirectory(this.directory);
   }
 
+  @Deprecated
   public void loadDirectory(String directory) {
 	  String path = APP.getApp().sketchPath("bin/data/image-sources/" + directory);	// ffs need this on Windows..
 	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
@@ -142,8 +157,9 @@ public class ImageListDrawer extends Filter {
    return p;//images.get(fn);
    }*/
 
+  @Deprecated
   public PImage getCurrentImage (ImageRepository IR) {
-    System.out.println(this + "#getCurrentImage for current_image_index: [" + current_image_index + "/" + filenames.size() + "]");
+    println(this + "#getCurrentImage for current_image_index: [" + current_image_index + "/" + filenames.size() + "]");
     //PImage p = getImageForFilename(filenames.get(current_image_index));
     //if (!images.containsKey(filenames.get(current_image_index))) {
     /*if(!IR.hasCached(filenames.get(current_image_index), sc.w, sc.h)) {
@@ -167,20 +183,21 @@ public class ImageListDrawer extends Filter {
      return current_image;*/
     //return this.image_srcs[current_image_index];
   }
+  @Deprecated
   public void nextImage () {
-    System.out.println(this + "#nextImage [" + current_image_index + "/" + filenames.size() + "]");
+    println(this + "#nextImage [" + current_image_index + "/" + filenames.size() + "]");
     current_image_index++;
     //IR.precache(filenames.get(current_image_index), sc.w, sc.h);
     if (current_image_index >= filenames.size())
       current_image_index = 0;
     else if (!ImageRepository.IR.hasCached(filenames.get(current_image_index), sc.w, sc.h)) {
-      System.out.println(this + "#nextImage: haven't got cached " + filenames.get(current_image_index));
+      println(this + "#nextImage: haven't got cached " + filenames.get(current_image_index));
       current_image_index++;// = 0;//current_image_index--;
     }
 
     //IR.precache(filenames.get(current_image_index), sc.w, sc.h);#
     //p = IR.cacheLoad(filenames.get(current_image_index), sc.w, sc.h);
-    p = getCurrentImage(ImageRepository.IR);
+    setSlide(getCurrentImage(ImageRepository.IR));
     //if (!images.containsKey(filenames.get(current_image_index))) current_image_index-=1; //cacheImage(filenames.get(current_image_index));
   }
 
@@ -233,7 +250,7 @@ public class ImageListDrawer extends Filter {
     return this;
   }
 
-  PImage p;
+  private PImage p;
   public boolean applyMeatToBuffers() {
     //System.out.println("in applymeattobuffers in ImageListDrawer (" + this + "), src is " + src + " and out is " + out);
     //if (fileChanged) {
@@ -252,20 +269,20 @@ public class ImageListDrawer extends Filter {
     out.scale((Float)getParameterValue("scale"));//random(0,100));
 
     //p = getCurrentImage(IR);
-    if (p!=null) {
+    if (getSlide()!=null) {
       //out.image(p, 0, 0, sc.w, sc.h);//sc.w*map((Float)getParameterValue("scale"),1.0,5.0,0.0,1.0),sc.h*map((Float)getParameterValue("scale"),1.0,5.0,0.0,1.0));
-      out.background(p);
+      out.background(getSlide());
       //out.image(p, 0, 0, sc.w, sc.h);
       //out.scale(-1,0);
       //out.translate((Integer)getParameterValue("translate_x"), (Integer)getParameterValue("translate_y"));
       if ((Integer)getParameterValue("translate_x")<0) {
-        out.image(p, sc.w, 0, sc.w, sc.h);
+        out.image(getSlide(), sc.w, 0, sc.w, sc.h);
       }
       else if ((Integer)getParameterValue("translate_x")>0) {
-        out.image(p, 0-sc.w, 0, sc.w, sc.h);
+        out.image(getSlide(), 0-sc.w, 0, sc.w, sc.h);
       }
     }
-    p = null;
+    setSlide(null);
     out.popMatrix();
     //fileChanged = false;
     //}
@@ -275,6 +292,17 @@ public class ImageListDrawer extends Filter {
     //arrayCopy(src.pixels, out.pixels);
     return true;
   }
+  @Deprecated
+	public void chooseImageIndex(int imageIndex) {
+		this.setCurrentIndex(imageIndex);
+		setSlide(getCurrentImage(ImageRepository.IR));
+	}
+	public PImage getSlide() {
+		return p;
+	}
+	public void setSlide(PImage p) {
+		this.p = p;
+	}
 
   /*public void beginDraw() {
    //src.loadPixels();
