@@ -21,6 +21,7 @@ import vurfeclipse.sequence.Sequencer;
 import vurfeclipse.streams.*;
 import codeanticode.glgraphics.*;
 import controlP5.*;
+import processing.core.PApplet;
 
 
 public abstract class Project implements Serializable {
@@ -97,7 +98,7 @@ public abstract class Project implements Serializable {
   //public GLGraphicsOffScreen getOutputBuffer() {
   public Canvas getOutputCanvas() {
     //return buffers[BUF_OUT];
-    return getCanvas("out");
+    return getCanvas(getPath()+"out");
   }
 
 ////// sequencer stuff?
@@ -546,6 +547,9 @@ public abstract class Project implements Serializable {
     println("Project#setupControls about to get controlwindow");
     ControlWindow cw = ((VurfEclipse)APP.getApp()).getCW();
 
+    this.sequencer.setupControls(cp5, "Default");
+    
+    //this.setupMonitor(cp5);
 
     println("Project#setupControls about to loop over scenes");
     Iterator<Scene> i = scenes.iterator();
@@ -575,7 +579,31 @@ public abstract class Project implements Serializable {
 
 
 
-  int guid = 10000;
+  private void setupMonitor(ControlP5 cp5) {
+		// TODO Auto-generated method stub
+    //controlWindow = cp5.addControlWindow("controlP5window",100,100,width/2,height/2,30);
+  	final Project p = this;
+    //cp5.getWindow().setUpdateMode(ControlWindow.NORMAL);
+  	//((VurfEclipse)APP.getApp()).getCW()
+    ControlWindowCanvas monitor = ((VurfEclipse)APP.getApp()).getCW().getCurrentTab().addCanvas(new ControlWindowCanvas() {
+			@Override
+			public void draw(PApplet theApplet) {
+				// TODO Auto-generated method stub
+				//theApplet.background((int) (Math.random()*255));
+				/*if (p.canvases.containsKey(p.getPath()+"out")) {
+					theApplet.pushMatrix();
+					//theApplet.image(p.getCanvas(p.getPath()+"out").getSurf().get(), 0, theApplet.height - p.h/8, p.w/8, p.h/8);
+					theApplet.color((int) (Math.random()*255));
+					theApplet.rect(50, 50, 200, 200);
+					theApplet.rectMode((int) (Math.random()*10));
+					theApplet.popMatrix();
+				}*/
+			}
+    }); //.moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab());
+    
+  }
+
+	int guid = 10000;
   public int getGUID() {
     return guid++;
   }

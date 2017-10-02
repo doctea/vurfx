@@ -15,7 +15,7 @@ import vurfeclipse.scenes.Scene;
 abstract public class Sequence implements Mutable {
 	//Scene sc;
 	
-	public Random rng = new Random();
+	public Random rng = new Random(1337);
 	long seed = rng.nextLong();
 
 	int startTimeMillis;

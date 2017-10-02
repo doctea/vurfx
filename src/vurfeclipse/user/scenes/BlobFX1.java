@@ -20,6 +20,7 @@ public class BlobFX1 extends SimpleScene {
 		setSceneName("BlobFX1 Instance");
 	}
 	
+	@Override
 	public boolean setupFilters() {	
 		//SimpleScene this = (SimpleScene) new SimpleScene(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out");
 		super.setupFilters();

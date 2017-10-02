@@ -121,7 +121,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  //println(this+"#runSequences");
 		  // probably want to move this up to Sequencer and do super.runSequences()
 		  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
-			  println(this+"#runSequences(): is readyToChange from "+this.activeSequenceName + ", calling randomSequence()");
+			  println(this+"#runSequences(): is readyToChange from " + this.activeSequenceName + ", calling randomSequence()");
 			  nextSequence();
 		  }
 		  if (getActiveSequence()==null) nextSequence();
