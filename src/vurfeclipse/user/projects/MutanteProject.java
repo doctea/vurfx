@@ -111,13 +111,20 @@ public class MutanteProject extends Project implements Serializable {
 
   	/// INPUT SCENES
 
-    final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
-    final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
+    //final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
+    //final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
     
     int BLOBCOUNT = 5; //20; // set to 50 for production, 5 makes for quick loading!
 
-    ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"mutante").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory("mutante"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer2").nextMode());
+    //ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"mutante").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
+    
+    ImageListScene ils1 = new ImageListScene(this,w,h).setDirectory("mutante");//.setDirectory("mutante");
+    //this.addSceneOutputCanvas(ils1, "pix0");
+    
+    ImageListScene ils2 = new ImageListScene(this,w,h).setDirectory("mutante");
+    //this.addSceneOutputCanvas(ils2, "pix1");
+    
+    //ils2.addFilter(new ImageListDrawer(ils2).setDirectory("mutante"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer2").nextMode());
 
     /*ils2.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
     ils2.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
@@ -137,22 +144,8 @@ public class MutanteProject extends Project implements Serializable {
     final PlainDrawer pd = (PlainDrawer)new PlainDrawer(ils2).setFilterName("Source Switcher").setInputCanvas("/pix1");
     ils2.addFilter(pd);*/
 
-    ils1.addSequence("next", new ShowSceneSequence(ils1, 0) {
-			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
-			@Override public void onStop() { super.onStop(); }
-	
-			@Override
-			public void onStart() {
-				super.onStart();
-				ils1.nextFilterMode();
-			}
-			
-			@Override
-			public boolean readyToChange(int max_i) {
-				return true;
-			}
-		});
-    ils2.addSequence("next", new ShowSceneSequence(ils1, 0) {
+
+    /*ils2.addSequence("next", new ShowSceneSequence(ils1, 0) {
 			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
 			@Override public void onStop() { super.onStop(); }
 	
@@ -168,15 +161,15 @@ public class MutanteProject extends Project implements Serializable {
 			}
 
 		});
-
+*/
 
     this.addSceneOutputCanvas(
-      ils1,
-      "/pix0"
+      ils1.setCanvas("out", "/pix0"),
+      "out"
     );
     this.addSceneOutputCanvas(
-      ils2,
-      "/pix1"
+      ils2.setCanvas("out", "/pix1"),
+      "out"
       //"/temp1"
     );
 
@@ -418,7 +411,7 @@ public class MutanteProject extends Project implements Serializable {
     switcher.bindSequence("outputModeChange7", opSequence);
     switcher.bindSequence("outputModeChange8", opSequence);*/
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
-    		new TunnelScene(this, w, h).setCanvas("temp", "/temp2")
+    		new TunnelScene(this, w, h).setCanvas("temp", "/pix0") //temp2")
 			//.addFilter(new BlendDrawer()))
 		, "/pix0", "/out"
 	);
@@ -533,8 +526,9 @@ public class MutanteProject extends Project implements Serializable {
 
     
 
-    switcher.bindSequence("ils1_next", ils1.getSequence("next"), 2+switcher.getSequenceCount()/4);//32);
-    switcher.bindSequence("ils2_next", ils2.getSequence("next"), 2+switcher.getSequenceCount()/4);//32);
+    //ils1.setupFilters();
+    switcher.bindSequence("ils1_choose", ils1.getSequence("choose_0"), 2+switcher.getSequenceCount()/4);//32);
+    switcher.bindSequence("ils2_choose", ils2.getSequence("choose_1"), 2+switcher.getSequenceCount()/4);//32);
    
 
     /*switcher.addSequence("word_take_trips",
