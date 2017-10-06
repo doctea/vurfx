@@ -123,53 +123,14 @@ public class MutanteProject extends Project implements Serializable {
     
     ImageListScene ils2 = new ImageListScene(this,w,h).setDirectory("mutante");
     //this.addSceneOutputCanvas(ils2, "pix1");
-    
-    //ils2.addFilter(new ImageListDrawer(ils2).setDirectory("mutante"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer2").nextMode());
-
-    /*ils2.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
-    ils2.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
-
-    /*ils2.addFilter(new OpenNIFilter(ils2,1).setOutputCanvas("/pix0").setFilterName("kinect"));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
-    ils2.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
-    */
-    
-    //((ImageListDrawer)ils1.getFilter("ImageListDrawer1")).loadDirectory("christmas");
-    //((ImageListDrawer)ils2.getFilter("ImageListDrawer2")).setOutputCanvas("out");
-
-    /*VideoPlayer vp2 = new VideoPlayer(ils2,"");
-    vp2.loadDirectory("video-sources/");
-    vp2.setOutputCanvas("/pix1");
-    ils2.addFilter(vp2);
-    
-    final PlainDrawer pd = (PlainDrawer)new PlainDrawer(ils2).setFilterName("Source Switcher").setInputCanvas("/pix1");
-    ils2.addFilter(pd);*/
-
-
-    /*ils2.addSequence("next", new ShowSceneSequence(ils1, 0) {
-			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
-			@Override public void onStop() { super.onStop(); }
-	
-			@Override
-			public void onStart() {
-				super.onStart();
-				ils2.nextFilterMode();
-			}
-			
-			@Override
-			public boolean readyToChange(int max_i) {
-				return true;
-			}
-
-		});
-*/
 
     this.addSceneOutputCanvas(
       ils1.setCanvas("out", "/pix0"),
-      "out"
+      "/pix0"
     );
     this.addSceneOutputCanvas(
       ils2.setCanvas("out", "/pix1"),
-      "out"
+      "/pix1"
       //"/temp1"
     );
 

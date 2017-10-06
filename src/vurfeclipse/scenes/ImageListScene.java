@@ -34,6 +34,20 @@ public class ImageListScene extends SimpleScene {
 
   PImage p;
 
+
+
+  @Override
+  public boolean setupFilters () {
+    int BLOBCOUNT = 5; //20; // set to 50 for production, 5 makes for quick loading!
+
+    this.addFilter(new ImageListDrawer(this).setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer")).setOutputCanvas(this.getCanvasMapping("out")); //.nextMode());
+    //this.addFilter(new BlendDrawer(this).setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("pix0")).setOutputCanvas(getCanvasMapping("out")));
+   
+    return true;
+  }
+
+  
+  
   public ImageListScene setCurrentIndex (int index) {
     this.current_image_index = index;
     return this;
@@ -61,7 +75,8 @@ public class ImageListScene extends SimpleScene {
   }
   public void loadDirectory(String directory) {
   	if (filenames==null) filenames = new ArrayList<String>();
-	  String path = APP.getApp().sketchPath("bin/data/image-sources/" + directory);	// ffs need this on Windows..
+	  //String path = APP.getApp().sketchPath("bin/data/image-sources/" + directory);	// ffs need this on Windows..
+  	  String path = APP.getApp().sketchPath("data/image-sources/" + directory);	// ffs need this on Windows..
 	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
 	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
 	  //String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
@@ -87,6 +102,7 @@ public class ImageListScene extends SimpleScene {
 		this.setCurrentIndex(imageIndex);
 		p = getCurrentImage(ImageRepository.IR);
 		((ImageListDrawer)this.getObjectForPath("/ImageListDrawer")).setSlide(p);
+		//this.getCanvas(getCanvasMapping("pix0")).getSurf().image(p,0,0);
 	}
 
   public PImage getCurrentImage (ImageRepository IR) {
@@ -144,21 +160,10 @@ public class ImageListScene extends SimpleScene {
   }
 
 
-  @Override
-  public boolean setupFilters () {
-    int BLOBCOUNT = 5; //20; // set to 50 for production, 5 makes for quick loading!
-
-    this.addFilter(new ImageListDrawer(this).setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer")).setOutputCanvas("out"); //.nextMode());
-   
-    return true;
-  }
-
-
 
   	public void setupSequences() {
   		super.setupSequences();
   		int i = 0;
-  		
   		
   		for (String file : (this.getFilenames())) {
   			println ("#setupSequences() adding sequence #" + i + "/" + this.getFilenames().size());

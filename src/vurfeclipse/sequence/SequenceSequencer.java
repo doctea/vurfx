@@ -115,7 +115,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  synchronized public void runSequences() {
 		  if (stopSequencesFlag) {
 			  Iterator<Sequence> it = sequences.values().iterator();
-			  while (it.hasNext()) it.next().stop();
+			  while (it.hasNext()) {
+				  Sequence next = it.next();
+				  if (next!=null) next.stop();
+			  }
 			  stopSequencesFlag = false;
 		  }
 		  //println(this+"#runSequences");

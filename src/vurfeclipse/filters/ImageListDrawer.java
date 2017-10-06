@@ -282,7 +282,7 @@ public class ImageListDrawer extends Filter {
         out.image(getSlide(), 0-sc.w, 0, sc.w, sc.h);
       }
     }
-    setSlide(null);
+    //setSlide(null);
     out.popMatrix();
     //fileChanged = false;
     //}

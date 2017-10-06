@@ -159,6 +159,8 @@ public class BlendDrawer extends Filter {
         out.rotate(PApplet.radians(rotation));
       }
 
+    //src = sc.host.getCanvas(this.canvas_in).getSurf();
+    //out = sc.host.getCanvas(this.canvas_out).getSurf();
 
     GLTextureFilter tf = getFilterNumber(currentBlendMode);
     tf.setParameterValue("Opacity", new Float((Float)this.getParameterValue("Opacity")));
