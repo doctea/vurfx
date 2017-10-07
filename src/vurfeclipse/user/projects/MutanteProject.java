@@ -229,7 +229,7 @@ public class MutanteProject extends Project implements Serializable {
     switcher.bindSequence("blob1_4", blobScene, "preset 4");
 
     Scene blobScene2 = new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out").setInputCanvas("/out");
-    blobScene.setPalette(palette);
+    //blobScene.setPalette(palette);
     this.addScene(blobScene2);
     switcher.bindSequence("blob2_1", blobScene2, "preset 1");
     switcher.bindSequence("blob2_2", blobScene2, "preset 2");
@@ -258,6 +258,7 @@ public class MutanteProject extends Project implements Serializable {
 
     PlasmaScene plasmaScene = (PlasmaScene)(new PlasmaScene(this,w,h).setSceneName("PlasmaScene"));
     plasmaScene.setCanvas("out", "/out");
+    plasmaScene.setCanvas("temp1","/temp2");
 
     addScene(plasmaScene);
     //plasmaScene.setupFilters();
@@ -372,7 +373,7 @@ public class MutanteProject extends Project implements Serializable {
     switcher.bindSequence("outputModeChange7", opSequence);
     switcher.bindSequence("outputModeChange8", opSequence);*/
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
-    		new TunnelScene(this, w, h).setCanvas("temp", "/pix0") //temp2")
+    		new TunnelScene(this, w, h).setCanvas("temp", "/temp2") //temp2")	// "/out"
 			//.addFilter(new BlendDrawer()))
 		, "/pix0", "/out"
 	);
@@ -389,7 +390,7 @@ public class MutanteProject extends Project implements Serializable {
         	"tunnel_2_pulse",
         	*/
     TunnelScene ts2 = (TunnelScene) this.addSceneInputOutputCanvas(
-	    		new TunnelScene(this, w, h).setCanvas("temp", "/temp3")
+	    		new TunnelScene(this, w, h).setCanvas("temp", "/temp3") //
 	    			//.addFilter(new BlendDrawer()))
 
 	    		, "/out", "/out"
@@ -490,6 +491,8 @@ public class MutanteProject extends Project implements Serializable {
     //ils1.setupFilters();
     switcher.bindSequence("ils1_choose", ils1.getSequence("choose_0"), 2+switcher.getSequenceCount()/4);//32);
     switcher.bindSequence("ils2_choose", ils2.getSequence("choose_1"), 2+switcher.getSequenceCount()/4);//32);
+    switcher.bindSequence("ils2_choose", ils1.getSequence("choose_2"), 2+switcher.getSequenceCount()/4);//32);
+    switcher.bindSequence("ils2_choose", ils2.getSequence("choose_3"), 2+switcher.getSequenceCount()/4);//32);
    
 
     /*switcher.addSequence("word_take_trips",
