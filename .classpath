@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="lib" path="lib/base/opengl-orig/library/jogl.jar">
+	<classpathentry kind="lib" path="lib/base/core-336/jogl-all.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/windows64"/>
 		</attributes>
@@ -10,18 +10,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/windows64"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/opengl-orig/library/gluegen-rt.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/opengl-orig/library/macosx"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/gson-2.3.jar"/>
-	<classpathentry kind="lib" path="lib/user/GLGraphics/GLGraphics.jar" sourcepath="D:/code/processing/sketches/libraries/GLGraphics/src">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/D:/code/processing/sketches/libraries/GLGraphics/reference/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/GLGraphics/library"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/minim/jl1.0.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
@@ -72,7 +61,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/core"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/core/core.jar">
+	<classpathentry kind="lib" path="lib/base/core-336/core.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/core"/>
 		</attributes>
@@ -174,7 +163,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/themidibus"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="vurfeclipse/filters/dlibKinectFilter.java|vurfeclipse/filters/GLColourDropper.java|vurfeclipse/filters/ImageDrawer.java|vurfeclipse/filters/PointDrawer.java|vurfeclipse/user/projects/AboveBoardsProject.java|vurfeclipse/user/projects/NozstockProject.java|vurfeclipse/scenes/Demo2Scene.java|vurfeclipse/scenes/DemoScene.java|vurfeclipse/user/projects/MagicDustProject.java|vurfeclipse/user/projects/ParadoxProject.java|vurfeclipse/projects/TestProject.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar">
@@ -188,5 +177,7 @@
 	<classpathentry kind="lib" path="lib/user/GSVideo/library/GSVideo.jar"/>
 	<classpathentry kind="lib" path="lib/user/GSVideo/library/jna.jar"/>
 	<classpathentry kind="lib" path="lib/user/fullscreen/library/fullscreen.jar"/>
+	<classpathentry kind="lib" path="lib/base/core-336/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="lib/user/PostFX/library/PostFX.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

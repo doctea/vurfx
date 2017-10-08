@@ -2,9 +2,10 @@ package vurfeclipse.filters;
 
 
 import vurfeclipse.APP;
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
-import codeanticode.glgraphics.GLTextureFilter;
+import processing.core.PGraphics;
+import processing.opengl.PShader;
 
 public class KaleidoFilter extends ShaderFilter {
   boolean flipHorizontal = true, flipVertical = true;
@@ -12,8 +13,8 @@ public class KaleidoFilter extends ShaderFilter {
 
   int d_value = 2;
 
-  transient GLTextureFilter glFilter;
-  transient GLTexture t;
+  transient PShader glFilter;
+  transient PGraphics t;
 
   public KaleidoFilter(Scene sc) {
     super(sc,shaderName);
@@ -27,17 +28,17 @@ public class KaleidoFilter extends ShaderFilter {
   public Filter nextMode() {
     if (flipHorizontal&&flipVertical) {
       flipVertical = false;
-      glFilter.setParameterValue("mirror_y",0);
+      glFilter.set("mirror_y",0);
     } else if (flipHorizontal&&!flipVertical) {
       flipHorizontal = false;
       flipVertical = true;
-      glFilter.setParameterValue("mirror_y",1);
-      glFilter.setParameterValue("mirror_x",0);
+      glFilter.set("mirror_y",1);
+      glFilter.set("mirror_x",0);
     } else if (!flipHorizontal&&flipVertical) {
       flipVertical = true;
       flipHorizontal = true;
-      glFilter.setParameterValue("mirror_y",1);
-      glFilter.setParameterValue("mirror_x",1);
+      glFilter.set("mirror_y",1);
+      glFilter.set("mirror_x",1);
     } else {
       println("wtf");
     }
@@ -50,13 +51,12 @@ public class KaleidoFilter extends ShaderFilter {
 
     //glFilter = new GLTextureFilter();
     //glFilter.setTint((int)random(255)); //random(1),random(1),random(1));
-    glFilter = new GLTextureFilter(APP.getApp(), shaderName); //"Edges.xml");
+    glFilter = APP.getApp().loadShader(shaderName); //new GLTextureFilter(APP.getApp(), shaderName); //"Edges.xml");
 
     //if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
     //if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
 
-    t = new GLTexture(APP.getApp(),sc.w,sc.h);
-
+    t = this.sc.host.createCanvas("/kaleido_buffer", this.getFilterLabel()).getSurf(); //new GLTexture(APP.getApp(),sc.w,sc.h);
 
     return true;
   }
@@ -66,10 +66,10 @@ public class KaleidoFilter extends ShaderFilter {
     src.loadTexture();
     out.loadTexture();*/
     //super.beginDraw();
-    if (t==null) t = new GLTexture(APP.getApp(),sc.w,sc.h);
+    //if (t==null) t = new GLTexture(APP.getApp(),sc.w,sc.h);
     if (src==null) setInputCanvas(canvas_in);
     if (out==null) setOutputCanvas(canvas_out);
-    if (glFilter==null) glFilter = new GLTextureFilter(APP.getApp(), shaderName);
+    if (glFilter==null) glFilter = APP.getApp().loadShader(shaderName); //new GLTextureFilter(APP.getApp(), shaderName);
   }
   public void endDraw() {
   }
@@ -77,9 +77,10 @@ public class KaleidoFilter extends ShaderFilter {
   //int[] temp;
   public boolean applyMeatToBuffers() {
     //println("in applymeattobuffers in pointdrawer (" + this + "), src is " + src);
-    t.copy(src.getTexture());
+    t.image(src,0,0); //.getTexture());
 
-    t.filter(glFilter,out.getTexture());
+    //t.filter(glFilter,out); // TODO POSTFX
+    this.filter(glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out));
 
     // just copy src to out
     //out.image(src,0,0);
@@ -118,5 +119,6 @@ public class KaleidoFilter extends ShaderFilter {
     */
     return true;
   }
+
 
 }

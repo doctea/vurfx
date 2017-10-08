@@ -23,7 +23,6 @@ import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.PlasmaScene;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.Sequence;
-import codeanticode.glgraphics.GLGraphicsOffScreen;
 import controlP5.Bang;
 import controlP5.CallbackEvent;
 import controlP5.ControlP5;

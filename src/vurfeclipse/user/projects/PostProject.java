@@ -16,7 +16,7 @@ public class PostProject extends Project implements Serializable {
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
   
   public PostProject(int w, int h, String gfx_mode) {
-    super(w,h,gfx_mode);
+    super(w,h);
   }
   
   /*public boolean initialiseBuffers() {

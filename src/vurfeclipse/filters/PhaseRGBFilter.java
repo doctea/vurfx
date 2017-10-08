@@ -3,8 +3,8 @@ package vurfeclipse.filters;
 
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
-import codeanticode.glgraphics.GLTextureFilter;
+import processing.core.PGraphics;
+import processing.opengl.PShader;
 
 public class PhaseRGBFilter extends ShaderFilter {
   boolean flipHorizontal = true, flipVertical = true;
@@ -12,8 +12,8 @@ public class PhaseRGBFilter extends ShaderFilter {
   
   int d_value = 2;
     
-  transient GLTextureFilter glFilter;
-  transient GLTexture t;
+  transient PShader glFilter;
+  transient PGraphics t;
     
   public PhaseRGBFilter(Scene sc) {
     super(sc,shaderName);

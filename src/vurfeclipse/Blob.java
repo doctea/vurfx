@@ -1,8 +1,10 @@
 package vurfeclipse;
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.core.PShape;
-import codeanticode.glgraphics.*;
+//import codeanticode.glgraphics.*;
 
 public class Blob {
   public int x = 0;
@@ -36,10 +38,11 @@ public class Blob {
   
   boolean edge = false;
   
-  transient GLTexture src;
+  //transient GLTexture src;
+  PImage src;
   String imageName;
   
-  public void setInput(GLTexture t) {
+  public void setInput(PImage t) {
     this.src = t;
   }
   
@@ -120,11 +123,11 @@ public class Blob {
  
   
   //void draw(PGraphics out) {
-  public void draw(GLGraphicsOffScreen out, GLGraphicsOffScreen src) {
-    this.src = src.getTexture();
+  public void draw(PGraphics out, PGraphics src) {
+    this.src = src;//.getTexture();
     draw(out);
   }
-  public void draw(GLGraphicsOffScreen out) {
+  public void draw(PGraphics out) {
     out.pushStyle();
     if (tint!=255) 
       out.fill(c, tint);
@@ -218,7 +221,7 @@ public class Blob {
   
   
   //void polygon(PGraphics out, int n, float cx, float cy, float r)
-  void polygon(GLGraphicsOffScreen out, int n, float cx, float cy, float r)
+  void polygon(PGraphics out, int n, float cx, float cy, float r)
   {
     polygon(out, n, cx, cy, r * 2.0f, r * 2.0f, 0.0f);
   }
@@ -227,7 +230,7 @@ public class Blob {
   float[] twopi_lookup = new float[] { 3, TWO_PI/1, TWO_PI/2, TWO_PI/3, TWO_PI/4, TWO_PI/5, TWO_PI/6, TWO_PI/7, TWO_PI/8, TWO_PI/9, TWO_PI/10, TWO_PI/11, TWO_PI/12, TWO_PI/13, TWO_PI/14, TWO_PI/15, TWO_PI/16 };
   
   //void polygon(PGraphics out, int n, float cx, float cy, float w, float h, float startAngle)
-  void polygon(GLGraphicsOffScreen out, int n, float cx, float cy, float w, float h, float startAngle)
+  void polygon(PGraphics out, int n, float cx, float cy, float w, float h, float startAngle)
   {
     if (n > 2)
     {
@@ -250,7 +253,7 @@ public class Blob {
     }
   }
 
-  void drawImage(GLGraphicsOffScreen out, float cx, float cy, float w, float h, float startAngle) {
+  void drawImage(PGraphics out, float cx, float cy, float w, float h, float startAngle) {
     if (imageName!=null) {
       out.pushMatrix();
       out.rotate(startAngle);
@@ -259,7 +262,7 @@ public class Blob {
     }
   }
 
-  void drawSVG(GLGraphicsOffScreen out, float cx, float cy, float w, float h, float startAngle) {
+  void drawSVG(PGraphics out, float cx, float cy, float w, float h, float startAngle) {
     if (svg!=null) {
       out.pushMatrix();
       out.rotate(startAngle);
@@ -269,7 +272,7 @@ public class Blob {
   }
 
   Blob compoundBlob[];
-  void drawCompoundBlob(GLGraphicsOffScreen out, float cx, float cy, float w, float h, float startAngle) {
+  void drawCompoundBlob(PGraphics out, float cx, float cy, float w, float h, float startAngle) {
     
     //if(this.compoundBlob==null) {
       float step = (float)h/8;

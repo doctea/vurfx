@@ -19,16 +19,16 @@ import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
 import vurfeclipse.sequence.Sequencer;
 import vurfeclipse.streams.*;
-import codeanticode.glgraphics.*;
 import controlP5.*;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 
 public abstract class Project implements Serializable {
   public int w,h;
   public String gfx_mode;
 
-  public Project(int w, int h, String gfx_mode) {
+  public Project(int w, int h) {
     this.w = w;
     this.h = h;
     this.gfx_mode = gfx_mode;
@@ -167,7 +167,7 @@ public abstract class Project implements Serializable {
   int selectedSceneIndex = 0;
 
   //public abstract boolean initialise ();
-  transient GLGraphicsOffScreen off;
+  transient PGraphics off;
   public boolean initialise() {
 	println("Project#initialise:");
 
@@ -360,17 +360,17 @@ public abstract class Project implements Serializable {
       }
   }*/
 
-  public void applyGL(GLGraphicsOffScreen gfx) {
+  public void applyGL(PGraphics gfx) {
     applyGL(gfx, this.w, this.h);
   }
-  public void applyGL(GLGraphicsOffScreen gfx, int w, int h) {
+  public void applyGL(PGraphics gfx, int w, int h) {
   //public void applyGL(PGraphics gfx) {
     //Iterator it = Arrays.asList(scenes).iterator();
 
     //gfx.clear(0);
     //GLGraphicsOffScreen temp = createGLBuffer(w,h,gfx_mode);
     gfx.background(0,0,0,255);  // added
-    gfx.clear(0);
+    //gfx.clear(0);
 
     Canvas out = getCanvas(getPath()+"out");
 
@@ -392,7 +392,7 @@ public abstract class Project implements Serializable {
     }
     ////gfx.image(buffers[BUF_OUT].getTexture(),0,0,w,h);
 
-    gfx.image(out.getSurf().getTexture(),0,0,w,h);//w,h);
+    gfx.image(out.getSurf(),0,0,w,h);//w,h);
 
     ////gfx.image(buffers[BUF_INP1].getTexture(),0,0,w,h);
     ////gfx.image(off.getTexture(),0,0,w,h);

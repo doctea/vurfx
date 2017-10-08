@@ -93,7 +93,9 @@ public class DiskWriterFilter extends Filter {
 
       //System.out.println("pixelBufferUse : " + src.getTexture().getPixelBufferUse());
 
-      src.getTexture().getBuffer(pixels); //, ARGB);
+      //src.getTexture().getBuffer(pixels); //, ARGB);
+      src.loadPixels();
+      pixels = src.pixels;
       //src.getBuffer(pixels);
       mm.addFrame(pixels);
       //src.getTexture().loadPixels();

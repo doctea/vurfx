@@ -1,12 +1,13 @@
 package vurfeclipse.filters;
 
+import ch.bildspur.postfx.PostFXSupervisor;
+import ch.bildspur.postfx.pass.SobelPass;
+import processing.core.PGraphics;
 import processing.core.PVector;
 import vurfeclipse.APP;
+import vurfeclipse.Canvas;
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
-import codeanticode.glgraphics.GLTextureFilter;
-import codeanticode.glgraphics.GLTextureParameters;
-import codeanticode.glgraphics.*;
 import processing.opengl.*;
 
 
@@ -15,7 +16,7 @@ public class ShaderFilter extends Filter {
 
   int mode = 0;
   String shaderName;
-  transient GLTexture t;
+  transient Canvas c;
 
   public ShaderFilter(Scene sc, String shaderName) {
     super(sc);
@@ -39,10 +40,10 @@ public class ShaderFilter extends Filter {
 	
 			if (current instanceof Float ) {
 				//println("setting GLFilter parameter " + paramName + " " + value);
-				glFilter.setParameterValue(paramName, ((Float)value).floatValue());
+				glFilter.set(paramName, ((Float)value).floatValue());
 			} else if (current instanceof Integer) {
 				//println("setting GLFilter parameter " + paramName + " " + value);
-				glFilter.setParameterValue(paramName, ((Integer)value).intValue());
+				glFilter.set(paramName, ((Integer)value).intValue());
 			} else {
 				println("ShaderFilter#updateParameterValue doesn't know what to do with passed value for " + paramName);
 			}
@@ -51,14 +52,14 @@ public class ShaderFilter extends Filter {
   }
 
   public void initShader(String shaderName) {
-	  glFilter = new GLTextureFilter(APP.getApp(), shaderName);
+	  glFilter = APP.getApp().loadShader(shaderName); //new GLTextureFilter(APP.getApp(), shaderName);
 
 	  //if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
 	  //if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
 
   }
 
-  GLTextureFilter glFilter;
+  PShader glFilter;
   public boolean initialise() {
     // set up inital variables or whatevs
     //temp = new int[sc.w*sc.h];
@@ -70,11 +71,11 @@ public class ShaderFilter extends Filter {
     //glFilter = new GLTextureFilter(APP.getApp(), shaderName); //"Edges.xml");
     initShader(shaderName);
 
-    GLTextureParameters params = new GLTextureParameters();
+    /*GLTextureParameters params = new GLTextureParameters();
     params.wrappingU = GLTextureParameters.REPEAT;
-    params.wrappingV = GLTextureParameters.REPEAT;
-
-    t = new GLTexture(APP.getApp(),sc.w,sc.h, params);
+    params.wrappingV = GLTextureParameters.REPEAT;*/
+    //t = new GLTexture(APP.getApp(),sc.w,sc.h, params);
+    c = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel());
 
     return true;
   }
@@ -98,11 +99,30 @@ public class ShaderFilter extends Filter {
 
   int pixelCount;
   public boolean applyMeatToBuffers() {
-    t.copy(src.getTexture());
+    //t.copy(src.getTexture());
+	c.getSurf().image(src,0,0);
 
-    t.filter(glFilter,out.getTexture());
+    //t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
+    this.filter(c, glFilter, out);
 
     return true;
+  }
+
+  SobelPass sobelPass = new SobelPass(APP.getApp());
+  protected void filter(Canvas source, PShader shader, PGraphics out) {
+	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
+	  fxs.render(source.getSurf());
+	  fxs.pass(sobelPass);
+	  fxs.compose(out);
+  }
+  
+
+  protected void filter(PShader glFilter2, Canvas source) {
+	// TODO Auto-generated method stub
+	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
+	  fxs.render(source.getSurf());
+	  fxs.pass(sobelPass);
+	  fxs.compose(out);
   }
 
   public void beginDraw() {
@@ -111,16 +131,16 @@ public class ShaderFilter extends Filter {
 	    out.loadTexture();*/
 	    //super.beginDraw();
 
-	    if (t==null) {
-	        GLTextureParameters params = new GLTextureParameters();
+	    //if (t==null) {
+	        /*GLTextureParameters params = new GLTextureParameters();
 	        params.wrappingU = GLTextureParameters.REPEAT;
-	        params.wrappingV = GLTextureParameters.REPEAT;
-	    	t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
-
-	    }
+	        params.wrappingV = GLTextureParameters.REPEAT;*/
+	    	//t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
+	    	//t = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel()).getSurf();
+	    //}
 	    if (src==null) setInputCanvas(canvas_in);
 	    if (out==null) setOutputCanvas(canvas_out);
-	    if (glFilter==null) glFilter = new GLTextureFilter(APP.getApp(), shaderName);
+	    if (glFilter==null) glFilter = APP.getApp().loadShader(shaderName); //new GLTextureFilter(APP.getApp(), shaderName);
 	  }
   public void endDraw() {
     //out.loadPixels(); // makes no difference apparently

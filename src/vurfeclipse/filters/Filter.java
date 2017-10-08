@@ -6,12 +6,11 @@ import controlP5.ControlP5;
 import controlP5.Group;
 import controlP5.Slider;
 import controlP5.Tab;
-import codeanticode.glgraphics.*;
-
 import java.io.Serializable;
 import java.util.*;
 
 import vurfeclipse.parameters.Parameter;
+import processing.core.PGraphics;
 import processing.core.PImage;
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
@@ -39,8 +38,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   //PGraphics out;
   //PGraphics src;
-  public transient GLGraphicsOffScreen out;
-  public transient GLGraphicsOffScreen src;
+  public transient PGraphics out;
+  public transient PGraphics src;
 
 
   boolean outputDebug = true;

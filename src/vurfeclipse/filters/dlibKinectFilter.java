@@ -32,7 +32,7 @@ public class dlibKinectFilter extends Filter {
   //Kinect kinect;
 
   //PGraphics depth;
-  GLGraphicsOffScreen depth;
+  PGraphics depth;
 
   boolean enable_depth = true;
   boolean enable_rgb = true;

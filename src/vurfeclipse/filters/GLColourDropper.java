@@ -4,11 +4,13 @@ package vurfeclipse.filters;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
 import codeanticode.glgraphics.*;
+import processing.core.PGraphics;
+import processing.opengl.PShader;
 
 class GLColourDropper extends Filter {
 
   int mode = 0;
-  GLTexture t;
+  PGraphics t;
 
   GLColourDropper(Scene sc) {
     super(sc);
@@ -19,7 +21,7 @@ class GLColourDropper extends Filter {
     this.offsety = y;
   }*/
 
-  GLTextureFilter glFilter;
+  PShader glFilter;
   public boolean initialise() {
     // set up initial variables or whatevs
     temp = new int[sc.w*sc.h];
@@ -28,16 +30,17 @@ class GLColourDropper extends Filter {
 
     //glFilter = new GLTextureFilter();
     //glFilter.setTint((int)random(255)); //random(1),random(1),random(1));
-    glFilter = new GLTextureFilter(APP.getApp(), "DropRGB.xml");
+    glFilter = APP.getApp().loadShader("DropRGB.glsl");
 
-    t = new GLTexture(APP.getApp(),sc.w,sc.h);
+    t = new PGraphics();
+    t.setSize(sc.w, sc.h);
     return true;
   }
 
   public Filter nextMode() {
     mode++;
     if(mode>3) mode = 0;
-    glFilter.setParameterValue("swap_mode", mode);
+    glFilter.set("swap_mode", mode);
     return this;
   }
 
@@ -55,12 +58,14 @@ class GLColourDropper extends Filter {
 
     //GLTexture t = new GLTexture(APP,sc.w,sc.h);
     if (src==out) {
-      t.copy(src.getTexture());
+      //t.copy(src);
+    	t.image(src, 0, 0, sc.w, sc.h);
     } else {
-      t = src.getTexture();
+      t = src;
     }
 
-    t.filter(glFilter,out.getTexture());
+    t.filter(glFilter,out);
+    //t.shader(glFilter);
 
     return true;
   }

@@ -21,8 +21,8 @@ public class TestProject extends Project implements Serializable {
 	
   float tempo = 130.0f;
 
-  public TestProject(int w, int h, String gfx_mode) {
-    super(w,h,gfx_mode);
+  public TestProject(int w, int h) {
+    super(w,h);//,gfx_mode);
   }
 
   public boolean initialiseBuffers() {

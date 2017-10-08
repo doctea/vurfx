@@ -2,18 +2,19 @@ package vurfeclipse.filters;
 
 
 import vurfeclipse.APP;
+import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
-import codeanticode.glgraphics.GLTextureFilter;
+import processing.core.PGraphics;
+import processing.opengl.PShader;
 
-public class GLColourFilter extends Filter {
+public class GLColourFilter extends ShaderFilter {
 
   int mode = 0;
   //transient GLTexture t;
 
   public GLColourFilter(Scene sc) {
-    super(sc);
+    super(sc,"PhaseRGB.glsl");
   }
 
   /*public void setXYOffset(int x, int y) {
@@ -21,8 +22,9 @@ public class GLColourFilter extends Filter {
     this.offsety = y;
   }*/
 
-  GLTextureFilter glFilter;
+  //PShader glFilter;
   public boolean initialise() {
+	super.initialise();
     // set up inital variables or whatevs
     /*temp = new int[sc.w*sc.h];
     pixelCount = sc.w*sc.h;*/
@@ -32,7 +34,7 @@ public class GLColourFilter extends Filter {
     //glFilter.setTint((int)random(255)); //random(1),random(1),random(1));
     //glFilter = new GLTextureFilter(APP, "SwapRGB.xml");
 
-    glFilter = new GLTextureFilter(APP.getApp(), "PhaseRGB.xml");
+    //glFilter = APP.getApp().loadShader("PhaseRGB.glsl"); //new (APP.getApp(), "PhaseRGB.xml");
 
     //t = new GLTexture(APP,sc.w,sc.h);
     return true;
@@ -44,15 +46,15 @@ public class GLColourFilter extends Filter {
     this.r_shift = r;
     this.g_shift = g;
     this.b_shift = b;
-    glFilter.setParameterValue("rshift", r);
-    glFilter.setParameterValue("gshift", g);
-    glFilter.setParameterValue("bshift", b);
+    glFilter.set("rshift", r);
+    glFilter.set("gshift", g);
+    glFilter.set("bshift", b);
   }
 
   public Filter nextMode() {
     mode++;
     if(mode>5) mode = 0;
-    glFilter.setParameterValue("swap_mode", mode);
+    glFilter.set("swap_mode", mode);
     return this;
   }
 
@@ -75,9 +77,10 @@ public class GLColourFilter extends Filter {
       t = src.getTexture();
     }*/
 
-    GLTexture t = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_in).getSurf().getTexture();
+    Canvas t = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_in);//.getTexture();
 
-    t.filter(glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out).getSurf().getTexture());
+    //t.filter(glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out).getSurf());//.getTexture());
+    this.filter(t, glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out).getSurf());
 
     return true;
   }

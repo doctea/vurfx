@@ -2,11 +2,11 @@ package vurfeclipse.filters;
 
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.core.PImage;
+import processing.opengl.PShader;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
-import codeanticode.glgraphics.GLTextureFilter;
-import codeanticode.glgraphics.GLTextureParameters;
 
 public class BlendDrawer extends Filter {
 
@@ -18,30 +18,30 @@ public class BlendDrawer extends Filter {
   int currentBlendMode = 4;
 
   String blendModes[] = {
-    "BlendColor.xml",
-    "BlendLuminance.xml",
-    "BlendMultiply.xml",
-    "BlendSubtract.xml",
-    "BlendAdd.xml",
-    "BlendColorDodge.xml",
-    "BlendColorBurn.xml",
-    "BlendDarken.xml",
-    "BlendLighten.xml",
-    "BlendDifference.xml",
-    "BlendInverseDifference.xml",
-    "BlendExclusion.xml",
-    "BlendOverlay.xml",
-    "BlendScreen.xml",
+    "BlendColor.glsl",
+    "BlendLuminance.glsl",
+    "BlendMultiply.glsl",
+    "BlendSubtract.glsl",
+    "BlendAdd.glsl",
+    "BlendColorDodge.glsl",
+    "BlendColorBurn.glsl",
+    "BlendDarken.glsl",
+    "BlendLighten.glsl",
+    "BlendDifference.glsl",
+    "BlendInverseDifference.glsl",
+    "BlendExclusion.glsl",
+    "BlendOverlay.glsl",
+    "BlendScreen.glsl",
     //"BlendHardLight.xml",
-    "BlendSoftLight.xml",
-    "BlendUnmultiplied.xml",
-    "BlendPremultiplied.xml"
+    "BlendSoftLight.glsl",
+    "BlendUnmultiplied.glsl",
+    "BlendPremultiplied.glsl"
   };
 
-  transient GLTextureFilter blendFilters[] = new GLTextureFilter[blendModes.length];
+  transient PShader blendFilters[] = new PShader[blendModes.length];
 
-  transient GLTextureFilter glFilter;
-  transient GLTexture t;
+  transient PShader glFilter;
+  transient PGraphics t;
 
 
   public BlendDrawer(Scene sc) {
@@ -102,11 +102,11 @@ public class BlendDrawer extends Filter {
     //changeParameterValue("BlendMode", n);
   }
 
-  public GLTextureFilter getFilterNumber(int n) {
-    if (this.blendFilters==null) blendFilters = new GLTextureFilter[blendModes.length];
+  public PShader getFilterNumber(int n) {
+    if (this.blendFilters==null) blendFilters = new PShader[blendModes.length];
     if (this.blendFilters[n]==null) {
       println("BlendDrawer#getFilterNumber(n) initialising GLTextureFilter");
-      this.blendFilters[n] = new GLTextureFilter(APP.getApp(),blendModes[n]);
+      this.blendFilters[n] = APP.getApp().loadShader(blendModes[n]); //new PShader(APP.getApp(),blendModes[n]);
     }
     return this.blendFilters[n];
   }
@@ -116,10 +116,13 @@ public class BlendDrawer extends Filter {
     // set up inital variables or whatevs
 
     //this.glFilter = new GLTextureFilter(APP,blendModes[currentBlendMode]);//"BlendColor.xml");
-    GLTextureParameters params = new GLTextureParameters();
+    /*GLTextureParameters params = new GLTextureParameters();
     params.wrappingU = GLTextureParameters.REPEAT;
-    params.wrappingV = GLTextureParameters.REPEAT;
-    this.t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
+    params.wrappingV = GLTextureParameters.REPEAT;*/
+    //this.t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
+    //this.t = new PImage(sc.w,sc.h);
+    this.t = new PGraphics();
+    t.setSize(this.w, this.h);
 
     for (int i = 0 ; i < blendModes.length ; i++) {
       getFilterNumber(i);
@@ -136,8 +139,8 @@ public class BlendDrawer extends Filter {
     //out.setBlendMode(REPLACE);
     //tint(128);
     //out.image(src.getTexture(),x,y,w,h);
-    if (t!=null)
-      t.clear(0);
+    /*if (t!=null)
+      t.clear(0);*/
     out.pushMatrix();
 
     //println ("x and y are " + (Float)getParameterValue("X") + "," +  (Float)getParameterValue("Y"));
@@ -162,9 +165,10 @@ public class BlendDrawer extends Filter {
     //src = sc.host.getCanvas(this.canvas_in).getSurf();
     //out = sc.host.getCanvas(this.canvas_out).getSurf();
 
-    GLTextureFilter tf = getFilterNumber(currentBlendMode);
-    tf.setParameterValue("Opacity", new Float((Float)this.getParameterValue("Opacity")));
-    tf.apply(new GLTexture[]{src.getTexture(), out.getTexture()}, t); // all are called the same way
+    PShader tf = getFilterNumber(currentBlendMode);
+    tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
+    //tf.apply(new PImage[]{src, out}, t); // all are called the same way
+    t.shader(tf);
 
 
     int im = out.imageMode;// to restore imageMode
@@ -214,10 +218,13 @@ public class BlendDrawer extends Filter {
     if (out==null) setOutputCanvas(canvas_out);
     if (src==null) setInputCanvas(canvas_in);
     if (t==null) {
-        GLTextureParameters params = new GLTextureParameters();
+        /*GLTextureParameters params = new GLTextureParameters();
         params.wrappingU = GLTextureParameters.REPEAT;
-        params.wrappingV = GLTextureParameters.REPEAT;
-    	this.t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
+        params.wrappingV = GLTextureParameters.REPEAT;*/
+    	this.t = new PGraphics();
+    	t.setSize(w, h);
+    	
+    	//(APP.getApp(),sc.w,sc.h,params);
     }
     out.beginDraw();
   }

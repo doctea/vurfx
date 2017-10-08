@@ -2,18 +2,19 @@ package vurfeclipse;
 
 import java.io.Serializable;
 
+import processing.core.PGraphics;
 import processing.core.PVector;
-
-import codeanticode.glgraphics.GLGraphicsOffScreen;
 
 public class Canvas implements Serializable /*implements Pathable*/ {
 	
 
 	
-	static public GLGraphicsOffScreen createGLBuffer(int width, int height, String mode) {
+	static public PGraphics createGLBuffer(int width, int height, String mode) {
 	  //GLGraphicsOffScreen s = getStaticGLBuff(width,height); //
-	  GLGraphicsOffScreen s = new GLGraphicsOffScreen(APP.getApp(), width, height);//, true, 4);
-	  s.setDepthMask(true);
+	  //GLGraphicsOffScreen s = new GLGraphicsOffScreen(APP.getApp(), width, height);//, true, 4);
+	  PGraphics s = new PGraphics();
+	  //s.setDepthMask(true);
+	  s.setSize(width, height);
 	  s.background(0,0,0,0);
 	  //s.beginDraw(); s.endDraw();
 	  //System.out.println("create gl buffer");
@@ -24,11 +25,11 @@ public class Canvas implements Serializable /*implements Pathable*/ {
 	
   int w,h;
   String gfx_mode;
-  transient protected GLGraphicsOffScreen arsesurf;
+  transient protected PGraphics arsesurf;
   
   public String canvasName = "Unnamed Canvas";
   
-  public GLGraphicsOffScreen getSurf() {
+  public PGraphics getSurf() {
     if (null==arsesurf) {
       arsesurf = createGLBuffer(w,h,gfx_mode);
     }

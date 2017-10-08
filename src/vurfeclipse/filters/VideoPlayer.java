@@ -7,17 +7,16 @@ import java.util.ArrayList;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
-import codeanticode.glgraphics.GLTextureParameters;
 import codeanticode.gsvideo.*;
+import processing.core.PGraphics;
 
 public class VideoPlayer extends Filter {
   transient GSMovie stream;
   String filename;
 
-  transient GLTexture tex;
+  transient PGraphics tex;
 
-  transient GLTexture newTex;
+  transient PGraphics newTex;
 
   int mode = 0;
 
@@ -184,10 +183,10 @@ public class VideoPlayer extends Filter {
       qte.printStackTrace();
     }*/
 
-    GLTextureParameters params = new GLTextureParameters();
+    /*GLTextureParameters params = new GLTextureParameters();
     params.wrappingU = GLTextureParameters.REPEAT;
-    params.wrappingV = GLTextureParameters.REPEAT;
-    tex = new GLTexture(APP.getApp(),sc.w,sc.h, params);
+    params.wrappingV = GLTextureParameters.REPEAT;*/
+    tex = this.sc.host.createCanvas(this.getPath()+"/ca/", this.getFilterLabel()).getSurf(); //new GLTexture(APP.getApp(),sc.w,sc.h, params);
 
     loadDirectory();
     if (videos.size()==0) return true;
@@ -257,7 +256,9 @@ public class VideoPlayer extends Filter {
 
 
         //out.getTexture().putPixelsIntoTexture();
-        if (tex.putPixelsIntoTexture()) {
+        tex.updatePixels(); //.loadPixels();
+        if (stream.isModified()) {
+        //if (tex.putPixelsIntoTexture()) {
           out.beginDraw();
           //if ((int)((VurfEclipse)APP.getApp()).random(100)<20)  println("VideoPlayer>>>video writing to " + out);
           out.image(tex,0,0,sc.w,sc.h);

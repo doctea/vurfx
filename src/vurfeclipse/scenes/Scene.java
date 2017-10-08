@@ -5,6 +5,7 @@ import vurfeclipse.*;
 import java.io.*;
 import java.util.*;
 
+import processing.core.PGraphics;
 import processing.core.PVector;
 
 import vurfeclipse.*;
@@ -14,7 +15,6 @@ import vurfeclipse.projects.Project;
 import vurfeclipse.streams.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.*;
-import codeanticode.glgraphics.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
@@ -442,7 +442,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     applyGL(canvas.getSurf());
   }
 
-  public void applyGL(GLGraphicsOffScreen gfx) {
+  public void applyGL(PGraphics gfx) {
     //int start_mils = millis();
     //gfx.background(0,0,0,255);
     //gfx.background(128,0,0);

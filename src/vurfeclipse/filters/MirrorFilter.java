@@ -3,7 +3,7 @@ package vurfeclipse.filters;
 
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
+import processing.core.PGraphics;
 
 public class MirrorFilter extends Filter {
   
@@ -19,12 +19,13 @@ public class MirrorFilter extends Filter {
     this.offsetx = x;
     this.offsety = y;
   }*/
-  transient GLTexture t;
+  transient PGraphics t;
   int[] temp;
   public boolean initialise() {
     // set up inital variables or whatevs 
     temp = new int[sc.w*sc.h];
-    t = new GLTexture(APP.getApp(),sc.w,sc.h);
+    //t = new GLTexture(APP.getApp(),sc.w,sc.h);
+    t = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel()).getSurf();
     return true;
   }
   
@@ -88,7 +89,8 @@ public class MirrorFilter extends Filter {
     //out.beginDraw();
 
     //GLTexture t = new GLTexture(APP,sc.w,sc.h);
-    t.copy(src.getTexture());
+    //t.copy(src.getTexture());
+	t.image(src,0,0,sc.w,sc.h);
     
     out.pushMatrix();
     //out.scale(-1,1);

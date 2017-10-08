@@ -2,11 +2,11 @@ package vurfeclipse.filters;
 
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import processing.core.PVector;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLGraphicsOffScreen;
 
 public class SpiralDrawer extends Filter {
 
@@ -192,7 +192,7 @@ public class SpiralDrawer extends Filter {
       out.popMatrix();
   }
 
-  public void drawActualObject(GLGraphicsOffScreen out, float currRadius, float currentRadian) {
+  public void drawActualObject(PGraphics out, float currRadius, float currentRadian) {
       //float units_w = sc.w/currRadius;  // get proportion of sc.w appropriate to radius - larger radius, larger part of sc.w.  /currRadius = smaller radius, smaller size.
       //float units_h = sc.h/currRadius;
       float units_w = 1.0f/4, units_h = 0.75f/4;
@@ -206,8 +206,8 @@ public class SpiralDrawer extends Filter {
         out.fill(128);
         out.rect(-2,-2,new_w+4,new_h+4);
       }
-      out.noTint();
-      out.image(src.getTexture(),0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
+      //out.noTint();
+      out.image(src,0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
       //out.image(src.getTexture(),0,0,new_w,new_h);
       out.popMatrix();
       /*out.fill(random(255),random(255),random(255),random(255));

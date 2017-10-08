@@ -10,7 +10,7 @@ import controlP5.*;
 import vurfeclipse.projects.*;
 import vurfeclipse.user.projects.*;
 import vurfeclipse.user.projects.TestProject;
-import codeanticode.glgraphics.*;
+//import codeanticode.glgraphics.*;
 import ddf.minim.*;
 
 import java.awt.BorderLayout;
@@ -20,7 +20,11 @@ import java.util.*;
 
 //import javax.media.opengl.*;
 import processing.opengl.*;
-import javax.media.opengl.GL;
+//import javax.media.opengl.GL;
+
+import ch.bildspur.postfx.builder.*;
+import ch.bildspur.postfx.pass.*;
+import ch.bildspur.postfx.*;
 
 import fullscreen.*;
 
@@ -44,15 +48,16 @@ public class VurfEclipse extends PApplet {
 	FullScreen fs;
 	boolean fullscreen = false;
 	
-  boolean ready = false;
-
+	boolean ready = false;
+	
+	private PostFXSupervisor fxs;
 
 	///// SYPHON STUFF (choose one - disabled stuff or enabled stuff)
 
 	// DISABLED SYPHON BLOCK (stubs)
 	boolean syphon = false;
-	public void drawSyphon(GLGraphicsOffScreen offscreen) {};
-	public void initSyphon(GL gl, String theName) {};
+	public void drawSyphon(PGraphics offscreen) {};
+	//public void initSyphon(GL gl, String theName) {};
 
 	/*
 	// ENABLE SYPHON BLOCK (supposed working code) //JSyphon stuff+info at https://forum.processing.org/topic/syphon-integration-with-processing
@@ -179,16 +184,16 @@ public class VurfEclipse extends PApplet {
 
 
 
-	String gfx_mode = GLConstants.GLGRAPHICS;
+	//String gfx_mode = GLConstants.GLGRAPHICS;
 	//String gfx_mode = P2D;
 
 	//Frame f;// = new Frame(width,height);
 
 	int[] texID;
 
-	GLGraphics pgl;
-	GL gl;
-	GLGraphicsOffScreen offscreen;
+	/*GLGraphics pgl;
+	GL gl;*/
+	PGraphics offscreen;
 
 	int lastSecond;
 
@@ -255,8 +260,8 @@ public class VurfEclipse extends PApplet {
 		 
 
 		 //size(output_width, output_height + gw_height, gfx_mode);
-		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
-		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
+		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
+		 this.size(output_width, output_height); //, gfx_mode); // + gw_height, gfx_mode);
 
 		 if (frame != null) {
 			 frame.removeNotify();
@@ -288,9 +293,9 @@ public class VurfEclipse extends PApplet {
 	     this.delaySetup();
 
 
+	     println("---------- setting up PostFX");
+	     setFxs(new PostFXSupervisor(this));
 	     
-
-
 		 //System.exit(1);
 
 		 frameRate(global_fps);
@@ -335,14 +340,14 @@ public class VurfEclipse extends PApplet {
 
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-		 pr = new MutanteProject(desired_width, desired_height, gfx_mode);
+		 //pr = new MutanteProject(desired_width, desired_height, gfx_mode);
 		 //pr = new FeralFestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
 		 //pr = new PharmacyProject(desired_width, desired_height, gfx_mode);
 		 //pr = new TempSocioSukiVideoProject(desired_width, desired_height, gfx_mode);
 		 
-		 //pr = new TestProject(desired_width, desired_height, gfx_mode);
+		 pr = new TestProject(desired_width, desired_height);
 
 		 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 		 
@@ -385,7 +390,7 @@ public class VurfEclipse extends PApplet {
 
 	}
 	private void initialiseGraphics() {
-		 if (gfx_mode==GLConstants.GLGRAPHICS) {
+		 /*if (gfx_mode==GLConstants.GLGRAPHICS) {
 			   System.out.println("Setting up in GLConstants.GLGRAPHICS mode, so have to do some funky GL shit..");
 
 			   offscreen = new GLGraphicsOffScreen(this, width, height); //, true, 4);
@@ -408,14 +413,14 @@ public class VurfEclipse extends PApplet {
 			   pgl.endGL();
 			   		   
 			   System.out.println("..Finished funky GL shit.");
-		 }
+		 }*/
 		 
 
 		 //pgl = (PGraphicsOpenGL) g;
-		 gl = pgl.gl;
+		 /*gl = pgl.gl;
 		 if (syphon) {
 		   initSyphon(gl, "Vurf");
-		 }
+		 }*/
 	}
 
 	/*******
@@ -424,7 +429,7 @@ public class VurfEclipse extends PApplet {
 	*
 	********/
 	public int timeMillis;
-	GLTextureWindow texWin;
+	//GLTextureWindow texWin;
 	@Override
 	public void draw () {
 	//System.out.println("Draw!");
@@ -571,8 +576,11 @@ public class VurfEclipse extends PApplet {
 	 return APP.getApp();
 	}
 
-	public GLGraphicsOffScreen getStaticGLBuff(int width, int height) {
-	 return new GLGraphicsOffScreen(APP.getApp(), width, height);
+	public PGraphics getStaticGLBuff(int width, int height) {
+	  PGraphics p = new PGraphics();
+	  p.setSize(width, height);;
+	  return p;
+	 //return new PGraphics(APP.getApp(), width, height);
 	}
 
 
@@ -583,6 +591,14 @@ public class VurfEclipse extends PApplet {
 	 return (a << 24) | (r << 16) | (g << 8) | b;
 	}
 
+	public PostFXSupervisor getFxs() {
+		return fxs;
+	}
+
+	public void setFxs(PostFXSupervisor fxs) {
+		this.fxs = fxs;
+	}
+	
 	/*public PGraphics createBuffer (int width, int height, String mode) {
 	return (PGraphics) createGraphics(w, h, gfx_mode);
 	}*/
