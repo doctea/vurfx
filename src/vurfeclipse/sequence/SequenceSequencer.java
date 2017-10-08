@@ -589,9 +589,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	protected Bang loadHistoryButton;
 
 	@Override public void setupControls (ControlP5 cp5, String tabName) {
-    this.saveHistoryButton = cp5.addBang("SAVE sequencer history").moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab()).linebreak();
-    this.loadHistoryButton = cp5.addBang("LOAD sequencer history").moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab()).linebreak();
-    cp5.addCallback(this);
+		this.saveHistoryButton = cp5.addBang("SAVE sequencer history").moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab()).linebreak();
+		this.loadHistoryButton = cp5.addBang("LOAD sequencer history").moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab()).linebreak();
+		cp5.addCallback(this);
 	}
 	
   @Override public void controlEvent (CallbackEvent ev) {
