@@ -171,7 +171,7 @@ public abstract class Project implements Serializable {
   public boolean initialise() {
 	println("Project#initialise:");
 
-    off = Canvas.createGLBuffer(w,h,gfx_mode);
+    off = Canvas.createGLBuffer(w,h);
     initialiseBuffers();
 
     setupStreams();
@@ -242,7 +242,10 @@ public abstract class Project implements Serializable {
 	  return true;
   };
 
-  public abstract boolean initialiseBuffers();
+  public boolean initialiseBuffers() {
+	  println(this.toString() + " initialising buffers");
+	  return true;
+  };
 
   public boolean initialiseScenes() {
     println("== initialiseScenes() in " + this);
@@ -360,23 +363,26 @@ public abstract class Project implements Serializable {
       }
   }*/
 
-  public void applyGL(PGraphics gfx) {
-    applyGL(gfx, this.w, this.h);
+  public void applyGL(Canvas offscreen) {
+    applyGL(offscreen, this.w, this.h);
   }
-  public void applyGL(PGraphics gfx, int w, int h) {
+  public void applyGL(Canvas offscreen_canvas, int w, int h) {
   //public void applyGL(PGraphics gfx) {
     //Iterator it = Arrays.asList(scenes).iterator();
 
+	PGraphics offscreen = offscreen_canvas.getSurf(); 
+	 
+	//offscreen.beginDraw();
     //gfx.clear(0);
     //GLGraphicsOffScreen temp = createGLBuffer(w,h,gfx_mode);
-    gfx.background(0,0,0,255);  // added
+    offscreen.background(0,0,0,255);  // added
     //gfx.clear(0);
 
     Canvas out = getCanvas(getPath()+"out");
 
     //out.getSurf().background(0);
 
-    gfx.background(APP.getApp().random(255));
+    offscreen.background(APP.getApp().random(255));
 
     Iterator<Scene> it = scenes.iterator();
     while(it.hasNext()) {
@@ -392,8 +398,11 @@ public abstract class Project implements Serializable {
     }
     ////gfx.image(buffers[BUF_OUT].getTexture(),0,0,w,h);
 
-    gfx.image(out.getSurf(),0,0,w,h);//w,h);
+    offscreen.beginDraw();
+    offscreen.image(out.getSurf(),0,0,w,h);//w,h);
+    offscreen.endDraw();
 
+    //offscreen.endDraw();
     ////gfx.image(buffers[BUF_INP1].getTexture(),0,0,w,h);
     ////gfx.image(off.getTexture(),0,0,w,h);
   }

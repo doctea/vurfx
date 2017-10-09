@@ -16,12 +16,12 @@ import ddf.minim.*;
 import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
+import java.io.PrintStream;
+import java.text.MessageFormat;
 import java.util.*;
 
 //import javax.media.opengl.*;
 import processing.opengl.*;
-//import javax.media.opengl.GL;
-
 import ch.bildspur.postfx.builder.*;
 import ch.bildspur.postfx.pass.*;
 import ch.bildspur.postfx.*;
@@ -122,6 +122,7 @@ public class VurfEclipse extends PApplet {
 	  if (controlWindow==null) {
 		  System.out.println("VurfEclipse#getCW initialising controlWindow");
 	  	  ControlP5 cp5 = getCP5();
+	  	  
 	  	  //cp5.window().setLocation(1024, 0);
 	  	  System.out.println("VurfEclipse#getCW about to do addControlWindow()");
 		  controlWindow = cp5.addControlWindow("controlP5window", 300, 0, 1000, 800, JAVA2D, 30);
@@ -129,6 +130,9 @@ public class VurfEclipse extends PApplet {
 		  controlWindow.hideCoordinates();
 		  System.out.println("VurfEclipse#getCW about to do setBackground");
 		  controlWindow.setBackground(color(40));
+		  
+		  System.out.println("Setting font to Arial 10");
+		  cp5.setFont(createFont("Arial",10));
 		  
 		  controlWindow.setLocation(800, 20);		//NOZSTOCK ADDITION
 	  }
@@ -159,7 +163,7 @@ public class VurfEclipse extends PApplet {
 	}
 
 	//boolean enablecp5 = false;
-	public static boolean enablecp5 = true;//false;//true; //true;
+	public static boolean enablecp5 = false; //true;//false;//true; //true;
 
 
 	/////// Minim
@@ -193,7 +197,7 @@ public class VurfEclipse extends PApplet {
 
 	/*GLGraphics pgl;
 	GL gl;*/
-	PGraphics offscreen;
+	Canvas offscreen;
 
 	int lastSecond;
 
@@ -222,10 +226,11 @@ public class VurfEclipse extends PApplet {
 
 	public static void main(String args[]) {
 	    //PApplet.main(new String[] { "--present", "vurfeclipse.VurfEclipse" });
-		PApplet.runSketch(new String[] { "vurfeclipse.VurfEclipse" }, new VurfEclipse());
+		//PApplet.runSketch(new String[] { "vurfeclipse.VurfEclipse" }, new VurfEclipse());
 		//PApplet.runSketch(new String[] { "--present", "vurfeclipse.VurfEclipse" }, new VurfEclipse());
 		//PApplet.
 		//PApplet.main(new String[] { "vurfeclipse.VurfEclipse" });
+		PApplet.main("vurfeclipse.VurfEclipse");
 	}
 
 	int sizeCount = 0;
@@ -233,8 +238,10 @@ public class VurfEclipse extends PApplet {
 	public void size(int w, int h, String gfx) {
 		sizeCount++;
 		if (sizeCount>=2) {
-			System.out.println("size(): ignoring " + sizeCount + "th call so as not to trigger GL error.");
+			println("size(): ignoring " + sizeCount + "th call so as not to trigger GL error.");
 			return;
+		} else {
+			println("size(): Passing size call number " + sizeCount);
 		}
 		super.size(w,h,gfx);
 	}
@@ -242,12 +249,27 @@ public class VurfEclipse extends PApplet {
 	int refCount = 0;
 	
 	@Override
+	public void settings () {
+		 System.out.println(refCount + ": -------------==================== \\\\/URF/ [1] settings() ===================--------------");
+		 System.out.println("Working Directory = " +
+		     System.getProperty("user.dir"));
+
+		 //size(output_width, output_height + gw_height, gfx_mode);
+		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
+		 this.size(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
+		 
+		 System.out.println("Enabling DebugStream to capture error output");
+		 DebugStream.activate();
+		 
+	}
+	
+	@Override
 	public void setup () {
 		 refCount++;
 		 APP.setApp(this);
 
 		 
-		 System.out.println(refCount + ": -------------==================== \\\\/URF/ ===================--------------");
+		 System.out.println(refCount + ": -------------==================== \\\\/URF/ [2] setup() ===================--------------");
 		 System.out.println("Working Directory = " +
 		     System.getProperty("user.dir"));
 		 
@@ -258,15 +280,10 @@ public class VurfEclipse extends PApplet {
 		 
 		 //if (enablecp5 && refCount==1) setupControls();
 		 
-
-		 //size(output_width, output_height + gw_height, gfx_mode);
-		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
-		 this.size(output_width, output_height); //, gfx_mode); // + gw_height, gfx_mode);
-
 		 if (frame != null) {
 			 frame.removeNotify();
-			 		frame.setVisible(false);
-			    frame.setResizable(false);
+			 	//frame.setVisible(false);
+			    //frame.setResizable(false);
 			    frame.setLayout(new BorderLayout() /*{
 			    	@Override public void {
 			    		
@@ -282,7 +299,8 @@ public class VurfEclipse extends PApplet {
 			   });
 			   //frame.setUndecorated(true);
 
-			   frame.setVisible(true);
+			    
+			   //frame.setVisible(true);
 			   frame.addNotify();
 			   //frame.dispose();
 			   //frame = null;
@@ -320,7 +338,7 @@ public class VurfEclipse extends PApplet {
 
 		 cursor(CROSS);
 
-		 noSmooth();
+		 //noSmooth();
 		 //tint(255);
 		 noTint();
 
@@ -415,6 +433,7 @@ public class VurfEclipse extends PApplet {
 			   System.out.println("..Finished funky GL shit.");
 		 }*/
 		 
+		//offscreen = pr.createCanvas("/out", "Main out");
 
 		 //pgl = (PGraphicsOpenGL) g;
 		 /*gl = pgl.gl;
@@ -455,6 +474,8 @@ public class VurfEclipse extends PApplet {
 	 //offscreen.beginDraw();
 
 	 //pgl.beginGL();
+	 if (offscreen==null) 
+		 offscreen = pr.createCanvas("/out", "Main out");
 
 	 if (frameCount>25) {	// skip rendering first 25 frames
 	   pr.applyGL(offscreen, output_width, output_height);
@@ -466,7 +487,7 @@ public class VurfEclipse extends PApplet {
 	   gw.drawStuff(offscreen, output_height, gw_height); //gw_height);
 	 }*/
 
-	 if (syphon) drawSyphon (offscreen);
+	 if (syphon) drawSyphon (offscreen.getSurf());
 
 	 //pgl.endGL();
 
@@ -602,4 +623,43 @@ public class VurfEclipse extends PApplet {
 	/*public PGraphics createBuffer (int width, int height, String mode) {
 	return (PGraphics) createGraphics(w, h, gfx_mode);
 	}*/
+	
+	
+	/**
+	 * @author Jeeeyul 2011. 11. 1.
+	 * @since M1.10
+	 * https://jeeeyul.wordpress.com/2012/10/18/make-system-out-println-rocks/
+	 */
+	public static class DebugStream extends PrintStream {
+	   private static final DebugStream INSTANCE = new DebugStream();
+	 
+	   public static void activate() {
+	      System.setErr(INSTANCE);
+	   }
+	 
+	   private DebugStream() {
+	      super(System.err);
+	   }
+	 
+	   @Override
+	   public void println(Object x) {
+	      showLocation();
+	      super.println(x);
+	   }
+	 
+	   @Override
+	   public void println(String x) {
+	      showLocation();
+	      super.println(x);
+	   }
+	 
+	   private void showLocation() {
+	      StackTraceElement element = Thread.currentThread().getStackTrace()[3];
+	      StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+	      System.out.print (this.toString() + ": + caught error output at ");
+	      System.out.print(MessageFormat.format("({0}:{1, number,#}) : ", element.getFileName(), element.getLineNumber()));
+	      //System.out.print(trace);
+	      System.out.println();
+	   }
+	}
 }

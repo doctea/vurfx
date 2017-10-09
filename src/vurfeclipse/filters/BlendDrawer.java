@@ -8,7 +8,7 @@ import processing.opengl.PShader;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
 
-public class BlendDrawer extends Filter {
+public class BlendDrawer extends ShaderFilter {
 
   int rotation = 0;
 
@@ -17,7 +17,7 @@ public class BlendDrawer extends Filter {
 
   int currentBlendMode = 4;
 
-  String blendModes[] = {
+  static String blendModes[] = {
     "BlendColor.glsl",
     "BlendLuminance.glsl",
     "BlendMultiply.glsl",
@@ -40,12 +40,12 @@ public class BlendDrawer extends Filter {
 
   transient PShader blendFilters[] = new PShader[blendModes.length];
 
-  transient PShader glFilter;
-  transient PGraphics t;
+  //transient PShader glFilter;
+  //transient PGraphics t;
 
 
   public BlendDrawer(Scene sc) {
-    super(sc);
+    super(sc,blendModes[4]);
     this.w = sc.w;
     this.h = sc.h;
   }
@@ -121,8 +121,8 @@ public class BlendDrawer extends Filter {
     params.wrappingV = GLTextureParameters.REPEAT;*/
     //this.t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
     //this.t = new PImage(sc.w,sc.h);
-    this.t = new PGraphics();
-    t.setSize(this.w, this.h);
+    //this.t = new PGraphics();
+    //t.setSize(this.w, this.h);
 
     for (int i = 0 ; i < blendModes.length ; i++) {
       getFilterNumber(i);
@@ -168,14 +168,15 @@ public class BlendDrawer extends Filter {
     PShader tf = getFilterNumber(currentBlendMode);
     tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
     //tf.apply(new PImage[]{src, out}, t); // all are called the same way
-    t.shader(tf);
+    //t.shader(tf);
+    this.filter(c, tf); //c.getSurf(), tf);
 
 
     int im = out.imageMode;// to restore imageMode
     //out.image(t,x,y,w,h);
     out.imageMode(out.CENTER);
     //out.image(t,x,y);
-    out.image(t,
+    out.image(c.getSurf(),
     		0,0
     		,w,h	// added to try and support hi-res display of blobs 2015-07-12
     		//w * (Float)getParameterValue("X"),
@@ -212,26 +213,5 @@ public class BlendDrawer extends Filter {
     //println("Switched to currentBlendMode " + currentBlendMode + " " + blendModes[currentBlendMode]);
   }
 
-  public void beginDraw() {
-    //src.loadPixels();
-    //out.loadPixels();
-    if (out==null) setOutputCanvas(canvas_out);
-    if (src==null) setInputCanvas(canvas_in);
-    if (t==null) {
-        /*GLTextureParameters params = new GLTextureParameters();
-        params.wrappingU = GLTextureParameters.REPEAT;
-        params.wrappingV = GLTextureParameters.REPEAT;*/
-    	this.t = new PGraphics();
-    	t.setSize(w, h);
-    	
-    	//(APP.getApp(),sc.w,sc.h,params);
-    }
-    out.beginDraw();
-  }
-
-  public void endDraw() {
-    //out.updatePixels();
-    out.endDraw();
-  }
 
 }

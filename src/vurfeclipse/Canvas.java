@@ -9,13 +9,16 @@ public class Canvas implements Serializable /*implements Pathable*/ {
 	
 
 	
-	static public PGraphics createGLBuffer(int width, int height, String mode) {
+	static public PGraphics createGLBuffer(int width, int height) {
 	  //GLGraphicsOffScreen s = getStaticGLBuff(width,height); //
 	  //GLGraphicsOffScreen s = new GLGraphicsOffScreen(APP.getApp(), width, height);//, true, 4);
-	  PGraphics s = new PGraphics();
+	  //PGraphics s = new PGraphics();
+	  PGraphics s = APP.getApp().createGraphics(width,height,APP.getApp().P3D);
 	  //s.setDepthMask(true);
 	  s.setSize(width, height);
+	  s.beginDraw();
 	  s.background(0,0,0,0);
+	  s.endDraw();
 	  //s.beginDraw(); s.endDraw();
 	  //System.out.println("create gl buffer");
 	  return s;
@@ -31,7 +34,7 @@ public class Canvas implements Serializable /*implements Pathable*/ {
   
   public PGraphics getSurf() {
     if (null==arsesurf) {
-      arsesurf = createGLBuffer(w,h,gfx_mode);
+      arsesurf = createGLBuffer(w,h);
     }
     return arsesurf;
   }

@@ -2,6 +2,7 @@ package vurfeclipse.filters;
 
 
 import vurfeclipse.APP;
+import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
 import processing.core.PGraphics;
@@ -80,7 +81,7 @@ public class KaleidoFilter extends ShaderFilter {
     t.image(src,0,0); //.getTexture());
 
     //t.filter(glFilter,out); // TODO POSTFX
-    this.filter(glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out));
+    this.filter(((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out), glFilter);
 
     // just copy src to out
     //out.image(src,0,0);
@@ -119,6 +120,5 @@ public class KaleidoFilter extends ShaderFilter {
     */
     return true;
   }
-
 
 }

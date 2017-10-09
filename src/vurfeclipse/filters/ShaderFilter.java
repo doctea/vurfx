@@ -115,17 +115,18 @@ public class ShaderFilter extends Filter {
 	  fxs.pass(sobelPass);
 	  fxs.compose(out);
   }
-  
 
-  protected void filter(PShader glFilter2, Canvas source) {
+  protected void filter(Canvas source, PShader shader) {
 	// TODO Auto-generated method stub
 	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
 	  fxs.render(source.getSurf());
+	  //TODO: ADD REAL SHADER HERE
 	  fxs.pass(sobelPass);
 	  fxs.compose(out);
   }
 
   public void beginDraw() {
+	  super.beginDraw();
 	    /*src.loadPixels();
 	    src.loadTexture();
 	    out.loadTexture();*/
@@ -143,6 +144,7 @@ public class ShaderFilter extends Filter {
 	    if (glFilter==null) glFilter = APP.getApp().loadShader(shaderName); //new GLTextureFilter(APP.getApp(), shaderName);
 	  }
   public void endDraw() {
+	  super.endDraw();
     //out.loadPixels(); // makes no difference apparently
     //out.updatePixels(); // stops form working
     //out.loadTexture(); // this line stops this from working...
