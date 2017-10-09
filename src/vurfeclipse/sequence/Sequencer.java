@@ -13,6 +13,7 @@ import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
+import vurfeclipse.ui.ControlFrame;
 
 abstract public class Sequencer implements Targetable, CallbackListener {
 	public Project host;
@@ -85,7 +86,7 @@ abstract public class Sequencer implements Targetable, CallbackListener {
 		return true;
 	}
 
-	public void setupControls(ControlP5 cp5, String string) {
+	public void setupControls(ControlFrame cf, String string) {
 		// TODO Auto-generated method stub
 
 	}

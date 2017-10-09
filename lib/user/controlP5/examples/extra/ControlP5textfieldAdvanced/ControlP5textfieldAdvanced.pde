@@ -71,7 +71,7 @@ void controlEvent(ControlEvent theEvent) {
     Textfield t = (Textfield)theEvent.getController();
 
     println("controlEvent: accessing a string from controller '"
-      +t.getName()+"': "+t.stringValue()
+      +t.getName()+"': "+t.getStringValue()
       );
 
     // Textfield.isAutoClear() must be true

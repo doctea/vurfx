@@ -31,7 +31,7 @@ void setup() {
   cp5.addButton("button")
      .setValue(10)
      .setPosition(20,20)
-     .setSize(100,30)
+     .setSize(100,50)
      .setId(1);
      
   b = cp5.addButton("buttonValue")
@@ -61,7 +61,7 @@ void setup() {
      .setSize(24)
      ;
      
-  b.captionLabel()
+  b.getCaptionLabel()
    .setFont(font)
    .setSize(50)
    .toUpperCase(false)
@@ -71,27 +71,64 @@ void setup() {
   // (4)
   // adjust the location of a catiption label using the 
   // style property of a controller.
-  b.captionLabel().getStyle().marginLeft = 4;
-  b.captionLabel().getStyle().marginTop = 36;
+  b.getCaptionLabel().getStyle().marginLeft = 20;
+  b.getCaptionLabel().getStyle().marginTop = 40;
 
 }
 
 void draw() {
-  background(buttonValue*10);
+  background(ControlP5.SILVER);
   // animate button b
-  b.position().x += ((isOpen==true ? 0:-200) - b.position().x) * 0.2;
+  float x = b.x(b.getPosition());
+  x += ((isOpen==true ? 0:-200) - x) * 0.2;;
+  float y = b.y(b.getPosition());
+  b.setPosition(x,y);
 }
 
 public void controlEvent(ControlEvent theEvent) {
-  println(theEvent.controller().id());
+  println(theEvent.getController().getId());
 }
 
 public void button(float theValue) {
   println("a button event. "+theValue);
   isOpen = !isOpen;
-  cp5.controller("button").setCaptionLabel((isOpen==true) ? "close":"open");
+  cp5.getController("button").setCaptionLabel((isOpen==true) ? "close":"open");
 }
 
 
+
+/*
+a list of all methods available for the ControlFont Controller
+use ControlP5.printPublicMethodsFor(ControlFont.class);
+to print the following list into the console.
+
+You can find further details about class ControlFont in the javadoc.
+
+Format:
+ClassName : returnType methodName(parameter type)
+
+
+controlP5.ControlFont : PFont getFont() 
+controlP5.ControlFont : int getBaseline() 
+controlP5.ControlFont : int getBottom() 
+controlP5.ControlFont : int getCenter() 
+controlP5.ControlFont : int getHeight() 
+controlP5.ControlFont : int getOffset(int) 
+controlP5.ControlFont : int getOverflow() 
+controlP5.ControlFont : int getSize() 
+controlP5.ControlFont : int getTextHeight() 
+controlP5.ControlFont : int getTop() 
+controlP5.ControlFont : int getWidth() 
+controlP5.ControlFont : void adjust(PGraphics, Label) 
+controlP5.ControlFont : void draw(ControlP5, Label) 
+controlP5.ControlFont : void draw(PGraphics, Label) 
+controlP5.ControlFont : void init(Label) 
+controlP5.ControlFont : void setSize(int) 
+java.lang.Object : String toString() 
+java.lang.Object : boolean equals(Object) 
+
+created: 2015/03/24 12:22:36
+
+*/
 
 

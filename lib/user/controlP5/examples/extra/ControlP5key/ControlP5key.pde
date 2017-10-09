@@ -1,6 +1,7 @@
 /**
  * ControlP5 ControlKey
  * use ControlKeys to map key combinations to particular events.
+ * multi-keypress supported.
  *
  * by Andreas Schlegel, 2012
  * www.sojamo.de/libraries/controlp5

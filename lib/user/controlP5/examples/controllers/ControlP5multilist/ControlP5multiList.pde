@@ -1,6 +1,8 @@
 /**
  * ControlP5 MultiList
  * by andreas schlegel, 2009
+ *
+ * broken with version 2.2.1+
  */
 
 import controlP5.*;
@@ -12,6 +14,23 @@ void setup() {
   size(700,400);
   frameRate(30);
   controlP5 = new ControlP5(this);
+  
+  // sorry, MultiList is currently broken.
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   // add a multiList to controlP5.
   // elements of the list have default dimensions
@@ -58,13 +77,13 @@ void setup() {
     }
   }
   
-  MultiListButton cc = (MultiListButton)controlP5.controller("level21");
+  MultiListButton cc = (MultiListButton)controlP5.getController("level21");
   cc.setHeight(40);
 }
 
 
 void controlEvent(ControlEvent theEvent) {
-  println(theEvent.controller().name()+" = "+theEvent.value());  
+  println(theEvent.getController().getName()+" = "+theEvent.value());  
   // uncomment the line below to remove a multilist item when clicked.
   // theEvent.controller().remove();
 }
@@ -75,8 +94,8 @@ void draw() {
 }
 
 void keyPressed() {
-  if(controlP5.controller("level23")!=null) {
+  if(controlP5.getController("level23")!=null) {
     println("removing multilist button level23.");
-    controlP5.controller("level23").remove();
+    controlP5.getController("level23").remove();
   }
 }

@@ -90,10 +90,10 @@ void setup() {
 
 
   // (uncomment line below) print the a map of all available controller addresses
-  //cp5.printControllerMap();
+  // cp5.printControllerMap();
 
   // (uncomment line below) access a controller via its address:
-  //println(cp5.getController("/world/x").getInfo());
+  // println(cp5.getController("/world/x").getInfo());
 }
 
 
@@ -154,6 +154,11 @@ public class TestControl {
 
   @ControlElement (x=0, y=100, label="Type here")
     String in = "";
+    
+  @ControlElement (x=200, y=25, properties = {"type=list", "items=hello, world, how are you"}, label="Sample-list") 
+    public void a(int val) {  
+      println(val);
+    }
 }
 
 

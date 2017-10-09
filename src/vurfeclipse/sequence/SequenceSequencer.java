@@ -23,6 +23,7 @@ import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.PlasmaScene;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.Sequence;
+import vurfeclipse.ui.ControlFrame;
 import controlP5.Bang;
 import controlP5.CallbackEvent;
 import controlP5.ControlP5;
@@ -587,10 +588,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	protected Bang saveHistoryButton;
 	protected Bang loadHistoryButton;
 
-	@Override public void setupControls (ControlP5 cp5, String tabName) {
-		this.saveHistoryButton = cp5.addBang("SAVE sequencer history").moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab()).linebreak();
-		this.loadHistoryButton = cp5.addBang("LOAD sequencer history").moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab()).linebreak();
-		cp5.addCallback(this);
+	@Override public void setupControls (ControlFrame cf, String tabName) {
+		this.saveHistoryButton = cf.control().addBang("SAVE sequencer history");		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
+		this.loadHistoryButton = cf.control().addBang("LOAD sequencer history");		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
+		cf.control().addCallback(this);
 	}
 	
   @Override public void controlEvent (CallbackEvent ev) {

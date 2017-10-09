@@ -18,7 +18,16 @@ int sliderValue = 100;
 
 void setup() {
   size(400,400);
+  noStroke();
   cp5 = new ControlP5(this);
+
+  cp5.addSlider("sliderValue")
+     .setRange(100,200)
+     .setValue(120)
+     .setPosition(100,200)
+     .setSize(100,10)
+     ;
+
   
   cp5.addSlider("slider")
      .setRange(100,200)
@@ -26,12 +35,6 @@ void setup() {
      .setPosition(100,160)
      .setSize(100,10);
      
-  cp5.addSlider("sliderValue")
-     .setRange(100,200)
-     .setValue(120)
-     .setPosition(100,200)
-     .setSize(100,10)
-     ;
 }
 
 void draw() {
@@ -43,7 +46,7 @@ void draw() {
 void slider(int theColor) {
   myColorBackground = color(theColor);
   println("a slider event. setting background to "+theColor);
-  cp5.controller("sliderValue").setValue(theColor);
+  cp5.getController("sliderValue").setValue(theColor);
 }
 
 void keyPressed() {

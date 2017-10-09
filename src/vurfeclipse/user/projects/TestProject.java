@@ -100,11 +100,11 @@ public class TestProject extends Project implements Serializable {
     //ss.addFilter(new OpenNIFilter(ss));
     
     //BlobFX1 blobScene = new BlobFX1(this, this.w, this.h);
-    SpiralScene spiralScene = new SpiralScene(this, this.w, this.h, "/inp0");
+    /*SpiralScene spiralScene = new SpiralScene(this, this.w, this.h, "/inp0");
     
     this.addSceneInputOutputCanvas(spiralScene, "/src", "/out")
     	.registerCallbackPreset("beat", "beat_1", "spin_forward")
-    	.setOutputCanvas("/out");
+    	.setOutputCanvas("/out");*/
 
     //this.addScene(ss);
     /*this.addSceneOutput(

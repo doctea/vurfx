@@ -8,6 +8,7 @@ import controlP5.*;
 //import javax.media.j3d.*;
 
 import vurfeclipse.projects.*;
+import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.user.projects.*;
 import vurfeclipse.user.projects.TestProject;
 //import codeanticode.glgraphics.*;
@@ -111,8 +112,9 @@ public class VurfEclipse extends PApplet {
 
 	//ControlP5 cp5;
 	//int myColorBackground = color(0, 0, 0);
-	private static ControlWindow controlWindow;
+	private static ControlFrame controlFrame;
 
+	/*
 	void destroyControls(ControlP5 cp5) {
 	  cp5.dispose(); //dispose();
 	  controlWindow.clear();
@@ -139,20 +141,25 @@ public class VurfEclipse extends PApplet {
 	  //if (controlWindow==null) setupControls(getCP5());
 	  return controlWindow;
 	}
+	*/
 
-	synchronized public ControlP5 getCP5() {
-		if (cp5==null && enablecp5) {
+	synchronized public ControlFrame getCF() {
+		if (controlFrame==null && enablecp5) {
 			System.out.println("VurfEclipse#getCP5 creating new ControlP5..");
-			cp5 = new ControlP5(this);
+			//cp5 = new ControlP5(this);
+			controlFrame = new ControlFrame(this, 400, 800, "Vurfx Controls");
+			//controlFrame.setup();
+			surface.setLocation(20, 20);
 		}
-		System.out.println("getCP5 returning " + cp5);
-		return cp5;
+		System.out.println("getCP5 returning " + controlFrame);
+		return controlFrame;
 	}
 
 	void setupControls() {
 		System.out.println("VurfEclipse#setupControls");
 
-		getCW();
+		//getCW();
+		getCF();
 	}
 
 
@@ -163,7 +170,7 @@ public class VurfEclipse extends PApplet {
 	}
 
 	//boolean enablecp5 = false;
-	public static boolean enablecp5 = false; //true;//false;//true; //true;
+	public static boolean enablecp5 = true;//false;//true; //true;
 
 
 	/////// Minim
@@ -250,35 +257,15 @@ public class VurfEclipse extends PApplet {
 	
 	@Override
 	public void settings () {
+		 APP.setApp(this);
+		 		 
 		 System.out.println(refCount + ": -------------==================== \\\\/URF/ [1] settings() ===================--------------");
-		 System.out.println("Working Directory = " +
-		     System.getProperty("user.dir"));
+		 System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
 		 //size(output_width, output_height + gw_height, gfx_mode);
-		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
-		 this.size(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
 		 
 		 System.out.println("Enabling DebugStream to capture error output");
 		 DebugStream.activate();
-		 
-	}
-	
-	@Override
-	public void setup () {
-		 refCount++;
-		 APP.setApp(this);
-
-		 
-		 System.out.println(refCount + ": -------------==================== \\\\/URF/ [2] setup() ===================--------------");
-		 System.out.println("Working Directory = " +
-		     System.getProperty("user.dir"));
-		 
-		 /*if (refCount==1) {
-			 System.out.println("returning from setup() because refCount is " + refCount); 
-			 return;
-		 }*/
-		 
-		 //if (enablecp5 && refCount==1) setupControls();
 		 
 		 if (frame != null) {
 			 frame.removeNotify();
@@ -309,12 +296,69 @@ public class VurfEclipse extends PApplet {
 		 }
 
 	     this.delaySetup();
-
-
-	     println("---------- setting up PostFX");
-	     setFxs(new PostFXSupervisor(this));
 	     
 		 //System.exit(1);
+
+
+		 ImageRepository.IR = new ImageRepository();
+
+		 io = new IOUtils();
+
+
+
+			//// instantiate a project to display
+
+			 //pr = new TestProject(desired_width, desired_height, gfx_mode);
+			 //pr = new SimpleProject(desired_width, desired_height, gfx_mode);
+			 //pr = new PsychNightProject(desired_width, desired_height, gfx_mode);
+			 //pr = new PostProject(desired_width, desired_height, gfx_mode);
+			 //pr = new NozstockProject(desired_width, desired_height, gfx_mode);
+
+			 //pr = new AboveBoardsProject(desired_width, desired_height, gfx_mode);
+			 System.out.println("Instantiating Project at " + desired_width + "x" + desired_height);
+			 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
+
+			 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
+			 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
+			 //pr = new MutanteProject(desired_width, desired_height, gfx_mode);
+			 //pr = new FeralFestProject(desired_width, desired_height, gfx_mode);
+			 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
+			 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
+			 //pr = new PharmacyProject(desired_width, desired_height, gfx_mode);
+			 //pr = new TempSocioSukiVideoProject(desired_width, desired_height, gfx_mode);
+			 
+			 pr = new TestProject(desired_width, desired_height);
+
+			 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
+			 
+			 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
+
+
+			 //gw = new GwrxInterface(APP, pr);
+
+			 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
+			 this.size(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
+		 
+			 //pr.setupControls();
+			 System.out.println("Finished VurfEclipse#settings() - handing off to setup?");;
+	}
+	
+	@Override
+	public void setup () {	// was public void setup() {
+		 refCount++;
+		 System.out.println(refCount + ": -------------==================== \\\\/URF/ [2] setup() ===================--------------");
+
+
+		 /*if (refCount==1) {
+			 System.out.println("returning from setup() because refCount is " + refCount); 
+			 return;
+		 }*/
+		 
+		 //if (enablecp5 && refCount==1) setupControls();
+		 
+
+		 //delaySetup();
+		 
 
 		 frameRate(global_fps);
 
@@ -322,19 +366,10 @@ public class VurfEclipse extends PApplet {
 			 fs = new FullScreen(this);
 			 fs.enter();
 		 }
-
-		 ImageRepository.IR = new ImageRepository();
-
-		 io = new IOUtils();
-
 		 initialiseGraphics();
-
-		 delaySetup();
-
 
 		 //colorMode(ARGB);
 		 colorMode(RGB, 255, 255, 255, 100);
-
 
 		 cursor(CROSS);
 
@@ -343,40 +378,6 @@ public class VurfEclipse extends PApplet {
 		 noTint();
 
 		 lastSecond = exportMode?0:millis();
-
-		//// instantiate a project to display
-
-		 //pr = new TestProject(desired_width, desired_height, gfx_mode);
-		 //pr = new SimpleProject(desired_width, desired_height, gfx_mode);
-		 //pr = new PsychNightProject(desired_width, desired_height, gfx_mode);
-		 //pr = new PostProject(desired_width, desired_height, gfx_mode);
-		 //pr = new NozstockProject(desired_width, desired_height, gfx_mode);
-
-		 //pr = new AboveBoardsProject(desired_width, desired_height, gfx_mode);
-		 System.out.println("Instantiating Project at " + desired_width + "x" + desired_height);
-		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
-
-		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
-		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-		 //pr = new MutanteProject(desired_width, desired_height, gfx_mode);
-		 //pr = new FeralFestProject(desired_width, desired_height, gfx_mode);
-		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
-		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
-		 //pr = new PharmacyProject(desired_width, desired_height, gfx_mode);
-		 //pr = new TempSocioSukiVideoProject(desired_width, desired_height, gfx_mode);
-		 
-		 pr = new TestProject(desired_width, desired_height);
-
-		 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
-		 
-		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
-
-		 System.out.println("Initialising " + pr);
-		 pr.initialise();
-
-		 //gw = new GwrxInterface(APP, pr);
-
-		 //pr.setupControls();
 
 		 if (exportMode) {
 		   timeMillis = 500;
@@ -389,6 +390,10 @@ public class VurfEclipse extends PApplet {
 		   exit();
 		 }
 
+
+		 System.out.println("Initialising " + pr);
+		 pr.initialise();
+		 
 		 System.out.println("Finished VurfEclipse setup(); handing off to draw()...");
 		 this.ready = true;
 		 //System.exit(0);
@@ -440,6 +445,10 @@ public class VurfEclipse extends PApplet {
 		 if (syphon) {
 		   initSyphon(gl, "Vurf");
 		 }*/
+
+
+	     println("---------- setting up PostFX");
+	     setFxs(new PostFXSupervisor(this));
 	}
 
 	/*******
@@ -451,7 +460,7 @@ public class VurfEclipse extends PApplet {
 	//GLTextureWindow texWin;
 	@Override
 	public void draw () {
-	//System.out.println("Draw!");
+		System.out.println("Draw!");
 		
 		if (!ready) return;
 	
@@ -649,17 +658,23 @@ public class VurfEclipse extends PApplet {
 	 
 	   @Override
 	   public void println(String x) {
-	      showLocation();
-	      super.println(x);
+		  super.println("----");
+	      super.println("original error output: \"" + x + "\"");
+		  showLocation();
 	   }
 	 
 	   private void showLocation() {
-	      StackTraceElement element = Thread.currentThread().getStackTrace()[3];
-	      StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-	      System.out.print (this.toString() + ": + caught error output at ");
-	      System.out.print(MessageFormat.format("({0}:{1, number,#}) : ", element.getFileName(), element.getLineNumber()));
-	      //System.out.print(trace);
-	      System.out.println();
+		  StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+	      StackTraceElement last = trace[3]; //= Thread.currentThread().getStackTrace()[3];
+		  super.print("caught error output at ");
+	      super.print(last);
+	      for (StackTraceElement element : Arrays.copyOfRange(trace,3,trace.length)) {	    	  
+	    	  //super.print(MessageFormat.format("({0}:{1, number,#}) : ", element.getFileName(), element.getLineNumber()) + " " + element);
+	    	  super.print(element);
+	    	  //System.out.print(trace);
+	    	  super.println();
+	      }
+	      super.println("----");
 	   }
 	}
 }

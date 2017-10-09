@@ -35,13 +35,17 @@ void draw() {
   popMatrix();
   // makes the gui stay on top of elements
   // drawn before.
+ 
   gui();
+  
 }
 
 void gui() {
+  hint(DISABLE_DEPTH_TEST);
   cam.beginHUD();
   cp5.draw();
   cam.endHUD();
+  hint(ENABLE_DEPTH_TEST);
 }
 
 void controlEvent(ControlEvent theEvent) {

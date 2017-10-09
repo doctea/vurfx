@@ -142,9 +142,10 @@ class Info {
     label = cp5.addTextarea("Hello\nWorld")
                .setSize(200,200)
                .setPosition(300,40)
-               .setFont(ControlP5.standard56)
                .setColor(color(255))
-               .setColorBackground(color(100,0));
+               .setColorBackground(color(100,0))
+               .setLineHeight(12);
+                   
   }
   
   void update() {
@@ -152,19 +153,6 @@ class Info {
     label.setColorBackground(color(100,255*a));
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*

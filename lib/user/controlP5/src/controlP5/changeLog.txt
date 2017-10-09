@@ -1,13 +1,156 @@
+2016-14-04  Andreas Schlegel  <andi at sojamo.de>
+	
+      mostly bug fixes, see github issues
+      removed all PVector references, variables, and functions using processing.core.PVector
+      		
+2015-08-02  Andreas Schlegel  <andi at sojamo.de>
+
+      changes see github change log
+
+2015-03-29  Andreas Schlegel  <andi at sojamo.de>
+
+      * src controlP5.ScrollabelList:
+      fixing ArrayOutOfBounds error as reported on github under issue 3 https://github.com/sojamo/controlp5/issues/3
+
+2014-09-08  Andreas Schlegel  <andi at sojamo.de>
+
+      * src controlP5.Icon:
+      adding Icon class, acts like a button; can be used with images and font-icons
+      from "Font Awesome".
+      
+      * src controlP5.Button:
+      when theButton acts as a switch (setSwitch(true)), the corresponding
+      method inside a sketch should use type boolean as argument instead of float;
+      a java.lang.IllegalArgumentException will be thrown in case of a float argument
+
+
+2014-08-28  Andreas Schlegel  <andi at sojamo.de>
+
+      * src controlP5.Background:
+      adding Background class, a convenience class for grouping controllers with 
+      the top bar disabled by default.  
+	
+
+2014-07-21  Andreas Schlegel  <andi at sojamo.de>
+
+      * src controlP5.Textfield:
+      making use of a graphics buffer now, simplifies cursor position calculation and 
+      prevents from throwing an ArrayIndexOutOfBoundsException which could occasionally 
+      happen with previous versions.
+       
+      
+2014-07-17  Andreas Schlegel  <andi at sojamo.de>
+      * version 2.2.1
+      
+      * removing PVector dependencies
+      
+      * removing all deprecated methods
+      
+      * src controlP5.ListBox, controlP5.DropdownList:
+      Due to changes to and deprecation of DropdownList and ListBox, both share the same
+      source code as ScrollableList. Consequently some functionality got lost though this
+      should be marginal. In case of any issues occuring due to these changes, please
+      inform the author. In any case use ScrollableList instead of DropdownList and ListBox.
+      The major benefit of using a ScrollableList is that an item is now of type Map and
+      therefore is not limited (as it was the case before) to the implementation of a 
+      ListBoxItem and hence is more flexible as data container.
+      Do note that ListBox, DropdownList and ScrollableList do extend Controller, 
+      not ControllerGroup
+      
+      
+2014-04-27  Andreas Schlegel  <andi at sojamo.de>
+      * version 2.1.6
+      
+      * preparing for next release. 
+      
+      * src controlP5.ListBox, controlP5.DropdownList:
+      deprecated, use ScrollableList instead.
+      
+      * src controlP5.ControlP5Legacy:
+      repository of functions only kept for backwards compatibility but it is not encouraged 
+      to use the anymore. Use ControlP5Base instead.
+      
+      * src controlP5.Controller:
+      adding onEnter, onLeave, onDrag, onStartDrag, onEndDrag, onWheel, onMove, onClick, 
+      onPress, onDoublePress, onRelease, onReleaseOutside, onChange to register callbacks 
+      for specific events. This is not implemented for classes extending ControllerGroup.
+      
+      
+2013-01-23  Andreas Schlegel  <andi at sojamo.de>
+
+      * version 2.1.5
+	
+      * src controlP5.ControllerProperties:
+       removing XML format. adding JSON format, JSON format will be the default format instead of the Java Serialization format.
+
+
+2012-09-22  Andreas Schlegel  <andi at sojamo.de>
+
+      * version 2.1.3
+	
+      * src controlP5.ListBox:
+       now extends Controller instead of ControlGroup.
+
+
+2012-09-09  Andreas Schlegel  <andi at sojamo.de>
+
+      * version 2.1.0
+	
+      * starting processingjs implementation.
+      - many controllers will be included:
+      completed: Bang, Button, CheckBox, ColorPalette, Group, Knob, Label, ListBox, DropdownList, Numberbox, RadioButton,
+      Range, Slider, Slider2D, Tab, Textfield, Toggle
+      under construction: Canvas, Chart, ColorPicker, ControllerView, FrameRate, Matrix, Textarea    
+      pending: ButtonBar, Pointer, TickMark, Tooltip 
+      some will be missed: MutiList, Textlabel
+      and more will be missed: CColor, ControlBehavior, ControllerProperties, ControllerStyle, ControlTimer, ControlWindow
+ 	  - the BitFont from the Java version will not be ported over to js and the default fontsize will be set to 10 
+      - The automatic binding of functions and variables with the js version did not work as smooth as expected. Currently 
+      only automatic function detection and binding is available. But then why not variables? See my request here:
+      https://processing-js.lighthouseapp.com/projects/41284/tickets/1972-feature-request-access-sketch-global-variables-from-library
+      	      
+      * src controlP5.Slider2D:
+      changed size of cursor, changed color handling
+      
+      * src controlP5.Button:
+      alignment of caption label changed to CENTER,CENTER
+      
+      * adding PGraphics support instead of only rendering into PApplet directly
+      
+      * fixing Annotation issue addressed here https://forum.processing.org/topic/controlp5-annotations-24-8-2012#25080000002597047
+      
+      
+             
+2012-12-23  Andreas Schlegel  <andi at sojamo.de>
+
+      * version 2.0.4
+	
+      * src controlP5.Textfield.java,controlP5.ListBox.java,
+      controlP5.DropdownList.java,controlP5.ControlWindow.java
+      controlP5.ControlP5Base.java:
+      adjusting to processing's KeyEvent final variable name changes     
+      see issue 69 https://code.google.com/p/controlp5/issues/detail?id=69 (thanks jeff)      
+      
+      * src controlP5.Textfield.java:
+      reimplemented password mode (thanks jeff)
+      
+       
+
 2012-10-19  Andreas Schlegel  <andi at sojamo.de>
 
-      * version 1.5.2
+      * version 2.0.3
 	
       * src controlP5.Controller.java:
       Automatic (PApplet) field recognition for Slider, Knob, Numberbox, Toggle adjusted.    
       
+      
+2012-09-17  Andreas Schlegel  <andi at sojamo.de>
+
+      * version 2.0.2
+      
       * major changes to controlP5's font handling. the BitFontRenderer has been removed and the BitFont class
       has been introduced. BitFont extends PFont and is the replacement for rendering controlP5's bitfont as
-      a pfont. this makes font handling much easier and stable. if this has caused any font rendering 
+      a pfont. this makes font handling way more easier and stable. if this has caused any font rendering 
       flaws, let me know. 
       
       * src controlP5.BitFontRenderer.java:
@@ -16,7 +159,85 @@
       * src controlP5.BitFont.java:
       added, see above.      
              
-             
+      
+
+2012-09-07  Andreas Schlegel  <andi at sojamo.de>
+
+      * version 2.0.1
+      
+      * processing 2.0, time to make some changes, major revision in progress.
+      The goal should be to make 2.0+ desktop and android compatible, for that java.awt dependencies 
+      will be removed. 
+      starting to remove deprecated methods, fields and classes
+      
+      * removing all java.awt dependencies.
+      with each ControlP5 instance there will only be 1 ControlWindow since separate windows/frames have
+      been removed due to their java.awt dependency. There will be an example of how to make your own 
+      separate Frame when in desktop mode. 
+      
+      * versions starting with 2.0.1 will not be backwards compatible with 1.5.1 and earlier
+      from this version onwards Android is supported
+      
+      
+      * src controlP5.Println.java:
+      new class added
+      a console logger that captures the System.out stream and displays it using a Textarea
+      
+      
+      * src controlP5.FrameRate.java:
+      new class added
+      a Textlabel that displays the current or average framerate based on update interval 
+      
+      
+      * src controlP5.BitFontRenderer.java:
+      using Base64 encoded bitfont source instead of loading gif textures
+      
+      
+      * src controlP5.Knob.java:
+      adding value label, ARC is default view now.
+      
+      
+      * src controlP5.Matrix.java:
+      adding play(), pause(), stop(), isPlaying(), trigger(int)
+  
+  
+      * src controlP5.Controller.java:
+      all ControllerSprite references (previously deprecated) have been removed
+      
+      
+      * src controlP5.ControllerSprite.java:
+      removed
+		
+      
+      * src controlP5.ControlP5IOHandler.java:
+      obsolete, removed, all static method transfered to controlP5.CP.java which will handle static method
+  
+      
+      * src controlP5.ControlWindowKeyListener.java:
+      obsolete, removed
+  
+      
+      * src controlP5.PAppletWindow.java:
+      obsolete, removed, currently there is no support for separate frames other than the main window due to removing java.awt dependencies
+
+
+      * src controlP5.ControlWindow.java:
+			removed mouseWheelMoved(MouseWheelEvent e) due to removal of java.awt dependencies
+			how to use an extra window, see example extra/ControlP5frame
+
+			
+			* src controlP5.ControlWindowKeyHandler.java:
+			obsolete, removed, now handled by controlP5/ControlWindow.java
+
+			
+			* src controlP5.CRect.java:
+      obsolete, removed, was only used by MultiList and MultiListButton - replaced with int array.
+
+			       
+			* src controlP5.ControlCanvas.java:
+      obsolete, removed, use controlP5.Canvas.java instead.
+
+
 2012-09-07  Andreas Schlegel  <andi at sojamo.de>
 
       * version 1.5.1
@@ -33,7 +254,7 @@
       * version 0.7.6
 
       * src controlP5.Textfield.java:
-      fixing special character issue with e.g. ã,é,ç,Ç, etc.
+      fixing special character issue with e.g. ÔøΩ,ÔøΩ,ÔøΩ,ÔøΩ, etc.
       backspace, left arrow, right arrow now respond when pressed longer
       added isFocus()
       implemented issue 56 http://code.google.com/p/controlp5/issues/detail?id=56 , thanks jeff
@@ -629,7 +850,7 @@
       * removed decimal point when setDecimalPrecision(0)
 
 0.3.9
-      * Range: defautValue for min shows correct value now.
+      * Range: defaultValue for min shows correct value now.
       * Radio: added deactivateAll()
       * TextLabel: added setWidth, setHeight
       * setColor -Label(), -Active(), -Value(), -Foreground(), -Background(): issues resolved and tested for slider, range, button, knob, sliderlist, multilist, toggle, radio
@@ -639,7 +860,7 @@
       * ControlWindow: controlWindow.post() has been deleted.
       * Knob: issue with minimum value has been resolved.
 
-how to move a textlabel that has been created with "new" to another tab than the default:
+how to move a textlabel that has been created with "new" to a tab other than the default:
 Tab myTab = controlP5.addTab("new");
 Textlabel myTextlabel = new Textlabel(this,"a single textlabel.",20,100,400,200,0xffff0000,ControlP5.synt24);
 myTab.addDrawable(myTextlabel);

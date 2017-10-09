@@ -41,7 +41,7 @@ void setup() {
   .setRange(0,200)
   .setValue(128)
   .setPosition(20,100)
-  .setSize(10,100)
+  .setSize(20,100)
   ;
   // create another slider with tick marks, now without
   // default value, the initial value will be set according th
@@ -49,7 +49,7 @@ void setup() {
   cp5.addSlider("sliderTicks1")
      .setRange(0,255)
      .setPosition(100,100)
-     .setSize(10,100)
+     .setSize(20,100)
      .setNumberOfTickMarks(5)
      ;
   
@@ -59,14 +59,14 @@ void setup() {
      .setRange(0,255)
      .setValue(128)
      .setPosition(200,180)
-     .setSize(100,10)
+     .setSize(100,20)
      ;
   
   cp5.addSlider("sliderTicks2")
      .setRange(0,255)
      .setValue(128)
      .setPosition(200,220)
-     .setSize(100,10)
+     .setSize(100,20)
      .setNumberOfTickMarks(7)
      .setSliderMode(Slider.FLEXIBLE);
      ;   
@@ -98,9 +98,9 @@ void keyPressed() {
   // alt+shift+l to load properties
   // alt+shift+s to save properties
   if(key=='1') {
-    cp5.saveProperties(("hello.ser"));
+    cp5.saveProperties(("hello.json"));
   } else if(key=='2') {
-    cp5.loadProperties(("hello.ser"));
+    cp5.loadProperties(("hello.json"));
   }
 }
 

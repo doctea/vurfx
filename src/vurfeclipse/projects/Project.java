@@ -19,6 +19,7 @@ import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
 import vurfeclipse.sequence.Sequencer;
 import vurfeclipse.streams.*;
+import vurfeclipse.ui.ControlFrame;
 import controlP5.*;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -183,9 +184,10 @@ public abstract class Project implements Serializable {
     initialiseScenes();
 
     //if (cp5!=null) {
+    if (((VurfEclipse)APP.getApp()).enablecp5) {
         println("Project#initialise about to call setupControls");
-    	setupControls();
-    //}
+    	setupControls(((VurfEclipse)APP.getApp()).getCF());
+    }
 
     setupRest();
 
@@ -548,15 +550,18 @@ public abstract class Project implements Serializable {
 
   }
 
-  public void setupControls() {
+  public void setupControls(ControlFrame cf) {
     if (!((VurfEclipse)APP.getApp()).enablecp5) return;
 
-    ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
+    //ui.ControlFrame cf = ((VurfEclipse)APP.getApp()).getCF();
+    //ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCF();
 
     println("Project#setupControls about to get controlwindow");
-    ControlWindow cw = ((VurfEclipse)APP.getApp()).getCW();
+    //ControlFrame cw = ((VurfEclipse)APP.getApp()).getCW();
 
-    this.sequencer.setupControls(cp5, "Default");
+    this.sequencer.setupControls(cf, "Default");
+    
+    ControlP5 cp5 = cf.control();
     
     //this.setupMonitor(cp5);
 
@@ -569,7 +574,7 @@ public abstract class Project implements Serializable {
       println(c + ": Project#setupControls() got scene " + n.getSceneName());
       String tabName = "["+c+"] " + n.getSceneName(); //getClass();
       //ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
-      Tab tab = cw.addTab(tabName);
+      Tab tab = cp5.addTab(tabName);
       println("added tab " + tabName);
       //ControllerInterface[] controls = ((Scene)i.next()).getControls();
       cp5.begin(10,40);
@@ -594,9 +599,9 @@ public abstract class Project implements Serializable {
   	final Project p = this;
     //cp5.getWindow().setUpdateMode(ControlWindow.NORMAL);
   	//((VurfEclipse)APP.getApp()).getCW()
-    ControlWindowCanvas monitor = ((VurfEclipse)APP.getApp()).getCW().getCurrentTab().addCanvas(new ControlWindowCanvas() {
-			@Override
-			public void draw(PApplet theApplet) {
+    //ControlWindowCanvas monitor = ((VurfEclipse)APP.getApp()).getCW().control().addCanvas(new ControlWindowCanvas() {
+	//		@Override
+	//		public void draw(PApplet theApplet) {
 				// TODO Auto-generated method stub
 				//theApplet.background((int) (Math.random()*255));
 				/*if (p.canvases.containsKey(p.getPath()+"out")) {
@@ -607,8 +612,8 @@ public abstract class Project implements Serializable {
 					theApplet.rectMode((int) (Math.random()*10));
 					theApplet.popMatrix();
 				}*/
-			}
-    }); //.moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab());
+	//		}
+   // }); //.moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab());
     
   }
 

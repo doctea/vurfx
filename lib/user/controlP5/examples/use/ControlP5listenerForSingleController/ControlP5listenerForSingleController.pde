@@ -17,13 +17,13 @@ void setup() {
 
 
   cp5 = new ControlP5(this);
-  cp5.setColor(new CColor(0xffaa0000, 0xff330000, 0xffff0000, 0xffffffff, 0xffffffff));  
+  cp5.setColor(ControlP5.THEME_RED);  
   
   cp5.addSlider("mySlider")
      .setRange(100,200)
      .setValue(140)
      .setPosition(200,200)
-     .setSize(100,20);
+     .setSize(200,20);
   
   myListener = new MyControlListener();
   
