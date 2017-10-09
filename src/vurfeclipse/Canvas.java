@@ -16,9 +16,9 @@ public class Canvas implements Serializable /*implements Pathable*/ {
 	  PGraphics s = APP.getApp().createGraphics(width,height,APP.getApp().P3D);
 	  //s.setDepthMask(true);
 	  s.setSize(width, height);
-	  s.beginDraw();
+	  /*s.beginDraw();
 	  s.background(0,0,0,0);
-	  s.endDraw();
+	  s.endDraw();*/
 	  //s.beginDraw(); s.endDraw();
 	  //System.out.println("create gl buffer");
 	  return s;

@@ -2,6 +2,8 @@ package vurfeclipse.ui;
 import controlP5.ControlP5;
 import controlP5.*;
 import processing.core.PApplet;
+import vurfeclipse.APP;
+import vurfeclipse.VurfEclipse;
 
 public class ControlFrame extends PApplet {
 
@@ -70,6 +72,8 @@ public class ControlFrame extends PApplet {
        .setPosition(100, 240)
        .setSize(200, 30);
        
+	 System.out.println("Initialising " + ((VurfEclipse)APP.getApp()).pr);
+	 ((VurfEclipse)APP.getApp()).pr.initialise();   
   }
   
   public ControlP5 control() {

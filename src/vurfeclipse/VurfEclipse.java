@@ -349,6 +349,8 @@ public class VurfEclipse extends PApplet {
 		 System.out.println(refCount + ": -------------==================== \\\\/URF/ [2] setup() ===================--------------");
 
 
+		 getCF();
+
 		 /*if (refCount==1) {
 			 System.out.println("returning from setup() because refCount is " + refCount); 
 			 return;
@@ -390,9 +392,9 @@ public class VurfEclipse extends PApplet {
 		   exit();
 		 }
 
-
-		 System.out.println("Initialising " + pr);
-		 pr.initialise();
+		 
+		 //System.out.println("Initialising " + pr);
+		 //pr.initialise();
 		 
 		 System.out.println("Finished VurfEclipse setup(); handing off to draw()...");
 		 this.ready = true;
@@ -460,8 +462,7 @@ public class VurfEclipse extends PApplet {
 	//GLTextureWindow texWin;
 	@Override
 	public void draw () {
-		System.out.println("Draw!");
-		
+		//System.out.println("Draw!");
 		if (!ready) return;
 	
 		/*if (texWin==null) {
