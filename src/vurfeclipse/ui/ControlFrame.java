@@ -27,7 +27,6 @@ public class ControlFrame extends PApplet {
   public void setup() {
 	setupCount++;
 	System.out.println("ControlFrame setup count " + setupCount);
-    surface.setLocation(10, 10);
     this.cp5 = new ControlP5(this);
     cp5.setFont(createFont("Arial",10));
     
@@ -72,8 +71,12 @@ public class ControlFrame extends PApplet {
        .setPosition(100, 240)
        .setSize(200, 30);
        
-	 System.out.println("Initialising " + ((VurfEclipse)APP.getApp()).pr);
-	 ((VurfEclipse)APP.getApp()).pr.initialise();   
+	 System.out.println("From " + this + ": calling setupControls() on " + ((VurfEclipse)APP.getApp()).pr);
+	 ((VurfEclipse)APP.getApp()).pr.setupControls(this);   
+	 
+	 //surface.setLocation(10, 10);
+
+	 System.out.println("Finished ControlFrame setup()");
   }
   
   public ControlP5 control() {

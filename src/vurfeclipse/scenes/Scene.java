@@ -703,7 +703,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   String tabName;
   boolean doneControls = false;
 
-	private Integer[] palette;
+  private Integer[] palette;
   public void setupControls(ControlP5 cp5, Tab tab) {
     println("Scene#setupControls() in " + this);
     if (doneControls) return;

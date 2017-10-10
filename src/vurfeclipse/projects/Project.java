@@ -169,29 +169,28 @@ public abstract class Project implements Serializable {
 
   //public abstract boolean initialise ();
   transient PGraphics off;
-  public boolean initialise() {
+  public boolean initialise () {
 	println("Project#initialise:");
 
-    off = Canvas.createGLBuffer(w,h);
     initialiseBuffers();
 
     setupStreams();
 
     setupSequencer();
-
+    
     setupScenes();
-
-    initialiseScenes();
+    
+    //initialiseScenes();
+    //initialiseScenes();
 
     //if (cp5!=null) {
-    if (((VurfEclipse)APP.getApp()).enablecp5) {
+    /*if (((VurfEclipse)APP.getApp()).enablecp5) {
         println("Project#initialise about to call setupControls");
     	setupControls(((VurfEclipse)APP.getApp()).getCF());
-    }
+    }*/
 
-    setupRest();
-
-    setupExposed();
+    //setupRest();
+    //setupExposed();
 
     return true;
   }
@@ -556,16 +555,18 @@ public abstract class Project implements Serializable {
     //ui.ControlFrame cf = ((VurfEclipse)APP.getApp()).getCF();
     //ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCF();
 
-    println("Project#setupControls about to get controlwindow");
+    //println("Project#setupControls about to get controlwindow");
     //ControlFrame cw = ((VurfEclipse)APP.getApp()).getCW();
 
-    this.sequencer.setupControls(cf, "Default");
+    //println("Project#setupControls about to setupControls for sequencer " + this.sequencer);
+    //this.sequencer.setupControls(cf, "Default");
     
+    println("Project#setupControls about to grab cp5 before scene loop..");
     ControlP5 cp5 = cf.control();
     
     //this.setupMonitor(cp5);
 
-    println("Project#setupControls about to loop over scenes");
+    println("Project#setupControls about to loop over scenes ("+scenes.size()+" scenes to process)");
     Iterator<Scene> i = scenes.iterator();
     int c = 0;
     Scene n;

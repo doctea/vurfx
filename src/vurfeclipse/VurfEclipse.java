@@ -149,7 +149,7 @@ public class VurfEclipse extends PApplet {
 			//cp5 = new ControlP5(this);
 			controlFrame = new ControlFrame(this, 400, 800, "Vurfx Controls");
 			//controlFrame.setup();
-			surface.setLocation(20, 20);
+			//surface.setLocation(20, 20);
 		}
 		System.out.println("getCP5 returning " + controlFrame);
 		return controlFrame;
@@ -264,8 +264,11 @@ public class VurfEclipse extends PApplet {
 
 		 //size(output_width, output_height + gw_height, gfx_mode);
 		 
-		 System.out.println("Enabling DebugStream to capture error output");
-		 DebugStream.activate();
+		 boolean enableDebugStream = false;
+		 if (enableDebugStream) {
+			 System.out.println("Enabling DebugStream to capture error output");
+			 DebugStream.activate();
+		 }
 		 
 		 if (frame != null) {
 			 frame.removeNotify();
@@ -349,8 +352,7 @@ public class VurfEclipse extends PApplet {
 		 System.out.println(refCount + ": -------------==================== \\\\/URF/ [2] setup() ===================--------------");
 
 
-		 getCF();
-
+		 
 		 /*if (refCount==1) {
 			 System.out.println("returning from setup() because refCount is " + refCount); 
 			 return;
@@ -358,11 +360,22 @@ public class VurfEclipse extends PApplet {
 		 
 		 //if (enablecp5 && refCount==1) setupControls();
 		 
+		 //pr.setupSequencer();
+		 //pr.initialiseScenes();
 
+		 pr.initialise();
+		 
 		 //delaySetup();
+		 pr.initialiseScenes();
+		 
+		 System.out.println("About to call getCF() in " + this + "#setup()");
+		 getCF(); // start up control frame
+		 System.out.println("Finished getCF() call!");
+		 //System.out.println("about to call setupControls on " + pr.toString());
+		 //pr.setupControls(getCF());
 		 
 
-		 frameRate(global_fps);
+		 //frameRate(global_fps);
 
 		 if (fullscreen) {
 			 fs = new FullScreen(this);
@@ -404,15 +417,15 @@ public class VurfEclipse extends PApplet {
 
 
 	private void delaySetup() {
-		 try {
-			 int sleepTime = 1000;
-			 System.out.println("Pausing for " + sleepTime + " milliseconds to wait for stuff to catch up..");
-			 Thread.sleep(sleepTime);
-		 } catch (Exception e) {
-			 System.out.println("Caught " + e);
-		 }
-		 System.out.println("Finished pausing.");
-
+		if (false)
+			 try {
+				 int sleepTime = 1000;
+				 System.out.println("Pausing for " + sleepTime + " milliseconds to wait for stuff to catch up..");
+				 Thread.sleep(sleepTime);
+			 } catch (Exception e) {
+				 System.out.println("Caught " + e);
+			 }
+			 System.out.println("Finished pausing.");
 	}
 	private void initialiseGraphics() {
 		 /*if (gfx_mode==GLConstants.GLGRAPHICS) {
