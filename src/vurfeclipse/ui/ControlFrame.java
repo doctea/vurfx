@@ -2,6 +2,7 @@ package vurfeclipse.ui;
 import controlP5.ControlP5;
 import controlP5.*;
 import processing.core.PApplet;
+import processing.event.KeyEvent;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 
@@ -87,5 +88,10 @@ public class ControlFrame extends PApplet {
 
   public void draw() {
     background(190);
+  }
+  
+  @Override
+  public void keyPressed () {
+	  ((VurfEclipse)parent).handleKey(key);
   }
 }

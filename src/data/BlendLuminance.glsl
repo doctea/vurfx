@@ -1,3 +1,4 @@
+#version 120
 //
 // BlendLuminance.glsl
 // 2010 Kevin Bjorke http://www.botzilla.com

@@ -147,7 +147,7 @@ public class VurfEclipse extends PApplet {
 		if (controlFrame==null && enablecp5) {
 			System.out.println("VurfEclipse#getCP5 creating new ControlP5..");
 			//cp5 = new ControlP5(this);
-			controlFrame = new ControlFrame(this, 400, 800, "Vurfx Controls");
+			controlFrame = new ControlFrame(this, 1024, 800, "Vurfx Controls");
 			//controlFrame.setup();
 			//surface.setLocation(20, 20);
 		}
@@ -324,14 +324,14 @@ public class VurfEclipse extends PApplet {
 
 			 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 			 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-			 //pr = new MutanteProject(desired_width, desired_height);
+			 pr = new MutanteProject(desired_width, desired_height);
 			 //pr = new FeralFestProject(desired_width, desired_height, gfx_mode);
 			 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 			 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
 			 //pr = new PharmacyProject(desired_width, desired_height, gfx_mode);
 			 //pr = new TempSocioSukiVideoProject(desired_width, desired_height, gfx_mode);
 			 
-			 pr = new TestProject(desired_width, desired_height);
+			 //pr = new TestProject(desired_width, desired_height);
 
 			 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 			 
@@ -597,32 +597,7 @@ public class VurfEclipse extends PApplet {
 	private ControlP5 cp5;
 	@Override
 	public void keyPressed() {
-	 try {
-	   if (key == ' ') {
-	     screenGrab = true;
-	   }
-	   else if (key=='/') {
-	     enableStreams = !enableStreams;
-	   }
-	   /*else if (key=='l') {
-	     //pr.cp5.destroy();
-	     destroyControls(getCP5());
-	     pr.finish();
-	     //pr.dispose();
-	     pr = null;
-	     pr = Project.loadProject(); //selectInput("select a file"));
-
-	     cp5 = new ControlP5(this);
-	     setupControls(cp5);
-	     pr.initialise();
-	     //selectInput("Choose a project file to load", "fileSelectedProject");
-	   } */
-	   else {
-	     pr.sendKeyPressed(key);
-	   }
-	 }
-	 catch (Exception e) {
-	 }
+		handleKey(key);
 	}
 
 
@@ -705,5 +680,34 @@ public class VurfEclipse extends PApplet {
 	      }
 	      super.println("----");
 	   }
+	}
+
+	public void handleKey(char key) {
+		 try {
+			   if (key == ' ') {
+			     screenGrab = true;
+			   }
+			   else if (key=='/') {
+			     enableStreams = !enableStreams;
+			   }
+			   /*else if (key=='l') {
+			     //pr.cp5.destroy();
+			     destroyControls(getCP5());
+			     pr.finish();
+			     //pr.dispose();
+			     pr = null;
+			     pr = Project.loadProject(); //selectInput("select a file"));
+
+			     cp5 = new ControlP5(this);
+			     setupControls(cp5);
+			     pr.initialise();
+			     //selectInput("Choose a project file to load", "fileSelectedProject");
+			   } */
+			   else {
+			     pr.sendKeyPressed(key);
+			   }
+			 }
+			 catch (Exception e) {
+			 }		
 	}
 }

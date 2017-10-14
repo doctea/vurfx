@@ -53,7 +53,7 @@ public class QuasicrystalScene extends Scene {
 	    //// START PLASMA SCENE
 	    //plasmaScene.setCanvas("pix0","/pix0");
 	    //os2.setCanvas("blendresult", "/blendresult");
-	    addFilter(new ShaderFilter(this,"Quasicrystal.xml") {
+	    addFilter(new ShaderFilter(this,"Quasicrystal.glsl") {
 	    	@Override
 	    	public void setParameterDefaults() {
 	    		super.setParameterDefaults();

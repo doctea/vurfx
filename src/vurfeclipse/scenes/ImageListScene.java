@@ -76,10 +76,11 @@ public class ImageListScene extends SimpleScene {
   public void loadDirectory(String directory) {
   	if (filenames==null) filenames = new ArrayList<String>();
 	  //String path = APP.getApp().sketchPath("bin/data/image-sources/" + directory);	// ffs need this on Windows..
-  	  String path = APP.getApp().sketchPath("data/image-sources/" + directory);	// ffs need this on Windows..
+  	  //String path = APP.getApp().sketchPath("data/image-sources/" + directory);	// ffs need this on Windows..
 	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
 	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
 	  //String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
+  	  String path = "data/image-sources/" + directory;
 	  File folder = new File(path);
 	  println(this + "#loadDirectory() got path " + path);
 	  int count = 0;

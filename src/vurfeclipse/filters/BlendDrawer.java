@@ -107,6 +107,7 @@ public class BlendDrawer extends ShaderFilter {
     if (this.blendFilters[n]==null) {
       println("BlendDrawer#getFilterNumber(n) initialising GLTextureFilter");
       this.blendFilters[n] = APP.getApp().loadShader(blendModes[n]); //new PShader(APP.getApp(),blendModes[n]);
+      this.blendFilters[n].init();
     }
     return this.blendFilters[n];
   }
@@ -169,7 +170,8 @@ public class BlendDrawer extends ShaderFilter {
     tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
     //tf.apply(new PImage[]{src, out}, t); // all are called the same way
     //t.shader(tf);
-    this.filter(c, tf); //c.getSurf(), tf);
+    println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
+    this.filter(src, tf); //c.getSurf(), tf);
 
 
     int im = out.imageMode;// to restore imageMode

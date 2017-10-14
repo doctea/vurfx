@@ -10,6 +10,7 @@ import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.user.scenes.OutputFX1;
 import processing.opengl.*;
 
 
@@ -17,12 +18,15 @@ import processing.opengl.*;
 public class ShaderFilter extends Filter {
 
   int mode = 0;
-  String shaderName;
+  String shaderFragName;
+  String shaderVertName;
+  
   transient Canvas c;
 
-  public ShaderFilter(Scene sc, String shaderName) {
+  public ShaderFilter(Scene sc, String shaderFragName, String shaderVertName) {
     super(sc);
-    this.shaderName = shaderName;
+    this.shaderFragName = shaderFragName;
+    this.shaderVertName = shaderVertName;
   }
 
   /*public void setXYOffset(int x, int y) {
@@ -30,7 +34,11 @@ public class ShaderFilter extends Filter {
     this.offsety = y;
   }*/
 
-  @Override
+  public ShaderFilter(Scene sc, String shaderFragName) {
+	  this(sc,shaderFragName,"");
+  }
+
+@Override
   synchronized public void updateParameterValue(String paramName, Object value) {
 		//if (!this.parameters.containsKey(paramName)) this.addParameter(paramName, value);
 		super.updateParameterValue(paramName, value);
@@ -53,8 +61,11 @@ public class ShaderFilter extends Filter {
     //return this;
   }
 
-  public void initShader(String shaderName) {
-	  glFilter = APP.getApp().loadShader(shaderName); //new GLTextureFilter(APP.getApp(), shaderName);
+  public void initShader(String shaderFragName, String shaderVertName) {
+	  if (shaderVertName!="")
+		  glFilter = APP.getApp().loadShader(shaderFragName,shaderVertName); //new GLTextureFilter(APP.getApp(), shaderName);
+	  else
+		  glFilter = APP.getApp().loadShader(shaderFragName);
 
 	  //if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
 	  //if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
@@ -71,7 +82,7 @@ public class ShaderFilter extends Filter {
     //glFilter = new GLTextureFilter();
     //glFilter.setTint((int)random(255)); //random(1),random(1),random(1));
     //glFilter = new GLTextureFilter(APP.getApp(), shaderName); //"Edges.xml");
-    initShader(shaderName);
+    initShader(shaderFragName, shaderVertName);
 
     /*GLTextureParameters params = new GLTextureParameters();
     params.wrappingU = GLTextureParameters.REPEAT;
@@ -85,7 +96,7 @@ public class ShaderFilter extends Filter {
   public Filter nextMode() {
     mode++;
     if(mode>4) mode = 0;
-    initShader(shaderName);
+    initShader(shaderFragName,shaderVertName);
     this.updateAllParameterValues();
     return this;
   }
@@ -105,28 +116,25 @@ public class ShaderFilter extends Filter {
 	c.getSurf().image(src,0,0);
 
     //t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
-    this.filter(c, glFilter, out);
+	println("About to apply " + this.shaderFragName);
+    this.filter(c.getSurf(), glFilter, out);
 
     return true;
   }
 
   SobelPass sobelPass = new SobelPass(APP.getApp());
-  protected void filter(Canvas source, PShader shader, PGraphics out) {
+  protected void filter(PGraphics source, PShader shader, PGraphics out) {
 	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
-	  fxs.render(source.getSurf());
-	  fxs.pass(sobelPass);
-	  fxs.compose(out);
-  }
-
-  protected void filter(Canvas source, PShader shader) {
-	// TODO Auto-generated method stub
-	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
-	  fxs.render(source.getSurf());
+	  fxs.render(source);
 	  //TODO: ADD REAL SHADER HERE
 	  //fxs.pass(sobelPass);
 	  //fxs.pass(new Pass
 	  this.applyPass(fxs,glFilter);
 	  fxs.compose(out);
+  }
+
+  protected void filter(PGraphics source, PShader shader) {
+	  filter(source, shader, out);
   }
   
   public void applyPass(PostFXSupervisor fxs, PShader shader) {

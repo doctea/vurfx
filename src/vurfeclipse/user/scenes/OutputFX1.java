@@ -18,8 +18,8 @@ public class OutputFX1 extends SimpleScene {
 
 	public boolean setupFilters() {
 
-	    this.addFilter(new ShaderFilter(this,"Pixelate.xml").addParameter("pixel_size", new Float(5.0f)).setFilterName("Edges").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-	    this.addFilter(new ShaderFilter(this,"Toon.xml").setFilterName("Toon").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    this.addFilter(new ShaderFilter(this,"Pixelate.glsl").addParameter("pixel_size", new Float(5.0f)).setFilterName("Edges").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    this.addFilter(new ShaderFilter(this,"ToonFrag.glsl","ToonVert.glsl").setFilterName("Toon").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
 	    return true;
 	}

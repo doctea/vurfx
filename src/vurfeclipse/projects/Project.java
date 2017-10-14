@@ -393,7 +393,7 @@ public abstract class Project implements Serializable {
       //println("Applying to " + sc.toString() + " to " + sc.getSceneName());
       //sc.applyGL(gfx);
       if (shouldDrawScene(sc)) {
-    	//println("Should draw " + sc);
+    	println("Should draw " + sc + " to " + out.getSurf());
         sc.applyGLtoCanvas(out); //getCanvas(getPath()+"out"));
         //sc.applyGL(buffers[BUF_OUT]);
         //sc.applyGL(off);
@@ -401,6 +401,7 @@ public abstract class Project implements Serializable {
     }
     ////gfx.image(buffers[BUF_OUT].getTexture(),0,0,w,h);
 
+    println("Outputting to " + offscreen);
     offscreen.beginDraw();
     offscreen.image(out.getSurf(),0,0,w,h);//w,h);
     offscreen.endDraw();
@@ -581,7 +582,7 @@ public abstract class Project implements Serializable {
       println("added tab " + tabName);
       //ControllerInterface[] controls = ((Scene)i.next()).getControls();
       cp5.begin(10,40);
-      ((Scene)n).setupControls(cp5,tab);
+      ((Scene)n).setupControls(cf,tab);
       println("done setupControls for " + n);
       cp5.end();
       /*for (int n = 0 ; n < controls.length ; n++) {

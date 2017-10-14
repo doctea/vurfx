@@ -1,3 +1,4 @@
+#version 120
 uniform sampler2D src_tex_unit0;
 uniform vec2 src_tex_offset0;
 uniform vec2 dest_tex_size;

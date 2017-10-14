@@ -13,6 +13,7 @@ import vurfeclipse.filters.*;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.streams.*;
+import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.*;
 import controlP5.CallbackEvent;
@@ -68,6 +69,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
   }
   public Sequence getSequence(String name) {
+	  if (!getSequences().containsKey(name)) {
+		  println(this + " doesn't have a Sequence named '"+name+"'!");
+		  System.exit(1);;
+		  //throw new Exception(this + " doesn't have a Sequence named '"+name+"'!");
+	  }
 	  return getSequences().get(name);
   }
   public Sequence makeChainSequenceFrom(String name,Sequence newSeq) {
@@ -210,9 +216,13 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   public void setMuted() {
 	  this.setMuted(true);
   }
-  public void setMuted(boolean m) {
+  public synchronized void setMuted(boolean m) {
     this.muted = m;
-    if (null!=muteController) muteController.setValue(isMuted());
+    if (null!=muteController) {
+    	muteController.setBroadcast(false);
+    	muteController.setValue(isMuted());
+    	muteController.setBroadcast(true);
+    }
     //return this;
   }
   public void toggleMute() {
@@ -706,7 +716,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   boolean doneControls = false;
 
   private Integer[] palette;
-  public void setupControls(ControlP5 cp5, Tab tab) {
+  public void setupControls(ControlFrame cf, Tab tab) {
+	  
+	  ControlP5 cp5 = cf.control();
     println("Scene#setupControls() in " + this);
     if (doneControls) return;
     doneControls = true;
@@ -778,7 +790,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
            .addCallback(filters[i])
            .linebreak()
            ;*/
-        filters[i].setupControls(cp5,tab);
+        filters[i].setupControls(cf,tab);
         
         println("<<<<<<<<<<<<<<<<did setupcontrols for " + filters[i]);
 

@@ -1,3 +1,5 @@
+#version 120
+
 //
 // BlendAdd.glsl
 // 2010 Kevin Bjorke http://www.botzilla.com

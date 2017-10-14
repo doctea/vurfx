@@ -20,6 +20,7 @@ import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.Sequence;
+import vurfeclipse.ui.ControlFrame;
 
 //import java.util.Iterator;
 //import java.util.Map;
@@ -533,7 +534,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   int count = 0;
   boolean controlsSetup = false;
-  public synchronized void setupControls(ControlP5 cp5, Tab tab) {
+  public synchronized void setupControls(ControlFrame cf, Tab tab) {
+	  ControlP5 cp5 = cf.control();
   	if (controlsSetup) return;
   	controlsSetup = true;
     println("Filter#setupControls() for "  + this + ": " + tab.getName());
@@ -628,7 +630,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         o.getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE);//.setPaddingY(cp5.getFont().getHeight());
         this.setControllerMapping(param.getName(),o);
 
-        if (o.getAbsolutePosition()[0]+(o.getWidth()*2) >= o.getControlWindow().getCurrentTab().getWidth()) // fuzzy linebreak if gonna go off the edge of the window  
+        if (o.getAbsolutePosition()[0]+(o.getWidth()*2) >= cf.width) // fuzzy linebreak if gonna go off the edge of the window  
         	o.linebreak();
         if (!i.hasNext()) { o.linebreak();}// add a linebreak if its the last one
 

@@ -189,7 +189,7 @@ class FeedbackScene extends Scene {
 
 
     //filters[++i] = new ShaderFilter(this,"pulsatingEmboss-Compiled.xml"); 
-    filters[++i] = new ShaderFilter(this,"Feedback.xml"); 
+    filters[++i] = new ShaderFilter(this,"Feedback.glsl"); 
     filters[i].setFilterName("Feedback");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    
@@ -210,7 +210,7 @@ class FeedbackScene extends Scene {
 
 
     //filters[++i] = new ShaderFilter(this,"AngularKaleidoScope.xml"); 
-    filters[++i] = new ShaderFilter(this,"Edges.xml"); 
+    filters[++i] = new ShaderFilter(this,"Edges.glsl"); 
     filters[i].setFilterName("Edges");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    

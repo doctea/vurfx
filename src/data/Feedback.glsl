@@ -1,3 +1,4 @@
+#version 120
 #define TWO_PI 6.28318531
 uniform sampler2D src_tex_unit0; 
 

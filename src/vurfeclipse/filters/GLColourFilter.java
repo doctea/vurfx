@@ -80,7 +80,7 @@ public class GLColourFilter extends ShaderFilter {
     Canvas t = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_in);//.getTexture();
 
     //t.filter(glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out).getSurf());//.getTexture());
-    this.filter(t, glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out).getSurf());
+    this.filter(t.getSurf(), glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out).getSurf());
 
     return true;
   }
