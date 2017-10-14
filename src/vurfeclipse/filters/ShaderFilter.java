@@ -1,6 +1,8 @@
 package vurfeclipse.filters;
 
 import ch.bildspur.postfx.PostFXSupervisor;
+import ch.bildspur.postfx.builder.PostFX;
+import ch.bildspur.postfx.pass.Pass;
 import ch.bildspur.postfx.pass.SobelPass;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -122,7 +124,18 @@ public class ShaderFilter extends Filter {
 	  fxs.render(source.getSurf());
 	  //TODO: ADD REAL SHADER HERE
 	  //fxs.pass(sobelPass);
+	  //fxs.pass(new Pass
+	  this.applyPass(fxs,glFilter);
 	  fxs.compose(out);
+  }
+  
+  public void applyPass(PostFXSupervisor fxs, PShader shader) {
+	  PGraphics pass = fxs.getNextPass();
+	  fxs.clearPass(pass);
+	  pass.beginDraw();
+	  pass.shader(shader);
+	  pass.image(fxs.getCurrentPass(), 0, 0);
+	  pass.endDraw();
   }
 
   public void beginDraw() {
