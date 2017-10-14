@@ -372,7 +372,8 @@ public abstract class Project implements Serializable {
     //Iterator it = Arrays.asList(scenes).iterator();
 
 	PGraphics offscreen = offscreen_canvas.getSurf(); 
-	 
+	
+	offscreen.beginDraw();
 	//offscreen.beginDraw();
     //gfx.clear(0);
     //GLGraphicsOffScreen temp = createGLBuffer(w,h,gfx_mode);
@@ -385,6 +386,7 @@ public abstract class Project implements Serializable {
 
     offscreen.background(APP.getApp().random(255));
 
+    offscreen.endDraw();
     Iterator<Scene> it = scenes.iterator();
     while(it.hasNext()) {
       Scene sc = (Scene) it.next();
@@ -589,6 +591,7 @@ public abstract class Project implements Serializable {
       c++;
       //((Scene)i).setupControls(cp5);
     }
+    this.initialised = true;
     println("Project#setupControls()----------------------------------------------------------------------------------<END");
   }
 
@@ -686,6 +689,7 @@ public abstract class Project implements Serializable {
 
   boolean outputDebug = true;
 	protected double timeScale = 1.0d;
+	private boolean initialised;
   public void println(String text) {		// debugPrint, printDebug -- you get the idea
 	  if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
   }
@@ -703,6 +707,10 @@ public abstract class Project implements Serializable {
 	public boolean isSequencerEnabled() {
 		// TODO Auto-generated method stub
 		return this.enableSequencer;
+	}
+	public boolean isInitialised() {
+		// TODO Auto-generated method stub
+		return this.initialised;
 	}
 
 

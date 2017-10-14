@@ -49,7 +49,7 @@ public class VurfEclipse extends PApplet {
 	FullScreen fs;
 	boolean fullscreen = false;
 	
-	boolean ready = false;
+	//boolean ready = false;
 	
 	private PostFXSupervisor fxs;
 
@@ -254,6 +254,7 @@ public class VurfEclipse extends PApplet {
 	}
 
 	int refCount = 0;
+	private boolean finishedSetup;
 	
 	@Override
 	public void settings () {
@@ -323,7 +324,7 @@ public class VurfEclipse extends PApplet {
 
 			 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 			 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-			 //pr = new MutanteProject(desired_width, desired_height, gfx_mode);
+			 //pr = new MutanteProject(desired_width, desired_height);
 			 //pr = new FeralFestProject(desired_width, desired_height, gfx_mode);
 			 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 			 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
@@ -410,7 +411,8 @@ public class VurfEclipse extends PApplet {
 		 //pr.initialise();
 		 
 		 System.out.println("Finished VurfEclipse setup(); handing off to draw()...");
-		 this.ready = true;
+		 this.finishedSetup = true;
+		 //this.ready = true;
 		 //System.exit(0);
 	}
 
@@ -465,6 +467,12 @@ public class VurfEclipse extends PApplet {
 	     println("---------- setting up PostFX");
 	     setFxs(new PostFXSupervisor(this));
 	}
+	
+	public boolean isReady() {
+		return ( this.finishedSetup && 
+				(this.pr!=null && this.pr.isInitialised()));
+	}
+	
 
 	/*******
 	*
@@ -476,7 +484,12 @@ public class VurfEclipse extends PApplet {
 	@Override
 	public void draw () {
 		//System.out.println("Draw!");
-		if (!ready) return;
+		if (!isReady()) {
+			//println("Not yet isReady!()");
+			return;
+		} /*else {
+			println("is ready!");
+		}*/
 	
 		/*if (texWin==null) {
 			GLTextureWindow texWin = new GLTextureWindow(this, 0, 0, this.desired_width, this.desired_height);
@@ -509,6 +522,8 @@ public class VurfEclipse extends PApplet {
 	 /*if (gw!=null) {
 	   gw.drawStuff(offscreen, output_height, gw_height); //gw_height);
 	 }*/
+	 
+	 this.image(offscreen.getSurf(), 0, 0);	// actually draw to applet!
 
 	 if (syphon) drawSyphon (offscreen.getSurf());
 

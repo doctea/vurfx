@@ -446,7 +446,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     //int start_mils = millis();
     //gfx.background(0,0,0,255);
     //gfx.background(128,0,0);
-    gfx.background(0,0,0,0);
+    //gfx.background(0,0,0,0);
+    
+    //gfx.rect(100, 100, 200,200);
 
     //println(this + " applyGL start loop: ");
     for (int i = 0 ; i < filterCount ; i++) {

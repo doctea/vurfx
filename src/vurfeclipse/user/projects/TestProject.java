@@ -125,7 +125,7 @@ public class TestProject extends Project implements Serializable {
     );*/
 
     this.addSceneInputOutputCanvas(
-      new TextFlashScene(this,w,h),
+      new TextFlashScene(this,w,h), //.setCanvas("temp", "/out"),
       "/out",
       "/out"
 //      buffers[BUF_OUT],
@@ -148,7 +148,7 @@ public class TestProject extends Project implements Serializable {
       //... make Project call initialiseFilters() on the Scene, which calls initialise() on Filter, which then buffers appropriately
       buffers[BUF_OUT]
     );*/
-
+        
     this.addSceneOutputCanvas(
       new DebugScene(this,w,h),
       "/out"
