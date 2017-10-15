@@ -87,8 +87,10 @@ public class BlendDrawer extends ShaderFilter {
   public void updateParameterValue(String paramName, Object value) {
     if (paramName.equals("BlendMode"))
       this.setBlendMode((Integer)value);
-    else
+    else {
+      glFilter = getFilterNumber(this.currentBlendMode);
       super.updateParameterValue(paramName, value);
+    }
   }
 
   /*public void setXYOffset(int x, int y) {
@@ -151,6 +153,8 @@ public class BlendDrawer extends ShaderFilter {
     		w*(Float)getParameterValue("X"),
     		h*(Float)getParameterValue("Y")
     );
+    
+    float x = (Float)getParameterValue("X");
 
     //if ((Float)getParameterValue("Zoom")!=1.0f) {
     	out.scale((Float)getParameterValue("Scale"));
@@ -167,7 +171,10 @@ public class BlendDrawer extends ShaderFilter {
     //out = sc.host.getCanvas(this.canvas_out).getSurf();
 
     PShader tf = getFilterNumber(currentBlendMode);
+    glFilter = tf;
     tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
+    tf.set("texture", src);
+    tf.set("topSampler",  src);
     //tf.apply(new PImage[]{src, out}, t); // all are called the same way
     //t.shader(tf);
     //println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
