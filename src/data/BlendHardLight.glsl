@@ -9,6 +9,9 @@ uniform sampler2D bottomSampler;
 uniform sampler2D topSampler;
 uniform float Opacity;
 
+varying vec4 vertColor;
+varying vec4 vertTexCoord;
+
 
 // utility function that assumes NON-pre-multiplied RGB...
 vec4 final_mix(
@@ -24,8 +27,8 @@ vec4 final_mix(
 
 void main(void) // fragment
 {
-	vec4 botColor = texture2D(bottomSampler,gl_TexCoord[0].st);
-	vec4 topColor = texture2D(topSampler,gl_TexCoord[0].st);
+	vec4 botColor = texture2D(bottomSampler,vertTexCoord.st);
+	vec4 topColor = texture2D(topSampler,vertTexCoord.st);
     vec4 lumCoeff = vec4(0.25,0.65,0.1,0.0);
     float L = min(1.0,max(0.0,10.0*(dot(lumCoeff,topColor)- 0.45)));
     vec4 result1 = 2.0 * botColor * topColor;

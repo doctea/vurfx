@@ -6,11 +6,13 @@
 // Uses Processing & the GLGraphics library
 //
 
-#define bottomSampler texture
+//#define bottomSampler texture
 
 uniform sampler2D bottomSampler;
 uniform sampler2D topSampler;
 uniform float Opacity;
+
+//#define vertTexCoord gl_TexCoord[0]
 
 varying vec4 vertColor;
 varying vec4 vertTexCoord;
