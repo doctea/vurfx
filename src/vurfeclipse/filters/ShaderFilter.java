@@ -1,6 +1,7 @@
 package vurfeclipse.filters;
 
 import ch.bildspur.postfx.PostFXSupervisor;
+import ch.bildspur.postfx.Supervisor;
 import ch.bildspur.postfx.builder.PostFX;
 import ch.bildspur.postfx.pass.Pass;
 import ch.bildspur.postfx.pass.SobelPass;
@@ -14,14 +15,41 @@ import vurfeclipse.user.scenes.OutputFX1;
 import processing.opengl.*;
 
 
-
 public class ShaderFilter extends Filter {
 
+	class CustomPass implements Pass
+	{
+	  PShader shader;
+
+	  public CustomPass(PShader shader)
+	  {
+	    this.shader = shader;//loadShader("negateFrag.glsl");
+	  }
+
+	  @Override
+	    public void prepare(Supervisor supervisor) {
+	    // set parameters of the shader if needed
+	  }
+
+	  @Override
+	    public void apply(Supervisor supervisor) {
+	    PGraphics pass = supervisor.getNextPass();
+	    supervisor.clearPass(pass);
+
+	    pass.beginDraw();
+	    pass.shader(shader);
+	    pass.image(supervisor.getCurrentPass(), 0, 0);
+	    pass.endDraw();
+	  }
+	}
+	
+	
   int mode = 0;
   String shaderFragName;
   String shaderVertName;
   
   transient Canvas c;
+  private CustomPass customPass;
 
   public ShaderFilter(Scene sc, String shaderFragName, String shaderVertName) {
     super(sc);
@@ -67,6 +95,8 @@ public class ShaderFilter extends Filter {
 	  else
 		  glFilter = APP.getApp().loadShader(shaderFragName);
 
+	  customPass = new CustomPass(glFilter);
+	  
 	  //if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
 	  //if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
 
@@ -113,11 +143,18 @@ public class ShaderFilter extends Filter {
   int pixelCount;
   public boolean applyMeatToBuffers() {
     //t.copy(src.getTexture());
-	c.getSurf().image(src,0,0);
+	//c.getSurf().image(src,0,0);
 
+	c.getSurf().rect(400, 20, 20, 400);
+	  
     //t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
-	println("About to apply " + this.shaderFragName);
-    this.filter(c.getSurf(), glFilter, out);
+	//println("About to apply " + this.shaderFragName);
+    this.filter(src/*c.getSurf()*/, glFilter, out);
+    
+	out.color(255,128,96);
+	out.rect(0, 0, 50, 50);
+    out.rect(50, 50, 100, 100);
+    //println("out is " + out);
 
     return true;
   }
@@ -125,11 +162,17 @@ public class ShaderFilter extends Filter {
   SobelPass sobelPass = new SobelPass(APP.getApp());
   protected void filter(PGraphics source, PShader shader, PGraphics out) {
 	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
-	  fxs.render(source);
 	  //TODO: ADD REAL SHADER HERE
 	  //fxs.pass(sobelPass);
 	  //fxs.pass(new Pass
-	  this.applyPass(fxs,glFilter);
+	  source.beginDraw();
+	  source.sphere(60);
+	  source.endDraw();
+	  fxs.render(source);
+	  //this.applyPass(fxs,glFilter);
+	  //fxs.pass(customPass);
+	  fxs.pass(new CustomPass(glFilter));
+	  //fxs.pass(sobelPass);
 	  fxs.compose(out);
   }
 

@@ -485,17 +485,18 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   transient controlP5.Button nextModeButton;
 
 
+  @Override
   public void controlEvent (CallbackEvent ev) {
     //println(this + " got event " + ev + " : " + ev.getController());
     if (ev.getController()==this.muteController &&
     		/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
-    		ev.getAction()==ControlP5.ACTION_PRESSED) {
+    		ev.getAction()==ControlP5.ACTION_PRESS) {
         println("Setting mute state on " + this + " to " + muteController.getState());
         this.setMuted(muteController.getState());
-    } else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_PRESSED) {
+    } else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_PRESS) {
         this.nextMode();
     } else if (controllers.containsKey(ev.getController()) &&
-    		(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || ev.getAction()==ControlP5.ACTION_PRESSED)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
+    		(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_RELEASE || ev.getAction()==ControlP5.ACTION_RELEASE_OUTSIDE || ev.getAction()==ControlP5.ACTION_PRESS)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
     	) {
         String paramName = (String)controllers.get(ev.getController());
         println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());

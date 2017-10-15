@@ -133,7 +133,7 @@ public class BlendDrawer extends ShaderFilter {
   }
 
   public boolean applyMeatToBuffers() {
-    //println("in applymeattobuffers in pointdrawer (" + this + "), src is " + src);
+    //println("in applymeattobuffers in blenddrawer (" + this + "), src is " + src);
 
     // image draw mode
     //out.getTexture().blend();
@@ -170,9 +170,10 @@ public class BlendDrawer extends ShaderFilter {
     tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
     //tf.apply(new PImage[]{src, out}, t); // all are called the same way
     //t.shader(tf);
-    println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
-    this.filter(src, tf); //c.getSurf(), tf);
-
+    //println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
+    this.filter(src, tf, out); //c.getSurf(), tf);
+    
+    out.rect(0, 0, 150, 300);
 
     int im = out.imageMode;// to restore imageMode
     //out.image(t,x,y,w,h);
@@ -185,6 +186,8 @@ public class BlendDrawer extends ShaderFilter {
     		//h * (Float)getParameterValue("Y")
     );
     out.imageMode(im);
+    
+    out.ellipse(50, 50, 100, 150);
 
     //if (rotation!=0) {
       out.popMatrix();

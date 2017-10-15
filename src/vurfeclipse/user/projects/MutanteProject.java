@@ -375,7 +375,7 @@ public class MutanteProject extends Project implements Serializable {
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
     		new TunnelScene(this, w, h).setCanvas("temp", "/temp2") //temp2")	// "/out"
 			//.addFilter(new BlendDrawer()))
-		, "/pix0", "/out"
+		, "/out", "/out"
 	);
     int tunnel_weight = 1;
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), tunnel_weight);

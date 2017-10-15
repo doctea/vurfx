@@ -125,8 +125,8 @@ public class TestProject extends Project implements Serializable {
     );*/
 
     this.addSceneInputOutputCanvas(
-      new TextFlashScene(this,w,h), //.setCanvas("temp", "/out"),
-      "/out",
+      new TextFlashScene(this,w,h).setCanvas("temp", "/temp1").setCanvas("out",  "/out"),
+      "/temp1",
       "/out"
 //      buffers[BUF_OUT],
 //      buffers[BUF_OUT]
@@ -150,10 +150,10 @@ public class TestProject extends Project implements Serializable {
     );*/
         
     this.addSceneOutputCanvas(
-      new DebugScene(this,w,h),
+      new DebugScene(this,w,h).setCanvas("out", "/out"),
       "/out"
       //buffers[BUF_OUT]
-    );
+    ).setOutputCanvas("/out");
 
     /*this.addScene(
       new TimeScene(this,w,h)

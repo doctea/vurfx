@@ -13,7 +13,7 @@ public class Canvas implements Serializable /*implements Pathable*/ {
 	  //GLGraphicsOffScreen s = getStaticGLBuff(width,height); //
 	  //GLGraphicsOffScreen s = new GLGraphicsOffScreen(APP.getApp(), width, height);//, true, 4);
 	  //PGraphics s = new PGraphics();
-	  if (/*true || */((VurfEclipse)APP.getApp()).isReady()) {
+	  if (true || ((VurfEclipse)APP.getApp()).isReady()) {
 		  PGraphics s = APP.getApp().createGraphics(width,height,APP.getApp().P3D);
 		  //s.setDepthMask(true);
 		  s.setSize(width, height);

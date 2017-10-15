@@ -399,6 +399,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   }
   public abstract boolean setupFilters();
   boolean initialisedFilters = false;
+  
   public boolean initialiseFilters () {
 	if (initialisedFilters) return true;
     setupFilters();
@@ -458,7 +459,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     //gfx.background(128,0,0);
     //gfx.background(0,0,0,0);
     
-    //gfx.rect(100, 100, 200,200);
+    gfx.rect(100, 100, 200,200);
 
     //println(this + " applyGL start loop: ");
     for (int i = 0 ; i < filterCount ; i++) {
