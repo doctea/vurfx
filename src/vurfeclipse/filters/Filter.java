@@ -2,7 +2,9 @@ package vurfeclipse.filters;
 import vurfeclipse.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
+import controlP5.ControlGroup;
 import controlP5.ControlP5;
+import controlP5.ControllerGroup;
 import controlP5.Group;
 import controlP5.Slider;
 import controlP5.Tab;
@@ -487,6 +489,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   @Override
   public void controlEvent (CallbackEvent ev) {
+	if (!ev.getController().isUserInteraction()) return;
     //println(this + " got event " + ev + " : " + ev.getController());
     if (ev.getController()==this.muteController &&
     		/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
@@ -535,7 +538,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   int count = 0;
   boolean controlsSetup = false;
-  public synchronized void setupControls(ControlFrame cf, Tab tab) {
+  public synchronized void setupControls(ControlFrame cf, ControllerGroup tab, int row) {
 	  ControlP5 cp5 = cf.control();
   	if (controlsSetup) return;
   	controlsSetup = true;
@@ -544,22 +547,26 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       println("Exiting because setupControls count is " + count + " in " + this);
       System.exit(0);
     }*/
+       
     int size = 20;
     cp5.addCallback(this);
     //cp5.addTextlabel(tabName + this.toString()).setText(getFilterLabel()).linebreak();
        
-    Group grp = cp5.addGroup("group_" + tab.getName() + "_" + getFilterName()).moveTo(tab);
+    /*Group grp = cp5.addGroup("group_" + tab.getName() + "_" + getFilterName()).moveTo(tab);
     grp.setLabel(getFilterName());
-    /*grp.setBarHeight(50);
-    grp.showBar();
-    grp.showArrow();
-    grp.enableCollapse();*/
     cp5.addTextlabel("label " + grp.getName(), getFilterName()).setGroup(grp).moveTo(grp).linebreak()
     		.setText("ffs?").setLabel("wtaf?").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
     
-    grp.setTitle("asdfasdf");
+    grp.setTitle("asdfasdf");*/
+    Group grp = (Group) tab;
     
+    int margin_h = 15;
+    int margin_w = 10;
+    /*int row = 0,*/int col = 1;
+    int row_h = 50, col_w = 150;
+        
     this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
+      .setPosition(margin_w + (col*col_w),margin_h + (row*row_h))
       .setLabel("Mute " + this.getFilterLabel())
       .setSize(size*2, size)
       .setValue(this.isMuted())
@@ -575,16 +582,17 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
     this.nextModeButton = cp5.addButton("nextmode_" + tab.getName() + getFilterName())
       .setLabel(">|")
-        .setSize(size, size)
-          .moveTo(grp)
+      .setSize(size, size)
+      .setPosition(margin_w + (col*(col_w+margin_w)) + size + 5,margin_h + (row*row_h))
+      .moveTo(grp)
             //.plugTo(this)
             //.addCallback(this)
-            .linebreak()
+            //.linebreak()
               ;
 
     //cp5.addTextlabel("path_" + tab.getName() + getFilterName(), "Path: " + this.getPath()).setSize(size, size).moveTo(grp);//.linebreak();
 
-
+    col = 2;
 
     if (parameters==null)
       setParameterDefaults();
@@ -602,16 +610,16 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         value instanceof Float ?
           cp5.addSlider(tab.getName() + this + me.getKey()).setValue(
         		  (Float)(Float)value).setLabel(me.getKey().toString())
-          		.setSliderMode(Slider.FLEXIBLE)
+          			.setSliderMode(Slider.FLEXIBLE)
         		  .setRange(
         				  new Float((Float)param.min),
         				  new Float((Float)param.max)
         			)
-        			.moveTo(grp).setSize(size*5, size) : //.addCallback(this) :
+        			.setSize(size*5, size) : //.addCallback(this) :
         value instanceof Integer ?
-          cp5.addSlider(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.min, (Integer)param.max).moveTo(grp).setSize(size*5, size) : //addCallback(this) :
+          cp5.addSlider(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.min, (Integer)param.max).setSize(size*5, size) : //addCallback(this) :
         value instanceof Boolean ?
-          cp5.addToggle(tab.getName() + this + me.getKey()).setState((Boolean)value).setLabel(me.getKey().toString()).moveTo(grp).setSize(size, size) : //.addCallback(this) :
+          cp5.addToggle(tab.getName() + this + me.getKey()).setState((Boolean)value).setLabel(me.getKey().toString()).setSize(size, size) : //.addCallback(this) :
           /*          value instanceof PVector ?
            cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :*/
           null
@@ -622,20 +630,30 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       println("Filter: adding control object for filter with path " + this.getPath());
 
 
+      //col = 2;
+      //row--;
+      
       //o.linebreak();
       //param.controller = o;
       //param.setController(o);
       //o.addCallback(this);
       if (o!=null) {
-        o.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingY(2*cp5.getFont().getHeight());
+        o.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER);//.setPaddingY(2*cp5.getFont().getHeight());
         o.getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE);//.setPaddingY(cp5.getFont().getHeight());
-        this.setControllerMapping(param.getName(),o);
-
-        if (o.getAbsolutePosition()[0]+(o.getWidth()*2) >= cf.width) {// fuzzy linebreak if gonna go off the edge of the window
-        	println ("linebreaking because controller width " + o.getAbsolutePosition()[0]+(o.getWidth()*2) + " is more than frame width" + cf.width + "?");
-        	o.linebreak();
+        o.setPosition(margin_w + (col++*(margin_w+col_w)),margin_h + (row*row_h));
+        if (col>5) { //(5*(cf.width/col_w))) {
+        	col = 2;
+        	row++;
         }
-        if (!i.hasNext()) { o.linebreak();}// add a linebreak if its the last one
+        this.setControllerMapping(param.getName(),o);
+        
+        o.moveTo(grp);
+
+        /*if (o.getAbsolutePosition()[0]+(o.getWidth()*2) >= cf.width) {// fuzzy linebreak if gonna go off the edge of the window
+        	println ("linebreaking because controller width " + o.getAbsolutePosition()[0]+(o.getWidth()*2) + " is more than frame width" + cf.width + "?");
+        	//o.linebreak();
+        }*/
+        //if (!i.hasNext()) { o.linebreak();}// add a linebreak if its the last one
 
         //o.linebreak();	// removed 2017-09-22 to make layout loads better !!!
         /*controllers.put(
@@ -645,6 +663,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       }
       // }
     }
+    ((ControlGroup<Group>) tab).setBackgroundHeight(margin_h + (row++ * row_h));
+    tab.setColorBackground((int) random(255));
+    tab.setSize(margin_w + (col++*col_w),margin_h + (row++ * row_h));
     //cp5.linebreak();
   }
 

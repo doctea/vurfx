@@ -1,3 +1,4 @@
+#version 120
 uniform int swap_mode;
 
 uniform sampler2D src_tex_unit0;

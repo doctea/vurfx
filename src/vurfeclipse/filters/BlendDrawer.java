@@ -180,7 +180,7 @@ public class BlendDrawer extends ShaderFilter {
 
     PShader tf = getFilterNumber(currentBlendMode);
     glFilter = tf;
-    Pass customPass = this.getPassForShader(tf,out,src);
+    customPass = this.getPassForShader(tf,out,src);
     tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
     //tf.set("bottomSampler", out);
     //tf.set("topSampler",  src);
@@ -194,9 +194,9 @@ public class BlendDrawer extends ShaderFilter {
     c.getSurf().endDraw();
     
 
-    out.color(this.random(255));
+    /*out.color(this.random(255));
     out.fill(this.random(255));
-    out.rect(random(sc.w), random(sc.h), random(100), random(100));
+    out.rect(random(sc.w), random(sc.h), random(100), random(100));*/
 
     int im = out.imageMode;// to restore imageMode
     //out.image(t,x,y,w,h);
@@ -208,14 +208,17 @@ public class BlendDrawer extends ShaderFilter {
     		//w * (Float)getParameterValue("X"),
     		//h * (Float)getParameterValue("Y")
     );
+
+
     out.imageMode(im);
     
-    out.ellipse(random(sc.w), random(sc.h), random(100), random(100));
 
     
     //if (rotation!=0) {
       out.popMatrix();
     //}
+      //out.ellipse(random(sc.w), random(sc.h), random(100), random(100));
+      
 
 
       out.endDraw();
@@ -232,12 +235,12 @@ public class BlendDrawer extends ShaderFilter {
     return super.toString() + " " + blendModes[currentBlendMode];
   }*/
 
-  private Pass getPassForShader(PShader tf, PGraphics out, PGraphics src) {
+  private CustomPass getPassForShader(PShader tf, PGraphics out, PGraphics src) {
 	// TODO Auto-generated method stub
 
-	  Pass p = this.passes .get(tf);
+	  CustomPass p = (CustomPass)this.passes.get(tf);
 	  if (p==null) {
-		p = new CustomPass(tf);
+		p = new CustomPass(tf,"blend mode!","blend mode..!");
 	    tf.set("bottomSampler", out);
 	    tf.set("topSampler",  src);
 	    this.passes.put(tf,p);

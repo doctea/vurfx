@@ -1,6 +1,8 @@
 #version 120
-uniform sampler2D Texture0;
+uniform sampler2D src_tex_unit0;
 uniform vec2 offset;
+
+#define Texture0 src_tex_unit0
 
 #define HueLevCount 6
 #define SatLevCount 7
@@ -122,7 +124,7 @@ float nearestLevel(float col, int mode) {
 
 // averaged pixel intensity from 3 color channels
 float avg_intensity(vec4 pix) {
- return (pix.r + pix.g + pix.b)/3.;
+ return (pix.r + pix.g + pix.b)/3.0f;
 }
 
 vec4 get_pixel(vec2 coords, float dx, float dy) {

@@ -572,19 +572,28 @@ public abstract class Project implements Serializable {
     println("Project#setupControls about to loop over scenes ("+scenes.size()+" scenes to process)");
     Iterator<Scene> i = scenes.iterator();
     int c = 0;
+    
+    Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth);
+
     Scene n;
     while(i.hasNext()) {
       n = (Scene)i.next();
       println(c + ": Project#setupControls() got scene " + n.getSceneName());
       String tabName = "["+c+"] " + n.getSceneName(); //getClass();
       //ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
-      Tab tab = cp5.addTab(tabName);
+      //Tab tab = cp5.addTab(tabName);
+
+      Group g = cp5.addGroup(tabName);
+      
       println("added tab " + tabName);
       //ControllerInterface[] controls = ((Scene)i.next()).getControls();
-      cp5.begin(10,40);
-      ((Scene)n).setupControls(cf,tab);
+      //cp5.begin(10,40);
+      ((Scene)n).setupControls(cf,g);//tab);
       println("done setupControls for " + n);
-      cp5.end();
+      //cp5.end();
+      
+      accordion.addItem(g);
+      
       /*for (int n = 0 ; n < controls.length ; n++) {
         cp5.getTab("Scene " + c).add(controls[n]).moveTo("Scene " + c);
         //cp5.addSlider(controls[n]).moveTo("Scene " + c);
@@ -592,6 +601,9 @@ public abstract class Project implements Serializable {
       c++;
       //((Scene)i).setupControls(cp5);
     }
+    accordion.open();
+    accordion.setCollapseMode(Accordion.MULTI);
+
     this.initialised = true;
     println("Project#setupControls()----------------------------------------------------------------------------------<END");
   }

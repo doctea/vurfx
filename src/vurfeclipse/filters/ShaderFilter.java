@@ -21,9 +21,9 @@ public class ShaderFilter extends Filter {
 	{
 	  PShader shader;
 
-	  public CustomPass(PShader shader)
+	  public CustomPass(PShader shader, String shaderFragName, String shaderVertName)
 	  {
-		System.out.println("Instantiated new CustomPass " + shader);
+		System.out.println("Instantiated new CustomPass " + shader + " (told it was " + shaderFragName + " and " + shaderVertName);
 	    this.shader = shader;//loadShader("negateFrag.glsl");
 	  }
 
@@ -50,7 +50,7 @@ public class ShaderFilter extends Filter {
   String shaderVertName;
   
   transient Canvas c;
-  private CustomPass customPass;
+  protected CustomPass customPass;
 
   public ShaderFilter(Scene sc, String shaderFragName, String shaderVertName) {
     super(sc);
@@ -91,12 +91,13 @@ public class ShaderFilter extends Filter {
   }
 
   public void initShader(String shaderFragName, String shaderVertName) {
+	  println("initShader("+shaderFragName+","+shaderVertName+")");
 	  if (shaderVertName!="")
 		  glFilter = APP.getApp().loadShader(shaderFragName,shaderVertName); //new GLTextureFilter(APP.getApp(), shaderName);
 	  else
 		  glFilter = APP.getApp().loadShader(shaderFragName);
 
-	  customPass = new CustomPass(glFilter);
+	  customPass = new CustomPass(glFilter, shaderFragName, shaderVertName);
 	  
 	  //if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
 	  //if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
@@ -148,11 +149,12 @@ public class ShaderFilter extends Filter {
 
 	//c.getSurf().rect(400, 20, 20, 400);
 	  
-	out.beginDraw();
     //t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
 	//println("About to apply " + this.shaderFragName);
+	//customPass.shader.set("src_tex_unit0", src);
     this.filter(src/*c.getSurf()*/, customPass, out);
     
+	out.beginDraw();
 	out.color(255,128,96);
 	out.rect(0, 0, 50, 50);
     out.rect(50, 50, 100, 100);
@@ -182,7 +184,7 @@ public class ShaderFilter extends Filter {
   
   @Deprecated
   protected void filter(PGraphics source, PShader shader, PGraphics out) {
-	  filter(source,new CustomPass(shader),out);
+	  filter(source,new CustomPass(shader,"from shader", "from shader"),out);
 	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
 	  //TODO: ADD REAL SHADER HERE
 	  //fxs.pass(sobelPass);

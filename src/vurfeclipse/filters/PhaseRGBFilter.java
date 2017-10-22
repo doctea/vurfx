@@ -8,7 +8,7 @@ import processing.opengl.PShader;
 
 public class PhaseRGBFilter extends ShaderFilter {
   boolean flipHorizontal = true, flipVertical = true;
-  static String shaderName = "PhaseRGB.xml";
+  static String shaderName = "PhaseRGB.glsl";
   
   int d_value = 2;
     

@@ -463,6 +463,12 @@ public class VurfEclipse extends PApplet {
 		   initSyphon(gl, "Vurf");
 		 }*/
 
+		// https://stackoverflow.com/questions/20551224/how-to-enable-vsync-synchronization-in-processing-2-x
+		  PJOGL pgl = (PJOGL)beginPGL();
+		  pgl.gl.setSwapInterval(1);
+		  endPGL();
+		  
+		  frameRate(60);
 
 	     println("---------- setting up PostFX");
 	     setFxs(new PostFXSupervisor(this));

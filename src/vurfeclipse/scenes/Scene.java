@@ -19,6 +19,7 @@ import vurfeclipse.sequence.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.ControllerGroup;
 import controlP5.Tab;
 
 public abstract class Scene implements CallbackListener, Serializable, Mutable, Targetable {
@@ -684,6 +685,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   transient controlP5.Button loadButton;
 
   public synchronized void controlEvent (CallbackEvent ev) {
+	if (!ev.getController().isUserInteraction()) return;
     if (ev.getController().isUserInteraction() && ev.getAction()==ControlP5.ACTION_RELEASE) {
       println("controlevent in " + this); 
 
@@ -722,7 +724,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   boolean doneControls = false;
 
   private Integer[] palette;
-  public void setupControls(ControlFrame cf, Tab tab) {
+  public void setupControls(ControlFrame cf, ControllerGroup tab) {
 	  
 	  ControlP5 cp5 = cf.control();
     println("Scene#setupControls() in " + this);
@@ -739,15 +741,15 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     int currentY = topMargin;
     
     this.muteController = cp5.addToggle("mute_"+tabName)
+      .setPosition(margin, margin)
       .setSize(size,size)
       .setValue(isMuted())
       //.setPosition(lm, currentY)
       .setLabel("Mute Scene")
       //.plugTo(this, "setMuted")
       //.addCallback(this)
-      .moveTo(tabName)
-      .linebreak()
-      ;
+      .moveTo(tab)
+    ;
     currentY += size + margin;
     this.muteController.getCaptionLabel().alignY(ControlP5.CENTER);
 
@@ -796,7 +798,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
            .addCallback(filters[i])
            .linebreak()
            ;*/
-        filters[i].setupControls(cf,tab);
+        filters[i].setupControls(cf,tab,i);
         
         println("<<<<<<<<<<<<<<<<did setupcontrols for " + filters[i]);
 
