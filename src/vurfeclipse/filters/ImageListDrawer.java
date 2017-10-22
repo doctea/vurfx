@@ -70,6 +70,11 @@ public class ImageListDrawer extends Filter {
   @Deprecated
   ArrayList<String> filenames = new ArrayList<String>();
   
+  public ImageListDrawer setFilenames(ArrayList<String> filenames) {
+	  this.filenames = filenames;
+	  return this;
+  }
+  
   @Deprecated
   public ArrayList<String> getFilenames() {
   	if (filenames == null) {

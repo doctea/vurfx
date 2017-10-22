@@ -9,12 +9,16 @@ uniform int width;
 uniform int height;
 //varying vec2 v_coords;
 
+
+varying vec4 vertColor;
+varying vec4 vertTexCoord;
+
 uniform int colourMode;
  
 void main() {
 	//gl_FragColor = vec4(1,0.25,0.75,1); //vec4(sin(u_time),sin(u_time),sin(u_time),sin(u_time));
 
-    vec2 v_coords = gl_TexCoord[0].st;
+    vec2 v_coords = vertTexCoord.st;
 
     float u_time = float(u_time_2)/50.0;///10.0;
 

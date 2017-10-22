@@ -135,8 +135,8 @@ public abstract class Project implements Serializable {
     if (enableStreams) {
       Iterator<?> i = streams.entrySet().iterator();
       while (i.hasNext()) {
-        //println("processStreams in " + this);
         Map.Entry e = (Map.Entry) i.next();
+        //println("processStreams in " + this + " for " + e);
         Stream s = (Stream) e.getValue();
         s.processEvents(time);
         s.deliverEvents();
@@ -189,8 +189,8 @@ public abstract class Project implements Serializable {
     	setupControls(((VurfEclipse)APP.getApp()).getCF());
     }*/
 
-    //setupRest();
-    //setupExposed();
+    setupRest();
+    setupExposed();
 
     return true;
   }

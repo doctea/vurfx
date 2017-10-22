@@ -29,6 +29,8 @@ class RestMessage {
 
 public class RestConnector implements Runnable {
 
+	private static final int PORT_NUMBER = 7777;
+
 	com.google.gson.Gson gson = new Gson();
 	
 	Project pr;
@@ -67,7 +69,7 @@ public class RestConnector implements Runnable {
 		
 	    try { 	        // Instantiate it once 
 	        rest  = new IceBreakRestServer();
-	        rest.setPort(7777);
+	        rest.setPort(this.PORT_NUMBER);
 	        System.out.println(this + ": started server...");
 	        //System.exit(1);
 	        

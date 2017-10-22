@@ -4,14 +4,12 @@ import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
+import vurfeclipse.sequence.SequenceSequencer;
 
 import java.io.Serializable;
 
 import vurfeclipse.filters.OpenNIFilter;
 import vurfeclipse.projects.Project;
-import vurfeclipse.scenes.DebugScene;
-import vurfeclipse.scenes.SimpleScene;
-import vurfeclipse.scenes.WebcamScene;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlobFX1;
 
@@ -53,6 +51,52 @@ public class TestProject extends Project implements Serializable {
     this.addStream("number", numberStream);
 
     return true;
+  }
+  
+
+  public boolean setupSequencer() {
+	  //this.sequencer = new SceneSequencer(this,w,h);
+	  this.sequencer = new SequenceSequencer((Project)this,w,h) {
+	  	int count = 1;
+	  	int seq_count = 1;
+	  	@Override
+	  	public void nextSequence() {
+	  		count++;
+	  		//if (count%8==0) this.setRandomMode(!this.randtrue);//count%8==0);
+	  		if (count%16==0) {
+	  			super.randomSequence();
+	  			return;
+	  		}
+	  		if ((count%2)==0)
+	  			this.host.setTimeScale(
+	  					((count%3)==0)?
+	  							2.0d:
+	  							0.5d
+	  		); //getTimeScale()
+	  		else
+	  			this.host.setTimeScale(1.0f);
+	  		if (count>1000) count = 0;
+	  		//this.host.setTimeScale(0.01f);
+	  		super.nextSequence();
+	  	}
+	  	@Override
+	  	public void runSequences() {
+	  		seq_count++;
+	  		if (this.getCurrentSequenceName().contains("_next_")) {
+	  			println("Fastforwarding sequence " + this.getCurrentSequenceName() + " because it contains '_next_'..");
+	  			super.runSequences();
+	  			this.nextSequence();
+	  		}
+	  		/*if ((1+(count%10))>5 && (seq_count%(count+1)<2)) {
+	  			this.nextSequence();
+	  		}*/
+	  		//this.host.setTimeScale(0.1f); // twat
+	  		//if (seq_count>10000) seq_count = 0;
+	  		super.runSequences();
+	  	}
+	  };
+
+	  return true;
   }
 
   public boolean setupScenes () {
@@ -123,6 +167,22 @@ public class TestProject extends Project implements Serializable {
       //buffers[BUF_OUT],
       //buffers[BUF_OUT]
     );*/
+	  
+    ImageListScene ils1 = new ImageListScene(this,w,h).setDirectory("mutante");//.setDirectory("mutante");
+    //this.addSceneOutputCanvas(ils1, "pix0");
+    
+    ImageListScene ils2 = new ImageListScene(this,w,h).setDirectory("mutante");
+    //this.addSceneOutputCanvas(ils2, "pix1");
+
+    this.addSceneOutputCanvas(
+      ils1, //.setCanvas("out", "/pix0"),
+      "/out"
+    );
+    this.addSceneOutputCanvas(
+      ils2, //.setCanvas("out", "/pix1"),
+      "/out"
+      //"/temp1"
+    );
 
     this.addSceneInputOutputCanvas(
       new TextFlashScene(this,w,h).setCanvas("temp", "/temp1").setCanvas("out",  "/out"),
@@ -131,6 +191,10 @@ public class TestProject extends Project implements Serializable {
 //      buffers[BUF_OUT],
 //      buffers[BUF_OUT]
     );
+    
+    ((SequenceSequencer) sequencer).bindSequence("ils1_choose", ils1.getSequence("choose_0"),1); //, 2+switcher.getSequenceCount()/4);//32);
+    ((SequenceSequencer) sequencer).bindSequence("ils2_choose", ils2.getSequence("choose_1"),1); //, 2+switcher.getSequenceCount()/4);//32);
+
 
     /*this.addSceneInputOutput(
       new SimpleScene(this,w,h).addFilter(

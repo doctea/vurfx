@@ -23,6 +23,7 @@ public class ShaderFilter extends Filter {
 
 	  public CustomPass(PShader shader)
 	  {
+		System.out.println("Instantiated new CustomPass " + shader);
 	    this.shader = shader;//loadShader("negateFrag.glsl");
 	  }
 
@@ -38,7 +39,7 @@ public class ShaderFilter extends Filter {
 
 	    pass.beginDraw();
 	    pass.shader(shader);
-	    pass.image(supervisor.getCurrentPass(), 0, 0);
+	    pass.image(supervisor.getCurrentPass(), 0, 0, sc.w, sc.h);
 	    pass.endDraw();
 	  }
 	}
@@ -145,38 +146,60 @@ public class ShaderFilter extends Filter {
     //t.copy(src.getTexture());
 	//c.getSurf().image(src,0,0);
 
-	c.getSurf().rect(400, 20, 20, 400);
+	//c.getSurf().rect(400, 20, 20, 400);
 	  
+	out.beginDraw();
     //t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
 	//println("About to apply " + this.shaderFragName);
-    this.filter(src/*c.getSurf()*/, glFilter, out);
+    this.filter(src/*c.getSurf()*/, customPass, out);
     
 	out.color(255,128,96);
 	out.rect(0, 0, 50, 50);
     out.rect(50, 50, 100, 100);
     //println("out is " + out);
+    out.endDraw();
 
     return true;
   }
 
   SobelPass sobelPass = new SobelPass(APP.getApp());
-  protected void filter(PGraphics source, PShader shader, PGraphics out) {
+  protected void filter(PGraphics source, Pass pass, PGraphics out) {
 	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
 	  //TODO: ADD REAL SHADER HERE
 	  //fxs.pass(sobelPass);
 	  //fxs.pass(new Pass
-	  source.beginDraw();
+	  /*source.beginDraw();
 	  source.sphere(60);
-	  source.text(this.getFilterName(), sc.w/2, sc.h/2);
-	  source.endDraw();
+	  source.text(this.getFilterName() + ": " + shader, sc.w/2, sc.h/2);
+	  source.endDraw();*/
 	  fxs.render(source);
 	  //this.applyPass(fxs,glFilter);
-	  //fxs.pass(customPass);
-	  fxs.pass(new CustomPass(shader)); //glFilter));
+	  fxs.pass(pass);
+	  //fxs.pass(new CustomPass(shader)); //glFilter));
+	  //fxs.pass(sobelPass);
+	  fxs.compose(out);
+  } 
+  
+  @Deprecated
+  protected void filter(PGraphics source, PShader shader, PGraphics out) {
+	  filter(source,new CustomPass(shader),out);
+	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
+	  //TODO: ADD REAL SHADER HERE
+	  //fxs.pass(sobelPass);
+	  //fxs.pass(new Pass
+	  /*source.beginDraw();
+	  source.sphere(60);
+	  source.text(this.getFilterName() + ": " + shader, sc.w/2, sc.h/2);
+	  source.endDraw();*/
+	  fxs.render(source);
+	  //this.applyPass(fxs,glFilter);
+	  //fxs.pass(new CustomPass(shader)); //glFilter));
+	  fxs.pass(customPass);
 	  //fxs.pass(sobelPass);
 	  fxs.compose(out);
   }
 
+  @Deprecated
   protected void filter(PGraphics source, PShader shader) {
 	  filter(source, shader, out);
   }

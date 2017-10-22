@@ -561,14 +561,14 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     
     this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
       .setLabel("Mute " + this.getFilterLabel())
-        .setSize(size*2, size)
-          .setValue(this.isMuted())
-            //.setPosition(lm, currentY+=(size+margin))
-            //.plugTo(this, "setMuted")
-            //.plugTo(this)
-            .moveTo(grp)
-              //.addCallback(this)
-              ;
+      .setSize(size*2, size)
+      .setValue(this.isMuted())
+      //.setPosition(lm, currentY+=(size+margin))
+      //.plugTo(this, "setMuted")
+      //.plugTo(this)
+      .moveTo(grp)
+      //.addCallback(this)
+      ;
     
     this.muteController.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingY(2*cp5.getFont().getHeight());
     this.muteController.getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setPaddingY(2*cp5.getFont().getHeight());//.setPaddingY(cp5.getFont().getHeight());
@@ -631,8 +631,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         o.getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE);//.setPaddingY(cp5.getFont().getHeight());
         this.setControllerMapping(param.getName(),o);
 
-        if (o.getAbsolutePosition()[0]+(o.getWidth()*2) >= cf.width) // fuzzy linebreak if gonna go off the edge of the window  
+        if (o.getAbsolutePosition()[0]+(o.getWidth()*2) >= cf.width) {// fuzzy linebreak if gonna go off the edge of the window
+        	println ("linebreaking because controller width " + o.getAbsolutePosition()[0]+(o.getWidth()*2) + " is more than frame width" + cf.width + "?");
         	o.linebreak();
+        }
         if (!i.hasNext()) { o.linebreak();}// add a linebreak if its the last one
 
         //o.linebreak();	// removed 2017-09-22 to make layout loads better !!!

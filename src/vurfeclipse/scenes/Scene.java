@@ -683,10 +683,15 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   transient controlP5.Button saveButton;
   transient controlP5.Button loadButton;
 
-  public void controlEvent (CallbackEvent ev) {
-    //println("controlevent in " + this);
-    if (ev.getAction()==ControlP5.ACTION_RELEASED) {
+  public synchronized void controlEvent (CallbackEvent ev) {
+    if (ev.getController().isUserInteraction() && ev.getAction()==ControlP5.ACTION_RELEASE) {
+      println("controlevent in " + this); 
+
+      println (ev.getController() + " check if same as " + this.muteController);
       if (ev.getController()==this.muteController) {
+        //muteController.setState(!muteController.getState());
+        muteController.setValue(muteController.getValue());
+    	println("it is, should be toggling state to " + muteController.getValue());
         this.setMuted(muteController.getState());
       }/*
       else if (ev.getController()==this.saveButton) {
@@ -738,7 +743,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
       .setValue(isMuted())
       //.setPosition(lm, currentY)
       .setLabel("Mute Scene")
-      .plugTo(this, "setMuted")
+      //.plugTo(this, "setMuted")
       //.addCallback(this)
       .moveTo(tabName)
       .linebreak()

@@ -1,6 +1,9 @@
 package vurfeclipse.filters;
 
 
+import java.util.HashMap;
+
+import ch.bildspur.postfx.pass.Pass;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -39,6 +42,8 @@ public class BlendDrawer extends ShaderFilter {
   };
 
   transient PShader blendFilters[] = new PShader[blendModes.length];
+
+  private HashMap<PShader,Pass> passes = new HashMap<PShader,Pass>();
 
   //transient PShader glFilter;
   //transient PGraphics t;
@@ -137,6 +142,9 @@ public class BlendDrawer extends ShaderFilter {
   public boolean applyMeatToBuffers() {
     //println("in applymeattobuffers in blenddrawer (" + this + "), src is " + src);
 
+	//if (true) return super.applyMeatToBuffers();
+	out.beginDraw();
+
     // image draw mode
     //out.getTexture().blend();
     //out.setBlendMode(REPLACE);
@@ -172,15 +180,23 @@ public class BlendDrawer extends ShaderFilter {
 
     PShader tf = getFilterNumber(currentBlendMode);
     glFilter = tf;
+    Pass customPass = this.getPassForShader(tf,out,src);
     tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
-    tf.set("bottomSampler", src);
-    tf.set("topSampler",  src);
+    //tf.set("bottomSampler", out);
+    //tf.set("topSampler",  src);
     //tf.apply(new PImage[]{src, out}, t); // all are called the same way
     //t.shader(tf);
     //println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
-    this.filter(src, tf, out); //c.getSurf(), tf);
+    c.getSurf().beginDraw();
+    //this.filter(src, tf, out); //c.getSurf()); //c.getSurf(), tf);	// WORKING 2017-1022
+    c.getSurf().image(out,0,0,sc.w,sc.h);
+    this.filter(src, customPass, c.getSurf()); //c.getSurf()); //c.getSurf(), tf);
+    c.getSurf().endDraw();
     
-    out.rect(0, 0, 150, 300);
+
+    out.color(this.random(255));
+    out.fill(this.random(255));
+    out.rect(random(sc.w), random(sc.h), random(100), random(100));
 
     int im = out.imageMode;// to restore imageMode
     //out.image(t,x,y,w,h);
@@ -194,13 +210,15 @@ public class BlendDrawer extends ShaderFilter {
     );
     out.imageMode(im);
     
-    out.ellipse(50, 50, 100, 150);
+    out.ellipse(random(sc.w), random(sc.h), random(100), random(100));
 
+    
     //if (rotation!=0) {
       out.popMatrix();
     //}
 
 
+      out.endDraw();
     // pixel copy mode
       //arrayCopy(src.pixels, out.pixels);
 
@@ -214,7 +232,19 @@ public class BlendDrawer extends ShaderFilter {
     return super.toString() + " " + blendModes[currentBlendMode];
   }*/
 
-  public Filter nextMode () {
+  private Pass getPassForShader(PShader tf, PGraphics out, PGraphics src) {
+	// TODO Auto-generated method stub
+
+	  Pass p = this.passes .get(tf);
+	  if (p==null) {
+		p = new CustomPass(tf);
+	    tf.set("bottomSampler", out);
+	    tf.set("topSampler",  src);
+	    this.passes.put(tf,p);
+	  }
+	  return p;
+}
+public Filter nextMode () {
     currentBlendMode++;
     if(this.currentBlendMode>=blendModes.length)
       currentBlendMode = 0;
