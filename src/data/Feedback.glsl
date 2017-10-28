@@ -8,13 +8,15 @@ uniform int dirs;
 uniform float radio;
 uniform float amp;
 
+varying vec4 vertTexCoord;
+
  
 void main(void)
 {
-		
-      
-   	
- 	vec2 tex_coords = gl_TexCoord[0].st;
+
+
+
+ 	vec2 tex_coords = vertTexCoord.st;
  	vec4 orig ;
 	vec4 sum = vec4(0.0)*0.01;
 	

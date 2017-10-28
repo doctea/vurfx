@@ -11,6 +11,9 @@ uniform float HueLevels[HueLevCount];
 uniform float SatLevels[SatLevCount];
 uniform float ValLevels[ValLevCount];
 
+varying vec4 vertTexCoord;
+
+
 vec3 RGBtoHSV( float r, float g, float b) {
    float minv, maxv, delta;
    vec3 res;
@@ -160,7 +163,7 @@ float IsEdge(in vec2 coords){
 
 void main(void)
 {
-    vec2 texCoord = gl_TexCoord[0].xy;
+    vec2 texCoord = vertTexCoord.xy;
     vec4 colorOrg = texture2D( Texture0, texCoord );
     vec3 vHSV =  RGBtoHSV(colorOrg.r,colorOrg.g,colorOrg.b);
     vHSV.x = nearestLevel(vHSV.x, 0);

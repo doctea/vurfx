@@ -5,10 +5,13 @@ uniform vec2 dest_tex_size;
 
 uniform float pixel_size;
 
+varying vec4 vertTexCoord;
+
+
 void main(void)
 {
     float d = 1.0 / pixel_size;
-    vec2 tex_coords = gl_TexCoord[0].st;
+    vec2 tex_coords = vertTexCoord.st;
 
 	int fx = int(tex_coords.s * dest_tex_size.x / pixel_size);
 	int fy = int(tex_coords.t * dest_tex_size.y / pixel_size);

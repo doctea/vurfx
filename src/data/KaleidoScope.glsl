@@ -6,9 +6,12 @@ uniform sampler2D src_tex_unit0;
 uniform int mirror_x;
 uniform int mirror_y;
 
+varying vec4 vertTexCoord;
+
+
 void main(void)
 {
-    vec2 tex_coord = gl_TexCoord[0].st;
+    vec2 tex_coord = vertTexCoord.st;
 
     //vec4 ts = textureSize2D(src_tex_unit0);
     if (mirror_x==1 && gl_TexCoord[0].x > 0.5) {

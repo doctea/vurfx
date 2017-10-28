@@ -5,12 +5,12 @@ uniform float gshift;
 uniform float bshift;
 
 uniform sampler2D src_tex_unit0;
-//uniform vec2 src_tex_offset0;
+varying vec4 vertTexCoord;
 
 void main(void)
 {
     //gl_FragColor = vec4(texture2DRect(src_tex_unit0, src_tex_offset0).abrg);
-    vec4 color = texture2D(src_tex_unit0, gl_TexCoord[0].st).rgba;
+    vec4 color = texture2D(src_tex_unit0, vertTexCoord.st).rgba;
 /*    gl_FragColor = vec4 (
 	rshift, //1 + color.r * rshift,
 	gshift, //color.g * gshift,

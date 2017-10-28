@@ -11,9 +11,12 @@ uniform float step_y;
 uniform float offset_x;
 uniform float offset_y;
 
+varying vec4 vertTexCoord;
+
+
 void main(void)
 {
-    vec2 tex_coord = gl_TexCoord[0].st;
+    vec2 tex_coord = vertTexCoord.st;
 
     //tex_coord.xy = vec2(0.5-tex_coord.x * step_x, 0.5-tex_coord.y * step_y);
    	// ^^ this one for straightforward 'grid'

@@ -151,10 +151,13 @@ public class ShaderFilter extends Filter {
 	  
     //t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
 	//println("About to apply " + this.shaderFragName);
-	//customPass.shader.set("src_tex_unit0", src);
-    this.filter(src/*c.getSurf()*/, customPass, out);
+	customPass.shader.set("src_tex_unit0", src);
+	c.getSurf().beginDraw();
+    this.filter(src/*c.getSurf()*/, customPass, c.getSurf()); //out);
+    c.getSurf().endDraw();
     
 	out.beginDraw();
+	out.image(c.getSurf(),0,0,sc.w,sc.h);
 	out.color(255,128,96);
 	out.rect(0, 0, 50, 50);
     out.rect(50, 50, 100, 100);
