@@ -260,7 +260,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
     if (this.muteController!=null) {
     	this.muteController.setState(v);
-    	//println("#setMute: muteController (" + this.muteController.getLabel() + ") set to " + v);
+    	println("#setMute: muteController (" + this.muteController.getLabel() + ") set to " + v);
     	//System.exit(1);
     } else {
     	println("#setMute: no muteController set!");
@@ -420,6 +420,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   //abstract public boolean initialise ();
   public boolean initialise () {
     //setParameterDefaults();
+	this.setMuted(this.muted);	// 2017-10-29
     return true;
   }
 
@@ -493,7 +494,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     //println(this + " got event " + ev + " : " + ev.getController());
     if (ev.getController()==this.muteController &&
     		/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
-    		ev.getAction()==ControlP5.ACTION_PRESS) {
+    		ev.getAction()==ControlP5.ACTION_CLICK) {
         println("Setting mute state on " + this + " to " + muteController.getState());
         this.setMuted(muteController.getState());
     } else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_PRESS) {
@@ -503,7 +504,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     	) {
         String paramName = (String)controllers.get(ev.getController());
         println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
-        Object currentValue = getParameterValue(paramName) ;
+        Object currentValue = getParameterValue(paramName);
         changeValueFor(currentValue,paramName,ev);
     } else if (controllers.containsKey(ev.getController()) && ev.getController().isUserInteraction()) {
       String paramName = (String)controllers.get(ev.getController());
@@ -570,6 +571,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       .setLabel("Mute " + this.getFilterLabel())
       .setSize(size*2, size)
       .setValue(this.isMuted())
+      .setState(this.isMuted())
       //.setPosition(lm, currentY+=(size+margin))
       //.plugTo(this, "setMuted")
       //.plugTo(this)

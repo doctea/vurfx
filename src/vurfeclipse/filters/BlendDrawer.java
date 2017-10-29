@@ -180,6 +180,7 @@ public class BlendDrawer extends ShaderFilter {
 
     PShader tf = getFilterNumber(currentBlendMode);
     glFilter = tf;
+    this.shaderFragName = "blend mode " + currentBlendMode;
     customPass = this.getPassForShader(tf,out,src);
     tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
     //tf.set("bottomSampler", out);
@@ -189,8 +190,8 @@ public class BlendDrawer extends ShaderFilter {
     //println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
     c.getSurf().beginDraw();
     //this.filter(src, tf, out); //c.getSurf()); //c.getSurf(), tf);	// WORKING 2017-1022
-    c.getSurf().image(out,0,0,sc.w,sc.h);
-    this.filter(src, customPass, c.getSurf()); //c.getSurf()); //c.getSurf(), tf);
+    c.getSurf().image(out,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
+    this.filter(src, customPass, c.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
     c.getSurf().endDraw();
     
 

@@ -417,6 +417,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
         if (filters[i].out==null) filters[i].setOutputCanvas(getCanvasMapping("out"));
         if (filters[i].src==null) filters[i].setInputCanvas(getCanvasMapping("src"));
 
+        filters[i].start();// 2017-10-29 --- filters were never getting started and so buffers not being initialised..?
+
       }
     }
     initialisedFilters = true;
@@ -686,10 +688,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
   public synchronized void controlEvent (CallbackEvent ev) {
 	if (!ev.getController().isUserInteraction()) return;
-    if (ev.getController().isUserInteraction() && ev.getAction()==ControlP5.ACTION_RELEASE) {
-      println("controlevent in " + this); 
+    if (ev.getAction()==ControlP5.ACTION_PRESS) {
+      //println("controlevent in " + this); 
 
-      println (ev.getController() + " check if same as " + this.muteController);
+      //println (ev.getController() + " check if same as " + this.muteController);
       if (ev.getController()==this.muteController) {
         //muteController.setState(!muteController.getState());
         muteController.setValue(muteController.getValue());

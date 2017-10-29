@@ -52,7 +52,7 @@ public abstract class Project implements Serializable {
   public Canvas getCanvas(String name) {
     try{
       if (canvases.get(name)==null) {
-        println("Project#getCanvas couldn't find '" + name + "'!!!!!!!!!!!!!!! - creating!");
+        println("Project#getCanvas couldn't find '" + name + "'!!!!!!!!!!!!!!! - creating one at " + "/" + name + "!");
         return createCanvas("/"+name,name);
       }
       //System.out.println("Project#getCanvas('" + name + "') returning " + canvases.get(name) + " with buffer " + canvases.get(name).surf);
@@ -192,6 +192,7 @@ public abstract class Project implements Serializable {
     setupRest();
     setupExposed();
 
+    initialised = true;
     return true;
   }
 
@@ -573,6 +574,8 @@ public abstract class Project implements Serializable {
     Iterator<Scene> i = scenes.iterator();
     int c = 0;
     
+    Tab sceneTab = cp5.addTab("Scenes");
+    
     Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth);
 
     Scene n;
@@ -601,10 +604,38 @@ public abstract class Project implements Serializable {
       c++;
       //((Scene)i).setupControls(cp5);
     }
-    accordion.open();
+    accordion.setPosition(0, 20);
+    //accordion.open();
     accordion.setCollapseMode(Accordion.MULTI);
 
-    this.initialised = true;
+    accordion.moveTo(sceneTab);
+    
+    Tab monitorTab = cp5.addTab("Monitor");
+    
+    //for (String canvas_name : this.canvases.keySet()) {
+    	final Project pr = this; //.getCanvas("out");
+    	controlP5.Canvas cp5canvas = new controlP5.Canvas() {
+    		@Override
+    		  public synchronized void draw(PGraphics pg) {
+    			    // renders a square with randomly changing colors
+    			    // make changes here.
+    			    //pg.fill(100);
+    			    //pg.rect(APP.getApp().random(255)-20, APP.getApp().random(255)-20, 240, 30);
+    			    //pg.fill(255);
+    				//pg.beginDraw();
+    			    pg.text("This text is drawn by MyCanvas", APP.getApp().random(255),APP.getApp().random(255));
+    			    if (pr.isInitialised()) 
+    			    	pg.image(pr.getCanvas(getPath()+"out").getSurf(),0,0,w/8,h/8);
+    			    //pg.endDraw();
+    			    //
+    			  }
+    	};
+    	monitorTab.addCanvas(cp5canvas);
+    	//cp5canvas.moveTo(monitorTab);
+    //}
+       
+    
+    //this.initialised = true;
     println("Project#setupControls()----------------------------------------------------------------------------------<END");
   }
 

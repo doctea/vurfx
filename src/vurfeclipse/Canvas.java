@@ -35,7 +35,7 @@ public class Canvas implements Serializable /*implements Pathable*/ {
   
   public String canvasName = "Unnamed Canvas";
   
-  public PGraphics getSurf() {
+  public synchronized PGraphics getSurf() {
     if (null==arsesurf) {
       arsesurf = createGLBuffer(w,h);
     }

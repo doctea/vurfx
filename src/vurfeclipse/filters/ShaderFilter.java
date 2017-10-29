@@ -98,6 +98,8 @@ public class ShaderFilter extends Filter {
 		  glFilter = APP.getApp().loadShader(shaderFragName);
 
 	  customPass = new CustomPass(glFilter, shaderFragName, shaderVertName);
+	  //glFilter.set("bottomSampler", out);
+	  //glFilter.set("src_tex_unit0", src);
 	  
 	  //if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
 	  //if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
