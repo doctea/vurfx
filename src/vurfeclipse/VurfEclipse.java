@@ -27,7 +27,7 @@ import ch.bildspur.postfx.builder.*;
 import ch.bildspur.postfx.pass.*;
 import ch.bildspur.postfx.*;
 
-import fullscreen.*;
+//import fullscreen.*;
 
 public class VurfEclipse extends PApplet {
 	/*public void setup() {
@@ -46,7 +46,7 @@ public class VurfEclipse extends PApplet {
 
 	public boolean exportMode = false; //true;
 
-	FullScreen fs;
+	//FullScreen fs;
 	boolean fullscreen = false;
 	
 	//boolean ready = false;
@@ -378,10 +378,10 @@ public class VurfEclipse extends PApplet {
 
 		 //frameRate(global_fps);
 
-		 if (fullscreen) {
+		 /*if (fullscreen) {
 			 fs = new FullScreen(this);
 			 fs.enter();
-		 }
+		 }*/
 		 initialiseGraphics();
 
 		 //colorMode(ARGB);
@@ -465,6 +465,7 @@ public class VurfEclipse extends PApplet {
 
 		// https://stackoverflow.com/questions/20551224/how-to-enable-vsync-synchronization-in-processing-2-x
 		  PJOGL pgl = (PJOGL)beginPGL();
+		  //pgl.gl.getGLProfile().
 		  pgl.gl.setSwapInterval(1);
 		  endPGL();
 		  

@@ -1,8 +1,10 @@
-#version 120
+#version 130
 uniform sampler2D src_tex_unit0;
-uniform vec2 offset;
+//uniform vec4 vertTexCoord;
+//varying vec4 offset;
 
 #define Texture0 src_tex_unit0
+#define offset gl_TexCoord[0]
 
 #define HueLevCount 6
 #define SatLevCount 7
@@ -11,7 +13,7 @@ uniform float HueLevels[HueLevCount];
 uniform float SatLevels[SatLevCount];
 uniform float ValLevels[ValLevCount];
 
-varying vec4 vertTexCoord;
+//varying vec4 vertTexCoord;
 
 
 vec3 RGBtoHSV( float r, float g, float b) {
@@ -163,7 +165,7 @@ float IsEdge(in vec2 coords){
 
 void main(void)
 {
-    vec2 texCoord = vertTexCoord.xy;
+    vec2 texCoord = offset.xy;
     vec4 colorOrg = texture2D( Texture0, texCoord );
     vec3 vHSV =  RGBtoHSV(colorOrg.r,colorOrg.g,colorOrg.b);
     vHSV.x = nearestLevel(vHSV.x, 0);

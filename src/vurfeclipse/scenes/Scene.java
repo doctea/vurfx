@@ -72,7 +72,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   public Sequence getSequence(String name) {
 	  if (!getSequences().containsKey(name)) {
 		  println(this + " doesn't have a Sequence named '"+name+"'!");
-		  System.exit(1);;
+		  //System.exit(1);;
 		  //throw new Exception(this + " doesn't have a Sequence named '"+name+"'!");
 	  }
 	  return getSequences().get(name);

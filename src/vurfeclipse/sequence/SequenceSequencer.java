@@ -342,6 +342,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  }
 
 		  this.activeSequenceName = SequenceName;
+		  
+		  if (null==this.getActiveSequence()) {
+		  	println("Got NULL for " + this.activeSequenceName + "!");
+		  	return;
+		  }
 
 		  println("Changing to sequence: " + SequenceName + "  (" + this.getActiveSequence().toString() + ")");
 		  if (remember && this.shouldRemember(SequenceName)) {

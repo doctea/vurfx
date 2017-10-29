@@ -179,6 +179,7 @@ public class ShaderFilter extends Filter {
 	  source.endDraw();*/
 	  fxs.render(source);
 	  //this.applyPass(fxs,glFilter);
+	  println("doing filter for " + this.shaderFragName);
 	  fxs.pass(pass);
 	  //fxs.pass(new CustomPass(shader)); //glFilter));
 	  //fxs.pass(sobelPass);
