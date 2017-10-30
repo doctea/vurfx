@@ -3,10 +3,12 @@
 #define PROCESSING_TEXTURE_SHADER
 
 uniform sampler2D src_tex_unit0;
-uniform vec2 offset;
+uniform vec2 texOffset;
 
-//uniform vec4 vertColor;
-//varying vec4 vertTexCoord;
+varying vec4 vertColor;
+varying vec4 vertTexCoord;
+
+//#define gl_TexCoord[0] vertTexCoord
 
 //#define Texture0 src_tex_unit0
 //#define offset gl_Position
@@ -145,8 +147,8 @@ vec4 get_pixel(vec2 coords, float dx, float dy) {
 
 // returns pixel color
 float IsEdge(in vec2 coords){
-  float dxtex = offset.x;
-  float dytex = offset.y;
+  float dxtex = texOffset.x;
+  float dytex = texOffset.y;
   float pix[9];
   int k = -1;
   float delta;
@@ -172,7 +174,7 @@ float IsEdge(in vec2 coords){
 
 void main(void)
 {
-    vec2 texCoord = gl_TexCoord[0].xy;
+    vec2 texCoord = vertTexCoord.st;
     vec4 colorOrg = texture2D( src_tex_unit0, texCoord );
     vec3 vHSV =  RGBtoHSV(colorOrg.r,colorOrg.g,colorOrg.b);
     vHSV.x = nearestLevel(vHSV.x, 0);
@@ -180,5 +182,11 @@ void main(void)
     vHSV.z = nearestLevel(vHSV.z, 2);
     float edg = IsEdge(texCoord);
     vec3 vRGB = (edg >= 0.3)? vec3(0.0,0.0,0.0):HSVtoRGB(vHSV.x,vHSV.y,vHSV.z);
+    //vec3 vRGB = HSVtoRGB(vHSV.x,vHSV.y,vHSV.z);
     gl_FragColor = vec4(vRGB.x,vRGB.y,vRGB.z,1.0);
+
+    //gl_FragColor = colorOrg;
+
+    //gl_FragColor = vec4(tex_coords.x,tex_coords.y,tex_coords.x,1.);  // fuckin handy deubg line !
+    //gl_FragColor = vec4(texCoord.x,texCoord.y,texCoord.x,1.) * texture2D(src_tex_unit0, texCoord); //+ texOffset*5.);
 }
