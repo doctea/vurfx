@@ -1,14 +1,26 @@
 #version 120
+
+#define PROCESSING_TEXTURE_SHADER
+
 uniform sampler2D src_tex_unit0;
-uniform vec2 src_tex_offset0;
-uniform vec2 dest_tex_size;
+
+varying vec4 vertColor;
+varying vec4 vertTexCoord;
+
+//uniform vec2 src_tex_offset0;
+uniform float dest_tex_size_x;
+uniform float dest_tex_size_y;
 
 uniform float pixel_size;
 
-varying vec4 vertTexCoord;
+//varying vec4 vertTexCoord;
+
+//#define vertTexCoord gl_TexCoord[0]
+//#define vertTexCoord src_tex_offset0
 
 
-void main(void)
+// version from old vurfx - non-processing3 version
+/*void main(void)
 {
     float d = 1.0 / pixel_size;
     vec2 tex_coords = vertTexCoord.st;
@@ -20,4 +32,15 @@ void main(void)
     float t = pixel_size * (float(fy) + d) / dest_tex_size.y;
     
     gl_FragColor = texture2D(src_tex_unit0, vec2(s, t)).rgba;
+}*/
+
+// new version pinched from https://processing.org/tutorials/pshader/
+void main() {
+  //pixel_size =
+  //float mult = 50.0 * (1.0/pixel_size);
+	float mult = pixel_size; // / dest_tex_size_x;
+  int si = int(vertTexCoord.s * mult);
+  int sj = int(vertTexCoord.t * mult);
+  gl_FragColor = texture2D(src_tex_unit0, vec2(float(si) / mult, float(sj) / mult)) * vertColor;
 }
+
