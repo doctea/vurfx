@@ -1,10 +1,17 @@
-#version 130
-uniform sampler2D src_tex_unit0;
-//uniform vec4 vertTexCoord;
-//varying vec4 offset;
+#version 120
 
-#define Texture0 src_tex_unit0
-#define offset gl_TexCoord[0]
+#define PROCESSING_TEXTURE_SHADER
+
+uniform sampler2D src_tex_unit0;
+uniform vec2 offset;
+
+//uniform vec4 vertColor;
+//varying vec4 vertTexCoord;
+
+//#define Texture0 src_tex_unit0
+//#define offset gl_Position
+//#define offset gl_TexCoord[0]
+//#define vertTexCoord gl_TexCoord[0]
 
 #define HueLevCount 6
 #define SatLevCount 7
@@ -23,7 +30,7 @@ vec3 RGBtoHSV( float r, float g, float b) {
    minv = min(min(r, g), b);
    maxv = max(max(r, g), b);
    res.z = maxv;            // v
-   
+
    delta = maxv - minv;
 
    if( maxv != 0.0 )
@@ -45,7 +52,7 @@ vec3 RGBtoHSV( float r, float g, float b) {
    res.x = res.x * 60.0;            // degrees
    if( res.x < 0.0 )
       res.x = res.x + 360.0;
-      
+
    return res;
 }
 
@@ -72,7 +79,7 @@ vec3 HSVtoRGB(float h, float s, float v ) {
    // Default:
    res.x = v;
    res.y = p;
-   res.z = q;   
+   res.z = q;
    if (i == 0) {
      res.x = v;
      res.y = t;
@@ -98,7 +105,7 @@ vec3 HSVtoRGB(float h, float s, float v ) {
      res.y = p;
      res.z = v;
    }
-   
+
    return res;
 }
 
@@ -107,7 +114,7 @@ float nearestLevel(float col, int mode) {
    if (mode==0) levCount = HueLevCount;
    if (mode==1) levCount = SatLevCount;
    if (mode==2) levCount = ValLevCount;
-   
+
    for (int i =0; i<levCount-1; i++ ) {
      if (mode==0) {
         if (col >= HueLevels[i] && col <= HueLevels[i+1]) {
@@ -133,7 +140,7 @@ float avg_intensity(vec4 pix) {
 }
 
 vec4 get_pixel(vec2 coords, float dx, float dy) {
- return texture2D(Texture0,coords + vec2(dx, dy));
+ return texture2D( src_tex_unit0,coords + vec2(dx, dy));
 }
 
 // returns pixel color
@@ -165,8 +172,8 @@ float IsEdge(in vec2 coords){
 
 void main(void)
 {
-    vec2 texCoord = offset.xy;
-    vec4 colorOrg = texture2D( Texture0, texCoord );
+    vec2 texCoord = gl_TexCoord[0].xy;
+    vec4 colorOrg = texture2D( src_tex_unit0, texCoord );
     vec3 vHSV =  RGBtoHSV(colorOrg.r,colorOrg.g,colorOrg.b);
     vHSV.x = nearestLevel(vHSV.x, 0);
     vHSV.y = nearestLevel(vHSV.y, 1);

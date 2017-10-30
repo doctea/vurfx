@@ -2,20 +2,18 @@
 #define TWO_PI 6.28318531
 uniform sampler2D src_tex_unit0; 
 
+varying vec4 vertTexCoord;
+
 uniform vec2 dest_tex_size;
 uniform int dirs;
 
 uniform float radio;
 uniform float amp;
 
-varying vec4 vertTexCoord;
 
  
 void main(void)
 {
-
-
-
  	vec2 tex_coords = vertTexCoord.st;
  	vec4 orig ;
 	vec4 sum = vec4(0.0)*0.01;

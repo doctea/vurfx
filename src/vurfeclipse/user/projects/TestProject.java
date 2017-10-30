@@ -191,6 +191,10 @@ public class TestProject extends Project implements Serializable {
       //"/temp1"
     );
 
+
+    this.addSceneInputOutputCanvas(new PlainScene(this, w, h), "/pix0", "/out");
+    this.addSceneInputOutputCanvas(new PlainScene(this, w, h), "/pix1", "/out");
+    
     this.addSceneInputOutputCanvas(
       new TextFlashScene(this,w,h).setCanvas("temp", "/temp1").setCanvas("out",  "/out"),
       "/temp1",
@@ -204,8 +208,6 @@ public class TestProject extends Project implements Serializable {
     ((SequenceSequencer) sequencer).bindAll(ils1.getSequences(),250);
     ((SequenceSequencer) sequencer).bindAll(ils2.getSequences(),250);
 
-    this.addSceneInputOutputCanvas(new PlainScene(this, w, h), "/pix0", "/out");
-    this.addSceneInputOutputCanvas(new PlainScene(this, w, h), "/pix1", "/out");
 
     this.addSceneInputOutputCanvas(
     	      //os,
@@ -213,14 +215,14 @@ public class TestProject extends Project implements Serializable {
     	      "/out",
     	      "/out"
     	    );
-/*
+
     	    // OUTPUT FILTER 2
     	    this.addSceneInputOutputCanvas(
     	    		new OutputFX2(this,w,h).setSceneName("OutputShader2").setCanvas("pix0", "/pix0").setCanvas("pix1", "/pix1"),
     	    		"/out",
     	    		"/out"
     	    );
-
+/*
     	    this.addSceneInputOutputCanvas(
     	    		new OutputFX3(this,w,h).setSceneName("OutputShader3").setCanvas("pix0", "/pix0"),
     	    		"/out",

@@ -96,10 +96,17 @@ public class ShaderFilter extends Filter {
 		  glFilter = APP.getApp().loadShader(shaderFragName,shaderVertName); //new GLTextureFilter(APP.getApp(), shaderName);
 	  else
 		  glFilter = APP.getApp().loadShader(shaderFragName);
+	  
+	  glFilter.bind();
+	  glFilter.unbind();
 
+	  glFilter.set("src_tex_unit0", src);
+	  glFilter.set("dest_tex_size_x", sc.w);
+	  glFilter.set("dest_tex_size_y", sc.h);
+	  glFilter.set("dest_tex_size",  new PVector(sc.w,sc.h));
 	  customPass = new CustomPass(glFilter, shaderFragName, shaderVertName);
 	  //glFilter.set("bottomSampler", out);
-	  //glFilter.set("src_tex_unit0", src);
+	  
 	  
 	  //if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
 	  //if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
@@ -181,7 +188,7 @@ public class ShaderFilter extends Filter {
 	  source.endDraw();*/
 	  fxs.render(source);
 	  //this.applyPass(fxs,glFilter);
-	  println("doing filter for " + this.shaderFragName);
+	  //println("doing filter for " + this.shaderFragName);
 	  fxs.pass(pass);
 	  //fxs.pass(new CustomPass(shader)); //glFilter));
 	  //fxs.pass(sobelPass);
