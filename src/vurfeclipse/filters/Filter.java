@@ -259,8 +259,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     }
 
     if (this.muteController!=null) {
-    	this.muteController.setState(v);
-    	this.muteController.setValue(v);
+        muteController.setBroadcast(false);
+        muteController.setValue(v); //isMuted());
+        muteController.setState(v);
+        muteController.setBroadcast(true);
+    	//this.muteController.setValue(v);
     	println("#setMute: muteController (" + this.muteController.getLabel() + ") set to " + v);
     	//System.exit(1);
     } else {
@@ -367,6 +370,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   }
 
   synchronized public void updateAllParameterValues() {
+    if (this.parameters==null) this.setParameterDefaults();
     Iterator i = parameters.entrySet().iterator();
     while (i.hasNext ()) {
       Map.Entry me = (Map.Entry)i.next();
@@ -495,7 +499,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     //println(this + " got event " + ev + " : " + ev.getController());
     if (ev.getController()==this.muteController &&
     		/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
-    		ev.getAction()==ControlP5.ACTION_CLICK) {
+    		ev.getAction()==ControlP5.ACTION_PRESS) {
         println("Setting mute state on " + this + " to " + muteController.getState());
         this.setMuted(muteController.getState());
     } else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_PRESS) {
@@ -678,7 +682,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     controllers.put(o, paramName);
   }
 
-  public void updateControl (String name, Object value) {
+  public synchronized void updateControl (String name, Object value) {
     //(((controlP5.Controller)controllerMapping.get(name))).setValue(value);
     if (controllerMapping==null) controllerMapping = new HashMap<String,controlP5.Controller> ();
     controlP5.Controller c = (controlP5.Controller)controllerMapping.get(name);
