@@ -33,7 +33,7 @@ public class ShaderFilter extends Filter {
 	  }
 
 	  @Override
-	    public void apply(Supervisor supervisor) {
+	    public synchronized void apply(Supervisor supervisor) {
 	    PGraphics pass = supervisor.getNextPass();
 	    supervisor.clearPass(pass);
 
@@ -97,7 +97,7 @@ public class ShaderFilter extends Filter {
 	  else
 		  glFilter = APP.getApp().loadShader(shaderFragName);
 	  
-	  glFilter.bind();
+	  glFilter.bind();	// force compilation when loaded to save hassle later
 	  glFilter.unbind();
 
 	  glFilter.set("src_tex_unit0", src);
@@ -113,6 +113,12 @@ public class ShaderFilter extends Filter {
 
   }
 
+  @Override public boolean start() {
+	  super.start();
+	  this.updateAllParameterValues();
+	return true;
+  }
+  
   PShader glFilter;
   public boolean initialise() {
     // set up inital variables or whatevs
@@ -137,7 +143,7 @@ public class ShaderFilter extends Filter {
   public Filter nextMode() {
     mode++;
     if(mode>4) mode = 0;
-    initShader(shaderFragName,shaderVertName);
+    //initShader(shaderFragName,shaderVertName);
     this.updateAllParameterValues();
     return this;
   }
@@ -221,7 +227,7 @@ public class ShaderFilter extends Filter {
   
   public void applyPass(PostFXSupervisor fxs, PShader shader) {
 	  PGraphics pass = fxs.getNextPass();
-	  fxs.clearPass(pass);
+	  //fxs.clearPass(pass);
 	  pass.beginDraw();
 	  pass.shader(shader);
 	  pass.image(fxs.getCurrentPass(), 0, 0);

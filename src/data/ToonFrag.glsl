@@ -1,5 +1,3 @@
-#version 120
-
 #define PROCESSING_TEXTURE_SHADER
 
 uniform sampler2D src_tex_unit0;

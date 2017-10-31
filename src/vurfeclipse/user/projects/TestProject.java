@@ -205,8 +205,8 @@ public class TestProject extends Project implements Serializable {
     
     ((SequenceSequencer) sequencer).bindSequence("ils1_choose", ils1.getSequence("choose_0"),250); //, 2+switcher.getSequenceCount()/4);//32);
     ((SequenceSequencer) sequencer).bindSequence("ils2_choose", ils2.getSequence("choose_1"),250); //, 2+switcher.getSequenceCount()/4);//32);
-    ((SequenceSequencer) sequencer).bindAll(ils1.getSequences(),250);
-    ((SequenceSequencer) sequencer).bindAll(ils2.getSequences(),250);
+    ((SequenceSequencer) sequencer).bindAll("ils1ba_",ils1.getSequences(),250);
+    ((SequenceSequencer) sequencer).bindAll("ils2ba_",ils2.getSequences(),250);
 
 
     this.addSceneInputOutputCanvas(

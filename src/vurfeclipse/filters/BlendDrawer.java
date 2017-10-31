@@ -103,7 +103,6 @@ public class BlendDrawer extends ShaderFilter {
     this.offsety = y;
   }*/
 
-
   public void setBlendMode(int n) {
     this.currentBlendMode = n;
     //changeParameterValue("BlendMode", n);
@@ -111,7 +110,7 @@ public class BlendDrawer extends ShaderFilter {
 
   public PShader getFilterNumber(int n) {
     if (this.blendFilters==null) blendFilters = new PShader[blendModes.length];
-    if (this.blendFilters[n]==null) {
+    if (this.blendFilters[n]==null && n<this.blendFilters.length) {
       println("BlendDrawer#getFilterNumber(n) initialising GLTextureFilter " + blendModes[n]);
       this.blendFilters[n] = APP.getApp().loadShader(blendModes[n]); //new PShader(APP.getApp(),blendModes[n]);
       this.blendFilters[n].init();
@@ -180,6 +179,8 @@ public class BlendDrawer extends ShaderFilter {
 
     PShader tf = getFilterNumber(currentBlendMode);
     glFilter = tf;
+    tf.set("bottomSampler", src); //out);
+    tf.set("topSampler", out); //src);
     this.shaderFragName = "blend mode " + currentBlendMode;
     customPass = this.getPassForShader(tf,out,src);
     tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
@@ -190,7 +191,7 @@ public class BlendDrawer extends ShaderFilter {
     //println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
     c.getSurf().beginDraw();
     //this.filter(src, tf, out); //c.getSurf()); //c.getSurf(), tf);	// WORKING 2017-1022
-    c.getSurf().image(out,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
+    //c.getSurf().image(out,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
     this.filter(src, customPass, c.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
     c.getSurf().endDraw();
     
@@ -242,8 +243,6 @@ public class BlendDrawer extends ShaderFilter {
 	  CustomPass p = (CustomPass)this.passes.get(tf);
 	  if (p==null) {
 		p = new CustomPass(tf,"blend mode!","blend mode..!");
-	    tf.set("bottomSampler", out);
-	    tf.set("topSampler",  src);
 	    this.passes.put(tf,p);
 	  }
 	  return p;

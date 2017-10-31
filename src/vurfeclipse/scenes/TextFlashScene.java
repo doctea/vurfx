@@ -186,7 +186,7 @@ public class TextFlashScene extends Scene {
     final BlendDrawer fbd = (BlendDrawer) filters[i];
     ((BlendDrawer)filters[i]).setBlendMode(9);
     
-    filters[++i] = new ShaderFilter(this,"negateFrag.glsl").setCanvases(getCanvasMapping("out"), getCanvasMapping("temp"));//.addParameter("Opacity", new Float(0.5f), 0f, 1f);
+    //filters[++i] = new ShaderFilter(this,"negateFrag.glsl").setCanvases(getCanvasMapping("out"), getCanvasMapping("temp"));//.addParameter("Opacity", new Float(0.5f), 0f, 1f);
 
     /*host.getStream("beat").registerEventListener("beat_8",
       new ParameterCallback () {

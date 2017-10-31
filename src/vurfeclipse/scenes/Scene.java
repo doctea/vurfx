@@ -694,7 +694,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
       //println (ev.getController() + " check if same as " + this.muteController);
       if (ev.getController()==this.muteController) {
         //muteController.setState(!muteController.getState());
-        muteController.setValue(muteController.getValue());
+        //muteController.setValue(muteController.getValue());
     	println("it is, should be toggling state to " + muteController.getValue());
         this.setMuted(muteController.getState());
       }/*

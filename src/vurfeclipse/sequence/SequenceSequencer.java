@@ -222,6 +222,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  		if (isBindToRandom()==true) this.randomPool.addAll(seqs.keySet());
 	  	}
 	  }
+	  public synchronized void bindAll(String prefix, HashMap<String,Sequence> seqs, int weight) {
+		  Iterator<String> it = seqs.keySet().iterator();
+		  HashMap<String,Sequence> newSeqs = new HashMap<String,Sequence> ();
+		  while (it.hasNext()) {
+			  String c = it.next();
+			  newSeqs.put(prefix+"_"+c, seqs.get(c));
+			  //seqs.remove(c);
+		  }
+		  bindAll(newSeqs, weight);
+	  }
 
 	  public Sequence bindSequence(String nameInSequencer, Sequence seq, int weight) {
 		  for (int i = 0 ; i < weight ; i++) {

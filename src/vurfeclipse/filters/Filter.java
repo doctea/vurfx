@@ -505,7 +505,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     } else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_PRESS) {
         this.nextMode();
     } else if (controllers.containsKey(ev.getController()) &&
-    		(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_RELEASE || ev.getAction()==ControlP5.ACTION_RELEASE_OUTSIDE || ev.getAction()==ControlP5.ACTION_PRESS)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
+    		(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_DRAG || ev.getAction()==ControlP5.ACTION_RELEASE || ev.getAction()==ControlP5.ACTION_RELEASE_OUTSIDE || ev.getAction()==ControlP5.ACTION_PRESS)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
     	) {
         String paramName = (String)controllers.get(ev.getController());
         println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
@@ -569,7 +569,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     int margin_h = 15;
     int margin_w = 10;
     /*int row = 0,*/int col = 1;
-    int row_h = 50, col_w = 150;
+    int row_h = 50, col_w = 120;
         
     this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
       .setPosition(margin_w + (col*col_w),margin_h + (row*row_h))
@@ -648,7 +648,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         o.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER);//.setPaddingY(2*cp5.getFont().getHeight());
         o.getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE);//.setPaddingY(cp5.getFont().getHeight());
         o.setPosition(margin_w + (col++*(margin_w+col_w)),margin_h + (row*row_h));
-        if (col>5) { //(5*(cf.width/col_w))) {
+        if (col > 8) { //(col_w*margin_w)*col>cf.width) { //(5*(cf.width/col_w))) {
         	col = 2;
         	row++;
         }

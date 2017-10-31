@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 import vurfeclipse.APP;
 import vurfeclipse.filters.ShaderFilter;
+import vurfeclipse.filters.ToonFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.ChainSequence;
@@ -19,14 +20,13 @@ public class OutputFX1 extends SimpleScene {
 	public boolean setupFilters() {
 
 	    this.addFilter(new ShaderFilter(this,"Pixelate.glsl")
-	    		.addParameter("pixel_size", new Float(5.0f),new Float(0.0f),new Float((float)this.w/8))
+	    		.addParameter("pixel_size", new Float(25.0f),new Float(0.0f),new Float((float)this.w/8))
 	    		.setFilterName("Pixelate")
-	    		.setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))
+	    		.setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("src"))
 	    ); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-	    this.addFilter(new ShaderFilter(this,"ToonFrag.glsl","ToonVert.glsl")
+	    this.addFilter(new ToonFilter(this)//,"ToonVert.glsl")
 	    		.setFilterName("Toon")
-	    		.addParameter("fraction", new Float(1.0f),new Float(0.2f),new Float(10f))
-	    		.setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))
+	    		.setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("src"))
 	    ); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
 	    return true;

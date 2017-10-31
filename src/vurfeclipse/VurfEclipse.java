@@ -251,6 +251,7 @@ public class VurfEclipse extends PApplet {
 			println("size(): Passing size call number " + sizeCount);
 		}
 		super.size(w,h,gfx);
+
 	}
 
 	int refCount = 0;
@@ -342,7 +343,7 @@ public class VurfEclipse extends PApplet {
 
 			 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
 			 this.size(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
-		 
+
 			 //pr.setupControls();
 			 System.out.println("Finished VurfEclipse#settings() - handing off to setup?");;
 	}
@@ -363,11 +364,16 @@ public class VurfEclipse extends PApplet {
 		 
 		 //pr.setupSequencer();
 		 //pr.initialiseScenes();
+		 
+
+		 
 
 		 pr.initialise();
 		 
 		 //delaySetup();
 		 pr.initialiseScenes();
+		 
+		 ///frame.setLocation(500, 0);
 		 
 		 System.out.println("About to call getCF() in " + this + "#setup()");
 		 getCF(); // start up control frame
@@ -462,12 +468,14 @@ public class VurfEclipse extends PApplet {
 		 if (syphon) {
 		   initSyphon(gl, "Vurf");
 		 }*/
-
+		
 		// https://stackoverflow.com/questions/20551224/how-to-enable-vsync-synchronization-in-processing-2-x
 		  PJOGL pgl = (PJOGL)beginPGL();
 		  //pgl.gl.getGLProfile().
 		  pgl.gl.setSwapInterval(1);
 		  endPGL();
+		  
+		  hint(DISABLE_DEPTH_TEST);
 		  
 		  frameRate(60);
 

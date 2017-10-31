@@ -1,4 +1,3 @@
-#version 120
 //
 // BlendColorDodge.glsl
 // 2010 Kevin Bjorke http://www.botzilla.com

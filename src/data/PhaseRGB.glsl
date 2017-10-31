@@ -1,5 +1,3 @@
-#version 120
-
 uniform float rshift;
 uniform float gshift;
 uniform float bshift;

@@ -1,4 +1,3 @@
-#version 120
 //
 // BlendColorBurn.glsl
 // 2010 Kevin Bjorke http://www.botzilla.com

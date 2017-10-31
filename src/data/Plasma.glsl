@@ -1,4 +1,3 @@
-#version 120
 // http://www.bidouille.org/prog/plasma
 //precision mediump float;
 #define PI 3.1415926535897932384626433832795
