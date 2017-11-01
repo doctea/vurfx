@@ -686,14 +686,18 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     //(((controlP5.Controller)controllerMapping.get(name))).setValue(value);
     if (controllerMapping==null) controllerMapping = new HashMap<String,controlP5.Controller> ();
     controlP5.Controller c = (controlP5.Controller)controllerMapping.get(name);
+    
     if (c!=null) {
+    	c.setBroadcast(false);
         if (value instanceof Float)
           c.setValue((Float)value);
         else if (value instanceof Integer)
           c.setValue((Integer)value);
         else if (value instanceof Boolean)
           c.setValue((Boolean)value?1.0f:0.0f);
+        c.setBroadcast(true);
     }
+    
   }
 
 

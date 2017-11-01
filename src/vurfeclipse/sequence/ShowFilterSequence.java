@@ -9,8 +9,8 @@ import vurfeclipse.scenes.Scene;
 public class ShowFilterSequence extends Sequence {
 	String filterPath;
 	
-	public ShowFilterSequence(Scene outputFX2, int i, String filterPath) {
-		super(outputFX2,i);
+	public ShowFilterSequence(Scene outputFX2, int length, String filterPath) {
+		super(outputFX2,length);
 		this.filterPath = filterPath;
 	}
 

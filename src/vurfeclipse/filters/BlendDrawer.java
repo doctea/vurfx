@@ -179,8 +179,8 @@ public class BlendDrawer extends ShaderFilter {
 
     PShader tf = getFilterNumber(currentBlendMode);
     glFilter = tf;
-    tf.set("bottomSampler", src); //out);
-    tf.set("topSampler", out); //src);
+    tf.set("bottomSampler", out);
+    tf.set("topSampler", src);
     this.shaderFragName = "blend mode " + currentBlendMode;
     customPass = this.getPassForShader(tf,out,src);
     tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));

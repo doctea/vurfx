@@ -64,9 +64,9 @@ public class OutputFX1 extends SimpleScene {
 			sequences.put("show_toonandedges", new ChainSequence(0).addSequence(sequences.get("show_toon")).addSequence(sequences.get("show_edges")));
 			
 			sequences.put("pixel_size",  new ChainSequence(2000)
-					.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Toon"))
+					//.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Toon"))
 					.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Pixelate"))
-					.addSequence(new ChangeParameterSequence(this, getPath()+"/fl/Pixelate", "pixel_size", 4.0f, 2000))
+					.addSequence(new ChangeParameterSequence(this, getPath()+"/fl/Pixelate", "pixel_size", 64.0f, 2000))
 			);
 	
 			//.addSequence(getSequence("show_feedback"))

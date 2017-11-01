@@ -173,9 +173,9 @@ public class ShaderFilter extends Filter {
     
 	out.beginDraw();
 	out.image(c.getSurf(),0,0,sc.w,sc.h);
-	out.color(255,128,96);
+	/*out.color(255,128,96);
 	out.rect(0, 0, 50, 50);
-    out.rect(50, 50, 100, 100);
+    out.rect(50, 50, 100, 100);*/
     //println("out is " + out);
     out.endDraw();
 
