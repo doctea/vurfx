@@ -60,9 +60,11 @@ public class BadTVScene extends Scene {
 
 	    		addParameter("width", new Integer(w/16), 0, w*2);
 	    		addParameter("height", new Integer(h/16), 0, h*2);*/
-	    		addParameter("iTime", new Integer(10), 0, 1000000);
-	    		addParameter("iResolutionX", new Float((float)host.w));
-	    		addParameter("iResolutionY", new Float((float)host.h));
+	    		addParameter("iTime", new Float(10), new Float(0), new Float(1000000));
+	    		addParameter("iResolutionX", 1.0f);
+	    		addParameter("iResolutionY", 1.0f);
+	    		//addParameter("iResolutionX", new Float((float)host.w), new Float(0), new Float(1900));
+	    		//addParameter("iResolutionY", new Float((float)host.h), new Float(0), new Float(1080));
 	    	}
 	    	@Override
 	    	public Filter nextMode() {
@@ -73,7 +75,7 @@ public class BadTVScene extends Scene {
 	    		return this;
 	    	}
 
-	    }.setFilterName("BadTV").setCanvases("/out", this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    }.setFilterName("BadTV").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
 	    //addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setInputCanvas("/temp1").setOutputCanvas(this.getCanvasMapping("out")));
 

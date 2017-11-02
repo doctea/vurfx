@@ -1,3 +1,6 @@
+#define PROCESSING_TEXTURE_SHADER
+
+
 /*!
  * <info>
  * <author>ehj1 [ https://www.shadertoy.com/user/ehj1 ]</author>
@@ -23,6 +26,17 @@
  * </synthclipse-importer-legal-note>
  * </info>
  */
+#extension GL_EXT_gpu_shader4 : enable
+uniform sampler2D src_tex_unit0;
+varying vec4 vertTexCoord;
+varying vec4 vertColor;
+
+//#define gl_FragCoord vertTexCoord
+
+//#define iChannel0 src_tex_unit0
+
+//#define iResolutionX dest_tex_size_x
+//#define iResolutionY dest_tex_size_y
 
 //#define iResolution vec2(1024.0,768.0)
 uniform float iResolutionX;
@@ -39,7 +53,7 @@ uniform float iTime;          // shader playback time (in seconds)
 //uniform float iSampleRate;          // sound sample rate (i.e., 44100)
 //uniform float iFrameRate;           // frames per second (effectively "1.0 / iTimeDelta")
 
-uniform sampler2D iChannel0; //! WARNING: Unsupported input type: "video". Source: "3405e48f74815c7baa49133bdc835142948381fbe003ad2f12f5087715731153.ogv"
+//uniform sampler2D iChannel0; //! WARNING: Unsupported input type: "video". Source: "3405e48f74815c7baa49133bdc835142948381fbe003ad2f12f5087715731153.ogv"
 
 // change these values to 0.0 to turn off individual effects
 /*float vertJerkOpt = 1.0;
@@ -131,11 +145,14 @@ float staticV(vec2 uv) {
 }
 
 
-void mainImage( inout vec4 fragColor, in vec2 fragCoord )
+void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
+	//vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+	//vec2 fragCoord = vertTexCoord.st;
+
 	vec2 iResolution = vec2(iResolutionX,iResolutionY);
 
-	vec2 uv =  fragCoord.xy/iResolution.xy;
+	vec2 uv =  fragCoord.xy/vec2(iResolutionX, iResolutionY); //iResolution.xy;
 	
 	float jerkOffset = (1.0-step(snoise(vec2(iTime*1.3,5.0)),0.8))*0.05;
 	
@@ -165,9 +182,9 @@ void mainImage( inout vec4 fragColor, in vec2 fragCoord )
         
     staticVal *= bottomStaticOpt;
 	
-	float red 	=   texture2D(	iChannel0, 	vec2(uv.x + xOffset -0.01*rgbOffsetOpt,y)).r+staticVal;
-	float green = 	texture2D(	iChannel0, 	vec2(uv.x + xOffset,	  y)).g+staticVal;
-	float blue 	=	texture2D(	iChannel0, 	vec2(uv.x + xOffset +0.01*rgbOffsetOpt,y)).b+staticVal;
+	float red 	=   texture2D(	src_tex_unit0, 	vec2(uv.x + xOffset -0.01*rgbOffsetOpt,y)).r+staticVal;
+	float green = 	texture2D(	src_tex_unit0, 	vec2(uv.x + xOffset,	  y)).g+staticVal;
+	float blue 	=	texture2D(	src_tex_unit0, 	vec2(uv.x + xOffset +0.01*rgbOffsetOpt,y)).b+staticVal;
 	
 	vec3 color = vec3(red,green,blue);
 	float scanline = sin(uv.y*800.0)*0.04*scalinesOpt;
@@ -179,7 +196,8 @@ void mainImage( inout vec4 fragColor, in vec2 fragCoord )
 
 void main() {
 	vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
-	mainImage(color, gl_FragCoord.xy);
+	mainImage(color, vertTexCoord.st); //gl_FragCoord.xy);
 
-	gl_FragColor = color;
+	gl_FragColor = color; //vec4(vertTexCoord.st, 1.0, 1.0); //color;
 }
+

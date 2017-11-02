@@ -21,19 +21,19 @@ public class ShaderFilter extends Filter {
 	{
 	  PShader shader;
 
-	  public CustomPass(PShader shader, String shaderFragName, String shaderVertName)
+	  public CustomPass(PShader shader) //, String shaderFragName, String shaderVertName)
 	  {
-		System.out.println("Instantiated new CustomPass " + shader + " (told it was " + shaderFragName + " and " + shaderVertName);
+		//System.out.println("Instantiated new CustomPass " + shader + " (told it was " + shaderFragName + " and " + shaderVertName);
 	    this.shader = shader;//loadShader("negateFrag.glsl");
 	  }
 
 	  @Override
-	    public void prepare(Supervisor supervisor) {
+	  public void prepare(Supervisor supervisor) {
 	    // set parameters of the shader if needed
 	  }
 
 	  @Override
-	    public synchronized void apply(Supervisor supervisor) {
+	  public synchronized void apply(Supervisor supervisor) {
 	    PGraphics pass = supervisor.getNextPass();
 	    supervisor.clearPass(pass);
 
@@ -101,10 +101,10 @@ public class ShaderFilter extends Filter {
 	  glFilter.unbind();
 
 	  glFilter.set("src_tex_unit0", src);
-	  glFilter.set("dest_tex_size_x", sc.w);
-	  glFilter.set("dest_tex_size_y", sc.h);
-	  glFilter.set("dest_tex_size",  new PVector(sc.w,sc.h));
-	  customPass = new CustomPass(glFilter, shaderFragName, shaderVertName);
+	  glFilter.set("dest_tex_size_x", (float)sc.w);
+	  glFilter.set("dest_tex_size_y", (float)sc.h);
+	  glFilter.set("dest_tex_size",  new PVector((float)sc.w,(float)sc.h));
+	  customPass = new CustomPass(glFilter); //, shaderFragName, shaderVertName);
 	  //glFilter.set("bottomSampler", out);
 	  
 	  
@@ -203,7 +203,7 @@ public class ShaderFilter extends Filter {
   
   @Deprecated
   protected void filter(PGraphics source, PShader shader, PGraphics out) {
-	  filter(source,new CustomPass(shader,"from shader", "from shader"),out);
+	  filter(source,new CustomPass(shader),out);
 	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
 	  //TODO: ADD REAL SHADER HERE
 	  //fxs.pass(sobelPass);

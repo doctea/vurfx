@@ -18,27 +18,27 @@ uniform float pixel_size;
 
 
 // version from old vurfx - non-processing3 version
-/*void main(void)
+void main(void)
 {
     float d = 1.0 / pixel_size;
     vec2 tex_coords = vertTexCoord.st;
 
-	int fx = int(tex_coords.s * dest_tex_size.x / pixel_size);
-	int fy = int(tex_coords.t * dest_tex_size.y / pixel_size);
+	int fx = int(tex_coords.s * dest_tex_size_x / pixel_size);
+	int fy = int(tex_coords.t * dest_tex_size_y / pixel_size);
 	
-    float s = pixel_size * (float(fx) + d) / dest_tex_size.x;
-    float t = pixel_size * (float(fy) + d) / dest_tex_size.y;
+    float s = pixel_size * (float(fx) + d) / dest_tex_size_x;
+    float t = pixel_size * (float(fy) + d) / dest_tex_size_y;
     
     gl_FragColor = texture2D(src_tex_unit0, vec2(s, t)).rgba;
-}*/
+}
 
 // new version pinched from https://processing.org/tutorials/pshader/
-void main() {
+/*void main() {
   //pixel_size =
   //float mult = 50.0 * (1.0/pixel_size);
 	float mult = pixel_size; // / dest_tex_size_x;
   int si = int(vertTexCoord.s * mult);
   int sj = int(vertTexCoord.t * mult);
-  gl_FragColor = texture2D(src_tex_unit0, vec2(float(si) / mult, float(sj) / mult)) * vertColor;
-}
+  gl_FragColor = texture2D(src_tex_unit0, vec2(float(si) / mult, float(sj) / mult));// * vertColor;
+}*/
 

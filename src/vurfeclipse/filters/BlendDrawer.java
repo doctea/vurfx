@@ -242,7 +242,7 @@ public class BlendDrawer extends ShaderFilter {
 
 	  CustomPass p = (CustomPass)this.passes.get(tf);
 	  if (p==null) {
-		p = new CustomPass(tf,"blend mode!","blend mode..!");
+		p = new CustomPass(tf); //,"blend mode ,"blend mode..!");
 	    this.passes.put(tf,p);
 	  }
 	  return p;
