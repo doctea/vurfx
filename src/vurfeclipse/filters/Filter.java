@@ -495,8 +495,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   @Override
   public void controlEvent (CallbackEvent ev) {
+	//println(this + " got event " + ev + " : " + ev.getController() + ev.getController().getValue());
 	if (!ev.getController().isUserInteraction()) return;
-    //println(this + " got event " + ev + " : " + ev.getController());
+	//println(this + " got event " + ev + " : " + ev.getController() + ev.getController().getValue());
     if (ev.getController()==this.muteController &&
     		/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
     		ev.getAction()==ControlP5.ACTION_PRESS) {
@@ -505,15 +506,15 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     } else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_PRESS) {
         this.nextMode();
     } else if (controllers.containsKey(ev.getController()) &&
-    		(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_DRAG || ev.getAction()==ControlP5.ACTION_RELEASE || ev.getAction()==ControlP5.ACTION_RELEASE_OUTSIDE || ev.getAction()==ControlP5.ACTION_PRESS)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
+    		(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_BROADCAST || ev.getAction()==ControlP5.ACTION_DRAG || ev.getAction()==ControlP5.ACTION_RELEASE || ev.getAction()==ControlP5.ACTION_RELEASE_OUTSIDE || ev.getAction()==ControlP5.ACTION_PRESS)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
     	) {
         String paramName = (String)controllers.get(ev.getController());
-        println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
+        //println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
         Object currentValue = getParameterValue(paramName);
         changeValueFor(currentValue,paramName,ev);
     } else if (controllers.containsKey(ev.getController()) && ev.getController().isUserInteraction()) {
       String paramName = (String)controllers.get(ev.getController());
-      //println("UNHANDLED CONTROL EVENT in " + this + "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue() + " action is " + ev.getAction());
+      println("UNHANDLED CONTROL EVENT in " + this + "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue() + " action is " + ev.getAction());
     }
      /*else if (ev.getAction()==ControlP5.ACTION_PRESSED) {
       if (controllers.containsKey(ev.getController())) {
