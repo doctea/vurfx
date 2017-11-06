@@ -218,11 +218,15 @@ public abstract class Project implements Serializable {
 	    	//println("Found " + s.getSceneName());
 	        //return s;
 	        // ask it to get the rest of the path for us
-	        if (spl.length>3) {
-	        	  println("#getObjectForPath('"+path+") going to call getObjectForPath on " + s + ", looking for path '"+spl[3]+"/"+spl[4]);
+	        if (spl.length>4) {
+	          println("#getObjectForPath('"+path+") going to call getObjectForPath on " + s + ", looking for path '"+spl[3]+"/"+spl[4]);
 	          return s.getObjectForPath(spl[3]+"/"+spl[4]);
-	        } else
+	        } else if (spl.length>3) {
+	          println("#getObjectForPath('"+path+") going to call getObjectForPath on " + s + ", looking for path '"+spl[3]);
+	          return s.getObjectForPath(spl[3]);	// mute etc
+	        } else {
 	          return s;
+	        }
 	      }
 	    }
     }

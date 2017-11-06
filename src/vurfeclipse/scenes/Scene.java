@@ -111,21 +111,23 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
   public Object getObjectForPath(String path) {
     //println("Scene#getObjectForPath(" + path + ")");
-    if (path.equals("") || path.equals(this.getSceneName())) 
+    if (path.equals("") || path.equals(this.getSceneName()) || path.equals("mute")) 
     		return this;
     String spl[] = path.split("/",2);
     
     String spl2[] = spl[1].split("/");
-    println ("got spl " + spl.toString() + " and spl2 " + spl2.toString());
+    //println ("got spl " + spl.toString() + " and spl2 " + spl2.toString());
     String filterName = spl2[0];
     if (spl2.length==1) {
     		return getFilter(filterName);
     } else if (spl2[1].equals("mute")) {
     		return getFilter(filterName);
-    } else {
+    } else if (spl2[1].equals("pa")) {	// is a Parameter
     		return getFilter(filterName).getParameter(spl2[2]);
-    }
-    		
+    } else {
+    	// fuck knows?
+    	return null;
+    }    		
   }
 
   public Filter getFilter(String name) {
@@ -730,13 +732,15 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   public HashMap<String,Object> collectParameters() {
 	HashMap<String,Object> params = new HashMap<String,Object>();
 	// params for scene here?
+	params.put(this.getPath()+"/mute", new Boolean(this.isMuted()));
 	
 	for(Filter f : this.getFilters()) {
 		//add params for each filter here
 		params.put(f.getPath()+"/mute", new Boolean(f.isMuted()));
 		for (Parameter p : f.getParameters()) {
 			// add params for each parameter here
-			params.put(p.getPath(), p);
+			println("collectParameters got " + p.getPath() + " for " + f.getPath());
+			params.put(p.getPath(), p.value);
 		}
 	}
 	return params;
@@ -873,7 +877,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   @Override
   public Object target(String path, Object payload) {
 	  println("#target('"+path+"', '"+payload+"')");
-	  if ("/mute".equals(path.substring(path.length()-5, path.length()))) {
+	  if (path.endsWith("/mute")) { //"/mute".equals(path.substring(path.length()-5, path.length()))) {
 		  this.toggleMute();
 		  return this.isMuted()?"Muted":"Unmuted";
 	  }

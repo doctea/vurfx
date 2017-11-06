@@ -568,10 +568,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     grp.setTitle("asdfasdf");*/
     Group grp = (Group) tab;
     
-    int margin_h = 15;
-    int margin_w = 10;
-    /*int row = 0,*/int col = 1;
-    int row_h = 50, col_w = 120;
+    int margin_h = 40;
+    int margin_w = 5;
+    /*int row = 0,*/int col = 0;
+    int row_h = 50, col_w = 100;
         
     this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
       .setPosition(margin_w + (col*col_w),margin_h + (row*row_h))
@@ -601,7 +601,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
     //cp5.addTextlabel("path_" + tab.getName() + getFilterName(), "Path: " + this.getPath()).setSize(size, size).moveTo(grp);//.linebreak();
 
-    col = 2;
+    col = 1;
 
     if (parameters==null)
       setParameterDefaults();
@@ -649,10 +649,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       if (o!=null) {
         o.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER);//.setPaddingY(2*cp5.getFont().getHeight());
         o.getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE);//.setPaddingY(cp5.getFont().getHeight());
-        o.setPosition(margin_w + (col++*(margin_w+col_w)),margin_h + (row*row_h));
-        if (col > 8) { //(col_w*margin_w)*col>cf.width) { //(5*(cf.width/col_w))) {
+        o.setPosition(
+        		margin_w/2 + (col++*(margin_w+col_w)),
+        		margin_h + (row*row_h)
+        );
+        if (col > 10) { //(col_w*margin_w)*col>cf.width) { //(5*(cf.width/col_w))) {
         	col = 2;
-        	row++;
+        	row++; row++;
         }
         this.setControllerMapping(param.getName(),o);
         
