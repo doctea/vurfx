@@ -111,9 +111,21 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
   public Object getObjectForPath(String path) {
     //println("Scene#getObjectForPath(" + path + ")");
-    if (path.equals("") || path.equals(this.getSceneName())) return this;
+    if (path.equals("") || path.equals(this.getSceneName())) 
+    		return this;
     String spl[] = path.split("/",2);
-    return getFilter(spl[1]);
+    
+    String spl2[] = spl[1].split("/");
+    println ("got spl " + spl.toString() + " and spl2 " + spl2.toString());
+    String filterName = spl2[0];
+    if (spl2.length==1) {
+    		return getFilter(filterName);
+    } else if (spl2[1].equals("mute")) {
+    		return getFilter(filterName);
+    } else {
+    		return getFilter(filterName).getParameter(spl2[2]);
+    }
+    		
   }
 
   public Filter getFilter(String name) {
@@ -732,10 +744,29 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   
   public void loadParameters(HashMap<String,Object> params) {
 	  for (Entry<String,Object> e : params.entrySet()) {
-		  //this.target(e.getKey(), e.getValue());
-		  //(((Parameter)e.getValue()).getName(), 
-		  ((Parameter) this.host.getObjectForPath(((Parameter)e.getValue()).getFilterPath()))
-		  	.target(((Parameter)e.getValue()).getName(), ((Parameter)e.getValue()).value);	/// prize for king of readable code
+		  println("got " + e.getKey() + " with " + e.getValue().getClass().getName());
+		  if (e.getKey().endsWith("/mute")) {
+			  ((Mutable) host.getObjectForPath(e.getKey())).setMuted((Boolean)e.getValue());
+			  continue;
+		  }
+		  if (e.getValue() instanceof Parameter) {
+			  host.target(e.getKey(), ((Parameter)e.getValue()));
+		  } else {
+			  host.target(e.getKey(), e.getValue());
+		  }
+		  //(((Parameter)e.getValue()).getName(),
+		  
+		  /*Parameter p = (Parameter)e.getValue();
+		  Object o = this.host.getObjectForPath(p.getFilterPath());
+		  //((Parameter) this.host.getObjectForPath(p.getFilterPath())
+		  if (o instanceof Filter) {
+			  println(e.getKey() + " is a Filter!");
+			  //((Filter)o).target(p.getName(), p.value);	/// prize for king of readable code
+
+			  ((Filter) o).setParameterValue(p.getName(), p.value);
+		  } else {
+			  println(e.getKey() + " is a " + o.getClass().getName());
+		  }*/
 		  	//..setValue( ((Parameter)e.getValue()).value);
 		  //f.target(e.getKey(), payload)
 	  }

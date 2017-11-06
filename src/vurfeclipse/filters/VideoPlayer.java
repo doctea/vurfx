@@ -81,7 +81,7 @@ public class VideoPlayer extends Filter {
 
     if (changing) return;
     final String filename = fn;
-    if (filename=="") return;
+    if (filename.equals("") return;
     this.filename = filename;
     changing = true;
     final VideoPlayer self = this;

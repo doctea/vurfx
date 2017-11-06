@@ -13,6 +13,7 @@ import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.ShaderFilter.CustomPass;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.user.scenes.OutputFX1;
 import processing.opengl.*;
@@ -80,15 +81,31 @@ public class ShaderFilter extends Filter {
 	
 			Object current = getParameterValue(paramName);
 	
-			if (current instanceof Float ) {
+			//glFilter.set(paramName, ((Class<? extends current.getClass()>) getParameter(paramName)).cast(value), value); //
+			Parameter p = this.getParameter(paramName);
+			if (p.getDataType()==Integer.class) {
+				glFilter.set(paramName, (Integer) value);
+			} else if (p.getDataType()==Float.class || p.getDataType()==Double.class) {
+				if (value instanceof Float) {
+					glFilter.set(paramName, ((Float)value).floatValue());
+				} else if (value instanceof Double) {
+					glFilter.set(paramName, ((Double)value).floatValue());
+				}
+			} else if (p.getDataType()==Boolean.class) {
+				glFilter.set(paramName, (Boolean) value);
+			} else {
+				println(this + "#updateParameterValue("+paramName+","+value+") doesn't know what to do with " + value + " when setting gl shader uniforms?");
+			}
+			
+			/*if (current instanceof Float ) {
 				//println("setting GLFilter parameter " + paramName + " " + value);
 				glFilter.set(paramName, ((Float)value).floatValue());
 			} else if (current instanceof Integer) {
 				//println("setting GLFilter parameter " + paramName + " " + value);
 				glFilter.set(paramName, ((Integer)value).intValue());
 			} else {
-				println("ShaderFilter#updateParameterValue doesn't know what to do with passed value for " + paramName);
-			}
+				println("ShaderFilter#updateParameterValue doesn't know what to do with passed value for " + paramName + " (is a " + paramName.getClass() + ")");
+			}*/
 		}
     //return this;
   }

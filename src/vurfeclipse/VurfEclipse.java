@@ -38,11 +38,13 @@ public class VurfEclipse extends PApplet {
 	}*/
 
 	boolean hdRes = false; //false;//true;
-	boolean mdRes = true; //true;
+	boolean mdRes = false; //true;
 	boolean projRes = false;
 	boolean ultrahiRes = false;
-	boolean hiRes = true;
-	boolean medRes = true;
+	boolean hiRes = false; //true;
+	boolean medRes = false; //true;
+	boolean lowRes = false;
+	// all false for really low res 
 
 	public boolean exportMode = false; //true;
 
@@ -484,7 +486,7 @@ public class VurfEclipse extends PApplet {
 	}
 	
 	public boolean isReady() {
-		return ( this.finishedSetup && 
+		return ( false && this.finishedSetup &&			/// false to debug without drawing ! 
 				(this.pr!=null && this.pr.isInitialised()));
 	}
 	

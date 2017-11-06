@@ -130,8 +130,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	  System.out.println("getObjectForPath " + path);
 	  //System.exit(1);
     String[] spl = path.split("/",2);
+    if (spl[0].equals("mute")) return this;
     if (this.parameters.containsKey(spl[0])) {
-      return this.parameters.get(spl[0]);
+      return this.getParameter(spl[0]);
     }
     return null;
   }
@@ -383,7 +384,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
     //sc.myTextarea.setText(serialize());
     //sc.updateSerializeBox();
-    if(paramname=="muted") {
+    if(paramname.equals("mute")) {	// WAS "muted" until 2017-11-06 !!! might be wrong/breaking stuff like this
       this.muted = (Boolean) value;
     }
   }
@@ -470,9 +471,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 
   public String getFilterLabel() {
-    if (this.filterLabel=="") filterLabel = this.getClass().toString() + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();//.replace("@","-");
+    if (this.filterLabel.equals("")) filterLabel = this.getClass().toString() + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();//.replace("@","-");
 
-    return this.filterLabel==""?this.toString():this.filterLabel;
+    return this.filterLabel.equals("")?this.toString():this.filterLabel;
   }
   public String getDescription () {
     return (this.filterLabel!=""?"'"+filterLabel+"': ":"") +
@@ -733,7 +734,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		Parameter p = pit.next();
 		println("added Parameter's url '" + p.getPath() + "' mapped to " + p);
 		urls.put(p.getPath(), p);
-		if (p.getName()=="text") {
+		if (p.getName().equals("text")) {
 			println("got text!");
 			//System.exit(0);
 		}
@@ -748,6 +749,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			println("Randomising parameter " + p + " in " + this.toString());
 			this.setParameterValueFromSin(p, seq.random(0f, 2f)-1f);
 		}		
+	}
+	public Parameter getParameter(String name) {
+		return this.parameters.get(name);
+		//return null;
 	}
 }
 

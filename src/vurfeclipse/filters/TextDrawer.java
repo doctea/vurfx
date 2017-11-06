@@ -54,22 +54,22 @@ public class TextDrawer extends Filter {
   }
   @Override
   public void updateParameterValue(String paramName, Object value) {
-    if (paramName=="text") {
+    if (paramName.equals("text")) {
       //this.t = (String)value;
       this.setText((String)value);
       println("Changed text to " + value);
-    } else if (paramName=="colour") {
+    } else if (paramName.equals("colour")) {
       //this.colour = (Integer)value;
       this.setColour((Integer)value);
-    } else if (paramName=="rotation") {
+    } else if (paramName.equals("rotation")) {
       //this.rotation = (Float)value;
       this.setRotation((Integer)value);
-    } else if (paramName=="continuousDraw") {
+    } else if (paramName.equals("continuousDraw")) {
       this.setContinuousDraw((Boolean)value);
-    } else if (paramName=="zrotation") {
+    } else if (paramName.equals("zrotation")) {
       this.setZRotation((Integer)value);
-    } else if (paramName=="motionBlur") {
-    	this.motionBlur = ((Boolean)value); 
+    } else if (paramName.equals("motionBlur")) {
+    	  this.motionBlur = ((Boolean)value); 
     } else {
       super.updateParameterValue(paramName,value);
     }

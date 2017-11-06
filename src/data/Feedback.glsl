@@ -7,7 +7,7 @@ uniform sampler2D ppixels;
 
 varying vec4 vertColor;
 varying vec4 vertTexCoord;
-varying vec2 texOffset;
+uniform vec2 texOffset;
 
 uniform vec2 dest_tex_size;
 uniform int dirs;

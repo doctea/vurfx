@@ -65,7 +65,7 @@ public class Parameter implements Serializable, Targetable {
   public Object cast(Object payload) {
 	  if (this.datatype == Integer.class) {
 		  return Integer.parseInt(payload.toString());
-	  } else if (this.datatype == Double.class) {
+	  } else if (this.datatype == Float.class || this.datatype == Double.class) {
 		  return Double.parseDouble(payload.toString());
 	  } else if (this.datatype == Boolean.class) {
 		  return Boolean.parseBoolean(payload.toString());
@@ -124,5 +124,9 @@ public class Parameter implements Serializable, Targetable {
       this.setValue (v + (Integer)this.min);
     }
   }
+public Class getDataType() {
+	// TODO Auto-generated method stub
+	return this.datatype;
+}
 
 }

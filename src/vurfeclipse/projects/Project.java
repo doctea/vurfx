@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import vurfeclipse.filters.Filter;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
@@ -218,6 +219,7 @@ public abstract class Project implements Serializable {
 	        //return s;
 	        // ask it to get the rest of the path for us
 	        if (spl.length>3) {
+	        	  println("#getObjectForPath('"+path+") going to call getObjectForPath on " + s + ", looking for path '"+spl[3]+"/"+spl[4]);
 	          return s.getObjectForPath(spl[3]+"/"+spl[4]);
 	        } else
 	          return s;
@@ -785,6 +787,25 @@ public abstract class Project implements Serializable {
 	public boolean isInitialised() {
 		// TODO Auto-generated method stub
 		return this.initialised;
+	}
+	public void target(String key, Object value) {
+		Targetable t = (Targetable) this.getObjectForPath(key);
+		println("#target("+key+","+value + ") got targetable object " + t.getClass() + " " + t);
+		
+		if (value instanceof Parameter) {
+			key = ((Parameter)value).getName();
+			value = ((Parameter)value).value;
+		}
+		
+		if (t instanceof Filter) {
+			t.target(key, value);
+		} else if (t instanceof Parameter) {
+			t.target(key, value);
+		} else {
+			println("#target('"+key+"','"+value+"'):  Unhandled Targetable type '"+t.getClass().getName()+"'");
+		}
+		
+		
 	}
 
 
