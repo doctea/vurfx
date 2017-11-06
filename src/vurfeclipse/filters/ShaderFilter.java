@@ -1,5 +1,7 @@
 package vurfeclipse.filters;
 
+import java.util.HashMap;
+
 import ch.bildspur.postfx.PostFXSupervisor;
 import ch.bildspur.postfx.Supervisor;
 import ch.bildspur.postfx.builder.PostFX;
@@ -10,6 +12,7 @@ import processing.core.PVector;
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
+import vurfeclipse.filters.ShaderFilter.CustomPass;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.user.scenes.OutputFX1;
 import processing.opengl.*;
@@ -50,7 +53,7 @@ public class ShaderFilter extends Filter {
   String shaderVertName;
   
   transient Canvas c;
-  protected CustomPass customPass;
+  transient protected CustomPass customPass;
 
   public ShaderFilter(Scene sc, String shaderFragName, String shaderVertName) {
     super(sc);
@@ -97,20 +100,31 @@ public class ShaderFilter extends Filter {
 	  else
 		  glFilter = APP.getApp().loadShader(shaderFragName);
 	  
-	  glFilter.bind();	// force compilation when loaded to save hassle later
-	  glFilter.unbind();
+	  //glFilter.bind();	// force compilation when loaded to save hassle later
+	  //glFilter.unbind();
+	  glFilter.init();
 
 	  glFilter.set("src_tex_unit0", src);
 	  glFilter.set("dest_tex_size_x", (float)sc.w);
 	  glFilter.set("dest_tex_size_y", (float)sc.h);
 	  glFilter.set("dest_tex_size",  new PVector((float)sc.w,(float)sc.h));
-	  customPass = new CustomPass(glFilter); //, shaderFragName, shaderVertName);
+	  customPass = this.getPassForShader(glFilter,out,src); //, shaderFragName, shaderVertName);
 	  //glFilter.set("bottomSampler", out);
-	  
 	  
 	  //if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
 	  //if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
 
+  }
+  
+  transient private HashMap<PShader,Pass> passes = new HashMap<PShader,Pass>();
+  
+  protected CustomPass getPassForShader(PShader tf, PGraphics out, PGraphics src) {
+	  CustomPass p = (CustomPass) this.passes.get(tf);
+	  if (p==null) {
+		p = new CustomPass(tf); //,"blend mode ,"blend mode..!");
+	    this.passes.put(tf,p);
+	  }
+	  return p;
   }
 
   @Override public boolean start() {
@@ -119,7 +133,7 @@ public class ShaderFilter extends Filter {
 	return true;
   }
   
-  PShader glFilter;
+  transient PShader glFilter;
   public boolean initialise() {
     // set up inital variables or whatevs
     //temp = new int[sc.w*sc.h];
@@ -182,7 +196,7 @@ public class ShaderFilter extends Filter {
     return true;
   }
 
-  SobelPass sobelPass = new SobelPass(APP.getApp());
+  transient SobelPass sobelPass = new SobelPass(APP.getApp());
   protected void filter(PGraphics source, Pass pass, PGraphics out) {
 	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
 	  //TODO: ADD REAL SHADER HERE

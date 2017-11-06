@@ -31,7 +31,7 @@ public class Canvas implements Serializable /*implements Pathable*/ {
 	
   int w,h;
   String gfx_mode;
-  protected PGraphics arsesurf;
+  transient protected PGraphics arsesurf;
   
   public String canvasName = "Unnamed Canvas";
   

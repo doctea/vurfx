@@ -211,7 +211,13 @@ public class TunnelScene extends SimpleScene {
 					.changeParameterValue("BlendMode", new Integer(8))
 					//.changeParameterValue("X", new Float(0.5f))
 					//.changeParameterValue("Y", new Float(0.5f))
-		);		
+		);
+		
+		/*this.addFilter(
+				new ShaderFilter(this,"BlendCorners.glsl")
+				.setFilterName("Corner blender").setInputCanvas(getCanvasMapping("temp")).setOutputCanvas(getCanvasMapping("temp"))
+				.addParameter("blendAmount", new Float(1.0f), new Float(-20.0f),new Float(20.0f))
+		);*/
 		
 		this.addFilter(
 				new BlendDrawer(this).setFilterName("Blend_5").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))

@@ -12,6 +12,7 @@ import vurfeclipse.scenes.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.Map.Entry;
 
 import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Scene;
@@ -23,6 +24,8 @@ import vurfeclipse.ui.ControlFrame;
 import controlP5.*;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
+import sun.security.jca.GetInstance.Instance;
 
 
 public abstract class Project implements Serializable {
@@ -419,22 +422,37 @@ public abstract class Project implements Serializable {
     return false;
   }
 
-  static public Project loadProject() {
-    return loadProject("project-test-2");
+  public Project loadProject() {
+    return loadProject("blah_project-test");
   }
-  static public Project loadProject(String filename) {
-    return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename, Project.class);
+  public Project loadProject(String filename) {
+	  println("loadProject " + filename);
+    //return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename+".vj", Project.class);
+	HashMap<String,HashMap<String,Object>> input = ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
+	for (Entry<String,HashMap<String,Object>> e : input.entrySet()) {
+		Scene s = (Scene) this.getObjectForPath(e.getKey());
+		s.loadParameters(e.getValue());
+	}
+	return null;
   }
 
   public void saveProject() {
-    saveProject("project-test-2");
+    saveProject("blah_project-test");
   }
   public void saveProject(String filename) {
     println("SAVING TO " + filename);
 
     //saveIndividualParts(filename);
-    ((VurfEclipse)APP.getApp()).io.serialize(filename, this); //getSelectedScene().getFilter(2)); //getCanvas("/out"));
+    //((VurfEclipse)APP.getApp()).io.serialize(filename + ".vj", this); //getSelectedScene().getFilter(2)); //getCanvas("/out"));
     //io.serialize("test-serialisation-2", new testsave()); //getCanvas("/out"));
+    saveScenes(filename);
+  }
+  public void saveScenes(String filename) {
+	HashMap<String,HashMap<String,Object>> output = new HashMap<String,HashMap<String,Object>>();
+	for (Scene s : this.getScenes()) {
+		output.put(s.getPath(), s.collectParameters());
+	}
+	((VurfEclipse)APP.getApp()).io.serialize(filename, output);
   }
   public void saveIndividualParts(String filename) {
     Iterator<Scene> it = scenes.iterator();
@@ -501,11 +519,13 @@ public abstract class Project implements Serializable {
 	    	println(rsConn.getURLs().toString());
 	    	System.exit(0);
 	    } */ 
-      /*} else  if (key=='s') {
+    } else  if (key=='s') {
       //println(this.getSelectedScene().getSelectedFilter().serialize());
       //println(this.serialize());
 
-      saveProject(); */
+      saveProject(); 
+    } else if (key=='S') {
+    	loadProject();
     } else if (this.sequencer.sendKeyPressed(key)) {
     	println ("Key " + key + " handled by sequencer!");
   	} else {
@@ -541,7 +561,7 @@ public abstract class Project implements Serializable {
   }
 
 
-  public RestConnector rsConn = new RestConnector(this);
+  public transient RestConnector rsConn = new RestConnector(this);
   public void setupRest() {
 	  //rsConn = new RestConnector(this);
 	  rsConn.start();
@@ -566,7 +586,7 @@ public abstract class Project implements Serializable {
     //this.sequencer.setupControls(cf, "Default");
     
     println("Project#setupControls about to grab cp5 before scene loop..");
-    ControlP5 cp5 = cf.control();
+    final ControlP5 cp5 = cf.control();
     
     //this.setupMonitor(cp5);
 
@@ -623,9 +643,19 @@ public abstract class Project implements Serializable {
     			    //pg.rect(APP.getApp().random(255)-20, APP.getApp().random(255)-20, 240, 30);
     			    //pg.fill(255);
     				//pg.beginDraw();
-    			    pg.text("This text is drawn by MyCanvas", APP.getApp().random(255),APP.getApp().random(255));
-    			    if (pr.isInitialised()) 
-    			    	pg.image(pr.getCanvas(getPath()+"out").getSurf(),0,0,w/8,h/8);
+    			
+    				//cp5.setGraphics(pr.getCanvas(getPath()+"out").getSurf(), 0, 0);
+    			
+    			    if (pr.isInitialised()) {
+    			    	//pg.beginDraw();
+
+        			    pg.text("This text is drawn by MyCanvas !!", 0/*APP.getApp().random(255)*/,APP.getApp().random(255));
+
+        			    /*pr.getCanvas(getPath()+"out").getSurf().loadPixels();
+        			    PImage i = pr.getCanvas(getPath()+"out").getSurf().get(); 
+    			    	pg.image(i,0,150,w/8,h/8);
+    			    	pg.endDraw();*/
+    			    }
     			    //pg.endDraw();
     			    //
     			  }

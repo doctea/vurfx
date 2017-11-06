@@ -32,7 +32,7 @@ public class ImageListScene extends SimpleScene {
   
   int current_image_index;
 
-  PImage p;
+  transient PImage p;
 
 
 

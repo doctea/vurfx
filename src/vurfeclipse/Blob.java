@@ -1,12 +1,14 @@
 package vurfeclipse;
 
+import java.io.Serializable;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PShape;
 //import codeanticode.glgraphics.*;
 
-public class Blob {
+public class Blob implements Serializable {
   public int x = 0;
 
   public int y = 0;
@@ -39,7 +41,7 @@ public class Blob {
   boolean edge = false;
   
   //transient GLTexture src;
-  PImage src;
+  transient PImage src;
   String imageName;
   
   public void setInput(PImage t) {

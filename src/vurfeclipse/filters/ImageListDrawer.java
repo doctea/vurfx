@@ -255,7 +255,7 @@ public class ImageListDrawer extends Filter {
     return this;
   }
 
-  private PImage p;
+  transient private PImage p;
   public boolean applyMeatToBuffers() {
     //System.out.println("in applymeattobuffers in ImageListDrawer (" + this + "), src is " + src + " and out is " + out);
     //if (fileChanged) {

@@ -22,14 +22,14 @@ import SimpleOpenNI.*;
 
 public class OpenNIFilter extends Filter {
 
-  SimpleOpenNI context;
+  transient SimpleOpenNI context;
   float        zoomF = 0.3f;
   float        rotX = PApplet.radians(180);  // by default rotate the hole scene 180deg around the x-axis,
                                      // the data from openni comes upside down
   float        rotY = PApplet.radians(0);
   PShape       pointCloud;
   int          steps = 2;
-	private int cameraId = 0;
+  private int cameraId = 0;
 
 /*  String depthOutputName;
   String irOutputName;
@@ -172,19 +172,19 @@ public class OpenNIFilter extends Filter {
   }*/
 
   //PImage video_frame_ = new PImage(640,480);
-  Canvas scaled = Canvas.makeCanvas(640,480,((VurfEclipse)APP.getApp()).pr.gfx_mode,"/dlibcanvas");
+  transient Canvas scaled = Canvas.makeCanvas(640,480,((VurfEclipse)APP.getApp()).pr.gfx_mode,"/dlibcanvas");
 
   PImage rgb;
   PImage depth;
 
-  PImage t = scaled.getSurf().get();
+  transient PImage t = scaled.getSurf().get();
 
   boolean newFrame = false;
 
-  ReaderThread rt;// = new ReaderThread();
+  transient ReaderThread rt;// = new ReaderThread();
 
-  PImage newRgb;
-  PImage newDepth;
+  transient PImage newRgb;
+  transient PImage newDepth;
   //PImage newIR;
 
   public boolean applyMeatToBuffers() {

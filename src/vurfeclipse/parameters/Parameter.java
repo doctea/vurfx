@@ -17,7 +17,7 @@ public class Parameter implements Serializable, Targetable {
   //String controllerName;
   
   String filterPath;
-  Filter filter;
+  transient Filter filter;
   //transient Scene sc;
 
   Class<? extends Object> datatype;
@@ -77,6 +77,7 @@ public class Parameter implements Serializable, Targetable {
   
   @Override
   public Object target(String path, Object payload) {
+	  filter.println("Parameter " + getName() + " targeted with " + " path " + " and " + payload);
 	  //this.value = this.datatype.cast(payload);
 	  setValue(
 			  this.cast(payload)

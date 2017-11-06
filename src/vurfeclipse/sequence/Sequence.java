@@ -1,6 +1,7 @@
 package vurfeclipse.sequence;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -12,7 +13,7 @@ import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 
-abstract public class Sequence implements Mutable {
+abstract public class Sequence implements Serializable, Mutable {
 	//Scene sc;
 	
 	public Random rng = new Random(1337);
@@ -23,7 +24,7 @@ abstract public class Sequence implements Mutable {
 
 	int iteration;
 
-	protected ArrayList<Mutable> mutables = new ArrayList<Mutable>();
+	transient protected ArrayList<Mutable> mutables = new ArrayList<Mutable>();
 
 
 	protected Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..

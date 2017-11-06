@@ -4,6 +4,7 @@ import vurfeclipse.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -58,9 +59,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   protected int filterCount;
 
   //transient
-    public Filter[] filters;// = new Filter[filterCount];
+  public transient Filter[] filters;// = new Filter[filterCount];
 
-  protected HashMap<String,Sequence> sequences = new HashMap<String,Sequence>();
+  transient protected HashMap<String,Sequence> sequences = new HashMap<String,Sequence>();
 
   public HashMap<String,Sequence> getSequences() {
 	  if (sequences.size()==0) setupSequences();
@@ -710,10 +711,37 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     }
   }
 
-  /*public void savePreset(String filename) {
-	  ((VurfEclipse)APP.getApp()).io.serialize(filename, this);
+  public void savePreset(String filename) {
+	  ((VurfEclipse)APP.getApp()).io.serialize(filename, this.collectParameters());
   }
-  public void loadPreset2(String filename) {
+  
+  public HashMap<String,Object> collectParameters() {
+	HashMap<String,Object> params = new HashMap<String,Object>();
+	// params for scene here?
+	
+	for(Filter f : this.getFilters()) {
+		//add params for each filter here
+		params.put(f.getPath()+"/mute", new Boolean(f.isMuted()));
+		for (Parameter p : f.getParameters()) {
+			// add params for each parameter here
+			params.put(p.getPath(), p);
+		}
+	}
+	return params;
+  }
+  
+  public void loadParameters(HashMap<String,Object> params) {
+	  for (Entry<String,Object> e : params.entrySet()) {
+		  //this.target(e.getKey(), e.getValue());
+		  //(((Parameter)e.getValue()).getName(), 
+		  ((Parameter) this.host.getObjectForPath(((Parameter)e.getValue()).getFilterPath()))
+		  	.target(((Parameter)e.getValue()).getName(), ((Parameter)e.getValue()).value);	/// prize for king of readable code
+		  	//..setValue( ((Parameter)e.getValue()).value);
+		  //f.target(e.getKey(), payload)
+	  }
+  }
+  
+  /*public void loadPreset2(String filename) {
     Scene s = ((VurfEclipse)APP.getApp()).io.deserialize(filename, this.getClass());
     s.setSceneName(this.getSceneName());
     cp5.remove(this.tabName);
@@ -728,7 +756,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   private Integer[] palette;
   public void setupControls(ControlFrame cf, ControllerGroup tab) {
 	  
-	  ControlP5 cp5 = cf.control();
+	ControlP5 cp5 = cf.control();
     println("Scene#setupControls() in " + this);
     if (doneControls) return;
     doneControls = true;

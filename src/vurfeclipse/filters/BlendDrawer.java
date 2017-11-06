@@ -43,7 +43,6 @@ public class BlendDrawer extends ShaderFilter {
 
   transient PShader blendFilters[] = new PShader[blendModes.length];
 
-  private HashMap<PShader,Pass> passes = new HashMap<PShader,Pass>();
 
   //transient PShader glFilter;
   //transient PGraphics t;
@@ -82,7 +81,7 @@ public class BlendDrawer extends ShaderFilter {
     //this.changeParameterValue("Opacity", 1.0);
     //this.changeParameterValue("BlendMode", 4);
     addParameter("Opacity", 1.0f, 0.0f, 1.0f);
-    addParameter("BlendMode", 4, 0, blendModes.length);
+    addParameter("BlendMode", 4, 0, blendModes.length-1);
     addParameter("Scale", new Float(1.0f), 0.0f, 4.0f);
     addParameter("X", new Float(0.0f), -1.0f, 1.0f);
     addParameter("Y", new Float(0.0f), -1.0f, 1.0f);
@@ -177,13 +176,16 @@ public class BlendDrawer extends ShaderFilter {
     //src = sc.host.getCanvas(this.canvas_in).getSurf();
     //out = sc.host.getCanvas(this.canvas_out).getSurf();
 
-    PShader tf = getFilterNumber(currentBlendMode);
-    glFilter = tf;
-    tf.set("bottomSampler", out);
-    tf.set("topSampler", src);
-    this.shaderFragName = "blend mode " + currentBlendMode;
-    customPass = this.getPassForShader(tf,out,src);
-    tf.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
+    //Shader tf = getFilterNumber(currentBlendMode);
+    //glFilter = tf;
+    //tf.set("bottomSampler", out);
+    //tf.set("topSampler", src);
+    //this.shaderFragName = "blend mode " + currentBlendMode;
+    customPass = (CustomPass) this.getPassForBlendMode(currentBlendMode); //Shader(tf,out,src);
+    customPass.shader.set("bottomSampler", out);
+    customPass.shader.set("topSampler", src);
+    customPass.shader.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
+    
     //tf.set("bottomSampler", out);
     //tf.set("topSampler",  src);
     //tf.apply(new PImage[]{src, out}, t); // all are called the same way
@@ -237,17 +239,12 @@ public class BlendDrawer extends ShaderFilter {
     return super.toString() + " " + blendModes[currentBlendMode];
   }*/
 
-  private CustomPass getPassForShader(PShader tf, PGraphics out, PGraphics src) {
+  private Pass getPassForBlendMode(int currentBlendMode) {
 	// TODO Auto-generated method stub
+	return this.getPassForShader(this.getFilterNumber(currentBlendMode), out, src);
+  }
 
-	  CustomPass p = (CustomPass)this.passes.get(tf);
-	  if (p==null) {
-		p = new CustomPass(tf); //,"blend mode ,"blend mode..!");
-	    this.passes.put(tf,p);
-	  }
-	  return p;
-}
-public Filter nextMode () {
+  public Filter nextMode () {
     currentBlendMode++;
     if(this.currentBlendMode>=blendModes.length)
       currentBlendMode = 0;

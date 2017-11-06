@@ -3,6 +3,7 @@ package vurfeclipse.sequence;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,7 +16,7 @@ import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
 import vurfeclipse.ui.ControlFrame;
 
-abstract public class Sequencer implements Targetable, CallbackListener {
+abstract public class Sequencer implements Serializable, Targetable, CallbackListener {
 	public Project host;
 
 	boolean locked = false;

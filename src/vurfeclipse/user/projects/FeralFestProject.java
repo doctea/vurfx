@@ -29,7 +29,7 @@ import vurfeclipse.user.scenes.OutputFX2;
 import vurfeclipse.user.scenes.OutputFX3;
 import vurfeclipse.user.scenes.TunnelScene;
 
-public class FeralFestProject extends Project implements Serializable {
+public class FeralFestProject extends Project {
 
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
 	
