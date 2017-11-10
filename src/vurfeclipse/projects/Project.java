@@ -206,6 +206,7 @@ public abstract class Project implements Serializable {
 
   public Object getObjectForPath(String path) {
     // loop over the scenes and check for one with the same name as the first part of path; then pass the rest to getObjectForPath() for the second part..
+	if (path=="/") return this;
     String[] spl = path.split("/",5); //, 3);
     //println("spl[1] is " + spl[1]);
     if ("sc".equals(spl[1])) {
@@ -219,10 +220,10 @@ public abstract class Project implements Serializable {
 	        //return s;
 	        // ask it to get the rest of the path for us
 	        if (spl.length>4) {
-	          println("#getObjectForPath('"+path+") going to call getObjectForPath on " + s + ", looking for path '"+spl[3]+"/"+spl[4]);
+	          //println("#getObjectForPath('"+path+") going to call getObjectForPath on " + s + ", looking for path '"+spl[3]+"/"+spl[4]);
 	          return s.getObjectForPath(spl[3]+"/"+spl[4]);
 	        } else if (spl.length>3) {
-	          println("#getObjectForPath('"+path+") going to call getObjectForPath on " + s + ", looking for path '"+spl[3]);
+	          //println("#getObjectForPath('"+path+") going to call getObjectForPath on " + s + ", looking for path '"+spl[3]);
 	          return s.getObjectForPath(spl[3]);	// mute etc
 	        } else {
 	          return s;
@@ -435,6 +436,19 @@ public abstract class Project implements Serializable {
 	  println("loadProject " + filename);
     //return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename+".vj", Project.class);
 	HashMap<String,HashMap<String,Object>> input = ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
+	
+	// get /seq params
+	if (input.containsKey("/seq")) {
+		HashMap<String,Object> target_pr = input.get("/seq");
+		input.remove("/seq");
+	
+		// process sequencer params
+		for (Entry<String, Object> e : target_pr.entrySet()) {
+			this.sequencer.target(e.getKey(), e.getValue());
+		}
+	}
+	
+	// process Parameter params
 	for (Entry<String,HashMap<String,Object>> e : input.entrySet()) {
 		Scene s = (Scene) this.getObjectForPath(e.getKey());
 		s.loadParameters(e.getValue());
@@ -455,6 +469,10 @@ public abstract class Project implements Serializable {
   }
   public void saveScenes(String filename) {
 	HashMap<String,HashMap<String,Object>> output = new HashMap<String,HashMap<String,Object>>();
+	if (null!=this.sequencer) {
+		HashMap<String,Object> sequencerParams = this.sequencer.collectParameters();
+		output.put("/seq", sequencerParams); //new HashMap<String,HashMap<String,Object>>().put("current_sequence", this.sequencer.getCurrentSequenceName()));
+	}
 	for (Scene s : this.getScenes()) {
 		output.put(s.getPath(), s.collectParameters());
 	}
