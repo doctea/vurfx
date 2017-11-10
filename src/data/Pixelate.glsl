@@ -29,8 +29,8 @@ void main(void)
     float s = pixel_size * (float(fx) + d) / dest_tex_size_x;
     float t = pixel_size * (float(fy) + d) / dest_tex_size_y;
     
-    s -= pixel_size*2. /dest_tex_size_x;
-    t -= pixel_size*2. /dest_tex_size_y;
+    s += (pixel_size*0.5) /dest_tex_size_x;	// (pixel_size*0.5) <-- this is the impotrant part that fixes the blur 'bug'... which is actually really cool and which we should enable as a filter!
+    t += (pixel_size*0.5) /dest_tex_size_y;
 
     gl_FragColor = texture2D(src_tex_unit0, vec2(s, t)).rgba;
 }
