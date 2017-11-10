@@ -1,6 +1,7 @@
 package vurfeclipse.scenes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import vurfeclipse.APP;
 import vurfeclipse.filters.BlendDrawer;
@@ -63,6 +64,17 @@ public class BadTVScene extends Scene {
 	    		addParameter("iTime", new Float(10), new Float(0), new Float(1000000));
 	    		addParameter("iResolutionX", 1.0f);
 	    		addParameter("iResolutionY", 1.0f);
+	    		for (String param : Arrays.asList("vertJerkOpt", "vertMovementOpt", "bottomStaticOpt", "scalinesOpt", "rgbOffsetOpt", "horzFuzzOpt")) {
+	    			addParameter(param, 1.0f, new Float(0.0), new Float(1.0));
+	    		}
+	    		//addParameter("vertJerkOpt", 1.0f, new Float(0.0), new Float(1.0));
+	    		//addParameter("vertMovementOpt", 1.0f, new Float(0.0), new Float(1.0));")
+	    		/*float vertJerkOpt = 1.0;
+float vertMovementOpt = 1.0;
+float bottomStaticOpt = 1.0;
+float scalinesOpt = 1.0;
+float rgbOffsetOpt = 1.0;
+float horzFuzzOpt = 1.0;*/
 	    		//addParameter("iResolutionX", new Float((float)host.w), new Float(0), new Float(1900));
 	    		//addParameter("iResolutionY", new Float((float)host.h), new Float(0), new Float(1080));
 	    	}

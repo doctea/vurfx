@@ -56,19 +56,19 @@ uniform float iTime;          // shader playback time (in seconds)
 //uniform sampler2D iChannel0; //! WARNING: Unsupported input type: "video". Source: "3405e48f74815c7baa49133bdc835142948381fbe003ad2f12f5087715731153.ogv"
 
 // change these values to 0.0 to turn off individual effects
-/*float vertJerkOpt = 1.0;
-float vertMovementOpt = 1.0;
-float bottomStaticOpt = 1.0;
-float scalinesOpt = 1.0;
-float rgbOffsetOpt = 1.0;
-float horzFuzzOpt = 1.0;*/
+uniform float vertJerkOpt = 1.0;
+uniform float vertMovementOpt = 1.0;
+uniform float bottomStaticOpt = 1.0;
+uniform float scalinesOpt = 1.0;
+uniform float rgbOffsetOpt = 1.0;
+uniform float horzFuzzOpt = 1.0;
 
-#define vertJerkOpt 0.5
+/*#define vertJerkOpt 0.5
 #define vertMovementOpt 0.5
 #define bottomStaticOpt 1.0
 #define scalinesOpt 1.0
 #define rgbOffsetOpt 0.5
-#define horzFuzzOpt 0.5
+#define horzFuzzOpt 0.5*/
 
 // Noise generation functions borrowed from: 
 // https://github.com/ashima/webgl-noise/blob/master/src/noise2D.glsl
@@ -135,10 +135,10 @@ float snoise(vec2 v)
 }
 
 float staticV(vec2 uv) {
-    //float staticHeight = snoise(vec2(9.0,iTime*1.2+3.0))*0.3+5.0;
+    float staticHeight = snoise(vec2(9.0,iTime*1.2+3.0))*0.3+5.0;
     float staticAmount = snoise(vec2(1.0,iTime*1.2-6.0))*0.1+0.3;
     float staticStrength = snoise(vec2(-9.75,iTime*0.6-3.0))*2.0+2.0;
-    #define staticHeight 0.8
+    //#define staticHeight 0.8
     //#define staticAmount 0.8
     //#define staticStrength 2.5
 	return (1.0-step(snoise(vec2(5.0*pow(iTime,2.0)+pow(uv.x*7.0,1.2),pow((mod(iTime,100.0)+100.0)*uv.y*0.3+3.0,staticHeight))),staticAmount))*staticStrength;
@@ -170,7 +170,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     
     float staticVal = 0.0;
 
-	/*  
+
 	    for (float y = -1.0; y <= 1.0; y += 1.0) {
 	        float maxDist = 5.0/200.0;
 	        float dist = y/200.0;
@@ -178,7 +178,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 	    					(maxDist-abs(dist)) *
 	    					1.5;
 	    }
-	*/
+
         
     staticVal *= bottomStaticOpt;
 	
