@@ -653,7 +653,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         		margin_w/2 + (col++*(margin_w+col_w)),
         		margin_h + (row*row_h)
         );
-        if (col > 10) { //(col_w*margin_w)*col>cf.width) { //(5*(cf.width/col_w))) {
+        if (col > 12) { //(col_w*margin_w)*col>cf.width) { //(5*(cf.width/col_w))) {
         	col = 2;
         	row++; row++;
         }
