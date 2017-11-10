@@ -41,7 +41,7 @@ public class VurfEclipse extends PApplet {
 	boolean mdRes = false; //true;
 	boolean projRes = false;
 	boolean ultrahiRes = false;
-	boolean hiRes = false; //true;
+	boolean hiRes = true; //true;
 	boolean medRes = false; //true;
 	boolean lowRes = false;
 	// all false for really low res 
@@ -50,7 +50,8 @@ public class VurfEclipse extends PApplet {
 
 	//FullScreen fs;
 	boolean fullscreen = false;
-	
+	int fullscreen_num = 2;
+
 	//boolean ready = false;
 	
 	private PostFXSupervisor fxs;
@@ -346,6 +347,12 @@ public class VurfEclipse extends PApplet {
 			 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
 			 this.size(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
 
+			 
+			 if (fullscreen) {
+				 //System.out.println("going fullscreen on " + fullscreen_num);
+				 this.fullScreen(fullscreen_num);
+			 }
+			 
 			 //pr.setupControls();
 			 System.out.println("Finished VurfEclipse#settings() - handing off to setup?");;
 	}
@@ -486,7 +493,7 @@ public class VurfEclipse extends PApplet {
 	}
 	
 	public boolean isReady() {
-		return ( false && this.finishedSetup &&			/// false to debug without drawing ! 
+		return ( this.finishedSetup &&		//false	&& /// false to debug without drawing ! 
 				(this.pr!=null && this.pr.isInitialised()));
 	}
 	
@@ -725,7 +732,8 @@ public class VurfEclipse extends PApplet {
 			   }
 			 }
 			 catch (Exception e) {
-				 println("Caught exception " + e);
+				 println("keyPressed Caught exception " + e);
+				 e.printStackTrace();
 			 }		
 	}
 }
