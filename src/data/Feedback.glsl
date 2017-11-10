@@ -65,7 +65,7 @@ void main(void)
 
    //orig = vec4(0.,1.,0.5,0.5);
 	
-   vec3 newColor  = vec3(1./radio,0.,0.) + orig.rgb;
+   vec3 newColor  = /*vec3(1./radio,0.,0.) +*/ orig.rgb;
 
    //vec3 newColor = vec3(1./radio,1./amp,1.f);
    
