@@ -221,8 +221,11 @@ public class FeralFestProject extends Project {
     blendScene.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
     blendScene.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
     
-    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
-    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setOutputCanvas("/pix0").setFilterName("kinect1")));
+    //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setOutputCanvas("/pix0").setFilterName("kinect1")));
+    blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect0",0).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect1",1).setOutputCanvas("/pix1").setFilterName("kinect1")));
+
     blendScene.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
     
     blendScene.addSequence("_next_camera", new SimpleSequence() {
@@ -233,14 +236,14 @@ public class FeralFestProject extends Project {
 				super.onStart();
 				int current_camera = camera;
 				
-				OpenNIFilter old = (OpenNIFilter)blendScene.getFilter("kinect"+camera);
+				OpenKinectFilter old = (OpenKinectFilter)blendScene.getFilter("kinect"+camera);
 				//old.setCanvases("depth", "/NULL").setOutputCanvas("/NULL"); //setMuted(true);
 				old.changeParameterValue("depth", new Boolean(false));
 				old.changeParameterValue("rgb", new Boolean(false));
 				camera++;
 				if (camera>=max_camera) camera = 0;
 				//blendScene.getFilter("kinect"+camera).setOutputsetMuted(false);
-				old = (OpenNIFilter)blendScene.getFilter("kinect"+camera);
+				old = (OpenKinectFilter)blendScene.getFilter("kinect"+camera);
 				old.changeParameterValue("depth", new Boolean(true));
 				old.changeParameterValue("rgb", new Boolean(true));
 				

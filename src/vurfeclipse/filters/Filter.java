@@ -317,7 +317,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     //parameters.put(paramName, new Parameter(paramName, value));//, min, max));
     //if (parameters.containsKey(paramName)) {
     //parameters.get(paramName).value = value;
-    parameters.get(paramName).setValue(value);
+    if (parameters.containsKey(paramName))
+    	parameters.get(paramName).setValue(value);
+    else
+    	println("no parameter for " + paramName + "(tried to set value " + value + ")");
     /*} else {
      parameters.put(paramName, new Parameter(paramName, value));
      }*/

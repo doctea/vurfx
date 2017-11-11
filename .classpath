@@ -83,11 +83,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/kinect"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/openkinect/openkinect.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/openkinect"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/proxml/proxml.jar" sourcepath="c:/code/processing/sketches/libraries/proxml/src">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/proxml"/>
@@ -120,5 +115,10 @@
 	<classpathentry kind="lib" path="lib/user/fullscreen/library/fullscreen.jar"/>
 	<classpathentry kind="lib" path="lib/user/PostFX/library/PostFX.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/processing 336"/>
+	<classpathentry kind="lib" path="lib/user/openkinect_processing/library/openkinect_processing.jar" sourcepath="lib/user/openkinect_processing/src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/openkinect_processing/library/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
