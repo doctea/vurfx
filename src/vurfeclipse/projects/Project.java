@@ -468,7 +468,7 @@ public abstract class Project implements Serializable {
 
   public void saveProject() {
     saveProject(this.getClass().getSimpleName()
-    		/*+"_"+APP.getApp().millis()*/
+    		+"_"+APP.getApp().millis()
     		+".xml");
   }
   public void saveProject(String filename) {
