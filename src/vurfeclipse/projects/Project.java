@@ -6,6 +6,7 @@ import vurfeclipse.IOUtils;
 import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.RestConnector;
+import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 
@@ -430,12 +431,21 @@ public abstract class Project implements Serializable {
   }
 
   public Project loadProject() {
-    return loadProject("blah_project-test");
+    return loadProject(this.getClass().getSimpleName()+".xml");
   }
   public Project loadProject(String filename) {
 	  println("loadProject " + filename);
     //return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename+".vj", Project.class);
-	HashMap<String,HashMap<String,Object>> input = ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
+	HashMap<String, HashMap<String, Object>> input;
+	try {
+		 //input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
+		input = (HashMap<String, HashMap<String, Object>>) XMLSerializer.read(filename);
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		System.err.println("Caught " + e1 + " trying to load '" + filename + "'");
+		e1.printStackTrace();
+		return this;
+	}
 	
 	// get /seq params
 	if (input.containsKey("/seq")) {
@@ -457,7 +467,9 @@ public abstract class Project implements Serializable {
   }
 
   public void saveProject() {
-    saveProject("blah_project-test");
+    saveProject(this.getClass().getSimpleName()
+    		/*+"_"+APP.getApp().millis()*/
+    		+".xml");
   }
   public void saveProject(String filename) {
     println("SAVING TO " + filename);
@@ -476,7 +488,14 @@ public abstract class Project implements Serializable {
 	for (Scene s : this.getScenes()) {
 		output.put(s.getPath(), s.collectParameters());
 	}
-	((VurfEclipse)APP.getApp()).io.serialize(filename, output);
+	//((VurfEclipse)APP.getApp()).io.serialize(filename, output);
+	try {
+		XMLSerializer.write(output, filename);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		System.err.println("Caught " + e.toString() + " trying to save to '" + filename + "'");
+		e.printStackTrace();
+	}
   }
   public void saveIndividualParts(String filename) {
     Iterator<Scene> it = scenes.iterator();
