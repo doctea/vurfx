@@ -281,6 +281,13 @@ abstract public class Sequence implements Serializable, Mutable {
 			return this.palette!=null;
 		}
 
+		public long getSeed() {
+			return seed;
+		}
+		public void setSeed(long seed) {
+			this.seed = seed;
+		}
+
 
 
 

@@ -458,6 +458,15 @@ public abstract class Project implements Serializable {
 		}
 	}
 	
+	// get /project params
+	if (input.containsKey("/project")) {
+		HashMap<String,Object> target_pr = input.get("/project");
+		input.remove("/project");
+		for (Entry<String, Object> e : target_pr.entrySet()) {
+			this.target(e.getKey(), e.getValue());
+		}
+	}
+	
 	// process Parameter params
 	for (Entry<String,HashMap<String,Object>> e : input.entrySet()) {
 		Scene s = (Scene) this.getObjectForPath(e.getKey());
@@ -481,6 +490,10 @@ public abstract class Project implements Serializable {
   }
   public void saveScenes(String filename) {
 	HashMap<String,HashMap<String,Object>> output = new HashMap<String,HashMap<String,Object>>();
+	
+	HashMap<String,Object> projectParams = this.collectParameters();
+	output.put("/project",projectParams);
+	
 	if (null!=this.sequencer) {
 		HashMap<String,Object> sequencerParams = this.sequencer.collectParameters();
 		output.put("/seq", sequencerParams); //new HashMap<String,HashMap<String,Object>>().put("current_sequence", this.sequencer.getCurrentSequenceName()));
@@ -497,7 +510,12 @@ public abstract class Project implements Serializable {
 		e.printStackTrace();
 	}
   }
-  public void saveIndividualParts(String filename) {
+  private HashMap<String, Object> collectParameters() {
+	HashMap<String,Object> params = new HashMap<String,Object>();
+	params.put("/project/timeScale", this.getTimeScale());
+	return null;
+}
+public void saveIndividualParts(String filename) {
     Iterator<Scene> it = scenes.iterator();
     while (it.hasNext()) {
       Scene ss = (Scene)it.next();

@@ -148,9 +148,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		@Override
 		public HashMap<String, Targetable> getTargetURLs() {
-			HashMap<String, Targetable> urls = new HashMap<String,Targetable>();
-
-			urls.putAll(super.getTargetURLs());
+			HashMap<String, Targetable> urls = super.getTargetURLs(); //new HashMap<String,Targetable>();
+			//urls.putAll(super.getTargetURLs());
+			
+			urls.put("/seq/seed", this);
 
 			Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
 			while (it.hasNext()) {
@@ -187,6 +188,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				  return "Sequencer active Sequence is currently " + activeSequenceName;
 			  } else if (spl[2].equals("toggleLock")) {
 				  return "Lock is " + this.toggleLock();
+			  } else if (spl[2].equals("seed")) {
+				  this.getActiveSequence().setSeed((Long)payload);
+				  return "Set seed to "+payload;
 			  }
 			  return payload;
 		  }
@@ -642,5 +646,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     }
   }
 
+  @Override public HashMap<String,Object> collectParameters() {
+	  HashMap<String,Object> params = super.collectParameters(); 
+	  params.put("/seq/seed", this.getActiveSequence().getSeed());
+	  return params;
+  }
+  
 
 }
