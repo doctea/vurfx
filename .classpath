@@ -102,11 +102,6 @@
 	<classpathentry excluding="vurfeclipse/filters/dlibKinectFilter.java|vurfeclipse/filters/GLColourDropper.java|vurfeclipse/filters/ImageDrawer.java|vurfeclipse/filters/PointDrawer.java|vurfeclipse/user/projects/AboveBoardsProject.java|vurfeclipse/user/projects/NozstockProject.java|vurfeclipse/scenes/Demo2Scene.java|vurfeclipse/scenes/DemoScene.java|vurfeclipse/user/projects/MagicDustProject.java|vurfeclipse/user/projects/ParadoxProject.java|vurfeclipse/projects/TestProject.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/VurfEclipse/lib/user/SimpleOpenNI/library"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
 	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
 	<classpathentry kind="lib" path="lib/user/GSVideo/library/gstreamer-java.jar"/>
@@ -120,5 +115,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/openkinect_processing/library/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

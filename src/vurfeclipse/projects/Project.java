@@ -10,6 +10,7 @@ import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -476,8 +477,10 @@ public abstract class Project implements Serializable {
   }
 
   public void saveProject() {
-    saveProject(this.getClass().getSimpleName()
-    		+"_"+APP.getApp().millis()
+    saveProject(
+    		this.getClass().getSimpleName()
+    		//+"_"+APP.getApp().millis()
+    		+((VurfEclipse)APP.getApp()).dateStamp()
     		+".xml");
   }
   public void saveProject(String filename) {
@@ -587,6 +590,7 @@ public void saveIndividualParts(String filename) {
       saveProject(); 
     } else if (key=='S') {
     	loadProject();
+    	//APP.getApp().selectInput("Select a file to load", "loadProject"); - DOESNT WORK ?
     } else if (this.sequencer.sendKeyPressed(key)) {
     	println ("Key " + key + " handled by sequencer!");
   	} else {
@@ -650,6 +654,11 @@ public void saveIndividualParts(String filename) {
     final ControlP5 cp5 = cf.control();
     
     //this.setupMonitor(cp5);
+    
+    /*ListBox lb = cp5.addScrollableList("preset")
+    			.setSize(200, 100)
+    			.setItemHeight(20)
+    			.addItems(this.getAvailableFiles());*/
 
     println("Project#setupControls about to loop over scenes ("+scenes.size()+" scenes to process)");
     Iterator<Scene> i = scenes.iterator();

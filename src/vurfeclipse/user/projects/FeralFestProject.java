@@ -223,12 +223,10 @@ public class FeralFestProject extends Project {
     
     //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
     //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setOutputCanvas("/pix0").setFilterName("kinect1")));
-    blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect0",0).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
-    blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect1",1).setOutputCanvas("/pix1").setFilterName("kinect1")));
-
-    blendScene.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
+    blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect0",0).setOutputCanvas("/pix0").setFilterName("kinect0"))).setCanvas("depth", "/pix1");//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    //blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect1",1).setOutputCanvas("/pix1").setFilterName("kinect1")));
     
-    blendScene.addSequence("_next_camera", new SimpleSequence() {
+    /*blendScene.addSequence("_next_camera", new SimpleSequence() {
     	int camera = 0;
     	int max_camera = 2;
 			@Override
@@ -257,7 +255,7 @@ public class FeralFestProject extends Project {
 			public boolean readyToChange(int max_i) {
 				return true;				
 			}
-    });
+    });*/
     
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);

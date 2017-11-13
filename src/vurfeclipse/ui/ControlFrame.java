@@ -73,7 +73,7 @@ public class ControlFrame extends PApplet {
        .setSize(200, 30);
        */
 	 System.out.println("From " + this + ": calling setupControls() on " + ((VurfEclipse)APP.getApp()).pr);
-	 ((VurfEclipse)APP.getApp()).pr.setupControls(this);   
+	 ((VurfEclipse)APP.getApp()).pr.setupControls(this);
 	 
 	 //surface.setLocation(10, 10);
 

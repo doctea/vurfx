@@ -194,6 +194,7 @@ public class VurfEclipse extends PApplet {
 		sizeCount++;
 		if (sizeCount>=2) {
 			println("size(): ignoring " + sizeCount + "th call so as not to trigger GL error.");
+			//System.exit(1);
 			return;
 		} else {
 			println("size(): Passing size call number " + sizeCount);
@@ -257,12 +258,13 @@ public class VurfEclipse extends PApplet {
 		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
 
 		 println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
-		 this.size(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
 		 
 		 if (fullscreen) {
 			 println("going fullscreen on " + fullscreen_num);
-			 this.fullScreen(fullscreen_num);
-		 } 
+			 this.fullScreen(P3D, fullscreen_num);
+		 } else {
+			 this.size(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
+		 }
 		 
 		 System.out.println("Finished VurfEclipse#settings() - handing off to setup!");
 	}

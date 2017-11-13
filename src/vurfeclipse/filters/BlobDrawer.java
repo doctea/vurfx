@@ -48,7 +48,7 @@ public class BlobDrawer extends SpiralDrawer {
     this.addParameter("shape", new Integer(0), 0, b.shapesCount);
     //this.addParameter("colour",new Integer(255), new Integer(0), new Integer(2^32)); //APP.color(APP.random(255),APP.random(255),APP.random(255),128)));
 
-    this.addParameter("spiralCenter", new PVector(this.w/2, this.h/2));
+    //this.addParameter("spiralCenter", new PVector(this.w/2, this.h/2));		// duplicate, already specified in superclass?
 
     //this.addParameter("startRadius")
 

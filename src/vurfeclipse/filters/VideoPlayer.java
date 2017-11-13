@@ -106,7 +106,7 @@ public class VideoPlayer extends Filter {
         newStream.setPixelDest(tex, true);
         newStream.volume(volume);
         println("Set volume and pixeldest..");
-        if (!((VurfEclipse)APP.getApp()).exportMode)
+        //if (!((VurfEclipse)APP.getApp()).exportMode)
           newStream.play();
         //println("about to do ")
         while (!newStream.available())
@@ -206,7 +206,7 @@ public class VideoPlayer extends Filter {
       if (this.startDelay>0)
     	  Thread.sleep(startDelay);
 
-      if (!((VurfEclipse)APP.getApp()).exportMode)
+      //if (!((VurfEclipse)APP.getApp()).exportMode)
         stream.play();
     } catch (Exception e) {
       println("got error " + e + " loading " + filename);
@@ -217,7 +217,7 @@ public class VideoPlayer extends Filter {
   }
 
   public synchronized boolean  applyMeatToBuffers() {
-    if (((VurfEclipse)APP.getApp()).exportMode) {
+    /*if (((VurfEclipse)APP.getApp()).exportMode) {
       //seek to the correct position based on the current frame number ..
       println("jumping to frameCount " + ((VurfEclipse)APP.getApp()).frameCount);
       //stream.jump(frameCount * (global_fps/stream.getSourceFrameRate()));
@@ -226,7 +226,7 @@ public class VideoPlayer extends Filter {
       stream.play();
       stream.jump((float)((VurfEclipse)APP.getApp()).timeMillis/1000);
       stream.pause();
-    }
+    }*/
 /*    if (changing && newStream!=null) {
       GSMovie oldStream = stream;
       //GLTexture oldTex = tex;
