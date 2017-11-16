@@ -38,7 +38,10 @@ public class BlenderFX1 extends SimpleScene {
     
     public void setupSequences() {
 			sequences.put("preset 1", new BlendSequence1(this, 2000));
+			sequences.put("nomute_preset 1", new BlendSequence1(this, 2000).disableHostMute());
 			sequences.put("preset 2_next_", new BlendSequence2(this, 2000));
+			sequences.put("nomute_preset 2_next_", new BlendSequence2(this, 2000).disableHostMute());
+			
     }
     
 }
@@ -60,7 +63,11 @@ class BlendSequence1 extends Sequence {
 		for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
 			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
 	}
-	@Override public void onStop() {	}
+	@Override public void onStop() {	return; }
+	
+	/*@Override public ArrayList<Mutable> getMutables() {
+		return this.mutables; //new ArrayList<Mutable>;
+	}*/
 }
 
 class BlendSequence2 extends Sequence {
@@ -80,5 +87,9 @@ class BlendSequence2 extends Sequence {
 	public void onStop() {
 		// TODO Auto-generated method stub
 		
-	}
+	}	
+	
+	/*@Override public ArrayList<Mutable> getMutables() {
+		return this.mutables; //new ArrayList<Mutable>;
+	}*/
 }
