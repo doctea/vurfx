@@ -259,9 +259,9 @@ public class FeralFestProject extends Project {
     
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
-    switcher.bindSequence("blend", blendScene, "preset 1", 100).setLengthMillis(1000);
-    switcher.bindSequence("blend2_next_", blendScene, "preset 2_next_", 100).setLengthMillis(0);
-    switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
+    switcher.bindSequence("blend", blendScene, "nomute_preset 1", 100).setLengthMillis(1000);
+    switcher.bindSequence("blend2_next_", blendScene, "nomute_preset 2_next_", 100).setLengthMillis(0);
+    //switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
 
 
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
@@ -379,14 +379,14 @@ public class FeralFestProject extends Project {
 		Sequence doubleSequence = new ChainSequence(2000)
 			.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
 			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
-			.addSequence(blendScene, "preset 1")
+			.addSequence(blendScene, "nomute_preset 1")
 		;
     switcher.bindSequence("d1:", doubleSequence, 10);
     
   	Sequence doubleSequence2 = new ChainSequence(2000)
   			//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
   			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 2")
-  			.addSequence(blendScene, "preset 1")
+  			.addSequence(blendScene, "nomute_preset 1")
   			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 3")
   			//.addSequence(blendScene, "preset 1")
   		;
@@ -394,7 +394,7 @@ public class FeralFestProject extends Project {
   	
   	Sequence doubleSequence3 = new ChainSequence(2000)
   			.addSequence(getSceneForPath("/sc/BlobScene2"), "preset 1")
-  			.addSequence(blendScene, "preset 1")
+  			.addSequence(blendScene, "nomute_preset 1")
   	;
   	switcher.bindSequence("d2:", doubleSequence3, 5);
   	
@@ -442,7 +442,7 @@ public class FeralFestProject extends Project {
     switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), tunnel_weight);
     switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), tunnel_weight);
     switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(doubleSequence), tunnel_weight/5);
-    switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "nomute_preset 1"), tunnel_weight);
     switcher.bindSequence("tunnel_2_blob_wobble_1",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 1"), tunnel_weight);
     switcher.bindSequence("tunnel_2_blob_wobble_2",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 2"), tunnel_weight/5);
     switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene, "preset 4").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), tunnel_weight*2);
