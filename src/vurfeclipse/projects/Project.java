@@ -432,21 +432,21 @@ public abstract class Project implements Serializable {
   }
 
   public Project loadProject() {
-    return loadProject(this.getClass().getSimpleName()+".xml");
+  	return loadProject(this.getClass().getSimpleName()+".xml");
   }
   public Project loadProject(String filename) {
-	  println("loadProject " + filename);
-    //return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename+".vj", Project.class);
-	HashMap<String, HashMap<String, Object>> input;
-	try {
-		 //input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
-		input = (HashMap<String, HashMap<String, Object>>) XMLSerializer.read(filename);
-	} catch (Exception e1) {
-		// TODO Auto-generated catch block
-		System.err.println("Caught " + e1 + " trying to load '" + filename + "'");
-		e1.printStackTrace();
-		return this;
-	}
+  	println("loadProject " + filename);
+  	//return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename+".vj", Project.class);
+  	HashMap<String, HashMap<String, Object>> input;
+  	try {
+  		//input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
+  		input = (HashMap<String, HashMap<String, Object>>) XMLSerializer.read(filename);
+  	} catch (Exception e1) {
+  		// TODO Auto-generated catch block
+  		System.err.println("Caught " + e1 + " trying to load '" + filename + "'");
+  		e1.printStackTrace();
+  		return this;
+  	}
 	
 	// get /seq params
 	if (input.containsKey("/seq")) {
@@ -463,8 +463,10 @@ public abstract class Project implements Serializable {
 	if (input.containsKey("/project")) {
 		HashMap<String,Object> target_pr = input.get("/project");
 		input.remove("/project");
-		for (Entry<String, Object> e : target_pr.entrySet()) {
-			this.target(e.getKey(), e.getValue());
+		if (target_pr!=null) {
+			for (Entry<String, Object> e : target_pr.entrySet()) {
+				this.target(e.getKey(), e.getValue());
+			}
 		}
 	}
 	
@@ -514,11 +516,11 @@ public abstract class Project implements Serializable {
 	}
   }
   private HashMap<String, Object> collectParameters() {
-	HashMap<String,Object> params = new HashMap<String,Object>();
-	params.put("/project/timeScale", this.getTimeScale());
-	return null;
-}
-public void saveIndividualParts(String filename) {
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		params.put("/project/timeScale", this.getTimeScale());
+		return params;
+	}
+  public void saveIndividualParts(String filename) {
     Iterator<Scene> it = scenes.iterator();
     while (it.hasNext()) {
       Scene ss = (Scene)it.next();
@@ -874,6 +876,10 @@ public void saveIndividualParts(String filename) {
 		}
 		
 		
+	}
+	public VurfEclipse getApp() {
+		// TODO Auto-generated method stub
+		return (VurfEclipse) APP.getApp();
 	}
 
 
