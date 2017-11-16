@@ -26,7 +26,7 @@
  * </synthclipse-importer-legal-note>
  * </info>
  */
-#extension GL_EXT_gpu_shader4 : enable
+//#extension GL_EXT_gpu_shader4 : enable
 uniform sampler2D src_tex_unit0;
 varying vec4 vertTexCoord;
 varying vec4 vertColor;

@@ -1,8 +1,8 @@
+//#extension GL_EXT_gpu_shader4 : enable
 // http://www.bidouille.org/prog/plasma
 //precision mediump float;
 #define PI 3.1415926535897932384626433832795
-#extension GL_EXT_gpu_shader4 : enable
- 
+
 uniform int u_time_2;
 uniform int width;
 uniform int height;
