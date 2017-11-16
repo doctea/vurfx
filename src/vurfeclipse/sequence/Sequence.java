@@ -28,6 +28,7 @@ abstract public class Sequence implements Serializable, Mutable {
 
 
 	protected Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
+	private boolean disableHostMute;
 	public Sequence (Scene host, int sequenceLengthMillis) {
 		this(sequenceLengthMillis);
 		this.host = host;
@@ -90,10 +91,15 @@ abstract public class Sequence implements Serializable, Mutable {
 	public ArrayList<Mutable> getMutables() {
 		return mutables;
 	}*/
+	public Sequence disableHostMute() {
+		this.disableHostMute = true;
+		return this;
+	}
+	
 	//abstract public ArrayList<Mutable> getMutables();
 	public ArrayList<Mutable> getMutables() {
 		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-		if (host!=null) muts.add((Mutable) host);
+		if (host!=null && !this.disableHostMute) muts.add((Mutable) host);
 		return muts;
 	}
 
@@ -113,6 +119,7 @@ abstract public class Sequence implements Serializable, Mutable {
 
 
 	@Override public boolean isMuted() {	// PROBABLY BUGGY AND WONT DO WHAT YOU EXPECT
+		println("Known dodgy isMuted() called in sequence " + this);
 		Iterator<Mutable> mit = getMutables().iterator();
 		while(mit.hasNext()) {
 			if (mit.next().isMuted()) return true;
