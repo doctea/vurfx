@@ -1,5 +1,6 @@
 package vurfeclipse.sequence;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -180,10 +182,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			  if (spl[2].equals("changeTo")) {
 				  if (spl.length>3) {
 					  println ("Sequencer attempting changeSequence to " + spl[3]);
-					  changeSequence(spl[3]);
+					  changeSequence(spl[3],false, true);	// 2017-11-16, quick hack to prevent targeted changes from saving in history..
 				  } else {
 					  println ("Sequencer attempting changeSequence to " + payload.toString());
-					  changeSequence(payload.toString());
+					  changeSequence(payload.toString(),false, true); // 2017-11-16, quick hack to prevent targeted changes from saving in history..
 				  }
 				  return "Sequencer active Sequence is currently " + activeSequenceName;
 			  } else if (spl[2].equals("toggleLock")) {
@@ -514,6 +516,28 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		//sequences.putAll(toAdd);
 		bindAll(toAdd);
+	}
+	
+	public void bindSavedSequencer(String prefix, int sequenceLength, int weight) {
+		  List<String> textFiles = new ArrayList<String>();
+		  String directory = System.getProperty("user.dir") + "/saves"; //APP.getApp().sketchPath("");
+		  File dir = new File(directory);
+		  
+		  HashMap<String, Sequence> sequences = new HashMap<String, Sequence>();
+		  
+		  for (File file : dir.listFiles()) {
+		    if (file.getName().startsWith(host.getClass().getSimpleName()) && file.getName().endsWith((".xml"))) {
+		      //textFiles.add(file.getName());
+		      ((HashMap<String, Sequence>) sequences).put("_saved " + file.getName(), new SavedSequence("saves/"+file.getName(),sequenceLength));
+		    }
+		  }
+		  //return textFiles;
+		  
+		  //for (String filename : textFiles) {
+		  	//for (int i = 0 ; i < weight ; i++) {
+		  		this.bindAll(sequences, weight); 
+		  	//}
+		  //}
 	}
 
 
