@@ -78,9 +78,9 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/flob"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/kinect/kinect.jar">
+	<classpathentry kind="lib" path="/home/doctea/vurfx-p3/lib/user/openkinect_processing/library/openkinect_processing.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/kinect"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/openkinect_processing"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/proxml/proxml.jar" sourcepath="c:/code/processing/sketches/libraries/proxml/src">
@@ -102,19 +102,39 @@
 	<classpathentry excluding="vurfeclipse/filters/dlibKinectFilter.java|vurfeclipse/filters/GLColourDropper.java|vurfeclipse/filters/ImageDrawer.java|vurfeclipse/filters/PointDrawer.java|vurfeclipse/user/projects/AboveBoardsProject.java|vurfeclipse/user/projects/NozstockProject.java|vurfeclipse/scenes/Demo2Scene.java|vurfeclipse/scenes/DemoScene.java|vurfeclipse/user/projects/MagicDustProject.java|vurfeclipse/user/projects/ParadoxProject.java|vurfeclipse/projects/TestProject.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/VurfEclipse/lib/user/SimpleOpenNI/library"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
 	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
 	<classpathentry kind="lib" path="lib/user/GSVideo/library/gstreamer-java.jar"/>
 	<classpathentry kind="lib" path="lib/user/GSVideo/library/GSVideo.jar"/>
 	<classpathentry kind="lib" path="lib/user/GSVideo/library/jna.jar"/>
-	<classpathentry kind="lib" path="lib/user/fullscreen/library/fullscreen.jar"/>
 	<classpathentry kind="lib" path="lib/user/PostFX/library/PostFX.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/processing 336"/>
-	<classpathentry kind="lib" path="lib/user/openkinect_processing/library/openkinect_processing.jar" sourcepath="lib/user/openkinect_processing/src">
+	<classpathentry kind="lib" path="lib/base/core-336/core.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/openkinect_processing/library/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-336"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar"/>
+	<classpathentry kind="lib" path="lib/base/core-336/gluegen-rt-natives-linux-i586.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-336"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/base/core-336/gluegen-rt.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-336"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/base/core-336/gluegen.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-336"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/base/core-336/jogl-all-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="lib/base/core-336/jogl-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -859,7 +859,18 @@ public abstract class Project implements Serializable {
 		return this.initialised;
 	}
 	public void target(String key, Object value) {
+		println("#target("+key+","+value+")");
+		
+		if (key.equals("/project/timeScale")) {
+			this.setTimeScale((Double)value);
+			return;
+		}
+		
+
 		Targetable t = (Targetable) this.getObjectForPath(key);
+		if (t==null) {
+			System.err.println("#target("+key+","+value+") in " + this + " couldn't find the object to target!");
+		}
 		println("#target("+key+","+value + ") got targetable object " + t.getClass() + " " + t);
 		
 		if (value instanceof Parameter) {

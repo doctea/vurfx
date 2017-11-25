@@ -449,7 +449,7 @@ public class FeralFestProject extends Project {
     switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene, "preset 4").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), tunnel_weight*2);
 
     //switcher.bindSequence("TEST", new SavedSequence(ts2,"FeralFestProject2017-11-16-22-21-7.xml",2000));
-    switcher.bindSavedSequencer("Saved Sequence ", 10, 2000);
+    switcher.bindSavedSequencer("Saved Sequence ", 10, 20);
     
     //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
     //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
