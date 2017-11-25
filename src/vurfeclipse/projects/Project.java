@@ -473,7 +473,11 @@ public abstract class Project implements Serializable {
 	// process Parameter params
 	for (Entry<String,HashMap<String,Object>> e : input.entrySet()) {
 		Scene s = (Scene) this.getObjectForPath(e.getKey());
-		s.loadParameters(e.getValue());
+		if(s==null) {
+			System.err.println ("Couldn't find a targetable for key '"+e.getKey()+"'");
+		} else {
+			s.loadParameters(e.getValue());
+		}
 	}
 	return null;
   }
@@ -870,23 +874,22 @@ public abstract class Project implements Serializable {
 		Targetable t = (Targetable) this.getObjectForPath(key);
 		if (t==null) {
 			System.err.println("#target("+key+","+value+") in " + this + " couldn't find the object to target!");
-		}
-		println("#target("+key+","+value + ") got targetable object " + t.getClass() + " " + t);
-		
-		if (value instanceof Parameter) {
-			key = ((Parameter)value).getName();
-			value = ((Parameter)value).value;
-		}
-		
-		if (t instanceof Filter) {
-			t.target(key, value);
-		} else if (t instanceof Parameter) {
-			t.target(key, value);
 		} else {
-			println("#target('"+key+"','"+value+"'):  Unhandled Targetable type '"+t.getClass().getName()+"'");
-		}
-		
-		
+			println("#target("+key+","+value + ") got targetable object " + t.getClass() + " " + t);
+			
+			if (value instanceof Parameter) {
+				key = ((Parameter)value).getName();
+				value = ((Parameter)value).value;
+			}
+			
+			if (t instanceof Filter) {
+				t.target(key, value);
+			} else if (t instanceof Parameter) {
+				t.target(key, value);
+			} else {
+				println("#target('"+key+"','"+value+"'):  Unhandled Targetable type '"+t.getClass().getName()+"'");
+			}
+		}	
 	}
 	public VurfEclipse getApp() {
 		// TODO Auto-generated method stub
