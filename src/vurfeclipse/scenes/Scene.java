@@ -123,11 +123,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     } else if (spl2[1].equals("mute")) {
     		return getFilter(filterName);
     } else if (spl2[1].equals("pa")) {	// is a Parameter
+    	if (getFilter(filterName)!=null)
     		return getFilter(filterName).getParameter(spl2[2]);
-    } else {
-    	// fuck knows?
-    	return null;
-    }    		
+    } 
+    
+    return null;    		
   }
 
   public Filter getFilter(String name) {
@@ -750,7 +750,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	  for (Entry<String,Object> e : params.entrySet()) {
 		  println("got " + e.getKey() + " with " + e.getValue().getClass().getName());
 		  if (e.getKey().endsWith("/mute")) {
-			  ((Mutable) host.getObjectForPath(e.getKey())).setMuted((Boolean)e.getValue());
+			  if (host.getObjectForPath(e.getKey())!=null)
+			  	((Mutable) host.getObjectForPath(e.getKey())).setMuted((Boolean)e.getValue());
 			  continue;
 		  }
 		  if (e.getValue() instanceof Parameter) {
