@@ -17,6 +17,7 @@ public class Canvas implements Serializable /*implements Pathable*/ {
 		  PGraphics s = APP.getApp().createGraphics(width,height,APP.getApp().P3D);
 		  //s.setDepthMask(true);
 		  s.setSize(width, height);
+		  //s.pixelDensity = 2;
 		  /*s.beginDraw();
 	  		s.background(0,0,0,0);
 	  		s.endDraw();*/

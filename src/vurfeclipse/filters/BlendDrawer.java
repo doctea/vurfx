@@ -194,6 +194,9 @@ public class BlendDrawer extends ShaderFilter {
     c.getSurf().beginDraw();
     //this.filter(src, tf, out); //c.getSurf()); //c.getSurf(), tf);	// WORKING 2017-1022
     //c.getSurf().image(out,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
+	//c.getSurf().resetShader();
+	//customPass.shader.set(shaderFragName, out);
+	//c.getSurf().shader(customPass.shader);
     this.filter(src, customPass, c.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
     c.getSurf().endDraw();
     

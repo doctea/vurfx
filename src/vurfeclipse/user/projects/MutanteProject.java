@@ -489,10 +489,13 @@ public class MutanteProject extends Project implements Serializable {
     
 
     //ils1.setupFilters();
-    switcher.bindSequence("ils1_choose", ils1.getSequence("choose_0"), 2+switcher.getSequenceCount()/4);//32);
+    /*switcher.bindSequence("ils1_choose", ils1.getSequence("choose_0"), 2+switcher.getSequenceCount()/4);//32);
     switcher.bindSequence("ils2_choose", ils2.getSequence("choose_1"), 2+switcher.getSequenceCount()/4);//32);
     switcher.bindSequence("ils2_choose", ils1.getSequence("choose_2"), 2+switcher.getSequenceCount()/4);//32);
-    switcher.bindSequence("ils2_choose", ils2.getSequence("choose_3"), 2+switcher.getSequenceCount()/4);//32);
+    switcher.bindSequence("ils2_choose", ils2.getSequence("choose_3"), 2+switcher.getSequenceCount()/4);//32);*/
+    
+    switcher.bindAll("ils1_choosers_", ils1.getSequences(), 100);
+    switcher.bindAll("ils2_choosers_", ils1.getSequences(), 100);
    
 
     /*switcher.addSequence("word_take_trips",

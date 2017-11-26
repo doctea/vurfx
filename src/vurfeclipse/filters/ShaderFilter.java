@@ -7,6 +7,8 @@ import ch.bildspur.postfx.Supervisor;
 import ch.bildspur.postfx.builder.PostFX;
 import ch.bildspur.postfx.pass.Pass;
 import ch.bildspur.postfx.pass.SobelPass;
+import net.neilcsmith.praxis.video.pgl.PGLShader;
+import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import vurfeclipse.APP;
@@ -41,8 +43,12 @@ public class ShaderFilter extends Filter {
 	    PGraphics pass = supervisor.getNextPass();
 	    supervisor.clearPass(pass);
 
+	    //pass.setSize(sc.w, sc.h);
+	    //pass.setSize(1920, 1080); //sc.w, sc.h);
+	    //pass.res
 	    pass.beginDraw();
 	    pass.shader(shader);
+	    //pass.imageMode(PApplet.CORNERS);
 	    pass.image(supervisor.getCurrentPass(), 0, 0, sc.w, sc.h);
 	    pass.endDraw();
 	  }
@@ -110,13 +116,31 @@ public class ShaderFilter extends Filter {
     //return this;
   }
 
-  public void initShader(String shaderFragName, String shaderVertName) {
+  synchronized public void initShader(String shaderFragName, String shaderVertName) {
 	  println("initShader("+shaderFragName+","+shaderVertName+")");
+	  //out.init(sc.w, sc.h, APP.getApp().ARGB);//, format); //
+	  //out.beginDraw();
+	  //PGraphics oldg = APP.getApp().g;
+	  //APP.getApp().g = out;
 	  if (shaderVertName!="")
-		  glFilter = APP.getApp().loadShader(shaderFragName,shaderVertName); //new GLTextureFilter(APP.getApp(), shaderName);
+		  glFilter = 
+		  	APP.getApp(). 
+		  	//out.
+		  	loadShader(shaderFragName,shaderVertName); //new GLTextureFilter(APP.getApp(), shaderName);
+		  //new PGLShader(APP.getApp(), shaderFragName, shaderVertName);
 	  else
-		  glFilter = APP.getApp().loadShader(shaderFragName);
+		  glFilter = 
+		  	APP.getApp().
+		  	//out.
+		  	loadShader(shaderFragName);
+		  //new PGLShader(APP.getApp(), shaderFragName);
+	  //APP.getApp().g = oldg;
+	  //out.endDraw();
 	  
+	  //glFilter = new PGLShader((PApplet)APP.getApp(), shaderFragName, shaderVertName);
+	  //if (!shaderFragName.equals("")) glFilter.setFragmentShader(shaderFragName);
+	  //if (!shaderVertName.equals("")) glFilter.setVertexShader(shaderVertName);
+	  	  
 	  //glFilter.bind();	// force compilation when loaded to save hassle later
 	  //glFilter.unbind();
 	  glFilter.init();
@@ -135,7 +159,7 @@ public class ShaderFilter extends Filter {
   
   transient private HashMap<PShader,Pass> passes = new HashMap<PShader,Pass>();
   
-  protected CustomPass getPassForShader(PShader tf, PGraphics out, PGraphics src) {
+  synchronized protected CustomPass getPassForShader(PShader tf, PGraphics out, PGraphics src) {
 	  CustomPass p = (CustomPass) this.passes.get(tf);
 	  if (p==null) {
 		p = new CustomPass(tf); //,"blend mode ,"blend mode..!");
@@ -189,7 +213,7 @@ public class ShaderFilter extends Filter {
   int autoLimit = 5;
 
   int pixelCount;
-  public boolean applyMeatToBuffers() {
+  synchronized public boolean applyMeatToBuffers() {
     //t.copy(src.getTexture());
 	//c.getSurf().image(src,0,0);
 
@@ -200,9 +224,12 @@ public class ShaderFilter extends Filter {
 	customPass.shader.set("src_tex_unit0", src);
 	c.getSurf().beginDraw();
     this.filter(src/*c.getSurf()*/, customPass, c.getSurf()); //out);
+	//c.getSurf().resetShader();
+	//c.getSurf().shader(customPass.shader);
     c.getSurf().endDraw();
     
 	out.beginDraw();
+	out.imageMode(APP.getApp().CORNERS);
 	out.image(c.getSurf(),0,0,sc.w,sc.h);
 	/*out.color(255,128,96);
 	out.rect(0, 0, 50, 50);

@@ -33,7 +33,7 @@ public class PharmacyProject extends Project implements Serializable {
 
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
 
-  public PharmacyProject(int w, int h, String gfx_mode) {
+  public PharmacyProject(int w, int h) {
     super(w,h);
   }
 

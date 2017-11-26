@@ -21,6 +21,8 @@ import java.io.PrintStream;
 import java.text.MessageFormat;
 import java.util.*;
 
+import com.sun.glass.ui.Screen;
+
 //import javax.media.opengl.*;
 import processing.opengl.*;
 import ch.bildspur.postfx.builder.*;
@@ -127,17 +129,17 @@ public class VurfEclipse extends PApplet {
 	//config settings
 	
 	// select resolution
-	boolean hdRes = false; //false;//true;
-	boolean mdRes = true; //true;
-	boolean projRes = false;
+	boolean hdRes = false;//true;
+	boolean mdRes = false; //true; //true;
+	boolean projRes = true;
 	boolean ultrahiRes = false;
 	boolean hiRes = true; //true;
 	boolean medRes = false; //true;
 	boolean lowRes = false;
 	// all false for really low res 
 
-	boolean fullscreen = true;//false;
-	int fullscreen_num = 2;
+	boolean fullscreen = false;//true;//false;
+	int fullscreen_num = 3;
 
 	int title_adjust = -50; //-100;	// amount to take off the height to compensate for window title, system bar etc
 	int
@@ -185,7 +187,7 @@ public class VurfEclipse extends PApplet {
 		//PApplet.runSketch(new String[] { "--present", "vurfeclipse.VurfEclipse" }, new VurfEclipse());
 		//PApplet.
 		//PApplet.main(new String[] { "vurfeclipse.VurfEclipse" });
-		PApplet.main("vurfeclipse.VurfEclipse");
+		PApplet.main("vurfeclipse.VurfEclipse",args);
 	}
 
 	int sizeCount = 0;
@@ -209,10 +211,23 @@ public class VurfEclipse extends PApplet {
 	@Override
 	public void settings () {
 		 APP.setApp(this);
-		 		 
+		 
 		 System.out.println(refCount + ": -------------==================== \\\\/URF/ [1] settings() ===================--------------");
 		 System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
+		 if (this.args!=null) {
+			 List<String> args = Arrays.asList(this.args);
+			 System.out.println("Passed command line arguments: " + Arrays.deepToString(this.args));
+			 if (args.contains("fullscreen")) {
+				 println("Setting fullscreen = true from commandline switch!");
+				 this.fullscreen = true;
+			 }
+			 if (args.contains("fullscreen_num")) {
+				 this.fullscreen_num = Integer.parseInt(args.get(args.indexOf("fullscreen_num")+1));
+				 println("Setting fullscreen_num = " + this.fullscreen_num + " from commandline switch!");
+			 }
+		 }
+ 		 	 
 		 //size(output_width, output_height + gw_height, gfx_mode);
 		 
 		 boolean enableDebugStream = false;
@@ -256,13 +271,17 @@ public class VurfEclipse extends PApplet {
 		 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 		 
 		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
-
-		 println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
 		 
 		 if (fullscreen) {
+			 //((PGraphicsOpenGL)this.offscreen.getSurf()).updatePixelSize();
 			 println("going fullscreen on " + fullscreen_num);
+			 //this.setSize(output_width, output_height);
+			 this.setSize(desired_width, desired_height);
 			 this.fullScreen(P3D, fullscreen_num);
+			 //this.g.init(desired_width, gw_height, ARGB);
+			 //
 		 } else {
+			 println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
 			 this.size(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
 		 }
 		 
@@ -274,6 +293,8 @@ public class VurfEclipse extends PApplet {
 		 refCount++;
 		 println(refCount + ": -------------==================== \\\\/URF/ [2] setup() ===================--------------");
 
+		 //this.g.setSize(1920,1080); //desired_width/2, desired_height);
+		 //this.g.setSize(Screen.getMainScreen().getWidth(), Screen.getMainScreen().getHeight());
 
 		 
 		 /*if (refCount==1) {
@@ -307,6 +328,7 @@ public class VurfEclipse extends PApplet {
 			 fs.enter();
 		 }*/
 		 initialiseGraphics();
+		 //this.setSize(output_width, output_height);
 
 		 //colorMode(ARGB);
 		 colorMode(RGB, 255, 255, 255, 100);
@@ -377,14 +399,17 @@ public class VurfEclipse extends PApplet {
 		  PJOGL pgl = (PJOGL)beginPGL();
 		  //pgl.gl.getGLProfile().
 		  pgl.gl.setSwapInterval(1);
+		  //pgl.presentX = 1920;
+		  //pgl.presentY = 1080;
+		  //pgl..hei
 		  endPGL();
 		  
 		  hint(DISABLE_DEPTH_TEST);
 		  
 		  frameRate(60);
 
-	     println("initialiseGraphics() setting up PostFX");
-	     setFxs(new PostFXSupervisor(this));
+	      //println("initialiseGraphics() setting up PostFX");
+	      //setFxs(new PostFXSupervisor(this, output_width, output_height));
 	}
 	
 	public boolean isReady() {
@@ -401,7 +426,7 @@ public class VurfEclipse extends PApplet {
 	public int timeMillis;
 	//GLTextureWindow texWin;
 	@Override
-	public void draw () {
+	synchronized public void draw () {
 		//System.out.println("Draw!");
 		if (!isReady()) {
 			//println("Not yet isReady!()");
@@ -409,6 +434,13 @@ public class VurfEclipse extends PApplet {
 		} /*else {
 			println("is ready!");
 		}*/
+		
+		if (getFxs()==null) {
+			setFxs(new PostFXSupervisor(this,output_width,output_height)); //.setResolution(output_width, output_height); //, 1920, 1080)); //output_width, output_height));
+			//this.setSize(desired_width, desired_height);
+			//this.g.init(APP.getApp().displayWidth, APP.getApp().displayHeight, ARGB);	// important !
+			this.g.init(output_width, output_height, ARGB);	// important !
+		}
 	
 		/*if (texWin==null) {
 			GLTextureWindow texWin = new GLTextureWindow(this, 0, 0, this.desired_width, this.desired_height);
@@ -429,9 +461,10 @@ public class VurfEclipse extends PApplet {
 	
 		 //pgl.beginGL();
 		 if (offscreen==null) 
-			 offscreen = pr.getCanvas("/out"); //pr.createCanvas("/out", "Main out");
+			 offscreen = pr.getCanvas("/out"); //, this.sketchWidth(), this.sketchHeight()); //output_width, output_height); //pr.createCanvas("/out", "Main out");
 	
 		 if (frameCount>25) {	// skip rendering first 25 frames
+			 offscreen.getSurf().imageMode(CENTER);
 			 pr.applyGL(offscreen, output_width, output_height);
 			 //texWin.render();
 		 }
@@ -442,8 +475,27 @@ public class VurfEclipse extends PApplet {
 		 }*/
 		 
 		 //this.imageMode(0);
-		 this.background(0);
+		 this.background(0);	// was it always thus?
+		 this.imageMode(CORNERS);
+		 //offscreen.getSurf().imageMode(CENTER);
+		 //this.setSize(APP.getApp().displayWidth, APP.getApp().displayHeight);
+		 //this.g.scale(0.25f);//0.8f); //1.5f);
+		 //this.g.scale(0.75f);
+
 		 this.image(offscreen.getSurf(), 0, 0, APP.getApp().sketchWidth(), APP.getApp().sketchHeight()); //output_width, output_height);	// actually draw to applet!
+		 //this.resetMatrix();
+		 //this.g.init(desired_width, desired_height, ARGB);
+
+		 //this.image(offscreen.getSurf(), 0, 0, 1920, APP.getApp().displayHeight); //output_width, output_height);	// actually draw to applet!
+		 //this.applyMatrix(offscreen.getSurf().getMatrix());
+		 //this.mask(this.get());//offscreen.getSurf());
+		 //this.image(offscreen.getSurf(), 0, 0, output_width, output_height);	// actually draw to applet!
+		 //this.applyMatrix((PMatrix3D)offscreen.getSurf().getMatrix().scale(1.5f);
+		 //this.scale(1.5f);
+		 //this.g.scale(1.f);
+		 //this.pi
+		 //this.image(offscreen.getSurf(), 0, 0, output_width, output_height);	// actually draw to applet!
+
 	
 		 if (syphon) drawSyphon (offscreen.getSurf());
 	
@@ -521,8 +573,9 @@ public class VurfEclipse extends PApplet {
 		return fxs;
 	}
 
-	public void setFxs(PostFXSupervisor fxs) {
+	public PostFXSupervisor setFxs(PostFXSupervisor fxs) {
 		this.fxs = fxs;
+		return this.getFxs();
 	}
 	
 	/**

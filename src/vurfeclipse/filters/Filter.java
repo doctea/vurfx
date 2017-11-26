@@ -411,7 +411,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     }
   }
 
-  public HashMap<String,Object> getPresetValues () {
+  synchronized public HashMap<String,Object> getPresetValues () {
     HashMap<String,Object> h = new HashMap<String,Object>();
     Iterator i = parameters.entrySet().iterator();
     while(i.hasNext()) {

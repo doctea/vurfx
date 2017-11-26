@@ -386,20 +386,22 @@ public abstract class Project implements Serializable {
 
 	PGraphics offscreen = offscreen_canvas.getSurf(); 
 	
-	offscreen.beginDraw();
+	//offscreen.beginDraw();
 	//offscreen.beginDraw();
     //gfx.clear(0);
     //GLGraphicsOffScreen temp = createGLBuffer(w,h,gfx_mode);
     //offscreen.background(0,0,0,255);  // added
     //gfx.clear(0);
 
+	
     Canvas out = getCanvas(getPath()+"out");
+    out.getSurf().imageMode(APP.getApp().CENTER);
 
     //out.getSurf().background(0);
 
     //offscreen.background(APP.getApp().random(255));
 
-    offscreen.endDraw();
+    //offscreen.endDraw();
     Iterator<Scene> it = scenes.iterator();
     while(it.hasNext()) {
       Scene sc = (Scene) it.next();
@@ -415,9 +417,10 @@ public abstract class Project implements Serializable {
     ////gfx.image(buffers[BUF_OUT].getTexture(),0,0,w,h);
 
     //println("Outputting to " + offscreen);
-    offscreen.beginDraw();
+    /*offscreen.beginDraw();
+    out.getSurf().imageMode(APP.getApp().CENTER);
     offscreen.image(out.getSurf(),0,0,w,h);//w,h);
-    offscreen.endDraw();
+    offscreen.endDraw();*/
 
     //offscreen.endDraw();
     ////gfx.image(buffers[BUF_INP1].getTexture(),0,0,w,h);
