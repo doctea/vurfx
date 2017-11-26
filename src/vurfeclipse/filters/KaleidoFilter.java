@@ -23,21 +23,37 @@ public class KaleidoFilter extends ShaderFilter {
     this.offsetx = x;
     this.offsety = y;
   }*/
+  
+  @Override
+  public void setParameterDefaults () {
+	    super.setParameterDefaults();
+
+	    addParameter("mirror_x", new Boolean(false));
+	    addParameter("mirror_y", new Boolean(false));
+
+	    addParameter("half_x", new Boolean(false));
+	    addParameter("half_y", new Boolean(false));
+  }
 
   public Filter nextMode() {
     if (flipHorizontal&&flipVertical) {
       flipVertical = false;
-      glFilter.set("mirror_y",0);
+      //glFilter.set("mirror_y",0);
+      this.changeParameterValue("mirror_y", false);
     } else if (flipHorizontal&&!flipVertical) {
       flipHorizontal = false;
       flipVertical = true;
-      glFilter.set("mirror_y",1);
-      glFilter.set("mirror_x",0);
+      this.changeParameterValue("mirror_y", true);
+      this.changeParameterValue("mirror_x", false);
+      //glFilter.set("mirror_y",1);
+      //glFilter.set("mirror_x",0);
     } else if (!flipHorizontal&&flipVertical) {
       flipVertical = true;
       flipHorizontal = true;
-      glFilter.set("mirror_y",1);
-      glFilter.set("mirror_x",1);
+      //glFilter.set("mirror_y",1);
+      //glFilter.set("mirror_x",1);
+      this.changeParameterValue("mirror_y", true);
+      this.changeParameterValue("mirror_x", true);
     } else {
       println("wtf");
     }
