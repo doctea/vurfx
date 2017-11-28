@@ -2,7 +2,9 @@ package vurfeclipse.sequence;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -26,6 +28,50 @@ abstract public class Sequence implements Serializable, Mutable {
 
 	transient protected ArrayList<Mutable> mutables = new ArrayList<Mutable>();
 
+	static public Sequence createSequence(String classname, Scene host) {
+		System.out.println("got classname " + classname);
+		try {
+			Sequence seq;
+			if (classname.contains("$")) {
+				String[] spl = classname.split("\\$");
+				Class<?> clazz = Class.forName(spl[0]); //Class.forName(classname); host.getClass();//
+				Class<?> inner = Class.forName(classname);
+				//System.out.println (clazz.getConstructors());
+				//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+				Constructor<?> ctor = inner.getConstructor(clazz); //Scene.class,Integer.TYPE);
+				//Object seq = ctor.newInstance(); //(Scene)null, 0);
+				ctor.setAccessible(true);
+				seq = (Sequence) ctor.newInstance(host); //(Scene)null, (int)0);				
+			} else {
+				Class<?> clazz = Class.forName(classname);
+				//System.out.println (clazz.getConstructors());
+				//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+				Constructor<?> ctor = clazz.getConstructor(); //Scene.class,Integer.TYPE);
+				//Object seq = ctor.newInstance(); //(Scene)null, 0);
+				seq = (Sequence) ctor.newInstance(null); //(Scene)null, (int)0);
+			}
+			seq.setHost(host);
+			return (Sequence) seq;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public HashMap<String,Object> collectParameters() {
+		HashMap<String,Object> params = new HashMap<String,Object> ();
+		params.put("class", this.getClass().getCanonicalName());
+		if (this.host!=null) params.put("hostPath", this.host.getPath());
+		params.put("seed", this.getSeed());
+		params.put("lengthMillis", this.lengthMillis);
+		return params;
+	}
+	
+	public void loadParameters(HashMap<String,Object> params) {
+		if (params.containsKey("seed")) this.seed = (Long) params.get("seed"); //Long.parseLong((String)params.get("seed"));
+		if (params.containsKey("lengthMillis")) this.lengthMillis = (Integer) params.get("lengthMillis"); //Integer.parseInt((String)params.get("lengthMillis"));
+	}
 
 	protected Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
 	private boolean disableHostMute;

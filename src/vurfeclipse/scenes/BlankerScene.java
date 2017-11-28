@@ -32,7 +32,8 @@ public class BlankerScene extends SimpleScene {
 		//sequences.put("preset 3", new TunnelPulseSequence2(this, 2000, false));
 	}
 	
-	abstract class BlankSequence extends Sequence {
+	public abstract class BlankSequence extends Sequence {
+		public BlankSequence() { super(); }
 		public BlankSequence(BlankerScene sc, int i) {
 			super(sc,i);
 		}
@@ -49,7 +50,8 @@ public class BlankerScene extends SimpleScene {
 		
 	}		
 	
-	class Standard extends BlankSequence {
+	public class Standard extends BlankSequence {
+		public Standard() { super(); }
 		public Standard(BlankerScene sc, int i) {
 			super(sc, i);
 			// TODO Auto-generated constructor stub
@@ -64,7 +66,8 @@ public class BlankerScene extends SimpleScene {
 		@Override public void onStop() {	}
 	}
 	
-	class Feedback extends BlankSequence {
+	public class Feedback extends BlankSequence {
+		public Feedback() { super(); }
 		public Feedback(BlankerScene sc, int i) {
 			super(sc, i);
 			// TODO Auto-generated constructor stub
@@ -85,7 +88,8 @@ public class BlankerScene extends SimpleScene {
 		}
 	}	
 	
-	class Fade extends BlankSequence {
+	public class Fade extends BlankSequence {
+		public Fade() { super(); }
 		public Fade(BlankerScene sc, int i) {
 			super(sc, i);
 			// TODO Auto-generated constructor stub

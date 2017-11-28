@@ -89,100 +89,106 @@ public class PlasmaScene extends Scene {
 		sequences.put("preset 3", new RGBFilterSequence3(this, 4000));
   }
 
-}
+	
+	public class RGBFilterSequence1 extends Sequence {
+		public RGBFilterSequence1() {}
+		public RGBFilterSequence1(PlasmaScene plasmaFX1, int i) {
+			// TODO Auto-generated constructor stub
+			super(plasmaFX1,i);
+		}
+		@Override public ArrayList<Mutable> getMutables() {
+			ArrayList<Mutable> muts = new ArrayList<Mutable>();
+			muts.add(host);//.getFilter("BlendDrawer1"));
+			return muts;
+		}
+		public void setValuesForNorm(double norm, int iteration) {
+			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
+			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
+			//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm*norm*norm));
+		}
+		@Override public void onStart() {
+			//this.setLengthMillis((int)random(1,5) * 500);
+			/*for (int i = 0 ; i < random(2,10) ; i++)
+				host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
+			for (int i = 0 ; i < random(2,10) ; i++)
+				host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
+			host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) random(0,((PlasmaScene)this.host).colourModeCount)));
+	
+			host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
+	
+		}
+		@Override public void onStop() {	}
+	}
 
-class RGBFilterSequence1 extends Sequence {
-	public RGBFilterSequence1(PlasmaScene plasmaFX1, int i) {
-		// TODO Auto-generated constructor stub
-		super(plasmaFX1,i);
+	public class RGBFilterSequence2 extends Sequence {
+		public RGBFilterSequence2() {}
+		public RGBFilterSequence2(PlasmaScene plasmaFX1, int i) {
+			// TODO Auto-generated constructor stub
+			super(plasmaFX1,i);
+		}
+		@Override public ArrayList<Mutable> getMutables() {
+			ArrayList<Mutable> muts = new ArrayList<Mutable>();
+			muts.add(host);//.getFilter("BlendDrawer1"));
+			return muts;
+		}
+		public void setValuesForNorm(double norm, int iteration) {
+			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
+			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
+			//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm*norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
+		}
+		@Override public void onStart() {
+			//this.setLengthMillis((int)random(1,5) * 500);
+			/*for (int i = 0 ; i < random(2,10) ; i++)
+				host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
+			for (int i = 0 ; i < random(2,10) ; i++)
+				host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
+			host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int)random(0,((PlasmaScene)this.host).colourModeCount)));
+	
+			host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
+	
+		}
+		@Override public void onStop() {	}
 	}
-	@Override public ArrayList<Mutable> getMutables() {
-		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-		muts.add(host);//.getFilter("BlendDrawer1"));
-		return muts;
-	}
-	public void setValuesForNorm(double norm, int iteration) {
-		//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
-		if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
-		//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
-		host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm));
-		host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
-		host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm*norm*norm));
-	}
-	@Override public void onStart() {
-		//this.setLengthMillis((int)random(1,5) * 500);
-		/*for (int i = 0 ; i < random(2,10) ; i++)
-			host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
-		for (int i = 0 ; i < random(2,10) ; i++)
-			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
-		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) random(0,((PlasmaScene)this.host).colourModeCount)));
 
-		host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
+	public class RGBFilterSequence3 extends Sequence {
+		public RGBFilterSequence3() {}
+	
+		public RGBFilterSequence3(PlasmaScene plasmaFX1, int i) {
+			// TODO Auto-generated constructor stub
+			super(plasmaFX1,i);
+		}
+		@Override public ArrayList<Mutable> getMutables() {
+			ArrayList<Mutable> muts = new ArrayList<Mutable>();
+			muts.add(host);//.getFilter("BlendDrawer1"));
+			return muts;
+		}
+		public void setValuesForNorm(double norm, int iteration) {
+			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
+			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
+			//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
+		}
+		@Override public void onStart() {
+			//this.setLengthMillis((int)random(1,5) * 500);
+			/*for (int i = 0 ; i < random(2,10) ; i++)
+				host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
+			for (int i = 0 ; i < random(2,10) ; i++)
+				host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
+			host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) random(0,((PlasmaScene)this.host).colourModeCount)));
+	
+			host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
+	
+		}
+		@Override public void onStop() {	}
+	}
 
-	}
-	@Override public void onStop() {	}
-}
 
-class RGBFilterSequence2 extends Sequence {
-	public RGBFilterSequence2(PlasmaScene plasmaFX1, int i) {
-		// TODO Auto-generated constructor stub
-		super(plasmaFX1,i);
-	}
-	@Override public ArrayList<Mutable> getMutables() {
-		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-		muts.add(host);//.getFilter("BlendDrawer1"));
-		return muts;
-	}
-	public void setValuesForNorm(double norm, int iteration) {
-		//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
-		if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
-		//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
-		host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm));
-		host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm*norm));
-		host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
-	}
-	@Override public void onStart() {
-		//this.setLengthMillis((int)random(1,5) * 500);
-		/*for (int i = 0 ; i < random(2,10) ; i++)
-			host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
-		for (int i = 0 ; i < random(2,10) ; i++)
-			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
-		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int)random(0,((PlasmaScene)this.host).colourModeCount)));
-
-		host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
-
-	}
-	@Override public void onStop() {	}
-}
-
-class RGBFilterSequence3 extends Sequence {
-	public RGBFilterSequence3(PlasmaScene plasmaFX1, int i) {
-		// TODO Auto-generated constructor stub
-		super(plasmaFX1,i);
-	}
-	@Override public ArrayList<Mutable> getMutables() {
-		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-		muts.add(host);//.getFilter("BlendDrawer1"));
-		return muts;
-	}
-	public void setValuesForNorm(double norm, int iteration) {
-		//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
-		if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
-		//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
-		host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm));
-		host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
-		host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
-	}
-	@Override public void onStart() {
-		//this.setLengthMillis((int)random(1,5) * 500);
-		/*for (int i = 0 ; i < random(2,10) ; i++)
-			host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
-		for (int i = 0 ; i < random(2,10) ; i++)
-			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
-		host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) random(0,((PlasmaScene)this.host).colourModeCount)));
-
-		host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
-
-	}
-	@Override public void onStop() {	}
 }

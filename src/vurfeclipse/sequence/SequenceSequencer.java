@@ -14,6 +14,8 @@ import java.util.Map.Entry;
 
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.VurfEclipse;
+import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.Sequence;
@@ -590,7 +592,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  }*/
 	
-	@Override public boolean sendKeyPressed(char key) {
+	@Override 
+	public boolean sendKeyPressed(char key) {
 		/*if (key=='w') {
     	try {
     			saveHistory();
@@ -614,6 +617,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     } else if (key=='p') {
     	this.historyMode = !this.historyMode;
     	println ("historyMode set to " + historyMode);
+    } else if (key=='f') {
+    	saveSequence(this.getCurrentSequenceName() + ((VurfEclipse)APP.getApp()).dateStamp());
+    } else if (key=='F') {
+    	//loadSequence(host.getApp().select.selectInput("Load a sequence", activeSequenceName));
+    	loadSequence("test.xml");
     } else if (super.sendKeyPressed(key)) {
     } else {
     	return false;
@@ -621,6 +629,43 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return true;
 	}
 	
+	private void loadSequence(String filename) {
+	  	HashMap<String, Object> input;
+	  	try {
+	  		//input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
+	  		input = (HashMap<String, Object>) XMLSerializer.read(filename);
+	  		
+	  		Scene host = this.host.getSceneForPath((String)input.get("hostPath"));
+	  		Sequence newSeq = Sequence.createSequence((String) input.get("class"), host);
+	  		newSeq.loadParameters(input);
+	  		this.addSequence(filename, newSeq); //Sequence.createSequence((String) input.get("class")));
+	  		this.changeSequence(filename);
+	  	} catch (Exception e1) {
+	  		// TODO Auto-generated catch block
+	  		System.err.println("Caught " + e1 + " trying to load sequence '" + filename + "'");
+	  		e1.printStackTrace();
+	  		//return this;
+	  	}		
+	}
+
+
+	private void saveSequence(String filename) {
+		if (!filename.endsWith(".xml")) filename += ".xml";
+		filename = filename.replace(':', '_');
+		
+		Sequence toSave = this.getActiveSequence();
+		HashMap<String,Object> output; //= new HashMap<String,Object>();
+		output = toSave.collectParameters();
+		try {
+			XMLSerializer.write(output, filename);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.err.println("Caught " + e.toString() + " trying to save sequence of class " + toSave.getClass().getSimpleName() + " to '" + filename + "'");
+			e.printStackTrace();
+		}
+	}
+
+
 	protected Bang saveHistoryButton;
 	protected Bang loadHistoryButton;
 

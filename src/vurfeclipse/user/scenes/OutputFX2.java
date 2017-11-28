@@ -84,6 +84,7 @@ public class OutputFX2 extends SimpleScene {
 
 
 	class OutputSequence1 extends Sequence {
+		public OutputSequence1() {}
 		public OutputSequence1(OutputFX2 outputFX2, int i) {
 			super(outputFX2,i);
 		}
@@ -123,6 +124,7 @@ public class OutputFX2 extends SimpleScene {
 	}
 
 	class FeedbackSequence1 extends Sequence {
+		public FeedbackSequence1() {}
 		public FeedbackSequence1(OutputFX2 outputFX2, int i) {
 			// TODO Auto-generated constructor stub
 			super(outputFX2, i);

@@ -1,8 +1,11 @@
 package vurfeclipse.sequence;
 
+import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
+import vurfeclipse.APP;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 
@@ -10,11 +13,13 @@ public class ChainSequence extends Sequence {
 
 	ArrayList<Sequence> chain = new ArrayList<Sequence>();
 	
-	public ChainSequence(Scene host, int i) {
-		super(host,i);
+	public ChainSequence() { super(); }
+	
+	public ChainSequence(Scene host, int lengthMillis) {
+		super(host,lengthMillis);
 	}
-	public ChainSequence(int i) {
-		super(i);
+	public ChainSequence(int lengthMillis) {
+		super(lengthMillis);
 	}
 	public ChainSequence addSequence(Sequence seq) {
 		seq.setLengthMillis(this.getLengthMillis());
@@ -92,4 +97,31 @@ public class ChainSequence extends Sequence {
 		}*/
 	}
 
+	@Override
+	public HashMap<String,Object> collectParameters() {
+		HashMap<String,Object> params = super.collectParameters();
+		ArrayList<HashMap<String,Object>> chains = new ArrayList<HashMap<String,Object>>();
+		for (Sequence cs : chain) {
+			chains.add(cs.collectParameters());
+		}
+		params.put("chain",  chains);
+		/*params.put("filterPath", filterPath);
+		params.put("parameterName", parameterName);
+		params.put("value", "value");*/
+		return params;
+	}
+	
+	@Override
+	public void loadParameters(HashMap<String,Object> params) {
+		super.loadParameters(params);
+		ArrayList<HashMap<String,Object>> chains = (ArrayList<HashMap<String,Object>>) params.get("chain");
+		for (HashMap<String,Object> cs : chains) {
+			// cs contains info to build a new ChainSequence and attach it
+			//ChainSequence n = new ChainSequence(this.host, (Integer) cs.get("lengthMillis"));
+			Sequence n = Sequence.createSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
+			n.loadParameters(cs);
+			this.addSequence(n);
+		}		
+	}
+	
 }

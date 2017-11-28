@@ -225,7 +225,7 @@ public class TextFlashScene extends Scene {
   		return this;
   	}
 
-	class TextFlashSequence1 extends Sequence {
+	public class TextFlashSequence1 extends Sequence {
 		public TextFlashSequence1(TextFlashScene fx, int i) {
 			// TODO Auto-generated constructor stub
 			super(fx,i);
