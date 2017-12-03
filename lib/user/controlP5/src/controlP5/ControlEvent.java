@@ -3,7 +3,7 @@ package controlP5;
 /**
  * controlP5 is a processing gui library.
  *
- *  2006-2012 by Andreas Schlegel
+ * 2006-2015 by Andreas Schlegel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -20,8 +20,8 @@ package controlP5;
  * Boston, MA 02111-1307 USA
  *
  * @author 		Andreas Schlegel (http://www.sojamo.de)
- * @modified	10/22/2012
- * @version		1.5.2
+ * @modified	04/14/2016
+ * @version		2.2.6
  *
  */
 
@@ -43,7 +43,7 @@ public class ControlEvent {
 
 	public static int GROUP = 2;
 
-	protected final ControllerInterface<?> _myController;
+	protected final ControllerInterface< ? > _myController;
 
 	protected boolean isTab;
 
@@ -55,9 +55,10 @@ public class ControlEvent {
 
 	/**
 	 * 
-	 * @param theController Controller
+	 * @param theController
+	 *            Controller
 	 */
-	protected ControlEvent(Controller<?> theController) {
+	protected ControlEvent( Controller< ? > theController ) {
 		_myController = theController;
 		isTab = false;
 		isController = true;
@@ -66,9 +67,10 @@ public class ControlEvent {
 
 	/**
 	 * @exclude
-	 * @param theController Controller
+	 * @param theController
+	 *            Controller
 	 */
-	public ControlEvent(Tab theController) {
+	public ControlEvent( Tab theController ) {
 		_myController = theController;
 		isTab = true;
 		isGroup = false;
@@ -77,21 +79,22 @@ public class ControlEvent {
 
 	/**
 	 * @exclude
-	 * @param theController Controller
+	 * @param theController
+	 *            Controller
 	 */
-	public ControlEvent(ControllerGroup<?> theController) {
+	public ControlEvent( ControllerGroup< ? > theController ) {
 		_myController = theController;
 		isTab = false;
 		isGroup = true;
 		isController = false;
 	}
 
-	public float getValue() {
-		return _myController.getValue();
+	public float getValue( ) {
+		return _myController.getValue( );
 	}
 
-	public String getStringValue() {
-		return ((Controller<?>) _myController).getStringValue();
+	public String getStringValue( ) {
+		return ( ( Controller< ? > ) _myController ).getStringValue( );
 	}
 
 	/**
@@ -99,8 +102,8 @@ public class ControlEvent {
 	 * 
 	 * @return float[]
 	 */
-	public float[] getArrayValue() {
-		return _myController.getArrayValue();
+	public float[] getArrayValue( ) {
+		return _myController.getArrayValue( );
 	}
 
 	/**
@@ -111,8 +114,8 @@ public class ControlEvent {
 	 * @param theIndex
 	 * @return
 	 */
-	public float getArrayValue(int theIndex) {
-		return _myController.getArrayValue()[theIndex];
+	public float getArrayValue( int theIndex ) {
+		return _myController.getArrayValue( )[ theIndex ];
 	}
 
 	/**
@@ -120,8 +123,8 @@ public class ControlEvent {
 	 * 
 	 * @return Controller
 	 */
-	public Controller<?> getController() {
-		return ((Controller<?>) _myController);
+	public Controller< ? > getController( ) {
+		return ( ( Controller< ? > ) _myController );
 	}
 
 	/**
@@ -129,8 +132,8 @@ public class ControlEvent {
 	 * 
 	 * @return Tab Tab
 	 */
-	public Tab getTab() {
-		return (Tab) _myController;
+	public Tab getTab( ) {
+		return ( Tab ) _myController;
 	}
 
 	/**
@@ -138,8 +141,8 @@ public class ControlEvent {
 	 * 
 	 * @return ControlGroup
 	 */
-	public ControlGroup<?> getGroup() {
-		return (ControlGroup<?>) _myController;
+	public ControlGroup< ? > getGroup( ) {
+		return ( ControlGroup< ? > ) _myController;
 	}
 
 	/**
@@ -147,8 +150,8 @@ public class ControlEvent {
 	 * 
 	 * @return String
 	 */
-	public String getLabel() {
-		return ((Controller<?>) _myController).getLabel();
+	public String getLabel( ) {
+		return ( ( Controller< ? > ) _myController ).getLabel( );
 	}
 
 	/**
@@ -157,7 +160,7 @@ public class ControlEvent {
 	 * @see controlP5.Tab
 	 * @return boolean
 	 */
-	public boolean isTab() {
+	public boolean isTab( ) {
 		return isTab;
 	}
 
@@ -167,7 +170,7 @@ public class ControlEvent {
 	 * @see controlP5.Controller
 	 * @return boolean
 	 */
-	public boolean isController() {
+	public boolean isController( ) {
 		return isController;
 	}
 
@@ -177,7 +180,7 @@ public class ControlEvent {
 	 * @see controlP5.ControllerGroup
 	 * @return boolean
 	 */
-	public boolean isGroup() {
+	public boolean isGroup( ) {
 		return isGroup;
 	}
 
@@ -186,8 +189,8 @@ public class ControlEvent {
 	 * 
 	 * @return String
 	 */
-	public String getName() {
-		return _myController.getName();
+	public String getName( ) {
+		return _myController.getName( );
 	}
 
 	/**
@@ -196,19 +199,19 @@ public class ControlEvent {
 	 * 
 	 * @return
 	 */
-	public int getId() {
-		return _myController.getId();
+	public int getId( ) {
+		return _myController.getId( );
 	}
 
 	/**
 	 * @return int returned is ControlP5.CONTROLLER, or ControlP5.TAB, or ControlP5.GROUP
 	 */
-	public int getType() {
-		if (isController) {
+	public int getType( ) {
+		if ( isController ) {
 			return CONTROLLER;
-		} else if (isTab) {
+		} else if ( isTab ) {
 			return TAB;
-		} else if (isGroup) {
+		} else if ( isGroup ) {
 			return GROUP;
 		}
 		return -1;
@@ -220,8 +223,8 @@ public class ControlEvent {
 	 * @param theController
 	 * @return boolean
 	 */
-	public boolean isFrom(ControllerInterface<?> theController) {
-		return _myController.equals(theController);
+	public boolean isFrom( ControllerInterface< ? > theController ) {
+		return _myController.equals( theController );
 	}
 
 	/**
@@ -232,95 +235,105 @@ public class ControlEvent {
 	 * @return boolean
 	 */
 
-	public boolean isFrom(String theControllerName) {
-		return _myController.getName().equals(theControllerName);
+	public boolean isFrom( String theControllerName ) {
+		return _myController.getName( ).equals( theControllerName );
 	}
 
-	public boolean isAssignableFrom(Class<?> c) {
-		return _myController.getClass().isAssignableFrom(c);
-	}
-
-	/**
-	 * @exclude
-	 * @deprecated
-	 */
-	@Deprecated public int type() {
-		return getType();
+	public boolean isAssignableFrom( Class< ? > c ) {
+		return _myController.getClass( ).isAssignableFrom( c );
 	}
 
 	/**
 	 * @exclude
 	 * @deprecated
 	 */
-	@Deprecated public int id() {
-		return getId();
+	@Deprecated
+	public int type( ) {
+		return getType( );
 	}
 
 	/**
 	 * @exclude
 	 * @deprecated
 	 */
-	@Deprecated public String name() {
-		return getName();
+	@Deprecated
+	public int id( ) {
+		return getId( );
 	}
 
 	/**
 	 * @exclude
 	 * @deprecated
 	 */
-	@Deprecated public String label() {
-		return getLabel();
+	@Deprecated
+	public String name( ) {
+		return getName( );
 	}
 
 	/**
 	 * @exclude
 	 * @deprecated
 	 */
-	@Deprecated public float value() {
-		return getValue();
+	@Deprecated
+	public String label( ) {
+		return getLabel( );
 	}
 
 	/**
 	 * @exclude
 	 * @deprecated
 	 */
-	@Deprecated public String stringValue() {
-		return getStringValue();
+	@Deprecated
+	public float value( ) {
+		return getValue( );
 	}
 
 	/**
 	 * @exclude
 	 * @deprecated
 	 */
-	@Deprecated public float[] arrayValue() {
-		return getArrayValue();
+	@Deprecated
+	public String stringValue( ) {
+		return getStringValue( );
 	}
 
 	/**
 	 * @exclude
 	 * @deprecated
 	 */
-	@Deprecated public Controller<?> controller() {
-		return getController();
+	@Deprecated
+	public float[] arrayValue( ) {
+		return getArrayValue( );
 	}
 
 	/**
 	 * @exclude
 	 * @deprecated
 	 */
-	@Deprecated public ControlGroup<?> group() {
-		return getGroup();
+	@Deprecated
+	public Controller< ? > controller( ) {
+		return getController( );
 	}
 
 	/**
 	 * @exclude
 	 * @deprecated
 	 */
-	@Deprecated public Tab tab() {
-		return getTab();
+	@Deprecated
+	public ControlGroup< ? > group( ) {
+		return getGroup( );
 	}
-	
-	public String toString() {
-		return "[ ControlEvent from:"+_myController.getClass().getSimpleName()+" value:"+getValue()+" name:"+getName()+" ]";
+
+	/**
+	 * @exclude
+	 * @deprecated
+	 */
+	@Deprecated
+	public Tab tab( ) {
+		return getTab( );
+	}
+
+	public String toString( ) {
+		return "[ ControlEvent from:" + _myController.getClass( ).getSimpleName( ) + " value:" + getValue( ) + " name:" + getName( ) + " ]";
 	}
 }

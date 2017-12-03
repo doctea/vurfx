@@ -1,12 +1,12 @@
 package vurfeclipse.filters;
 
+import processing.core.PGraphics;
 import processing.core.PVector;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.streams.*;
 import vurfeclipse.*;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLGraphicsOffScreen;
 
 public class BlobDrawer extends SpiralDrawer {
 
@@ -48,7 +48,7 @@ public class BlobDrawer extends SpiralDrawer {
     this.addParameter("shape", new Integer(0), 0, b.shapesCount);
     //this.addParameter("colour",new Integer(255), new Integer(0), new Integer(2^32)); //APP.color(APP.random(255),APP.random(255),APP.random(255),128)));
 
-    this.addParameter("spiralCenter", new PVector(this.w/2, this.h/2));
+    //this.addParameter("spiralCenter", new PVector(this.w/2, this.h/2));		// duplicate, already specified in superclass?
 
     //this.addParameter("startRadius")
 
@@ -68,7 +68,7 @@ public class BlobDrawer extends SpiralDrawer {
         b.setTint((Integer)value);
     else if(paramName.equals("shape")) {   // there goes my hero <3
     	if (src==null) src = sc.getCanvas("pix0").getSurf();
-    	if (src!=null) b.setInput(src.getTexture());
+    	if (src!=null) b.setInput(src);
         b.setShape((Integer)value);
     }
     else if(paramName.equals("colour"))
@@ -91,7 +91,7 @@ public class BlobDrawer extends SpiralDrawer {
   int colourSwitchCount = 0;
   int colourSwitchEvery = 50; // frames
 
-  synchronized public void drawActualObject(GLGraphicsOffScreen out, float currRadius, float currentRadian) {
+  synchronized public void drawActualObject(PGraphics out, float currRadius, float currentRadian) {
 
 	/*colourSwitchCount++;
 	if (colourSwitchEvery<=colourSwitchCount) {*/
@@ -104,7 +104,7 @@ public class BlobDrawer extends SpiralDrawer {
     //b.setTint(255);
 	//if ((int)((VurfEclipse)APP.getApp()).random(100)==0) println("BlobDrawer is setting blob texture to " + src.getTexture());
     //b.setInput(sc.host.getCanvas("/out").getSurf().getTexture()); //src.getTexture());
-  	b.setInput(sc.getCanvas("temp3").getSurf().getTexture());
+  	b.setInput(sc.getCanvas("temp3").getSurf());//.getTexture());
     //b.setColour(255); //new Integer((int)APP.random(255) << (int)APP.random(255) << (int)APP.random(255) << 255));
     //b.setColour((int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255));
     //b.setColour((Integer)this.getParameterValue("colour"));

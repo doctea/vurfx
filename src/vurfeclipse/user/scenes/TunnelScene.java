@@ -42,11 +42,15 @@ public class TunnelScene extends SimpleScene {
 		sequences.put("preset 3", new TunnelPulseSequence2(this, 2000, false));
 	}
 	
-	class TunnelPulseSequence extends Sequence {
+	public class TunnelPulseSequence extends Sequence {
 
 		public TunnelPulseSequence(TunnelScene tunnelScene, int i) {
 			// TODO Auto-generated constructor stub
 			super(tunnelScene,i);
+		}
+
+		public TunnelPulseSequence() {
+			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -79,10 +83,14 @@ public class TunnelScene extends SimpleScene {
 		
 	}
 	
-	class TunnelPulseSequence2 extends TunnelPulseSequence {
+	public class TunnelPulseSequence2 extends TunnelPulseSequence {
 		boolean loop = true;
 		public TunnelPulseSequence2(TunnelScene tunnelScene, int i, boolean loop) {
 			super(tunnelScene, i);
+			// TODO Auto-generated constructor stub
+		}
+
+		public TunnelPulseSequence2() {
 			// TODO Auto-generated constructor stub
 		}
 
@@ -102,9 +110,13 @@ public class TunnelScene extends SimpleScene {
 		
 	}
 	
-	class TunnelFixedSequence extends TunnelPulseSequence {
+	public class TunnelFixedSequence extends TunnelPulseSequence {
 		public TunnelFixedSequence(TunnelScene tunnelScene, int i) {
 			super(tunnelScene, i);
+			// TODO Auto-generated constructor stub
+		}
+
+		public TunnelFixedSequence() {
 			// TODO Auto-generated constructor stub
 		}
 		
@@ -128,7 +140,11 @@ public class TunnelScene extends SimpleScene {
 		}
 	}
 	
-	class TunnelFixedSequence2 extends TunnelPulseSequence {
+	public class TunnelFixedSequence2 extends TunnelPulseSequence {
+
+		public TunnelFixedSequence2() {
+			// TODO Auto-generated constructor stub
+		}
 		public TunnelFixedSequence2(TunnelScene tunnelScene, int i) {
 			super(tunnelScene, i);
 			// TODO Auto-generated constructor stub
@@ -154,9 +170,10 @@ public class TunnelScene extends SimpleScene {
 		}
 	}	
 	
-	class TunnelAngledSequence extends TunnelPulseSequence {
+	public class TunnelAngledSequence extends TunnelPulseSequence {
 		int angle;
 		
+		public TunnelAngledSequence() { super(); }
 		public TunnelAngledSequence(TunnelScene tunnelScene, int i, int angle) {
 			super(tunnelScene, i);
 			this.angle = angle;
@@ -211,7 +228,13 @@ public class TunnelScene extends SimpleScene {
 					.changeParameterValue("BlendMode", new Integer(8))
 					//.changeParameterValue("X", new Float(0.5f))
 					//.changeParameterValue("Y", new Float(0.5f))
-		);		
+		);
+		
+		/*this.addFilter(
+				new ShaderFilter(this,"BlendCorners.glsl")
+				.setFilterName("Corner blender").setInputCanvas(getCanvasMapping("temp")).setOutputCanvas(getCanvasMapping("temp"))
+				.addParameter("blendAmount", new Float(1.0f), new Float(-20.0f),new Float(20.0f))
+		);*/
 		
 		this.addFilter(
 				new BlendDrawer(this).setFilterName("Blend_5").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))

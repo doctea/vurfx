@@ -87,7 +87,7 @@ class MyButton extends Controller<MyButton> {
     
     // replace the default view with a custom view.
     setView(new ControllerView() {
-      public void display(PApplet p, Object b) {
+      public void display(PGraphics p, Object b) {
         // draw button background
         na += (a-na) * 0.1; 
         p.fill(current,na);

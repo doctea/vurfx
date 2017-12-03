@@ -4,7 +4,9 @@ import vurfeclipse.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
 
+import processing.core.PGraphics;
 import processing.core.PVector;
 
 import vurfeclipse.*;
@@ -12,12 +14,13 @@ import vurfeclipse.filters.*;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.streams.*;
+import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.*;
-import codeanticode.glgraphics.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.ControllerGroup;
 import controlP5.Tab;
 
 public abstract class Scene implements CallbackListener, Serializable, Mutable, Targetable {
@@ -56,9 +59,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   protected int filterCount;
 
   //transient
-    public Filter[] filters;// = new Filter[filterCount];
+  public transient Filter[] filters;// = new Filter[filterCount];
 
-  protected HashMap<String,Sequence> sequences = new HashMap<String,Sequence>();
+  transient protected HashMap<String,Sequence> sequences = new HashMap<String,Sequence>();
 
   public HashMap<String,Sequence> getSequences() {
 	  if (sequences.size()==0) setupSequences();
@@ -68,6 +71,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
   }
   public Sequence getSequence(String name) {
+	  if (!getSequences().containsKey(name)) {
+		  println(this + " doesn't have a Sequence named '"+name+"'!");
+		  //System.exit(1);;
+		  //throw new Exception(this + " doesn't have a Sequence named '"+name+"'!");
+	  }
 	  return getSequences().get(name);
   }
   public Sequence makeChainSequenceFrom(String name,Sequence newSeq) {
@@ -103,9 +111,23 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
   public Object getObjectForPath(String path) {
     //println("Scene#getObjectForPath(" + path + ")");
-    if (path.equals("") || path.equals(this.getSceneName())) return this;
+    if (path.equals("") || path.equals(this.getSceneName()) || path.equals("mute")) 
+    		return this;
     String spl[] = path.split("/",2);
-    return getFilter(spl[1]);
+    
+    String spl2[] = spl[1].split("/");
+    //println ("got spl " + spl.toString() + " and spl2 " + spl2.toString());
+    String filterName = spl2[0];
+    if (spl2.length==1) {
+    		return getFilter(filterName);
+    } else if (spl2[1].equals("mute")) {
+    		return getFilter(filterName);
+    } else if (spl2[1].equals("pa")) {	// is a Parameter
+    	if (getFilter(filterName)!=null)
+    		return getFilter(filterName).getParameter(spl2[2]);
+    } 
+    
+    return null;    		
   }
 
   public Filter getFilter(String name) {
@@ -210,9 +232,13 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   public void setMuted() {
 	  this.setMuted(true);
   }
-  public void setMuted(boolean m) {
+  public synchronized void setMuted(boolean m) {
     this.muted = m;
-    if (null!=muteController) muteController.setValue(isMuted());
+    if (null!=muteController) {
+    	muteController.setBroadcast(false);
+    	muteController.setValue(isMuted());
+    	muteController.setBroadcast(true);
+    }
     //return this;
   }
   public void toggleMute() {
@@ -389,6 +415,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   }
   public abstract boolean setupFilters();
   boolean initialisedFilters = false;
+  
   public boolean initialiseFilters () {
 	if (initialisedFilters) return true;
     setupFilters();
@@ -404,6 +431,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
         if (filters[i].out==null) filters[i].setOutputCanvas(getCanvasMapping("out"));
         if (filters[i].src==null) filters[i].setInputCanvas(getCanvasMapping("src"));
+
+        filters[i].start();// 2017-10-29 --- filters were never getting started and so buffers not being initialised..?
 
       }
     }
@@ -442,11 +471,13 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     applyGL(canvas.getSurf());
   }
 
-  public void applyGL(GLGraphicsOffScreen gfx) {
+  public void applyGL(PGraphics gfx) {
     //int start_mils = millis();
     //gfx.background(0,0,0,255);
     //gfx.background(128,0,0);
-    gfx.background(0,0,0,0);
+    //gfx.background(0,0,0,0);
+    
+    gfx.rect(100, 100, 200,200);
 
     //println(this + " applyGL start loop: ");
     for (int i = 0 ; i < filterCount ; i++) {
@@ -670,10 +701,16 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   transient controlP5.Button saveButton;
   transient controlP5.Button loadButton;
 
-  public void controlEvent (CallbackEvent ev) {
-    //println("controlevent in " + this);
-    if (ev.getAction()==ControlP5.ACTION_RELEASED) {
+  public synchronized void controlEvent (CallbackEvent ev) {
+	if (!ev.getController().isUserInteraction()) return;
+    if (ev.getAction()==ControlP5.ACTION_PRESS) {
+      //println("controlevent in " + this); 
+
+      //println (ev.getController() + " check if same as " + this.muteController);
       if (ev.getController()==this.muteController) {
+        //muteController.setState(!muteController.getState());
+        //muteController.setValue(muteController.getValue());
+    	println("it is, should be toggling state to " + muteController.getValue());
         this.setMuted(muteController.getState());
       }/*
       else if (ev.getController()==this.saveButton) {
@@ -688,10 +725,59 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     }
   }
 
-  /*public void savePreset(String filename) {
-	  ((VurfEclipse)APP.getApp()).io.serialize(filename, this);
+  public void savePreset(String filename) {
+	  ((VurfEclipse)APP.getApp()).io.serialize(filename, this.collectParameters());
   }
-  public void loadPreset2(String filename) {
+  
+  public HashMap<String,Object> collectParameters() {
+	HashMap<String,Object> params = new HashMap<String,Object>();
+	// params for scene here?
+	params.put(this.getPath()+"/mute", new Boolean(this.isMuted()));
+	
+	for(Filter f : this.getFilters()) {
+		//add params for each filter here
+		params.put(f.getPath()+"/mute", new Boolean(f.isMuted()));
+		for (Parameter p : f.getParameters()) {
+			// add params for each parameter here
+			println("collectParameters got " + p.getPath() + " for " + f.getPath());
+			params.put(p.getPath(), p.value);
+		}
+	}
+	return params;
+  }
+  
+  public void loadParameters(HashMap<String,Object> params) {
+	  for (Entry<String,Object> e : params.entrySet()) {
+		  println("got " + e.getKey() + " with " + e.getValue().getClass().getName());
+		  if (e.getKey().endsWith("/mute")) {
+			  if (host.getObjectForPath(e.getKey())!=null)
+			  	((Mutable) host.getObjectForPath(e.getKey())).setMuted((Boolean)e.getValue());
+			  continue;
+		  }
+		  if (e.getValue() instanceof Parameter) {
+			  host.target(e.getKey(), ((Parameter)e.getValue()));
+		  } else {
+			  host.target(e.getKey(), e.getValue());
+		  }
+		  //(((Parameter)e.getValue()).getName(),
+		  
+		  /*Parameter p = (Parameter)e.getValue();
+		  Object o = this.host.getObjectForPath(p.getFilterPath());
+		  //((Parameter) this.host.getObjectForPath(p.getFilterPath())
+		  if (o instanceof Filter) {
+			  println(e.getKey() + " is a Filter!");
+			  //((Filter)o).target(p.getName(), p.value);	/// prize for king of readable code
+
+			  ((Filter) o).setParameterValue(p.getName(), p.value);
+		  } else {
+			  println(e.getKey() + " is a " + o.getClass().getName());
+		  }*/
+		  	//..setValue( ((Parameter)e.getValue()).value);
+		  //f.target(e.getKey(), payload)
+	  }
+  }
+  
+  /*public void loadPreset2(String filename) {
     Scene s = ((VurfEclipse)APP.getApp()).io.deserialize(filename, this.getClass());
     s.setSceneName(this.getSceneName());
     cp5.remove(this.tabName);
@@ -703,8 +789,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   String tabName;
   boolean doneControls = false;
 
-	private Integer[] palette;
-  public void setupControls(ControlP5 cp5, Tab tab) {
+  private Integer[] palette;
+  public void setupControls(ControlFrame cf, ControllerGroup tab) {
+	  
+	ControlP5 cp5 = cf.control();
     println("Scene#setupControls() in " + this);
     if (doneControls) return;
     doneControls = true;
@@ -719,15 +807,15 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     int currentY = topMargin;
     
     this.muteController = cp5.addToggle("mute_"+tabName)
+      .setPosition(margin, margin)
       .setSize(size,size)
       .setValue(isMuted())
       //.setPosition(lm, currentY)
       .setLabel("Mute Scene")
-      .plugTo(this, "setMuted")
+      //.plugTo(this, "setMuted")
       //.addCallback(this)
-      .moveTo(tabName)
-      .linebreak()
-      ;
+      .moveTo(tab)
+    ;
     currentY += size + margin;
     this.muteController.getCaptionLabel().alignY(ControlP5.CENTER);
 
@@ -776,7 +864,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
            .addCallback(filters[i])
            .linebreak()
            ;*/
-        filters[i].setupControls(cp5,tab);
+        filters[i].setupControls(cf,tab,i);
         
         println("<<<<<<<<<<<<<<<<did setupcontrols for " + filters[i]);
 
@@ -790,7 +878,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   @Override
   public Object target(String path, Object payload) {
 	  println("#target('"+path+"', '"+payload+"')");
-	  if ("/mute".equals(path.substring(path.length()-5, path.length()))) {
+	  if (path.endsWith("/mute")) { //"/mute".equals(path.substring(path.length()-5, path.length()))) {
 		  this.toggleMute();
 		  return this.isMuted()?"Muted":"Unmuted";
 	  }

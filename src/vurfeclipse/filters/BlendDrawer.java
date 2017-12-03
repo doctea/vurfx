@@ -1,14 +1,17 @@
 package vurfeclipse.filters;
 
 
+import java.util.HashMap;
+
+import ch.bildspur.postfx.pass.Pass;
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.core.PImage;
+import processing.opengl.PShader;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
-import codeanticode.glgraphics.GLTextureFilter;
-import codeanticode.glgraphics.GLTextureParameters;
 
-public class BlendDrawer extends Filter {
+public class BlendDrawer extends ShaderFilter {
 
   int rotation = 0;
 
@@ -17,35 +20,36 @@ public class BlendDrawer extends Filter {
 
   int currentBlendMode = 4;
 
-  String blendModes[] = {
-    "BlendColor.xml",
-    "BlendLuminance.xml",
-    "BlendMultiply.xml",
-    "BlendSubtract.xml",
-    "BlendAdd.xml",
-    "BlendColorDodge.xml",
-    "BlendColorBurn.xml",
-    "BlendDarken.xml",
-    "BlendLighten.xml",
-    "BlendDifference.xml",
-    "BlendInverseDifference.xml",
-    "BlendExclusion.xml",
-    "BlendOverlay.xml",
-    "BlendScreen.xml",
+  static String blendModes[] = {
+    "BlendColor.glsl",
+    "BlendLuminance.glsl",
+    "BlendMultiply.glsl",
+    "BlendSubtract.glsl",
+    "BlendAdd.glsl",
+    "BlendColorDodge.glsl",
+    "BlendColorBurn.glsl",
+    "BlendDarken.glsl",
+    "BlendLighten.glsl",
+    "BlendDifference.glsl",
+    "BlendInverseDifference.glsl",
+    "BlendExclusion.glsl",
+    "BlendOverlay.glsl",
+    "BlendScreen.glsl",
     //"BlendHardLight.xml",
-    "BlendSoftLight.xml",
-    "BlendUnmultiplied.xml",
-    "BlendPremultiplied.xml"
+    "BlendSoftLight.glsl",
+    "BlendUnmultiplied.glsl",
+    "BlendPremultiplied.glsl"
   };
 
-  transient GLTextureFilter blendFilters[] = new GLTextureFilter[blendModes.length];
+  transient PShader blendFilters[] = new PShader[blendModes.length];
 
-  transient GLTextureFilter glFilter;
-  transient GLTexture t;
+
+  //transient PShader glFilter;
+  //transient PGraphics t;
 
 
   public BlendDrawer(Scene sc) {
-    super(sc);
+    super(sc,blendModes[4]);
     this.w = sc.w;
     this.h = sc.h;
   }
@@ -77,7 +81,7 @@ public class BlendDrawer extends Filter {
     //this.changeParameterValue("Opacity", 1.0);
     //this.changeParameterValue("BlendMode", 4);
     addParameter("Opacity", 1.0f, 0.0f, 1.0f);
-    addParameter("BlendMode", 4, 0, blendModes.length);
+    addParameter("BlendMode", 4, 0, blendModes.length-1);
     addParameter("Scale", new Float(1.0f), 0.0f, 4.0f);
     addParameter("X", new Float(0.0f), -1.0f, 1.0f);
     addParameter("Y", new Float(0.0f), -1.0f, 1.0f);
@@ -87,8 +91,10 @@ public class BlendDrawer extends Filter {
   public void updateParameterValue(String paramName, Object value) {
     if (paramName.equals("BlendMode"))
       this.setBlendMode((Integer)value);
-    else
+    else {
+      glFilter = getFilterNumber(this.currentBlendMode);
       super.updateParameterValue(paramName, value);
+    }
   }
 
   /*public void setXYOffset(int x, int y) {
@@ -96,17 +102,17 @@ public class BlendDrawer extends Filter {
     this.offsety = y;
   }*/
 
-
   public void setBlendMode(int n) {
     this.currentBlendMode = n;
     //changeParameterValue("BlendMode", n);
   }
 
-  public GLTextureFilter getFilterNumber(int n) {
-    if (this.blendFilters==null) blendFilters = new GLTextureFilter[blendModes.length];
-    if (this.blendFilters[n]==null) {
-      println("BlendDrawer#getFilterNumber(n) initialising GLTextureFilter");
-      this.blendFilters[n] = new GLTextureFilter(APP.getApp(),blendModes[n]);
+  public PShader getFilterNumber(int n) {
+    if (this.blendFilters==null) blendFilters = new PShader[blendModes.length];
+    if (this.blendFilters[n]==null && n<this.blendFilters.length) {
+      println("BlendDrawer#getFilterNumber(n) initialising GLTextureFilter " + blendModes[n]);
+      this.blendFilters[n] = APP.getApp().loadShader(blendModes[n]); //new PShader(APP.getApp(),blendModes[n]);
+      this.blendFilters[n].init();
     }
     return this.blendFilters[n];
   }
@@ -116,10 +122,13 @@ public class BlendDrawer extends Filter {
     // set up inital variables or whatevs
 
     //this.glFilter = new GLTextureFilter(APP,blendModes[currentBlendMode]);//"BlendColor.xml");
-    GLTextureParameters params = new GLTextureParameters();
+    /*GLTextureParameters params = new GLTextureParameters();
     params.wrappingU = GLTextureParameters.REPEAT;
-    params.wrappingV = GLTextureParameters.REPEAT;
-    this.t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
+    params.wrappingV = GLTextureParameters.REPEAT;*/
+    //this.t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
+    //this.t = new PImage(sc.w,sc.h);
+    //this.t = new PGraphics();
+    //t.setSize(this.w, this.h);
 
     for (int i = 0 ; i < blendModes.length ; i++) {
       getFilterNumber(i);
@@ -129,15 +138,18 @@ public class BlendDrawer extends Filter {
   }
 
   public boolean applyMeatToBuffers() {
-    //println("in applymeattobuffers in pointdrawer (" + this + "), src is " + src);
+    //println("in applymeattobuffers in blenddrawer (" + this + "), src is " + src);
+
+	//if (true) return super.applyMeatToBuffers();
+	out.beginDraw();
 
     // image draw mode
     //out.getTexture().blend();
     //out.setBlendMode(REPLACE);
     //tint(128);
     //out.image(src.getTexture(),x,y,w,h);
-    if (t!=null)
-      t.clear(0);
+    /*if (t!=null)
+      t.clear(0);*/
     out.pushMatrix();
 
     //println ("x and y are " + (Float)getParameterValue("X") + "," +  (Float)getParameterValue("Y"));
@@ -147,6 +159,8 @@ public class BlendDrawer extends Filter {
     		w*(Float)getParameterValue("X"),
     		h*(Float)getParameterValue("Y")
     );
+    
+    float x = (Float)getParameterValue("X");
 
     //if ((Float)getParameterValue("Zoom")!=1.0f) {
     	out.scale((Float)getParameterValue("Scale"));
@@ -162,28 +176,59 @@ public class BlendDrawer extends Filter {
     //src = sc.host.getCanvas(this.canvas_in).getSurf();
     //out = sc.host.getCanvas(this.canvas_out).getSurf();
 
-    GLTextureFilter tf = getFilterNumber(currentBlendMode);
-    tf.setParameterValue("Opacity", new Float((Float)this.getParameterValue("Opacity")));
-    tf.apply(new GLTexture[]{src.getTexture(), out.getTexture()}, t); // all are called the same way
+    //Shader tf = getFilterNumber(currentBlendMode);
+    //glFilter = tf;
+    //tf.set("bottomSampler", out);
+    //tf.set("topSampler", src);
+    //this.shaderFragName = "blend mode " + currentBlendMode;
+    customPass = (CustomPass) this.getPassForBlendMode(currentBlendMode); //Shader(tf,out,src);
+    customPass.shader.set("bottomSampler", out);
+    customPass.shader.set("topSampler", src);
+    customPass.shader.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
+    
+    //tf.set("bottomSampler", out);
+    //tf.set("topSampler",  src);
+    //tf.apply(new PImage[]{src, out}, t); // all are called the same way
+    //t.shader(tf);
+    //println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
+    c.getSurf().beginDraw();
+    //this.filter(src, tf, out); //c.getSurf()); //c.getSurf(), tf);	// WORKING 2017-1022
+    //c.getSurf().image(out,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
+	//c.getSurf().resetShader();
+	//customPass.shader.set(shaderFragName, out);
+	//c.getSurf().shader(customPass.shader);
+    this.filter(src, customPass, c.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
+    c.getSurf().endDraw();
+    
 
+    /*out.color(this.random(255));
+    out.fill(this.random(255));
+    out.rect(random(sc.w), random(sc.h), random(100), random(100));*/
 
     int im = out.imageMode;// to restore imageMode
     //out.image(t,x,y,w,h);
     out.imageMode(out.CENTER);
     //out.image(t,x,y);
-    out.image(t,
+    out.image(c.getSurf(),
     		0,0
     		,w,h	// added to try and support hi-res display of blobs 2015-07-12
     		//w * (Float)getParameterValue("X"),
     		//h * (Float)getParameterValue("Y")
     );
-    out.imageMode(im);
 
+
+    out.imageMode(im);
+    
+
+    
     //if (rotation!=0) {
       out.popMatrix();
     //}
+      //out.ellipse(random(sc.w), random(sc.h), random(100), random(100));
+      
 
 
+      out.endDraw();
     // pixel copy mode
       //arrayCopy(src.pixels, out.pixels);
 
@@ -197,6 +242,11 @@ public class BlendDrawer extends Filter {
     return super.toString() + " " + blendModes[currentBlendMode];
   }*/
 
+  private Pass getPassForBlendMode(int currentBlendMode) {
+	// TODO Auto-generated method stub
+	return this.getPassForShader(this.getFilterNumber(currentBlendMode), out, src);
+  }
+
   public Filter nextMode () {
     currentBlendMode++;
     if(this.currentBlendMode>=blendModes.length)
@@ -208,23 +258,5 @@ public class BlendDrawer extends Filter {
     //println("Switched to currentBlendMode " + currentBlendMode + " " + blendModes[currentBlendMode]);
   }
 
-  public void beginDraw() {
-    //src.loadPixels();
-    //out.loadPixels();
-    if (out==null) setOutputCanvas(canvas_out);
-    if (src==null) setInputCanvas(canvas_in);
-    if (t==null) {
-        GLTextureParameters params = new GLTextureParameters();
-        params.wrappingU = GLTextureParameters.REPEAT;
-        params.wrappingV = GLTextureParameters.REPEAT;
-    	this.t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
-    }
-    out.beginDraw();
-  }
-
-  public void endDraw() {
-    //out.updatePixels();
-    out.endDraw();
-  }
 
 }

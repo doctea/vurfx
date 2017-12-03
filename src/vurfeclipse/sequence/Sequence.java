@@ -1,7 +1,10 @@
 package vurfeclipse.sequence;
 
 import java.awt.Color;
+import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -11,11 +14,12 @@ import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.filters.Filter;
 
-abstract public class Sequence implements Mutable {
+abstract public class Sequence implements Serializable, Mutable {
 	//Scene sc;
 	
-	public Random rng = new Random(1337);
+	public Random rng = new Random(); //1337);
 	long seed = rng.nextLong();
 
 	int startTimeMillis;
@@ -23,10 +27,82 @@ abstract public class Sequence implements Mutable {
 
 	int iteration;
 
-	protected ArrayList<Mutable> mutables = new ArrayList<Mutable>();
+	transient protected ArrayList<Mutable> mutables = new ArrayList<Mutable>();
 
+	static public Sequence createSequence(String classname, Scene host) {
+		System.out.println("got classname " + classname);
+		try {
+			Sequence seq;
+			try {
+				Class<?> clazz = Class.forName(classname); //Class.forName(classname); host.getClass();//
+			} catch (ClassNotFoundException e) {
+				// assume the last . should be turned into a $
+				classname = classname.substring(0, classname.lastIndexOf('.')) + "$" + classname.substring(classname.lastIndexOf('.')+1,classname.length()); 
+			}
+			if (classname.contains("$")) {
+				String[] spl = classname.split("\\$");
+				Class<?> clazz = Class.forName(spl[0]); //Class.forName(classname); host.getClass();//
+				Class<?> inner = Class.forName(classname);
+				//System.out.println (clazz.getConstructors());
+				//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+				Constructor<?> ctor = inner.getConstructor(clazz); //Scene.class,Integer.TYPE);
+				//Object seq = ctor.newInstance(); //(Scene)null, 0);
+				ctor.setAccessible(true);
+				seq = (Sequence) ctor.newInstance(host); //(Scene)null, (int)0);				
+			} else {
+				Class<?> clazz = Class.forName(classname);
+				//System.out.println (clazz.getConstructors());
+				//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+				Constructor<?> ctor = clazz.getConstructor(); //Scene.class,Integer.TYPE);
+				//Object seq = ctor.newInstance(); //(Scene)null, 0);
+				seq = (Sequence) ctor.newInstance(null); //(Scene)null, (int)0);
+			}
+			seq.setHost(host);
+			return (Sequence) seq;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public HashMap<String,Object> collectParameters() {
+		HashMap<String,Object> params = new HashMap<String,Object> ();
+		params.put("class", this.getClass().getCanonicalName());
+		if (this.host!=null) params.put("hostPath", this.host.getPath());
+		params.put("seed", this.getSeed());
+		params.put("lengthMillis", this.lengthMillis);
+		
+		params.put("current_sequence_name", APP.getApp().dateStamp());
+		
+		ArrayList<String> mutableUrls = new ArrayList<String> ();
+		for (Mutable m : getMutables()) {
+			if (m instanceof Scene) {
+				mutableUrls.add(((Scene) m).getPath());
+			} else if (m instanceof Filter) {
+				mutableUrls.add(((Filter)m).getPath());
+			} else {
+				println("Unhandled Mutable type " + m.getClass());
+			}
+		}
+		params.put("mutableUrls", mutableUrls);
+		
+		return params;
+	}
+	
+	public void loadParameters(HashMap<String,Object> params) {
+		if (params.containsKey("seed")) this.seed = (Long) params.get("seed"); //Long.parseLong((String)params.get("seed"));
+		if (params.containsKey("lengthMillis")) this.lengthMillis = (Integer) params.get("lengthMillis"); //Integer.parseInt((String)params.get("lengthMillis"));
+		if (params.containsKey("mutableUrls")) {
+			this.mutables = new ArrayList<Mutable>();
+			for (String url : (ArrayList<String>)params.get("mutableUrls")) {
+				this.mutables.add((Mutable) APP.getApp().pr.getObjectForPath(url));
+			}
+		}
+	}
 
 	protected Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
+	private boolean disableHostMute;
 	public Sequence (Scene host, int sequenceLengthMillis) {
 		this(sequenceLengthMillis);
 		this.host = host;
@@ -89,11 +165,19 @@ abstract public class Sequence implements Mutable {
 	public ArrayList<Mutable> getMutables() {
 		return mutables;
 	}*/
+	public Sequence disableHostMute() {
+		this.disableHostMute = true;
+		return this;
+	}
+	
 	//abstract public ArrayList<Mutable> getMutables();
 	public ArrayList<Mutable> getMutables() {
-		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-		if (host!=null) muts.add((Mutable) host);
-		return muts;
+		if (this.mutables==null) {
+			ArrayList<Mutable> muts = new ArrayList<Mutable>();
+			if (host!=null && !this.disableHostMute) muts.add((Mutable) host);
+			this.mutables = muts;
+		} 
+		return this.mutables;
 	}
 
 
@@ -112,6 +196,7 @@ abstract public class Sequence implements Mutable {
 
 
 	@Override public boolean isMuted() {	// PROBABLY BUGGY AND WONT DO WHAT YOU EXPECT
+		println("Known dodgy isMuted() called in sequence " + this);
 		Iterator<Mutable> mit = getMutables().iterator();
 		while(mit.hasNext()) {
 			if (mit.next().isMuted()) return true;
@@ -278,6 +363,13 @@ abstract public class Sequence implements Mutable {
 		private boolean hasPalette() {
 			// TODO Auto-generated method stub
 			return this.palette!=null;
+		}
+
+		public long getSeed() {
+			return seed;
+		}
+		public void setSeed(long seed) {
+			this.seed = seed;
 		}
 
 

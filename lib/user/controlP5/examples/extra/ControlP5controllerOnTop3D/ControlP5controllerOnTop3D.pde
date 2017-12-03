@@ -20,9 +20,9 @@ String messageBoxString = "";
 float t;
 
 void setup() {
-  size(640,480,OPENGL);
-  noStroke();
+  size(640,480,P3D);
   cp5 = new ControlP5(this);
+  noStroke();
   createMessageBox();
   Button b = cp5.addButton("toggleBox",1,20,20,100,20);
   b.setLabel("Toggle Box");
@@ -78,7 +78,7 @@ void createMessageBox() {
   // add a textfield-controller with named-id inputbox
   // this controller will be linked to function inputbox() below.
   Textfield f = cp5.addTextfield("inputbox",20,36,260,20);
-  f.captionLabel().setVisible(false);
+  f.getCaptionLabel().setVisible(false);
   f.moveTo(messageBox);
   f.setColorForeground(color(20));
   f.setColorBackground(color(20));
@@ -125,7 +125,7 @@ void createMessageBox() {
 // the OK button of the messageBox.
 void buttonOK(int theValue) {
   println("a button event from button OK.");
-  messageBoxString = ((Textfield)cp5.controller("inputbox")).getText();
+  messageBoxString = ((Textfield)cp5.getController("inputbox")).getText();
   messageBoxResult = theValue;
   messageBox.hide();
 }

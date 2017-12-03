@@ -3,6 +3,7 @@ package vurfeclipse.sequence;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,8 +14,9 @@ import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
+import vurfeclipse.ui.ControlFrame;
 
-abstract public class Sequencer implements Targetable, CallbackListener {
+abstract public class Sequencer implements Serializable, Targetable, CallbackListener {
 	public Project host;
 
 	boolean locked = false;
@@ -85,7 +87,7 @@ abstract public class Sequencer implements Targetable, CallbackListener {
 		return true;
 	}
 
-	public void setupControls(ControlP5 cp5, String string) {
+	public void setupControls(ControlFrame cf, String string) {
 		// TODO Auto-generated method stub
 
 	}
@@ -107,5 +109,12 @@ abstract public class Sequencer implements Targetable, CallbackListener {
       }
     }*/
   }
+
+	public HashMap<String, Object> collectParameters() {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		//params.put("/seq/changeTo", this.getCurrentSequenceName());
+		return params;
+	}
 
 }

@@ -7,17 +7,16 @@ import java.util.ArrayList;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
-import codeanticode.glgraphics.GLTextureParameters;
 import codeanticode.gsvideo.*;
+import processing.core.PGraphics;
 
 public class VideoPlayer extends Filter {
   transient GSMovie stream;
   String filename;
 
-  transient GLTexture tex;
+  transient PGraphics tex;
 
-  transient GLTexture newTex;
+  transient PGraphics newTex;
 
   int mode = 0;
 
@@ -82,7 +81,7 @@ public class VideoPlayer extends Filter {
 
     if (changing) return;
     final String filename = fn;
-    if (filename=="") return;
+    if (filename.equals("")) return;
     this.filename = filename;
     changing = true;
     final VideoPlayer self = this;
@@ -107,7 +106,7 @@ public class VideoPlayer extends Filter {
         newStream.setPixelDest(tex, true);
         newStream.volume(volume);
         println("Set volume and pixeldest..");
-        if (!((VurfEclipse)APP.getApp()).exportMode)
+        //if (!((VurfEclipse)APP.getApp()).exportMode)
           newStream.play();
         //println("about to do ")
         while (!newStream.available())
@@ -184,10 +183,10 @@ public class VideoPlayer extends Filter {
       qte.printStackTrace();
     }*/
 
-    GLTextureParameters params = new GLTextureParameters();
+    /*GLTextureParameters params = new GLTextureParameters();
     params.wrappingU = GLTextureParameters.REPEAT;
-    params.wrappingV = GLTextureParameters.REPEAT;
-    tex = new GLTexture(APP.getApp(),sc.w,sc.h, params);
+    params.wrappingV = GLTextureParameters.REPEAT;*/
+    tex = this.sc.host.createCanvas(this.getPath()+"/ca/", this.getFilterLabel()).getSurf(); //new GLTexture(APP.getApp(),sc.w,sc.h, params);
 
     loadDirectory();
     if (videos.size()==0) return true;
@@ -207,7 +206,7 @@ public class VideoPlayer extends Filter {
       if (this.startDelay>0)
     	  Thread.sleep(startDelay);
 
-      if (!((VurfEclipse)APP.getApp()).exportMode)
+      //if (!((VurfEclipse)APP.getApp()).exportMode)
         stream.play();
     } catch (Exception e) {
       println("got error " + e + " loading " + filename);
@@ -218,7 +217,7 @@ public class VideoPlayer extends Filter {
   }
 
   public synchronized boolean  applyMeatToBuffers() {
-    if (((VurfEclipse)APP.getApp()).exportMode) {
+    /*if (((VurfEclipse)APP.getApp()).exportMode) {
       //seek to the correct position based on the current frame number ..
       println("jumping to frameCount " + ((VurfEclipse)APP.getApp()).frameCount);
       //stream.jump(frameCount * (global_fps/stream.getSourceFrameRate()));
@@ -227,7 +226,7 @@ public class VideoPlayer extends Filter {
       stream.play();
       stream.jump((float)((VurfEclipse)APP.getApp()).timeMillis/1000);
       stream.pause();
-    }
+    }*/
 /*    if (changing && newStream!=null) {
       GSMovie oldStream = stream;
       //GLTexture oldTex = tex;
@@ -257,7 +256,9 @@ public class VideoPlayer extends Filter {
 
 
         //out.getTexture().putPixelsIntoTexture();
-        if (tex.putPixelsIntoTexture()) {
+        tex.updatePixels(); //.loadPixels();
+        if (stream.isModified()) {
+        //if (tex.putPixelsIntoTexture()) {
           out.beginDraw();
           //if ((int)((VurfEclipse)APP.getApp()).random(100)<20)  println("VideoPlayer>>>video writing to " + out);
           out.image(tex,0,0,sc.w,sc.h);

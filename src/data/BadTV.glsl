@@ -1,3 +1,6 @@
+#define PROCESSING_TEXTURE_SHADER
+
+
 /*!
  * <info>
  * <author>ehj1 [ https://www.shadertoy.com/user/ehj1 ]</author>
@@ -23,6 +26,17 @@
  * </synthclipse-importer-legal-note>
  * </info>
  */
+//#extension GL_EXT_gpu_shader4 : enable
+uniform sampler2D src_tex_unit0;
+varying vec4 vertTexCoord;
+varying vec4 vertColor;
+
+//#define gl_FragCoord vertTexCoord
+
+//#define iChannel0 src_tex_unit0
+
+//#define iResolutionX dest_tex_size_x
+//#define iResolutionY dest_tex_size_y
 
 //#define iResolution vec2(1024.0,768.0)
 uniform float iResolutionX;
@@ -39,22 +53,22 @@ uniform float iTime;          // shader playback time (in seconds)
 //uniform float iSampleRate;          // sound sample rate (i.e., 44100)
 //uniform float iFrameRate;           // frames per second (effectively "1.0 / iTimeDelta")
 
-uniform sampler2D iChannel0; //! WARNING: Unsupported input type: "video". Source: "3405e48f74815c7baa49133bdc835142948381fbe003ad2f12f5087715731153.ogv"
+//uniform sampler2D iChannel0; //! WARNING: Unsupported input type: "video". Source: "3405e48f74815c7baa49133bdc835142948381fbe003ad2f12f5087715731153.ogv"
 
 // change these values to 0.0 to turn off individual effects
-/*float vertJerkOpt = 1.0;
-float vertMovementOpt = 1.0;
-float bottomStaticOpt = 1.0;
-float scalinesOpt = 1.0;
-float rgbOffsetOpt = 1.0;
-float horzFuzzOpt = 1.0;*/
+uniform float vertJerkOpt = 1.0;
+uniform float vertMovementOpt = 1.0;
+uniform float bottomStaticOpt = 1.0;
+uniform float scalinesOpt = 1.0;
+uniform float rgbOffsetOpt = 1.0;
+uniform float horzFuzzOpt = 1.0;
 
-#define vertJerkOpt 0.5
+/*#define vertJerkOpt 0.5
 #define vertMovementOpt 0.5
 #define bottomStaticOpt 1.0
 #define scalinesOpt 1.0
 #define rgbOffsetOpt 0.5
-#define horzFuzzOpt 0.5
+#define horzFuzzOpt 0.5*/
 
 // Noise generation functions borrowed from: 
 // https://github.com/ashima/webgl-noise/blob/master/src/noise2D.glsl
@@ -121,21 +135,24 @@ float snoise(vec2 v)
 }
 
 float staticV(vec2 uv) {
-    //float staticHeight = snoise(vec2(9.0,iTime*1.2+3.0))*0.3+5.0;
+    float staticHeight = snoise(vec2(9.0,iTime*1.2+3.0))*0.3+5.0;
     float staticAmount = snoise(vec2(1.0,iTime*1.2-6.0))*0.1+0.3;
     float staticStrength = snoise(vec2(-9.75,iTime*0.6-3.0))*2.0+2.0;
-    #define staticHeight 0.8
+    //#define staticHeight 0.8
     //#define staticAmount 0.8
     //#define staticStrength 2.5
 	return (1.0-step(snoise(vec2(5.0*pow(iTime,2.0)+pow(uv.x*7.0,1.2),pow((mod(iTime,100.0)+100.0)*uv.y*0.3+3.0,staticHeight))),staticAmount))*staticStrength;
 }
 
 
-void mainImage( inout vec4 fragColor, in vec2 fragCoord )
+void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
+	//vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+	//vec2 fragCoord = vertTexCoord.st;
+
 	vec2 iResolution = vec2(iResolutionX,iResolutionY);
 
-	vec2 uv =  fragCoord.xy/iResolution.xy;
+	vec2 uv =  fragCoord.xy/vec2(iResolutionX, iResolutionY); //iResolution.xy;
 	
 	float jerkOffset = (1.0-step(snoise(vec2(iTime*1.3,5.0)),0.8))*0.05;
 	
@@ -153,7 +170,7 @@ void mainImage( inout vec4 fragColor, in vec2 fragCoord )
     
     float staticVal = 0.0;
 
-	/*  
+
 	    for (float y = -1.0; y <= 1.0; y += 1.0) {
 	        float maxDist = 5.0/200.0;
 	        float dist = y/200.0;
@@ -161,13 +178,13 @@ void mainImage( inout vec4 fragColor, in vec2 fragCoord )
 	    					(maxDist-abs(dist)) *
 	    					1.5;
 	    }
-	*/
+
         
     staticVal *= bottomStaticOpt;
 	
-	float red 	=   texture2D(	iChannel0, 	vec2(uv.x + xOffset -0.01*rgbOffsetOpt,y)).r+staticVal;
-	float green = 	texture2D(	iChannel0, 	vec2(uv.x + xOffset,	  y)).g+staticVal;
-	float blue 	=	texture2D(	iChannel0, 	vec2(uv.x + xOffset +0.01*rgbOffsetOpt,y)).b+staticVal;
+	float red 	=   texture2D(	src_tex_unit0, 	vec2(uv.x + xOffset -0.01*rgbOffsetOpt,y)).r+staticVal;
+	float green = 	texture2D(	src_tex_unit0, 	vec2(uv.x + xOffset,	  y)).g+staticVal;
+	float blue 	=	texture2D(	src_tex_unit0, 	vec2(uv.x + xOffset +0.01*rgbOffsetOpt,y)).b+staticVal;
 	
 	vec3 color = vec3(red,green,blue);
 	float scanline = sin(uv.y*800.0)*0.04*scalinesOpt;
@@ -179,7 +196,8 @@ void mainImage( inout vec4 fragColor, in vec2 fragCoord )
 
 void main() {
 	vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
-	mainImage(color, gl_FragCoord.xy);
+	mainImage(color, vertTexCoord.st); //gl_FragCoord.xy);
 
-	gl_FragColor = color;
+	gl_FragColor = color; //vec4(vertTexCoord.st, 1.0, 1.0); //color;
 }
+

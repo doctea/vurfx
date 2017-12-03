@@ -2,8 +2,8 @@ package vurfeclipse.filters;
 
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
 import codeanticode.gsvideo.*;
+import processing.core.PGraphics;
 
 
 /*void captureEvent(GSCapture cam) {
@@ -20,7 +20,7 @@ public class WebcamFilter extends Filter {
 
   transient GSCapture webcamStream;
   
-  transient GLTexture tex;
+  transient PGraphics tex;
   
   WebcamFilter(Scene sc, int capW, int capH, int cameraNumber) {
     this(sc, capW, capH);
@@ -51,7 +51,7 @@ public class WebcamFilter extends Filter {
       
       if (pixelMode) {
         //tex = new GLTexture(APP.getApp(),sc.w,sc.h);
-    	tex = new GLTexture(APP.getApp(),capW,capH);
+    	tex = this.sc.host.createCanvas(getPath() + "/ca/buffer",this.getFilterLabel(), capW,capH).getSurf();
         //webcamStream.setPixelDest(tex);
         webcamStream.setPixelDest(tex, true);
         //webcamStream.setPixelDest(out.getTexture());
@@ -91,7 +91,8 @@ public class WebcamFilter extends Filter {
       System.out.println("WebcamFilter OUT is " + out);
       
       if (pixelMode) {
-        tex = new GLTexture(APP.getApp(),sc.w,sc.h);
+        //tex = new GLTexture(APP.getApp(),sc.w,sc.h);
+        tex = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel()).getSurf();
         //webcamStream.setPixelDest(tex);
         webcamStream.setPixelDest(tex, true);
         //webcamStream.setPixelDest(out.getTexture());
@@ -116,7 +117,9 @@ public class WebcamFilter extends Filter {
         //arrayCopy(webcamStream.pixels, out.pixels);
         //out.getTexture().putBuffer(webcamStream.pixels);
       } else {
-        if (tex.putPixelsIntoTexture()) {
+        //if (tex.putPixelsIntoTexture()) {
+    	if (tex.isModified()) {
+    	  tex.updatePixels();
           out.beginDraw();
           out.image(tex,0,0,sc.w,sc.h);
           out.endDraw();

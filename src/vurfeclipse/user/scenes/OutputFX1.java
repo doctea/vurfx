@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 import vurfeclipse.APP;
 import vurfeclipse.filters.ShaderFilter;
+import vurfeclipse.filters.ToonFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.ChainSequence;
@@ -18,8 +19,15 @@ public class OutputFX1 extends SimpleScene {
 
 	public boolean setupFilters() {
 
-	    this.addFilter(new ShaderFilter(this,"Pixelate.xml").addParameter("pixel_size", new Float(5.0f)).setFilterName("Edges").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
-	    this.addFilter(new ShaderFilter(this,"Toon.xml").setFilterName("Toon").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    this.addFilter(new ShaderFilter(this,"Pixelate.glsl")
+	    		.addParameter("pixel_size", new Float(25.0f),new Float(0.0f),new Float((float)this.w/8))
+	    		.setFilterName("Pixelate")
+	    		.setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("src"))
+	    ); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    this.addFilter(new ToonFilter(this)//,"ToonVert.glsl")
+	    		.setFilterName("Toon")
+	    		.setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("src"))
+	    ); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
 	    return true;
 	}
@@ -51,14 +59,14 @@ public class OutputFX1 extends SimpleScene {
 			sequences.put("preset 1", new OutputSequence1(this, 0));
 	
 			sequences.put("show_toon",  new ShowFilterSequence(this, 0, getPath()+"/fl/Toon"));
-			sequences.put("show_edges", new ShowFilterSequence(this, 0, getPath()+"/fl/Edges"));
+			sequences.put("show_edges", new ShowFilterSequence(this, 0, getPath()+"/fl/Pixelate"));
 	
 			sequences.put("show_toonandedges", new ChainSequence(0).addSequence(sequences.get("show_toon")).addSequence(sequences.get("show_edges")));
 			
 			sequences.put("pixel_size",  new ChainSequence(2000)
-					.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Toon"))
-					.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Edges"))
-					.addSequence(new ChangeParameterSequence(this, getPath()+"/fl/Edges", "pixel_size", 4.0f, 2000))
+					//.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Toon"))
+					.addSequence(new ShowFilterSequence(this, 0, getPath()+"/fl/Pixelate"))
+					.addSequence(new ChangeParameterSequence(this, getPath()+"/fl/Pixelate", "pixel_size", 64.0f, 2000))
 			);
 	
 			//.addSequence(getSequence("show_feedback"))
@@ -68,6 +76,7 @@ public class OutputFX1 extends SimpleScene {
 
 
 	class OutputSequence1 extends Sequence {
+		public OutputSequence1() {}
 		public OutputSequence1(OutputFX1 outputFX1, int i) {
 			super(outputFX1,i);
 		}
@@ -85,7 +94,7 @@ public class OutputFX1 extends SimpleScene {
 			if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
 			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
 			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-			if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Edges").toggleMute();
+			if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Pixelate").toggleMute();
 		}
 		@Override public void onStop() {	}
 	}

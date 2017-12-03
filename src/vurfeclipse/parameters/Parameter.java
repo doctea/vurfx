@@ -2,6 +2,7 @@ package vurfeclipse.parameters;
 
 import java.io.Serializable;
 
+import processing.core.PVector;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
@@ -17,7 +18,7 @@ public class Parameter implements Serializable, Targetable {
   //String controllerName;
   
   String filterPath;
-  Filter filter;
+  transient Filter filter;
   //transient Scene sc;
 
   Class<? extends Object> datatype;
@@ -29,6 +30,7 @@ public class Parameter implements Serializable, Targetable {
   }
   Parameter (Filter filter, String name, Object value) {
 	this.filter = filter;
+	this.filterPath = filter.getPath();
     this.name = name;
     this.value = value;
     this.defaultValue = value;
@@ -36,6 +38,9 @@ public class Parameter implements Serializable, Targetable {
   }
   public Parameter (Filter filter, String name, Object value, Object min, Object max) {
     this(filter, name, value);
+    if (this.filter==null) {
+    	System.err.println ("wtf null filter?");
+    }
     this.min = min;
     this.max = max;
   }
@@ -47,7 +52,7 @@ public class Parameter implements Serializable, Targetable {
   
   public void setFilterPath(String filterPath) {
 	  if (filterPath==null) {
-		  System.out.println("no filterpath set!");
+		  System.err.println("no filterpath set!");
 		  System.exit(0);
 	  }
     this.filterPath = filterPath;
@@ -65,18 +70,21 @@ public class Parameter implements Serializable, Targetable {
   public Object cast(Object payload) {
 	  if (this.datatype == Integer.class) {
 		  return Integer.parseInt(payload.toString());
-	  } else if (this.datatype == Double.class) {
-		  return Double.parseDouble(payload.toString());
+	  } else if (this.datatype == Float.class || this.datatype == Double.class) {
+		  return (Float)Float.parseFloat(payload.toString());
 	  } else if (this.datatype == Boolean.class) {
 		  return Boolean.parseBoolean(payload.toString());
 	  } else if (this.datatype == String.class) {
 		  return payload.toString();
+	  } else if (this.datatype == PVector.class) {
+		  return (PVector)payload;
 	  }
 	  return null;
   }
   
   @Override
   public Object target(String path, Object payload) {
+	  filter.println("Parameter " + getName() + " targeted with " + " path " + " and " + payload);
 	  //this.value = this.datatype.cast(payload);
 	  setValue(
 			  this.cast(payload)
@@ -123,5 +131,9 @@ public class Parameter implements Serializable, Targetable {
       this.setValue (v + (Integer)this.min);
     }
   }
+public Class getDataType() {
+	// TODO Auto-generated method stub
+	return this.datatype;
+}
 
 }

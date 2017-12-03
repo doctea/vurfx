@@ -3,7 +3,7 @@ package controlP5;
 /**
  * controlP5 is a processing gui library.
  * 
- * 2006-2012 by Andreas Schlegel
+ * 2006-2015 by Andreas Schlegel
  * 
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,8 +18,8 @@ package controlP5;
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
  * @author Andreas Schlegel (http://www.sojamo.de)
- * @modified 10/22/2012
- * @version 1.5.2
+ * @modified 04/14/2016
+ * @version 2.2.6
  * 
  */
 
@@ -30,40 +30,27 @@ import java.io.Serializable;
  * active-, captionlabel- and valuelabel-colors.
  */
 
-@SuppressWarnings("serial")
+@SuppressWarnings( "serial" )
 public class CColor implements Serializable {
 
 	private int colorBackground = 0xff003652;
-
 	private int colorForeground = 0xff00698c;
-
 	private int colorActive = 0xff08a2cf; // 0699C4;
-
 	private int colorCaptionLabel = 0xffffffff;
-
 	private int colorValueLabel = 0xffffffff;
-
 	private int colorBackgroundAlpha = 0xff;
-
 	private int colorForegroundAlpha = 0xff;
-
 	private int colorActiveAlpha = 0xff; // 0699C4;
-
 	private int colorCaptionLabelAlpha = 0xff;
-
 	private int colorValueLabelAlpha = 0xff;
 
 	private int alpha = 0xff;
-
 	private int maskA = 0x00ffffff;
-
 	int maskR = 0xff00ffff;
-
 	int maskG = 0xffff00ff;
-
 	int maskB = 0xffffff00;
 
-	protected CColor set(CColor theColor) {
+	protected CColor set( CColor theColor ) {
 		colorBackground = theColor.colorBackground;
 		colorForeground = theColor.colorForeground;
 		colorActive = theColor.colorActive;
@@ -77,80 +64,51 @@ public class CColor implements Serializable {
 		return this;
 	}
 
-	protected CColor copyTo(ControllerInterface<?> theControl) {
-		theControl.setColorBackground(colorBackground);
-		theControl.setColorForeground(colorForeground);
-		theControl.setColorActive(colorActive);
-		theControl.setColorLabel(colorCaptionLabel);
+	protected CColor copyTo( ControllerInterface< ? > theControl ) {
+		theControl.setColorBackground( colorBackground );
+		theControl.setColorForeground( colorForeground );
+		theControl.setColorActive( colorActive );
+		theControl.setColorLabel( colorCaptionLabel );
 		return this;
 	}
 
 	/**
 	 * @exclude {@inheritDoc}
 	 */
-	public String toString() {
-		// return "{\"CColor\":[ "+
-		// "{\"colorBackground\":[" +
-		// (colorBackground >> 16 & 0xff) + "," + (colorBackground >> 8 & 0xff)
-		// +
-		// ","+ (colorBackground >> 0 & 0xff) +"]}, " +
-		// "{\"colorForeground\":[" +
-		// (colorForeground >> 16 & 0xff) + "," + (colorForeground >> 8 & 0xff)
-		// +
-		// ","+ (colorForeground >> 0 & 0xff) +"]}, " +
-		// "{\"colorActive\":[" +
-		// (colorActive >> 16 & 0xff) + "," + (colorActive >> 8 & 0xff) + ","+
-		// (colorActive >> 0 & 0xff) +"]}, " +
-		// "{\"colorCaptionLabel\":[" +
-		// (colorCaptionLabel >> 16 & 0xff) + "," + (colorCaptionLabel >> 8 &
-		// 0xff)
-		// + ","+ (colorCaptionLabel >> 0 & 0xff) +"]}, " +
-		// "{\"colorValueLabel\":[" +
-		// (colorValueLabel >> 16 & 0xff) + "," + (colorValueLabel >> 8 & 0xff)
-		// +
-		// ","+ (colorValueLabel >> 0 & 0xff) +"]}" +
-		// " ]}";
+	public String toString( ) {
 
-		return ("bg (" + (colorBackground >> 16 & 0xff) + "," + (colorBackground >> 8 & 0xff) + "," + (colorBackground >> 0 & 0xff) + "), " + "fg ("
-				+ (colorForeground >> 16 & 0xff) + "," + (colorForeground >> 8 & 0xff) + "," + (colorForeground >> 0 & 0xff) + "), " + "active (" + (colorActive >> 16 & 0xff)
-				+ "," + (colorActive >> 8 & 0xff) + "," + (colorActive >> 0 & 0xff) + "), " + "captionlabel (" + (colorCaptionLabel >> 16 & 0xff) + ","
-				+ (colorCaptionLabel >> 8 & 0xff) + "," + (colorCaptionLabel >> 0 & 0xff) + "), " + "valuelabel (" + (colorValueLabel >> 16 & 0xff) + ","
-				+ (colorValueLabel >> 8 & 0xff) + "," + (colorValueLabel >> 0 & 0xff) + ")");
+		return ( "bg (" + ( colorBackground >> 16 & 0xff ) + "," + ( colorBackground >> 8 & 0xff ) + "," + ( colorBackground >> 0 & 0xff ) + "), " + "fg (" + ( colorForeground >> 16 & 0xff ) + "," + ( colorForeground >> 8 & 0xff ) + ","
+				+ ( colorForeground >> 0 & 0xff ) + "), " + "active (" + ( colorActive >> 16 & 0xff ) + "," + ( colorActive >> 8 & 0xff ) + "," + ( colorActive >> 0 & 0xff ) + "), " + "captionlabel (" + ( colorCaptionLabel >> 16 & 0xff ) + ","
+				+ ( colorCaptionLabel >> 8 & 0xff ) + "," + ( colorCaptionLabel >> 0 & 0xff ) + "), " + "valuelabel (" + ( colorValueLabel >> 16 & 0xff ) + "," + ( colorValueLabel >> 8 & 0xff ) + "," + ( colorValueLabel >> 0 & 0xff ) + ")" );
 	}
 
-	public CColor() {
-		set(ControlP5.getColor());
-	}
-	
-	public CColor(int cfg, int cbg, int cactive, int ccl, int cvl) {
-		setForeground(cfg);
-		setBackground(cbg);
-		setActive(cactive);
-		setCaptionLabel(ccl);
-		setValueLabel(cvl);
+	public CColor( ) {
+		set( ControlP5.getColor( ) );
 	}
 
-	public CColor(CColor theColor) {
-		set(theColor);
+	public CColor( int cfg , int cbg , int cactive , int ccl , int cvl ) {
+		setForeground( cfg );
+		setBackground( cbg );
+		setActive( cactive );
+		setCaptionLabel( ccl );
+		setValueLabel( cvl );
+	}
+
+	public CColor( CColor theColor ) {
+		set( theColor );
 	}
 
 	/**
 	 * @exclude
 	 * @param theAlpha
 	 */
-	public CColor setAlpha(int theAlpha) {
-		System.out.println("controlP5.CColor.setAlpha: setting alpha values disabled for this version of controlP5.");
-//		alpha = theAlpha;
-//		colorBackground = (colorBackground & maskA) | (int) (colorBackgroundAlpha * (alpha / 255.0f)) << 24;
-//		colorForeground = (colorForeground & maskA) | (int) (colorForegroundAlpha * (alpha / 255.0f)) << 24;
-//		colorActive = (colorActive & maskA) | (int) (colorActiveAlpha * (alpha / 255.0f)) << 24;
-//		colorCaptionLabel = (colorCaptionLabel & maskA) | (int) (colorCaptionLabelAlpha * (alpha / 255.0f)) << 24;
-//		colorValueLabel = (colorValueLabel & maskA) | (int) (colorValueLabel * (alpha / 255.0f)) << 24;
+	public CColor setAlpha( int theAlpha ) {
+		System.out.println( "controlP5.CColor.setAlpha: setting alpha values disabled for this version of controlP5." );
 		return this;
 	}
 
-	public CColor setForeground(int theColor) {
-		if((theColor & 0xff000000) == 0) {
+	public CColor setForeground( int theColor ) {
+		if ( ( theColor & 0xff000000 ) == 0 ) {
 			colorForeground = 0xff000000;
 		} else {
 			colorForeground = theColor;
@@ -158,8 +116,8 @@ public class CColor implements Serializable {
 		return this;
 	}
 
-	public CColor setBackground(int theColor) {
-		if((theColor & 0xff000000) == 0) {
+	public CColor setBackground( int theColor ) {
+		if ( ( theColor & 0xff000000 ) == 0 ) {
 			colorBackground = 0xff000000;
 		} else {
 			colorBackground = theColor;
@@ -167,8 +125,8 @@ public class CColor implements Serializable {
 		return this;
 	}
 
-	public CColor setActive(int theColor) {
-		if((theColor & 0xff000000) == 0) {
+	public CColor setActive( int theColor ) {
+		if ( ( theColor & 0xff000000 ) == 0 ) {
 			colorActive = 0xff000000;
 		} else {
 			colorActive = theColor;
@@ -176,8 +134,8 @@ public class CColor implements Serializable {
 		return this;
 	}
 
-	public CColor setCaptionLabel(int theColor) {
-		if((theColor & 0xff000000) == 0) {
+	public CColor setCaptionLabel( int theColor ) {
+		if ( ( theColor & 0xff000000 ) == 0 ) {
 			colorCaptionLabel = 0xff000000;
 		} else {
 			colorCaptionLabel = theColor;
@@ -185,8 +143,8 @@ public class CColor implements Serializable {
 		return this;
 	}
 
-	public CColor setValueLabel(int theColor) {
-		if((theColor & 0xff000000) == 0) {
+	public CColor setValueLabel( int theColor ) {
+		if ( ( theColor & 0xff000000 ) == 0 ) {
 			colorValueLabel = 0xff000000;
 		} else {
 			colorValueLabel = theColor;
@@ -194,34 +152,34 @@ public class CColor implements Serializable {
 		return this;
 	}
 
-	public int getAlpha() {
+	public int getAlpha( ) {
 		return alpha;
 	}
 
-	public int getForeground() {
+	public int getForeground( ) {
 		return colorForeground;
 	}
 
-	public int getBackground() {
+	public int getBackground( ) {
 		return colorBackground;
 	}
 
-	public int getActive() {
+	public int getActive( ) {
 		return colorActive;
 	}
 
-	public int getCaptionLabel() {
+	public int getCaptionLabel( ) {
 		return colorCaptionLabel;
 	}
 
-	public int getValueLabel() {
+	public int getValueLabel( ) {
 		return colorValueLabel;
 	}
 
 	/**
 	 * @exclude {@inheritDoc}
 	 */
-	public int hashCode() {
+	public int hashCode( ) {
 		int result = 23;
 		result = 37 * result + colorBackground;
 		result = 37 * result + colorForeground;
@@ -232,16 +190,15 @@ public class CColor implements Serializable {
 	/**
 	 * @exclude {@inheritDoc}
 	 */
-	public boolean equals(Object o) {
-		if (this == o) {
+	public boolean equals( Object o ) {
+		if ( this == o ) {
 			return true;
 		}
-		if (o == null || getClass() != o.getClass()) {
+		if ( o == null || getClass( ) != o.getClass( ) ) {
 			return false;
 		}
-		CColor cc = (CColor) o;
-		if (colorBackground != cc.colorBackground || colorForeground != cc.colorForeground || colorActive != cc.colorActive || colorCaptionLabel != cc.colorCaptionLabel
-				|| colorValueLabel != cc.colorValueLabel) {
+		CColor cc = ( CColor ) o;
+		if ( colorBackground != cc.colorBackground || colorForeground != cc.colorForeground || colorActive != cc.colorActive || colorCaptionLabel != cc.colorCaptionLabel || colorValueLabel != cc.colorValueLabel ) {
 			return false;
 		}
 		return true;

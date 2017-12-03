@@ -10,6 +10,7 @@ import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.Filter;
+import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.filters.TextDrawer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.sequence.ChangeParameterSequence;
@@ -178,12 +179,14 @@ public class TextFlashScene extends Scene {
     //println("DemoScene initialised " + this + " - filtercount is " + filterCount);
     int i = 0;
 
-    filters[i] = new TextDrawer(this).setFilterName("TextDrawer").setCanvases(getCanvasMapping("temp"),getCanvasMapping("temp"));//setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);
+    filters[i] = new TextDrawer(this).setFilterName("TextDrawer").setCanvases(getCanvasMapping("temp"),getCanvasMapping("out"));//setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);
     final TextDrawer ftd = (TextDrawer) filters[i];
 
     filters[++i] = new BlendDrawer(this).setFilterName("BlendDrawer").setCanvases(getCanvasMapping("out"),getCanvasMapping("temp")); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
     final BlendDrawer fbd = (BlendDrawer) filters[i];
     ((BlendDrawer)filters[i]).setBlendMode(9);
+    
+    //filters[++i] = new ShaderFilter(this,"negateFrag.glsl").setCanvases(getCanvasMapping("out"), getCanvasMapping("temp"));//.addParameter("Opacity", new Float(0.5f), 0f, 1f);
 
     /*host.getStream("beat").registerEventListener("beat_8",
       new ParameterCallback () {
@@ -222,7 +225,7 @@ public class TextFlashScene extends Scene {
   		return this;
   	}
 
-	class TextFlashSequence1 extends Sequence {
+	public class TextFlashSequence1 extends Sequence {
 		public TextFlashSequence1(TextFlashScene fx, int i) {
 			// TODO Auto-generated constructor stub
 			super(fx,i);

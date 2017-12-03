@@ -8,51 +8,37 @@ import controlP5.*;
 //import javax.media.j3d.*;
 
 import vurfeclipse.projects.*;
+import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.user.projects.*;
 import vurfeclipse.user.projects.TestProject;
-import codeanticode.glgraphics.*;
+//import codeanticode.glgraphics.*;
 import ddf.minim.*;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
+import java.io.PrintStream;
+import java.text.MessageFormat;
 import java.util.*;
+
+import com.sun.glass.ui.Screen;
 
 //import javax.media.opengl.*;
 import processing.opengl.*;
-import javax.media.opengl.GL;
+import ch.bildspur.postfx.builder.*;
+import ch.bildspur.postfx.pass.*;
+import ch.bildspur.postfx.*;
 
-import fullscreen.*;
 
 public class VurfEclipse extends PApplet {
-	/*public void setup() {
-	}
-	public void draw() {
-		fill(color(random(255),random(255),random(255)));
-		rect (width/2,height/2,5,5);
-	}*/
-
-	boolean hdRes = false;//true;
-	boolean mdRes = true; //true;
-	boolean projRes = false;
-	boolean ultrahiRes = false;
-	boolean hiRes = true;
-	boolean medRes = true;
-
-	public boolean exportMode = false; //true;
-
-	FullScreen fs;
-	boolean fullscreen = false;
-	
-  boolean ready = false;
-
+	private PostFXSupervisor fxs;
 
 	///// SYPHON STUFF (choose one - disabled stuff or enabled stuff)
 
 	// DISABLED SYPHON BLOCK (stubs)
 	boolean syphon = false;
-	public void drawSyphon(GLGraphicsOffScreen offscreen) {};
-	public void initSyphon(GL gl, String theName) {};
+	public void drawSyphon(PGraphics offscreen) {};
+	//public void initSyphon(GL gl, String theName) {};
 
 	/*
 	// ENABLE SYPHON BLOCK (supposed working code) //JSyphon stuff+info at https://forum.processing.org/topic/syphon-integration-with-processing
@@ -102,48 +88,23 @@ public class VurfEclipse extends PApplet {
 	*/
 	//////////////////////////////// END OF SYPHON STUFF
 
+	private static ControlFrame controlFrame;
 
-
-	//ControlP5 cp5;
-	//int myColorBackground = color(0, 0, 0);
-	private static ControlWindow controlWindow;
-
-	void destroyControls(ControlP5 cp5) {
-	  cp5.dispose(); //dispose();
-	  controlWindow.clear();
-	}
-
-	public ControlWindow getCW() {
-	  if (controlWindow==null) {
-		  System.out.println("VurfEclipse#getCW initialising controlWindow");
-	  	  ControlP5 cp5 = getCP5();
-	  	  //cp5.window().setLocation(1024, 0);
-	  	  System.out.println("VurfEclipse#getCW about to do addControlWindow()");
-		  controlWindow = cp5.addControlWindow("controlP5window", 300, 0, 1000, 800, JAVA2D, 30);
-		  System.out.println("VurfEclipse#getCW about to do hideCoordinates");
-		  controlWindow.hideCoordinates();
-		  System.out.println("VurfEclipse#getCW about to do setBackground");
-		  controlWindow.setBackground(color(40));
-		  
-		  controlWindow.setLocation(800, 20);		//NOZSTOCK ADDITION
-	  }
-	  //if (controlWindow==null) setupControls(getCP5());
-	  return controlWindow;
-	}
-
-	synchronized public ControlP5 getCP5() {
-		if (cp5==null && enablecp5) {
+	synchronized public ControlFrame getCF() {
+		if (controlFrame==null && enablecp5) {
 			System.out.println("VurfEclipse#getCP5 creating new ControlP5..");
-			cp5 = new ControlP5(this);
+			//cp5 = new ControlP5(this);
+			controlFrame = new ControlFrame(this, 1280, 800, "Vurfx Controls");
+			//controlFrame.setup();
+			//surface.setLocation(20, 20);
 		}
-		System.out.println("getCP5 returning " + cp5);
-		return cp5;
+		println("getCF() returning " + controlFrame);
+		return controlFrame;
 	}
 
 	void setupControls() {
-		System.out.println("VurfEclipse#setupControls");
-
-		getCW();
+		println("VurfEclipse#setupControls()");
+		getCF();
 	}
 
 
@@ -161,34 +122,39 @@ public class VurfEclipse extends PApplet {
 	Minim minim;
 
 	String dateStamp = dateStamp();
-	String dateStamp () {
-	 return year() + "-" + month() + "-" + day() + "-" + hour() + "-" + minute() + "-" + second();
+	public String dateStamp () {
+		return year() + "-" + month() + "-" + day() + "-" + hour() + "-" + minute() + "-" + second();
 	}
 
 	//config settings
-	int title_adjust = -50; //-100;
+	
+	// select resolution
+	boolean hdRes = false;//true;
+	boolean mdRes = false; //true; //true;
+	boolean projRes = true;
+	boolean ultrahiRes = false;
+	boolean hiRes = true; //true;
+	boolean medRes = false; //true;
+	boolean lowRes = false;
+	// all false for really low res 
+
+	boolean fullscreen = false;//true;//false;
+	int fullscreen_num = 3;
+
+	int title_adjust = -50; //-100;	// amount to take off the height to compensate for window title, system bar etc
 	int
-		output_width =  								(hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640),
-		output_height = title_adjust + 	(hdRes ? 1080 : mdRes ? 900 :  projRes ? 960  : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480);
-		//output_width = 1280; int output_height = 1024;;;;
-	//int output_width = hiRes ? 1280 : 800, output_height = hiRes? 1024 : 600;
-	//int output_width = 1280, output_height = 1024;
-	int desired_width = output_width; //(int)(output_width*1.5f);
-	int desired_height = output_height; //(int)(output_height*1.5f);
+		output_width =  (hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640),
+		output_height = (hdRes ? 1080 : mdRes ? 900 :  projRes ? 960  : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480) 
+						+ (fullscreen?0:title_adjust);
 
+	int desired_width 	= output_width; //(int)(output_width*1.5f);
+	int desired_height 	= output_height; //(int)(output_height*1.5f);
 
+	//int[] texID;
 
-
-	String gfx_mode = GLConstants.GLGRAPHICS;
-	//String gfx_mode = P2D;
-
-	//Frame f;// = new Frame(width,height);
-
-	int[] texID;
-
-	GLGraphics pgl;
-	GL gl;
-	GLGraphicsOffScreen offscreen;
+	/*GLGraphics pgl;
+	GL gl;*/
+	Canvas offscreen;
 
 	int lastSecond;
 
@@ -217,10 +183,11 @@ public class VurfEclipse extends PApplet {
 
 	public static void main(String args[]) {
 	    //PApplet.main(new String[] { "--present", "vurfeclipse.VurfEclipse" });
-		PApplet.runSketch(new String[] { "vurfeclipse.VurfEclipse" }, new VurfEclipse());
+		//PApplet.runSketch(new String[] { "vurfeclipse.VurfEclipse" }, new VurfEclipse());
 		//PApplet.runSketch(new String[] { "--present", "vurfeclipse.VurfEclipse" }, new VurfEclipse());
 		//PApplet.
 		//PApplet.main(new String[] { "vurfeclipse.VurfEclipse" });
+		PApplet.main("vurfeclipse.VurfEclipse",args);
 	}
 
 	int sizeCount = 0;
@@ -228,100 +195,58 @@ public class VurfEclipse extends PApplet {
 	public void size(int w, int h, String gfx) {
 		sizeCount++;
 		if (sizeCount>=2) {
-			System.out.println("size(): ignoring " + sizeCount + "th call so as not to trigger GL error.");
+			println("size(): ignoring " + sizeCount + "th call so as not to trigger GL error.");
+			//System.exit(1);
 			return;
+		} else {
+			println("size(): Passing size call number " + sizeCount);
 		}
 		super.size(w,h,gfx);
+
 	}
 
 	int refCount = 0;
+	private boolean finishedSetup;
 	
 	@Override
-	public void setup () {
-		 refCount++;
+	public void settings () {
 		 APP.setApp(this);
+		 
+		 System.out.println(refCount + ": -------------==================== \\\\/URF/ [1] settings() ===================--------------");
+		 System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
-		 
-		 System.out.println(refCount + ": -------------==================== \\\\/URF/ ===================--------------");
-		 System.out.println("Working Directory = " +
-		     System.getProperty("user.dir"));
-		 
-		 /*if (refCount==1) {
-			 System.out.println("returning from setup() because refCount is " + refCount); 
-			 return;
-		 }*/
-		 
-		 //if (enablecp5 && refCount==1) setupControls();
-		 
-
+		 if (this.args!=null) {
+			 List<String> args = Arrays.asList(this.args);
+			 System.out.println("Passed command line arguments: " + Arrays.deepToString(this.args));
+			 if (args.contains("fullscreen")) {
+				 println("Setting fullscreen = true from commandline switch!");
+				 this.fullscreen = true;
+			 }
+			 if (args.contains("fullscreen_num")) {
+				 this.fullscreen_num = Integer.parseInt(args.get(args.indexOf("fullscreen_num")+1));
+				 println("Setting fullscreen_num = " + this.fullscreen_num + " from commandline switch!");
+			 }
+		 }
+ 		 	 
 		 //size(output_width, output_height + gw_height, gfx_mode);
-		 System.out.println("Initialising size() at " + output_width + ", " + output_height + " using renderer " + gfx_mode);
-		 this.size(output_width, output_height, gfx_mode); // + gw_height, gfx_mode);
-
-		 if (frame != null) {
-			 frame.removeNotify();
-			 		frame.setVisible(false);
-			    frame.setResizable(false);
-			    frame.setLayout(new BorderLayout() /*{
-			    	@Override public void {
-			    		
-			    		
-			    	}
-			    }*/);
-			    frame.setLocation(0, 0);
-			    //frame.setSize(output_width, output_height);
-			    frame.addWindowStateListener(new WindowStateListener() {
-			      public void windowStateChanged(WindowEvent arg0) {
-			         System.out.println("Caught windowStateChanged " + arg0);
-			      }
-			   });
-			   //frame.setUndecorated(true);
-
-			   frame.setVisible(true);
-			   frame.addNotify();
-			   //frame.dispose();
-			   //frame = null;
-			   //frame.setUndecorated(true);
-			   frame.setMenuBar(null);
+		 
+		 boolean enableDebugStream = false;
+		 if (enableDebugStream) {
+			 System.out.println("Enabling DebugStream to capture System.err output");
+			 DebugStream.activate();
 		 }
 
 	     this.delaySetup();
-
-
 	     
-
-
 		 //System.exit(1);
 
-		 frameRate(global_fps);
-
-		 if (fullscreen) {
-			 fs = new FullScreen(this);
-			 fs.enter();
-		 }
 
 		 ImageRepository.IR = new ImageRepository();
 
 		 io = new IOUtils();
 
-		 initialiseGraphics();
-
-		 delaySetup();
-
-
-		 //colorMode(ARGB);
-		 colorMode(RGB, 255, 255, 255, 100);
-
-
-		 cursor(CROSS);
-
-		 noSmooth();
-		 //tint(255);
-		 noTint();
-
-		 lastSecond = exportMode?0:millis();
-
 		//// instantiate a project to display
+	 	println("Instantiating Project at " + desired_width + "x" + desired_height);
 
 		 //pr = new TestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new SimpleProject(desired_width, desired_height, gfx_mode);
@@ -330,62 +255,114 @@ public class VurfEclipse extends PApplet {
 		 //pr = new NozstockProject(desired_width, desired_height, gfx_mode);
 
 		 //pr = new AboveBoardsProject(desired_width, desired_height, gfx_mode);
-		 System.out.println("Instantiating Project at " + desired_width + "x" + desired_height);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-		 pr = new MutanteProject(desired_width, desired_height, gfx_mode);
-		 //pr = new FeralFestProject(desired_width, desired_height, gfx_mode);
+		 //pr = new MutanteProject(desired_width, desired_height);
+		 pr = new FeralFestProject(desired_width, desired_height);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
 		 //pr = new PharmacyProject(desired_width, desired_height, gfx_mode);
 		 //pr = new TempSocioSukiVideoProject(desired_width, desired_height, gfx_mode);
 		 
-		 //pr = new TestProject(desired_width, desired_height, gfx_mode);
+		 //pr = new TestProject(desired_width, desired_height);
 
 		 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 		 
 		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
-
-		 System.out.println("Initialising " + pr);
-		 pr.initialise();
-
-		 //gw = new GwrxInterface(APP, pr);
-
-		 //pr.setupControls();
-
-		 if (exportMode) {
-		   timeMillis = 500;
-		   lastSecond = timeMillis;
-		   noLoop();
-		   while (true && frameCount < (60*global_fps)) {
-		     System.out.println("exportMode: about to call redraw()");
-		     draw();
-		   }
-		   exit();
+		 
+		 if (fullscreen) {
+			 //((PGraphicsOpenGL)this.offscreen.getSurf()).updatePixelSize();
+			 println("going fullscreen on " + fullscreen_num);
+			 //this.setSize(output_width, output_height);
+			 this.setSize(desired_width, desired_height);
+			 this.fullScreen(P3D, fullscreen_num);
+			 //this.g.init(desired_width, gw_height, ARGB);
+			 //
+		 } else {
+			 println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
+			 this.size(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
 		 }
+		 
+		 System.out.println("Finished VurfEclipse#settings() - handing off to setup!");
+	}
+	
+	@Override
+	public void setup () {	// was public void setup() {
+		 refCount++;
+		 println(refCount + ": -------------==================== \\\\/URF/ [2] setup() ===================--------------");
 
-		 System.out.println("Finished VurfEclipse setup(); handing off to draw()...");
-		 this.ready = true;
+		 //this.g.setSize(1920,1080); //desired_width/2, desired_height);
+		 //this.g.setSize(Screen.getMainScreen().getWidth(), Screen.getMainScreen().getHeight());
+
+		 
+		 /*if (refCount==1) {
+			 System.out.println("returning from setup() because refCount is " + refCount); 
+			 return;
+		 }*/
+		 
+		 //if (enablecp5 && refCount==1) setupControls();
+		 
+		 //pr.setupSequencer();
+		 //pr.initialiseScenes();
+
+		 pr.initialise();
+		 
+		 //delaySetup();
+		 pr.initialiseScenes();
+		 
+		 ///frame.setLocation(500, 0);
+		 
+		 println("About to call getCF() in " + this + "#setup()");
+		 getCF(); // start up control frame
+		 println("Finished getCF() call!");
+		 //System.out.println("about to call setupControls on " + pr.toString());
+		 //pr.setupControls(getCF());
+		 
+
+		 //frameRate(global_fps);
+
+		 /*if (fullscreen) {
+			 fs = new FullScreen(this);
+			 fs.enter();
+		 }*/
+		 initialiseGraphics();
+		 //this.setSize(output_width, output_height);
+
+		 //colorMode(ARGB);
+		 colorMode(RGB, 255, 255, 255, 100);
+
+		 cursor(CROSS);
+
+		 //noSmooth();
+		 //tint(255);
+		 noTint();
+	 
+		 //System.out.println("Initialising " + pr);
+		 //pr.initialise();
+		 
+		 println("Finished VurfEclipse setup(); handing off to draw()...");
+		 this.finishedSetup = true;
+		 //this.ready = true;
 		 //System.exit(0);
 	}
 
 
 
 	private void delaySetup() {
-		 try {
-			 int sleepTime = 1000;
-			 System.out.println("Pausing for " + sleepTime + " milliseconds to wait for stuff to catch up..");
-			 Thread.sleep(sleepTime);
-		 } catch (Exception e) {
-			 System.out.println("Caught " + e);
-		 }
-		 System.out.println("Finished pausing.");
-
+		if (false)
+			 try {
+				 int sleepTime = 1000;
+				 System.out.println("Pausing for " + sleepTime + " milliseconds to wait for stuff to catch up..");
+				 Thread.sleep(sleepTime);
+			 } catch (Exception e) {
+				 System.out.println("Caught " + e);
+			 }
+			 System.out.println("Finished pausing.");
 	}
-	private void initialiseGraphics() {
-		 if (gfx_mode==GLConstants.GLGRAPHICS) {
+	private void initialiseGraphics() {	// called from setup()
+		 /*if (gfx_mode==GLConstants.GLGRAPHICS) {
 			   System.out.println("Setting up in GLConstants.GLGRAPHICS mode, so have to do some funky GL shit..");
 
 			   offscreen = new GLGraphicsOffScreen(this, width, height); //, true, 4);
@@ -408,15 +385,38 @@ public class VurfEclipse extends PApplet {
 			   pgl.endGL();
 			   		   
 			   System.out.println("..Finished funky GL shit.");
-		 }
+		 }*/
 		 
+		//offscreen = pr.createCanvas("/out", "Main out");
 
 		 //pgl = (PGraphicsOpenGL) g;
-		 gl = pgl.gl;
+		 /*gl = pgl.gl;
 		 if (syphon) {
 		   initSyphon(gl, "Vurf");
-		 }
+		 }*/
+		
+		// https://stackoverflow.com/questions/20551224/how-to-enable-vsync-synchronization-in-processing-2-x
+		  PJOGL pgl = (PJOGL)beginPGL();
+		  //pgl.gl.getGLProfile().
+		  pgl.gl.setSwapInterval(1);
+		  //pgl.presentX = 1920;
+		  //pgl.presentY = 1080;
+		  //pgl..hei
+		  endPGL();
+		  
+		  hint(DISABLE_DEPTH_TEST);
+		  
+		  frameRate(60);
+
+	      //println("initialiseGraphics() setting up PostFX");
+	      //setFxs(new PostFXSupervisor(this, output_width, output_height));
 	}
+	
+	public boolean isReady() {
+		return ( this.finishedSetup &&		//false	&& /// false to debug without drawing ! 
+				(this.pr!=null && this.pr.isInitialised()));
+	}
+	
 
 	/*******
 	*
@@ -424,87 +424,95 @@ public class VurfEclipse extends PApplet {
 	*
 	********/
 	public int timeMillis;
-	GLTextureWindow texWin;
+	//GLTextureWindow texWin;
 	@Override
-	public void draw () {
-	//System.out.println("Draw!");
+	synchronized public void draw () {
+		//System.out.println("Draw!");
+		if (!isReady()) {
+			//println("Not yet isReady!()");
+			return;
+		} /*else {
+			println("is ready!");
+		}*/
 		
-		if (!ready) return;
+		if (getFxs()==null) {
+			setFxs(new PostFXSupervisor(this,output_width,output_height)); //.setResolution(output_width, output_height); //, 1920, 1080)); //output_width, output_height));
+			//this.setSize(desired_width, desired_height);
+			//this.g.init(APP.getApp().displayWidth, APP.getApp().displayHeight, ARGB);	// important !
+			this.g.init(output_width, output_height, ARGB);	// important !
+		}
 	
 		/*if (texWin==null) {
 			GLTextureWindow texWin = new GLTextureWindow(this, 0, 0, this.desired_width, this.desired_height);
 			texWin.setTexture(offscreen.getTexture());
 			texWin.init();
 		}*/
-		
-	 timeMillis = (exportMode?timeMillis+=(1000/global_fps):millis());
-	 if (exportMode)
-	   System.out.println("For frameCount " + frameCount + ", got timeMillis " + timeMillis);
+			
+		 //timeMillis = (exportMode?timeMillis+=(1000/global_fps):millis());
+		 timeMillis = millis();
+	
+		 if (enableStreams)
+			 pr.processStreams(timeMillis);
+	
+		 if (enableSequencer)
+			 pr.processSequencer(timeMillis);
+	
+		 //offscreen.beginDraw();
+	
+		 //pgl.beginGL();
+		 if (offscreen==null) 
+			 offscreen = pr.getCanvas("/out"); //, this.sketchWidth(), this.sketchHeight()); //output_width, output_height); //pr.createCanvas("/out", "Main out");
+	
+		 if (frameCount>25) {	// skip rendering first 25 frames
+			 offscreen.getSurf().imageMode(CENTER);
+			 pr.applyGL(offscreen, output_width, output_height);
+			 //texWin.render();
+		 }
+		 //offscreen.endDraw();
+	
+		 /*if (gw!=null) {
+		   gw.drawStuff(offscreen, output_height, gw_height); //gw_height);
+		 }*/
+		 
+		 //this.imageMode(0);
+		 this.background(0);	// was it always thus?
+		 this.imageMode(CORNERS);
+		 //offscreen.getSurf().imageMode(CENTER);
+		 //this.setSize(APP.getApp().displayWidth, APP.getApp().displayHeight);
+		 //this.g.scale(0.25f);//0.8f); //1.5f);
+		 //this.g.scale(0.75f);
 
-	 if (enableStreams)
-	   pr.processStreams(timeMillis);
+		 this.image(offscreen.getSurf(), 0, 0, APP.getApp().sketchWidth(), APP.getApp().sketchHeight()); //output_width, output_height);	// actually draw to applet!
+		 //this.resetMatrix();
+		 //this.g.init(desired_width, desired_height, ARGB);
 
-	if (enableSequencer)
-		 pr.processSequencer(timeMillis);
+		 //this.image(offscreen.getSurf(), 0, 0, 1920, APP.getApp().displayHeight); //output_width, output_height);	// actually draw to applet!
+		 //this.applyMatrix(offscreen.getSurf().getMatrix());
+		 //this.mask(this.get());//offscreen.getSurf());
+		 //this.image(offscreen.getSurf(), 0, 0, output_width, output_height);	// actually draw to applet!
+		 //this.applyMatrix((PMatrix3D)offscreen.getSurf().getMatrix().scale(1.5f);
+		 //this.scale(1.5f);
+		 //this.g.scale(1.f);
+		 //this.pi
+		 //this.image(offscreen.getSurf(), 0, 0, output_width, output_height);	// actually draw to applet!
 
-	 //offscreen.beginDraw();
-
-	 //pgl.beginGL();
-
-	 if (frameCount>25) {	// skip rendering first 25 frames
-	   pr.applyGL(offscreen, output_width, output_height);
-	   //texWin.render();
-	 }
-	 //offscreen.endDraw();
-
-	 /*if (gw!=null) {
-	   gw.drawStuff(offscreen, output_height, gw_height); //gw_height);
-	 }*/
-
-	 if (syphon) drawSyphon (offscreen);
-
-	 //pgl.endGL();
-
-	 //screenGrab = true;
-	 if (exportMode || screenGrab) { //exportMode) {
-	   frameCount++;
-	   saveImage();
-	   screenGrab = false;
-	 }
-	 /*if (exportMode) {
-	  //offscreen.saveFrame("ouptut/image-" + dateStamp + "-#####.tiff");
-	  System.out.println("exportMode: saving");
-	  saveincr ++;
-	  offscreen.save("output/image-" + dateStamp + "-"+saveincr + ".tiff");
-	  }*/
+	
+		 if (syphon) drawSyphon (offscreen.getSurf());
+	
+		 //pgl.endGL();
+	
+		//screenGrab = true;
+		if (/*exportMode ||*/ screenGrab) { 
+		   frameCount++;
+		   saveImage();
+		   screenGrab = false;
+		}
 	}
-
 
 
 	/*****
-	*
-	*
 	* supporting methods
 	*****/
-
-
-
-
-	/*
-	int saveincr = 0;
-	void saveImage () {
-	saveincr++;
-	delay(100); // give the buffer enough time to catch up. 50 is too slow, 250 works
-	loadPixels();
-	PImage s = createImage(width, height, ARGB);
-	s.loadPixels();
-	for (int i = 0 ; i < pixels.length ; i++) {
-	s.pixels[i] = pixels[i];//get(i, i*width);
-	}
-	s.updatePixels();
-	//updatePixels();
-	s.save("output/image"+saveincr+random(100000)+".jpg");
-	}*/
 
 	int saveincr = 0;
 	void saveImage() {
@@ -533,46 +541,24 @@ public class VurfEclipse extends PApplet {
 	private ControlP5 cp5;
 	@Override
 	public void keyPressed() {
-	 try {
-	   if (key == ' ') {
-	     screenGrab = true;
-	   }
-	   else if (key=='/') {
-	     enableStreams = !enableStreams;
-	   }
-	   /*else if (key=='l') {
-	     //pr.cp5.destroy();
-	     destroyControls(getCP5());
-	     pr.finish();
-	     //pr.dispose();
-	     pr = null;
-	     pr = Project.loadProject(); //selectInput("select a file"));
-
-	     cp5 = new ControlP5(this);
-	     setupControls(cp5);
-	     pr.initialise();
-	     //selectInput("Choose a project file to load", "fileSelectedProject");
-	   } */
-	   else {
-	     pr.sendKeyPressed(key);
-	   }
-	 }
-	 catch (Exception e) {
-	 }
+		handleKey(key);
 	}
 
 
 	@Override
 	public void dispose() {
-	 pr.finish();
+		pr.finish();
 	}
 
 	public synchronized PApplet getAPP() {
-	 return APP.getApp();
+		return APP.getApp();
 	}
 
-	public GLGraphicsOffScreen getStaticGLBuff(int width, int height) {
-	 return new GLGraphicsOffScreen(APP.getApp(), width, height);
+	public PGraphics getStaticGLBuff(int width, int height) {
+		PGraphics p = new PGraphics();
+		p.setSize(width, height);;
+		return p;
+		//return new PGraphics(APP.getApp(), width, height);
 	}
 
 
@@ -583,7 +569,92 @@ public class VurfEclipse extends PApplet {
 	 return (a << 24) | (r << 16) | (g << 8) | b;
 	}
 
-	/*public PGraphics createBuffer (int width, int height, String mode) {
-	return (PGraphics) createGraphics(w, h, gfx_mode);
-	}*/
+	public PostFXSupervisor getFxs() {
+		return fxs;
+	}
+
+	public PostFXSupervisor setFxs(PostFXSupervisor fxs) {
+		this.fxs = fxs;
+		return this.getFxs();
+	}
+	
+	/**
+	 * @author Jeeeyul 2011. 11. 1.
+	 * @since M1.10
+	 * https://jeeeyul.wordpress.com/2012/10/18/make-system-out-println-rocks/
+	 */
+	public static class DebugStream extends PrintStream {
+	   private static final DebugStream INSTANCE = new DebugStream();
+	 
+	   public static void activate() {
+	      System.setErr(INSTANCE);
+	   }
+	 
+	   private DebugStream() {
+	      super(System.err);
+	   }
+	 
+	   @Override
+	   public void println(Object x) {
+	      showLocation();
+	      super.println(x);
+	   }
+	 
+	   @Override
+	   public void println(String x) {
+		  super.println("----");
+	      super.println("original error output: \"" + x + "\"");
+		  showLocation();
+	   }
+	 
+	   private void showLocation() {
+		  StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+	      StackTraceElement last = trace[3]; //= Thread.currentThread().getStackTrace()[3];
+		  super.print("caught error output at ");
+	      super.print(last);
+	      for (StackTraceElement element : Arrays.copyOfRange(trace,3,trace.length)) {	    	  
+	    	  //super.print(MessageFormat.format("({0}:{1, number,#}) : ", element.getFileName(), element.getLineNumber()) + " " + element);
+	    	  super.print(element);
+	    	  //System.out.print(trace);
+	    	  super.println();
+	      }
+	      super.println("----");
+	   }
+	}
+
+	public void handleKey(char key) {
+		 try {
+			   if (key == ' ') {
+			     screenGrab = true;
+			   }
+			   else if (key=='/') {
+			     enableStreams = !enableStreams;
+			   }
+			   /*else if (key=='l') {
+			     //pr.cp5.destroy();
+			     destroyControls(getCP5());
+			     pr.finish();
+			     //pr.dispose();
+			     pr = null;
+			     pr = Project.loadProject(); //selectInput("select a file"));
+
+			     cp5 = new ControlP5(this);
+			     setupControls(cp5);
+			     pr.initialise();
+			     //selectInput("Choose a project file to load", "fileSelectedProject");
+			   } */
+			   else {
+			     pr.sendKeyPressed(key);
+			   }
+			 }
+			 catch (Exception e) {
+				 println("keyPressed Caught exception " + e);
+				 e.printStackTrace();
+			 }		
+	}
+	
+	// callback for selectInput() ? - DOESNT WORK ?
+	public void loadSnapshot(String filename) {
+		this.pr.loadSnapshot(filename);
+	}
 }

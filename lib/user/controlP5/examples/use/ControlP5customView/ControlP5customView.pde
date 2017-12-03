@@ -23,7 +23,7 @@ void setup() {
   cp5 = new ControlP5(this);
   cp5.addButton("hello")
      .setPosition(50, 100)
-     .setSize(100,100)
+     .setSize(150,150)
      .setView(new CircularButton())
      ;
      
@@ -36,7 +36,7 @@ void setup() {
 
 
 void draw() {
-  background(0);
+  background(ControlP5.BLACK);
 }
 
 public void hello(int theValue) {
@@ -59,16 +59,16 @@ public void world(int theValue) {
  
 class CircularButton implements ControllerView<Button> {
 
-  public void display(PApplet theApplet, Button theButton) {
+  public void display(PGraphics theApplet, Button theButton) {
     theApplet.pushMatrix();
     if (theButton.isInside()) {
       if (theButton.isPressed()) { // button is pressed
-        theApplet.fill(200, 60, 0);
+        theApplet.fill(ControlP5.LIME);
       }  else { // mouse hovers the button
-        theApplet.fill(200, 160, 100);
+        theApplet.fill(ControlP5.YELLOW);
       }
     } else { // the mouse is located outside the button area
-      theApplet.fill(0, 160, 100);
+      theApplet.fill(ControlP5.GREEN);
     }
     
     theApplet.ellipse(0, 0, theButton.getWidth(), theButton.getHeight());

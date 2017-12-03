@@ -36,8 +36,8 @@ public class MutanteProject extends Project implements Serializable {
 	
 	float tempo = 150.0f; //10.0f; //150.0f;
 
-  public MutanteProject(int w, int h, String gfx_mode) {
-    super(w,h,gfx_mode);
+  public MutanteProject(int w, int h) {
+    super(w,h);
   }
 
   public boolean initialiseBuffers() {
@@ -375,7 +375,7 @@ public class MutanteProject extends Project implements Serializable {
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
     		new TunnelScene(this, w, h).setCanvas("temp", "/temp2") //temp2")	// "/out"
 			//.addFilter(new BlendDrawer()))
-		, "/pix0", "/out"
+		, "/out", "/out"
 	);
     int tunnel_weight = 1;
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), tunnel_weight);
@@ -489,10 +489,13 @@ public class MutanteProject extends Project implements Serializable {
     
 
     //ils1.setupFilters();
-    switcher.bindSequence("ils1_choose", ils1.getSequence("choose_0"), 2+switcher.getSequenceCount()/4);//32);
+    /*switcher.bindSequence("ils1_choose", ils1.getSequence("choose_0"), 2+switcher.getSequenceCount()/4);//32);
     switcher.bindSequence("ils2_choose", ils2.getSequence("choose_1"), 2+switcher.getSequenceCount()/4);//32);
     switcher.bindSequence("ils2_choose", ils1.getSequence("choose_2"), 2+switcher.getSequenceCount()/4);//32);
-    switcher.bindSequence("ils2_choose", ils2.getSequence("choose_3"), 2+switcher.getSequenceCount()/4);//32);
+    switcher.bindSequence("ils2_choose", ils2.getSequence("choose_3"), 2+switcher.getSequenceCount()/4);//32);*/
+    
+    switcher.bindAll("ils1_choosers_", ils1.getSequences(), 100);
+    switcher.bindAll("ils2_choosers_", ils1.getSequences(), 100);
    
 
     /*switcher.addSequence("word_take_trips",

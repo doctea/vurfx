@@ -4,12 +4,12 @@ import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.PlainDrawer;
 import vurfeclipse.projects.Project;
 
-class PlainScene extends Scene {
+public class PlainScene extends Scene {
   //int filterCount = 2;
   
   //Filter[] filters;// = new Filter[filterCount];
   
-  PlainScene(Project host, int w, int h) {
+  public PlainScene(Project host, int w, int h) {
     super(host, w, h);
     
     this.filterCount = 32;

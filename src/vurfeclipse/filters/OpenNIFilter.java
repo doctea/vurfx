@@ -1,7 +1,7 @@
 package vurfeclipse.filters;
 import processing.core.PConstants.*;
-import codeanticode.glgraphics.GLGraphicsOffScreen;
-import codeanticode.glgraphics.*;
+//import codeanticode.glgraphics.GLGraphicsOffScreen;
+//import codeanticode.glgraphics.*;
 import vurfeclipse.*;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -22,14 +22,14 @@ import SimpleOpenNI.*;
 
 public class OpenNIFilter extends Filter {
 
-  SimpleOpenNI context;
+  transient SimpleOpenNI context;
   float        zoomF = 0.3f;
   float        rotX = PApplet.radians(180);  // by default rotate the hole scene 180deg around the x-axis,
                                      // the data from openni comes upside down
   float        rotY = PApplet.radians(0);
   PShape       pointCloud;
   int          steps = 2;
-	private int cameraId = 0;
+  private int cameraId = 0;
 
 /*  String depthOutputName;
   String irOutputName;
@@ -172,19 +172,19 @@ public class OpenNIFilter extends Filter {
   }*/
 
   //PImage video_frame_ = new PImage(640,480);
-  Canvas scaled = Canvas.makeCanvas(640,480,((VurfEclipse)APP.getApp()).pr.gfx_mode,"/dlibcanvas");
+  transient Canvas scaled = Canvas.makeCanvas(640,480,((VurfEclipse)APP.getApp()).pr.gfx_mode,"/dlibcanvas");
 
   PImage rgb;
   PImage depth;
 
-  PImage t = scaled.getSurf().get();
+  transient PImage t = scaled.getSurf().get();
 
   boolean newFrame = false;
 
-  ReaderThread rt;// = new ReaderThread();
+  transient ReaderThread rt;// = new ReaderThread();
 
-  PImage newRgb;
-  PImage newDepth;
+  transient PImage newRgb;
+  transient PImage newDepth;
   //PImage newIR;
 
   public boolean applyMeatToBuffers() {
@@ -224,7 +224,7 @@ public class OpenNIFilter extends Filter {
 	        out.copy(rgb, 0, 0, rgb.width, rgb.height, 0, 0, out.width, out.height);
 	        out.fill(255);
 	        //out.rect(sc.w/2,sc.h/2,40,40);
-	        newRgb.delete();
+	        //newRgb.delete();
 
 	        //out.background(t);
 	        //out.image(context.rgbImage(),0,0);
@@ -235,7 +235,7 @@ public class OpenNIFilter extends Filter {
   public void drawDepth() {
 	    if (context!=null) {
 		    //newDepth = context.depthImage().get();
-		    GLGraphicsOffScreen out_depth = sc.getCanvas("depth").getSurf();
+		    PGraphics out_depth = sc.getCanvas("depth").getSurf();
 		    
 		    //println("depth is " + sc.getCanvas("/depth").toString());
 
@@ -255,7 +255,7 @@ public class OpenNIFilter extends Filter {
 		      //out.text("OUT", 200, 200);
 		      //out.rect(20, 20, 20, 20);;
 		    	//out_depth.copy(depth, 0, 0, depth.width, depth.height, 0, 0, out_depth.width, out_depth.height);
-		    	newDepth.delete();
+		    	//newDepth.delete();
 		    }
 	    }
   }

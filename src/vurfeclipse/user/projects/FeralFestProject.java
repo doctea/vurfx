@@ -16,6 +16,7 @@ import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.ChainSequence;
 import vurfeclipse.sequence.ChangeParameterSequence;
+import vurfeclipse.sequence.SavedSequence;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
@@ -29,14 +30,14 @@ import vurfeclipse.user.scenes.OutputFX2;
 import vurfeclipse.user.scenes.OutputFX3;
 import vurfeclipse.user.scenes.TunnelScene;
 
-public class FeralFestProject extends Project implements Serializable {
+public class FeralFestProject extends Project {
 
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
 	
 	float tempo = 150.0f; //10.0f; //150.0f;
 
-  public FeralFestProject(int w, int h, String gfx_mode) {
-    super(w,h,gfx_mode);
+  public FeralFestProject(int w, int h) {
+    super(w,h);
   }
 
   public boolean initialiseBuffers() {
@@ -221,11 +222,12 @@ public class FeralFestProject extends Project implements Serializable {
     blendScene.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
     blendScene.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
     
-    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
-    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setOutputCanvas("/pix0").setFilterName("kinect1")));
-    blendScene.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
+    //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    //blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setOutputCanvas("/pix0").setFilterName("kinect1")));
+    blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect0",0).setOutputCanvas("/pix0").setFilterName("kinect0"))).setCanvas("depth", "/pix1");//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    //blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect1",1).setOutputCanvas("/pix1").setFilterName("kinect1")));
     
-    blendScene.addSequence("_next_camera", new SimpleSequence() {
+    /*blendScene.addSequence("_next_camera", new SimpleSequence() {
     	int camera = 0;
     	int max_camera = 2;
 			@Override
@@ -233,14 +235,14 @@ public class FeralFestProject extends Project implements Serializable {
 				super.onStart();
 				int current_camera = camera;
 				
-				OpenNIFilter old = (OpenNIFilter)blendScene.getFilter("kinect"+camera);
+				OpenKinectFilter old = (OpenKinectFilter)blendScene.getFilter("kinect"+camera);
 				//old.setCanvases("depth", "/NULL").setOutputCanvas("/NULL"); //setMuted(true);
 				old.changeParameterValue("depth", new Boolean(false));
 				old.changeParameterValue("rgb", new Boolean(false));
 				camera++;
 				if (camera>=max_camera) camera = 0;
 				//blendScene.getFilter("kinect"+camera).setOutputsetMuted(false);
-				old = (OpenNIFilter)blendScene.getFilter("kinect"+camera);
+				old = (OpenKinectFilter)blendScene.getFilter("kinect"+camera);
 				old.changeParameterValue("depth", new Boolean(true));
 				old.changeParameterValue("rgb", new Boolean(true));
 				
@@ -254,13 +256,13 @@ public class FeralFestProject extends Project implements Serializable {
 			public boolean readyToChange(int max_i) {
 				return true;				
 			}
-    });
+    });*/
     
     //switcher.bindScene("blend scene", "preset 1", blendScene);
     this.addScene(blendScene);
-    switcher.bindSequence("blend", blendScene, "preset 1", 100).setLengthMillis(1000);
-    switcher.bindSequence("blend2_next_", blendScene, "preset 2_next_", 100).setLengthMillis(0);
-    switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
+    switcher.bindSequence("blend", blendScene, "nomute_preset 1", 100).setLengthMillis(1000);
+    switcher.bindSequence("blend2_next_", blendScene, "nomute_preset 2_next_", 100).setLengthMillis(0);
+    //switcher.bindSequence("_next_camera", blendScene, "_next_camera", 50);
 
 
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
@@ -378,14 +380,14 @@ public class FeralFestProject extends Project implements Serializable {
 		Sequence doubleSequence = new ChainSequence(2000)
 			.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
 			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
-			.addSequence(blendScene, "preset 1")
+			.addSequence(blendScene, "nomute_preset 1")
 		;
     switcher.bindSequence("d1:", doubleSequence, 10);
     
   	Sequence doubleSequence2 = new ChainSequence(2000)
   			//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
   			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 2")
-  			.addSequence(blendScene, "preset 1")
+  			.addSequence(blendScene, "nomute_preset 1")
   			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 3")
   			//.addSequence(blendScene, "preset 1")
   		;
@@ -393,7 +395,7 @@ public class FeralFestProject extends Project implements Serializable {
   	
   	Sequence doubleSequence3 = new ChainSequence(2000)
   			.addSequence(getSceneForPath("/sc/BlobScene2"), "preset 1")
-  			.addSequence(blendScene, "preset 1")
+  			.addSequence(blendScene, "nomute_preset 1")
   	;
   	switcher.bindSequence("d2:", doubleSequence3, 5);
   	
@@ -422,9 +424,9 @@ public class FeralFestProject extends Project implements Serializable {
     switcher.bindSequence("tunnel_1_blob_preset_2_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), tunnel_weight);
     switcher.bindSequence("tunnel_1_blob_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 3"), tunnel_weight);
     switcher.bindSequence("tunnel_1_blob_wobble_preset3",new ChainSequence(2000).addSequence(ts1, "preset 3").addSequence(blobScene, "preset 3"), tunnel_weight);
-    switcher.bindSequence("tunnel_1_blend_wobble_preset2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_1_blend_wobble_preset2",new ChainSequence(2000).addSequence(ts1, "preset 2").addSequence(blendScene, "nomute_preset 1"), tunnel_weight);
     
-    switcher.bindSequence("tunnel_1_blend_angled_2",new ChainSequence(2000).addSequence(ts1, "f2 angled 60").addSequence(blendScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_1_blend_angled_2",new ChainSequence(2000).addSequence(ts1, "f2 angled 60").addSequence(blendScene, "nomute_preset 1"), tunnel_weight);
     
     /*switcher.bindSequence(
         	"tunnel_2_pulse",
@@ -441,12 +443,13 @@ public class FeralFestProject extends Project implements Serializable {
     switcher.bindSequence("tunnel_2_blob_pulse_1",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), tunnel_weight);
     switcher.bindSequence("tunnel_2_blob_pulse_2",   new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 2"), tunnel_weight);
     switcher.bindSequence("tunnel_2_double_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(doubleSequence), tunnel_weight/5);
-    switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "preset 1"), tunnel_weight);
+    switcher.bindSequence("tunnel_2_blend_pulse_1",  new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blendScene, "nomute_preset 1"), tunnel_weight);
     switcher.bindSequence("tunnel_2_blob_wobble_1",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 1"), tunnel_weight);
     switcher.bindSequence("tunnel_2_blob_wobble_2",  new ChainSequence(2000).addSequence(ts2, "preset 2").addSequence(blobScene, "preset 2"), tunnel_weight/5);
     switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene, "preset 4").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), tunnel_weight*2);
 
-    
+    //switcher.bindSequence("TEST", new SavedSequence(ts2,"FeralFestProject2017-11-16-22-21-7.xml",2000));
+    switcher.bindSavedSequencer("Saved Sequence ", 10, 20);
     
     //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
     //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
@@ -566,10 +569,10 @@ public class FeralFestProject extends Project implements Serializable {
 
 
     //switcher.setRandomMode(false);
-    /*this.addSceneOutputCanvas(
+    this.addSceneOutputCanvas(
     		new BadTVScene(this,w,h).registerCallbackPreset(getStream("beat"), "beat_8", "warp"),
     		"/out"
-    );*/
+    );
 
     this.addSceneOutputCanvas(
       new DebugScene(this,w,h),

@@ -6,29 +6,36 @@ import vurfeclipse.IOUtils;
 import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.RestConnector;
+import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.Map.Entry;
 
 import vurfeclipse.filters.Filter;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.SceneSequencer;
 import vurfeclipse.sequence.SequenceSequencer;
 import vurfeclipse.sequence.Sequencer;
 import vurfeclipse.streams.*;
-import codeanticode.glgraphics.*;
+import vurfeclipse.ui.ControlFrame;
 import controlP5.*;
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.core.PImage;
+import sun.security.jca.GetInstance.Instance;
 
 
 public abstract class Project implements Serializable {
   public int w,h;
   public String gfx_mode;
 
-  public Project(int w, int h, String gfx_mode) {
+  public Project(int w, int h) {
     this.w = w;
     this.h = h;
     this.gfx_mode = gfx_mode;
@@ -51,7 +58,7 @@ public abstract class Project implements Serializable {
   public Canvas getCanvas(String name) {
     try{
       if (canvases.get(name)==null) {
-        println("Project#getCanvas couldn't find '" + name + "'!!!!!!!!!!!!!!! - creating!");
+        println("Project#getCanvas couldn't find '" + name + "'!!!!!!!!!!!!!!! - creating one at " + "/" + name + "!");
         return createCanvas("/"+name,name);
       }
       //System.out.println("Project#getCanvas('" + name + "') returning " + canvases.get(name) + " with buffer " + canvases.get(name).surf);
@@ -134,8 +141,8 @@ public abstract class Project implements Serializable {
     if (enableStreams) {
       Iterator<?> i = streams.entrySet().iterator();
       while (i.hasNext()) {
-        //println("processStreams in " + this);
         Map.Entry e = (Map.Entry) i.next();
+        //println("processStreams in " + this + " for " + e);
         Stream s = (Stream) e.getValue();
         s.processEvents(time);
         s.deliverEvents();
@@ -167,30 +174,31 @@ public abstract class Project implements Serializable {
   int selectedSceneIndex = 0;
 
   //public abstract boolean initialise ();
-  transient GLGraphicsOffScreen off;
-  public boolean initialise() {
+  transient PGraphics off;
+  public boolean initialise () {
 	println("Project#initialise:");
 
-    off = Canvas.createGLBuffer(w,h,gfx_mode);
     initialiseBuffers();
 
     setupStreams();
 
     setupSequencer();
-
+    
     setupScenes();
-
-    initialiseScenes();
+    
+    //initialiseScenes();
+    //initialiseScenes();
 
     //if (cp5!=null) {
+    /*if (((VurfEclipse)APP.getApp()).enablecp5) {
         println("Project#initialise about to call setupControls");
-    	setupControls();
-    //}
+    	setupControls(((VurfEclipse)APP.getApp()).getCF());
+    }*/
 
     setupRest();
-
     setupExposed();
 
+    initialised = true;
     return true;
   }
 
@@ -200,6 +208,7 @@ public abstract class Project implements Serializable {
 
   public Object getObjectForPath(String path) {
     // loop over the scenes and check for one with the same name as the first part of path; then pass the rest to getObjectForPath() for the second part..
+	if (path=="/") return this;
     String[] spl = path.split("/",5); //, 3);
     //println("spl[1] is " + spl[1]);
     if ("sc".equals(spl[1])) {
@@ -212,10 +221,15 @@ public abstract class Project implements Serializable {
 	    	//println("Found " + s.getSceneName());
 	        //return s;
 	        // ask it to get the rest of the path for us
-	        if (spl.length>3) {
+	        if (spl.length>4) {
+	          //println("#getObjectForPath('"+path+") going to call getObjectForPath on " + s + ", looking for path '"+spl[3]+"/"+spl[4]);
 	          return s.getObjectForPath(spl[3]+"/"+spl[4]);
-	        } else
+	        } else if (spl.length>3) {
+	          //println("#getObjectForPath('"+path+") going to call getObjectForPath on " + s + ", looking for path '"+spl[3]);
+	          return s.getObjectForPath(spl[3]);	// mute etc
+	        } else {
 	          return s;
+	        }
 	      }
 	    }
     }
@@ -242,7 +256,10 @@ public abstract class Project implements Serializable {
 	  return true;
   };
 
-  public abstract boolean initialiseBuffers();
+  public boolean initialiseBuffers() {
+	  println(this.toString() + " initialising buffers");
+	  return true;
+  };
 
   public boolean initialiseScenes() {
     println("== initialiseScenes() in " + this);
@@ -360,31 +377,38 @@ public abstract class Project implements Serializable {
       }
   }*/
 
-  public void applyGL(GLGraphicsOffScreen gfx) {
-    applyGL(gfx, this.w, this.h);
+  public void applyGL(Canvas offscreen) {
+    applyGL(offscreen, this.w, this.h);
   }
-  public void applyGL(GLGraphicsOffScreen gfx, int w, int h) {
+  public void applyGL(Canvas offscreen_canvas, int w, int h) {
   //public void applyGL(PGraphics gfx) {
     //Iterator it = Arrays.asList(scenes).iterator();
 
+	PGraphics offscreen = offscreen_canvas.getSurf(); 
+	
+	//offscreen.beginDraw();
+	//offscreen.beginDraw();
     //gfx.clear(0);
     //GLGraphicsOffScreen temp = createGLBuffer(w,h,gfx_mode);
-    gfx.background(0,0,0,255);  // added
-    gfx.clear(0);
+    //offscreen.background(0,0,0,255);  // added
+    //gfx.clear(0);
 
+	
     Canvas out = getCanvas(getPath()+"out");
+    out.getSurf().imageMode(APP.getApp().CENTER);
 
     //out.getSurf().background(0);
 
-    gfx.background(APP.getApp().random(255));
+    //offscreen.background(APP.getApp().random(255));
 
+    //offscreen.endDraw();
     Iterator<Scene> it = scenes.iterator();
     while(it.hasNext()) {
       Scene sc = (Scene) it.next();
       //println("Applying to " + sc.toString() + " to " + sc.getSceneName());
       //sc.applyGL(gfx);
       if (shouldDrawScene(sc)) {
-    	//println("Should draw " + sc);
+    	//println("Should draw " + sc + " to " + out.getSurf());
         sc.applyGLtoCanvas(out); //getCanvas(getPath()+"out"));
         //sc.applyGL(buffers[BUF_OUT]);
         //sc.applyGL(off);
@@ -392,8 +416,13 @@ public abstract class Project implements Serializable {
     }
     ////gfx.image(buffers[BUF_OUT].getTexture(),0,0,w,h);
 
-    gfx.image(out.getSurf().getTexture(),0,0,w,h);//w,h);
+    //println("Outputting to " + offscreen);
+    /*offscreen.beginDraw();
+    out.getSurf().imageMode(APP.getApp().CENTER);
+    offscreen.image(out.getSurf(),0,0,w,h);//w,h);
+    offscreen.endDraw();*/
 
+    //offscreen.endDraw();
     ////gfx.image(buffers[BUF_INP1].getTexture(),0,0,w,h);
     ////gfx.image(off.getTexture(),0,0,w,h);
   }
@@ -405,23 +434,99 @@ public abstract class Project implements Serializable {
     return false;
   }
 
-  static public Project loadProject() {
-    return loadProject("project-test-2");
+  public Project loadSnapshot() {
+  	return loadSnapshot(this.getClass().getSimpleName()+".xml");
   }
-  static public Project loadProject(String filename) {
-    return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename, Project.class);
+  public Project loadSnapshot(String filename) {
+  	println("loadProject " + filename);
+  	//return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename+".vj", Project.class);
+  	HashMap<String, HashMap<String, Object>> input;
+  	try {
+  		//input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
+  		input = (HashMap<String, HashMap<String, Object>>) XMLSerializer.read(filename);
+  	} catch (Exception e1) {
+  		// TODO Auto-generated catch block
+  		System.err.println("Caught " + e1 + " trying to load '" + filename + "'");
+  		e1.printStackTrace();
+  		return this;
+  	}
+	
+	// get /seq params
+	if (input.containsKey("/seq")) {
+		HashMap<String,Object> target_pr = input.get("/seq");
+		input.remove("/seq");
+	
+		// process sequencer params
+		for (Entry<String, Object> e : target_pr.entrySet()) {
+			this.sequencer.target(e.getKey(), e.getValue());
+		}
+	}
+	
+	// get /project params
+	if (input.containsKey("/project")) {
+		HashMap<String,Object> target_pr = input.get("/project");
+		input.remove("/project");
+		if (target_pr!=null) {
+			for (Entry<String, Object> e : target_pr.entrySet()) {
+				this.target(e.getKey(), e.getValue());
+			}
+		}
+	}
+	
+	// process Parameter params
+	for (Entry<String,HashMap<String,Object>> e : input.entrySet()) {
+		Scene s = (Scene) this.getObjectForPath(e.getKey());
+		if(s==null) {
+			System.err.println ("Couldn't find a targetable for key '"+e.getKey()+"'");
+		} else {
+			s.loadParameters(e.getValue());
+		}
+	}
+	return null;
   }
 
-  public void saveProject() {
-    saveProject("project-test-2");
+  public void saveSnapshot() {
+    saveSnapshot(
+    		this.getClass().getSimpleName()
+    		//+"_"+APP.getApp().millis()
+    		+((VurfEclipse)APP.getApp()).dateStamp()
+    		+".xml");
   }
-  public void saveProject(String filename) {
+  public void saveSnapshot(String filename) {
     println("SAVING TO " + filename);
 
     //saveIndividualParts(filename);
-    ((VurfEclipse)APP.getApp()).io.serialize(filename, this); //getSelectedScene().getFilter(2)); //getCanvas("/out"));
+    //((VurfEclipse)APP.getApp()).io.serialize(filename + ".vj", this); //getSelectedScene().getFilter(2)); //getCanvas("/out"));
     //io.serialize("test-serialisation-2", new testsave()); //getCanvas("/out"));
+    saveScenes(filename);
   }
+  public void saveScenes(String filename) {
+	HashMap<String,HashMap<String,Object>> output = new HashMap<String,HashMap<String,Object>>();
+	
+	HashMap<String,Object> projectParams = this.collectParameters();
+	output.put("/project",projectParams);
+	
+	if (null!=this.sequencer) {
+		HashMap<String,Object> sequencerParams = this.sequencer.collectParameters();
+		output.put("/seq", sequencerParams); //new HashMap<String,HashMap<String,Object>>().put("current_sequence", this.sequencer.getCurrentSequenceName()));
+	}
+	for (Scene s : this.getScenes()) {
+		output.put(s.getPath(), s.collectParameters());
+	}
+	//((VurfEclipse)APP.getApp()).io.serialize(filename, output);
+	try {
+		XMLSerializer.write(output, filename);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		System.err.println("Caught " + e.toString() + " trying to save to '" + filename + "'");
+		e.printStackTrace();
+	}
+  }
+  private HashMap<String, Object> collectParameters() {
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		params.put("/project/timeScale", this.getTimeScale());
+		return params;
+	}
   public void saveIndividualParts(String filename) {
     Iterator<Scene> it = scenes.iterator();
     while (it.hasNext()) {
@@ -487,11 +592,14 @@ public abstract class Project implements Serializable {
 	    	println(rsConn.getURLs().toString());
 	    	System.exit(0);
 	    } */ 
-      /*} else  if (key=='s') {
+    } else  if (key=='s') {
       //println(this.getSelectedScene().getSelectedFilter().serialize());
       //println(this.serialize());
 
-      saveProject(); */
+      saveSnapshot(); 
+    } else if (key=='S') {
+    	loadSnapshot();
+    	//APP.getApp().selectInput("Select a file to load", "loadProject"); - DOESNT WORK ?
     } else if (this.sequencer.sendKeyPressed(key)) {
     	println ("Key " + key + " handled by sequencer!");
   	} else {
@@ -527,7 +635,7 @@ public abstract class Project implements Serializable {
   }
 
 
-  public RestConnector rsConn = new RestConnector(this);
+  public transient RestConnector rsConn = new RestConnector(this);
   public void setupRest() {
 	  //rsConn = new RestConnector(this);
 	  rsConn.start();
@@ -539,34 +647,55 @@ public abstract class Project implements Serializable {
 
   }
 
-  public void setupControls() {
+  public void setupControls(ControlFrame cf) {
     if (!((VurfEclipse)APP.getApp()).enablecp5) return;
 
-    ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
+    //ui.ControlFrame cf = ((VurfEclipse)APP.getApp()).getCF();
+    //ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCF();
 
-    println("Project#setupControls about to get controlwindow");
-    ControlWindow cw = ((VurfEclipse)APP.getApp()).getCW();
+    //println("Project#setupControls about to get controlwindow");
+    //ControlFrame cw = ((VurfEclipse)APP.getApp()).getCW();
 
-    this.sequencer.setupControls(cp5, "Default");
+    //println("Project#setupControls about to setupControls for sequencer " + this.sequencer);
+    //this.sequencer.setupControls(cf, "Default");
+    
+    println("Project#setupControls about to grab cp5 before scene loop..");
+    final ControlP5 cp5 = cf.control();
     
     //this.setupMonitor(cp5);
+    
+    /*ListBox lb = cp5.addScrollableList("preset")
+    			.setSize(200, 100)
+    			.setItemHeight(20)
+    			.addItems(this.getAvailableFiles());*/
 
-    println("Project#setupControls about to loop over scenes");
+    println("Project#setupControls about to loop over scenes ("+scenes.size()+" scenes to process)");
     Iterator<Scene> i = scenes.iterator();
     int c = 0;
+    
+    Tab sceneTab = cp5.addTab("Scenes");
+    
+    Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth);
+
     Scene n;
     while(i.hasNext()) {
       n = (Scene)i.next();
       println(c + ": Project#setupControls() got scene " + n.getSceneName());
       String tabName = "["+c+"] " + n.getSceneName(); //getClass();
       //ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
-      Tab tab = cw.addTab(tabName);
+      //Tab tab = cp5.addTab(tabName);
+
+      Group g = cp5.addGroup(tabName);
+      
       println("added tab " + tabName);
       //ControllerInterface[] controls = ((Scene)i.next()).getControls();
-      cp5.begin(10,40);
-      ((Scene)n).setupControls(cp5,tab);
+      //cp5.begin(10,40);
+      ((Scene)n).setupControls(cf,g);//tab);
       println("done setupControls for " + n);
-      cp5.end();
+      //cp5.end();
+      
+      accordion.addItem(g);
+      
       /*for (int n = 0 ; n < controls.length ; n++) {
         cp5.getTab("Scene " + c).add(controls[n]).moveTo("Scene " + c);
         //cp5.addSlider(controls[n]).moveTo("Scene " + c);
@@ -574,6 +703,48 @@ public abstract class Project implements Serializable {
       c++;
       //((Scene)i).setupControls(cp5);
     }
+    accordion.setPosition(0, 20);
+    //accordion.open();
+    accordion.setCollapseMode(Accordion.MULTI);
+
+    accordion.moveTo(sceneTab);
+    
+    Tab monitorTab = cp5.addTab("Monitor");
+    
+    //for (String canvas_name : this.canvases.keySet()) {
+    	final Project pr = this; //.getCanvas("out");
+    	controlP5.Canvas cp5canvas = new controlP5.Canvas() {
+    		@Override
+    		  public synchronized void draw(PGraphics pg) {
+    			    // renders a square with randomly changing colors
+    			    // make changes here.
+    			    //pg.fill(100);
+    			    //pg.rect(APP.getApp().random(255)-20, APP.getApp().random(255)-20, 240, 30);
+    			    //pg.fill(255);
+    				//pg.beginDraw();
+    			
+    				//cp5.setGraphics(pr.getCanvas(getPath()+"out").getSurf(), 0, 0);
+    			
+    			    if (pr.isInitialised()) {
+    			    	//pg.beginDraw();
+
+        			    pg.text("This text is drawn by MyCanvas !!", 0/*APP.getApp().random(255)*/,APP.getApp().random(255));
+
+        			    /*pr.getCanvas(getPath()+"out").getSurf().loadPixels();
+        			    PImage i = pr.getCanvas(getPath()+"out").getSurf().get(); 
+    			    	pg.image(i,0,150,w/8,h/8);
+    			    	pg.endDraw();*/
+    			    }
+    			    //pg.endDraw();
+    			    //
+    			  }
+    	};
+    	monitorTab.addCanvas(cp5canvas);
+    	//cp5canvas.moveTo(monitorTab);
+    //}
+       
+    
+    //this.initialised = true;
     println("Project#setupControls()----------------------------------------------------------------------------------<END");
   }
 
@@ -585,9 +756,9 @@ public abstract class Project implements Serializable {
   	final Project p = this;
     //cp5.getWindow().setUpdateMode(ControlWindow.NORMAL);
   	//((VurfEclipse)APP.getApp()).getCW()
-    ControlWindowCanvas monitor = ((VurfEclipse)APP.getApp()).getCW().getCurrentTab().addCanvas(new ControlWindowCanvas() {
-			@Override
-			public void draw(PApplet theApplet) {
+    //ControlWindowCanvas monitor = ((VurfEclipse)APP.getApp()).getCW().control().addCanvas(new ControlWindowCanvas() {
+	//		@Override
+	//		public void draw(PApplet theApplet) {
 				// TODO Auto-generated method stub
 				//theApplet.background((int) (Math.random()*255));
 				/*if (p.canvases.containsKey(p.getPath()+"out")) {
@@ -598,8 +769,8 @@ public abstract class Project implements Serializable {
 					theApplet.rectMode((int) (Math.random()*10));
 					theApplet.popMatrix();
 				}*/
-			}
-    }); //.moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab());
+	//		}
+   // }); //.moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab());
     
   }
 
@@ -671,6 +842,7 @@ public abstract class Project implements Serializable {
 
   boolean outputDebug = true;
 	protected double timeScale = 1.0d;
+	private boolean initialised;
   public void println(String text) {		// debugPrint, printDebug -- you get the idea
 	  if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
   }
@@ -688,6 +860,43 @@ public abstract class Project implements Serializable {
 	public boolean isSequencerEnabled() {
 		// TODO Auto-generated method stub
 		return this.enableSequencer;
+	}
+	public boolean isInitialised() {
+		// TODO Auto-generated method stub
+		return this.initialised;
+	}
+	public void target(String key, Object value) {
+		println("#target("+key+","+value+")");
+		
+		if (key.equals("/project/timeScale")) {
+			this.setTimeScale((Double)value);
+			return;
+		}
+		
+
+		Targetable t = (Targetable) this.getObjectForPath(key);
+		if (t==null) {
+			System.err.println("#target("+key+","+value+") in " + this + " couldn't find the object to target!");
+		} else {
+			println("#target("+key+","+value + ") got targetable object " + t.getClass() + " " + t);
+			
+			if (value instanceof Parameter) {
+				key = ((Parameter)value).getName();
+				value = ((Parameter)value).value;
+			}
+			
+			if (t instanceof Filter) {
+				t.target(key, value);
+			} else if (t instanceof Parameter) {
+				t.target(key, value);
+			} else {
+				println("#target('"+key+"','"+value+"'):  Unhandled Targetable type '"+t.getClass().getName()+"'");
+			}
+		}	
+	}
+	public VurfEclipse getApp() {
+		// TODO Auto-generated method stub
+		return (VurfEclipse) APP.getApp();
 	}
 
 

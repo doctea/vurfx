@@ -55,16 +55,18 @@ public class PlainDrawer extends Filter {
     //tint(128);
     //if (rotation!=0) {
     out.pushMatrix();
+    //out.imageMode(PApplet.CENTER);
     out.tint(255,(Integer)getParameterValue("tint"));    
     if (((Integer)getParameterValue("rotation")!=0)) {
-      out.imageMode(PApplet.CENTER);
       out.translate(x+(w/2),y+(h/2));
+      out.imageMode(PApplet.CENTER);
       out.rotate(PApplet.radians((Integer)getParameterValue("rotation")));
       //out.rect(x,y,20,20);
-      out.image(src.getTexture(),x,y,w,h);//,w,h);      
-      out.imageMode(PApplet.CORNER);
+      out.image(src,x,y,w,h);//,w,h);      
+      out.imageMode(PApplet.CORNERS);
     } else {
-      out.image(src.getTexture(),x,y,w,h);
+      out.imageMode(PApplet.CORNERS);
+      out.image(src,x,y,w,h);
     }
     //System.out.println(this + " copying from " + src + " to " + out);
 

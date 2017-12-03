@@ -75,7 +75,7 @@ public class Demo2Scene extends Scene {
 
 
     //filters[++i] = new ShaderFilter(this,"pulsatingEmboss-Compiled.xml"); 
-    filters[++i] = new ShaderFilter(this,"Feedback.xml"); 
+    filters[++i] = new ShaderFilter(this,"Feedback.glsl"); 
     filters[i].setFilterName("Feedback");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));

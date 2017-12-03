@@ -70,6 +70,11 @@ public class ImageListDrawer extends Filter {
   @Deprecated
   ArrayList<String> filenames = new ArrayList<String>();
   
+  public ImageListDrawer setFilenames(ArrayList<String> filenames) {
+	  this.filenames = filenames;
+	  return this;
+  }
+  
   @Deprecated
   public ArrayList<String> getFilenames() {
   	if (filenames == null) {
@@ -250,7 +255,7 @@ public class ImageListDrawer extends Filter {
     return this;
   }
 
-  private PImage p;
+  transient private PImage p;
   public boolean applyMeatToBuffers() {
     //System.out.println("in applymeattobuffers in ImageListDrawer (" + this + "), src is " + src + " and out is " + out);
     //if (fileChanged) {

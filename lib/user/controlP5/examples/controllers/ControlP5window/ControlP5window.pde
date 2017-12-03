@@ -18,16 +18,34 @@ void setup() {
 
   cp5 = new ControlP5(this);
 
-  controlWindow = cp5.addControlWindow("controlP5window", 100, 100, 400, 200)
-    .hideCoordinates()
-    .setBackground(color(40))
-    ;
+
+// PLEASE READ
+// 
+// With controlP5 2.0 the ControlWindow has been removed, 
+// please see the changelog.txt for details. 
+// Instead, see the extra/ControlP5frame example for 
+// a ControlWindow alternative.
+
+
+
+
+
+
+
+
+
+
+
+//  controlWindow = cp5.addControlWindow("controlP5window", 100, 100, 400, 200)
+//    .hideCoordinates()
+//    .setBackground(color(40))
+//    ;
 
   cp5.addSlider("sliderValue")
      .setRange(0, 255)
      .setPosition(40, 40)
      .setSize(200, 29)
-     .moveTo(controlWindow)
+     //.moveTo(controlWindow)
      ;
 }
 
@@ -45,21 +63,20 @@ void myWindowTextfield(String theValue) {
 }
 
 void keyPressed() {
-  if (key==',') cp5.window("controlP5window").hide();
-  if (key=='.') cp5.window("controlP5window").show();
+  // if (key==',') cp5.window("controlP5window").hide();
+  // if (key=='.') cp5.window("controlP5window").show();
   // controlWindow = controlP5.addControlWindow("controlP5window2",600,100,400,200);
   // controlP5.controller("sliderValue1").moveTo(controlWindow);
 
-  if (key=='d') {
-    if (controlWindow.isUndecorated()) {
-      controlWindow.setUndecorated(false);
-    } 
-    else {
-      controlWindow.setUndecorated(true);
-    }
-  }
-  if (key=='t') {
-    controlWindow.toggleUndecorated();
-  }
+  // if (key=='d') {
+  //   if (controlWindow.isUndecorated()) {
+  //     controlWindow.setUndecorated(false);
+  //   } else {
+  //     controlWindow.setUndecorated(true);
+  //   }
+  // }
+  // if (key=='t') {
+  //   controlWindow.toggleUndecorated();
+  // }
 }
 

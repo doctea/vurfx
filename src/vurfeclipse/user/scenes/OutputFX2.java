@@ -28,9 +28,14 @@ public class OutputFX2 extends SimpleScene {
 	    //os2.setCanvas("pix0","/pix0");
 	    //os2.setCanvas("blendresult", "/blendresult");
 
-	    os2.addFilter(new ShaderFilter(os2,"Feedback.xml").setFilterName("Feedback").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    os2.addFilter(new ShaderFilter(os2,"Feedback.glsl")
+	    		.setFilterName("Feedback")
+	    		.addParameter("dirs", new Integer(9), 1, 16)
+	    		.addParameter("amp", new Float(4.1f), 0.5f, 10f)
+	    		.addParameter("radio", new Float(7.0f), 3.0f, 15f)
+	    		.setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("src"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
-	    os2.addFilter(new KaleidoFilter(os2).setFilterName("Kaleido").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("out"))); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    os2.addFilter(new KaleidoFilter(os2).setFilterName("Kaleido").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("src"))); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 	    //os.addFilter(new GLColourFilter(os).setFilterName("GLColourFilter"));
 
 	    os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("pix0")).setParameterValue("BlendMode",8));
@@ -79,6 +84,7 @@ public class OutputFX2 extends SimpleScene {
 
 
 	class OutputSequence1 extends Sequence {
+		public OutputSequence1() {}
 		public OutputSequence1(OutputFX2 outputFX2, int i) {
 			super(outputFX2,i);
 		}
@@ -118,6 +124,7 @@ public class OutputFX2 extends SimpleScene {
 	}
 
 	class FeedbackSequence1 extends Sequence {
+		public FeedbackSequence1() {}
 		public FeedbackSequence1(OutputFX2 outputFX2, int i) {
 			// TODO Auto-generated constructor stub
 			super(outputFX2, i);

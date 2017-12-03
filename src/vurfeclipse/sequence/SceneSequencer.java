@@ -13,7 +13,6 @@ import vurfeclipse.filters.BlankFilter;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLGraphicsOffScreen;
 
 public class SceneSequencer extends Sequencer implements Targetable {
 	  String activeSceneName = "";

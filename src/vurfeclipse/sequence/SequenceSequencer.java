@@ -1,29 +1,26 @@
 package vurfeclipse.sequence;
 
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import java.util.Map.Entry;
 
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
-import vurfeclipse.filters.BlankFilter;
-import vurfeclipse.filters.Filter;
+import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.projects.Project;
-import vurfeclipse.scenes.PlasmaScene;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.Sequence;
-import codeanticode.glgraphics.GLGraphicsOffScreen;
+import vurfeclipse.sequence.*;
+import vurfeclipse.ui.ControlFrame;
 import controlP5.Bang;
 import controlP5.CallbackEvent;
 import controlP5.ControlP5;
@@ -148,9 +145,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		@Override
 		public HashMap<String, Targetable> getTargetURLs() {
-			HashMap<String, Targetable> urls = new HashMap<String,Targetable>();
-
-			urls.putAll(super.getTargetURLs());
+			HashMap<String, Targetable> urls = super.getTargetURLs(); //new HashMap<String,Targetable>();
+			//urls.putAll(super.getTargetURLs());
+			
+			urls.put("/seq/seed", this);
 
 			Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
 			while (it.hasNext()) {
@@ -179,14 +177,26 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			  if (spl[2].equals("changeTo")) {
 				  if (spl.length>3) {
 					  println ("Sequencer attempting changeSequence to " + spl[3]);
-					  changeSequence(spl[3]);
+					  changeSequence(spl[3],false, true);	// 2017-11-16, quick hack to prevent targeted changes from saving in history..
 				  } else {
-					  println ("Sequencer attempting changeSequence to " + payload.toString());
-					  changeSequence(payload.toString());
+					  if (payload instanceof String) {
+						  println ("Sequencer attempting changeSequence to " + payload.toString());
+						  changeSequence(payload.toString(),false, true); // 2017-11-16, quick hack to prevent targeted changes from saving in history..
+					  } else if (payload instanceof HashMap<?,?>) {
+						  println ("Sequencer attempting changeSequence to passed-in definition of a sequence!");
+						  Sequence newSeq = this.loadSequence((HashMap<String,Object>)payload);
+						  String seqName = (String) ((HashMap) payload).get("current_sequence_name");
+						  seqName = seqName==null?"loaded":seqName;
+						  this.addSequence(seqName, newSeq);
+						  changeSequence(seqName);
+					  }
 				  }
 				  return "Sequencer active Sequence is currently " + activeSequenceName;
 			  } else if (spl[2].equals("toggleLock")) {
 				  return "Lock is " + this.toggleLock();
+			  } else if (spl[2].equals("seed")) {
+				  this.getActiveSequence().setSeed((Long)payload);
+				  return "Set seed to "+payload;
 			  }
 			  return payload;
 		  }
@@ -221,6 +231,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  		sequences.putAll(seqs);
 	  		if (isBindToRandom()==true) this.randomPool.addAll(seqs.keySet());
 	  	}
+	  }
+	  public synchronized void bindAll(String prefix, HashMap<String,Sequence> seqs, int weight) {
+		  Iterator<String> it = seqs.keySet().iterator();
+		  HashMap<String,Sequence> newSeqs = new HashMap<String,Sequence> ();
+		  while (it.hasNext()) {
+			  String c = it.next();
+			  newSeqs.put(prefix+"_"+c, seqs.get(c));
+			  //seqs.remove(c);
+		  }
+		  bindAll(newSeqs, weight);
 	  }
 
 	  public Sequence bindSequence(String nameInSequencer, Sequence seq, int weight) {
@@ -342,6 +362,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  }
 
 		  this.activeSequenceName = SequenceName;
+		  
+		  if (null==this.getActiveSequence()) {
+		  	println("Got NULL for " + this.activeSequenceName + "!");
+		  	return;
+		  }
 
 		  println("Changing to sequence: " + SequenceName + "  (" + this.getActiveSequence().toString() + ")");
 		  if (remember && this.shouldRemember(SequenceName)) {
@@ -496,6 +521,28 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		//sequences.putAll(toAdd);
 		bindAll(toAdd);
 	}
+	
+	public void bindSavedSequencer(String prefix, int sequenceLength, int weight) {
+		  List<String> textFiles = new ArrayList<String>();
+		  String directory = System.getProperty("user.dir") + "/saves"; //APP.getApp().sketchPath("");
+		  File dir = new File(directory);
+		  
+		  HashMap<String, Sequence> sequences = new HashMap<String, Sequence>();
+		  
+		  for (File file : dir.listFiles()) {
+		    if (file.getName().startsWith(host.getClass().getSimpleName()) && file.getName().endsWith((".xml"))) {
+		      //textFiles.add(file.getName());
+		      ((HashMap<String, Sequence>) sequences).put("_saved " + file.getName(), new SavedSequence("saves/"+file.getName(),sequenceLength));
+		    }
+		  }
+		  //return textFiles;
+		  
+		  //for (String filename : textFiles) {
+		  	//for (int i = 0 ; i < weight ; i++) {
+		  		this.bindAll(sequences, weight); 
+		  	//}
+		  //}
+	}
 
 
 	public int getSequenceCount() {
@@ -554,7 +601,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	  }*/
 	
-	@Override public boolean sendKeyPressed(char key) {
+	@Override 
+	public boolean sendKeyPressed(char key) {
 		/*if (key=='w') {
     	try {
     			saveHistory();
@@ -578,6 +626,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     } else if (key=='p') {
     	this.historyMode = !this.historyMode;
     	println ("historyMode set to " + historyMode);
+    } else if (key=='f') {
+    	saveSequence(this.getCurrentSequenceName() + ((VurfEclipse)APP.getApp()).dateStamp());
+    } else if (key=='F') {
+    	//loadSequence(host.getApp().select.selectInput("Load a sequence", activeSequenceName));
+    	loadSequence("test.xml");
     } else if (super.sendKeyPressed(key)) {
     } else {
     	return false;
@@ -585,13 +638,66 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return true;
 	}
 	
+	private Sequence loadSequence(String filename) {
+	  	HashMap<String, Object> input;
+	  	try {
+	  		//input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
+	  		input = (HashMap<String, Object>) XMLSerializer.read(filename);
+	  		
+	  		Sequence newSeq = this.loadSequence(input);
+	  		this.addSequence(filename, newSeq); //Sequence.createSequence((String) input.get("class")));
+	  		this.changeSequence(filename);
+	  		
+			return newSeq;	
+	  	} catch (Exception e1) {
+	  		// TODO Auto-generated catch block
+	  		System.err.println("Caught " + e1 + " trying to load sequence '" + filename + "'");
+	  		e1.printStackTrace();
+	  		//return this;
+	  	}
+	  	return null;
+	}
+
+
+	public Sequence loadSequence(HashMap<String, Object> input) {
+  		try {
+			Scene host = this.host.getSceneForPath((String)input.get("hostPath"));
+			Sequence newSeq = Sequence.createSequence((String) input.get("class"), host);
+			newSeq.loadParameters(input);
+			
+			return newSeq;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+	  		System.err.println("Caught " + e + " trying to load sequence from input hash");
+		}
+		return null;
+	}
+
+
+	private void saveSequence(String filename) {
+		if (!filename.endsWith(".xml")) filename += ".xml";
+		filename = filename.replace(':', '_');
+		
+		Sequence toSave = this.getActiveSequence();
+		HashMap<String,Object> output; //= new HashMap<String,Object>();
+		output = toSave.collectParameters();
+		try {
+			XMLSerializer.write(output, filename);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.err.println("Caught " + e.toString() + " trying to save sequence of class " + toSave.getClass().getSimpleName() + " to '" + filename + "'");
+			e.printStackTrace();
+		}
+	}
+
+
 	protected Bang saveHistoryButton;
 	protected Bang loadHistoryButton;
 
-	@Override public void setupControls (ControlP5 cp5, String tabName) {
-		this.saveHistoryButton = cp5.addBang("SAVE sequencer history").moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab()).linebreak();
-		this.loadHistoryButton = cp5.addBang("LOAD sequencer history").moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab()).linebreak();
-		cp5.addCallback(this);
+	@Override public void setupControls (ControlFrame cf, String tabName) {
+		this.saveHistoryButton = cf.control().addBang("SAVE sequencer history");		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
+		this.loadHistoryButton = cf.control().addBang("LOAD sequencer history");		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
+		cf.control().addCallback(this);
 	}
 	
   @Override public void controlEvent (CallbackEvent ev) {
@@ -627,5 +733,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     }
   }
 
+  @Override public HashMap<String,Object> collectParameters() {
+	  HashMap<String,Object> params = super.collectParameters();  
+	  params.put("/seq/seed", this.getActiveSequence().getSeed());
+	  params.put("/seq/changeTo",this.getActiveSequence().collectParameters());
+	  params.put("/seq/current_sequence_name", this.getCurrentSequenceName());	// just save the name, used when re-loading from xml or hashmap
+	  return params;
+  }
+  
 
 }

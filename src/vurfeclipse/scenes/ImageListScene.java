@@ -32,7 +32,7 @@ public class ImageListScene extends SimpleScene {
   
   int current_image_index;
 
-  PImage p;
+  transient PImage p;
 
 
 
@@ -40,7 +40,9 @@ public class ImageListScene extends SimpleScene {
   public boolean setupFilters () {
     int BLOBCOUNT = 5; //20; // set to 50 for production, 5 makes for quick loading!
 
-    this.addFilter(new ImageListDrawer(this).setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer")).setOutputCanvas(this.getCanvasMapping("out")); //.nextMode());
+    String a = this.getCanvasMapping("out");
+    
+    this.addFilter(new ImageListDrawer(this).setFilenames(this.getFilenames()).setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer")).setOutputCanvas(this.getCanvasMapping("out")); //.nextMode());
     //this.addFilter(new BlendDrawer(this).setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("pix0")).setOutputCanvas(getCanvasMapping("out")));
    
     return true;
@@ -76,10 +78,11 @@ public class ImageListScene extends SimpleScene {
   public void loadDirectory(String directory) {
   	if (filenames==null) filenames = new ArrayList<String>();
 	  //String path = APP.getApp().sketchPath("bin/data/image-sources/" + directory);	// ffs need this on Windows..
-  	  String path = APP.getApp().sketchPath("data/image-sources/" + directory);	// ffs need this on Windows..
+  	  //String path = APP.getApp().sketchPath("data/image-sources/" + directory);	// ffs need this on Windows..
 	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
 	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
 	  //String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
+  	  String path = "bin/data/image-sources/" + directory;
 	  File folder = new File(path);
 	  println(this + "#loadDirectory() got path " + path);
 	  int count = 0;
@@ -216,7 +219,7 @@ public class ImageListScene extends SimpleScene {
 		else
 			this.loadDirectory();
 	    this.initTextures(ImageRepository.IR);
-
+	    
     //image_src.loadTexture(fileName);
     //fileChanged = true;
 

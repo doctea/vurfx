@@ -35,8 +35,8 @@ public class MinimalProject extends Project implements Serializable {
 	
 	float tempo = 150.0f; //10.0f; //150.0f;
 
-  public MinimalProject(int w, int h, String gfx_mode) {
-    super(w,h,gfx_mode);
+  public MinimalProject(int w, int h) {
+    super(w,h);
   }
 
   public boolean initialiseBuffers() {

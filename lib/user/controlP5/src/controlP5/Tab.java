@@ -2,9 +2,9 @@ package controlP5;
 
 /**
  * controlP5 is a processing gui library.
- *
- *  2006-2012 by Andreas Schlegel
- *
+ * 
+ * 2006-2015 by Andreas Schlegel
+ * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
@@ -13,20 +13,19 @@ package controlP5;
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General
  * Public License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307 USA
- *
- * @author 		Andreas Schlegel (http://www.sojamo.de)
- * @modified	10/22/2012
- * @version		1.5.2
- *
+ * 
+ * @author Andreas Schlegel (http://www.sojamo.de)
+ * @modified 04/14/2016
+ * @version 2.2.6
+ * 
  */
 
-import processing.core.PApplet;
-import processing.core.PVector;
+import processing.core.PGraphics;
 
 /**
  * Tabs are used to organize controllers. Tabs are arranged horizontally from the top-left corner by
@@ -36,24 +35,16 @@ import processing.core.PVector;
  * @example controllers/ControlP5tab
  * @nosuperclasses ControllerGroup ControllerGroup
  */
-public class Tab extends ControllerGroup<Tab> {
+public class Tab extends ControllerGroup< Tab > {
 
 	protected int _myOffsetX = -1000;
-
 	protected int _myOffsetY = -1000;
-
 	protected boolean isActive = false;
-
 	private boolean isAlwaysActive = false;
-
 	protected boolean isEventActive = false;
-
 	protected float _myValue = 0;
-
 	protected String _myStringValue = "";
-
 	public static int padding = 4;
-
 	public boolean autoWidth = true;
 
 	/**
@@ -62,45 +53,47 @@ public class Tab extends ControllerGroup<Tab> {
 	 * @param theControlWindow ControlWindow
 	 * @param theName String
 	 */
-	public Tab(ControlP5 theControlP5, ControlWindow theControlWindow, String theName) {
-		super(theControlP5, null, theName, 0, 0);
-		_myControlWindow = theControlWindow;
-		position = new PVector();
-		absolutePosition = new PVector();
+	public Tab( ControlP5 theControlP5 , ControlWindow theControlWindow , String theName ) {
+		super( theControlP5 , null , theName , 0 , 0 );
+		position = new float[ 2 ];
+		absolutePosition = new float[ 2 ];
 		isMoveable = false;
 		isEventActive = theControlP5.isTabEventsActive;
 		_myHeight = 16;
-		_myWidth = _myLabel.getWidth() + padding * 2;
-		_myLabel.align(LEFT, CENTER).setPadding(0, 0);
+		_myWidth = _myLabel.getWidth( ) + padding * 2;
+		_myLabel.align( LEFT , CENTER ).setPadding( 0 , 0 );
 	}
 
-	protected void setOffset(int theValueX, int theValueY) {
+	protected void setOffset( int theValueX , int theValueY ) {
 		_myOffsetX = theValueX;
 		_myOffsetY = theValueY;
 	}
 
-	protected int height() {
+	protected int height( ) {
 		return _myHeight;
 	}
 
-	protected boolean updateLabel() {
-		isInside = inside();
-		return _myControlWindow.getTabs().size() > 2;
+	protected boolean updateLabel( ) {
+		isInside = inside( );
+		return cp5.getWindow( ).getTabs( ).size( ) > 2;
 	}
 
-	protected void drawLabel(PApplet theApplet) {
-		if (autoWidth) {
-			_myWidth = _myLabel.getWidth() + padding * 2;
+	protected void drawLabel( PGraphics theGraphics ) {
+		if ( autoWidth ) {
+			_myWidth = _myLabel.getWidth( ) + padding * 2;
 		}
-		theApplet.pushMatrix();
-		theApplet.fill(isInside ? color.getForeground() : color.getBackground());
-		if (isActive) {
-			theApplet.fill(color.getActive());
+		theGraphics.pushMatrix( );
+		theGraphics.pushStyle( );
+		theGraphics.noStroke( );
+		theGraphics.fill( isInside ? color.getForeground( ) : color.getBackground( ) );
+		if ( isActive ) {
+			theGraphics.fill( color.getActive( ) );
 		}
-		theApplet.translate(_myOffsetX, _myOffsetY);
-		theApplet.rect(0, 0, _myWidth - 1, _myHeight);
-		_myLabel.draw(theApplet, padding, 0, this);
-		theApplet.popMatrix();
+		theGraphics.translate( _myOffsetX , _myOffsetY );
+		theGraphics.rect( 0 , 0 , _myWidth - 1 , _myHeight );
+		_myLabel.draw( theGraphics , padding , 0 , this );
+		theGraphics.popStyle( );
+		theGraphics.popMatrix( );
 	}
 
 	/**
@@ -110,12 +103,12 @@ public class Tab extends ControllerGroup<Tab> {
 	 * @param theLabel String
 	 * @return Tab
 	 */
-	public Tab setLabel(String theLabel) {
-		_myLabel.set(theLabel);
+	public Tab setLabel( String theLabel ) {
+		_myLabel.set( theLabel );
 		return this;
 	}
 
-	protected int width() {
+	protected int width( ) {
 		return _myWidth;
 	}
 
@@ -123,30 +116,28 @@ public class Tab extends ControllerGroup<Tab> {
 	 * @param theWidth
 	 * @return
 	 */
-	public Tab setWidth(int theWidth) {
+	public Tab setWidth( int theWidth ) {
 		_myWidth = theWidth + padding;
 		autoWidth = false;
 		return this;
 	}
 
-	public Tab setHeight(int theHeight) {
+	public Tab setHeight( int theHeight ) {
 		_myHeight = theHeight;
 		return this;
 	}
 
-	protected boolean inside() {
-		return (_myControlWindow.mouseX > _myOffsetX && _myControlWindow.mouseX < _myOffsetX + _myWidth && _myControlWindow.mouseY > _myOffsetY && _myControlWindow.mouseY < _myOffsetY
-				+ _myHeight);
+	protected boolean inside( ) {
+		return ( cp5.getWindow( ).mouseX > _myOffsetX && cp5.getWindow( ).mouseX < _myOffsetX + _myWidth && cp5.getWindow( ).mouseY > _myOffsetY && cp5.getWindow( ).mouseY < _myOffsetY + _myHeight );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@ControlP5.Invisible
-	public void mousePressed() {
-		_myControlWindow.activateTab(this);
-		if (isEventActive) {
-			cp5.getControlBroadcaster().broadcast(new ControlEvent(this), ControlP5Constants.METHOD);
+	@ControlP5.Invisible public void mousePressed( ) {
+		cp5.getWindow( ).activateTab( this );
+		if ( isEventActive ) {
+			cp5.getControlBroadcaster( ).broadcast( new ControlEvent( this ) , ControlP5Constants.METHOD );
 		}
 	}
 
@@ -155,12 +146,12 @@ public class Tab extends ControllerGroup<Tab> {
 	 * 
 	 * @param theFlag boolean
 	 */
-	public Tab setActive(boolean theFlag) {
+	public Tab setActive( boolean theFlag ) {
 		isActive = theFlag;
 		return this;
 	}
 
-	public Tab setAlwaysActive(boolean theFlag) {
+	public Tab setAlwaysActive( boolean theFlag ) {
 		isAlwaysActive = theFlag;
 		return this;
 	}
@@ -170,27 +161,25 @@ public class Tab extends ControllerGroup<Tab> {
 	 * 
 	 * @return boolean
 	 */
-	public boolean isActive() {
+	public boolean isActive( ) {
 		return isAlwaysActive ? true : isActive;
 	}
 
-	public boolean isAlwaysActive() {
+	public boolean isAlwaysActive( ) {
 		return isAlwaysActive;
 	}
 
-	@Override
-	public Tab bringToFront() {
-		_myControlWindow.activateTab(this);
+	@Override public Tab bringToFront( ) {
+		cp5.getWindow( ).activateTab( this );
 		return this;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public Tab moveTo(ControlWindow theWindow) {
-		_myControlWindow.removeTab(this);
-		setTab(theWindow, getName());
+	@Override public Tab moveTo( ControlWindow theWindow ) {
+		cp5.getWindow( ).removeTab( this );
+		setTab( theWindow , getName( ) );
 		return this;
 	}
 
@@ -201,7 +190,7 @@ public class Tab extends ControllerGroup<Tab> {
 	 * @param theFlag boolean
 	 * @return Tab
 	 */
-	public Tab activateEvent(boolean theFlag) {
+	public Tab activateEvent( boolean theFlag ) {
 		isEventActive = theFlag;
 		return this;
 	}
@@ -209,35 +198,30 @@ public class Tab extends ControllerGroup<Tab> {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public String getStringValue() {
+	@Override public String getStringValue( ) {
 		return _myStringValue;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public float getValue() {
+	@Override public float getValue( ) {
 		return _myValue;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public Tab setValue(float theValue) {
+	@Override public Tab setValue( float theValue ) {
 		_myValue = theValue;
 		return this;
 	}
 
-	@Deprecated
-	public float value() {
+	@Deprecated public float value( ) {
 		return _myValue;
 	}
 
-	@Deprecated
-	public String stringValue() {
+	@Deprecated public String stringValue( ) {
 		return _myStringValue;
 	}
 

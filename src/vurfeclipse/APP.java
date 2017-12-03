@@ -3,17 +3,17 @@ package vurfeclipse;
 import processing.core.PApplet;
 
 public class APP {
-	static public PApplet a;
+	static public VurfEclipse a;
 	
 	static public String sketchPath(String s) {
 		return getApp().sketchPath(s);
 	}
 	
-	static public PApplet getApp() {
+	static public VurfEclipse getApp() {
 		return a;
 	}
 	
-	static public void setApp(PApplet a) {
+	static public void setApp(VurfEclipse a) {
 		APP.a = a;
 	}
 }

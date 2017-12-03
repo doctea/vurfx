@@ -22,26 +22,26 @@ public int slider2 = 128;
 
 void setup() {
   size(700, 400);
-  smooth();
+  smooth(8);
   cp5 = new ControlP5(this);
 
   cp5.addSlider("slider1", 0, 255, 20, 100, 128, 20);
   cp5.addSlider("slider2", 0, 255, 20, 150, 128, 20);
 
-  ListBox l = cp5.addListBox("myList", 250, 260, 100, 80);
+  ScrollableList l = cp5.addScrollableList("myList", 250, 260, 200, 80);
   for (int i=0;i<80;i++) {
     l.addItem("item "+i, i);
   }
   
-  cp5.addButton("b1", 0, 20, 350, 80, 12);
-  cp5.addButton("b2", 0, 101, 350, 80, 12);
+  cp5.addButton("b1", 0, 20, 350, 80, 20);
+  cp5.addButton("b2", 0, 101, 350, 80, 20);
 
 }
 
 color hover = color(0, 230, 150);
 
 void draw() {
-  background(0);
+  background(ControlP5.BLACK);
   // check if the mouse is inside of any of the controllers 
   // displayed in the main window
   if(cp5.isMouseOver()) {
@@ -54,11 +54,11 @@ void draw() {
   
   // check if the mouse is hovering controller slider1 and set the color accordingly
   fill(cp5.isMouseOver(cp5.getController("slider1")) ? hover:color(slider1));
-  rect(250, 100, 100, 20);
+  rect(250, 100, 200, 20);
   
   
   fill(cp5.isMouseOver(cp5.getController("slider2")) ? hover:color(slider2));
-  rect(250, 150, 100, 20);
+  rect(250, 150, 200, 20);
   
   fill(cp5.isMouseOver(cp5.getController("b1")) ? hover:color(128));
   ellipse(30, 330, 20, 20);
@@ -66,7 +66,7 @@ void draw() {
   fill(cp5.isMouseOver(cp5.getController("b2")) ? hover:color(128));
   ellipse(110, 330, 20, 20);
   
-  fill(cp5.isMouseOver(cp5.getGroup("myList")) ? hover:color(128));
+  fill(cp5.isMouseOver(cp5.getController("myList")) ? hover:color(128));
   ellipse(260, 230, 20, 20);
   
 }

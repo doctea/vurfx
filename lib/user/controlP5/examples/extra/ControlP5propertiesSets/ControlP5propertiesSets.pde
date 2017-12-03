@@ -33,7 +33,7 @@ public int slider4 = 255;
 void setup() {
   size(400, 600);
   cp5 = new ControlP5(this);
-  ControlP5.printPublicMethodsFor(ControllerProperties.class);
+  
   // add a vertical slider
   cp5.addSlider("slider1", 0, 255, 20, 100, 128, 20);
   cp5.addSlider("slider2", 0, 255, 20, 150, 128, 20);
@@ -46,6 +46,7 @@ void setup() {
   cp5.addButton("b3", 0, 200, 350, 80, 12).setCaptionLabel("save default");
   cp5.addButton("b4", 0, 281, 350, 80, 12).setCaptionLabel("load default").setColorBackground(color(0, 100, 50));
 
+  
   // add a new properties set 'setA'
   cp5.getProperties().addSet("setA");
 
@@ -57,6 +58,8 @@ void setup() {
   // prints the current list of properties registered and the set(s) they belong to 
   cp5.getProperties().print();
   
+  /* by default properties are saved in JSON format, if you want to change to the old default (java's serialized format), un-comment line below*/
+  // cp5.getProperties().setFormat(ControlP5.SERIALIZED);
 }
 
 void draw() {
@@ -76,19 +79,19 @@ void draw() {
 }
 
 void b1(float v) {
-  cp5.saveProperties("setA.ser", "setA");
+  cp5.saveProperties("setA", "setA");
 }
 
 void b2(float v) {
-  cp5.loadProperties(("setA.ser"));
+  cp5.loadProperties(("setA"));
 }
 
 void b3(float v) {
-  cp5.saveProperties("default.ser", "default");
+  cp5.saveProperties("default", "default");
 }
 
 void b4(float v) {
-  cp5.loadProperties(("default.ser"));
+  cp5.loadProperties(("default.json"));
 }
 
 
@@ -96,7 +99,6 @@ void b4(float v) {
 
 
 /*
-
  a list of all methods available for the ControllerProperties class
  use ControlP5.printPublicMethodsFor(ControllerProperties.class);
  to print the following list into the console.

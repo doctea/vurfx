@@ -39,7 +39,7 @@ void keyPressed() {
     println("changing list to items of group 1");
     l.clear();
     for(int i=0;i<s[0].length;i++) {
-      // useing bit shifting to store 2 values in 1 int
+      // using bit shifting to store 2 values in 1 int
       int n = 0;
       n = n | 1 << 8;  
       n = n | i << 0; 
@@ -67,8 +67,8 @@ void myList(int theValue) {
 
 void controlEvent(ControlEvent theEvent) {
   if(theEvent.isGroup()) {
-  print("> "+theEvent.group().value());
-  int n = int(theEvent.group().value());
+  print("> "+theEvent.getGroup().getValue());
+  int n = int(theEvent.getGroup().getValue());
   println("\t\t group:"+(n >> 8 & 0xff)+", item:"+(n >> 0 & 0xff));
   }
 }

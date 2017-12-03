@@ -3,7 +3,7 @@ package controlP5;
 /**
  * controlP5 is a processing gui library.
  *
- *  2006-2012 by Andreas Schlegel
+ * 2006-2015 by Andreas Schlegel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -20,8 +20,8 @@ package controlP5;
  * Boston, MA 02111-1307 USA
  *
  * @author 		Andreas Schlegel (http://www.sojamo.de)
- * @modified	10/22/2012
- * @version		1.5.2
+ * @modified	04/14/2016
+ * @version		2.2.6
  *
  */
 
@@ -54,8 +54,9 @@ public class ControlTimer {
 	 */
 	public String toString() {
 		update();
-		return (((h < 10) ? "0" + h : "" + h) + " : " + ((m < 10) ? "0" + m : "" + m) + " : " + ((s < 10) ? "0" + s : ""
-				+ s) // + " : " +
+		return (((h < 10) ? "0" + h : "" + h) + " : " + ((m < 10) ? "0" + m : "" + m) + " : " + ((s < 10) ? "0" + s : "" + s) // +
+																																// " : "
+																																// +
 		// ((ms<100) ? "0" + ms: "" +ms)
 		);
 	}

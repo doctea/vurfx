@@ -1,6 +1,7 @@
 package vurfeclipse.scenes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import vurfeclipse.APP;
 import vurfeclipse.filters.BlendDrawer;
@@ -52,7 +53,7 @@ public class BadTVScene extends Scene {
 	    //// START PLASMA SCENE
 	    //plasmaScene.setCanvas("pix0","/pix0");
 	    //os2.setCanvas("blendresult", "/blendresult");
-	    addFilter(new ShaderFilter(this,"BadTV.xml") {
+	    addFilter(new ShaderFilter(this,"BadTV.glsl") {
 	    	@Override
 	    	public void setParameterDefaults() {
 	    		super.setParameterDefaults();
@@ -60,9 +61,22 @@ public class BadTVScene extends Scene {
 
 	    		addParameter("width", new Integer(w/16), 0, w*2);
 	    		addParameter("height", new Integer(h/16), 0, h*2);*/
-	    		addParameter("iTime", new Integer(10), 0, 1000000);
-	    		addParameter("iResolutionX", new Float((float)host.w));
-	    		addParameter("iResolutionY", new Float((float)host.h));
+	    		addParameter("iTime", new Float(10), new Float(0), new Float(1000000));
+	    		addParameter("iResolutionX", 1.0f);
+	    		addParameter("iResolutionY", 1.0f);
+	    		for (String param : Arrays.asList("vertJerkOpt", "vertMovementOpt", "bottomStaticOpt", "scalinesOpt", "rgbOffsetOpt", "horzFuzzOpt")) {
+	    			addParameter(param, 1.0f, new Float(0.0), new Float(1.0));
+	    		}
+	    		//addParameter("vertJerkOpt", 1.0f, new Float(0.0), new Float(1.0));
+	    		//addParameter("vertMovementOpt", 1.0f, new Float(0.0), new Float(1.0));")
+	    		/*float vertJerkOpt = 1.0;
+float vertMovementOpt = 1.0;
+float bottomStaticOpt = 1.0;
+float scalinesOpt = 1.0;
+float rgbOffsetOpt = 1.0;
+float horzFuzzOpt = 1.0;*/
+	    		//addParameter("iResolutionX", new Float((float)host.w), new Float(0), new Float(1900));
+	    		//addParameter("iResolutionY", new Float((float)host.h), new Float(0), new Float(1080));
 	    	}
 	    	@Override
 	    	public Filter nextMode() {
@@ -73,7 +87,7 @@ public class BadTVScene extends Scene {
 	    		return this;
 	    	}
 
-	    }.setFilterName("BadTV").setCanvases("/out", this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    }.setFilterName("BadTV").setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
 	    //addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setInputCanvas("/temp1").setOutputCanvas(this.getCanvasMapping("out")));
 

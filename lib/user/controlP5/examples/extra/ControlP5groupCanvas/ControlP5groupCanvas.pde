@@ -33,16 +33,16 @@ class TestCanvas extends Canvas {
   float n;
   float a;
   
-  public void setup(PApplet p) {
+  public void setup(PGraphics pg) {
     println("starting a test canvas.");
     n = 1;
   }
-  public void draw(PApplet p) {
+  public void draw(PGraphics pg) {
     n += 0.01;
-    p.ellipseMode(CENTER);
-    p.fill(lerpColor(color(0,100,200),color(0,200,100),map(sin(n),-1,1,0,1)));
-    p.rect(0,0,200,200);
-    p.fill(255,150);
+    pg.ellipseMode(CENTER);
+    pg.fill(lerpColor(color(0,100,200),color(0,200,100),map(sin(n),-1,1,0,1)));
+    pg.rect(0,0,200,200);
+    pg.fill(255,150);
     a+=0.01;
     ellipse(100,100,abs(sin(a)*150),abs(sin(a)*150));
     ellipse(40,40,abs(sin(a+0.5)*50),abs(sin(a+0.5)*50));
