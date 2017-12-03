@@ -549,9 +549,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   int count = 0;
   boolean controlsSetup = false;
-  public synchronized void setupControls(ControlFrame cf, ControllerGroup tab, int row) {
+  public synchronized int setupControls(ControlFrame cf, ControllerGroup tab, int row) {
 	  ControlP5 cp5 = cf.control();
-  	if (controlsSetup) return;
+  	if (controlsSetup) return 0;
   	controlsSetup = true;
     println("Filter#setupControls() for "  + this + ": " + tab.getName());
     /*if (count++>20) {
@@ -656,9 +656,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         		margin_w/2 + (col++*(margin_w+col_w)),
         		margin_h + (row*row_h)
         );
-        if (col > 12) { //(col_w*margin_w)*col>cf.width) { //(5*(cf.width/col_w))) {
-        	col = 2;
-        	row++; row++;
+        if (col > 11) { //(col_w*margin_w)*col>cf.width) { //(5*(cf.width/col_w))) {
+        	col = 1;
+        	row++;
         }
         this.setControllerMapping(param.getName(),o);
         
@@ -678,10 +678,14 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       }
       // }
     }
-    ((ControlGroup<Group>) tab).setBackgroundHeight(margin_h + (row++ * row_h));
+    row++;
+
+    ((ControlGroup<Group>) tab).setBackgroundHeight(margin_h + (row * row_h));
     tab.setColorBackground((int) random(255));
-    tab.setSize(margin_w + (col++*col_w),margin_h + (row++ * row_h));
+    tab.setSize(margin_w + (col++*col_w),margin_h + (row * row_h));
     //cp5.linebreak();
+
+    return row;
   }
 
   public void setControllerMapping(String paramName, controlP5.Controller o) {

@@ -850,6 +850,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     //cp5.addSlider("test " + this.toString()).setPosition(5,20).moveTo(tabName);
  //   for (int i = 0 ; i < filterCount ; i ++) {
    //println("in " + this + " filters length is " + this.filters.length);
+    int row = 0;
     for (int i = 0 ; i < this.filters.length ; i ++) {
       if (filters[i]!=null) {
         println(">>>>>>>>>>>>>>>>>About to setupControls for " + filters[i]);
@@ -864,7 +865,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
            .addCallback(filters[i])
            .linebreak()
            ;*/
-        filters[i].setupControls(cf,tab,i);
+        row = filters[i].setupControls(cf,tab,row);
         
         println("<<<<<<<<<<<<<<<<did setupcontrols for " + filters[i]);
 

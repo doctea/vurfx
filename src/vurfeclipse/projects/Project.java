@@ -444,48 +444,54 @@ public abstract class Project implements Serializable {
   	try {
   		//input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
   		input = (HashMap<String, HashMap<String, Object>>) XMLSerializer.read(filename);
+  		return loadSnapshot(input);
   	} catch (Exception e1) {
   		// TODO Auto-generated catch block
   		System.err.println("Caught " + e1 + " trying to load '" + filename + "'");
   		e1.printStackTrace();
   		return this;
   	}
-	
-	// get /seq params
-  	// will also trigger load of a new sequence if it gets one from /seq/changeTo 
-	if (input.containsKey("/seq")) {
-		HashMap<String,Object> target_pr = input.get("/seq");
-		input.remove("/seq");
-	
-		// process sequencer params
-		for (Entry<String, Object> e : target_pr.entrySet()) {
-			this.sequencer.target(e.getKey(), e.getValue());
-		}
-	}
-	
-	// get /project params
-	if (input.containsKey("/project")) {
-		HashMap<String,Object> target_pr = input.get("/project");
-		input.remove("/project");
-		if (target_pr!=null) {
+  }
+  
+
+  public Project loadSnapshot(HashMap<String, HashMap<String, Object>> input) {
+		// get /seq params
+	  	// will also trigger load of a new sequence if it gets one from /seq/changeTo 
+		if (input.containsKey("/seq")) {
+			HashMap<String,Object> target_pr = input.get("/seq");
+			input.remove("/seq");
+		
+			// process sequencer params
 			for (Entry<String, Object> e : target_pr.entrySet()) {
-				this.target(e.getKey(), e.getValue());
+				this.sequencer.target(e.getKey(), e.getValue());
 			}
 		}
-	}
-	
-	// process Parameter params
-	for (Entry<String,HashMap<String,Object>> e : input.entrySet()) {
-		Scene s = (Scene) this.getObjectForPath(e.getKey());
-		if(s==null) {
-			System.err.println ("Couldn't find a targetable for key '"+e.getKey()+"'");
-		} else {
-			s.loadParameters(e.getValue());
+		
+		// get /project params
+		if (input.containsKey("/project")) {
+			HashMap<String,Object> target_pr = input.get("/project");
+			input.remove("/project");
+			
+			if (target_pr!=null) {
+				for (Entry<String, Object> e : target_pr.entrySet()) {
+					this.target(e.getKey(), e.getValue());
+				}
+			}
 		}
-	}
-	return null;
+		
+		// process Parameter params
+		for (Entry<String,HashMap<String,Object>> e : input.entrySet()) {
+			Scene s = (Scene) this.getObjectForPath(e.getKey());
+			if(s==null) {
+				System.err.println ("Couldn't find a targetable for key '"+e.getKey()+"'");
+			} else {
+				s.loadParameters(e.getValue());
+			}
+		}	
+		
+		return this;
   }
-
+  
   public void saveSnapshot() {
     saveSnapshot(
     		this.getClass().getSimpleName()
@@ -494,14 +500,20 @@ public abstract class Project implements Serializable {
     		+".xml");
   }
   public void saveSnapshot(String filename) {
-    println("SAVING TO " + filename);
+    println("SAVING SNAPSHOT TO '" + filename + "'");
 
     //saveIndividualParts(filename);
     //((VurfEclipse)APP.getApp()).io.serialize(filename + ".vj", this); //getSelectedScene().getFilter(2)); //getCanvas("/out"));
     //io.serialize("test-serialisation-2", new testsave()); //getCanvas("/out"));
-    saveScenes(filename);
+	try {
+		XMLSerializer.write(collectSnapshot(filename), filename);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		System.err.println("Caught " + e.toString() + " trying to save to '" + filename + "'");
+		e.printStackTrace();
+	}
   }
-  public void saveScenes(String filename) {
+  public HashMap<String, HashMap<String, Object>> collectSnapshot(String filename) {
 	HashMap<String,HashMap<String,Object>> output = new HashMap<String,HashMap<String,Object>>();
 	
 	HashMap<String,Object> projectParams = this.collectParameters();
@@ -511,23 +523,21 @@ public abstract class Project implements Serializable {
 		HashMap<String,Object> sequencerParams = this.sequencer.collectParameters();
 		output.put("/seq", sequencerParams); //new HashMap<String,HashMap<String,Object>>().put("current_sequence", this.sequencer.getCurrentSequenceName()));
 	}
+	
+	// collect all the scenes
 	for (Scene s : this.getScenes()) {
 		output.put(s.getPath(), s.collectParameters());
 	}
 	//((VurfEclipse)APP.getApp()).io.serialize(filename, output);
-	try {
-		XMLSerializer.write(output, filename);
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		System.err.println("Caught " + e.toString() + " trying to save to '" + filename + "'");
-		e.printStackTrace();
-	}
+	return output;
   }
   private HashMap<String, Object> collectParameters() {
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		params.put("/project/timeScale", this.getTimeScale());
 		return params;
-	}
+  }
+  
+  @Deprecated
   public void saveIndividualParts(String filename) {
     Iterator<Scene> it = scenes.iterator();
     while (it.hasNext()) {
@@ -589,18 +599,18 @@ public abstract class Project implements Serializable {
 	          sc.setMuted(false);
 	      }
 	    } else*/ 
-	    /* }else if (key=='p') {
-	    	println(rsConn.getURLs().toString());
-	    	System.exit(0);
-	    } */ 
+    /* }else if (key=='p') {
+    	println(rsConn.getURLs().toString());
+    	System.exit(0);
+    } */ 
     } else  if (key=='s') {
       //println(this.getSelectedScene().getSelectedFilter().serialize());
       //println(this.serialize());
 
       saveSnapshot(); 
     } else if (key=='S') {
-    	loadSnapshot();
-    	//APP.getApp().selectInput("Select a file to load", "loadProject"); - DOESNT WORK ?
+    	//loadSnapshot();
+    	APP.getApp().selectInput("Select a file to load", "loadSnapshot"); //- DOESNT WORK ?
     } else if (this.sequencer.sendKeyPressed(key)) {
     	println ("Key " + key + " handled by sequencer!");
   	} else {
