@@ -438,7 +438,7 @@ public abstract class Project implements Serializable {
   	return loadSnapshot(this.getClass().getSimpleName()+".xml");
   }
   public Project loadSnapshot(String filename) {
-  	println("loadProject " + filename);
+  	println("loadSnapshot from '" + filename + "'");
   	//return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename+".vj", Project.class);
   	HashMap<String, HashMap<String, Object>> input;
   	try {
@@ -452,6 +452,7 @@ public abstract class Project implements Serializable {
   	}
 	
 	// get /seq params
+  	// will also trigger load of a new sequence if it gets one from /seq/changeTo 
 	if (input.containsKey("/seq")) {
 		HashMap<String,Object> target_pr = input.get("/seq");
 		input.remove("/seq");
