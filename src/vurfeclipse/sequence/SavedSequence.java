@@ -37,7 +37,7 @@ public class SavedSequence extends Sequence {
 	@Override
 	public void onStart() {
 		// TODO Auto-generated method stub
-		APP.getApp().loadProject(this.filename);
+		APP.getApp().loadSnapshot(this.filename);
 	}
 
 	@Override

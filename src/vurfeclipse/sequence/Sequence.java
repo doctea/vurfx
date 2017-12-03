@@ -14,6 +14,7 @@ import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.filters.Filter;
 
 abstract public class Sequence implements Serializable, Mutable {
 	//Scene sc;
@@ -32,6 +33,12 @@ abstract public class Sequence implements Serializable, Mutable {
 		System.out.println("got classname " + classname);
 		try {
 			Sequence seq;
+			try {
+				Class<?> clazz = Class.forName(classname); //Class.forName(classname); host.getClass();//
+			} catch (ClassNotFoundException e) {
+				// assume the last . should be turned into a $
+				classname = classname.substring(0, classname.lastIndexOf('.')) + "$" + classname.substring(classname.lastIndexOf('.')+1,classname.length()); 
+			}
 			if (classname.contains("$")) {
 				String[] spl = classname.split("\\$");
 				Class<?> clazz = Class.forName(spl[0]); //Class.forName(classname); host.getClass();//
@@ -65,12 +72,33 @@ abstract public class Sequence implements Serializable, Mutable {
 		if (this.host!=null) params.put("hostPath", this.host.getPath());
 		params.put("seed", this.getSeed());
 		params.put("lengthMillis", this.lengthMillis);
+		
+		params.put("current_sequence_name", APP.getApp().dateStamp());
+		
+		ArrayList<String> mutableUrls = new ArrayList<String> ();
+		for (Mutable m : getMutables()) {
+			if (m instanceof Scene) {
+				mutableUrls.add(((Scene) m).getPath());
+			} else if (m instanceof Filter) {
+				mutableUrls.add(((Filter)m).getPath());
+			} else {
+				println("Unhandled Mutable type " + m.getClass());
+			}
+		}
+		params.put("mutableUrls", mutableUrls);
+		
 		return params;
 	}
 	
 	public void loadParameters(HashMap<String,Object> params) {
 		if (params.containsKey("seed")) this.seed = (Long) params.get("seed"); //Long.parseLong((String)params.get("seed"));
 		if (params.containsKey("lengthMillis")) this.lengthMillis = (Integer) params.get("lengthMillis"); //Integer.parseInt((String)params.get("lengthMillis"));
+		if (params.containsKey("mutableUrls")) {
+			this.mutables = new ArrayList<Mutable>();
+			for (String url : (ArrayList<String>)params.get("mutableUrls")) {
+				this.mutables.add((Mutable) APP.getApp().pr.getObjectForPath(url));
+			}
+		}
 	}
 
 	protected Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
@@ -144,9 +172,12 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 	//abstract public ArrayList<Mutable> getMutables();
 	public ArrayList<Mutable> getMutables() {
-		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-		if (host!=null && !this.disableHostMute) muts.add((Mutable) host);
-		return muts;
+		if (this.mutables==null) {
+			ArrayList<Mutable> muts = new ArrayList<Mutable>();
+			if (host!=null && !this.disableHostMute) muts.add((Mutable) host);
+			this.mutables = muts;
+		} 
+		return this.mutables;
 	}
 
 

@@ -41,8 +41,8 @@ public class SpiralDrawer extends Filter {
 
   public void setParameterDefaults() {
     super.setParameterDefaults();
-    addParameter("spiralCenter", new PVector(this.w/2,this.h/2));
     addParameter("rotation", 90.0f, 0.0f, 360.0f);
+    addParameter("spiralCenter", new PVector(0.5f, 0.5f)); //this.w/2,this.h/2));
     addParameter("numofCircles", 5.0f, 1.0f, 20.0f); //4.5);
     //addParameter("startRadius", 300, 10, 500);
     addParameter("startRadius", this.h, 10, this.h*2);
@@ -96,7 +96,12 @@ public class SpiralDrawer extends Filter {
     float startRadius = this.startRadius; //300
     float endRadius = this.endRadius;  //20
     int numSections = this.numSections; // 60// bigger the number the smoother the spiral*/
-    PVector spiralCenter = (PVector)getParameterValue("spiralCenter");
+    PVector pSpiralCenter = (PVector)getParameterValue("spiralCenter");
+    if (pSpiralCenter.x>10.0f) {
+    	// must be saved in old format - reset to center
+    	pSpiralCenter.x = 0.5f;
+    	pSpiralCenter.y = 0.5f;
+    }
     float numofCircles = (Float)getParameterValue("numofCircles");
     float startRadius = (Integer)getParameterValue("startRadius");
     float endRadius = (Float)getParameterValue("endRadius");
@@ -138,6 +143,7 @@ public class SpiralDrawer extends Filter {
 
     //spiralCenter = new PVector(sc.w/2,sc.h/2);
 
+    PVector spiralCenter = new PVector(pSpiralCenter.x * sc.w, pSpiralCenter.y * sc.h);
 
     //curveVertex(x + spiralCenter.x, y + spiralCenter.y);
     //while (currentRadian < endRadian) {

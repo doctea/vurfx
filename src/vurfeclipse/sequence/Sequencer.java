@@ -113,7 +113,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	public HashMap<String, Object> collectParameters() {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("/seq/changeTo", this.getCurrentSequenceName());
+		//params.put("/seq/changeTo", this.getCurrentSequenceName());
 		return params;
 	}
 

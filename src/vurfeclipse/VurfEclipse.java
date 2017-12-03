@@ -654,7 +654,7 @@ public class VurfEclipse extends PApplet {
 	}
 	
 	// callback for selectInput() ? - DOESNT WORK ?
-	public void loadProject(String filename) {
-		this.pr.loadProject(filename);
+	public void loadSnapshot(String filename) {
+		this.pr.loadSnapshot(filename);
 	}
 }

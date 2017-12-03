@@ -434,10 +434,10 @@ public abstract class Project implements Serializable {
     return false;
   }
 
-  public Project loadProject() {
-  	return loadProject(this.getClass().getSimpleName()+".xml");
+  public Project loadSnapshot() {
+  	return loadSnapshot(this.getClass().getSimpleName()+".xml");
   }
-  public Project loadProject(String filename) {
+  public Project loadSnapshot(String filename) {
   	println("loadProject " + filename);
   	//return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename+".vj", Project.class);
   	HashMap<String, HashMap<String, Object>> input;
@@ -485,14 +485,14 @@ public abstract class Project implements Serializable {
 	return null;
   }
 
-  public void saveProject() {
-    saveProject(
+  public void saveSnapshot() {
+    saveSnapshot(
     		this.getClass().getSimpleName()
     		//+"_"+APP.getApp().millis()
     		+((VurfEclipse)APP.getApp()).dateStamp()
     		+".xml");
   }
-  public void saveProject(String filename) {
+  public void saveSnapshot(String filename) {
     println("SAVING TO " + filename);
 
     //saveIndividualParts(filename);
@@ -596,9 +596,9 @@ public abstract class Project implements Serializable {
       //println(this.getSelectedScene().getSelectedFilter().serialize());
       //println(this.serialize());
 
-      saveProject(); 
+      saveSnapshot(); 
     } else if (key=='S') {
-    	loadProject();
+    	loadSnapshot();
     	//APP.getApp().selectInput("Select a file to load", "loadProject"); - DOESNT WORK ?
     } else if (this.sequencer.sendKeyPressed(key)) {
     	println ("Key " + key + " handled by sequencer!");

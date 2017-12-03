@@ -13,7 +13,57 @@ import vurfeclipse.scenes.SimpleScene;
 import vurfeclipse.sequence.Sequence;
 
 public class BlenderFX1 extends SimpleScene {
-    public BlenderFX1(Project host, String name, int w, int h) {
+    class BlendSequence1 extends Sequence {
+    	public BlendSequence1() {}
+		public BlendSequence1(BlenderFX1 blenderFX1, int i) {
+			// TODO Auto-generated constructor stub
+			super(blenderFX1,i);
+		}
+		public void setValuesForNorm(double norm, int iteration) {
+			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
+			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
+			host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
+		}
+		@Override public void onStart() {
+			//this.setLengthMillis((int)random(1,5) * 500);
+			/*for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
+				host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
+			for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
+				host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
+		}
+		@Override public void onStop() {	return; }
+		
+		/*@Override public ArrayList<Mutable> getMutables() {
+			return this.mutables; //new ArrayList<Mutable>;
+		}*/
+	}
+
+	class BlendSequence2 extends Sequence {
+		public BlendSequence2() {}
+		public BlendSequence2(BlenderFX1 blenderFX1, int i) {
+			// TODO Auto-generated constructor stub
+			super(blenderFX1,i);
+		}
+		@Override public void onStart() {
+			host.getFilter("BlendDrawer1").nextMode();
+		}
+		@Override
+		public void setValuesForNorm(double pc, int iteration) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void onStop() {
+			// TODO Auto-generated method stub
+			
+		}	
+		
+		/*@Override public ArrayList<Mutable> getMutables() {
+			return this.mutables; //new ArrayList<Mutable>;
+		}*/
+	}
+
+	public BlenderFX1(Project host, String name, int w, int h) {
 		super(host, w, h);
 		// TODO Auto-generated constructor stub
 		setSceneName("BlenderFX1: " + name);
@@ -44,52 +94,4 @@ public class BlenderFX1 extends SimpleScene {
 			
     }
     
-}
-
-class BlendSequence1 extends Sequence {
-	public BlendSequence1(BlenderFX1 blenderFX1, int i) {
-		// TODO Auto-generated constructor stub
-		super(blenderFX1,i);
-	}
-	public void setValuesForNorm(double norm, int iteration) {
-		//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
-		if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
-		host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
-	}
-	@Override public void onStart() {
-		//this.setLengthMillis((int)random(1,5) * 500);
-		/*for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
-			host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
-		for (int i = 0 ; i < APP.getApp().random(2,10) ; i++) 
-			host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
-	}
-	@Override public void onStop() {	return; }
-	
-	/*@Override public ArrayList<Mutable> getMutables() {
-		return this.mutables; //new ArrayList<Mutable>;
-	}*/
-}
-
-class BlendSequence2 extends Sequence {
-	public BlendSequence2(BlenderFX1 blenderFX1, int i) {
-		// TODO Auto-generated constructor stub
-		super(blenderFX1,i);
-	}
-	@Override public void onStart() {
-		host.getFilter("BlendDrawer1").nextMode();
-	}
-	@Override
-	public void setValuesForNorm(double pc, int iteration) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void onStop() {
-		// TODO Auto-generated method stub
-		
-	}	
-	
-	/*@Override public ArrayList<Mutable> getMutables() {
-		return this.mutables; //new ArrayList<Mutable>;
-	}*/
 }

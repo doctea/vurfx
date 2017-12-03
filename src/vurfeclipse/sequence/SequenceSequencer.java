@@ -179,8 +179,17 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 					  println ("Sequencer attempting changeSequence to " + spl[3]);
 					  changeSequence(spl[3],false, true);	// 2017-11-16, quick hack to prevent targeted changes from saving in history..
 				  } else {
-					  println ("Sequencer attempting changeSequence to " + payload.toString());
-					  changeSequence(payload.toString(),false, true); // 2017-11-16, quick hack to prevent targeted changes from saving in history..
+					  if (payload instanceof String) {
+						  println ("Sequencer attempting changeSequence to " + payload.toString());
+						  changeSequence(payload.toString(),false, true); // 2017-11-16, quick hack to prevent targeted changes from saving in history..
+					  } else if (payload instanceof HashMap<?,?>) {
+						  println ("Sequencer attempting changeSequence to passed-in definition of a sequence!");
+						  Sequence newSeq = this.loadSequence((HashMap<String,Object>)payload);
+						  String seqName = (String) ((HashMap) payload).get("current_sequence_name");
+						  seqName = seqName==null?"loaded":seqName;
+						  this.addSequence(seqName, newSeq);
+						  changeSequence(seqName);
+					  }
 				  }
 				  return "Sequencer active Sequence is currently " + activeSequenceName;
 			  } else if (spl[2].equals("toggleLock")) {
@@ -629,23 +638,39 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return true;
 	}
 	
-	private void loadSequence(String filename) {
+	private Sequence loadSequence(String filename) {
 	  	HashMap<String, Object> input;
 	  	try {
 	  		//input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
 	  		input = (HashMap<String, Object>) XMLSerializer.read(filename);
 	  		
-	  		Scene host = this.host.getSceneForPath((String)input.get("hostPath"));
-	  		Sequence newSeq = Sequence.createSequence((String) input.get("class"), host);
-	  		newSeq.loadParameters(input);
+	  		Sequence newSeq = this.loadSequence(input);
 	  		this.addSequence(filename, newSeq); //Sequence.createSequence((String) input.get("class")));
 	  		this.changeSequence(filename);
+	  		
+			return newSeq;	
 	  	} catch (Exception e1) {
 	  		// TODO Auto-generated catch block
 	  		System.err.println("Caught " + e1 + " trying to load sequence '" + filename + "'");
 	  		e1.printStackTrace();
 	  		//return this;
-	  	}		
+	  	}
+	  	return null;
+	}
+
+
+	public Sequence loadSequence(HashMap<String, Object> input) {
+  		try {
+			Scene host = this.host.getSceneForPath((String)input.get("hostPath"));
+			Sequence newSeq = Sequence.createSequence((String) input.get("class"), host);
+			newSeq.loadParameters(input);
+			
+			return newSeq;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+	  		System.err.println("Caught " + e + " trying to load sequence from input hash");
+		}
+		return null;
 	}
 
 
@@ -709,8 +734,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
   }
 
   @Override public HashMap<String,Object> collectParameters() {
-	  HashMap<String,Object> params = super.collectParameters(); 
+	  HashMap<String,Object> params = super.collectParameters();  
 	  params.put("/seq/seed", this.getActiveSequence().getSeed());
+	  params.put("/seq/changeTo",this.getActiveSequence().collectParameters());
+	  params.put("/seq/current_sequence_name", this.getCurrentSequenceName());	// just save the name, used when re-loading from xml or hashmap
 	  return params;
   }
   
