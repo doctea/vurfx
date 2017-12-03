@@ -1,0 +1,1472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_144" class="java.beans.XMLDecoder">
+ <object class="java.util.HashMap">
+  <void method="put">
+   <string>/sc/OutputShader2</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/OutputShader2/fl/Feedback/pa/amp</string>
+     <float>10.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/BlendDrawer pix0 to out/pa/Opacity</string>
+     <float>0.23157896</float>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/Kaleido/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/Feedback/pa/dirs</string>
+     <int>1</int>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/BlendDrawer pix0 to out/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/Kaleido/pa/half_y</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/Kaleido/pa/half_x</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/BlendDrawer pix0 to out/pa/BlendMode</string>
+     <int>11</int>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/Feedback/pa/radio</string>
+     <float>8.810527</float>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/BlendDrawer pix0 to out/pa/Scale</string>
+     <float>1.0947369</float>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/Feedback/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/BlendDrawer pix0 to out/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/BlendDrawer pix0 to out/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/Kaleido/pa/mirror_y</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/Kaleido/pa/mirror_x</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader2/fl/BlendDrawer pix0 to out/pa/Y</string>
+     <float>0.0</float>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/OutputShader3</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/OutputShader3/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader3/fl/SyncEffect/pa/sin_mode</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader3/fl/SyncEffect/pa/step_x</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader3/fl/SyncEffect/pa/offset_x</string>
+     <float>0.37894773</float>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader3/fl/SyncEffect/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader3/fl/SyncEffect/pa/offset_y</string>
+     <float>3.5789475</float>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader3/fl/SyncEffect/pa/step_y</string>
+     <float>1.0</float>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/class vurfeclipse.scenes.DebugScene10007</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.DebugScene10007/fl/class vurfeclipse.filters.DebugDrawer10008/pa/beat</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.DebugScene10007/fl/class vurfeclipse.filters.DebugDrawer10008/mute</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.DebugScene10007/fl/class vurfeclipse.filters.DebugDrawer10008/pa/test</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.DebugScene10007/fl/class vurfeclipse.filters.DebugDrawer10008/pa/bar</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.DebugScene10007/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.DebugScene10007/fl/class vurfeclipse.filters.DebugDrawer10008/pa/scene</string>
+     <int>0</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/BlobScene</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/xRadianMod</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/totalRotate</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer/pa/BlendMode</string>
+     <int>4</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer2/pa/Scale</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/startRadius</string>
+     <int>900</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/rotation</string>
+     <float>90.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/totalRotate</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/edged</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/radius</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/endRadius</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/rotation</string>
+     <float>90.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer2/pa/BlendMode</string>
+     <int>4</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/outline</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/mode</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/xRadianMod</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer2/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer2/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer/pa/Opacity</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/mode</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/numSections</string>
+     <float>60.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/outline</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/shape</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/zRotate</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/startRadius</string>
+     <int>900</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/radius</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/numofCircles</string>
+     <float>5.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/numSections</string>
+     <float>60.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/zRotate</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer/pa/Scale</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/yRadianMod</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/spiralCenter</string>
+     <object class="processing.core.PVector" id="PVector0">
+      <void class="processing.core.PVector" method="getField">
+       <string>x</string>
+       <void method="set">
+        <object idref="PVector0"/>
+        <float>800.0</float>
+       </void>
+      </void>
+      <void class="processing.core.PVector" method="getField">
+       <string>y</string>
+       <void method="set">
+        <object idref="PVector0"/>
+        <float>450.0</float>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer2/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/tint</string>
+     <int>255</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/shape</string>
+     <int>2</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/mute</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/yRadianMod</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/spiralCenter</string>
+     <object class="processing.core.PVector" id="PVector1">
+      <void class="processing.core.PVector" method="getField">
+       <string>x</string>
+       <void method="set">
+        <object idref="PVector1"/>
+        <float>800.0</float>
+       </void>
+      </void>
+      <void class="processing.core.PVector" method="getField">
+       <string>y</string>
+       <void method="set">
+        <object idref="PVector1"/>
+        <float>450.0</float>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer2/pa/Opacity</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/numofCircles</string>
+     <float>5.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/endRadius</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer2/pa/edged</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlobDrawer/pa/tint</string>
+     <int>255</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene/fl/BlendDrawer2/pa/Rotate</string>
+     <int>0</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/seq</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/seq/changeTo</string>
+     <object class="java.util.HashMap">
+      <void method="put">
+       <string>mutableUrls</string>
+       <object class="java.util.ArrayList">
+        <void method="add">
+         <string>/sc/BlobScene2</string>
+        </void>
+       </object>
+      </void>
+      <void method="put">
+       <string>chain</string>
+       <object class="java.util.ArrayList">
+        <void method="add">
+         <object class="java.util.HashMap">
+          <void method="put">
+           <string>mutableUrls</string>
+           <object class="java.util.ArrayList">
+            <void method="add">
+             <string>/sc/BlobScene2</string>
+            </void>
+           </object>
+          </void>
+          <void method="put">
+           <string>seed</string>
+           <long>8545823572901538676</long>
+          </void>
+          <void method="put">
+           <string>current_sequence_name</string>
+           <string>2017-11-30-23-47-14</string>
+          </void>
+          <void method="put">
+           <string>class</string>
+           <string>vurfeclipse.user.scenes.BlobFX1.SpinnerSequence1</string>
+          </void>
+          <void method="put">
+           <string>hostPath</string>
+           <string>/sc/BlobScene2</string>
+          </void>
+          <void method="put">
+           <string>lengthMillis</string>
+           <int>8000</int>
+          </void>
+         </object>
+        </void>
+        <void method="add">
+         <object class="java.util.HashMap">
+          <void method="put">
+           <string>mutableUrls</string>
+           <object class="java.util.ArrayList"/>
+          </void>
+          <void method="put">
+           <string>seed</string>
+           <long>-5175636579864038172</long>
+          </void>
+          <void method="put">
+           <string>current_sequence_name</string>
+           <string>2017-11-30-23-47-14</string>
+          </void>
+          <void method="put">
+           <string>class</string>
+           <string>vurfeclipse.user.scenes.BlenderFX1.BlendSequence1</string>
+          </void>
+          <void method="put">
+           <string>hostPath</string>
+           <string>/sc/BlenderFX1: pix1 BlenderFX</string>
+          </void>
+          <void method="put">
+           <string>lengthMillis</string>
+           <int>8000</int>
+          </void>
+         </object>
+        </void>
+       </object>
+      </void>
+      <void method="put">
+       <string>seed</string>
+       <long>8533161377715143014</long>
+      </void>
+      <void method="put">
+       <string>current_sequence_name</string>
+       <string>2017-11-30-23-47-14</string>
+      </void>
+      <void method="put">
+       <string>class</string>
+       <string>vurfeclipse.sequence.ChainSequence</string>
+      </void>
+      <void method="put">
+       <string>hostPath</string>
+       <string>/sc/BlobScene2</string>
+      </void>
+      <void method="put">
+       <string>lengthMillis</string>
+       <int>8000</int>
+      </void>
+     </object>
+    </void>
+    <void method="put">
+     <string>/seq/current_sequence_name</string>
+     <string>2017-11-28-23-5-9</string>
+    </void>
+    <void method="put">
+     <string>/seq/seed</string>
+     <long>8533161377715143014</long>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/BlobScene2</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/tint</string>
+     <int>50</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/numofCircles</string>
+     <float>15.656125</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/numSections</string>
+     <float>73.65263</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/spiralCenter</string>
+     <object class="processing.core.PVector" id="PVector2">
+      <void class="processing.core.PVector" method="getField">
+       <string>x</string>
+       <void method="set">
+        <object idref="PVector2"/>
+        <float>0.5</float>
+       </void>
+      </void>
+      <void class="processing.core.PVector" method="getField">
+       <string>y</string>
+       <void method="set">
+        <object idref="PVector2"/>
+        <float>0.5</float>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/spiralCenter</string>
+     <object class="processing.core.PVector" id="PVector3">
+      <void class="processing.core.PVector" method="getField">
+       <string>x</string>
+       <void method="set">
+        <object idref="PVector3"/>
+        <float>0.5</float>
+       </void>
+      </void>
+      <void class="processing.core.PVector" method="getField">
+       <string>y</string>
+       <void method="set">
+        <object idref="PVector3"/>
+        <float>0.5</float>
+       </void>
+      </void>
+     </object>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer2/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/zRotate</string>
+     <float>299.36844</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/endRadius</string>
+     <float>7.2863154</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/radius</string>
+     <float>3.5158963</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/totalRotate</string>
+     <float>82.305</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/outline</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/yRadianMod</string>
+     <float>2.9136841</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/numSections</string>
+     <float>61.126324</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer/pa/Scale</string>
+     <float>1.3894738</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/outline</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer2/pa/X</string>
+     <float>0.68421054</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/numofCircles</string>
+     <float>3.4000003</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/xRadianMod</string>
+     <float>4.3657284</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer2/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/xRadianMod</string>
+     <float>-2.6153526</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer/pa/Opacity</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/shape</string>
+     <int>4</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/endRadius</string>
+     <float>6.661052</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/totalRotate</string>
+     <float>82.305</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/mode</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/startRadius</string>
+     <int>1041</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer2/pa/BlendMode</string>
+     <int>3</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer2/pa/Scale</string>
+     <float>0.16842106</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer2/pa/Rotate</string>
+     <int>237</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/edged</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/zRotate</string>
+     <float>90.94738</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/yRadianMod</string>
+     <float>9.569191</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/edged</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/rotation</string>
+     <float>41.1525</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/startRadius</string>
+     <int>172</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/rotation</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/mode</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/radius</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer/pa/tint</string>
+     <int>255</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer/pa/BlendMode</string>
+     <int>4</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlendDrawer2/pa/Opacity</string>
+     <float>0.2631579</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlobScene2/fl/BlobDrawer2/pa/shape</string>
+     <int>3</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/project</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/project/timeScale</string>
+     <double>2.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/TextFlash</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/TextFlash/fl/BlendDrawer/pa/BlendMode</string>
+     <int>4</int>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/BlendDrawer/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/BlendDrawer/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/BlendDrawer/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/BlendDrawer/pa/Scale</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/mute</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/TextDrawer/pa/motionBlur</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/TextDrawer/pa/rotation</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/TextDrawer/pa/continuousDraw</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/BlendDrawer/pa/Opacity</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/BlendDrawer/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/TextDrawer/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/TextDrawer/pa/zrotation</string>
+     <int>-180</int>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/TextDrawer/pa/text</string>
+     <string>end is near</string>
+    </void>
+    <void method="put">
+     <string>/sc/TextFlash/fl/TextDrawer/pa/colour</string>
+     <int>255</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/class vurfeclipse.scenes.BadTVScene10006</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/fl/BadTV/pa/horzFuzzOpt</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/fl/BadTV/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/fl/BadTV/pa/rgbOffsetOpt</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/mute</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/fl/BadTV/pa/iResolutionX</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/fl/BadTV/pa/iTime</string>
+     <float>66600.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/fl/BadTV/pa/iResolutionY</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/fl/BadTV/pa/bottomStaticOpt</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/fl/BadTV/pa/vertMovementOpt</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/fl/BadTV/pa/vertJerkOpt</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.scenes.BadTVScene10006/fl/BadTV/pa/scalinesOpt</string>
+     <float>1.0</float>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/ImageListScene1</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/ImageListScene1/mute</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/ImageListScene1/fl/ImageListDrawer1/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/ImageListScene1/fl/ImageListDrawer1/pa/scale</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/ImageListScene1/fl/ImageListDrawer1/pa/translate_x</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/ImageListScene1/fl/ImageListDrawer1/pa/translate_y</string>
+     <int>0</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/ImageListScene2</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/ImageListScene2/fl/ImageListDrawer2/pa/translate_x</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/ImageListScene2/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/ImageListScene2/fl/ImageListDrawer2/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/ImageListScene2/fl/ImageListDrawer2/pa/scale</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/ImageListScene2/fl/ImageListDrawer2/pa/translate_y</string>
+     <int>0</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_2/pa/Scale</string>
+     <float>0.25</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_1/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_1/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_7/pa/Opacity</string>
+     <float>0.5</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_5/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_5/pa/BlendMode</string>
+     <int>8</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_5/pa/Scale</string>
+     <float>1.5</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_3/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_3/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_2/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_7/pa/BlendMode</string>
+     <int>4</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/mute</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_4/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_4/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_2/pa/Opacity</string>
+     <float>0.6</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_1/pa/Opacity</string>
+     <float>0.6</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_5/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_2/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_2/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_4/pa/BlendMode</string>
+     <int>3</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_3/pa/BlendMode</string>
+     <int>8</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_5/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_7/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_4/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_4/pa/Scale</string>
+     <float>0.75</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_2/pa/BlendMode</string>
+     <int>4</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_4/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_7/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_1/pa/BlendMode</string>
+     <int>3</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_6/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_6/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_3/pa/Opacity</string>
+     <float>0.5</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_6/pa/BlendMode</string>
+     <int>8</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_6/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_5/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_3/pa/Scale</string>
+     <float>0.5</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_6/pa/Scale</string>
+     <float>2.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_3/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_7/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_6/pa/Opacity</string>
+     <float>0.05</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_7/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_2/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_1/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_6/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_1/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_1/pa/Scale</string>
+     <float>0.1</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_5/pa/Opacity</string>
+     <float>0.1</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_3/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_7/pa/Scale</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10004/fl/Blend_4/pa/Opacity</string>
+     <float>0.3</float>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/BlankerScene</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/BlankerScene/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlankerScene/fl/BlankFilter/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlankerScene/fl/BlankFilter/pa/bgcolour</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlankerScene/fl/BlankFilter/pa/alpha</string>
+     <int>30</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/PlasmaScene</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/PhaseRGB/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/Plasma/pa/u_time_2</string>
+     <int>2891</int>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/PhaseRGB/pa/bshift</string>
+     <float>0.36541972</float>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/Plasma/pa/width</string>
+     <int>100</int>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/PhaseRGB/pa/gshift</string>
+     <float>0.65454805</float>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/BlendDrawer/pa/Opacity</string>
+     <float>0.24210528</float>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/Plasma/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/Plasma/pa/height</string>
+     <int>56</int>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/BlendDrawer/pa/BlendMode</string>
+     <int>5</int>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/BlendDrawer/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/PhaseRGB/pa/rshift</string>
+     <float>0.25922805</float>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/Plasma/pa/colourMode</string>
+     <int>7</int>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/BlendDrawer/pa/Scale</string>
+     <float>1.2210526</float>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/BlendDrawer/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/BlendDrawer/pa/Rotate</string>
+     <int>298</int>
+    </void>
+    <void method="put">
+     <string>/sc/PlasmaScene/fl/BlendDrawer/pa/X</string>
+     <float>0.0</float>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/OutputShader</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/OutputShader/fl/Toon/mute</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader/mute</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader/fl/Pixelate/pa/pixel_size</string>
+     <float>64.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/OutputShader/fl/Pixelate/mute</string>
+     <boolean>true</boolean>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/BlenderFX1: pix1 BlenderFX</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/class vurfeclipse.filters.PlainDrawer10000/pa/tint</string>
+     <int>255</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/BlendDrawer1/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/BlendDrawer1/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/kinect0/pa/rgb</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/BlendDrawer1/pa/Scale</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/class vurfeclipse.filters.PlainDrawer10000/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/class vurfeclipse.filters.PlainDrawer10000/pa/rotation</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/BlendDrawer1/pa/BlendMode</string>
+     <int>4</int>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/kinect0/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/mute</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/kinect0/pa/depth</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/BlendDrawer1/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/BlendDrawer1/mute</string>
+     <boolean>true</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/BlenderFX1: pix1 BlenderFX/fl/BlendDrawer1/pa/Opacity</string>
+     <float>0.227375</float>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005</string>
+   <object class="java.util.HashMap">
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_4/pa/Opacity</string>
+     <float>0.25</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_1/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_1/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_7/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_7/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_5/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_6/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_7/pa/Scale</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_1/pa/Scale</string>
+     <float>1.3103285</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_7/pa/Opacity</string>
+     <float>0.5</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_6/pa/BlendMode</string>
+     <int>8</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_4/pa/Scale</string>
+     <float>0.35530403</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_2/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_7/pa/BlendMode</string>
+     <int>4</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_5/pa/Scale</string>
+     <float>0.2847887</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_2/pa/Opacity</string>
+     <float>0.5</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_6/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_3/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_3/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_3/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_6/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_6/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_2/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_5/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_1/pa/Opacity</string>
+     <float>1.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_3/pa/Scale</string>
+     <float>0.4717781</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_4/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_6/pa/Scale</string>
+     <float>0.23757108</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_4/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_3/pa/Opacity</string>
+     <float>0.33333334</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_4/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_3/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_5/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_7/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_5/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_5/pa/BlendMode</string>
+     <int>8</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_4/pa/BlendMode</string>
+     <int>3</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_3/pa/BlendMode</string>
+     <int>8</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_1/pa/Rotate</string>
+     <int>0</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_7/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_2/pa/X</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_2/pa/Y</string>
+     <float>0.0</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_1/pa/BlendMode</string>
+     <int>3</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_2/pa/BlendMode</string>
+     <int>4</int>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_6/pa/Opacity</string>
+     <float>0.16666667</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_4/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_2/pa/Scale</string>
+     <float>0.6993047</float>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_1/mute</string>
+     <boolean>false</boolean>
+    </void>
+    <void method="put">
+     <string>/sc/class vurfeclipse.user.scenes.TunnelScene10005/fl/Blend_5/pa/Opacity</string>
+     <float>0.2</float>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>
