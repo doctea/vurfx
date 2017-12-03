@@ -667,8 +667,8 @@ public abstract class Project implements Serializable {
     //println("Project#setupControls about to get controlwindow");
     //ControlFrame cw = ((VurfEclipse)APP.getApp()).getCW();
 
-    //println("Project#setupControls about to setupControls for sequencer " + this.sequencer);
-    //this.sequencer.setupControls(cf, "Default");
+    println("Project#setupControls about to setupControls() for sequencer " + this.sequencer);
+    this.sequencer.setupControls(cf, "Sequencer");
     
     println("Project#setupControls about to grab cp5 before scene loop..");
     final ControlP5 cp5 = cf.control();

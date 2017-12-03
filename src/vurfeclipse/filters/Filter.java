@@ -265,7 +265,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         muteController.setState(v);
         muteController.setBroadcast(true);
     	//this.muteController.setValue(v);
-    	println("#setMute: muteController (" + this.muteController.getLabel() + ") set to " + v);
+    	//println("#setMute: muteController (" + this.muteController.getLabel() + ") set to " + v);
     	//System.exit(1);
     } else {
     	println("#setMute: no muteController set!");

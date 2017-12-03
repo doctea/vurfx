@@ -12,8 +12,13 @@ import controlP5.Bang;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.ListBox;
+import controlP5.ScrollableList;
+import controlP5.Tab;
+import controlP5.Textfield;
 import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
+import vurfeclipse.scenes.Scene;
 import vurfeclipse.ui.ControlFrame;
 
 abstract public class Sequencer implements Serializable, Targetable, CallbackListener {
@@ -32,6 +37,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	}
 
 	int w, h;
+
 
 	public boolean readyToChange(int max_iterations) {
 		if (forward) {
@@ -87,28 +93,30 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		return true;
 	}
 
-	public void setupControls(ControlFrame cf, String string) {
+	public void setupControls(ControlFrame cf, String tabName) {
 		// TODO Auto-generated method stub
+	    //this.sequencer.setupControls(cf, tabname);
+	    
 
 	}
 
-  public void controlEvent (CallbackEvent ev) {
-    //println("controlevent in " + this);
-    /*if (ev.getAction()==ControlP5.ACTION_RELEASED) {
-      if (ev.getController()==this.saveHistoryButton) {
-        
-      }
-      else if (ev.getController()==this.saveButton) {
-        println("save preset " + getSceneName());
-        //this.savePreset(saveFilenameController.getText(), getSerializedMap());
-        this.savePreset(getSceneName());
-      }
-      else if (ev.getController()==this.loadButton) {
-        println("load preset");
-        this.loadPreset2(getSceneName()); //saveFilenameController.getText());
-      }
-    }*/
-  }
+	  public void controlEvent (CallbackEvent ev) {
+	    //println("controlevent in " + this);
+	    /*if (ev.getAction()==ControlP5.ACTION_RELEASED) {
+	      if (ev.getController()==this.saveHistoryButton) {
+	        
+	      }
+	      else if (ev.getController()==this.saveButton) {
+	        println("save preset " + getSceneName());
+	        //this.savePreset(saveFilenameController.getText(), getSerializedMap());
+	        this.savePreset(getSceneName());
+	      }
+	      else if (ev.getController()==this.loadButton) {
+	        println("load preset");
+	        this.loadPreset2(getSceneName()); //saveFilenameController.getText());
+	      }
+	    }*/
+	  }
 
 	public HashMap<String, Object> collectParameters() {
 		// TODO Auto-generated method stub

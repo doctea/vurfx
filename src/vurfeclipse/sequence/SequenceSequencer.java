@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import vurfeclipse.APP;
@@ -25,6 +26,10 @@ import controlP5.Bang;
 import controlP5.CallbackEvent;
 import controlP5.ControlP5;
 import controlP5.Controller;
+import controlP5.ListBox;
+import controlP5.ScrollableList;
+import controlP5.Tab;
+import controlP5.Textfield;
 
 
 
@@ -355,29 +360,39 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	  	this.changeSequence(sequenceName,true,true);
 	  }
 
-	  public void changeSequence(String SequenceName, boolean remember, boolean restart) {
+	  public void changeSequence(String sequenceName, boolean remember, boolean restart) {
 		  if (this.getActiveSequence()!=null) {		// mute the current sequence 
 			  if (restart) this.getActiveSequence().stop();//setMuted(true);
 			  // check if this is already the top of the sequence history, if so don't add it again 
 		  }
 
-		  this.activeSequenceName = SequenceName;
+		  this.activeSequenceName = sequenceName;
 		  
 		  if (null==this.getActiveSequence()) {
 		  	println("Got NULL for " + this.activeSequenceName + "!");
 		  	return;
 		  }
 
-		  println("Changing to sequence: " + SequenceName + "  (" + this.getActiveSequence().toString() + ")");
-		  if (remember && this.shouldRemember(SequenceName)) {
-		  	this.addHistorySequenceName(SequenceName);
+		  println("Changing to sequence: " + sequenceName + "  (" + this.getActiveSequence().toString() + ")");
+		  if (remember && this.shouldRemember(sequenceName)) {
+		  	this.addHistorySequenceName(sequenceName);
 		  	//if (historyCursor==this.historySequenceNames.size()-1)	// if the cursor is already tracking the history then set cursor to most recent item so that 'j' does jump to the most recent sequence 
 	  		historyCursor = this.historySequenceNames.size()-1;
+	  		
+	  		// update gui for changed sequences
+	  		this.updateGuiSequenceChanged(sequenceName);
 		  }
 		  //muteAllSequences();
 		  this.getActiveSequence().setMuted(false);
 		  if (restart) this.getActiveSequence().start();
 	  }
+
+
+	private void updateGuiSequenceChanged(String sequenceName) {
+		// TODO Auto-generated method stub
+  		this.lstSequences.addItem(sequenceName, sequenceName);
+  		this.txtCurrentSequenceName.setValue(sequenceName);
+	}
 
 
 	private boolean shouldRemember(String sequenceName) {
@@ -694,9 +709,41 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	protected Bang saveHistoryButton;
 	protected Bang loadHistoryButton;
 
+	private Textfield txtCurrentSequenceName;
+	private ListBox lstSequences;
+	
 	@Override public void setupControls (ControlFrame cf, String tabName) {
-		this.saveHistoryButton = cf.control().addBang("SAVE sequencer history");		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
-		this.loadHistoryButton = cf.control().addBang("LOAD sequencer history");		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
+		super.setupControls(cf, tabName);
+		
+	    println("Project#setupControls about to grab cp5 before scene loop..");
+	    final ControlP5 cp5 = cf.control();
+	    
+	    //this.setupMonitor(cp5);
+	    
+	    int c = 0;
+	    
+	    int margin_y = 20; // start under the tab row
+	    int margin_x = 5;
+	    
+	    int width = cf.sketchWidth();
+	    int height = cf.sketchHeight();
+	    
+	    Tab sceneTab = cp5.addTab(tabName);
+	    
+	    txtCurrentSequenceName = new Textfield(cp5, "Current Sequence Name")
+	    		.setPosition(margin_x, margin_y)
+	    		.moveTo(sceneTab);
+	    sceneTab.add(txtCurrentSequenceName);
+
+	    lstSequences = new controlP5.ListBox(cp5, "sequence names")  	    		
+	    		.setPosition(width-(width/3), margin_y + 100)
+    			.setSize(width/3, height-margin_y)
+    			.setItemHeight(20)
+    			.moveTo(sceneTab)
+    			.setType(ScrollableList.LIST);
+		
+		//this.saveHistoryButton = cf.control().addBang("SAVE sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
+		//zthis.loadHistoryButton = cf.control().addBang("LOAD sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
 		cf.control().addCallback(this);
 	}
 	
@@ -718,6 +765,19 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 					println("Problem load history!");
 					e.printStackTrace();
 				}
+      }
+    } else if (ev.getAction()==ScrollableList.ACTION_CLICK) { 
+      if (ev.getController()==this.lstSequences) {
+    	  //println("My name is: " + this.lstSequences.getValueLabel().getText());
+    	  String sequenceName = this.lstSequences.getValueLabel().getText();
+    			  
+    	  Map<String, Object> test = this.lstSequences.getItem((int)this.lstSequences.getValue());
+    	  sequenceName = (String) test.get("value");
+    	  
+    	  println("got value " + (int)this.lstSequences.getValue());
+    	  
+		  println("got list-selected sequenceName " + sequenceName);
+    	  this.changeSequence(sequenceName, false, true);
       }
       /*else if (ev.getController()==this.saveButton) {
         println("save preset " + getSceneName());
