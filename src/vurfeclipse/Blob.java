@@ -13,7 +13,7 @@ public class Blob implements Serializable {
 
   public int y = 0;
 
-  int r=10;
+  float r = 10.0f;
   
   int c;
   int tint = 255;
@@ -89,7 +89,7 @@ public class Blob implements Serializable {
     this.y = y;
   }
   
-  public void setRadius(int r) {
+  public void setRadius(float r) {
     this.r = r;
   }
   
@@ -155,7 +155,7 @@ public class Blob implements Serializable {
       out.rotate(rot%(((VurfEclipse)APP.getApp()).millis()/1000)%60);
     }
     
-    int R = isScaleRelative()?(int)((VurfEclipse)APP.getApp()).brightness(c)/8 : r;
+    float R = isScaleRelative()?(int)((VurfEclipse)APP.getApp()).brightness(c)/8 : r;
 /*          if (doRelative) {
         blobs[b].setRadius((int)hue(pix)/8+((int)random(r)));//(int)random(r));
       }*/
