@@ -30,7 +30,7 @@ public class Blob implements Serializable {
   public int shapesCount = 7; //8;
   public int SH_RANDOM = shapesCount;
   
-  int rot = 0;
+  float rot = 0;
   
   private int strokeSize = 3;
   
@@ -57,7 +57,7 @@ public class Blob implements Serializable {
 
   }
   
-  public Blob(int shape, int x, int y, int rot) {
+  public Blob(int shape, int x, int y, float rot) {
     //this.shape = shape;
     this();
     this.setShape(shape);
@@ -108,7 +108,7 @@ public class Blob implements Serializable {
     this.tint = c;
   }
   
-  public void setRotation(int rot) {
+  public void setRotation(float rot) {
     this.rot = rot;
   }
   
@@ -155,7 +155,7 @@ public class Blob implements Serializable {
       out.rotate(rot%(((VurfEclipse)APP.getApp()).millis()/1000)%60);
     }
     
-    float R = isScaleRelative()?(int)((VurfEclipse)APP.getApp()).brightness(c)/8 : r;
+    float R = isScaleRelative()?(float)((VurfEclipse)APP.getApp()).brightness(c)/8 : r;
 /*          if (doRelative) {
         blobs[b].setRadius((int)hue(pix)/8+((int)random(r)));//(int)random(r));
       }*/
@@ -170,7 +170,7 @@ public class Blob implements Serializable {
       //out.rect(x-r,y-r,r/2,r/2);
       out.rectMode(PApplet.RADIUS);
       //out.rect(-R,-R,R,R);
-      out.rect(0,0,R/2,R/2);
+      out.rect(0,0,R/2.0f,R/2.0f);
       //out.rect(0,0,R,R);
       //polygon(out, /*doPolyRand?(int)random(3,8):*/4, 0, 0, R, R, 0);
     } else if (getShape()==SH_POLY) {
@@ -181,23 +181,23 @@ public class Blob implements Serializable {
       out.pushMatrix();
       out.rotate(rot*2);
       for (int i = 0; i < 360; i+=20) {
-        float x = PApplet.sin(PApplet.radians(i)) * R/2;
-        float y = PApplet.cos(PApplet.radians(i)) * R/2;
+        float x = PApplet.sin(PApplet.radians(i)) * R/2.0f;
+        float y = PApplet.cos(PApplet.radians(i)) * R/2.0f;
         out.pushMatrix();
         out.translate(x,y);
-        out.rotate(rot*4);
-        polygon(out, numSides, 0, 0, R/4, R/4, 0);
+        out.rotate(rot*4.0f);
+        polygon(out, numSides, 0, 0, R/4.0f, R/4.0f, 0);
         out.popMatrix();
         //polygon(out, numSides, x, y, R/4, R/4, 0);
       }
       out.popMatrix();
     } else if (getShape()==SH_TEXTURE) {
       float units_w = 1.0f, units_h = 0.75f;
-      float new_w = units_w * R/2;///*sc.w * (sc.w/*/units_w*R;///4;//);  
-      float new_h = units_h * R/2;///*sc.h * (sc.h/*/units_h*R;///4;//);
+      float new_w = units_w * R/2.0f;///*sc.w * (sc.w/*/units_w*R;///4;//);  
+      float new_h = units_h * R/2.0f;///*sc.h * (sc.h/*/units_h*R;///4;//);
   
       out.pushMatrix();
-      out.translate(-new_w/2,-new_h/2);
+      out.translate(-new_w/2.0f,-new_h/2.0f);
       out.image(src,0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
       //;;if ((int)((VurfEclipse)APP.getApp()).random(100)==0) System.out.println("BLOB>>>drawing texture " + this.src);
       //out.image(src.getTexture(),0,0,new_w,new_h);

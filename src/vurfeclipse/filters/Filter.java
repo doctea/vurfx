@@ -106,7 +106,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   public String getFilterName () {
     if(filterName.equals("")) {
-      filterName = this.getClass().toString() + ((VurfEclipse)APP.getApp()).pr.getGUID();
+      filterName = this.getClass().getSimpleName(); // + ((VurfEclipse)APP.getApp()).pr.getGUID();
       println("setting empty filter name to " + filterName);
     }
     return filterName;
@@ -474,7 +474,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 
   public String getFilterLabel() {
-    if (this.filterLabel.equals("")) filterLabel = this.getClass().toString() + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();//.replace("@","-");
+    if (this.filterLabel.equals("")) filterLabel = this.getClass().getSimpleName() + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();//.replace("@","-");
 
     return this.filterLabel.equals("")?this.toString():this.filterLabel;
   }

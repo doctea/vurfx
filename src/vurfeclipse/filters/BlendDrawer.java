@@ -107,7 +107,7 @@ public class BlendDrawer extends ShaderFilter {
     //changeParameterValue("BlendMode", n);
   }
 
-  public PShader getFilterNumber(int n) {
+  synchronized public PShader getFilterNumber(int n) {
     if (this.blendFilters==null) blendFilters = new PShader[blendModes.length];
     if (this.blendFilters[n]==null && n<this.blendFilters.length) {
       println("BlendDrawer#getFilterNumber(n) initialising GLTextureFilter " + blendModes[n]);
@@ -137,7 +137,7 @@ public class BlendDrawer extends ShaderFilter {
     return true;
   }
 
-  public boolean applyMeatToBuffers() {
+  synchronized public boolean applyMeatToBuffers() {
     //println("in applymeattobuffers in blenddrawer (" + this + "), src is " + src);
 
 	//if (true) return super.applyMeatToBuffers();

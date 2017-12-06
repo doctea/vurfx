@@ -82,7 +82,12 @@ public class OutputFX3 extends SimpleScene {
 				// TODO Auto-generated constructor stub
 				super(outputFX2, i);
 			}
-
+			
+			@Override
+			public ArrayList<Mutable> getMutables() {
+				return new ArrayList<Mutable>();
+			}
+			
 			@Override
 			public void setValuesForNorm(double pc, int iteration) {
 				getFilter("SyncEffect").changeParameterValueFromSin("step_x", Math.abs((float)Math.sin(pc)));

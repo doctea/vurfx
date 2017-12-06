@@ -61,13 +61,16 @@ public class ChainSequence extends Sequence {
 	
 	@Override
 	public ArrayList<Mutable> getMutables() {
-		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-		//if (host!=null) muts.add(host);
-		Iterator<Sequence> it = chain.iterator();
-		while(it.hasNext()) {
-			muts.addAll(it.next().getMutables());
+		if (this.mutables==null) {
+			ArrayList<Mutable> muts = super.getMutables();// new ArrayList<Mutable>();
+			//if (host!=null) muts.add(host);
+			Iterator<Sequence> it = chain.iterator();
+			while(it.hasNext()) {
+				muts.addAll(it.next().getMutables());
+			}
+			this.mutables = muts;
 		}
-		return muts;
+		return this.mutables;
 	}	
 	
 	@Override
@@ -118,7 +121,7 @@ public class ChainSequence extends Sequence {
 		for (HashMap<String,Object> cs : chains) {
 			// cs contains info to build a new ChainSequence and attach it
 			//ChainSequence n = new ChainSequence(this.host, (Integer) cs.get("lengthMillis"));
-			Sequence n = Sequence.createSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
+			Sequence n = Sequence.makeSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
 			n.loadParameters(cs);
 			this.addSequence(n);
 		}		

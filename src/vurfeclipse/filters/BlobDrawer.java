@@ -109,7 +109,7 @@ public class BlobDrawer extends SpiralDrawer {
     //b.setColour((int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255));
     //b.setColour((Integer)this.getParameterValue("colour"));
     //b.setColour(0);
-    b.setRadius((int)currRadius);// * (int)random(5));
+    b.setRadius(currRadius);// * (int)random(5));
     b.setRotation((int)Math.toRadians((currentRadian)));
     //System.out.println("currentRadian is " + currentRadian);
     //b.setTint(128);
