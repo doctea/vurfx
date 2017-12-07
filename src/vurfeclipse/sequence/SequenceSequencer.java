@@ -27,6 +27,7 @@ import controlP5.CallbackEvent;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.ListBox;
+import controlP5.Slider;
 import controlP5.Tab;
 import controlP5.Textfield;
 
@@ -134,11 +135,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  //host.setTimeScale(0.1f);
 		  
 		  if (getActiveSequence()!=null) getActiveSequence().setValuesForTime();
+		  
+		  //gui : update current progress
+		  if (getActiveSequence()!=null) this.updateGuiProgress(getActiveSequence());
 	  }
 
 
 
-	  public Sequence getActiveSequence () {
+	  
+
+	public Sequence getActiveSequence () {
 		  return sequences.get(activeSequenceName);
 	  }
 
@@ -431,6 +437,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
   		this.lstSequences.getItem(newCursor).put("state", true);
   		this.txtCurrentSequenceName.setValue(this.getCurrentSequenceName());
 	}
+	
+	private void updateGuiProgress(Sequence activeSequence) {
+		this.sldProgress.changeValue(activeSequence.getPositionPC()*100);
+		this.sldProgress.setLabel("Progress iteration ["+(activeSequence.getPositionIteration()+1)+"/"+max_iterations+"]");
+	}
+
 
 
 	private boolean shouldRemember(String sequenceName) {
@@ -766,6 +778,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	private Textfield txtCurrentSequenceName;
 	private ListBox lstSequences;
+	private Slider sldProgress;
 	
 	@Override public void setupControls (ControlFrame cf, String tabName) {
 		super.setupControls(cf, tabName);
@@ -787,6 +800,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	    
 	    txtCurrentSequenceName = new Textfield(cp5, "Current Sequence Name")
 	    		.setPosition(margin_x, margin_y)
+	    		.setWidth(width/3)
 	    		.moveTo(sceneTab);
 	    sceneTab.add(txtCurrentSequenceName);
 
@@ -795,9 +809,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     			.setSize(width/3, height-margin_y-100)
     			.setItemHeight(20)
     			.moveTo(sceneTab)
-    			.setType(ListBox.LIST)
-    			;
-    			
+    			.setType(ListBox.LIST);
+	    
+	    sldProgress = new controlP5.Slider(cp5, "progress")
+	    		.setPosition(margin_x, margin_y * 3)
+	    		.setWidth(width/3)
+	    		.setHeight(margin_y*2)
+	    		.moveTo(sceneTab)
+	    		.setValue(0.0f);    			
 		
 		//this.saveHistoryButton = cf.control().addBang("SAVE sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
 		//zthis.loadHistoryButton = cf.control().addBang("LOAD sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
@@ -836,6 +855,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  this.histMoveCursorAbsolute((int)this.lstSequences.getValue(),true); //distance, restart);
     	  //this.changeSequence(sequenceName, false, true);
       }
+    } else if (ev.getAction()==ControlP5.ACTION_BROADCAST) {
+    	if (ev.getController()==this.sldProgress) {
+    		this.getActiveSequence().setValuesForNorm(this.sldProgress.getValue(),this.getActiveSequence().iteration);
+    	}
       /*else if (ev.getController()==this.saveButton) {
         println("save preset " + getSceneName());
         //this.savePreset(saveFilenameController.getText(), getSerializedMap());

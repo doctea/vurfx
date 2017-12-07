@@ -68,7 +68,10 @@ public class TunnelScene extends SimpleScene {
 
 		@Override
 		public void onStart() {
-			// TODO Auto-generated method stub
+			if(host==null) {
+ 				println("HEY!!! GOT A NULL HOST FOR " + this.getClass());
+ 				return;
+			}
 			for (int i = 1 ; i <= 6 ; i++) {
 				host.getFilter("Blend_"+i).changeParameterValue("Rotate", 0);
 				host.getFilter("Blend_"+i).updateAllParameterValues();

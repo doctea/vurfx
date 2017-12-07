@@ -105,6 +105,8 @@ public class ChainSequence extends Sequence {
 		HashMap<String,Object> params = super.collectParameters();
 		ArrayList<HashMap<String,Object>> chains = new ArrayList<HashMap<String,Object>>();
 		for (Sequence cs : chain) {
+			HashMap<String,HashMap<String,Object>> temp = cs.getSceneParameters();
+			cs.clearSceneParameters();	// remove any scene parameters that are set on the object before saving, since we save our own copy with the chain
 			chains.add(cs.collectParameters());
 		}
 		params.put("chain",  chains);
@@ -121,6 +123,7 @@ public class ChainSequence extends Sequence {
 		for (HashMap<String,Object> cs : chains) {
 			// cs contains info to build a new ChainSequence and attach it
 			//ChainSequence n = new ChainSequence(this.host, (Integer) cs.get("lengthMillis"));
+			if (cs.containsKey("scene_parameters")) cs.remove("scene_parameters");	// don't load scene_parameters for chained sequences, since if there are any they are there from an old version of save format
 			Sequence n = Sequence.makeSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
 			n.loadParameters(cs);
 			this.addSequence(n);

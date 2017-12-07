@@ -38,8 +38,11 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 
 	int w, h;
 
+	public int max_iterations;
+
 
 	public boolean readyToChange(int max_iterations) {
+		this.max_iterations = max_iterations;
 		if (forward) {
 			forward = false;
 			return true;

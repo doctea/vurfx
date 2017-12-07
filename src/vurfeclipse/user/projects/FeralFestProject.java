@@ -415,7 +415,7 @@ public class FeralFestProject extends Project {
     switcher.bindSequence("outputModeChange7", opSequence);
     switcher.bindSequence("outputModeChange8", opSequence);*/
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
-    		new TunnelScene(this, w, h).setCanvas("temp", "/temp2")
+    		new TunnelScene(this, w, h).setCanvas("temp", "/temp2").setSceneName("vurfeclipse.user.scenes.TunnelScene")
 			//.addFilter(new BlendDrawer()))
 		, "/out", "/out"
 	);

@@ -229,6 +229,7 @@ abstract public class Sequence implements Serializable, Mutable {
 
 	boolean outputDebug = true;
 	private Object[] palette;
+	private float current_pc;
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("Q " + (text.contains((this.toString()))? text : this+": "+text));
 	}
@@ -243,6 +244,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		startTimeMillis = APP.getApp().millis();
 		
 		if (this.scene_parameters!=null) {
+			println(this + " about to set scene_parameters!");
 			for (Entry<String,HashMap<String,Object>> e : scene_parameters.entrySet()) {
 				Scene s = (Scene) this.host.host.getObjectForPath(e.getKey());
 				if(s==null) {
@@ -294,6 +296,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 		//println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
 		setValuesForNorm(pc,iteration);
+		this.current_pc = (float) pc;
 	}
 
 	public void setValuesForNorm(double pc) {
@@ -314,6 +317,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 	public Color mixColors(Color color1, Color color2, double percent){
 		//percent *= 10.0;
+		percent = APP.getApp().constrain((float) percent, 0f, 1f);//.abs((float) percent); // fix if percent goes out of range
 	  double inverse_percent = 1.0 - percent;
 	  int redPart = (int) ((color1.getRed()*percent) + (color2.getRed()*inverse_percent));
 	  int greenPart = (int) ((color1.getGreen()*percent) + (color2.getGreen()*inverse_percent));
@@ -401,6 +405,23 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 		public void setSeed(long seed) {
 			this.seed = seed;
+		}
+
+		public HashMap<String, HashMap<String, Object>> getSceneParameters() {
+			return this.scene_parameters;
+		}
+
+		public void clearSceneParameters() {
+			this.scene_parameters = null;			
+		}
+
+		public float getPositionPC() {
+			return this.current_pc;
+		}
+
+		public int getPositionIteration() {
+			// TODO Auto-generated method stub
+			return iteration;
 		}
 
 
