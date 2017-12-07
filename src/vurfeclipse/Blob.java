@@ -9,9 +9,9 @@ import processing.core.PShape;
 //import codeanticode.glgraphics.*;
 
 public class Blob implements Serializable {
-  public int x = 0;
+  public float x = 0;
 
-  public int y = 0;
+  public float y = 0;
 
   float r = 10.0f;
   
@@ -57,7 +57,7 @@ public class Blob implements Serializable {
 
   }
   
-  public Blob(int shape, int x, int y, float rot) {
+  public Blob(int shape, float x, float y, float rot) {
     //this.shape = shape;
     this();
     this.setShape(shape);
@@ -84,9 +84,9 @@ public class Blob implements Serializable {
     return getShape();
   }
   
-  public void setXY(int x, int y) {
-    this.x = x;
-    this.y = y;
+  public void setXY(float x2, float y2) {
+    this.x = x2;
+    this.y = y2;
   }
   
   public void setRadius(float r) {
@@ -247,7 +247,7 @@ public class Blob implements Serializable {
       out.beginShape();
       for (int i = 0; i < n; i++)
       {
-        float calc = startAngle + angle * i;
+        float calc = startAngle + angle * (float)i;
         out.vertex(cx + w * ((VurfEclipse)APP.getApp()).cos(calc),
         cy + h * ((VurfEclipse)APP.getApp()).sin(calc));
       }
@@ -279,14 +279,14 @@ public class Blob implements Serializable {
     //if(this.compoundBlob==null) {
       float step = (float)h/8;
        this.compoundBlob = new Blob[] {
-         new Blob(SH_RECT,x,y,(int)startAngle),
-         new Blob(SH_POLY,x,y+(int)step,(int)startAngle),
-         new Blob(SH_RECT,x,y+(int)step+10,(int)startAngle),
-         new Blob(SH_POLY,x,y+(int)step*2,(int)startAngle),
-         new Blob(SH_POLY,x,y+(int)step*3,(int)startAngle),
+         new Blob(SH_RECT,x,y,(float)startAngle),
+         new Blob(SH_POLY,x,y+(float)step,(float)startAngle),
+         new Blob(SH_RECT,x,y+(float)step+10f,(float)startAngle),
+         new Blob(SH_POLY,x,y+(float)step*2f,(float)startAngle),
+         new Blob(SH_POLY,x,y+(float)step*3f,(float)startAngle),
          //new Blob(SH_TEXTURE,x,y+(int)step*4,(int)startAngle),
-         new Blob(SH_POLY,x-15,y+(int)step*5,(int)startAngle),
-         new Blob(SH_POLY,x+15,y+(int)step*5,(int)startAngle),
+         new Blob(SH_POLY,x-15,y+(float)step*5f,(float)startAngle),
+         new Blob(SH_POLY,x+15,y+(float)step*5f,(float)startAngle),
        };
     //};
     
@@ -299,7 +299,7 @@ public class Blob implements Serializable {
         //compoundBlob[i].setColour(color(random((i/numSpokes)*255.0),random(255.0),random(255.0),255));
         compoundBlob[i].setColour(this.c); ///1 * color(random(255.0),random(255.0),random(255.0),255));
         compoundBlob[i].setTint(255);
-        compoundBlob[i].setRadius(i*(int)w/12);
+        compoundBlob[i].setRadius(((float)i*(float)w/12.0f));
         compoundBlob[i].setSides(((VurfEclipse)APP.getApp()).constrain(8+i/3,3,12));
         compoundBlob[i].setInput(src);//out.getTexture());//src
         if (compoundBlob[i].getShape() == SH_COMPOUND) compoundBlob[i].setShape(SH_POLY);
