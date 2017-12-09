@@ -535,7 +535,8 @@ switcher.bindSequence("d1:", doubleSequence, 10);
     	      "/out"//"/pix0"
       );*/
 
-
+    switcher.bindSavedSequences("Saved Sequence ", 500, switcher.getSequenceCount());	// do this after everything has been created!
+    
     //switcher.setRandomMode(false);
 
     this.addSceneOutputCanvas(

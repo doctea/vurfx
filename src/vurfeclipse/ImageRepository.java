@@ -68,8 +68,8 @@ public class ImageRepository {
     if (!images.containsKey(fn)) {
       //if (images.size()>50) images.remove(random(0,images.size()));
       System.out.println("ImageRepository#cacheImage('" + fn + "', already " + images.size());
-      //PImage p = ((VurfEclipse)APP.getApp()).loadImage("data/image-sources/" + fn);
-      PImage p = getReversePImage(((VurfEclipse)APP.getApp()).loadImage("data/image-sources/" + fn));
+      PImage p = ((VurfEclipse)APP.getApp()).loadImage("data/image-sources/" + fn);
+      //PImage p = getReversePImage(((VurfEclipse)APP.getApp()).loadImage("data/image-sources/" + fn));
       if (p!=null) {
     	if (w!=0&&h!=0) p.resize(w, h);
 
