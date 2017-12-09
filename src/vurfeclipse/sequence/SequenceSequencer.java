@@ -187,6 +187,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	@Override
 	public Object target(String path, Object payload) {
 		println(this + "#target('"+path+"', '"+payload+"')");
+
 		String[] spl = path.split("/",4); // TODO: much better URL and parameter checking.
 		if (spl[2].equals("changeTo")) {
 			if (spl.length>3) {
@@ -432,7 +433,6 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 
 	private void updateGuiSequenceChanged(int oldCursor, int newCursor) {
-		// TODO Auto-generated method stub
 		if (oldCursor!=newCursor) this.lstSequences.getItem(oldCursor).put("state", false);
 		this.lstSequences.getItem(newCursor).put("state", true);
 		this.txtCurrentSequenceName.setValue(this.getCurrentSequenceName());
@@ -443,6 +443,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		this.sldProgress.setLabel("Progress iteration ["+(activeSequence.getPositionIteration()+1)+"/"+max_iterations+"]");
 	}
 
+
+
+	public void updateGuiTimeScale(double f) {
+		this.sldTimeScale.changeValue((float) f);
+	}
 
 
 	private boolean shouldRemember(String sequenceName) {
@@ -779,7 +784,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private Textfield txtCurrentSequenceName;
 	private ListBox lstSequences;
 	private Slider sldProgress;
-
+	private Slider sldTimeScale;
 	@Override public void setupControls (ControlFrame cf, String tabName) {
 		super.setupControls(cf, tabName);
 
@@ -816,7 +821,15 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setWidth(width/3)
 				.setHeight(margin_y*2)
 				.moveTo(sceneTab)
-				.setValue(0.0f);    			
+				.setValue(0.0f);
+		
+		sldTimeScale = new controlP5.Slider(cp5, "timescale")
+				.setPosition(margin_x, margin_y * 5)
+				.setWidth(width/3)
+				.setHeight(margin_y*2)
+				.setRange(0.01f, 8.0f)
+				.moveTo(sceneTab)
+				.setValue(0.0f);
 
 		//this.saveHistoryButton = cf.control().addBang("SAVE sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
 		//zthis.loadHistoryButton = cf.control().addBang("LOAD sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
@@ -858,6 +871,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		} else if (ev.getAction()==ControlP5.ACTION_BROADCAST) {
 			if (ev.getController()==this.sldProgress) {
 				this.getActiveSequence().setValuesForNorm(this.sldProgress.getValue(),this.getActiveSequence().iteration);
+			} else if (ev.getController()==this.sldTimeScale) {
+				//this.getActiveSequence().setValuesForNorm(this.sldTimeScale.getValue(),this.getActiveSequence());
+				this.setTimeScale(sldTimeScale.getValue());
 			}
 			/*else if (ev.getController()==this.saveButton) {
         println("save preset " + getSceneName());
@@ -898,9 +914,5 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	public void preserveCurrentSceneParameters() {
 		this.getActiveSequence().setSceneParameters(this.host.collectSceneParameters());
 	}
-
-
-
-
 
 }

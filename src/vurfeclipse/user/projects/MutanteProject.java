@@ -67,6 +67,7 @@ public class MutanteProject extends Project implements Serializable {
 	  	int seq_count = 1;
 	  	@Override
 	  	public void nextSequence() {
+	  		if (!APP.getApp().isReady()) return;
 	  		count++;
 	  		//if (count%8==0) this.setRandomMode(!this.randtrue);//count%8==0);
 	  		if (count%16==0) {
@@ -74,19 +75,20 @@ public class MutanteProject extends Project implements Serializable {
 	  			return;
 	  		}
 	  		if ((count%2)==0)
-	  			this.host.setTimeScale(
+	  			this.setTimeScale(
 	  					((count%3)==0)?
 	  							2.0d:
 	  							0.5d
 	  		); //getTimeScale()
 	  		else
-	  			this.host.setTimeScale(1.0f);
+	  			this.setTimeScale(1.0f);
 	  		if (count>1000) count = 0;
 	  		//this.host.setTimeScale(0.01f);
 	  		super.nextSequence();
 	  	}
 	  	@Override
 	  	public void runSequences() {
+	  		if (!APP.getApp().isReady()) return;
 	  		seq_count++;
 	  		if (this.getCurrentSequenceName().contains("_next_")) {
 	  			println("Fastforwarding sequence " + this.getCurrentSequenceName() + " because it contains '_next_'..");

@@ -917,7 +917,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   }
 	public double getTimeScale() {
 		// TODO Auto-generated method stub
-		return host.getTimeScale();
+		return host.getSequencer().getTimeScale();
 	}
 	public boolean hasPalette() {
 		// TODO Auto-generated method stub

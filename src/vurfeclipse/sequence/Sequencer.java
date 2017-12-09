@@ -16,6 +16,7 @@ import controlP5.ListBox;
 import controlP5.ScrollableList;
 import controlP5.Tab;
 import controlP5.Textfield;
+import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
@@ -30,7 +31,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	boolean outputDebug = true;
 
 	public void println(String text) { // debugPrint, printDebug -- you get the
-																			// idea
+		// idea
 		if (outputDebug)
 			System.out.println("SQR "
 					+ (text.contains((this.toString())) ? text : this + ": " + text));
@@ -39,6 +40,8 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	int w, h;
 
 	public int max_iterations;
+
+	protected double timeScale = 1.0d;
 
 
 	public boolean readyToChange(int max_iterations) {
@@ -76,7 +79,17 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 
 		urls.put("/seq/changeTo", this);
 
+		urls.put("/seq/timeScale", this);
+
 		return urls;
+	}
+	
+	@Override public Object target(String path, Object payload) {
+		if (path.equals("/seq/timeScale")) {
+			this.setTimeScale((Double)payload);
+			return payload;
+		}
+		return null;
 	}
 
 	abstract public String getCurrentSequenceName();
@@ -88,26 +101,30 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	public boolean sendKeyPressed(char key) {
 		if (key==';' || key=='f') {		// FORWARDS
 			setForward();
-    } else if (key=='l') {
-    		println("toggling sequencer lock " + toggleLock());
-    } else {
-    	return false;
-    }
+		} else if (key=='l') {
+			println("toggling sequencer lock " + toggleLock());
+		} else if (key=='q') {
+			setTimeScale(getTimeScale()+0.01d);
+		} else if (key=='a') {
+			setTimeScale(getTimeScale()-0.01d);
+		} else {
+			return false;
+		}
 		return true;
 	}
 
 	public void setupControls(ControlFrame cf, String tabName) {
 		// TODO Auto-generated method stub
-	    //this.sequencer.setupControls(cf, tabname);
-	    
+		//this.sequencer.setupControls(cf, tabname);
+
 
 	}
 
-	  public void controlEvent (CallbackEvent ev) {
-	    //println("controlevent in " + this);
-	    /*if (ev.getAction()==ControlP5.ACTION_RELEASED) {
+	public void controlEvent (CallbackEvent ev) {
+		//println("controlevent in " + this);
+		/*if (ev.getAction()==ControlP5.ACTION_RELEASED) {
 	      if (ev.getController()==this.saveHistoryButton) {
-	        
+
 	      }
 	      else if (ev.getController()==this.saveButton) {
 	        println("save preset " + getSceneName());
@@ -119,13 +136,29 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	        this.loadPreset2(getSceneName()); //saveFilenameController.getText());
 	      }
 	    }*/
-	  }
+	}
 
 	public HashMap<String, Object> collectParameters() {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		//params.put("/seq/changeTo", this.getCurrentSequenceName());
+		params.put("/seq/timeScale", this.getTimeScale());
 		return params;
+	}
+
+	public double getTimeScale() {
+		return timeScale; //1.0d;
+	}
+
+	public void setTimeScale(double f) {
+		//println("setTimeScale(" + f + ")");;
+		/*if (f>2.0d) {
+			println ("setting timescale to " + f + "!");
+		}*/
+		timeScale = f;
+		((SequenceSequencer)this).updateGuiTimeScale(f);
+		if (APP.getApp().isReady() && ((SequenceSequencer)this).getActiveSequence()!=null) ((SequenceSequencer)this).getActiveSequence().setValuesForTime();
+		// TODO Auto-generated method stub
 	}
 
 }

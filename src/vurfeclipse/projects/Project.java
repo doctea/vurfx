@@ -547,7 +547,6 @@ public abstract class Project implements Serializable {
 	}
 	private HashMap<String, Object> collectParameters() {
 		HashMap<String,Object> params = new HashMap<String,Object>();
-		params.put("/project/timeScale", this.getTimeScale());
 		return params;
 	}
 
@@ -589,10 +588,6 @@ public abstract class Project implements Serializable {
 			selectPreviousScene();
 		} else if (key==']') {
 			selectNextScene();
-		} else if (key=='q') {
-			setTimeScale(getTimeScale()+0.01d);
-		} else if (key=='a') {
-			setTimeScale(getTimeScale()-0.01d);
 		} else if (key=='\'') {
 			this.enableSequencer = !this.enableSequencer;
 			println("toggled enableSequencer to " + this.enableSequencer);
@@ -867,22 +862,11 @@ public abstract class Project implements Serializable {
 
 
 	boolean outputDebug = true;
-	protected double timeScale = 1.0d;
 	private boolean initialised;
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
 	}
-	public double getTimeScale() {
-		return this.timeScale; //1.0d;
-	}
-	public void setTimeScale(double f) {
-		//println("setTimeScale(" + f + ")");;
-		/*if (f>2.0d) {
-			println ("setting timescale to " + f + "!");
-		}*/
-		this.timeScale = f;
-		// TODO Auto-generated method stub
-	}
+
 	public boolean isSequencerEnabled() {
 		// TODO Auto-generated method stub
 		return this.enableSequencer;
@@ -893,12 +877,6 @@ public abstract class Project implements Serializable {
 	}
 	public void target(String key, Object value) {
 		println("#target("+key+","+value+")");
-
-		if (key.equals("/project/timeScale")) {
-			this.setTimeScale((Double)value);
-			return;
-		}
-
 
 		Targetable t = (Targetable) this.getObjectForPath(key);
 		if (t==null) {
