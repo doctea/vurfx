@@ -73,9 +73,9 @@ public class SocioSukiProject extends Project implements Serializable {
 	  			return;
 	  		}
 	  		if ((count%50)==0)
-	  			this.host.setTimeScale(((count%10)==0)?1.0f:0.25f); //getTimeScale()
+	  			this.setTimeScale(((count%10)==0)?1.0f:0.25f); //getTimeScale()
 	  		else
-	  			this.host.setTimeScale(1.0f);
+	  			this.setTimeScale(1.0f);
 	  		if (count>1000) count = 0;
 	  		//this.host.setTimeScale(0.01f);
 	  		super.nextSequence();
@@ -91,7 +91,7 @@ public class SocioSukiProject extends Project implements Serializable {
 	  		/*if ((1+(count%10))>5 && (seq_count%(count+1)<2)) {
 	  			this.nextSequence();
 	  		}*/
-	  		this.host.setTimeScale(0.1f);
+	  		this.setTimeScale(0.1f);
 	  		//if (seq_count>10000) seq_count = 0;
 	  		super.runSequences();
 	  	}

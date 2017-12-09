@@ -69,13 +69,13 @@ public class MinimalProject extends Project implements Serializable {
 	  		count++;
 	  		//if (count%8==0) this.setRandomMode(!this.randtrue);//count%8==0);
 	  		if ((count%2)==0)
-	  			this.host.setTimeScale(
+	  			this.setTimeScale(
 	  					((count%4)==0)?
 	  							2.0d:
 	  							0.5d
 	  		); //getTimeScale()
 	  		else
-	  			this.host.setTimeScale(1.0f);
+	  			this.setTimeScale(1.0f);
 	  		if (count%16==0) {
 	  			super.randomSequence();
 	  			return;

@@ -71,13 +71,13 @@ public class TestProject extends Project implements Serializable {
 	  			return;
 	  		}
 	  		if ((count%2)==0)
-	  			this.host.setTimeScale(
+	  			this.setTimeScale(
 	  					((count%3)==0)?
 	  							2.0d:
 	  							0.5d
 	  		); //getTimeScale()
 	  		else
-	  			this.host.setTimeScale(1.0f);
+	  			this.setTimeScale(1.0f);
 	  		if (count>1000) count = 0;
 	  		//this.host.setTimeScale(0.01f);
 	  		super.nextSequence();
