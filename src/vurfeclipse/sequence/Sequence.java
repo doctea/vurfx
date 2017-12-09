@@ -58,12 +58,13 @@ abstract public class Sequence implements Serializable, Mutable {
 				//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
 				Constructor<?> ctor = clazz.getConstructor(); //Scene.class,Integer.TYPE);
 				//Object seq = ctor.newInstance(); //(Scene)null, 0);
-				seq = (Sequence) ctor.newInstance(null); //(Scene)null, (int)0);
+				seq = (Sequence) ctor.newInstance(); //(Scene)null, (int)0);
 			}
 			seq.setHost(host);
 			return (Sequence) seq;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			System.err.println("Caught " + e + ": Didn't manage to instantiate " + classname + " might be missing constructor?");
 			e.printStackTrace();
 		}
 		return null;
@@ -409,6 +410,9 @@ abstract public class Sequence implements Serializable, Mutable {
 
 		public HashMap<String, HashMap<String, Object>> getSceneParameters() {
 			return this.scene_parameters;
+		}
+		public void setSceneParameters(HashMap<String, HashMap<String, Object>> scene_parameters) {
+			this.scene_parameters = scene_parameters;
 		}
 
 		public void clearSceneParameters() {

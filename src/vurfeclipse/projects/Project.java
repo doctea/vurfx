@@ -617,11 +617,12 @@ public abstract class Project implements Serializable {
     	println(rsConn.getURLs().toString());
     	System.exit(0);
     } */ 
-		} else  if (key=='s') {
+		} else if (key=='s') {
 			//println(this.getSelectedScene().getSelectedFilter().serialize());
 			//println(this.serialize());
 
-			saveSnapshot(); 
+			saveSnapshot();
+			((SequenceSequencer) this.sequencer).preserveCurrentSceneParameters();
 		} else if (key=='S') {
 			//loadSnapshot();
 			APP.getApp().selectInput("Select a file to load", "loadSnapshot"); //- DOESNT WORK ?

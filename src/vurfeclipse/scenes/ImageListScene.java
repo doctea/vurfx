@@ -211,6 +211,7 @@ public class ImageListScene extends SimpleScene {
 
 	class ChooseImageSequence extends Sequence {
 		private int imageIndex;
+		public ChooseImageSequence() {}
 		public ChooseImageSequence(ImageListScene fx, int sequenceLengthMillis, int imageIndex) {
 			super(fx,sequenceLengthMillis);
 			this.imageIndex = imageIndex;

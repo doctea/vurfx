@@ -99,7 +99,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   public String getSceneName() {
     if (this.sceneName==null)
       //return this.getClass().toString();//.toString(;
-      this.sceneName = this.getClass().getSimpleName();// + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();
+      this.sceneName = this.getClass().getSimpleName() + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();
     return sceneName;
   }
   public Scene setSceneName(String sn) {
