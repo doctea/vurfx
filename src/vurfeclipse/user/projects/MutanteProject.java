@@ -116,10 +116,10 @@ public class MutanteProject extends Project implements Serializable {
 
     //ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"mutante").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
     
-    ImageListScene ils1 = new ImageListScene(this,w,h).setDirectory("mutante");//.setDirectory("mutante");
+    ImageListScene ils1 = (ImageListScene) new ImageListScene(this,w,h).setDirectory("mutante").setSceneName("ImageListScene1");//.setDirectory("mutante");
     //this.addSceneOutputCanvas(ils1, "pix0");
     
-    ImageListScene ils2 = new ImageListScene(this,w,h).setDirectory("mutante");
+    ImageListScene ils2 = (ImageListScene) new ImageListScene(this,w,h).setDirectory("mutante").setSceneName("ImageListScene2");
     //this.addSceneOutputCanvas(ils2, "pix1");
 
     this.addSceneOutputCanvas(
@@ -219,6 +219,8 @@ public class MutanteProject extends Project implements Serializable {
     };
     
     Scene blobScene = new BlobFX1(this,w,h).setSceneName("BlobScene").setOutputCanvas("/out").setInputCanvas("/pix0");
+    blobScene.setCanvas("pix0", "/pix0");
+    blobScene.setCanvas("pix1", "/pix0");
     blobScene.setPalette(palette);
     this.addScene(blobScene);
     switcher.bindSequence("blob1_1", blobScene, "preset 1");
@@ -227,6 +229,8 @@ public class MutanteProject extends Project implements Serializable {
     switcher.bindSequence("blob1_4", blobScene, "preset 4");
 
     Scene blobScene2 = new BlobFX1(this,w,h).setSceneName("BlobScene2").setOutputCanvas("/out").setInputCanvas("/out");
+    blobScene2.setCanvas("pix0", "/pix0");
+    blobScene2.setCanvas("pix1", "/pix0");
     //blobScene.setPalette(palette);
     this.addScene(blobScene2);
     switcher.bindSequence("blob2_1", blobScene2, "preset 1");
