@@ -18,7 +18,9 @@ public class SocioSukiVideo2Project extends Project implements Serializable {
   
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
   
-  public SocioSukiVideo2Project(int w, int h) {
+  boolean enableSequencer = true;
+
+public SocioSukiVideo2Project(int w, int h) {
     super(w,h);
   }
   
@@ -484,6 +486,11 @@ public class SocioSukiVideo2Project extends Project implements Serializable {
     
     return true;
   }
+
+public boolean isSequencerEnabled() {
+	// TODO Auto-generated method stub
+	return this.enableSequencer;
+}
   
   
 }

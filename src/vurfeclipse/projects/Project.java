@@ -108,19 +108,10 @@ public abstract class Project implements Serializable {
 		return getCanvas(getPath()+"out");
 	}
 
-	////// sequencer stuff?
-	boolean enableSequencer = true;
 	protected Sequencer sequencer;
 
 	public boolean processSequencer(int time) {
-		if (enableSequencer) {
-			//try {
-			this.sequencer.runSequences();
-			//} catch (Exception e) {
-			//println("processSequencer("+time+") caught " + e + " " + e.getStackTrace());
-			//}
-		}
-		return enableSequencer;
+		return this.sequencer.runSequences();
 	}
 
 	/////////// Event stuff
@@ -588,9 +579,6 @@ public abstract class Project implements Serializable {
 			selectPreviousScene();
 		} else if (key==']') {
 			selectNextScene();
-		} else if (key=='\'') {
-			this.enableSequencer = !this.enableSequencer;
-			println("toggled enableSequencer to " + this.enableSequencer);
 		} else if (key=='m') {
 			this.toggleStreams();
 			println("toggled enableStreams to " + this.enableStreams);
@@ -867,10 +855,6 @@ public abstract class Project implements Serializable {
 		if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
 	}
 
-	public boolean isSequencerEnabled() {
-		// TODO Auto-generated method stub
-		return this.enableSequencer;
-	}
 	public boolean isInitialised() {
 		// TODO Auto-generated method stub
 		return this.initialised;

@@ -17,7 +17,9 @@ public class SimpleProject extends Project implements Serializable {
 
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
 
-  protected SimpleProject(int w, int h, String gfx_mode) {
+  boolean enableSequencer = true;
+
+protected SimpleProject(int w, int h, String gfx_mode) {
     super(w,h);
   }
 
@@ -152,6 +154,11 @@ public class SimpleProject extends Project implements Serializable {
 
     return true;
   }
+
+public boolean isSequencerEnabled() {
+	// TODO Auto-generated method stub
+	return this.enableSequencer;
+}
 
 
 }

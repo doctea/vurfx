@@ -114,8 +114,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 
 	@Override
-	synchronized public void runSequences() {
-		if (!APP.getApp().isReady()) return;
+	synchronized public boolean runSequences() {
+		if (!APP.getApp().isReady()) return false;
+		if (!this.isSequencerEnabled()) return false;
 		if (stopSequencesFlag) {
 			Iterator<Sequence> it = sequences.values().iterator();
 			while (it.hasNext()) {
@@ -138,6 +139,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		//gui : update current progress
 		if (getActiveSequence()!=null) this.updateGuiProgress(getActiveSequence());
+		
+		return getActiveSequence()!=null;
 	}
 
 
@@ -408,20 +411,22 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			return;
 		}
 
+		int oldCursor = historyCursor;
+		
 		println("Changing to sequence: " + sequenceName + "  (" + this.getActiveSequence().toString() + ")");
 		if (remember && this.shouldRemember(sequenceName)) {
 			this.addHistorySequenceName(sequenceName);
 			//if (historyCursor==this.historySequenceNames.size()-1)	// if the cursor is already tracking the history then set cursor to most recent item so that 'j' does jump to the most recent sequence
 
-			int oldCursor = historyCursor;
 			historyCursor = this.historySequenceNames.size()-1;
 
 			// GUI: add latest sequence to history GUI
 			if (this.getActiveSequence()!=null) this.lstSequences.addItem(this.getCurrentSequenceName(), this.getCurrentSequenceName());
-
-			// update gui for changed sequences
-			this.updateGuiSequenceChanged(oldCursor, historyCursor);
 		}
+		
+		// update gui for changed sequences
+		this.updateGuiSequenceChanged(oldCursor, historyCursor);
+		
 		//muteAllSequences();
 		//this.getActiveSequence().setMuted(false);	/// WTF IS THIS ..? 
 		if (restart) this.getActiveSequence().start();
@@ -644,6 +649,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 
 	int sequenceDistance = 1;
+
 	public void cutSequence() {
 		// go up and down cursor alternately; if nothing to switch to, do a random mahfucker?
 		if (sequenceDistance>0) {
@@ -824,7 +830,20 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setRange(0.01f, 8.0f)
 				.moveTo(sceneTab)
 				.setValue(0.0f);
+		
+		tglLocked = new controlP5.Toggle(cp5, "locked")
+				.setPosition(margin_x + (width/3), margin_y)
+				.moveTo(sceneTab)
+				.setValue(0.0f);
+		
+		tglEnabled = new controlP5.Toggle(cp5, "enabled")
+				.setPosition(tglLocked.getWidth()+(margin_x*2) + (width/3), margin_y)
+				.changeValue(this.isSequencerEnabled()?1.0f:0.0f)
+				.moveTo(sceneTab)
+				.setValue(0.0f);
 
+		super.updateGuiStatus();
+		
 		//this.saveHistoryButton = cf.control().addBang("SAVE sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
 		//zthis.loadHistoryButton = cf.control().addBang("LOAD sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
 		cf.control().addCallback(this);
@@ -861,6 +880,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				println("got list-selected sequenceName " + sequenceName);
 				this.histMoveCursorAbsolute((int)this.lstSequences.getValue(),true); //distance, restart);
 				//this.changeSequence(sequenceName, false, true);
+			} else if (ev.getController()==this.tglLocked) {
+				this.toggleLock(ev.getController().getValue()==1.0f);
+			} else if (ev.getController()==this.tglEnabled) {
+				this.toggleEnabled(ev.getController().getValue()==1.0f);
 			}
 		} else if (ev.getAction()==ControlP5.ACTION_BROADCAST) {
 			if (ev.getController()==this.sldProgress) {

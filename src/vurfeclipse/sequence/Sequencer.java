@@ -16,6 +16,7 @@ import controlP5.ListBox;
 import controlP5.ScrollableList;
 import controlP5.Tab;
 import controlP5.Textfield;
+import controlP5.Toggle;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
@@ -43,6 +44,14 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 
 	protected double timeScale = 1.0d;
 
+	protected Toggle tglLocked;
+	protected Toggle tglEnabled;
+
+	private boolean enableSequencer = true;
+
+	public boolean isSequencerEnabled() {
+		return this.enableSequencer;
+	}
 
 	public boolean readyToChange(int max_iterations) {
 		this.max_iterations = max_iterations;
@@ -66,16 +75,30 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	}
 	public boolean toggleLock(boolean payload) {
 		this.locked = payload;
+		// gui: update lock status
+		this.updateGuiStatus();
 		return locked;
 	}
+	
+	public boolean toggleEnabled() {
+		return this.toggleEnabled(!this.isSequencerEnabled());
+	}
+	public boolean toggleEnabled(boolean payload) {
+		this.enableSequencer = payload;
+		this.updateGuiStatus();
+		return enableSequencer;		
+	}
 
-
+	protected void updateGuiStatus() {
+		if (this.tglLocked!=null) this.tglLocked.changeValue(this.isLocked()?1.0f:0.0f);
+		if (this.tglEnabled!=null) this.tglEnabled.changeValue(this.isSequencerEnabled()?1.0f:0.0f);
+	}
 
 	public void setForward() {
 		this.forward = true;
 	}
 
-	abstract public void runSequences();
+	abstract public boolean runSequences();
 
 	public HashMap<String, Targetable> getTargetURLs() {
 		HashMap<String, Targetable> urls = new HashMap<String, Targetable>();
@@ -120,6 +143,8 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 			setForward();
 		} else if (key=='l') {
 			println("toggling sequencer lock " + toggleLock());
+		} else if (key=='\'') {
+			println("toggled enableSequencer to " + this.toggleEnabled());
 		} else if (key=='q') {
 			setTimeScale(getTimeScale()+0.01d);
 		} else if (key=='a') {

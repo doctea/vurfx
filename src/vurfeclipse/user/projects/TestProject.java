@@ -21,6 +21,7 @@ public class TestProject extends Project implements Serializable {
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
 	
   float tempo = 130.0f;
+boolean enableSequencer = true;
 
   public TestProject(int w, int h) {
     super(w,h);//,gfx_mode);
@@ -83,19 +84,14 @@ public class TestProject extends Project implements Serializable {
 	  		super.nextSequence();
 	  	}
 	  	@Override
-	  	public void runSequences() {
+	  	public boolean runSequences() {
 	  		seq_count++;
 	  		if (this.getCurrentSequenceName().contains("_next_")) {
 	  			println("Fastforwarding sequence " + this.getCurrentSequenceName() + " because it contains '_next_'..");
 	  			super.runSequences();
 	  			this.nextSequence();
 	  		}
-	  		/*if ((1+(count%10))>5 && (seq_count%(count+1)<2)) {
-	  			this.nextSequence();
-	  		}*/
-	  		//this.host.setTimeScale(0.1f); // twat
-	  		//if (seq_count>10000) seq_count = 0;
-	  		super.runSequences();
+	  		return super.runSequences();
 	  	}
 	  };
 
@@ -261,6 +257,11 @@ public class TestProject extends Project implements Serializable {
 
     return true;
   }
+
+public boolean isSequencerEnabled() {
+	// TODO Auto-generated method stub
+	return this.enableSequencer;
+}
 
 
 }

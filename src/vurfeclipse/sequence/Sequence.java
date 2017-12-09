@@ -267,27 +267,16 @@ abstract public class Sequence implements Serializable, Mutable {
 		return Math.abs(iteration)>=max_i;
 	}
 
-
-	public void setValuesForTime() {
-		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is
-
-		int now = APP.getApp().millis();
-		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d );
-		scale /= 10.0;
-
-		int elapsed = now - startTimeMillis;
-		now = (int) (((double)now) * scale);
+	public double getPCForElapsed(double elapsed) {
 		double pc;
-
-		elapsed *= scale;
 		
 		//println("got diff " + diff);
 		if (lengthMillis==0) {
 			pc = 0.5f;
 			iteration++;
 		} else {
-			iteration = elapsed/(lengthMillis);
-			if ((elapsed)>=(lengthMillis)) 
+			iteration = (int) ((int)elapsed/lengthMillis);
+			if (((int)elapsed)>=(lengthMillis)) 
 				elapsed = elapsed % lengthMillis;	// if we've gone past one loop length, reset it
 
 			// what percent is A diff of B lengthMillis ?
@@ -295,7 +284,27 @@ abstract public class Sequence implements Serializable, Mutable {
 			pc = PApplet.constrain((float) ((double)(elapsed) / (double)lengthMillis), 0.000000001f, 0.999999999f);
 			//println("adjusted diff " + diff + "length millis is " + lengthMillis + " and pc is " + pc);
 		}
+		
+		return pc;
+	}
+	
+	public void setValuesForTime() {
+		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is
+		int now = APP.getApp().millis();
+		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d );
+		scale /= 10.0d;
+		//now = (int) (((double)now) * scale);
+		double elapsed = now - startTimeMillis;
+		
+		//elapsed = elapsed * Math.sin(now);
+		
+		elapsed *= scale;
+		
+		//elapsed += Math.sin(now)*100.0;
+		
 		//println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
+		double pc = getPCForElapsed(elapsed);
+		//pc *= (100.0*(Math.sin(pc)-0.5f));	// TODO: timewarping effect, for later explration when i've figured out how to refactor this... probably change setValuesForTime to utilise Streams instead of going off timemillis, and then have that link go through a 'filter'
 		setValuesForNorm(pc,iteration);
 		this.current_pc = (float) pc;
 	}

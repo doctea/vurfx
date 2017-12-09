@@ -31,7 +31,9 @@ public class TempSocioSukiVideoProject extends Project implements Serializable {
   
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
   
-  public TempSocioSukiVideoProject(int w, int h) {
+  boolean enableSequencer = true;
+
+public TempSocioSukiVideoProject(int w, int h) {
     super(w,h);
   }
   
@@ -394,5 +396,10 @@ public class TempSocioSukiVideoProject extends Project implements Serializable {
 	    rsConn.expose("/seq/changeTo/" + "text_word_magic dust");
 	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");*/
   }
+
+public boolean isSequencerEnabled() {
+	// TODO Auto-generated method stub
+	return this.enableSequencer;
+}
   
 }

@@ -34,6 +34,7 @@ public class SocioSukiProject extends Project implements Serializable {
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
 	
 	float tempo = 150.0f; //10.0f; //150.0f;
+	boolean enableSequencer = true;
 
   public SocioSukiProject(int w, int h) {
     super(w,h);
@@ -81,7 +82,7 @@ public class SocioSukiProject extends Project implements Serializable {
 	  		super.nextSequence();
 	  	}
 	  	@Override
-	  	public void runSequences() {
+	  	public boolean runSequences() {
 	  		seq_count++;
 	  		if (this.getCurrentSequenceName().contains("_next_")) {
 	  			println("Fastforwarding sequence " + this.getCurrentSequenceName() + " because it contains '_next_'..");
@@ -92,8 +93,7 @@ public class SocioSukiProject extends Project implements Serializable {
 	  			this.nextSequence();
 	  		}*/
 	  		this.setTimeScale(0.1f);
-	  		//if (seq_count>10000) seq_count = 0;
-	  		super.runSequences();
+	  		return super.runSequences();
 	  	}
 	  };
 
@@ -587,5 +587,10 @@ public class SocioSukiProject extends Project implements Serializable {
 	    rsConn.expose("/seq/changeTo/" + "text_word_magic dust");
 	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");*/
   }
+
+public boolean isSequencerEnabled() {
+	// TODO Auto-generated method stub
+	return this.enableSequencer;
+}
 
 }

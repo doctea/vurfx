@@ -35,6 +35,7 @@ public class FeralFestProject extends Project {
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
 	
 	float tempo = 150.0f; //10.0f; //150.0f;
+	boolean enableSequencer = true;
 
   public FeralFestProject(int w, int h) {
     super(w,h);
@@ -86,19 +87,14 @@ public class FeralFestProject extends Project {
 	  		super.nextSequence();
 	  	}
 	  	@Override
-	  	public void runSequences() {
+	  	public boolean runSequences() {
 	  		seq_count++;
 	  		if (this.getCurrentSequenceName().contains("_next_")) {
 	  			println("Fastforwarding sequence " + this.getCurrentSequenceName() + " because it contains '_next_'..");
 	  			super.runSequences();
 	  			this.nextSequence();
 	  		}
-	  		/*if ((1+(count%10))>5 && (seq_count%(count+1)<2)) {
-	  			this.nextSequence();
-	  		}*/
-	  		//this.host.setTimeScale(0.1f); // twat
-	  		//if (seq_count>10000) seq_count = 0;
-	  		super.runSequences();
+	  		return super.runSequences();
 	  	}
 	  };
 
@@ -606,5 +602,10 @@ public class FeralFestProject extends Project {
 	    rsConn.expose("/seq/changeTo/" + "text_word_magic dust");
 	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");*/
   }
+
+public boolean isSequencerEnabled() {
+	// TODO Auto-generated method stub
+	return this.enableSequencer;
+}
 
 }

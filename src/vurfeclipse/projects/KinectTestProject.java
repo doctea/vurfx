@@ -22,7 +22,9 @@ public class KinectTestProject extends Project implements Serializable {
   
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
   
-  public KinectTestProject(int w, int h) {
+  boolean enableSequencer = true;
+
+public KinectTestProject(int w, int h) {
     super(w,h);
   }
   
@@ -208,6 +210,11 @@ public class KinectTestProject extends Project implements Serializable {
     
     return true;
   }
+
+public boolean isSequencerEnabled() {
+	// TODO Auto-generated method stub
+	return this.enableSequencer;
+}
   
   
 }

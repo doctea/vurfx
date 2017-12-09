@@ -15,7 +15,9 @@ public class PostProject extends Project implements Serializable {
   
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
   
-  public PostProject(int w, int h, String gfx_mode) {
+  boolean enableSequencer = true;
+
+public PostProject(int w, int h, String gfx_mode) {
     super(w,h);
   }
   
@@ -557,6 +559,11 @@ public class PostProject extends Project implements Serializable {
     
     return true;
   }
+
+public boolean isSequencerEnabled() {
+	// TODO Auto-generated method stub
+	return this.enableSequencer;
+}
   
   
 }

@@ -876,9 +876,6 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
       }
     }
-
-
-
   }
 
   @Override
