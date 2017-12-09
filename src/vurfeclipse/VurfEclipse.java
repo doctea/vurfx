@@ -92,17 +92,17 @@ public class VurfEclipse extends PApplet {
 	
 	////// SPOUT STUFF
 	
-	private Spout spout;
+	public Spout spout;
 	
 	void initSpout(String name) {
 		spout = new Spout(this);
 		spout.createSender("VurFX");
+		spout.createReceiver("VurFX");
 	}
 	
 	public void drawSpout(PGraphics p) {
 		spout.sendTexture(p);
 	}
-	
 
 	private static ControlFrame controlFrame;
 
@@ -707,4 +707,10 @@ public class VurfEclipse extends PApplet {
 	public void loadSnapshot(String filename) {
 		this.pr.loadSnapshot(filename);
 	}
+
+	//PGraphics rcvd = this.createPrimaryGraphics();
+	/*public PImage getSpoutImage() {
+		this.spout.receiveTexture(rcvd);
+		return rcvd;
+	}*/
 }
