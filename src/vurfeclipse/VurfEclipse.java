@@ -1,6 +1,6 @@
 package vurfeclipse;
 
-
+import spout.*;
 
 import processing.core.*;
 import controlP5.*;
@@ -36,7 +36,8 @@ public class VurfEclipse extends PApplet {
 	///// SYPHON STUFF (choose one - disabled stuff or enabled stuff)
 
 	// DISABLED SYPHON BLOCK (stubs)
-	boolean syphon = false;
+	boolean syphon = true;	// also used to turn on spout !
+
 	public void drawSyphon(PGraphics offscreen) {};
 	//public void initSyphon(GL gl, String theName) {};
 
@@ -87,6 +88,21 @@ public class VurfEclipse extends PApplet {
 	//// end Syphon stuff
 	*/
 	//////////////////////////////// END OF SYPHON STUFF
+	
+	
+	////// SPOUT STUFF
+	
+	private Spout spout;
+	
+	void initSpout(String name) {
+		spout = new Spout(this);
+		spout.createSender("VurFX");
+	}
+	
+	public void drawSpout(PGraphics p) {
+		spout.sendTexture(p);
+	}
+	
 
 	private static ControlFrame controlFrame;
 
@@ -129,10 +145,13 @@ public class VurfEclipse extends PApplet {
 	//config settings
 	
 	// select resolution
+	boolean hdReady = true;
+	
 	boolean hdRes = false;//true;
 	boolean mdRes = false; //true; //true;
-	boolean projRes = true;
+	boolean projRes = false;
 	boolean ultrahiRes = false;
+	boolean medHiRes = true;
 	boolean hiRes = true; //true;
 	boolean medRes = false; //true;
 	boolean lowRes = false;
@@ -141,11 +160,17 @@ public class VurfEclipse extends PApplet {
 	boolean fullscreen = false;//true;//false;
 	int fullscreen_num = 3;
 
-	int title_adjust = -50; //-100;	// amount to take off the height to compensate for window title, system bar etc
-	int
-		output_width =  (hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : hiRes ? 1024 : medRes ? 800 : 640),
-		output_height = (hdRes ? 1080 : mdRes ? 900 :  projRes ? 960  : ultrahiRes ? 1024 : hiRes ? 768  : medRes ? 600 : 480) 
-						+ (fullscreen?0:title_adjust);
+	int title_adjust = -20; //-100;	// amount to take off the height to compensate for window title, system bar etc
+	/*int
+		output_width =  (hdRes ? 1920 : mdRes ? 1600 : projRes ? 1280 : ultrahiRes ? 1280 : medHiRes ? 1080 : hiRes ? 1024 : medRes ? 800 : 640),
+		output_height = (hdRes ? 1080 : mdRes ? 900 :  projRes ? 720  : ultrahiRes ? 1024 : medHiRes ?  720 : hiRes ? 768  : medRes ? 600 : 480) 
+						+ (fullscreen?0:title_adjust);*/
+	
+	private int config_width = 1280;
+	private PVector config_aspect = RES_16_9;	// RES_16_9 
+	
+	int output_width = (int)this.getOutputResolution().x;
+	int output_height= (int)this.getOutputResolution().y;
 
 	int desired_width 	= output_width; //(int)(output_width*1.5f);
 	int desired_height 	= output_height; //(int)(output_height*1.5f);
@@ -159,6 +184,10 @@ public class VurfEclipse extends PApplet {
 	int lastSecond;
 
 	static public final int global_fps = 60;
+
+	private static final PVector RES_4_3 	= new PVector( 4 ,  3 );
+	private static final PVector RES_16_9 	= new PVector( 16,  9 );
+	private static final PVector RES_16_10 	= new PVector( 16, 10 );
 
 	boolean screenGrab = false;
 
@@ -207,6 +236,7 @@ public class VurfEclipse extends PApplet {
 
 	int refCount = 0;
 	private boolean finishedSetup;
+
 	
 	@Override
 	public void settings () {
@@ -259,8 +289,8 @@ public class VurfEclipse extends PApplet {
 
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-		 //pr = new MutanteProject(desired_width, desired_height);
-		 pr = new FeralFestProject(desired_width, desired_height);
+		 pr = new MutanteProject(desired_width, desired_height);
+		 //pr = new FeralFestProject(desired_width, desired_height);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
 		 //pr = new PharmacyProject(desired_width, desired_height, gfx_mode);
@@ -271,6 +301,8 @@ public class VurfEclipse extends PApplet {
 		 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 		 
 		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
+		 
+		 PVector resolution = this.getOutputResolution();
 		 
 		 if (fullscreen) {
 			 //((PGraphicsOpenGL)this.offscreen.getSurf()).updatePixelSize();
@@ -288,6 +320,20 @@ public class VurfEclipse extends PApplet {
 		 System.out.println("Finished VurfEclipse#settings() - handing off to setup!");
 	}
 	
+	private PVector getOutputResolution() {
+		PVector r = getOutputResolution(this.config_width, this.config_aspect); //RES_4_3);
+		println("getOutputResolution returning " + r);
+		return r;
+	}
+
+	private PVector getOutputResolution(int width, PVector aspect) {
+		PVector p = new PVector();
+		p.x = width;
+		p.y = width * (aspect.y/aspect.x);
+		
+		return p;
+	}
+
 	@Override
 	public void setup () {	// was public void setup() {
 		 refCount++;
@@ -394,6 +440,9 @@ public class VurfEclipse extends PApplet {
 		 if (syphon) {
 		   initSyphon(gl, "Vurf");
 		 }*/
+		 if (syphon) {
+			 initSpout("Vurf");
+		 }
 		
 		// https://stackoverflow.com/questions/20551224/how-to-enable-vsync-synchronization-in-processing-2-x
 		  PJOGL pgl = (PJOGL)beginPGL();
@@ -498,6 +547,7 @@ public class VurfEclipse extends PApplet {
 
 	
 		 if (syphon) drawSyphon (offscreen.getSurf());
+		 if (spout!=null) drawSpout(offscreen.getSurf());
 	
 		 //pgl.endGL();
 	

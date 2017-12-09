@@ -41,8 +41,6 @@ public class OutputFX2 extends SimpleScene {
 	    os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("pix0")).setParameterValue("BlendMode",8));
 	    //os.addFilter(new BlendDrawer(os).setFilterName("BlendDrawer inp0 to out").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0")).setParameterValue("BlendMode",9));
 
-
-
 	    return true;
 	}
 
@@ -70,7 +68,7 @@ public class OutputFX2 extends SimpleScene {
 
 
     public void setupSequences() {
-			sequences.put("preset 1", new OutputSequence1(this, 0));
+			//sequences.put("preset 1", new OutputSequence1(this, 0));
 			sequences.put("show_kaleido", new ShowFilterSequence(this, 0, getPath()+"/fl/Kaleido"));
 			sequences.put("show_feedback", new ChainSequence(2000)
 				//.addSequence(getSequence("show_feedback"))
@@ -82,15 +80,18 @@ public class OutputFX2 extends SimpleScene {
 			//sequences.put("show_blend", new ShowFilterSequence(this, 0, host.getSceneForPath(getPath()).getFilter("Kaleido")));
     }
 
-
-	class OutputSequence1 extends Sequence {
-		public OutputSequence1() {}
-		public OutputSequence1(OutputFX2 outputFX2, int i) {
+    @Deprecated
+	class __OutputSequence1 extends Sequence {
+		public __OutputSequence1() {}
+		public __OutputSequence1(OutputFX2 outputFX2, int i) {
 			super(outputFX2,i);
 		}
 		@Override
 		public ArrayList<Mutable> getMutables() {
-			return new ArrayList<Mutable>();
+			if (this.mutables==null) {
+				super.getMutables().add(this.host.getFilter("Kaleido"));
+			}
+			return mutables;
 		}
 		@Override
 		public void setValuesForNorm(double norm, int iteration) {
@@ -113,12 +114,12 @@ public class OutputFX2 extends SimpleScene {
     		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Kaleido").toggleMute();
 
     		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").toggleMute();
-    		host.host.getSceneForPath(getPath()).getFilter("BlendDrawer pix0 to out").setMuted((random(0f,1.0f)>=0.25f));
+    		//host.host.getSceneForPath(getPath()).getFilter("BlendDrawer pix0 to out").setMuted((random(0f,1.0f)>=0.25f));
 
     		//if (APP.getApp().random(0f,1.0f)>=0.5f) host.host.getSceneForPath("/sc/OutputShader2").getFilter("BlendDrawer pix0 to out").changeParameterValue("BlendMode", getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
-    		if (random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
+    		//if (random(0f,1.0f)>=0.5f) ((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer pix0 to out")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 } ));
 
-    		host.host.getSceneForPath(getPath()).getFilter("Kaleido").nextMode();
+    		//host.host.getSceneForPath(getPath()).getFilter("Kaleido").nextMode();
 		}
 		@Override public void onStop() {	}
 	}

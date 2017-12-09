@@ -29,16 +29,18 @@ public class ShowFilterSequence extends Sequence {
 	}
 	
 	@Override public ArrayList<Mutable> getMutables () {
-		this.mutables = new ArrayList<Mutable> ();
-		try {
-			//System.out.println(host.host.getObjectForPath(this.filterPath).toString());
-			this.mutables.add((Mutable)host.host.getObjectForPath(this.filterPath));
-			//System.out.println(host.host.getObjectForPath(this.filterPath).toString());
-		} catch (Exception e) {
-			System.out.println("caught " + e + " for " + this.filterPath);
-			System.exit(1);
+		if (this.mutables==null) {
+			this.mutables = new ArrayList<Mutable> ();
+			try {
+				//System.out.println(host.host.getObjectForPath(this.filterPath).toString());
+				this.mutables.add((Mutable)host.host.getObjectForPath(this.filterPath));
+				//System.out.println(host.host.getObjectForPath(this.filterPath).toString());
+			} catch (Exception e) {
+				System.out.println("caught " + e + " for " + this.filterPath);
+				System.exit(1);
+			}
+			this.mutables.add(host);
 		}
-		this.mutables.add(host);			
 		return this.mutables;
 	}
 	

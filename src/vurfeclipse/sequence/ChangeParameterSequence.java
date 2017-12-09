@@ -40,7 +40,7 @@ public class ChangeParameterSequence extends Sequence {
 	}
 
 	@Override public ArrayList<Mutable> getMutables () {
-		this.mutables = new ArrayList<Mutable> ();
+		if (this.mutables==null) this.mutables = super.getMutables();//new ArrayList<Mutable> ();
 		/*try {
 			System.out.println(host.host.getObjectForPath(this.filterPath).toString());
 			this.mutables.add((Mutable)host.host.getObjectForPath(this.filterPath));

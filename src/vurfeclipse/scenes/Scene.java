@@ -99,7 +99,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
   public String getSceneName() {
     if (this.sceneName==null)
       //return this.getClass().toString();//.toString(;
-      this.sceneName = this.getClass().toString() + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();
+      this.sceneName = this.getClass().getSimpleName();// + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();
     return sceneName;
   }
   public Scene setSceneName(String sn) {
@@ -111,21 +111,26 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
   public Object getObjectForPath(String path) {
     //println("Scene#getObjectForPath(" + path + ")");
-    if (path.equals("") || path.equals(this.getSceneName()) || path.equals("mute")) 
-    		return this;
-    String spl[] = path.split("/",2);
-    
-    String spl2[] = spl[1].split("/");
-    //println ("got spl " + spl.toString() + " and spl2 " + spl2.toString());
-    String filterName = spl2[0];
-    if (spl2.length==1) {
-    		return getFilter(filterName);
-    } else if (spl2[1].equals("mute")) {
-    		return getFilter(filterName);
-    } else if (spl2[1].equals("pa")) {	// is a Parameter
-    	if (getFilter(filterName)!=null)
-    		return getFilter(filterName).getParameter(spl2[2]);
-    } 
+	try {
+	    if (!path.contains("/") || path.equals("") || path.equals(this.getSceneName()) || path.equals("mute")) 
+	    		return this;
+	    String spl[] = path.split("/",2);
+	    
+	    String spl2[] = spl[1].split("/");
+	    //println ("got spl " + spl.toString() + " and spl2 " + spl2.toString());
+	    String filterName = spl2[0];
+	    if (spl2.length==1) {
+	    		return getFilter(filterName);
+	    } else if (spl2[1].equals("mute")) {
+	    		return getFilter(filterName);
+	    } else if (spl2[1].equals("pa")) {	// is a Parameter
+	    	if (getFilter(filterName)!=null)
+	    		return getFilter(filterName).getParameter(spl2[2]);
+	    } 
+	} catch (Exception e) {
+		System.err.println ("caught " + e);
+		System.err.println(e.getStackTrace());
+	}
     
     return null;    		
   }
@@ -850,6 +855,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     //cp5.addSlider("test " + this.toString()).setPosition(5,20).moveTo(tabName);
  //   for (int i = 0 ; i < filterCount ; i ++) {
    //println("in " + this + " filters length is " + this.filters.length);
+    int row = 0;
     for (int i = 0 ; i < this.filters.length ; i ++) {
       if (filters[i]!=null) {
         println(">>>>>>>>>>>>>>>>>About to setupControls for " + filters[i]);
@@ -864,7 +870,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
            .addCallback(filters[i])
            .linebreak()
            ;*/
-        filters[i].setupControls(cf,tab,i);
+        row = filters[i].setupControls(cf,tab,row);
         
         println("<<<<<<<<<<<<<<<<did setupcontrols for " + filters[i]);
 

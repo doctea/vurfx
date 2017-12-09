@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Map.Entry;
 
 import processing.core.PApplet;
 import vurfeclipse.APP;
@@ -27,16 +28,18 @@ abstract public class Sequence implements Serializable, Mutable {
 
 	int iteration;
 
-	transient protected ArrayList<Mutable> mutables = new ArrayList<Mutable>();
+	transient protected ArrayList<Mutable> mutables;// = new ArrayList<Mutable>();
+	private HashMap<String, HashMap<String,Object>> scene_parameters;
+	private ArrayList<String> mutableListToLoad;
 
-	static public Sequence createSequence(String classname, Scene host) {
+	static public Sequence makeSequence(String classname, Scene host) {
 		System.out.println("got classname " + classname);
 		try {
 			Sequence seq;
 			try {
 				Class<?> clazz = Class.forName(classname); //Class.forName(classname); host.getClass();//
 			} catch (ClassNotFoundException e) {
-				// assume the last . should be turned into a $
+				// assume its an inner class and that the last '.' should be turned into a '$' so that it can be loaded
 				classname = classname.substring(0, classname.lastIndexOf('.')) + "$" + classname.substring(classname.lastIndexOf('.')+1,classname.length()); 
 			}
 			if (classname.contains("$")) {
@@ -73,6 +76,8 @@ abstract public class Sequence implements Serializable, Mutable {
 		params.put("seed", this.getSeed());
 		params.put("lengthMillis", this.lengthMillis);
 		
+		params.put("scene_parameters", this.host.host.collectSceneParameters());
+		
 		params.put("current_sequence_name", APP.getApp().dateStamp());
 		
 		ArrayList<String> mutableUrls = new ArrayList<String> ();
@@ -92,12 +97,10 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 	public void loadParameters(HashMap<String,Object> params) {
 		if (params.containsKey("seed")) this.seed = (Long) params.get("seed"); //Long.parseLong((String)params.get("seed"));
-		if (params.containsKey("lengthMillis")) this.lengthMillis = (Integer) params.get("lengthMillis"); //Integer.parseInt((String)params.get("lengthMillis"));
+		if (params.containsKey("lengthMillis")) this.setLengthMillis((Integer) params.get("lengthMillis")); //Integer.parseInt((String)params.get("lengthMillis"));
+		if (params.containsKey("scene_parameters")) this.scene_parameters = (HashMap<String, HashMap<String, Object>>) params.get("scene_parameters");
 		if (params.containsKey("mutableUrls")) {
-			this.mutables = new ArrayList<Mutable>();
-			for (String url : (ArrayList<String>)params.get("mutableUrls")) {
-				this.mutables.add((Mutable) APP.getApp().pr.getObjectForPath(url));
-			}
+			this.mutableListToLoad = (ArrayList<String>)params.get("mutableUrls");
 		}
 	}
 
@@ -172,6 +175,18 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 	//abstract public ArrayList<Mutable> getMutables();
 	public ArrayList<Mutable> getMutables() {
+		if (this.mutableListToLoad!=null) {				// if we previously saved a copy of mutables, use them now
+			this.mutables = new ArrayList<Mutable>();
+			for (String url : this.mutableListToLoad) {
+				Mutable m = (Mutable) APP.getApp().pr.getObjectForPath(url);
+				if (m!=null) { 
+					this.mutables.add(m);
+				} else {
+					println("Couldn't find a Mutable to add for " + url +"!");
+				}
+			}
+			this.mutableListToLoad = null;	// and reset it so we don't load it again
+		}
 		if (this.mutables==null) {
 			ArrayList<Mutable> muts = new ArrayList<Mutable>();
 			if (host!=null && !this.disableHostMute) muts.add((Mutable) host);
@@ -190,7 +205,12 @@ abstract public class Sequence implements Serializable, Mutable {
 		// TODO Auto-generated method stub
 		Iterator<Mutable> it = getMutables().iterator(); //this.mutables.iterator();
 		while(it.hasNext()) {
-			it.next().setMuted(muted);
+			Mutable n = it.next();
+			if (n==null) {
+				println ("caught null Mutable in " + this + " hosted by " + this.host + "!!");
+			} else {
+				n.setMuted(muted);
+			}
 		}
 	}
 
@@ -209,6 +229,7 @@ abstract public class Sequence implements Serializable, Mutable {
 
 	boolean outputDebug = true;
 	private Object[] palette;
+	private float current_pc;
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("Q " + (text.contains((this.toString()))? text : this+": "+text));
 	}
@@ -221,6 +242,18 @@ abstract public class Sequence implements Serializable, Mutable {
 		setMuted(false);
 		iteration = 0;
 		startTimeMillis = APP.getApp().millis();
+		
+		if (this.scene_parameters!=null) {
+			println(this + " about to set scene_parameters!");
+			for (Entry<String,HashMap<String,Object>> e : scene_parameters.entrySet()) {
+				Scene s = (Scene) this.host.host.getObjectForPath(e.getKey());
+				if(s==null) {
+					System.err.println ("Couldn't find a targetable for key '"+e.getKey()+"'!!!");
+				} else {
+					s.loadParameters(e.getValue());
+				}
+			}		
+		}		
 	}
 
 	public void stop() {
@@ -263,6 +296,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 		//println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
 		setValuesForNorm(pc,iteration);
+		this.current_pc = (float) pc;
 	}
 
 	public void setValuesForNorm(double pc) {
@@ -283,6 +317,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 	public Color mixColors(Color color1, Color color2, double percent){
 		//percent *= 10.0;
+		percent = APP.getApp().constrain((float) percent, 0f, 1f);//.abs((float) percent); // fix if percent goes out of range
 	  double inverse_percent = 1.0 - percent;
 	  int redPart = (int) ((color1.getRed()*percent) + (color2.getRed()*inverse_percent));
 	  int greenPart = (int) ((color1.getGreen()*percent) + (color2.getGreen()*inverse_percent));
@@ -370,6 +405,23 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 		public void setSeed(long seed) {
 			this.seed = seed;
+		}
+
+		public HashMap<String, HashMap<String, Object>> getSceneParameters() {
+			return this.scene_parameters;
+		}
+
+		public void clearSceneParameters() {
+			this.scene_parameters = null;			
+		}
+
+		public float getPositionPC() {
+			return this.current_pc;
+		}
+
+		public int getPositionIteration() {
+			// TODO Auto-generated method stub
+			return iteration;
 		}
 
 

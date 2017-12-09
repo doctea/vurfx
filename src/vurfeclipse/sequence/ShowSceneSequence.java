@@ -29,7 +29,10 @@ public class ShowSceneSequence extends Sequence {
 	}
 
 	@Override public ArrayList<Mutable> getMutables () {
-		this.mutables = new ArrayList<Mutable> ();
+		if (this.mutables==null) {
+			this.mutables = super.getMutables(); //new ArrayList<Mutable> ();
+			this.mutables.add(host);
+		}
 		/*try {
 			System.out.println(host.host.getObjectForPath(this.filterPath).toString());
 			this.mutables.add((Mutable)host.host.getObjectForPath(this.filterPath));
@@ -38,7 +41,7 @@ public class ShowSceneSequence extends Sequence {
 			System.out.println("caught " + e + " for " + this.filterPath);
 			System.exit(1);
 		}*/
-		this.mutables.add(host);			
+					
 		return this.mutables;
 	}
 	

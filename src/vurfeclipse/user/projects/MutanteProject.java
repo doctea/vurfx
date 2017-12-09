@@ -70,7 +70,7 @@ public class MutanteProject extends Project implements Serializable {
 	  		count++;
 	  		//if (count%8==0) this.setRandomMode(!this.randtrue);//count%8==0);
 	  		if (count%16==0) {
-	  			super.randomSequence();
+	  			super.nextRandomSequence();
 	  			return;
 	  		}
 	  		if ((count%2)==0)
@@ -335,27 +335,6 @@ public class MutanteProject extends Project implements Serializable {
     //switcher.setRandomMode(true);
 
 
-		Sequence doubleSequence = new ChainSequence(2000)
-			.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
-			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
-			.addSequence(blendScene, "preset 1")
-		;
-    switcher.bindSequence("d1:", doubleSequence, 10);
-    
-  	Sequence doubleSequence2 = new ChainSequence(2000)
-  			//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
-  			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 2")
-  			.addSequence(blendScene, "preset 1")
-  			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 3")
-  			//.addSequence(blendScene, "preset 1")
-  		;
-  	switcher.bindSequence("d2:", doubleSequence2, 5);
-  	
-  	Sequence doubleSequence3 = new ChainSequence(2000)
-  			.addSequence(getSceneForPath("/sc/BlobScene2"), "preset 1")
-  			.addSequence(blendScene, "preset 1")
-  	;
-  	switcher.bindSequence("d2:", doubleSequence3, 5);
   	
   	//switcher.bindSequence("blend:",  blendScene, "preset 1", 10);
 
@@ -377,6 +356,36 @@ public class MutanteProject extends Project implements Serializable {
 			//.addFilter(new BlendDrawer()))
 		, "/out", "/out"
 	);
+    
+    TunnelScene ts2 = (TunnelScene) this.addSceneInputOutputCanvas(
+	    		new TunnelScene(this, w, h).setCanvas("temp", "/temp3") //
+	    			//.addFilter(new BlendDrawer()))
+
+	    		, "/out", "/out"
+	);
+
+	Sequence doubleSequence = new ChainSequence(2000)
+		.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
+		//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 1")
+		.addSequence(blendScene, "preset 1")
+	;
+switcher.bindSequence("d1:", doubleSequence, 10);
+
+	Sequence doubleSequence2 = new ChainSequence(2000)
+			//.addSequence(getSceneForPath("/sc/BlobScene"),  "preset 1")
+			.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 2")
+			.addSequence(blendScene, "preset 1")
+			//.addSequence(getSceneForPath("/sc/PlasmaScene"), "preset 3")
+			//.addSequence(blendScene, "preset 1")
+		;
+	switcher.bindSequence("d2:", doubleSequence2, 5);
+	
+	Sequence doubleSequence3 = new ChainSequence(2000)
+			.addSequence(getSceneForPath("/sc/BlobScene2"), "preset 1")
+			.addSequence(blendScene, "preset 1")
+	;
+	switcher.bindSequence("d2:", doubleSequence3, 5);    
+    
     int tunnel_weight = 1;
     switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), tunnel_weight);
     switcher.bindSequence("tunnel_1_blob_preset_2_pulse_preset1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 2"), tunnel_weight);
@@ -386,15 +395,7 @@ public class MutanteProject extends Project implements Serializable {
     
     switcher.bindSequence("tunnel_1_blend_angled_2",new ChainSequence(2000).addSequence(ts1, "f2 angled 60").addSequence(blendScene, "preset 1"), tunnel_weight);
     
-    /*switcher.bindSequence(
-        	"tunnel_2_pulse",
-        	*/
-    TunnelScene ts2 = (TunnelScene) this.addSceneInputOutputCanvas(
-	    		new TunnelScene(this, w, h).setCanvas("temp", "/temp3") //
-	    			//.addFilter(new BlendDrawer()))
-
-	    		, "/out", "/out"
-	);
+    
     tunnel_weight = 5;
     switcher.bindSequence("tunnel_2_plasma_pulse_1", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 1"), tunnel_weight);
     switcher.bindSequence("tunnel_2_plasma_pulse_2", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(plasmaScene, "preset 2"), tunnel_weight);
@@ -422,6 +423,13 @@ public class MutanteProject extends Project implements Serializable {
     );*/
 	//), "preset 1", 20);
 
+
+
+    
+    /*switcher.bindSequence(
+        	"tunnel_2_pulse",
+        	*/
+    
     switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader"), 5000);
     switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader2"), 5000);
     switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader"), 5000);
@@ -527,7 +535,8 @@ public class MutanteProject extends Project implements Serializable {
     	      "/out"//"/pix0"
       );*/
 
-
+    switcher.bindSavedSequences("Saved Sequence ", 500, switcher.getSequenceCount());	// do this after everything has been created!
+    
     //switcher.setRandomMode(false);
 
     this.addSceneOutputCanvas(

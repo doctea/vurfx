@@ -1,5 +1,6 @@
 package vurfeclipse.user.scenes;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import vurfeclipse.APP;
 import vurfeclipse.filters.BlendDrawer;
@@ -78,11 +79,19 @@ public class OutputFX3 extends SimpleScene {
     
 
 		class SyncSequence extends Sequence {
+			public SyncSequence() {
+				super();
+			}
 			public SyncSequence(OutputFX3 outputFX2, int i) {
 				// TODO Auto-generated constructor stub
 				super(outputFX2, i);
 			}
-
+			
+			@Override
+			public ArrayList<Mutable> getMutables() {
+				return new ArrayList<Mutable>();
+			}
+			
 			@Override
 			public void setValuesForNorm(double pc, int iteration) {
 				getFilter("SyncEffect").changeParameterValueFromSin("step_x", Math.abs((float)Math.sin(pc)));
@@ -104,6 +113,9 @@ public class OutputFX3 extends SimpleScene {
 		}
 
 		class SyncSequence2 extends Sequence {
+			public SyncSequence2() {
+				super();
+			}
 			public SyncSequence2(OutputFX3 outputFX2, int i) {
 				// TODO Auto-generated constructor stub
 				super(outputFX2, i);
@@ -111,8 +123,8 @@ public class OutputFX3 extends SimpleScene {
 
 			@Override
 			public void setValuesForNorm(double pc, int iteration) {
-				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/3.0*10));
-				getFilter("SyncEffect").changeParameterValueFromSin("step_y", (float)Math.sin(pc/3.0*10));
+				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/3.0f*10f));
+				getFilter("SyncEffect").changeParameterValueFromSin("step_y", (float)Math.sin(pc/3.0f*10f));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", (float)Math.sin(pc/3.0*10));
 
@@ -140,8 +152,8 @@ public class OutputFX3 extends SimpleScene {
 
 			@Override
 			public void setValuesForNorm(double pc, int iteration) {
-				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/3.0*10));
-				getFilter("SyncEffect").changeParameterValueFromSin("step_y", -(float)Math.sin(pc/3.0*10));
+				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/3.0*10f));
+				getFilter("SyncEffect").changeParameterValueFromSin("step_y", -(float)Math.sin(pc/3.0*10f));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", -(float)Math.sin(pc/3.0*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
@@ -195,10 +207,29 @@ public class OutputFX3 extends SimpleScene {
 		class GridSyncSequence extends Sequence {
 			private int grid;
 
+			public GridSyncSequence() {
+				super();
+			}
 			public GridSyncSequence(OutputFX3 outputFX2, int i, int grid) {
 				// TODO Auto-generated constructor stub
 				super(outputFX2, i);
 				this.grid = grid;
+			}
+			
+			@Override
+			public HashMap<String,Object> collectParameters() {
+				HashMap<String,Object> params = super.collectParameters();
+				params.put("grid", this.grid);
+				return params;
+			}
+			@Override
+			public void loadParameters(HashMap<String,Object> params) {
+				super.loadParameters(params);
+				if (params.containsKey("grid")) {
+					this.grid = (int) params.get("grid");
+				} else {	// no grid saved in snapshot, so try to assume existing one
+					this.grid = (int) getFilter("SyncEffect").getParameterValue("step_x");
+				}
 			}
 
 			@Override

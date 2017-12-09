@@ -78,7 +78,7 @@ public class FeralFestProject extends Project {
 	  		else
 	  			this.host.setTimeScale(1.0f);
 	  		if (count%16==0) {
-	  			super.randomSequence();
+	  			super.nextRandomSequence();
 	  			return;
 	  		}
 	  		if (count>1000) count = 0;
@@ -415,7 +415,7 @@ public class FeralFestProject extends Project {
     switcher.bindSequence("outputModeChange7", opSequence);
     switcher.bindSequence("outputModeChange8", opSequence);*/
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
-    		new TunnelScene(this, w, h).setCanvas("temp", "/temp2")
+    		new TunnelScene(this, w, h).setCanvas("temp", "/temp2").setSceneName("vurfeclipse.user.scenes.TunnelScene")
 			//.addFilter(new BlendDrawer()))
 		, "/out", "/out"
 	);
@@ -449,7 +449,6 @@ public class FeralFestProject extends Project {
     switcher.bindSequence("tunnel_2_blob_wobble_3_fade", new ChainSequence(2000).addSequence(ts2, "preset 3").addSequence(blobScene, "preset 4").addSequence(getSceneForPath("/sc/BlankerScene"), "fade"), tunnel_weight*2);
 
     //switcher.bindSequence("TEST", new SavedSequence(ts2,"FeralFestProject2017-11-16-22-21-7.xml",2000));
-    switcher.bindSavedSequencer("Saved Sequence ", 10, 20);
     
     //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
     //switcher.bindSequence("d1:", new ChainSequence(2000).addSequence(ts2, "preset 1").addSequence(blobScene2, "preset 1"), 50);
@@ -510,7 +509,7 @@ public class FeralFestProject extends Project {
     		"magic dust",
     		"merry xmas"*/
     }, 0);
-    switcher.setBindToRandom(false);
+    //switcher.setBindToRandom(false);
     switcher.bindSequences("text", getSceneForPath("/sc/TextFlash"));
     //switcher.setBindToRandom(true);
 
@@ -574,6 +573,12 @@ public class FeralFestProject extends Project {
     		"/out"
     );
 
+    
+    //switcher.clearSequences();
+    //switcher.clearRandomSequences();
+    switcher.bindSavedSequences("Saved Sequence ", 500, switcher.getSequenceCount());	// do this after everything has been created!
+
+    
     this.addSceneOutputCanvas(
       new DebugScene(this,w,h),
       "/out"

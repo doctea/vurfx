@@ -164,9 +164,11 @@ public class PlasmaScene extends Scene {
 			super(plasmaFX1,i);
 		}
 		@Override public ArrayList<Mutable> getMutables() {
-			ArrayList<Mutable> muts = new ArrayList<Mutable>();
-			muts.add(host);//.getFilter("BlendDrawer1"));
-			return muts;
+			if (this.mutables==null) {
+				ArrayList<Mutable> muts = super.getMutables(); //new ArrayList<Mutable>();
+				//mutables.add(host);//.getFilter("BlendDrawer1"));
+			}
+			return this.mutables;
 		}
 		public void setValuesForNorm(double norm, int iteration) {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);

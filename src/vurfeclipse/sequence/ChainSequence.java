@@ -61,13 +61,16 @@ public class ChainSequence extends Sequence {
 	
 	@Override
 	public ArrayList<Mutable> getMutables() {
-		ArrayList<Mutable> muts = new ArrayList<Mutable>();
-		//if (host!=null) muts.add(host);
-		Iterator<Sequence> it = chain.iterator();
-		while(it.hasNext()) {
-			muts.addAll(it.next().getMutables());
+		if (this.mutables==null) {
+			ArrayList<Mutable> muts = super.getMutables();// new ArrayList<Mutable>();
+			//if (host!=null) muts.add(host);
+			Iterator<Sequence> it = chain.iterator();
+			while(it.hasNext()) {
+				muts.addAll(it.next().getMutables());
+			}
+			this.mutables = muts;
 		}
-		return muts;
+		return this.mutables;
 	}	
 	
 	@Override
@@ -102,7 +105,14 @@ public class ChainSequence extends Sequence {
 		HashMap<String,Object> params = super.collectParameters();
 		ArrayList<HashMap<String,Object>> chains = new ArrayList<HashMap<String,Object>>();
 		for (Sequence cs : chain) {
-			chains.add(cs.collectParameters());
+			HashMap<String,HashMap<String,Object>> temp = cs.getSceneParameters();
+			cs.clearSceneParameters();	// remove any scene parameters that are set on the object before saving, since we save our own copy with the chain
+			HashMap<String, Object> full_params = cs.collectParameters();
+			if (full_params==null) {
+				println("wtf, saving null full_params..?");
+				cs.collectParameters();
+			}
+			chains.add(full_params);
 		}
 		params.put("chain",  chains);
 		/*params.put("filterPath", filterPath);
@@ -118,7 +128,12 @@ public class ChainSequence extends Sequence {
 		for (HashMap<String,Object> cs : chains) {
 			// cs contains info to build a new ChainSequence and attach it
 			//ChainSequence n = new ChainSequence(this.host, (Integer) cs.get("lengthMillis"));
-			Sequence n = Sequence.createSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
+			if (cs==null) {
+				println("skipping null chain sequence from broken save file :(");
+				continue;
+			}
+			if (cs.containsKey("scene_parameters")) cs.remove("scene_parameters");	// don't load scene_parameters for chained sequences, since if there are any they are there from an old version of save format
+			Sequence n = Sequence.makeSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
 			n.loadParameters(cs);
 			this.addSequence(n);
 		}		

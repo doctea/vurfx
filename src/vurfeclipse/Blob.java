@@ -9,11 +9,11 @@ import processing.core.PShape;
 //import codeanticode.glgraphics.*;
 
 public class Blob implements Serializable {
-  public int x = 0;
+  public float x = 0;
 
-  public int y = 0;
+  public float y = 0;
 
-  int r=10;
+  float r = 10.0f;
   
   int c;
   int tint = 255;
@@ -30,7 +30,7 @@ public class Blob implements Serializable {
   public int shapesCount = 7; //8;
   public int SH_RANDOM = shapesCount;
   
-  int rot = 0;
+  float rot = 0;
   
   private int strokeSize = 3;
   
@@ -57,7 +57,7 @@ public class Blob implements Serializable {
 
   }
   
-  public Blob(int shape, int x, int y, int rot) {
+  public Blob(int shape, float x, float y, float rot) {
     //this.shape = shape;
     this();
     this.setShape(shape);
@@ -84,12 +84,12 @@ public class Blob implements Serializable {
     return getShape();
   }
   
-  public void setXY(int x, int y) {
-    this.x = x;
-    this.y = y;
+  public void setXY(float x2, float y2) {
+    this.x = x2;
+    this.y = y2;
   }
   
-  public void setRadius(int r) {
+  public void setRadius(float r) {
     this.r = r;
   }
   
@@ -108,7 +108,7 @@ public class Blob implements Serializable {
     this.tint = c;
   }
   
-  public void setRotation(int rot) {
+  public void setRotation(float rot) {
     this.rot = rot;
   }
   
@@ -155,7 +155,7 @@ public class Blob implements Serializable {
       out.rotate(rot%(((VurfEclipse)APP.getApp()).millis()/1000)%60);
     }
     
-    int R = isScaleRelative()?(int)((VurfEclipse)APP.getApp()).brightness(c)/8 : r;
+    float R = isScaleRelative()?(float)((VurfEclipse)APP.getApp()).brightness(c)/8 : r;
 /*          if (doRelative) {
         blobs[b].setRadius((int)hue(pix)/8+((int)random(r)));//(int)random(r));
       }*/
@@ -170,7 +170,7 @@ public class Blob implements Serializable {
       //out.rect(x-r,y-r,r/2,r/2);
       out.rectMode(PApplet.RADIUS);
       //out.rect(-R,-R,R,R);
-      out.rect(0,0,R/2,R/2);
+      out.rect(0,0,R/2.0f,R/2.0f);
       //out.rect(0,0,R,R);
       //polygon(out, /*doPolyRand?(int)random(3,8):*/4, 0, 0, R, R, 0);
     } else if (getShape()==SH_POLY) {
@@ -181,23 +181,23 @@ public class Blob implements Serializable {
       out.pushMatrix();
       out.rotate(rot*2);
       for (int i = 0; i < 360; i+=20) {
-        float x = PApplet.sin(PApplet.radians(i)) * R/2;
-        float y = PApplet.cos(PApplet.radians(i)) * R/2;
+        float x = PApplet.sin(PApplet.radians(i)) * R/2.0f;
+        float y = PApplet.cos(PApplet.radians(i)) * R/2.0f;
         out.pushMatrix();
         out.translate(x,y);
-        out.rotate(rot*4);
-        polygon(out, numSides, 0, 0, R/4, R/4, 0);
+        out.rotate(rot*4.0f);
+        polygon(out, numSides, 0, 0, R/4.0f, R/4.0f, 0);
         out.popMatrix();
         //polygon(out, numSides, x, y, R/4, R/4, 0);
       }
       out.popMatrix();
     } else if (getShape()==SH_TEXTURE) {
       float units_w = 1.0f, units_h = 0.75f;
-      float new_w = units_w * R/2;///*sc.w * (sc.w/*/units_w*R;///4;//);  
-      float new_h = units_h * R/2;///*sc.h * (sc.h/*/units_h*R;///4;//);
+      float new_w = units_w * R/2.0f;///*sc.w * (sc.w/*/units_w*R;///4;//);  
+      float new_h = units_h * R/2.0f;///*sc.h * (sc.h/*/units_h*R;///4;//);
   
       out.pushMatrix();
-      out.translate(-new_w/2,-new_h/2);
+      out.translate(-new_w/2.0f,-new_h/2.0f);
       out.image(src,0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
       //;;if ((int)((VurfEclipse)APP.getApp()).random(100)==0) System.out.println("BLOB>>>drawing texture " + this.src);
       //out.image(src.getTexture(),0,0,new_w,new_h);
@@ -247,7 +247,7 @@ public class Blob implements Serializable {
       out.beginShape();
       for (int i = 0; i < n; i++)
       {
-        float calc = startAngle + angle * i;
+        float calc = startAngle + angle * (float)i;
         out.vertex(cx + w * ((VurfEclipse)APP.getApp()).cos(calc),
         cy + h * ((VurfEclipse)APP.getApp()).sin(calc));
       }
@@ -279,14 +279,14 @@ public class Blob implements Serializable {
     //if(this.compoundBlob==null) {
       float step = (float)h/8;
        this.compoundBlob = new Blob[] {
-         new Blob(SH_RECT,x,y,(int)startAngle),
-         new Blob(SH_POLY,x,y+(int)step,(int)startAngle),
-         new Blob(SH_RECT,x,y+(int)step+10,(int)startAngle),
-         new Blob(SH_POLY,x,y+(int)step*2,(int)startAngle),
-         new Blob(SH_POLY,x,y+(int)step*3,(int)startAngle),
+         new Blob(SH_RECT,x,y,(float)startAngle),
+         new Blob(SH_POLY,x,y+(float)step,(float)startAngle),
+         new Blob(SH_RECT,x,y+(float)step+10f,(float)startAngle),
+         new Blob(SH_POLY,x,y+(float)step*2f,(float)startAngle),
+         new Blob(SH_POLY,x,y+(float)step*3f,(float)startAngle),
          //new Blob(SH_TEXTURE,x,y+(int)step*4,(int)startAngle),
-         new Blob(SH_POLY,x-15,y+(int)step*5,(int)startAngle),
-         new Blob(SH_POLY,x+15,y+(int)step*5,(int)startAngle),
+         new Blob(SH_POLY,x-15,y+(float)step*5f,(float)startAngle),
+         new Blob(SH_POLY,x+15,y+(float)step*5f,(float)startAngle),
        };
     //};
     
@@ -299,7 +299,7 @@ public class Blob implements Serializable {
         //compoundBlob[i].setColour(color(random((i/numSpokes)*255.0),random(255.0),random(255.0),255));
         compoundBlob[i].setColour(this.c); ///1 * color(random(255.0),random(255.0),random(255.0),255));
         compoundBlob[i].setTint(255);
-        compoundBlob[i].setRadius(i*(int)w/12);
+        compoundBlob[i].setRadius(((float)i*(float)w/12.0f));
         compoundBlob[i].setSides(((VurfEclipse)APP.getApp()).constrain(8+i/3,3,12));
         compoundBlob[i].setInput(src);//out.getTexture());//src
         if (compoundBlob[i].getShape() == SH_COMPOUND) compoundBlob[i].setShape(SH_POLY);
