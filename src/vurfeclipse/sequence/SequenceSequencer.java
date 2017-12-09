@@ -189,26 +189,23 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		println(this + "#target('"+path+"', '"+payload+"')");
 
 		String[] spl = path.split("/",4); // TODO: much better URL and parameter checking.
-		if (spl[2].equals("changeTo")) {
-			if (spl.length>3) {
-				println ("Sequencer attempting changeSequence to " + spl[3]);
-				changeSequence(spl[3],false, true);	// 2017-11-16, quick hack to prevent targeted changes from saving in history..
-			} else {
-				if (payload instanceof String) {
-					println ("Sequencer attempting changeSequence to " + payload.toString());
-					changeSequence(payload.toString(),false, true); // 2017-11-16, quick hack to prevent targeted changes from saving in history..
-				} else if (payload instanceof HashMap<?,?>) {
-					println ("Sequencer attempting changeSequence to passed-in definition of a sequence!");
-					Sequence newSeq = this.createSequence((HashMap<String,Object>)payload);
-					String seqName = (String) ((HashMap) payload).get("current_sequence_name");
-					seqName = seqName==null?"loaded":seqName;
-					this.addSequence(seqName, newSeq);
-					changeSequence(seqName);
-				}
+		if (spl[2].equals("changeTo")) {	   
+			if (spl.length>3) 									// if given a named sequence as either the last query portion 
+				payload = spl[3];
+			if (payload instanceof String) {					// if got a string payload then switch to the sequence named that
+				println ("Sequencer attempting changeSequence to " + payload.toString());
+				changeSequence(payload.toString(), true, true); // 2017-12-09 removed quick hack ; 2017-11-16, quick hack to prevent targeted changes from saving in history..
+			} else if (payload instanceof HashMap<?,?>) {		// if given a hashmap, load the hashmap like its a partial saved snapshot and switch to it
+				println ("Sequencer attempting changeSequence to passed-in definition of a sequence!");
+				Sequence newSeq = this.createSequence((HashMap<String,Object>)payload);
+				String seqName = (String) ((HashMap) payload).get("current_sequence_name");
+				seqName = seqName==null?"loaded":seqName;
+				this.addSequence(seqName, newSeq);
+				changeSequence(seqName);
 			}
 			return "Sequencer active Sequence is currently " + activeSequenceName;
-		} else if (spl[2].equals("sequence")) {
-			if (payload instanceof HashMap<?,?>) {		// creates a sequence and adds it to the bank, but doesn't switch to it. returns url to change to the sequence
+		} else if (spl[2].equals("sequence")) {					// creates a sequence and adds it to the bank, but doesn't switch to it. returns url to change to the sequence
+			if (payload instanceof HashMap<?,?>) {		
 				Sequence newSeq = this.createSequence((HashMap<String,Object>)payload);
 				String seqName = (String) ((HashMap) payload).get("current_sequence_name");
 				seqName = seqName==null?"loaded":"loaded " + seqName;
@@ -217,14 +214,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			} else {
 				return this.collectParameters();	// strictly this should be done in a target that explicitly means 'current sequence' 
 			}
-		} else if (spl[2].equals("toggleLock")) {
-			return "Lock is " + this.toggleLock();
 		} else if (spl[2].equals("seed")) {
 			this.getActiveSequence().setSeed((Long)payload);
 			return "Set seed to "+payload;
 		}
 		return payload;
 	}
+
 
 	public Sequence addListSequence(String sequenceName) {
 		if (this.sequences.containsKey(sequenceName))
@@ -442,8 +438,6 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		this.sldProgress.changeValue(activeSequence.getPositionPC()*100);
 		this.sldProgress.setLabel("Progress iteration ["+(activeSequence.getPositionIteration()+1)+"/"+max_iterations+"]");
 	}
-
-
 
 	public void updateGuiTimeScale(double f) {
 		this.sldTimeScale.changeValue((float) f);

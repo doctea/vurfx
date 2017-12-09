@@ -61,9 +61,15 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	}
 
 	public boolean toggleLock() {
-		this.locked = !this.locked;
+		this.toggleLock(!this.locked);
 		return locked;
 	}
+	public boolean toggleLock(boolean payload) {
+		this.locked = payload;
+		return locked;
+	}
+
+
 
 	public void setForward() {
 		this.forward = true;
@@ -88,6 +94,17 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		if (path.equals("/seq/timeScale")) {
 			this.setTimeScale((Double)payload);
 			return payload;
+		}
+		
+		String[] spl = path.split("/",4); // TODO: much better URL and parameter checking.
+		if (spl[2].equals("toggleLock")) {				// just gets status of lock...
+			if (spl.length>3) payload = spl[3];
+			if (payload instanceof Boolean) {
+				this.toggleLock((boolean) payload);
+			} else if (payload instanceof String) {
+				this.toggleLock((boolean)payload.equals("true"));
+			}
+			return "Lock is " + this.toggleLock();
 		}
 		return null;
 	}
