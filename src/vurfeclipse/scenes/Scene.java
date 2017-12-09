@@ -578,7 +578,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		return this;
 	}
 	public Scene registerCallbackPreset(String streamName, String eventName, String callbackName) {
-		return this.registerCallbackPreset(((VurfEclipse)APP.getApp()).pr.getStream(streamName), eventName, callbackName);
+		return this.registerCallbackPreset(((VurfEclipse)APP.getApp()).pr.getSequencer().getStream(streamName), eventName, callbackName);
 	}
 
 	////////// end Callbacks stuff

@@ -48,11 +48,11 @@ boolean enableSequencer = true;
   public boolean setupStreams () {
     Stream stream = new Stream("Test Stream");
     BeatStream beatStream = new BeatStream("Beat Stream", this.tempo, ((VurfEclipse)APP.getApp()).millis());
-    this.addStream("test", stream);
-    this.addStream("beat", beatStream);
+    this.getSequencer().addStream("test", stream);
+    this.getSequencer().addStream("beat", beatStream);
 
     NumberStream numberStream = new NumberStream("Number Stream", (float) this.tempo, 0, ((VurfEclipse)APP.getApp()).millis());
-    this.addStream("number", numberStream);
+    this.getSequencer().addStream("number", numberStream);
 
     return true;
   }

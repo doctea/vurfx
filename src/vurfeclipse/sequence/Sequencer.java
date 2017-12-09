@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import controlP5.Bang;
 import controlP5.CallbackEvent;
@@ -21,6 +22,7 @@ import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.streams.Stream;
 import vurfeclipse.ui.ControlFrame;
 
 abstract public class Sequencer implements Serializable, Targetable, CallbackListener {
@@ -46,9 +48,36 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 
 	protected Toggle tglLocked;
 	protected Toggle tglEnabled;
+	protected Toggle tglStreams;
 
 	private boolean enableSequencer = true;
 
+	private boolean enableStreams = true;
+
+	private HashMap<String,Stream> streams = new HashMap<String,Stream>();
+	
+
+	public void addStream(String streamName, Stream st) {
+		//this.streams.put(streamName, st);
+		this.streams.put(streamName, st);
+	}
+	public Stream getStream(String streamName) {
+		return (Stream) this.streams.get(streamName);
+	}
+
+	public void toggleStreams() {
+		this.toggleStreams(!this.isStreamsEnabled());
+	}
+	public void toggleStreams(boolean b) {
+		this.enableStreams = b;
+		this.updateGuiStatus();
+	}
+	public boolean isStreamsEnabled() {
+		return this.enableStreams;
+	}
+	/////////////// end Event stuff
+
+	
 	public boolean isSequencerEnabled() {
 		return this.enableSequencer;
 	}
@@ -92,6 +121,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	protected void updateGuiStatus() {
 		if (this.tglLocked!=null) this.tglLocked.changeValue(this.isLocked()?1.0f:0.0f);
 		if (this.tglEnabled!=null) this.tglEnabled.changeValue(this.isSequencerEnabled()?1.0f:0.0f);
+		if (this.tglStreams!=null) this.tglStreams.changeValue(this.isStreamsEnabled()?1.0f:0.0f);
 	}
 
 	public void setForward() {
@@ -149,6 +179,9 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 			setTimeScale(getTimeScale()+0.01d);
 		} else if (key=='a') {
 			setTimeScale(getTimeScale()-0.01d);
+		} else if (key=='m') {
+			this.toggleStreams();
+			println("toggled enableStreams to " + this.enableStreams);
 		} else {
 			return false;
 		}
@@ -201,6 +234,21 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		((SequenceSequencer)this).updateGuiTimeScale(f);
 		if (APP.getApp().isReady() && ((SequenceSequencer)this).getActiveSequence()!=null) ((SequenceSequencer)this).getActiveSequence().setValuesForTime();
 		// TODO Auto-generated method stub
+	}
+
+	public boolean runStreams(int time) {
+		if (enableStreams) {
+			Iterator<?> i = streams.entrySet().iterator();
+			while (i.hasNext()) {
+				Map.Entry e = (Map.Entry) i.next();
+				//println("processStreams in " + this + " for " + e);
+				Stream s = (Stream) e.getValue();
+				s.processEvents(time);
+				s.deliverEvents();
+			}
+		}
+
+		return true;
 	}
 
 }

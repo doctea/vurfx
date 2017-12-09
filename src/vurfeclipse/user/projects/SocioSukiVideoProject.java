@@ -53,7 +53,7 @@ public SocioSukiVideoProject(int w, int h) {
 
   public boolean setupStreams () {
     BeatStream beatStream = new BeatStream("Beat Stream", 120.0f, APP.getApp().millis());
-    this.addStream("beat", beatStream);
+    this.getSequencer().addStream("beat", beatStream);
 
     return true;
   }
@@ -235,7 +235,7 @@ public SocioSukiVideoProject(int w, int h) {
     addScene(plasmaScene);
     //plasmaScene.setupFilters();
 
-    plasmaScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
+    plasmaScene.registerCallbackPreset(this.getSequencer().getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
     switcher.bindSequence("plasma_1", plasmaScene, "preset 1");
     switcher.bindSequence("plasma_2", plasmaScene, "preset 2");

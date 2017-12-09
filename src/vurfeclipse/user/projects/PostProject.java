@@ -58,13 +58,13 @@ public PostProject(int w, int h, String gfx_mode) {
     this.addStream("beatIV", beatStream);        */
 
     BeatStream beatStreamMaster = new BeatStream("Beat Stream Master", 90.0, ((VurfEclipse)APP.getApp()).millis());    
-    this.addStream("beatMaster", beatStreamMaster);    
+    this.getSequencer().addStream("beatMaster", beatStreamMaster);    
     
     /*NumberStream numberStream = new NumberStream("Number Stream", 130.0, 69, APP.millis());
     this.addStream("number", numberStream);
     */
     MidiStream midiStream = new MidiStream("Midi Stream", 5, true);
-    this.addStream("midi", midiStream);
+    this.getSequencer().addStream("midi", midiStream);
     
     return true;
   }
@@ -255,14 +255,14 @@ public PostProject(int w, int h, String gfx_mode) {
         };
 
     //getStream("midi").registerEventListener("note", new ParameterCallback () {
-    getStream("beatMaster").registerEventListener("beat_1", new ParameterCallback () {
+    this.getSequencer().getStream("beatMaster").registerEventListener("beat_1", new ParameterCallback () {
         synchronized public void call(Object value) {
           int v = (Integer) value;
           v = v % togglables.length;
           ((Mutable) getObjectForPath(togglables[v])).toggleMute();
           
           if (((Integer)value%10)==0) {
-            getStream("beatMaster").registerEventListener("beat_32", new DieAfterParameterCallback (359) {
+        	  getSequencer().getStream("beatMaster").registerEventListener("beat_32", new DieAfterParameterCallback (359) {
               synchronized public void call(Object value) {
                 super.call(value);
                 int v = 100 * ((Integer)value - (Integer)initial);
@@ -275,7 +275,7 @@ public PostProject(int w, int h, String gfx_mode) {
       }
     );
     
-    getStream("beatMaster").registerEventListener("bar_1", new ParameterCallback () {
+    this.getSequencer().getStream("beatMaster").registerEventListener("bar_1", new ParameterCallback () {
       synchronized public void call (Object value) {    
         ((Filter)getObjectForPath("/ImageListScene1/ImageListDrawer")).nextMode();
         ((Filter)getObjectForPath("/ImageListScene2/ImageListDrawer")).nextMode();        

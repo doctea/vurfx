@@ -111,51 +111,12 @@ public abstract class Project implements Serializable {
 	protected Sequencer sequencer;
 
 	public boolean processSequencer(int time) {
-		return this.sequencer.runSequences();
-	}
-
-	/////////// Event stuff
-	HashMap<String, Stream> streams = new HashMap<String, Stream>(); // Stream
-
-	//public abstract boolean initialise();
-	boolean enableStreams = true;
-
-	public void addStream(String streamName, Stream st) {
-		//this.streams.put(streamName, st);
-		this.streams.put(streamName, st);
-	}
-	public Stream getStream(String streamName) {
-		return (Stream) this.streams.get(streamName);
+		return this.sequencer.runSequences(); //time);// TODO: maybe this is where time should flow in..?
 	}
 
 	public boolean processStreams(int time) {
-		if (enableStreams) {
-			Iterator<?> i = streams.entrySet().iterator();
-			while (i.hasNext()) {
-				Map.Entry e = (Map.Entry) i.next();
-				//println("processStreams in " + this + " for " + e);
-				Stream s = (Stream) e.getValue();
-				s.processEvents(time);
-				s.deliverEvents();
-			}
-		}
-
-		return true;
+		return this.sequencer.runStreams(time);
 	}
-
-	public void enableStreams(boolean on) {
-		this.enableStreams = true;
-	}
-	public void disableStreams(boolean off) {
-		this.enableStreams = false;
-	}
-	public void toggleStreams() {
-		this.enableStreams = !this.enableStreams;
-	}
-	public boolean isStreamsEnabled() {
-		return this.enableStreams;
-	}
-	/////////////// end Event stuff
 
 
 
@@ -171,9 +132,9 @@ public abstract class Project implements Serializable {
 
 		initialiseBuffers();
 
-		setupStreams();
-
 		setupSequencer();
+		
+		setupStreams();
 
 		setupScenes();
 
@@ -579,9 +540,6 @@ public abstract class Project implements Serializable {
 			selectPreviousScene();
 		} else if (key==']') {
 			selectNextScene();
-		} else if (key=='m') {
-			this.toggleStreams();
-			println("toggled enableStreams to " + this.enableStreams);
 		} else if (key=='-') {
 			Iterator<Scene> i = scenes.iterator();
 			while(i.hasNext())

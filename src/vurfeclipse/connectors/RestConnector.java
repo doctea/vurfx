@@ -203,7 +203,7 @@ public class RestConnector implements Runnable {
 		h += "<b>Current sequence:</b> " + pr.getSequenceName() + "<br>";
 		h += pr.getSequencer().isLocked() ? "<b>Sequencer is locked</b> (ie sequencer preset won't change automatically)<br>" : "Sequencer is not locked" + "<br>";
 		h += !pr.getSequencer().isSequencerEnabled() ? "<b>Sequencer is disabled!</b> (ie paused)<br>" : "Sequencer is enabled" + "<br>";
-		h += !pr.isStreamsEnabled() ? "<b>Streams are disabled!</b><br>" :" Streams are enabled" + "<br>";
+		h += !pr.getSequencer().isStreamsEnabled() ? "<b>Streams are disabled!</b><br>" :" Streams are enabled" + "<br>";
 		
 		h += "<hr>";
 		
@@ -226,7 +226,7 @@ public class RestConnector implements Runnable {
 		h += "<hr>";
 		
 		h += "<h2>send keys</h2>";
-		String keys = "-lm';";		///keys from project onkeypressed 
+		String keys = "-lm';qasSp";		///keys from sequencer and project keypressed 
 		for (char c : keys.toCharArray()) {
 			try {
 				h += "<a target='sendkeys' href='/sendkey/" + java.net.URLEncoder.encode(""+c,"UTF-8") +"'>" + "[ send "+c+" ]" + "</a>";

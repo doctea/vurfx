@@ -15,6 +15,7 @@ import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.streams.Stream;
 import vurfeclipse.filters.Filter;
 
 abstract public class Sequence implements Serializable, Mutable {
@@ -231,6 +232,10 @@ abstract public class Sequence implements Serializable, Mutable {
 	boolean outputDebug = true;
 	private Object[] palette;
 	private float current_pc;
+	/////////// Event stuff
+	HashMap<String, Stream> streams = new HashMap<String, Stream>(); // Stream
+	//public abstract boolean initialise();
+	boolean enableStreams = true;
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("Q " + (text.contains((this.toString()))? text : this+": "+text));
 	}

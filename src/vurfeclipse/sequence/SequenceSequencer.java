@@ -837,10 +837,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setValue(0.0f);
 		
 		tglEnabled = new controlP5.Toggle(cp5, "enabled")
-				.setPosition(tglLocked.getWidth()+(margin_x*2) + (width/3), margin_y)
+				.setPosition(tglLocked.getWidth() + (margin_x*2) + (width/3), margin_y)
 				.changeValue(this.isSequencerEnabled()?1.0f:0.0f)
 				.moveTo(sceneTab)
-				.setValue(0.0f);
+				;
+		
+		tglStreams = new controlP5.Toggle(cp5, "streams")
+				.setPosition((tglLocked.getWidth()*2) + (margin_x*3) + (width/3), margin_y)
+				.changeValue(this.isStreamsEnabled()?1.0f:0.0f)
+				.moveTo(sceneTab)
+				;
 
 		super.updateGuiStatus();
 		
@@ -884,6 +890,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				this.toggleLock(ev.getController().getValue()==1.0f);
 			} else if (ev.getController()==this.tglEnabled) {
 				this.toggleEnabled(ev.getController().getValue()==1.0f);
+			} else if (ev.getController()==this.tglStreams) {
+				this.toggleStreams(ev.getController().getValue()==1.0f);
 			}
 		} else if (ev.getAction()==ControlP5.ACTION_BROADCAST) {
 			if (ev.getController()==this.sldProgress) {

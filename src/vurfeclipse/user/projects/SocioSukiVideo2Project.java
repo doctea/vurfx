@@ -48,26 +48,26 @@ public SocioSukiVideo2Project(int w, int h) {
   public boolean setupStreams () {
     Stream stream = new Stream("Test Stream");
     BeatStream beatStream = new BeatStream("Beat Stream", 120.0f, APP.getApp().millis());
-    this.addStream("test", stream);
-    this.addStream("beat", beatStream);
+    this.getSequencer().addStream("test", stream);
+    this.getSequencer().addStream("beat", beatStream);
     
     BeatStream beatStream2 = new BeatStream("Beat Stream 2", 60.0f, APP.getApp().millis());    
-    this.addStream("beatII", beatStream);
+    this.getSequencer().addStream("beatII", beatStream);
 
     BeatStream beatStream3= new BeatStream("Beat Stream 3", 90.0f, APP.getApp().millis());    
-    this.addStream("beatIII", beatStream);    
+    this.getSequencer().addStream("beatIII", beatStream);    
     
     BeatStream beatStream4= new BeatStream("Beat Stream 4", 180.0f, APP.getApp().millis());    
-    this.addStream("beatIV", beatStream);        
+    this.getSequencer().addStream("beatIV", beatStream);        
 
     BeatStream beatStreamMaster = new BeatStream("Beat Stream Master", 40.0f, APP.getApp().millis());    
-    this.addStream("beatMaster", beatStream);    
+    this.getSequencer().addStream("beatMaster", beatStream);    
     
     NumberStream numberStream = new NumberStream("Number Stream", 130.0f, 69.0f, APP.getApp().millis());
-    this.addStream("number", numberStream);
+    this.getSequencer().addStream("number", numberStream);
     
     //MidiStream midiStream = new MidiStream("Midi Stream", true);
-    //this.addStream("midi", midiStream);
+    //this.getSequencer().addStream("midi", midiStream);
     
     return true;
   }
@@ -152,14 +152,14 @@ public SocioSukiVideo2Project(int w, int h) {
       }
     );*/    
           
-    getStream("beat").registerEventListener("bar_1", 
+    this.getSequencer().getStream("beat").registerEventListener("bar_1", 
       new ParameterCallback () {
         public void call(Object value) {
           ils1.getFilter(0).nextMode();
         }
       }
     );    
-    getStream("beatII").registerEventListener("bar_1", 
+    this.getSequencer().getStream("beatII").registerEventListener("bar_1", 
       new ParameterCallback () {
         public void call(Object value) {
           ils2.getFilter(0).nextMode();
@@ -206,17 +206,17 @@ public SocioSukiVideo2Project(int w, int h) {
     //bl1.addFilter(new PlainDrawer(bl1).setInputBuffer(getCanvas("inp0").surf));
     this.addSceneOutputCanvas(bl2,"/out");//getCanvas("/out"));    */
     
-    getStream("beatMaster").registerEventListener("bar_4",
+    this.getSequencer().getStream("beatMaster").registerEventListener("bar_4",
       new ParameterCallback() {
         //int counter = 0;
         public void call(Object value) {            
             System.out.println("Changing speed..");
             //float bpm = 60 + (abs(sin((Integer)value%2)) * 300);
-            ((BeatStream)getStream("beatII")).toggleBPM(); //setBPM(60);
+            ((BeatStream)getSequencer().getStream("beatII")).toggleBPM(); //setBPM(60);
             if ((Integer)value%2==0)
-              ((BeatStream)getStream("beatIII")).toggleBPM(); //setBPM(60);            
+              ((BeatStream)getSequencer().getStream("beatIII")).toggleBPM(); //setBPM(60);            
             if ((Integer)value%3==0)              
-              ((BeatStream)getStream("beat")).toggleBPM();
+              ((BeatStream)getSequencer().getStream("beat")).toggleBPM();
             //if ((Integer)value%2==0) ((BeatStream)getStream("beatII")).toggleBPM(); //setBPM(60);            
             //if ((Integer)value%4==0) ((BeatStream)getStream("beatIII")).setSpeed(APP.random(1.0,4.0)); //toggleBPM(); //setBPM(60);                        
             //System.out.println("setting BPM to " + bpm); //" + 60 + abs(sin((Integer)value))) * 300);
@@ -225,7 +225,7 @@ public SocioSukiVideo2Project(int w, int h) {
     );
     
         
-    bl1.host.getStream("beatII").registerEventListener("beat_16",    
+    bl1.host.getSequencer().getStream("beatII").registerEventListener("beat_16",    
       new ParameterCallback() {
         int mode = 0;        
         public void call(Object value) {
@@ -413,7 +413,7 @@ public SocioSukiVideo2Project(int w, int h) {
    );*/
     
     
-    getStream("beatII").registerEventListener("beat_2",
+    this.getSequencer().getStream("beatII").registerEventListener("beat_2",
       new ParameterCallback() {
         public void call (Object value) {
           int v = (Integer)value;

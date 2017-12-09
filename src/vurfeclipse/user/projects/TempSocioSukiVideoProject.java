@@ -52,7 +52,7 @@ public TempSocioSukiVideoProject(int w, int h) {
   
   public boolean setupStreams () {
     BeatStream beatStream = new BeatStream("Beat Stream", 120.0f, APP.getApp().millis());
-    this.addStream("beat", beatStream);
+    this.getSequencer().addStream("beat", beatStream);
        
     return true;
   }

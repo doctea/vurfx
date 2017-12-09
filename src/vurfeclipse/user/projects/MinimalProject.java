@@ -55,7 +55,7 @@ public class MinimalProject extends Project implements Serializable {
 
   public boolean setupStreams () {
     BeatStream beatStream = new BeatStream("Beat Stream", tempo, APP.getApp().millis());
-    this.addStream("beat", beatStream);
+    this.getSequencer().addStream("beat", beatStream);
 
     return true;
   }
@@ -192,7 +192,7 @@ public class MinimalProject extends Project implements Serializable {
     addScene(plasmaScene);
     //plasmaScene.setupFilters();
 
-    plasmaScene.registerCallbackPreset(getStream("beat"), "beat_8", "warp");
+    plasmaScene.registerCallbackPreset(this.getSequencer().getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
     switcher.bindSequence("plasma[p1]", plasmaScene, "preset 1",10);
     switcher.bindSequence("plasma[p2]", plasmaScene, "preset 2",10);
