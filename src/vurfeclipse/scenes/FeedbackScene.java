@@ -35,8 +35,8 @@ class FeedbackScene extends Scene {
     BeatStream beatStream = new BeatStream("Beat Stream", 125.0);
     this.addStream("test", stream);
     this.addStream("beat", beatStream);*/
-    Stream stream = host.getStream("test");
-    BeatStream beatStream = (BeatStream) host.getStream("beat");
+    Stream stream = host.getSequencer().getStream("test");
+    BeatStream beatStream = (BeatStream) host.getSequencer().getStream("beat");
        
     //println("DemoScene initialised " + this + " - filtercount is " + filterCount);
     int i = 0;
