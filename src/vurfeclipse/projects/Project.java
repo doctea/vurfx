@@ -35,6 +35,16 @@ public abstract class Project implements Serializable {
 	public int w,h;
 	public String gfx_mode;
 
+	
+	public static Project bootProject(int w, int h, String filename) {
+		// load a project from XML....!
+		//HashMap<String,HashMap<String,Object>> input = pr.readSnapshotFile(filename);
+		Project pr = new SavedProject(w, h).setSnapshotFile(filename); //.loadSnapshotsetLoaded(loadSnapshot(filename));
+		
+		return pr;
+	}
+	
+	
 	public Project(int w, int h) {
 		this.w = w;
 		this.h = h;
@@ -75,15 +85,18 @@ public abstract class Project implements Serializable {
       setupBufferMappings();
     buffers[(Integer)mappings.get(name)] = canvas.surf;
   } */
-	HashMap<String, Integer> mappings;
+	HashMap<String, Object> mappings;
 	public void setupBufferMappings() {
-		mappings = new HashMap<String, Integer>();
+		mappings = new HashMap<String, Object>();
 		mappings.put(getPath()+"out", BUF_OUT);
 		mappings.put(getPath()+"inp0", BUF_INP0);
 		mappings.put(getPath()+"inp1", BUF_INP1);
 		mappings.put(getPath()+"inp2", BUF_INP2);
 		mappings.put(getPath()+"temp1", BUF_TEMP1);
 		mappings.put(getPath()+"temp2", BUF_TEMP2);
+	}
+	public HashMap<String, Object> getBufferMappings() {
+		return (HashMap<String, Object>)this.mappings;
 	}
 
 	public Canvas createCanvas(String path, String canvasName, int width, int height) {
@@ -386,15 +399,18 @@ public abstract class Project implements Serializable {
 		return false;
 	}
 
+	@Deprecated
 	public Project loadSnapshot() {
 		return loadSnapshot(this.getClass().getSimpleName()+".xml");
 	}
+	@Deprecated
 	public Project loadSnapshot(String filename) {
 		println("loadSnapshot from '" + filename + "'");
 		//return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename+".vj", Project.class);
 		//HashMap<String, HashMap<String, Object>> input;
 		return loadSnapshot(readSnapshotFile(filename));
 	}
+	@Deprecated
 	public Project loadSnapshot(HashMap<String, HashMap<String, Object>> input) {
 
 		HashMap<String,Object> target_seq = input.get("/seq");
@@ -482,6 +498,9 @@ public abstract class Project implements Serializable {
 			HashMap<String,Object> sequencerParams = this.sequencer.collectParameters();
 			output.put("/seq", sequencerParams); //new HashMap<String,HashMap<String,Object>>().put("current_sequence", this.sequencer.getCurrentSequenceName()));
 		}
+		
+		HashMap<String, Object> projectSetup = this.collectProjectSetup();
+		output.put("/project_setup",projectSetup);
 
 		// collect all the scenes
 		//output.putAll(this.collectSceneParameters());
@@ -489,8 +508,23 @@ public abstract class Project implements Serializable {
 		//((VurfEclipse)APP.getApp()).io.serialize(filename, output);
 		return output;
 	}
+	private LinkedHashMap<String, Object> collectProjectSetup() {
+		LinkedHashMap<String, Object> output = new LinkedHashMap<String,Object>();
+		// save buffers/canvases
+		/*for (Entry<String, Integer> bm : this.getBufferMappings().entrySet()) {
+			
+		}*/
+		output.put(getPath()+"project_setup/mappings", this.getBufferMappings());
+		// save scene configuration
+			// save filter canvas mappings		
+	
+		for (Scene s : this.getScenes()) {
+			output.put(s.getPath(), s.collectSceneSetup());
+		}
+		
+		return output;
+	}
 	public HashMap<String,HashMap<String,Object>> collectSceneParameters() {
-		// TODO Auto-generated method stub
 		HashMap<String,HashMap<String,Object>> output = new HashMap<String,HashMap<String,Object>>();
 		for (Scene s : this.getScenes()) {
 			output.put(s.getPath(), s.collectParameters());

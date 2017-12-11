@@ -354,13 +354,13 @@ public class MutanteProject extends Project implements Serializable {
     switcher.bindSequence("outputModeChange7", opSequence);
     switcher.bindSequence("outputModeChange8", opSequence);*/
     TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
-    		new TunnelScene(this, w, h).setCanvas("temp", "/temp2") //temp2")	// "/out"
+    		new TunnelScene(this, w, h).setSceneName("TunnelScene1").setCanvas("temp", "/temp2") //temp2")	// "/out"
 			//.addFilter(new BlendDrawer()))
 		, "/out", "/out"
 	);
     
     TunnelScene ts2 = (TunnelScene) this.addSceneInputOutputCanvas(
-	    		new TunnelScene(this, w, h).setCanvas("temp", "/temp3") //
+	    		new TunnelScene(this, w, h).setSceneName("TunnelScene2").setCanvas("temp", "/temp3") //
 	    			//.addFilter(new BlendDrawer()))
 
 	    		, "/out", "/out"

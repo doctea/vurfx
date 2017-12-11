@@ -1,6 +1,7 @@
 package vurfeclipse.filters;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import ch.bildspur.postfx.PostFXSupervisor;
 import ch.bildspur.postfx.Supervisor;
@@ -55,6 +56,22 @@ public class ShaderFilter extends Filter {
 	}
 
 
+	@Override
+	public HashMap<String,Object> collectFilterSetup() {	// for saving snapshots, save setup of filter
+		HashMap<String,Object> output = super.collectFilterSetup();
+		output.put("shaderFragName", this.shaderFragName);
+		output.put("shaderVertName", this.shaderVertName);
+		return output;
+	}
+	
+	@Override
+	public void readSnapshot(Map<String,Object> input) {
+		super.readSnapshot(input);
+		this.shaderFragName = (String) input.get("shaderFragName");
+		this.shaderVertName = (String) input.get("shaderVertName");
+	}
+
+	
 	int mode = 0;
 	String shaderFragName;
 	String shaderVertName;
@@ -62,6 +79,10 @@ public class ShaderFilter extends Filter {
 	transient Canvas c;
 	transient protected CustomPass customPass;
 
+	public ShaderFilter(Scene sc) {
+		super(sc);
+	}
+	
 	public ShaderFilter(Scene sc, String shaderFragName, String shaderVertName) {
 		super(sc);
 		this.shaderFragName = shaderFragName;
@@ -122,7 +143,7 @@ public class ShaderFilter extends Filter {
 		//out.beginDraw();
 		//PGraphics oldg = APP.getApp().g;
 		//APP.getApp().g = out;
-		if (shaderVertName!="")
+		if (!shaderVertName.equals(""))
 			glFilter = 
 			APP.getApp(). 
 			//out.

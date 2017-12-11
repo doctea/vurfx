@@ -10,6 +10,10 @@ public class BlankFilter extends Filter {
   public BlankFilter(Scene sc) {
     super(sc);
   }
+  public BlankFilter(Scene sc, int w) {
+	    super(sc);
+  }
+	    
   
   
   public boolean initialise() {

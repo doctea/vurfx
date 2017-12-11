@@ -1,5 +1,7 @@
 package vurfeclipse.filters;
 
+import java.util.HashMap;
+
 import processing.core.PGraphics;
 import processing.core.PVector;
 import vurfeclipse.filters.*;
@@ -121,5 +123,13 @@ public class BlobDrawer extends SpiralDrawer {
 
   }
 
+  
+
+	@Override
+	public HashMap<String,Object> collectFilterSetup() {	// for saving snapshots, save setup of filter
+		HashMap<String,Object> output = super.collectFilterSetup();
+		output.put("canvas_pix0", sc.getCanvas("pix0"));
+		return output;
+	}
 
 }
