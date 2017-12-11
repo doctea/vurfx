@@ -93,6 +93,8 @@ public class BlobDrawer extends SpiralDrawer {
 
   synchronized public void drawActualObject(PGraphics out, float currRadius, float currentRadian) {
 
+	  	//if (true) return;
+	  
 	/*colourSwitchCount++;
 	if (colourSwitchEvery<=colourSwitchCount) {*/
 			//b.setColour((int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255));

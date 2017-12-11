@@ -49,6 +49,8 @@ public class ImageListScene extends SimpleScene {
 		  
 		  if (path.equals("current_image_filename")) {
 			  this.setCurrentIndex(this.getIndexForFilename((String) payload));
+		  } else if (path.equals("current_image_index")) {
+			  this.setCurrentIndex((int) payload);
 		  } else {
 			  payload = super.target(path, payload);
 		  }

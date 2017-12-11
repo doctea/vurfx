@@ -46,7 +46,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/colorutils"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/controlP5/library/controlP5.jar" sourcepath="lib/user/controlP5/src/">
+	<classpathentry kind="lib" path="lib/user/controlP5/library/controlP5.jar" sourcepath="lib/user/controlP5/src/controlP5">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/C:/code/vurf-eclipse/lib/user/controlP5/reference/"/>
 		</attributes>

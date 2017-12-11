@@ -83,6 +83,7 @@ public class SpiralDrawer extends Filter {
   int numSections = 60;*/
 
   public boolean applyMeatToBuffers() {
+	  //if (true) return true;
     //if (src!=out) out.background(0); else out.image(src.getTexture(),0,0,sc.w,sc.h);
     //if (src!=out)
     out.background(0,0,0,0);

@@ -21,7 +21,7 @@ public class ControlFrame extends PApplet {
   }
 
   public void settings() {
-    size(w, h);
+    size(w, h); 	// P3D);
   }
 
   int setupCount = 0;

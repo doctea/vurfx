@@ -191,9 +191,6 @@ public class VurfEclipse extends PApplet {
 
 	boolean screenGrab = false;
 
-	boolean enableStreams = true;
-	boolean enableSequencer = true;
-
 	//Scene sc;
 	public static Project pr;
 
@@ -500,10 +497,10 @@ public class VurfEclipse extends PApplet {
 		 //timeMillis = (exportMode?timeMillis+=(1000/global_fps):millis());
 		 timeMillis = millis();
 	
-		 if (enableStreams)
+		 //if (enableStreams)
 			 pr.processStreams(timeMillis);
 	
-		 if (enableSequencer)
+		 //if (enableSequencer)
 			 pr.processSequencer(timeMillis);
 	
 		 //offscreen.beginDraw();
@@ -515,6 +512,7 @@ public class VurfEclipse extends PApplet {
 		 if (frameCount>25) {	// skip rendering first 25 frames
 			 offscreen.getSurf().imageMode(CENTER);
 			 pr.applyGL(offscreen, output_width, output_height);
+			 //pr.applyGL(offscreen, this.displayWidth, this.displayHeight); //.displayWidth(), this.doHeight());
 			 //texWin.render();
 		 }
 		 //offscreen.endDraw();
@@ -531,7 +529,8 @@ public class VurfEclipse extends PApplet {
 		 //this.g.scale(0.25f);//0.8f); //1.5f);
 		 //this.g.scale(0.75f);
 
-		 this.image(offscreen.getSurf(), 0, 0, APP.getApp().sketchWidth(), APP.getApp().sketchHeight()); //output_width, output_height);	// actually draw to applet!
+		 //this.image(offscreen.getSurf(), 0, 0, APP.getApp().sketchWidth(), APP.getApp().sketchHeight()); //output_width, output_height);	// actually draw to applet!
+		 this.image(offscreen.getSurf(), 0, 0, APP.getApp().displayWidth, APP.getApp().displayHeight); //output_width, output_height);	// actually draw to applet!
 		 //this.resetMatrix();
 		 //this.g.init(desired_width, desired_height, ARGB);
 
@@ -677,9 +676,9 @@ public class VurfEclipse extends PApplet {
 			   if (key == ' ') {
 			     screenGrab = true;
 			   }
-			   else if (key=='/') {
+			   /*else if (key=='/') {
 			     enableStreams = !enableStreams;
-			   }
+			   }*/
 			   /*else if (key=='l') {
 			     //pr.cp5.destroy();
 			     destroyControls(getCP5());

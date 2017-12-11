@@ -435,8 +435,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	private void updateGuiSequenceChanged(int oldCursor, int newCursor) {
 		if (oldCursor!=newCursor) this.lstSequences.getItem(oldCursor).put("state", false);
-		this.lstSequences.getItem(newCursor).put("state", true);
-		this.txtCurrentSequenceName.setValue(this.getCurrentSequenceName());
+		if (newCursor>=this.lstSequences.getItems().size()) this.lstSequences.getItem(newCursor).put("state", true);
+		if (!getCurrentSequenceName().equals("")) {
+			this.txtCurrentSequenceName.setValue(this.getCurrentSequenceName());
+		}
 	}
 
 	private void updateGuiProgress(Sequence activeSequence) {
