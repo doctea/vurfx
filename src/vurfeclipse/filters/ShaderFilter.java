@@ -25,68 +25,68 @@ public class ShaderFilter extends Filter {
 
 	class CustomPass implements Pass
 	{
-	  PShader shader;
+		PShader shader;
 
-	  public CustomPass(PShader shader) //, String shaderFragName, String shaderVertName)
-	  {
-		//System.out.println("Instantiated new CustomPass " + shader + " (told it was " + shaderFragName + " and " + shaderVertName);
-	    this.shader = shader;//loadShader("negateFrag.glsl");
-	  }
+		public CustomPass(PShader shader) //, String shaderFragName, String shaderVertName)
+		{
+			//System.out.println("Instantiated new CustomPass " + shader + " (told it was " + shaderFragName + " and " + shaderVertName);
+			this.shader = shader;//loadShader("negateFrag.glsl");
+		}
 
-	  @Override
-	  public void prepare(Supervisor supervisor) {
-	    // set parameters of the shader if needed
-	  }
+		@Override
+		public void prepare(Supervisor supervisor) {
+			// set parameters of the shader if needed
+		}
 
-	  @Override
-	  public synchronized void apply(Supervisor supervisor) {
-	    PGraphics pass = supervisor.getNextPass();
-	    supervisor.clearPass(pass);
+		@Override
+		public synchronized void apply(Supervisor supervisor) {
+			PGraphics pass = supervisor.getNextPass();
+			supervisor.clearPass(pass);
 
-	    //pass.setSize(sc.w, sc.h);
-	    //pass.setSize(1920, 1080); //sc.w, sc.h);
-	    //pass.res
-	    pass.beginDraw();
-	    pass.shader(shader);
-	    //pass.imageMode(PApplet.CORNERS);
-	    pass.image(supervisor.getCurrentPass(), 0, 0, sc.w, sc.h);
-	    pass.endDraw();
-	  }
+			//pass.setSize(sc.w, sc.h);
+			//pass.setSize(1920, 1080); //sc.w, sc.h);
+			//pass.res
+			pass.beginDraw();
+			pass.shader(shader);
+			//pass.imageMode(PApplet.CORNERS);
+			pass.image(supervisor.getCurrentPass(), 0, 0, sc.w, sc.h);
+			pass.endDraw();
+		}
 	}
-	
-	
-  int mode = 0;
-  String shaderFragName;
-  String shaderVertName;
-  
-  transient Canvas c;
-  transient protected CustomPass customPass;
 
-  public ShaderFilter(Scene sc, String shaderFragName, String shaderVertName) {
-    super(sc);
-    this.shaderFragName = shaderFragName;
-    this.shaderVertName = shaderVertName;
-  }
 
-  /*public void setXYOffset(int x, int y) {
+	int mode = 0;
+	String shaderFragName;
+	String shaderVertName;
+
+	transient Canvas c;
+	transient protected CustomPass customPass;
+
+	public ShaderFilter(Scene sc, String shaderFragName, String shaderVertName) {
+		super(sc);
+		this.shaderFragName = shaderFragName;
+		this.shaderVertName = shaderVertName;
+	}
+
+	/*public void setXYOffset(int x, int y) {
     this.offsetx = x;
     this.offsety = y;
-  }*/
+  	}*/
 
-  public ShaderFilter(Scene sc, String shaderFragName) {
-	  this(sc,shaderFragName,"");
-  }
+	public ShaderFilter(Scene sc, String shaderFragName) {
+		this(sc,shaderFragName,"");
+	}
 
-@Override
-  synchronized public void updateParameterValue(String paramName, Object value) {
+	@Override
+	synchronized public void updateParameterValue(String paramName, Object value) {
 		//if (!this.parameters.containsKey(paramName)) this.addParameter(paramName, value);
 		super.updateParameterValue(paramName, value);
 		if (glFilter!=null) {
 			//println("glFilter hasParameter("+paramName+") returns " + glFilter.hasParameter(paramName));
 			//System.exit(1);
-	
+
 			Object current = getParameterValue(paramName);
-	
+
 			//glFilter.set(paramName, ((Class<? extends current.getClass()>) getParameter(paramName)).cast(value), value); //
 			Parameter p = this.getParameter(paramName);
 			if (p.getDataType()==Integer.class) {
@@ -102,7 +102,7 @@ public class ShaderFilter extends Filter {
 			} else {
 				println(this + "#updateParameterValue("+paramName+","+value+") doesn't know what to do with " + value + " when setting gl shader uniforms?");
 			}
-			
+
 			/*if (current instanceof Float ) {
 				//println("setting GLFilter parameter " + paramName + " " + value);
 				glFilter.set(paramName, ((Float)value).floatValue());
@@ -113,209 +113,209 @@ public class ShaderFilter extends Filter {
 				println("ShaderFilter#updateParameterValue doesn't know what to do with passed value for " + paramName + " (is a " + paramName.getClass() + ")");
 			}*/
 		}
-    //return this;
-  }
+		//return this;
+	}
 
-  synchronized public void initShader(String shaderFragName, String shaderVertName) {
-	  println("initShader("+shaderFragName+","+shaderVertName+")");
-	  //out.init(sc.w, sc.h, APP.getApp().ARGB);//, format); //
-	  //out.beginDraw();
-	  //PGraphics oldg = APP.getApp().g;
-	  //APP.getApp().g = out;
-	  if (shaderVertName!="")
-		  glFilter = 
-		  	APP.getApp(). 
-		  	//out.
-		  	loadShader(shaderFragName,shaderVertName); //new GLTextureFilter(APP.getApp(), shaderName);
-		  //new PGLShader(APP.getApp(), shaderFragName, shaderVertName);
-	  else
-		  glFilter = 
-		  	APP.getApp().
-		  	//out.
-		  	loadShader(shaderFragName);
-		  //new PGLShader(APP.getApp(), shaderFragName);
-	  //APP.getApp().g = oldg;
-	  //out.endDraw();
-	  
-	  //glFilter = new PGLShader((PApplet)APP.getApp(), shaderFragName, shaderVertName);
-	  //if (!shaderFragName.equals("")) glFilter.setFragmentShader(shaderFragName);
-	  //if (!shaderVertName.equals("")) glFilter.setVertexShader(shaderVertName);
-	  	  
-	  //glFilter.bind();	// force compilation when loaded to save hassle later
-	  //glFilter.unbind();
-	  glFilter.init();
+	synchronized public void initShader(String shaderFragName, String shaderVertName) {
+		println("initShader("+shaderFragName+","+shaderVertName+")");
+		//out.init(sc.w, sc.h, APP.getApp().ARGB);//, format); //
+		//out.beginDraw();
+		//PGraphics oldg = APP.getApp().g;
+		//APP.getApp().g = out;
+		if (shaderVertName!="")
+			glFilter = 
+			APP.getApp(). 
+			//out.
+			loadShader(shaderFragName,shaderVertName); //new GLTextureFilter(APP.getApp(), shaderName);
+		//new PGLShader(APP.getApp(), shaderFragName, shaderVertName);
+		else
+			glFilter = 
+			APP.getApp().
+			//out.
+			loadShader(shaderFragName);
+		//new PGLShader(APP.getApp(), shaderFragName);
+		//APP.getApp().g = oldg;
+		//out.endDraw();
 
-	  glFilter.set("src_tex_unit0", src);
-	  glFilter.set("dest_tex_size_x", (float)sc.w);
-	  glFilter.set("dest_tex_size_y", (float)sc.h);
-	  glFilter.set("dest_tex_size",  new PVector((float)sc.w,(float)sc.h));
-	  customPass = this.getPassForShader(glFilter,out,src); //, shaderFragName, shaderVertName);
-	  //glFilter.set("bottomSampler", out);
-	  
-	  //if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
-	  //if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
+		//glFilter = new PGLShader((PApplet)APP.getApp(), shaderFragName, shaderVertName);
+		//if (!shaderFragName.equals("")) glFilter.setFragmentShader(shaderFragName);
+		//if (!shaderVertName.equals("")) glFilter.setVertexShader(shaderVertName);
 
-  }
-  
-  transient private HashMap<PShader,Pass> passes = new HashMap<PShader,Pass>();
-  
-  synchronized protected CustomPass getPassForShader(PShader tf, PGraphics out, PGraphics src) {
-	  CustomPass p = (CustomPass) this.passes.get(tf);
-	  if (p==null) {
-		p = new CustomPass(tf); //,"blend mode ,"blend mode..!");
-	    this.passes.put(tf,p);
-	  }
-	  return p;
-  }
+		//glFilter.bind();	// force compilation when loaded to save hassle later
+		//glFilter.unbind();
+		glFilter.init();
 
-  @Override public boolean start() {
-	  super.start();
-	  this.updateAllParameterValues();
-	return true;
-  }
-  
-  transient PShader glFilter;
-  public boolean initialise() {
-    // set up inital variables or whatevs
-    //temp = new int[sc.w*sc.h];
-    pixelCount = sc.w*sc.h;
+		glFilter.set("src_tex_unit0", src);
+		glFilter.set("dest_tex_size_x", (float)sc.w);
+		glFilter.set("dest_tex_size_y", (float)sc.h);
+		glFilter.set("dest_tex_size",  new PVector((float)sc.w,(float)sc.h));
+		customPass = this.getPassForShader(glFilter,out,src); //, shaderFragName, shaderVertName);
+		//glFilter.set("bottomSampler", out);
+
+		//if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
+		//if (glFilter.hasParameter("height")) glFilter.setParameterValue("height", sc.h);
+
+	}
+
+	transient private HashMap<PShader,Pass> passes = new HashMap<PShader,Pass>();
+
+	synchronized protected CustomPass getPassForShader(PShader tf, PGraphics out, PGraphics src) {
+		CustomPass p = (CustomPass) this.passes.get(tf);
+		if (p==null) {
+			p = new CustomPass(tf); //,"blend mode ,"blend mode..!");
+			this.passes.put(tf,p);
+		}
+		return p;
+	}
+
+	@Override public boolean start() {
+		super.start();
+		this.updateAllParameterValues();
+		return true;
+	}
+
+	transient PShader glFilter;
+	public boolean initialise() {
+		// set up inital variables or whatevs
+		//temp = new int[sc.w*sc.h];
+		pixelCount = sc.w*sc.h;
 
 
-    //glFilter = new GLTextureFilter();
-    //glFilter.setTint((int)random(255)); //random(1),random(1),random(1));
-    //glFilter = new GLTextureFilter(APP.getApp(), shaderName); //"Edges.xml");
-    initShader(shaderFragName, shaderVertName);
+		//glFilter = new GLTextureFilter();
+		//glFilter.setTint((int)random(255)); //random(1),random(1),random(1));
+		//glFilter = new GLTextureFilter(APP.getApp(), shaderName); //"Edges.xml");
+		initShader(shaderFragName, shaderVertName);
 
-    /*GLTextureParameters params = new GLTextureParameters();
+		/*GLTextureParameters params = new GLTextureParameters();
     params.wrappingU = GLTextureParameters.REPEAT;
     params.wrappingV = GLTextureParameters.REPEAT;*/
-    //t = new GLTexture(APP.getApp(),sc.w,sc.h, params);
-    c = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel());
+		//t = new GLTexture(APP.getApp(),sc.w,sc.h, params);
+		c = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel());
 
-    return true;
-  }
+		return true;
+	}
 
-  public Filter nextMode() {
-    mode++;
-    if(mode>4) mode = 0;
-    //initShader(shaderFragName,shaderVertName);
-    this.updateAllParameterValues();
-    return this;
-  }
+	public Filter nextMode() {
+		mode++;
+		if(mode>4) mode = 0;
+		//initShader(shaderFragName,shaderVertName);
+		this.updateAllParameterValues();
+		return this;
+	}
 
-  int a_bitshift = 255<<24;
+	int a_bitshift = 255<<24;
 
-  int[] temp;
+	int[] temp;
 
 
-  boolean autoChange = false;
-  int autoCount = 0;
-  int autoLimit = 5;
+	boolean autoChange = false;
+	int autoCount = 0;
+	int autoLimit = 5;
 
-  int pixelCount;
-  synchronized public boolean applyMeatToBuffers() {
-    //t.copy(src.getTexture());
-	//c.getSurf().image(src,0,0);
+	int pixelCount;
+	synchronized public boolean applyMeatToBuffers() {
+		//t.copy(src.getTexture());
+		//c.getSurf().image(src,0,0);
 
-	//c.getSurf().rect(400, 20, 20, 400);
-	  
-    //t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
-	//println("About to apply " + this.shaderFragName);
-	customPass.shader.set("src_tex_unit0", src);
-	c.getSurf().beginDraw();
-    this.filter(src/*c.getSurf()*/, customPass, c.getSurf()); //out);
-	//c.getSurf().resetShader();
-	//c.getSurf().shader(customPass.shader);
-    c.getSurf().endDraw();
-    
-	out.beginDraw();
-	out.imageMode(APP.getApp().CORNERS);
-	out.image(c.getSurf(),0,0,sc.w,sc.h);
-	/*out.color(255,128,96);
+		//c.getSurf().rect(400, 20, 20, 400);
+
+		//t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
+		//println("About to apply " + this.shaderFragName);
+		customPass.shader.set("src_tex_unit0", src);
+		c.getSurf().beginDraw();
+		this.filter(src/*c.getSurf()*/, customPass, c.getSurf()); //out);
+		//c.getSurf().resetShader();
+		//c.getSurf().shader(customPass.shader);
+		c.getSurf().endDraw();
+
+		out.beginDraw();
+		out.imageMode(APP.getApp().CORNERS);
+		out.image(c.getSurf(),0,0,sc.w,sc.h);
+		/*out.color(255,128,96);
 	out.rect(0, 0, 50, 50);
     out.rect(50, 50, 100, 100);*/
-    //println("out is " + out);
-    out.endDraw();
+		//println("out is " + out);
+		out.endDraw();
 
-    return true;
-  }
+		return true;
+	}
 
-  transient SobelPass sobelPass = new SobelPass(APP.getApp());
-  protected void filter(PGraphics source, Pass pass, PGraphics out) {
-	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
-	  //TODO: ADD REAL SHADER HERE
-	  //fxs.pass(sobelPass);
-	  //fxs.pass(new Pass
-	  /*source.beginDraw();
+	transient SobelPass sobelPass = new SobelPass(APP.getApp());
+	protected void filter(PGraphics source, Pass pass, PGraphics out) {
+		PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
+		//TODO: ADD REAL SHADER HERE
+		//fxs.pass(sobelPass);
+		//fxs.pass(new Pass
+		/*source.beginDraw();
 	  source.sphere(60);
 	  source.text(this.getFilterName() + ": " + shader, sc.w/2, sc.h/2);
 	  source.endDraw();*/
-	  fxs.render(source);
-	  //this.applyPass(fxs,glFilter);
-	  //println("doing filter for " + this.shaderFragName);
-	  fxs.pass(pass);
-	  //fxs.pass(new CustomPass(shader)); //glFilter));
-	  //fxs.pass(sobelPass);
-	  fxs.compose(out);
-  } 
-  
-  @Deprecated
-  protected void filter(PGraphics source, PShader shader, PGraphics out) {
-	  filter(source,new CustomPass(shader),out);
-	  PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
-	  //TODO: ADD REAL SHADER HERE
-	  //fxs.pass(sobelPass);
-	  //fxs.pass(new Pass
-	  /*source.beginDraw();
+		fxs.render(source);
+		//this.applyPass(fxs,glFilter);
+		//println("doing filter for " + this.shaderFragName);
+		fxs.pass(pass);
+		//fxs.pass(new CustomPass(shader)); //glFilter));
+		//fxs.pass(sobelPass);
+		fxs.compose(out);
+	} 
+
+	@Deprecated
+	protected void filter(PGraphics source, PShader shader, PGraphics out) {
+		filter(source,new CustomPass(shader),out);
+		PostFXSupervisor fxs = ((VurfEclipse)APP.getApp()).getFxs();
+		//TODO: ADD REAL SHADER HERE
+		//fxs.pass(sobelPass);
+		//fxs.pass(new Pass
+		/*source.beginDraw();
 	  source.sphere(60);
 	  source.text(this.getFilterName() + ": " + shader, sc.w/2, sc.h/2);
 	  source.endDraw();*/
-	  fxs.render(source);
-	  //this.applyPass(fxs,glFilter);
-	  //fxs.pass(new CustomPass(shader)); //glFilter));
-	  fxs.pass(customPass);
-	  //fxs.pass(sobelPass);
-	  fxs.compose(out);
-  }
+		fxs.render(source);
+		//this.applyPass(fxs,glFilter);
+		//fxs.pass(new CustomPass(shader)); //glFilter));
+		fxs.pass(customPass);
+		//fxs.pass(sobelPass);
+		fxs.compose(out);
+	}
 
-  @Deprecated
-  protected void filter(PGraphics source, PShader shader) {
-	  filter(source, shader, out);
-  }
-  
-  public void applyPass(PostFXSupervisor fxs, PShader shader) {
-	  PGraphics pass = fxs.getNextPass();
-	  //fxs.clearPass(pass);
-	  pass.beginDraw();
-	  pass.shader(shader);
-	  pass.image(fxs.getCurrentPass(), 0, 0);
-	  pass.endDraw();
-  }
+	@Deprecated
+	protected void filter(PGraphics source, PShader shader) {
+		filter(source, shader, out);
+	}
 
-  public void beginDraw() {
-	  //super.beginDraw();
-	    /*src.loadPixels();
+	public void applyPass(PostFXSupervisor fxs, PShader shader) {
+		PGraphics pass = fxs.getNextPass();
+		//fxs.clearPass(pass);
+		pass.beginDraw();
+		pass.shader(shader);
+		pass.image(fxs.getCurrentPass(), 0, 0);
+		pass.endDraw();
+	}
+
+	public void beginDraw() {
+		//super.beginDraw();
+		/*src.loadPixels();
 	    src.loadTexture();
 	    out.loadTexture();*/
-	    //super.beginDraw();
+		//super.beginDraw();
 
-	    //if (t==null) {
-	        /*GLTextureParameters params = new GLTextureParameters();
+		//if (t==null) {
+		/*GLTextureParameters params = new GLTextureParameters();
 	        params.wrappingU = GLTextureParameters.REPEAT;
 	        params.wrappingV = GLTextureParameters.REPEAT;*/
-	    	//t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
-	    	//t = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel()).getSurf();
-	    //}
-	    if (src==null) setInputCanvas(canvas_in);
-	    if (out==null) setOutputCanvas(canvas_out);
-	    //if (glFilter==null) glFilter = APP.getApp().loadShader(shaderName); //new GLTextureFilter(APP.getApp(), shaderName);
-  }
-  
-  public void endDraw() {
-	  //super.endDraw();
-    //out.loadPixels(); // makes no difference apparently
-    //out.updatePixels(); // stops form working
-    //out.loadTexture(); // this line stops this from working...
-  }
+		//t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
+		//t = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel()).getSurf();
+		//}
+		if (src==null) setInputCanvas(canvas_in);
+		if (out==null) setOutputCanvas(canvas_out);
+		//if (glFilter==null) glFilter = APP.getApp().loadShader(shaderName); //new GLTextureFilter(APP.getApp(), shaderName);
+	}
+
+	public void endDraw() {
+		//super.endDraw();
+		//out.loadPixels(); // makes no difference apparently
+		//out.updatePixels(); // stops form working
+		//out.loadTexture(); // this line stops this from working...
+	}
 
 }
