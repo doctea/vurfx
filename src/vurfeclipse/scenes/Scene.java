@@ -934,7 +934,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 	public void readSnapshot(HashMap<String, Object> input) {
 		for (Entry<String, Object> e : input.entrySet()) {
-			if (e.getKey().equals("name")) this.setSceneName((String) e.getValue());	// can aslo get "name" and "path" here
+			if (e.getKey().equals("name")) this.setSceneName((String) e.getValue());	// can also get "name" and "path" here
 			if (e.getKey().endsWith("/filter_setup")) {
 				// loop over the filters here
 				for (Entry<String,Object> fi : ((Map<String, Object>)e.getValue()).entrySet()) {

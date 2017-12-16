@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
@@ -78,9 +79,12 @@ abstract public class Sequence implements Serializable, Mutable {
 		params.put("seed", this.getSeed());
 		params.put("lengthMillis", this.lengthMillis);
 		
-		params.put("scene_parameters", this.host.host.collectSceneParameters());
+		// actually, what we want to do here is only collect scene parameters from the host.host if this is the currently active sequence, otherwise it means nothing
+		// instead, need to save the local scene_parameters if they exist
+		// if it is active sequence then update the scene_parameters with the host.host's collectSceneParameters, though
+		params.put("scene_parameters", this.getSceneParameters());
 		
-		params.put("current_sequence_name", APP.getApp().dateStamp());
+		//params.put("current_sequence_name", APP.getApp().dateStamp());
 		
 		ArrayList<String> mutableUrls = new ArrayList<String> ();
 		for (Mutable m : getMutables()) {
@@ -442,7 +446,19 @@ abstract public class Sequence implements Serializable, Mutable {
 			return iteration;
 		}
 
+		public void saveSequencePreset(String filename) {
+			if (!filename.endsWith(".xml")) filename += ".xml";
+			filename = filename.replace(':', '_');
 
-
-
+			Sequence toSave = this;//.getActiveSequence();
+			HashMap<String,Object> output; //= new HashMap<String,Object>();
+			output = toSave.collectParameters();
+			try {
+				XMLSerializer.write(output, filename);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.err.println("Caught " + e.toString() + " trying to save sequence of class " + toSave.getClass().getSimpleName() + " to '" + filename + "'");
+				e.printStackTrace();
+			}
+		}
 }

@@ -55,8 +55,11 @@ public class SavedProject extends Project {
 			this.addScene(new_sc);
 		}
 		
+		this.sequencer.target("/seq/bank/sequences", this.inputAll.get("/seq").get("/seq/bank/sequences"));
+		
 		// add the sequence from the saved load file
 		this.sequencer.target("/seq/changeTo", this.inputAll.get("/seq").get("/seq/sequence"));
+		
 		
 		return true;
 	}
@@ -112,6 +115,7 @@ public class SavedProject extends Project {
 		  		return super.runSequences();
 		  	}
 		  };
+		  ((SequenceSequencer)this.sequencer).setBindToRandom(true);
 
 		  return true;
 	  }

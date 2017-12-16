@@ -207,11 +207,26 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				changeSequence(seqName);
 			}
 			return "Sequencer active Sequence is currently " + activeSequenceName;
+		} else if (spl[2].equals("bank")) {
+			println ("loading bank for " + spl[3]);
+			if (spl[3].equals("sequences") &&  payload instanceof HashMap<?,?>) {		
+				for (Entry<String,Object> s : ((HashMap<String,Object>) payload).entrySet()) {
+					HashMap<String,Object> c = (HashMap<String,Object>)s.getValue();
+					Sequence newSeq = this.createSequence(c);
+					String seqName = (String) c.get("current_sequence_name");
+					println("got seqName " + seqName);
+					seqName = seqName==null?"loaded":seqName;
+					this.addSequence(seqName, newSeq);
+					this.addHistorySequenceName(seqName);
+				}
+			} else {
+				return this.collectBankSequences();
+			}
 		} else if (spl[2].equals("sequence")) {					// creates a sequence and adds it to the bank, but doesn't switch to it. returns url to change to the sequence
 			if (payload instanceof HashMap<?,?>) {		
 				Sequence newSeq = this.createSequence((HashMap<String,Object>)payload);
 				String seqName = (String) ((HashMap) payload).get("current_sequence_name");
-				seqName = seqName==null?"loaded":"loaded " + seqName;
+				seqName = seqName==null?"loaded":seqName;
 				this.addSequence(seqName, newSeq);
 				return "/seq/changeTo/"+seqName;
 			} else {
@@ -237,9 +252,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return addSequence(sequenceName, sc);
 	}
 
-	synchronized public Sequence addSequence(String SequenceName, Sequence sc) {
-		sequences.put(SequenceName, sc);
-		if (activeSequenceName.equals("")) activeSequenceName = SequenceName;
+	synchronized public Sequence addSequence(String sequenceName, Sequence sc) {
+		sequences.put(sequenceName, sc);
+		if (activeSequenceName.equals("")) activeSequenceName = sequenceName;
+		
+		if (isBindToRandom()==true) 
+			this.randomPool.add(sequenceName);
 
 		//host.addSequence(sc);
 		//this.sequences.put(SequenceName, sc);
@@ -426,7 +444,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			historyCursor = this.historySequenceNames.size()-1;
 
 			// GUI: add latest sequence to history GUI
-			if (this.getActiveSequence()!=null && APP.getApp().isReady()) this.lstSequences.addItem(this.getCurrentSequenceName(), this.getCurrentSequenceName());
+			this.updateGuiAddHistory(this.getCurrentSequenceName(), this.getCurrentSequenceName());
 		}
 		
 		// update gui for changed sequences
@@ -438,11 +456,22 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
+	private void updateGuiAddHistory(String currentSequenceName, String currentSequenceName2) {
+		if (this.getActiveSequence()!=null && APP.getApp().isReady() && this.lstSequences!=null) 
+			this.lstSequences.addItem(this.getCurrentSequenceName(), this.getCurrentSequenceName());		
+	}
+
+
 	private void updateGuiSequenceChanged(int oldCursor, int newCursor) {
 		if (!APP.getApp().isReady()) return;
-		
+		if (null==this.lstSequences) return;
+		if (this.lstSequences.getItems()==null) return;
+		if (this.lstSequences.getItems().size()==0) return;
+
 		if (oldCursor!=newCursor) this.lstSequences.getItem(oldCursor).put("state", false);
-		if (newCursor>=this.lstSequences.getItems().size()) this.lstSequences.getItem(newCursor).put("state", true);
+
+		if (newCursor<=this.lstSequences.getItems().size()) 
+			this.lstSequences.getItem(newCursor).put("state", true);
 		if (!getCurrentSequenceName().equals("")) {
 			this.txtCurrentSequenceName.setValue(this.getCurrentSequenceName());
 		}
@@ -714,6 +743,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     	restartSequence();
     } else if (key=='o') { // HISTORY 'cut' between cursor/next (or do random if at end?)
     	cutSequence();
+    } else if (key=='B') { // dump entire current sequencer bank to separate .xml files
+    	this.saveBankSequences(this.host.getClass().getSimpleName());
     } else if (key=='p') {
     	this.historyMode = !this.historyMode;
     	println ("historyMode set to " + historyMode);
@@ -764,6 +795,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
   				hashMap = (HashMap<String,Object>) hashMap.get("/seq"); // so just grab the /seq part for processing here
   			}*/
 			Scene host = this.host.getSceneForPath((String) hashMap.get("hostPath"));
+			if (host==null) {
+				System.err.println("Caught null host in createSequence() looking for " + hashMap.get("hostPath") + "!");
+			}
 			Sequence newSeq = Sequence.makeSequence((String) hashMap.get("class"), host);
 			newSeq.loadParameters(hashMap);
 
@@ -866,6 +900,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		super.updateGuiStatus();
 		
+		lstSequences.addItems(this.historySequenceNames);
+		
 		//this.saveHistoryButton = cf.control().addBang("SAVE sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
 		//zthis.loadHistoryButton = cf.control().addBang("LOAD sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
 		cf.control().addCallback(this);
@@ -935,8 +971,42 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	@Override public HashMap<String,Object> collectParameters() {
 		HashMap<String,Object> params = super.collectParameters();  
 		params.put("/seq/seed", this.getActiveSequence().getSeed());
-		params.put("/seq/sequence",this.getActiveSequence().collectParameters());	// /seq/sequence to load it and add it to bank, whereas /seq/changeTo loads it and changes to it
+		
+		this.getActiveSequence().setSceneParameters(this.host.collectSceneParameters());	// set the active sequence's parameters to be the current scene parameters
+		params.put("/seq/sequence",this.getActiveSequence().collectParameters().put("current_sequence_name",  this.getCurrentSequenceName()));	// /seq/sequence to load it and add it to bank, whereas /seq/changeTo loads it and changes to it
+		
 		params.put("/seq/current_sequence_name", this.getCurrentSequenceName());	// just save the name, used when re-loading from xml or hashmap
+		
+		params.put("/seq/bank/sequences", this.collectBankHistory());
+		
+		return params;
+	}
+
+	private HashMap<String,Object> collectBankHistory() {
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		//for (Entry<String, Sequence> s : this.histor.entrySet()) {
+		for (String e : this.historySequenceNames) {
+			Sequence s = this.getSequence(e);
+			HashMap<String,Object> t = s.collectParameters();
+			t.put("current_sequence_name", e);			
+			
+			params.put(e, t);
+		}
+		return params;
+	}
+
+
+	public void saveBankSequences (String filename) {
+		for (Entry<String, Sequence> s : this.sequences.entrySet()) {
+			s.getValue().saveSequencePreset("bank_" + filename + "_" + s.getKey() + ".xml");
+		}
+	}
+
+	private HashMap<String,Object> collectBankSequences() {
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		for (Entry<String, Sequence> s : this.sequences.entrySet()) {
+			params.put(s.getKey(), s.getValue().collectParameters());
+		}
 		return params;
 	}
 
