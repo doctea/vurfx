@@ -425,10 +425,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 	public abstract boolean setupFilters();
 	boolean initialisedFilters = false;
+	private boolean setupFilters = false;
 
 	public boolean initialiseFilters () {
 		if (initialisedFilters) return true;
-		setupFilters();
+		if (!setupFilters ) setupFilters();
 		for (int i = 0 ; i < this.filters.length ; i ++) {
 			if (filters[i]!=null) {
 				filters[i].initialise();
@@ -911,7 +912,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		output.put("path", this.getPath());
 		
 		// save all filters
-		HashMap<String,Object> filters = new HashMap<String,Object>();
+		LinkedHashMap<String,Object> filters = new LinkedHashMap<String,Object>();
 		for (Filter f : this.getFilters()) {
 			filters.put(f.getPath(), f.collectFilterSetup());
 		}
@@ -942,6 +943,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 					new_f.readSnapshot((Map<String, Object>) fi.getValue());
 					this.addFilter(new_f);
 				}
+				this.setupFilters = true;
 			}
 			if (e.getKey().endsWith("/canvas_setup")) {
 				this.setCanvasMappings((HashMap<String, String>) e.getValue());

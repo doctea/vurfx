@@ -311,6 +311,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	 */
 
 	public void randomSequence() {
+		if (randomPool.size()==0) {
+			println("No randomPool is empty!");
+			return;
+		}
+		
 		int count = randomPool.size();
 		int chosen = 0;
 		//try {
@@ -421,7 +426,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			historyCursor = this.historySequenceNames.size()-1;
 
 			// GUI: add latest sequence to history GUI
-			if (this.getActiveSequence()!=null) this.lstSequences.addItem(this.getCurrentSequenceName(), this.getCurrentSequenceName());
+			if (this.getActiveSequence()!=null && APP.getApp().isReady()) this.lstSequences.addItem(this.getCurrentSequenceName(), this.getCurrentSequenceName());
 		}
 		
 		// update gui for changed sequences
@@ -434,6 +439,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 
 	private void updateGuiSequenceChanged(int oldCursor, int newCursor) {
+		if (!APP.getApp().isReady()) return;
+		
 		if (oldCursor!=newCursor) this.lstSequences.getItem(oldCursor).put("state", false);
 		if (newCursor>=this.lstSequences.getItems().size()) this.lstSequences.getItem(newCursor).put("state", true);
 		if (!getCurrentSequenceName().equals("")) {
@@ -442,11 +449,18 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 	private void updateGuiProgress(Sequence activeSequence) {
+		if (!APP.getApp().isReady()) return;
+		if (null==activeSequence) return;
+		if (null==this.sldProgress) return;
+
 		this.sldProgress.changeValue(activeSequence.getPositionPC()*100);
 		this.sldProgress.setLabel("Progress iteration ["+(activeSequence.getPositionIteration()+1)+"/"+max_iterations+"]");
 	}
 
 	public void updateGuiTimeScale(double f) {
+		if (!APP.getApp().isReady()) return;
+		if (null==this.sldTimeScale) return;
+
 		this.sldTimeScale.changeValue((float) f);
 	}
 

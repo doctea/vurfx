@@ -815,9 +815,23 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			//System.out.println (clazz.getConstructors());
 			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
 			System.err.println("about to try and get constructor for Filter '" + classname + "'");
-			Constructor<?> ctor = clazz.getConstructor(Scene.class); //Scene.class,Integer.TYPE);
+			if (classname.contains("$")) {
+				String[] spl = classname.split("\\$");
+				clazz = Class.forName(spl[0]); //Class.forName(classname); host.getClass();//
+				Class<?> inner = Class.forName(classname);
+				//System.out.println (clazz.getConstructors());
+				//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+				Constructor<?> ctor = inner.getConstructor(clazz); //Scene.class,Integer.TYPE);
+				//Object seq = ctor.newInstance(); //(Scene)null, 0);
+				ctor.setAccessible(true);
+				Filter filt = (Filter) ctor.newInstance(host); //(Scene)null, (int)0);
+				filt.sc = host;
+				return filt;
+			} else {
+				Constructor<?> ctor = clazz.getConstructor(Scene.class); //Scene.class,Integer.TYPE);
+				return (Filter) ctor.newInstance(host); //(Scene)null, (int)0);
+			}
 			//Object seq = ctor.newInstance(); //(Scene)null, 0);
-			return (Filter) ctor.newInstance(host); //(Scene)null, (int)0);		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

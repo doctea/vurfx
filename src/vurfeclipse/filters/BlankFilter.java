@@ -14,14 +14,14 @@ public class BlankFilter extends Filter {
 	    super(sc);
   }
 	    
-  
-  
+  @Override
   public boolean initialise() {
 	super.initialise();
     // set up inital variables or whatevs 
     return true;
   }
   
+  @Override
   public boolean applyMeatToBuffers() {
     //println("#applyMeattoBuffers (out is " + src + ")");
     //System.exit(1);

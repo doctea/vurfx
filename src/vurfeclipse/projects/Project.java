@@ -69,7 +69,7 @@ public abstract class Project implements Serializable {
 		try{
 			if (canvases.get(name)==null) {
 				println("Project#getCanvas couldn't find '" + name + "'!!!!!!!!!!!!!!! - creating one at " + "/" + name + "!");
-				return createCanvas("/"+name,name);
+				return createCanvas(/*"/"+*/name,name);	// disabled adding leading slash 2017-12-12 as part of loading from xml...
 			}
 			//System.out.println("Project#getCanvas('" + name + "') returning " + canvases.get(name) + " with buffer " + canvases.get(name).surf);
 			return canvases.get(name);
@@ -442,7 +442,7 @@ public abstract class Project implements Serializable {
 		// process Parameter params - loop over every scene and call loadParameters
 		// DEPRECATED THIS -- FROM NOW ON, SHOULD SAVE THESE UNDER THE /seq/scene_parameters KEY!!
 		if (!target_seq.containsKey("scene_parameters")) {
-			for (Entry<String,HashMap<String,Object>> e : input.entrySet()) {
+			for (Entry<String, HashMap<String, Object>> e : input.entrySet()) {
 				Scene s = (Scene) this.getObjectForPath(e.getKey());
 				if(s==null) {
 					System.err.println ("Couldn't find a targetable for key '"+e.getKey()+"'!!!");
@@ -455,7 +455,7 @@ public abstract class Project implements Serializable {
 		return this;
 	}
 
-	public HashMap<String, HashMap<String,Object>> readSnapshotFile(String filename) {
+	public HashMap<String, HashMap<String, Object>> readSnapshotFile(String filename) {
 		try {
 			//input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
 			return (HashMap<String, HashMap<String, Object>>) XMLSerializer.read(filename);
@@ -499,7 +499,7 @@ public abstract class Project implements Serializable {
 			output.put("/seq", sequencerParams); //new HashMap<String,HashMap<String,Object>>().put("current_sequence", this.sequencer.getCurrentSequenceName()));
 		}
 		
-		HashMap<String, Object> projectSetup = this.collectProjectSetup();
+		LinkedHashMap<String, Object> projectSetup = this.collectProjectSetup();
 		output.put("/project_setup",projectSetup);
 
 		// collect all the scenes

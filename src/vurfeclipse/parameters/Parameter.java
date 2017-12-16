@@ -77,17 +77,23 @@ public class Parameter implements Serializable, Targetable {
 	}
 
 	public Object cast(Object payload) {
-		if (this.datatype == Integer.class) {
-			return Integer.parseInt(payload.toString());
-		} else if (this.datatype == Float.class || this.datatype == Double.class) {
-			return (Float)Float.parseFloat(payload.toString());
-		} else if (this.datatype == Boolean.class) {
-			return Boolean.parseBoolean(payload.toString());
-		} else if (this.datatype == String.class) {
-			return payload.toString();
-		} else if (this.datatype == PVector.class) {
-			return (PVector)payload;
+		try {
+			if (this.datatype == Integer.class) {
+				return Integer.parseInt(payload.toString());
+			} else if (this.datatype == Float.class || this.datatype == Double.class) {
+				return (Float)Float.parseFloat(payload.toString());
+			} else if (this.datatype == Boolean.class) {
+				return Boolean.parseBoolean(payload.toString());
+			} else if (this.datatype == String.class) {
+				return payload.toString();
+			} else if (this.datatype == PVector.class) {
+				return (PVector)payload;
+			}
+		} catch (NumberFormatException e) {
+			System.err.println(this + this.getName() + " caught " + e.toString() + " trying to decode " + " alleged " + this.datatype + " of '" + payload + "'");
+			e.printStackTrace();
 		}
+
 		return null;
 	}
 

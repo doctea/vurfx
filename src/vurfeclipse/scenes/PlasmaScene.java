@@ -47,31 +47,39 @@ public class PlasmaScene extends Scene {
 	    	  }
 	    });
   }
+  
+  public class PlasmaDrawer extends ShaderFilter {
+	public PlasmaDrawer() {
+		super(null,"Plasma.glsl");
+	}
+  	public PlasmaDrawer(Scene sc) {
+		super(sc,"Plasma.glsl");
+	}
+	@Override
+  	public void setParameterDefaults() {
+  		super.setParameterDefaults();
+  		addParameter("colourMode", new Integer(0), 0, colourModeCount);
 
+  		addParameter("width", new Integer(w/16), 0, w*2);
+  		addParameter("height", new Integer(h/16), 0, h*2);
+  		addParameter("u_time_2", new Integer(10), 0, 1000000);
+  	}
+  	@Override
+  	public Filter nextMode() {
+  		changeParameterValue("colourMode", new Integer(((Integer)getParameterValue("colourMode")+1)));
+  		if ((Integer)getParameterValue("colourMode")>colourModeCount) {
+  			changeParameterValue("colourMode", new Integer(0));
+  		}
+  		return this;
+  	}
+  }
+
+  @Override
   public boolean setupFilters () {
 	    //// START PLASMA SCENE
 	    //plasmaScene.setCanvas("pix0","/pix0");
 	    //os2.setCanvas("blendresult", "/blendresult");
-	    addFilter(new ShaderFilter(this,"Plasma.glsl") {
-	    	@Override
-	    	public void setParameterDefaults() {
-	    		super.setParameterDefaults();
-	    		addParameter("colourMode", new Integer(0), 0, colourModeCount);
-
-	    		addParameter("width", new Integer(w/16), 0, w*2);
-	    		addParameter("height", new Integer(h/16), 0, h*2);
-	    		addParameter("u_time_2", new Integer(10), 0, 1000000);
-	    	}
-	    	@Override
-	    	public Filter nextMode() {
-	    		changeParameterValue("colourMode", new Integer(((Integer)getParameterValue("colourMode")+1)));
-	    		if ((Integer)getParameterValue("colourMode")>colourModeCount) {
-	    			changeParameterValue("colourMode", new Integer(0));
-	    		}
-	    		return this;
-	    	}
-
-	    }.setFilterName("Plasma").setCanvases(this.getCanvasMapping("temp1"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    addFilter(new PlasmaDrawer(this).setFilterName("Plasma").setCanvases(this.getCanvasMapping("temp1"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
 	    //addFilter(new PhaseRGBFilter(this).setFilterName("PhaseRGB").setInputCanvas(getCanvasMapping("out")).setOutputCanvas(getCanvasMapping("out")));
 	    addFilter(new PhaseRGBFilter(this).setFilterName("PhaseRGB").setInputCanvas(this.getCanvasMapping("temp1")).setOutputCanvas(getCanvasMapping("temp1")));
@@ -82,7 +90,7 @@ public class PlasmaScene extends Scene {
   }
 
 
-
+  @Override
   public void setupSequences() {
 		sequences.put("preset 1", new RGBFilterSequence1(this, 2000));
 		sequences.put("preset 2", new RGBFilterSequence2(this, 3000));
@@ -101,7 +109,7 @@ public class PlasmaScene extends Scene {
 			muts.add(host);//.getFilter("BlendDrawer1"));
 			return muts;
 		}
-		public void setValuesForNorm(double norm, int iteration) {
+		@Override public void setValuesForNorm(double norm, int iteration) {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
 			//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
@@ -134,7 +142,7 @@ public class PlasmaScene extends Scene {
 			muts.add(host);//.getFilter("BlendDrawer1"));
 			return muts;
 		}
-		public void setValuesForNorm(double norm, int iteration) {
+		@Override public void setValuesForNorm(double norm, int iteration) {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
 			//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
@@ -170,7 +178,7 @@ public class PlasmaScene extends Scene {
 			}
 			return this.mutables;
 		}
-		public void setValuesForNorm(double norm, int iteration) {
+		@Override public void setValuesForNorm(double norm, int iteration) {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
 			//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
