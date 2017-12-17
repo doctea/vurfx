@@ -131,7 +131,8 @@ public class Stream implements Serializable {
 							try {
 								callback.call(v);
 							} catch (Exception e) {
-								System.out.println("Stream " + this + " caught " + e.toString() + " while attempting to process callback!");
+								System.out.println("Stream " + this + " caught " + e.toString() + " while attempting to process callback for " + v + " on " + callback + "!");
+								e.printStackTrace();
 							}
 						}
 						if (debug) System.out.println("Delivered " + v + " to " + callback + ".");

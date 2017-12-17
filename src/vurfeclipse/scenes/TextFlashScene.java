@@ -16,6 +16,7 @@ import vurfeclipse.projects.Project;
 import vurfeclipse.sequence.ChangeParameterSequence;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.ShowSceneSequence;
+import vurfeclipse.streams.FormulaCallback;
 import vurfeclipse.streams.ParameterCallback;
 
 public class TextFlashScene extends Scene {
@@ -72,11 +73,29 @@ public class TextFlashScene extends Scene {
 
 		this.callbacks.put("random", new RandomWordCallback());
 
-		this.callbacks.put("swivel", new SwivelCallback());
+		//this.callbacks.put("swivel", new SwivelCallback());
+		this.callbacks.put("swivel", new FormulaCallback()
+				.setExpression("(input%360)-180")
+				.setTargetPath(
+						this.getFilter("TextDrawer")
+						.getParameter("zrotation")
+						.getPath())
+		);
 
-		this.callbacks.put("rotate", new RotateCallback());
+		//this.callbacks.put("rotate", new RotateCallback());
+		this.callbacks.put("rotate", new FormulaCallback()
+				.setExpression("input%360")
+				.setTargetPath(
+						this.getFilter("TextDrawer")
+						.getParameter("rotation")
+						.getPath())
+		);
 
-		this.callbacks.put("toggle", new ToggleCallback(self));
+		//this.callbacks.put("toggle", new ToggleCallback(self));
+		this.callbacks.put("toggle", new FormulaCallback()
+				.setExpression("input%2==0")
+				.setTargetPath(this.getFilter("BlendDrawer").getPath()+"/mute")
+		);
 	}
 
 	public TextFlashScene(Project host, int w, int h, String[] values) {

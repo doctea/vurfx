@@ -884,4 +884,7 @@ public abstract class Project implements Serializable {
 	}
 
 
+	abstract public void initialiseStreams();
+
+
 }

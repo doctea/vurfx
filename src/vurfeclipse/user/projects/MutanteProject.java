@@ -265,7 +265,7 @@ public class MutanteProject extends Project implements Serializable {
     addScene(plasmaScene);
     //plasmaScene.setupFilters();
 
-    plasmaScene.registerCallbackPreset(switcher.getStream("beat"), "beat_8", "warp");
+    //plasmaScene.registerCallbackPreset(switcher.getStream("beat"), "beat_8", "warp");
     //this.addSceneOutputCanvas(plasmaScene, "/out");
     switcher.bindSequence("plasma_1", plasmaScene, "preset 1",10);
     switcher.bindSequence("plasma_2", plasmaScene, "preset 2",10);
@@ -323,8 +323,8 @@ public class MutanteProject extends Project implements Serializable {
   	        .setSceneName("TextFlash")
   	        //.getSequencesForWords
   	        //.registerCallbackPreset("beat","beat_1", "random")
-  	        .registerCallbackPreset("beat","beat_8", "rotate")
-  	        .registerCallbackPreset("beat","beat_16","swivel")
+  	        //.registerCallbackPreset("beat","beat_8", "rotate")
+  	        //.registerCallbackPreset("beat","beat_16","swivel")
   	        ,
   	      "/out",
   	      "/out"
@@ -572,6 +572,15 @@ switcher.bindSequence("d1:", doubleSequence, 10);
 public boolean isSequencerEnabled() {
 	// TODO Auto-generated method stub
 	return this.enableSequencer;
+}
+
+@Override
+public void initialiseStreams() {
+	// TODO Auto-generated method stub
+	this.getSceneForPath("/sc/PlasmaScene").registerCallbackPreset(this.getSequencer().getStream("beat"), "beat_8", "warp");
+	this.getSceneForPath("/sc/TextFlash")
+		.registerCallbackPreset(this.getSequencer().getStream("beat"),"beat_8", "rotate")
+		.registerCallbackPreset(this.getSequencer().getStream("beat"),"beat_16","swivel");
 }
 
 }

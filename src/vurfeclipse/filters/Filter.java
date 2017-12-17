@@ -762,6 +762,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		}		
 	}
 	public Parameter getParameter(String name) {
+		if (this.parameters==null) 
+			this.setParameterDefaults();
 		return this.parameters.get(name);
 		//return null;
 	}

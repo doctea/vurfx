@@ -287,11 +287,11 @@ public class VurfEclipse extends PApplet {
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
 	 	
-		 //pr = new MutanteProject(desired_width, desired_height);
+		 pr = new MutanteProject(desired_width, desired_height);
 	 	
 	  	 //pr = Project.bootProject(desired_width,  desired_height, "saves/FeralFestProject2017-12-17-0-49-28.xml");
 	 	
-		 pr = new FeralFestProject(desired_width, desired_height);
+		 //pr = new FeralFestProject(desired_width, desired_height);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
 		 //pr = new PharmacyProject(desired_width, desired_height, gfx_mode);
@@ -358,6 +358,8 @@ public class VurfEclipse extends PApplet {
 		 
 		 //delaySetup();
 		 pr.initialiseScenes();
+		 
+		 pr.initialiseStreams();
 		 
 		 ///frame.setLocation(500, 0);
 		 

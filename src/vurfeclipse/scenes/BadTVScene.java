@@ -12,6 +12,7 @@ import vurfeclipse.filters.PhaseRGBFilter;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.sequence.Sequence;
+import vurfeclipse.streams.FormulaCallback;
 import vurfeclipse.streams.ParameterCallback;
 import vurfeclipse.user.scenes.BlenderFX1;
 
@@ -32,7 +33,11 @@ public class BadTVScene extends Scene {
 		super.setupCallbackPresets();
 		final Scene self = this;
 		//println("adding callback 'spin'");
-		this.callbacks.put("warp", new TimeLink(self));
+		//this.callbacks.put("warp", new TimeLink(self));
+		this.callbacks.put("warp", new FormulaCallback()
+				.setExpression("(input%(100*12.0*pi)) * 10")
+				.setTargetPath(this.getFilter("BadTV").getParameter("iTime").getPath())
+		);
 	}
 
 	public boolean setupFilters () {
@@ -56,7 +61,7 @@ public class BadTVScene extends Scene {
 		sequences.put("preset 3", new RGBFilterSequence3(this, 4000));*/
 	}
 
-	public class TimeLink extends ParameterCallback {
+	/*public class TimeLink extends ParameterCallback {
 		private final Scene self;
 
 		public TimeLink(Scene self) {
@@ -76,7 +81,8 @@ public class BadTVScene extends Scene {
 						);
 			}
 		}
-	}
+	}*/
+
 
 	public class BadTVFilter extends ShaderFilter {
 		public BadTVFilter() {
