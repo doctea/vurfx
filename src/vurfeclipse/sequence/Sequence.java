@@ -235,10 +235,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	boolean outputDebug = true;
 	private Object[] palette;
 	private float current_pc;
-	/////////// Event stuff
-	HashMap<String, Stream> streams = new HashMap<String, Stream>(); // Stream
-	//public abstract boolean initialise();
-	boolean enableStreams = true;
+
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("Q " + (text.contains((this.toString()))? text : this+": "+text));
 	}

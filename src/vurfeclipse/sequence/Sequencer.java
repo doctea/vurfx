@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import controlP5.Bang;
 import controlP5.CallbackEvent;
@@ -52,11 +53,12 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 
 	private boolean enableSequencer = true;
 
-	private boolean enableStreams = true;
-
+	/////////// Event stuff
+	//public abstract boolean initialise();
+	boolean enableStreams = true;
+	
 	private HashMap<String,Stream> streams = new HashMap<String,Stream>();
 	
-
 	public void addStream(String streamName, Stream st) {
 		//this.streams.put(streamName, st);
 		this.streams.put(streamName, st);
@@ -218,6 +220,9 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		//params.put("/seq/changeTo", this.getCurrentSequenceName());
 		params.put("/seq/timeScale", this.getTimeScale());
+		
+		params.put("/seq/stream_setup",  this.collectStreamParameters());
+				
 		return params;
 	}
 
@@ -251,4 +256,14 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		return true;
 	}
 
+
+	private HashMap<String,HashMap<String,Object>> collectStreamParameters() {
+		HashMap<String,HashMap<String,Object>> params = new HashMap<String,HashMap<String,Object>>();
+		for (Entry<String, Stream> s : this.streams.entrySet()) {
+			params.put(s.getKey(), s.getValue().collectParameters());
+		}
+		return params;
+	}
+
+	
 }
