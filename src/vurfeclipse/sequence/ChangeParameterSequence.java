@@ -27,7 +27,7 @@ public class ChangeParameterSequence extends Sequence {
 		HashMap<String,Object> params = super.collectParameters();
 		params.put("filterPath",  filterPath);
 		params.put("parameterName", parameterName);
-		params.put("value", "value");
+		params.put("value", this.value);
 		return params;
 	}
 	
