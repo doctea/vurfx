@@ -19,7 +19,6 @@ import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
-import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequence.*;
 import vurfeclipse.ui.ControlFrame;
 import controlP5.Bang;
@@ -142,10 +141,6 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		
 		return getActiveSequence()!=null;
 	}
-
-
-
-
 
 	public Sequence getActiveSequence () {
 		return sequences.get(activeSequenceName);
@@ -472,9 +467,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		if (newCursor<=this.lstSequences.getItems().size()) 
 			this.lstSequences.getItem(newCursor).put("state", true);
-		if (!getCurrentSequenceName().equals("")) {
+		
+		if (!getCurrentSequenceName().equals("")) 
 			this.txtCurrentSequenceName.setValue(this.getCurrentSequenceName());
-		}
+		
 	}
 
 	private void updateGuiProgress(Sequence activeSequence) {
@@ -753,6 +749,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     } else if (key=='F') {
     	//loadSequence(host.getApp().select.selectInput("Load a sequence", activeSequenceName));
     	loadSequence("test.xml");*/
+    } else if (key=='d') {
+		this.preserveCurrentSceneParameters();
     } else if (super.sendKeyPressed(key)) {
     } else {
     	return false;
