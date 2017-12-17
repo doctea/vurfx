@@ -32,21 +32,7 @@ public class BadTVScene extends Scene {
 		super.setupCallbackPresets();
 		final Scene self = this;
 		//println("adding callback 'spin'");
-		this.callbacks.put("warp", new ParameterCallback() {
-			@Override
-			public void call(Object value) {
-				if (value instanceof Integer) {
-					//os2.getFilter("BadTV").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
-					Float limit = (float) (100 * 12.0*Math.PI);
-					Integer adjusted = ((Integer)value%(int)(float)limit);
-
-					self.getFilter("BadTV").changeParameterValue("iTime",
-							//value
-							(float) (Integer)value*10//adjusted
-							);
-				}
-			}
-		});
+		this.callbacks.put("warp", new TimeLink(self));
 	}
 
 	public boolean setupFilters () {
@@ -68,6 +54,28 @@ public class BadTVScene extends Scene {
 		sequences.put("preset 1", new BadTVSequence1(this, 2000));
 		/*sequences.put("preset 2", new RGBFilterSequence2(this, 3000));
 		sequences.put("preset 3", new RGBFilterSequence3(this, 4000));*/
+	}
+
+	public class TimeLink extends ParameterCallback {
+		private final Scene self;
+
+		public TimeLink(Scene self) {
+			this.self = self;
+		}
+
+		@Override
+		public void call(Object value) {
+			if (value instanceof Integer) {
+				//os2.getFilter("BadTV").changeParameterValue("u_time_2", (Integer)((Integer)value%(int)(Math.PI*12)));
+				Float limit = (float) (100 * 12.0*Math.PI);
+				Integer adjusted = ((Integer)value%(int)(float)limit);
+
+				self.getFilter("BadTV").changeParameterValue("iTime",
+						//value
+						(float) (Integer)value*10//adjusted
+						);
+			}
+		}
 	}
 
 	public class BadTVFilter extends ShaderFilter {

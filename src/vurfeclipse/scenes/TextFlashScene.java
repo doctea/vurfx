@@ -19,176 +19,103 @@ import vurfeclipse.sequence.ShowSceneSequence;
 import vurfeclipse.streams.ParameterCallback;
 
 public class TextFlashScene extends Scene {
-  //int filterCount = 2;
+	//int filterCount = 2;
 
-  //Filter[] filters;// = new Filter[filterCount];
+	//Filter[] filters;// = new Filter[filterCount];
 
-  String values[];
+	String values[];
 
-  HashMap<String,PFont> fonts = new HashMap<String,PFont>();
+	HashMap<String,PFont> fonts = new HashMap<String,PFont>();
 
-  public TextFlashScene setTextValues(String[] values) {
-    this.values = values;
-    return this;
-  }
-  public TextFlashScene setFonts(String[] fonts) {
-	  for (int i = 0 ; i < fonts.length ; i++) {
-		  this.fonts.put(fonts[i], ((VurfEclipse)APP.getApp()).loadFont(fonts[i]));
-	  }
-	  return this;
-  }
-  public void changeFont(int v) {
-	  if (fonts.size()>0) {
-		  v = v % fonts.size();
-		  Object[] pf = fonts.values().toArray();
-		  ((TextDrawer)getObjectForPath("TextDrawer")).setFont((PFont)pf[v]);
-	  }
-  }
+	public TextFlashScene setTextValues(String[] values) {
+		this.values = values;
+		return this;
+	}
+	public TextFlashScene setFonts(String[] fonts) {
+		for (int i = 0 ; i < fonts.length ; i++) {
+			this.fonts.put(fonts[i], ((VurfEclipse)APP.getApp()).loadFont(fonts[i]));
+		}
+		return this;
+	}
+	public void changeFont(int v) {
+		if (fonts.size()>0) {
+			v = v % fonts.size();
+			Object[] pf = fonts.values().toArray();
+			((TextDrawer)getObjectForPath("TextDrawer")).setFont((PFont)pf[v]);
+		}
+	}
 
-  public void randomWord() {
-      String letter = values[(int)((VurfEclipse)APP.getApp()).random(0,values.length)];
-      //println("got word '" + letter + "'");
-      //((TextDrawer)filters[0]).setText(values[(int)random(0,values.length)]);
-      //((TextDrawer)self.filters[0]).changeParameterValue("text",values[(int)APP.random(0,values.length)]);
-      changeFilterParameterValue(0,"text",letter);
-      //ftd.setRotation(i%360);//(int)random(i));
-      //fbd.setMute(false);
-  }
-  public void setWordByNorm(double norm) {
-	  int index = (int)(values.length * norm);
-	  if (index>=values.length) index = values.length-1;
-	  if (index<0) index = 0;
-	  changeFilterParameterValue(0,"text",values[index]);
-  }
-
-
-
-  public void setupCallbackPresets () {
-    super.setupCallbackPresets();
-    final Scene self = this;
-    //println("adding callback 'spin'");
-
-    this.callbacks.put("cycle", new ParameterCallback() {
-    	int count = 0;
-
-    	int totalLength;
-    	String[] chars;
-    	HashMap<Integer,String> wordBreaks = new HashMap<Integer,String>();
-
-    	public ParameterCallback setup () {
-    		int tot = 0;
-    		for (int i = 0 ; i < values.length ; i++) {
-    			wordBreaks.put(tot,values[i]);
-    			println("adding boundary at " + tot + " for " + values[i]);
-    			tot += values[i].length();
-    		}
-    		totalLength = tot;
-
-    		chars = new String[totalLength];
-    		int pointer = 0;
-    		for (int i = 0 ; i < values.length ; i++) {
-    			for (int x = 0 ; x < values[i].length() ; x++) {
-    				chars[pointer++] = new Character(values[i].charAt(x)).toString();
-    				println("added " + chars[pointer-1]);
-    			}
-    		}
-
-    		return this;
-    	}
-
-    	public void call(Object value) {
-    		int step = ((Integer)value)%totalLength;
-    		changeFilterParameterValue(0,"text",chars[step]);
-    		if (step==0) { //changeFont(count++);
-    		 //if (wordBreaks.containsKey(new Integer(step))) {
-    			println("found boundary at " + step);
-    			changeFont(count++);
-    		}
-    	}
-    }.setup());
-
-    this.callbacks.put("random", new ParameterCallback() {
-       //String[] values = getParameterValue("values");
-       public void call(Object value) {
-        int i = Integer.parseInt(value.toString());
-        randomWord();
-       }
-    });
-
-    this.callbacks.put("swivel", new ParameterCallback() {
-       //String[] values = getParameterValue("values");
-       public void call(Object value) {
-        int i = Integer.parseInt(value.toString());
-        //((TextDrawer)filters[0]).setText(values[(int)random(0,values.length)]);
-        changeFilterParameterValue(0,"zrotation",(i%360)-180); //values[(int)random(0,values.length)]);
-        //ftd.setRotation(i%360);//(int)random(i));
-        //fbd.setMute(false);
-       }
-    });
-
-    this.callbacks.put("rotate", new ParameterCallback() {
-       //String[] values = getParameterValue("values");
-       public void call(Object value) {
-        int i = Integer.parseInt(value.toString());
-        //((TextDrawer)filters[0]).setText(values[(int)random(0,values.length)]);
-        changeFilterParameterValue(0,"rotation",(i%360)); //values[(int)random(0,values.length)]);
-        //ftd.setRotation(i%360);//(int)random(i));
-        //fbd.setMute(false);
-       }
-    });
+	public void randomWord() {
+		String letter = values[(int)((VurfEclipse)APP.getApp()).random(0,values.length)];
+		//println("got word '" + letter + "'");
+		//((TextDrawer)filters[0]).setText(values[(int)random(0,values.length)]);
+		//((TextDrawer)self.filters[0]).changeParameterValue("text",values[(int)APP.random(0,values.length)]);
+		changeFilterParameterValue(0,"text",letter);
+		//ftd.setRotation(i%360);//(int)random(i));
+		//fbd.setMute(false);
+	}
+	public void setWordByNorm(double norm) {
+		int index = (int)(values.length * norm);
+		if (index>=values.length) index = values.length-1;
+		if (index<0) index = 0;
+		changeFilterParameterValue(0,"text",values[index]);
+	}
 
 
-    this.callbacks.put("toggle", new ParameterCallback() {
-      public void call(Object value) {
-        int i = Integer.parseInt(value.toString());
-        if (i%2==0) {
-          //this.toggleMute();
-          //changeFilterParameterValue(1
-          if (filters[1]!=null) self.filters[1].setMuted(false);
-        } else {
-          if (filters[1]!=null) self.filters[1].setMuted(true);
-        }
-      }
-    });
-  }
 
-  public TextFlashScene(Project host, int w, int h, String[] values) {
-    super(host,w,h);
-    this.filterCount = 4;
-    this.values = values;
-  }
+	public void setupCallbackPresets () {
+		super.setupCallbackPresets();
+		final Scene self = this;
+		//println("adding callback 'spin'");
 
-  public TextFlashScene(Project host, int w, int h) {
-    this(host, w, h, new String[] {
-          ";)", ":P", "MDMA", "LSD-25", "DMT", "2c-b", "2c-c", "2c-d", "4homet", "delysid", "MDA", "303", "909", "808",
+		this.callbacks.put("cycle", new TextCycleCallback().setup());
 
-          "take trips", "magic dust", "Socio Suki",
+		this.callbacks.put("random", new RandomWordCallback());
 
-          "nice", "dANCe", "rob0t", "ZX", "(:", "#!", "???", "!!", "!!!", "!", "dont panic",
+		this.callbacks.put("swivel", new SwivelCallback());
 
-          "(c)", "doctea", "Crack Zombie", "vurf", "gwrx", "greetz",
-          "::vurf::", "V:U:R:F", "SLiPs", "MMXIV", "MCMLXXX", "Sandoz", "cola", "acid", "acidtest", "electric", "kool-aid",
-          "RAVE", "rave", "XtC", "science", "drop acid", "make tea", "art?", "peace", "free", "<3 echo", "<3", "mwilk"
-        }
-    );
-  }
+		this.callbacks.put("rotate", new RotateCallback());
 
-  public boolean setupFilters () {
-    //super.initialise();
-    filters = new Filter[filterCount];
-    //println("DemoScene initialised " + this + " - filtercount is " + filterCount);
-    int i = 0;
+		this.callbacks.put("toggle", new ToggleCallback(self));
+	}
 
-    filters[i] = new TextDrawer(this).setFilterName("TextDrawer").setCanvases(getCanvasMapping("temp"),getCanvasMapping("out"));//setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);
-    final TextDrawer ftd = (TextDrawer) filters[i];
+	public TextFlashScene(Project host, int w, int h, String[] values) {
+		super(host,w,h);
+		this.filterCount = 4;
+		this.values = values;
+	}
 
-    filters[++i] = new BlendDrawer(this).setFilterName("BlendDrawer").setCanvases(getCanvasMapping("out"),getCanvasMapping("temp")); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
-    final BlendDrawer fbd = (BlendDrawer) filters[i];
-    ((BlendDrawer)filters[i]).setBlendMode(9);
-    
-    //filters[++i] = new ShaderFilter(this,"negateFrag.glsl").setCanvases(getCanvasMapping("out"), getCanvasMapping("temp"));//.addParameter("Opacity", new Float(0.5f), 0f, 1f);
+	public TextFlashScene(Project host, int w, int h) {
+		this(host, w, h, new String[] {
+				";)", ":P", "MDMA", "LSD-25", "DMT", "2c-b", "2c-c", "2c-d", "4homet", "delysid", "MDA", "303", "909", "808",
 
-    /*host.getStream("beat").registerEventListener("beat_8",
+				"take trips", "magic dust", "Socio Suki",
+
+				"nice", "dANCe", "rob0t", "ZX", "(:", "#!", "???", "!!", "!!!", "!", "dont panic",
+
+				"(c)", "doctea", "Crack Zombie", "vurf", "gwrx", "greetz",
+				"::vurf::", "V:U:R:F", "SLiPs", "MMXIV", "MCMLXXX", "Sandoz", "cola", "acid", "acidtest", "electric", "kool-aid",
+				"RAVE", "rave", "XtC", "science", "drop acid", "make tea", "art?", "peace", "free", "<3 echo", "<3", "mwilk"
+		}
+				);
+	}
+
+	public boolean setupFilters () {
+		//super.initialise();
+		filters = new Filter[filterCount];
+		//println("DemoScene initialised " + this + " - filtercount is " + filterCount);
+		int i = 0;
+
+		filters[i] = new TextDrawer(this).setFilterName("TextDrawer").setCanvases(getCanvasMapping("temp"),getCanvasMapping("out"));//setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);
+		final TextDrawer ftd = (TextDrawer) filters[i];
+
+		filters[++i] = new BlendDrawer(this).setFilterName("BlendDrawer").setCanvases(getCanvasMapping("out"),getCanvasMapping("temp")); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
+		final BlendDrawer fbd = (BlendDrawer) filters[i];
+		((BlendDrawer)filters[i]).setBlendMode(9);
+
+		//filters[++i] = new ShaderFilter(this,"negateFrag.glsl").setCanvases(getCanvasMapping("out"), getCanvasMapping("temp"));//.addParameter("Opacity", new Float(0.5f), 0f, 1f);
+
+		/*host.getStream("beat").registerEventListener("beat_8",
       new ParameterCallback () {
         public void call(Object value) {
           //ftd.setText(value.toString());
@@ -202,28 +129,115 @@ public class TextFlashScene extends Scene {
 
 
 
-    highestFilter = i;
-    return true;
-  }
+		highestFilter = i;
+		return true;
+	}
 
 
 
 
-  	public void setupSequences() {
+	public void setupSequences() {
 		sequences.put("preset 1", new TextFlashSequence1(this, 0));
 		sequences.put("on", 	  new ShowSceneSequence(this,1000));
-  	}
+	}
 
 
-  	public TextFlashScene addSequencesForWords(String[] words, int length) {
-  		for (int i = 0 ; i < words.length ; i++) {
-  			sequences.put("word_" /* + i + "_" */ + words[i],
-  					this.makeChainSequenceFrom("preset 1",
-  							new ChangeParameterSequence(this, getPath()+"/fl/TextDrawer", "text", words[i], length)
-  					));
-  		}
-  		return this;
-  	}
+	public TextFlashScene addSequencesForWords(String[] words, int length) {
+		for (int i = 0 ; i < words.length ; i++) {
+			sequences.put("word_" /* + i + "_" */ + words[i],
+					this.makeChainSequenceFrom("preset 1",
+							new ChangeParameterSequence(this, getPath()+"/fl/TextDrawer", "text", words[i], length)
+							));
+		}
+		return this;
+	}
+
+	public class ToggleCallback extends ParameterCallback {
+		private final Scene self;
+
+		public ToggleCallback(Scene self) {
+			this.self = self;
+		}
+
+		public void call(Object value) {
+			int i = Integer.parseInt(value.toString());
+			if (i%2==0) {
+				//this.toggleMute();
+				//changeFilterParameterValue(1
+				if (filters[1]!=null) self.filters[1].setMuted(false);
+			} else {
+				if (filters[1]!=null) self.filters[1].setMuted(true);
+			}
+		}
+	}
+
+	public class RotateCallback extends ParameterCallback {
+		//String[] values = getParameterValue("values");
+		public void call(Object value) {
+			int i = Integer.parseInt(value.toString());
+			//((TextDrawer)filters[0]).setText(values[(int)random(0,values.length)]);
+			changeFilterParameterValue(0,"rotation",(i%360)); //values[(int)random(0,values.length)]);
+			//ftd.setRotation(i%360);//(int)random(i));
+			//fbd.setMute(false);
+		}
+	}
+
+	public class SwivelCallback extends ParameterCallback {
+		//String[] values = getParameterValue("values");
+		public void call(Object value) {
+			int i = Integer.parseInt(value.toString());
+			//((TextDrawer)filters[0]).setText(values[(int)random(0,values.length)]);
+			changeFilterParameterValue(0,"zrotation",(i%360)-180); //values[(int)random(0,values.length)]);
+			//ftd.setRotation(i%360);//(int)random(i));
+			//fbd.setMute(false);
+		}
+	}
+
+	public class RandomWordCallback extends ParameterCallback {
+		//String[] values = getParameterValue("values");
+		public void call(Object value) {
+			int i = Integer.parseInt(value.toString());
+			randomWord();
+		}
+	}
+
+	public class TextCycleCallback extends ParameterCallback {
+		int count = 0;
+		int totalLength;
+		String[] chars;
+		HashMap<Integer,String> wordBreaks = new HashMap<Integer,String>();
+
+		public ParameterCallback setup () {
+			int tot = 0;
+			for (int i = 0 ; i < values.length ; i++) {
+				wordBreaks.put(tot,values[i]);
+				println("adding boundary at " + tot + " for " + values[i]);
+				tot += values[i].length();
+			}
+			totalLength = tot;
+
+			chars = new String[totalLength];
+			int pointer = 0;
+			for (int i = 0 ; i < values.length ; i++) {
+				for (int x = 0 ; x < values[i].length() ; x++) {
+					chars[pointer++] = new Character(values[i].charAt(x)).toString();
+					println("added " + chars[pointer-1]);
+				}
+			}
+
+			return this;
+		}
+
+		public void call(Object value) {
+			int step = ((Integer)value)%totalLength;
+			changeFilterParameterValue(0,"text",chars[step]);
+			if (step==0) { //changeFont(count++);
+				//if (wordBreaks.containsKey(new Integer(step))) {
+				println("found boundary at " + step);
+				changeFont(count++);
+			}
+		}
+	}
 
 	public class TextFlashSequence1 extends Sequence {
 		public TextFlashSequence1(TextFlashScene fx, int i) {
@@ -242,9 +256,9 @@ public class TextFlashScene extends Scene {
 		}
 		@Override public void onStart() {
 			((TextDrawer)(host.host.getSceneForPath(getPath()).getFilter("BlendDrawer"))).setText("FeralFest");
-	   		if (random(0f,1.0f)>=0.5f)
-	   			((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
-    		//((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setMuted((random(0f,1.0f)>=0.25f));
+			if (random(0f,1.0f)>=0.5f)
+				((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
+			//((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setMuted((random(0f,1.0f)>=0.25f));
 		}
 		@Override public void onStop() {	}
 	}

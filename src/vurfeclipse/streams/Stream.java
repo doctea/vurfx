@@ -164,6 +164,13 @@ public class Stream implements Serializable {
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("class",  this.getClass().getName());
 		params.put("name", this.streamName);
+		
+		HashMap<String, Object> callbacks = new HashMap<String, Object> ();
+		for (Entry<String,List<ParameterCallback>> l : this.listeners.entrySet()) {
+			callbacks.put(l.getKey(), l.getValue());
+		}
+		params.put("callbacks", callbacks);
+		
 		return params;
 	}
 

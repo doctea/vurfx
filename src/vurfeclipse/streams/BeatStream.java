@@ -1,6 +1,7 @@
 package vurfeclipse.streams;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 import processing.core.PApplet;
 import vurfeclipse.APP;
@@ -43,7 +44,6 @@ public class BeatStream extends Stream implements Serializable {
     twoBeatLength = beatLength*2;*/
 
 	}
-
 	public BeatStream(String streamName, double d, int millis) {
 		// TODO Auto-generated constructor stub
 		this(streamName,(float)d,millis);
@@ -150,4 +150,14 @@ public class BeatStream extends Stream implements Serializable {
 
 	} 
 
+
+	
+	@Override 
+	public HashMap<String,Object> collectParameters() {
+		HashMap<String,Object> params = super.collectParameters();
+		params.put("tempo", this.bpm);
+		return params;
+	}
+
+	
 }
