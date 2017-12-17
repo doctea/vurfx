@@ -31,7 +31,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	int iteration;
 
 	transient protected ArrayList<Mutable> mutables;// = new ArrayList<Mutable>();
-	private HashMap<String, HashMap<String,Object>> scene_parameters;
+	protected HashMap<String, HashMap<String,Object>> scene_parameters;
 	private ArrayList<String> mutableListToLoad;
 
 	static public Sequence makeSequence(String classname, Scene host) {
@@ -208,7 +208,6 @@ abstract public class Sequence implements Serializable, Mutable {
 	}
 	@Override
 	public void setMuted(boolean muted) {
-		// TODO Auto-generated method stub
 		Iterator<Mutable> it = getMutables().iterator(); //this.mutables.iterator();
 		while(it.hasNext()) {
 			Mutable n = it.next();
@@ -248,7 +247,7 @@ abstract public class Sequence implements Serializable, Mutable {
 
 	public void start() {
 		this.rng.setSeed(seed);
-		onStart();
+
 		setMuted(false);
 		iteration = 0;
 		startTimeMillis = APP.getApp().millis();
@@ -263,7 +262,9 @@ abstract public class Sequence implements Serializable, Mutable {
 					s.loadParameters(e.getValue());
 				}
 			}		
-		}		
+		} else {
+			onStart();
+		}
 	}
 
 	public void stop() {

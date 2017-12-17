@@ -33,9 +33,11 @@ public class ChainSequence extends Sequence {
 	
 	@Override public void start() {
 		super.start();
-		Iterator<Sequence> it = chain.iterator();
-		while(it.hasNext()) {
-			it.next().start();
+		if (this.scene_parameters==null) {
+			Iterator<Sequence> it = chain.iterator();
+			while(it.hasNext()) {
+				it.next().start();
+			}
 		}
 	}
 	@Override public void stop() {
@@ -105,7 +107,7 @@ public class ChainSequence extends Sequence {
 		HashMap<String,Object> params = super.collectParameters();
 		ArrayList<HashMap<String,Object>> chains = new ArrayList<HashMap<String,Object>>();
 		for (Sequence cs : chain) {
-			HashMap<String,HashMap<String,Object>> temp = cs.getSceneParameters();
+			HashMap<String,HashMap<String, Object>> temp = cs.getSceneParameters();
 			cs.clearSceneParameters();	// remove any scene parameters that are set on the object before saving, since we save our own copy with the chain
 			HashMap<String, Object> full_params = cs.collectParameters();
 			if (full_params==null) {
