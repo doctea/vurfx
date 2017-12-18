@@ -128,7 +128,7 @@ public class BlobDrawer extends SpiralDrawer {
 	@Override
 	public HashMap<String,Object> collectFilterSetup() {	// for saving snapshots, save setup of filter
 		HashMap<String,Object> output = super.collectFilterSetup();
-		output.put("canvas_pix0", sc.getCanvas("pix0"));
+		output.put("canvas_pix0", "pix0");
 		return output;
 	}
 
