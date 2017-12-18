@@ -13,6 +13,7 @@ import vurfeclipse.scenes.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -43,8 +44,47 @@ public abstract class Project implements Serializable {
 		
 		return pr;
 	}
-	
-	
+
+	public static Project chooseProject(int desired_width, int desired_height, Object what) {
+		// TODO Auto-generated method stub
+		if (what instanceof Class) {
+			return Project.createProject(desired_width, desired_height, (Class)what);
+		} else if (what instanceof String && ((String)what).endsWith(".class")) {
+			// instantiate Project class from what
+			return Project.createProject(desired_width,desired_height, (String)what);
+		} else if (what instanceof String) {
+			// assume filename
+			return Project.bootProject(desired_width, desired_height, (String) what);
+		}
+		return null;
+	}
+
+	private static Project createProject(int desired_width, int desired_height, String classname) {
+		try {
+			return createProject(desired_width,desired_height,Class.forName(classname));
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static Project createProject(int desired_width, int desired_height, Class clazz) {
+		try {
+			//clazz = Class.forName(classname);
+			//System.out.println (clazz.getConstructors());
+			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+			System.err.println("about to try and get constructor for Project '" + clazz + "'");
+			Constructor<?> ctor = clazz.getConstructor(Integer.TYPE,Integer.TYPE);
+			return (Project) ctor.newInstance(desired_width, desired_height); //(Scene)null, (int)0);
+			//Object seq = ctor.newInstance(); //(Scene)null, 0);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public Project(int w, int h) {
 		this.w = w;
 		this.h = h;
@@ -891,6 +931,7 @@ public abstract class Project implements Serializable {
 		this.guids.put(simpleName, 1 + this.guids.get(simpleName));
 		return this.guids.get(simpleName);
 	}
+
 
 
 }
