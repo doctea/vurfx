@@ -1,6 +1,7 @@
 package vurfeclipse.streams;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 import com.udojava.evalex.*;
 
@@ -30,6 +31,19 @@ public class FormulaCallback extends ParameterCallback {
 		this.targetPath = targetPath;
 		return this;
 	}
+	
+	@Override
+	public HashMap<String,Object> collectParameters () {
+		HashMap<String,Object> params = super.collectParameters();
+		params.put("expression",  this.expression);
+		params.put("targetPath", this.targetPath);
+		return params;
+	}
+	
+	public void readParameters(HashMap<String, Object> input) {
+		this.setTargetPath((String) input.get("targetPath"));
+		this.setExpression((String) input.get("expression"));
+	}
 
 	@Override
 	public void call(Object value) {
@@ -50,8 +64,11 @@ public class FormulaCallback extends ParameterCallback {
 		}
 	}
 	
+	@Override
 	public String toString() {
 		return this.getClass().getSimpleName()+ " { expression => '"+expression+"', targetPath => '"+targetPath+"' } ";
 	}
+	
+	
 	
 }

@@ -7,18 +7,18 @@ import processing.core.PApplet;
 import vurfeclipse.APP;
 
 public class BeatStream extends Stream implements Serializable { 
-	float bpm = 125.0f;
+	private float bpm = 125.0f;
 
-	int tolerance = 50;
+	private int tolerance = 50;
 
 	int startTime;
 
 
-	float stepDivisions[] = {
+	private float stepDivisions[] = {
 			/*128.0, 64.0,*/32.0f, 16.0f, 8.0f, 4.0f, 3.0f, 2.0f, 1.0f,  //MAKE SURE TO CHANGE stepMarker value below if edit this line!!
 			0.5f, 0.25f, 0.125f, 0.0625f, 0.03125f, 0.015625f
 	};
-	int stepMarker = 7; // the number of >=1 values in above array
+	private int stepMarker = 7; // the number of >=1 values in above array
 	int lastDealtStepTime[] = new int[stepDivisions.length]; //stepCount];
 	float stepLengths[] = new float[stepDivisions.length]; //stepCount];
 
@@ -48,6 +48,9 @@ public class BeatStream extends Stream implements Serializable {
 		// TODO Auto-generated constructor stub
 		this(streamName,(float)d,millis);
 	}
+	public BeatStream() {
+		this.startTime = APP.getApp().millis();		
+	}
 
 
 	int toggleMode = 1;
@@ -62,6 +65,7 @@ public class BeatStream extends Stream implements Serializable {
 	}
 
 	public void setBPM(float bpm) {
+		this.bpm = bpm;
 		this.setupStepLengths(bpm);
 		stepCounter = new int[stepDivisions.length];
 		lastDealtStepTime = new int[stepDivisions.length];
@@ -98,7 +102,10 @@ public class BeatStream extends Stream implements Serializable {
       lastDealtBeatTime = time;
       addEvent("beat", "BEAT AT " + time);
     }    */
-		//System.out.println("BeatStream speed is " + speed);
+		if (debug) {
+			System.out.println("BeatStream speed is " + speed);
+			System.out.println("BeatStream time is " + time);
+		}
 
 		// detect if any of the step divisions should trigger
 		//System.out.println("FRAME--");
@@ -157,6 +164,18 @@ public class BeatStream extends Stream implements Serializable {
 		HashMap<String,Object> params = super.collectParameters();
 		params.put("tempo", this.bpm);
 		return params;
+	}
+	
+	@Override
+	public void readParameters(HashMap<String, Object> input) {
+		super.readParameters(input);
+		this.setBPM((float) input.get("tempo"));
+		
+		/*HashMap<String, HashMap<String,Object>> callbacks = (HashMap<String, HashMap<String,Object>>) input.get("callbacks");
+		for (Entry<String, HashMap<String, Object>> i : callbacks.entrySet()) {
+			this.registerEventListener(paramName, ParameterCallback.createParameterCallback(i.getValue().get("class")));
+		}*/
+		//callbacks = input.
 	}
 
 	

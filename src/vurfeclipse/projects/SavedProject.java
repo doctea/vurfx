@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.SequenceSequencer;
+import vurfeclipse.Targetable;
 
 public class SavedProject extends Project {
 
@@ -33,7 +34,14 @@ public class SavedProject extends Project {
 
 	@Override
 	public boolean setupStreams() {
-		// TODO setup streams from save file!
+		getInput();
+		HashMap<String, HashMap<String, Object>> stream_input = (HashMap<String, HashMap<String,Object>>) 
+				inputAll
+				.get("/seq")
+				.get("/seq/stream_setup");
+		
+		this.sequencer.target("/seq/stream_setup", stream_input);
+		
 		return false;
 	}
 
@@ -67,7 +75,7 @@ public class SavedProject extends Project {
 	
 	@Override
 	public void setupBufferMappings() {
-		this.mappings = (HashMap<String, Object>) input.get("/project_setup/mappings");
+		this.mappings = (HashMap<String, Integer>) input.get("/project_setup/mappings");
 	}
 
 	public Project setSnapshotFile(String filename) {
@@ -119,6 +127,13 @@ public class SavedProject extends Project {
 
 		  return true;
 	  }
+
+
+	@Override
+	public void initialiseStreams() {
+		//HashMap<String, HashMap<String, Object>> stream_input = (HashMap<String, HashMap<String,Object>>) inputAll.get("/seq").get("/seq/stream_setup");
+		
+	}
 
 	
 }

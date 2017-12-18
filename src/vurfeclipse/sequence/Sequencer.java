@@ -160,6 +160,11 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 				this.toggleLock((boolean)payload.equals("true"));
 			}
 			return "Lock is " + this.toggleLock();
+		} else if (spl[2].equals("stream_setup")) {
+			//this.streams = (HashMap<String, Stream>) payload;
+			for (Entry<String,Object> i : ((HashMap<String,Object>)payload).entrySet()) {
+				this.addStream(i.getKey(), Stream.makeStream(i.getValue()));
+			}
 		}
 		return null;
 	}
@@ -221,7 +226,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		//params.put("/seq/changeTo", this.getCurrentSequenceName());
 		params.put("/seq/timeScale", this.getTimeScale());
 		
-		params.put("/seq/stream_setup",  this.collectStreamParameters());
+		params.put("/seq/stream_setup", this.collectStreamParameters());
 				
 		return params;
 	}

@@ -85,9 +85,9 @@ public abstract class Project implements Serializable {
       setupBufferMappings();
     buffers[(Integer)mappings.get(name)] = canvas.surf;
   } */
-	HashMap<String, Object> mappings;
+	HashMap<String, Integer> mappings;
 	public void setupBufferMappings() {
-		mappings = new HashMap<String, Object>();
+		mappings = new HashMap<String, Integer>();
 		mappings.put(getPath()+"out", BUF_OUT);
 		mappings.put(getPath()+"inp0", BUF_INP0);
 		mappings.put(getPath()+"inp1", BUF_INP1);
@@ -95,8 +95,8 @@ public abstract class Project implements Serializable {
 		mappings.put(getPath()+"temp1", BUF_TEMP1);
 		mappings.put(getPath()+"temp2", BUF_TEMP2);
 	}
-	public HashMap<String, Object> getBufferMappings() {
-		return (HashMap<String, Object>)this.mappings;
+	public HashMap<String, Integer> getBufferMappings() {
+		return (HashMap<String, Integer>)this.mappings;
 	}
 
 	public Canvas createCanvas(String path, String canvasName, int width, int height) {
@@ -511,9 +511,6 @@ public abstract class Project implements Serializable {
 	private LinkedHashMap<String, Object> collectProjectSetup() {
 		LinkedHashMap<String, Object> output = new LinkedHashMap<String,Object>();
 		// save buffers/canvases
-		/*for (Entry<String, Integer> bm : this.getBufferMappings().entrySet()) {
-			
-		}*/
 		output.put(getPath()+"project_setup/mappings", this.getBufferMappings());
 		// save scene configuration
 			// save filter canvas mappings		
@@ -847,6 +844,7 @@ public abstract class Project implements Serializable {
 
 	boolean outputDebug = true;
 	private boolean initialised;
+	private HashMap<String,Integer> guids = new HashMap<String,Integer>();
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
 	}
@@ -885,6 +883,14 @@ public abstract class Project implements Serializable {
 
 
 	abstract public void initialiseStreams();
+
+
+	public Integer getGUID(String simpleName) {
+		// TODO Auto-generated method stub
+		if (!this.guids.containsKey(simpleName)) this.guids.put(simpleName, 0);
+		this.guids.put(simpleName, 1 + this.guids.get(simpleName));
+		return this.guids.get(simpleName);
+	}
 
 
 }

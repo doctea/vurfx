@@ -3,6 +3,7 @@ package vurfeclipse.streams;
 //import java.util.LinkedList;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.*;
@@ -88,6 +89,7 @@ public class Stream implements Serializable {
 	}
 
 	synchronized public void deliverEvents () {
+		boolean debug = false;
 		Iterator<Entry<String, List<ParameterCallback>>> p = listeners.entrySet().iterator();
 
 		if (debug) System.out.println("deliverEvents() in " + this);
@@ -166,15 +168,62 @@ public class Stream implements Serializable {
 		params.put("class",  this.getClass().getName());
 		params.put("name", this.streamName);
 		
-		HashMap<String, Object> callbacks = new HashMap<String, Object> ();
-		for (Entry<String,List<ParameterCallback>> l : this.listeners.entrySet()) {
-			callbacks.put(l.getKey(), l.getValue());
-		}
-		params.put("callbacks", callbacks);
-		
+		params.put("callbacks", this.collectLinkParameters());
+				
 		return params;
 	}
+	
+	public HashMap<String, HashMap<String,Object>> collectLinkParameters() {
+		HashMap<String, HashMap<String, Object>> callbacks = new HashMap<String, HashMap<String,Object>> ();
+		for (Entry<String,List<ParameterCallback>> l : this.listeners.entrySet()) {
+			//callbacks.put(l.getKey(), l.getValue());
+			HashMap<String,Object> links = new HashMap<String,Object> ();
+			int index = 0;
+			for (ParameterCallback pc : l.getValue()) {
+				links.put(l.getKey() + (index++), pc.collectParameters());
+			}
+			callbacks.put(l.getKey(), links);
+		}
+		return callbacks;
+	}
 
+	public void readParameters(HashMap<String, Object> input) {
+		this.streamName = (String) input.get("name");
+		HashMap<String, HashMap<String,Object>> callbacks = (HashMap<String, HashMap<String,Object>>) input.get("callbacks");
+		for (Entry<String, HashMap<String, Object>> i : callbacks.entrySet()) {
+			//this.registerEventListener(paramName, ParameterCallback.createParameterCallback(i.getValue().get("class")));
+			for (Entry<String, Object> p : ((HashMap<String,Object>)i.getValue()).entrySet()) {
+				this.registerEventListener(i.getKey(), ParameterCallback.makeParameterCallback((HashMap<String, Object>) p.getValue()));
+			}
+		}
+		
+		//callbacks = input.
+	}
+	public static Stream makeStream(Object payload) {
+		// TODO Auto-generated method stub		
+		System.out.println ("makeStream() " + payload);
+		HashMap<String,Object> input = (HashMap<String,Object>)payload;
+
+		String classname = (String) input.get("class");
+		try {
+			Class<?> clazz = Class.forName(classname);
+			//System.out.println (clazz.getConstructors());
+			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+			Constructor<?> ctor = clazz.getConstructor(); //Scene.class,Integer.TYPE);
+			Stream stream = (Stream) ctor.newInstance(); //(Scene)null, 0);
+			stream.readParameters(input);
+			return stream;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.err.println("Caught " + e + ": Didn't manage to instantiate " + classname + " might be missing constructor?");
+			e.printStackTrace();
+		}
+		
+		//streamName = (String) input.get("name");
+		//String paramName = (String) input.get("paramName");
+		
+		return null;
+	}
 
 	/*
     while (p.hasNext()) {

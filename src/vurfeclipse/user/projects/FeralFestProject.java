@@ -324,20 +324,20 @@ public class FeralFestProject extends Project {
 
 		this.addSceneInputOutputCanvas(
 				//os,
-				new OutputFX1(this,w,h).setSceneName("OutputShader").setCanvas("pix0", "/pix0").setCanvas("pix1", "/pix1"),
+				new OutputFX1(this,w,h).setSceneName("OutputFX").setCanvas("pix0", "/pix0").setCanvas("pix1", "/pix1"),
 				"/out",
 				"/out"
 				);
 
 		// OUTPUT FILTER 2
 		this.addSceneInputOutputCanvas(
-				new OutputFX2(this,w,h).setSceneName("OutputShader2").setCanvas("pix0", "/pix0").setCanvas("pix1", "/pix1"),
+				new OutputFX2(this,w,h).setSceneName("OutputFX2").setCanvas("pix0", "/pix0").setCanvas("pix1", "/pix1"),
 				"/out",
 				"/out"
 				);
 
 		this.addSceneInputOutputCanvas(
-				new OutputFX3(this,w,h).setSceneName("OutputShader3").setCanvas("pix0", "/pix0"),
+				new OutputFX3(this,w,h).setSceneName("OutputFX3").setCanvas("pix0", "/pix0"),
 				"/out",
 				"/out"
 				).setMuted();
@@ -410,7 +410,7 @@ public class FeralFestProject extends Project {
     switcher.bindSequence("outputModeChange7", opSequence);
     switcher.bindSequence("outputModeChange8", opSequence);*/
 		TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
-				new TunnelScene(this, w, h).setCanvas("temp", "/temp2").setSceneName("vurfeclipse.user.scenes.TunnelScene")
+				new TunnelScene(this, w, h).setCanvas("temp", "/temp2").setSceneName("TunnelScene1")
 				//.addFilter(new BlendDrawer()))
 				, "/out", "/out"
 				);
@@ -427,7 +427,7 @@ public class FeralFestProject extends Project {
         	"tunnel_2_pulse",
 		 */
 		TunnelScene ts2 = (TunnelScene) this.addSceneInputOutputCanvas(
-				new TunnelScene(this, w, h).setCanvas("temp", "/temp3")
+				new TunnelScene(this, w, h).setCanvas("temp", "/temp3").setSceneName("TunnelScene2")
 				//.addFilter(new BlendDrawer()))
 
 				, "/out", "/out"
@@ -459,10 +459,10 @@ public class FeralFestProject extends Project {
     );*/
 		//), "preset 1", 20);
 
-		switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader"), 5000);
-		switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader2"), 5000);
-		switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader"), 5000);
-		switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputShader2"), 5000);
+		switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputFX"), 5000);
+		switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputFX2"), 5000);
+		switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputFX"), 5000);
+		switcher.bindAndPermute("t2:", "tunnel_2_", getSceneForPath("/sc/OutputFX2"), 5000);
 
 		//switcher.bindAndPermute("t2:", "tunnel_2_", "t1:", 5000);
 
@@ -471,10 +471,10 @@ public class FeralFestProject extends Project {
 
 		//switcher.bindAndPermute("t4", "t3_blanker", getSceneForPath("/sc/BlankerScene"), 5000);
 
-		switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader"), 5000);
-		switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputShader2"), 5000);
-		switcher.bindAndPermute("d2:", doubleSequence2, getSceneForPath("/sc/OutputShader"), 5000);
-		switcher.bindAndPermute("d2:", doubleSequence2, getSceneForPath("/sc/OutputShader2"), 5000);
+		switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputFX"), 5000);
+		switcher.bindAndPermute("d1:", doubleSequence, getSceneForPath("/sc/OutputFX2"), 5000);
+		switcher.bindAndPermute("d2:", doubleSequence2, getSceneForPath("/sc/OutputFX"), 5000);
+		switcher.bindAndPermute("d2:", doubleSequence2, getSceneForPath("/sc/OutputFX2"), 5000);
 
 		//switcher.bindAndPermute("t1:", "tunnel_1_", getSceneForPath("/sc/OutputShader3"), 5000);
 		//switcher.bindAndPermute("t3:", "d", getSceneForPath("/sc/OutputShader3"), 5000);
@@ -515,15 +515,15 @@ public class FeralFestProject extends Project {
 			/*switcher.bindAndPermute("wat2_", "d", ts2, 75*l);
     	switcher.bindAndPermute("wat3_", "t", ts1, 250*l);
     	switcher.bindAndPermute("wat3_", "t", ts2, 500*l);*/
-			switcher.bindAndPermute("vd1"+l+":", "d1", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-			switcher.bindAndPermute("vd2_"+l+":", "d2", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-			switcher.bindAndPermute("vt1_"+l+":", "t1:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-			switcher.bindAndPermute("vt2_"+l+":", "t2:", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
+			switcher.bindAndPermute("vd1"+l+":", "d1", getSceneForPath("/sc/OutputFX3"), 2000*(l*l));
+			switcher.bindAndPermute("vd2_"+l+":", "d2", getSceneForPath("/sc/OutputFX3"), 2000*(l*l));
+			switcher.bindAndPermute("vt1_"+l+":", "t1:", getSceneForPath("/sc/OutputFX3"), 2000*(l*l));
+			switcher.bindAndPermute("vt2_"+l+":", "t2:", getSceneForPath("/sc/OutputFX3"), 2000*(l*l));
 
-			switcher.bindAndPermute("bv3_"+l+":", "blob", getSceneForPath("/sc/OutputShader3"), 2000*(l*l));
-			switcher.bindAndPermute("bv2_"+l+":", "blob", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
-			switcher.bindAndPermute("bb2_"+l+":", "blend", getSceneForPath("/sc/OutputShader2"), 2000*(l*l));
-			switcher.bindAndPermute("bb3_"+l+":", "blend", getSceneForPath("/sc/OutputShader"), 2000*(l*l));
+			switcher.bindAndPermute("bv3_"+l+":", "blob", getSceneForPath("/sc/OutputFX3"), 2000*(l*l));
+			switcher.bindAndPermute("bv2_"+l+":", "blob", getSceneForPath("/sc/OutputFX2"), 2000*(l*l));
+			switcher.bindAndPermute("bb2_"+l+":", "blend", getSceneForPath("/sc/OutputFX2"), 2000*(l*l));
+			switcher.bindAndPermute("bb3_"+l+":", "blend", getSceneForPath("/sc/OutputFX"), 2000*(l*l));
 		}
 
 
@@ -614,7 +614,8 @@ public class FeralFestProject extends Project {
 	    	//.registerCallbackPreset("beat","beat_1", "random")
 			//.registerCallbackPreset("beat","beat_8", "rotate")
 			.registerCallbackPreset("beat","beat_16","swivel");
-	    this.getSceneForPath("/sc/BadTVScene10001").registerCallbackPreset(this.getSequencer().getStream("beat"), "beat_8", "warp");
+	    this.getSceneForPath("/sc/BadTVScene1")
+	    	.registerCallbackPreset(this.getSequencer().getStream("beat"), "beat_8", "warp");
 	}
 
 }

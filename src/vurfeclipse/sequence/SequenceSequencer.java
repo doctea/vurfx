@@ -9,6 +9,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -50,7 +52,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private boolean randomMode = true;
 	private boolean historyMode = false;
 
-	private ArrayList<String> historySequenceNames = new ArrayList<String>();
+	private LinkedList<String> historySequenceNames = new LinkedList<String>();
 	private int historyCursor;
 
 	public SequenceSequencer (Project host, int w, int h) {
@@ -87,7 +89,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		FileInputStream fis = new FileInputStream(fileName);
 		ObjectInputStream ois = new ObjectInputStream(fis);
 		try {
-			this.historySequenceNames = (ArrayList<String>) ois.readObject();
+			this.historySequenceNames = (LinkedList<String>) ois.readObject();
 			println("Loaded sequencer history from " + fileName + "!");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -202,10 +204,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				changeSequence(seqName);
 			}
 			return "Sequencer active Sequence is currently " + activeSequenceName;
-		} else if (spl[2].equals("bank")) {
+		} else if (spl[2].equals("bank")) {	//  /bank/sequences
 			println ("loading bank for " + spl[3]);
 			if (spl[3].equals("sequences") &&  payload instanceof HashMap<?,?>) {		
-				for (Entry<String,Object> s : ((HashMap<String,Object>) payload).entrySet()) {
+				for (Entry<String,Object> s : ((LinkedHashMap<String,Object>) payload).entrySet()) {
 					HashMap<String,Object> c = (HashMap<String,Object>)s.getValue();
 					Sequence newSeq = this.createSequence(c);
 					String seqName = (String) c.get("current_sequence_name");
@@ -230,6 +232,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		} else if (spl[2].equals("seed")) {
 			this.getActiveSequence().setSeed((Long)payload);
 			return "Set seed to "+payload;
+		} else {
+			return (super.target(path,  payload));			
 		}
 		return payload;
 	}
@@ -981,7 +985,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 	private HashMap<String,Object> collectBankHistory() {
-		HashMap<String,Object> params = new HashMap<String,Object>();
+		LinkedHashMap<String,Object> params = new LinkedHashMap<String,Object>();
 		//for (Entry<String, Sequence> s : this.histor.entrySet()) {
 		for (String e : this.historySequenceNames) {
 			Sequence s = this.getSequence(e);

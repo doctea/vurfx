@@ -65,7 +65,7 @@ public class BlenderFX1 extends SimpleScene {
 
 	public BlenderFX1(Project host, int w, int h) {
 		super(host,w,h);
-		setSceneName("BlenderFX1: autonumbered " + this.host.getGUID());
+		setSceneName("BlenderFX1: autonumbered " + this.host.getGUID(this.getClass().getSimpleName()));
 	}
 	public BlenderFX1(Project host, String name, int w, int h) {
 		super(host, w, h);

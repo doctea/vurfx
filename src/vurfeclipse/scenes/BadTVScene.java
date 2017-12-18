@@ -35,7 +35,7 @@ public class BadTVScene extends Scene {
 		//println("adding callback 'spin'");
 		//this.callbacks.put("warp", new TimeLink(self));
 		this.callbacks.put("warp", new FormulaCallback()
-				.setExpression("(input%(100*12.0*pi)) * 10")
+				.setExpression("(input%(100*12.0*pi))") // * 10")
 				.setTargetPath(this.getFilter("BadTV").getParameter("iTime").getPath())
 		);
 	}

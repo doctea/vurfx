@@ -99,13 +99,13 @@ public class Parameter implements Serializable, Targetable {
 
 	@Override
 	public Object target(String path, Object payload) {
-		filter.println("Parameter " + getName() + " targeted with " + " path " + " and " + payload);
+		//filter.println("Parameter " + getName() + " targeted with " + " path " + " and " + payload);
 		//this.value = this.datatype.cast(payload);
 		setValue(
 				this.cast(payload)
-				);
+		);
 
-		filter.updateParameterValue(name, this.cast(payload));
+		filter.changeParameterValue(name, this.cast(payload));	// was previously updateParameterValue..?!
 
 		return this.value.toString();
 	}
