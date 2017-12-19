@@ -63,6 +63,10 @@ public class BlenderFX1 extends SimpleScene {
 		}*/
 	}
 
+	public BlenderFX1(Project host, int w, int h) {
+		super(host,w,h);
+		setSceneName("BlenderFX1: autonumbered " + this.host.getGUID(this.getClass().getSimpleName()));
+	}
 	public BlenderFX1(Project host, String name, int w, int h) {
 		super(host, w, h);
 		// TODO Auto-generated constructor stub
@@ -73,6 +77,7 @@ public class BlenderFX1 extends SimpleScene {
     	return super.setCanvas(a, b);
     }*/
     
+	@Override
     public boolean setupFilters() {
     	System.out.println(this+"#setupFilters()");
     	Scene bl1 = this;
@@ -86,12 +91,12 @@ public class BlenderFX1 extends SimpleScene {
 	    return true;
     }
     
+	@Override
     public void setupSequences() {
 			sequences.put("preset 1", new BlendSequence1(this, 2000));
 			sequences.put("nomute_preset 1", new BlendSequence1(this, 2000).disableHostMute());
 			sequences.put("preset 2_next_", new BlendSequence2(this, 2000));
 			sequences.put("nomute_preset 2_next_", new BlendSequence2(this, 2000).disableHostMute());
-			
     }
     
 }

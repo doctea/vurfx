@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
@@ -30,7 +31,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	int iteration;
 
 	transient protected ArrayList<Mutable> mutables;// = new ArrayList<Mutable>();
-	private HashMap<String, HashMap<String,Object>> scene_parameters;
+	protected HashMap<String, HashMap<String,Object>> scene_parameters;
 	private ArrayList<String> mutableListToLoad;
 
 	static public Sequence makeSequence(String classname, Scene host) {
@@ -78,9 +79,12 @@ abstract public class Sequence implements Serializable, Mutable {
 		params.put("seed", this.getSeed());
 		params.put("lengthMillis", this.lengthMillis);
 		
-		params.put("scene_parameters", this.host.host.collectSceneParameters());
+		// actually, what we want to do here is only collect scene parameters from the host.host if this is the currently active sequence, otherwise it means nothing
+		// instead, need to save the local scene_parameters if they exist
+		// if it is active sequence then update the scene_parameters with the host.host's collectSceneParameters, though
+		params.put("scene_parameters", this.getSceneParameters());
 		
-		params.put("current_sequence_name", APP.getApp().dateStamp());
+		//params.put("current_sequence_name", APP.getApp().dateStamp());
 		
 		ArrayList<String> mutableUrls = new ArrayList<String> ();
 		for (Mutable m : getMutables()) {
@@ -182,7 +186,7 @@ abstract public class Sequence implements Serializable, Mutable {
 			for (String url : this.mutableListToLoad) {
 				Mutable m = (Mutable) APP.getApp().pr.getObjectForPath(url);
 				if (m!=null) { 
-					this.mutables.add(m);
+					if (!this.mutables.contains(m)) this.mutables.add(m);
 				} else {
 					println("Couldn't find a Mutable to add for " + url +"!");
 				}
@@ -204,7 +208,6 @@ abstract public class Sequence implements Serializable, Mutable {
 	}
 	@Override
 	public void setMuted(boolean muted) {
-		// TODO Auto-generated method stub
 		Iterator<Mutable> it = getMutables().iterator(); //this.mutables.iterator();
 		while(it.hasNext()) {
 			Mutable n = it.next();
@@ -232,10 +235,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	boolean outputDebug = true;
 	private Object[] palette;
 	private float current_pc;
-	/////////// Event stuff
-	HashMap<String, Stream> streams = new HashMap<String, Stream>(); // Stream
-	//public abstract boolean initialise();
-	boolean enableStreams = true;
+
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("Q " + (text.contains((this.toString()))? text : this+": "+text));
 	}
@@ -244,7 +244,7 @@ abstract public class Sequence implements Serializable, Mutable {
 
 	public void start() {
 		this.rng.setSeed(seed);
-		onStart();
+
 		setMuted(false);
 		iteration = 0;
 		startTimeMillis = APP.getApp().millis();
@@ -259,7 +259,9 @@ abstract public class Sequence implements Serializable, Mutable {
 					s.loadParameters(e.getValue());
 				}
 			}		
-		}		
+		} else {
+			onStart();
+		}
 	}
 
 	public void stop() {
@@ -442,7 +444,19 @@ abstract public class Sequence implements Serializable, Mutable {
 			return iteration;
 		}
 
+		public void saveSequencePreset(String filename) {
+			if (!filename.endsWith(".xml")) filename += ".xml";
+			filename = filename.replace(':', '_');
 
-
-
+			Sequence toSave = this;//.getActiveSequence();
+			HashMap<String,Object> output; //= new HashMap<String,Object>();
+			output = toSave.collectParameters();
+			try {
+				XMLSerializer.write(output, filename);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.err.println("Caught " + e.toString() + " trying to save sequence of class " + toSave.getClass().getSimpleName() + " to '" + filename + "'");
+				e.printStackTrace();
+			}
+		}
 }

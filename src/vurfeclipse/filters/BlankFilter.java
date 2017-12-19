@@ -10,14 +10,18 @@ public class BlankFilter extends Filter {
   public BlankFilter(Scene sc) {
     super(sc);
   }
-  
-  
+  public BlankFilter(Scene sc, int w) {
+	    super(sc);
+  }
+	    
+  @Override
   public boolean initialise() {
 	super.initialise();
     // set up inital variables or whatevs 
     return true;
   }
   
+  @Override
   public boolean applyMeatToBuffers() {
     //println("#applyMeattoBuffers (out is " + src + ")");
     //System.exit(1);

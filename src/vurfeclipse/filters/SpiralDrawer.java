@@ -25,7 +25,7 @@ public class SpiralDrawer extends Filter {
     this.h = sc.h;
   }
 
-
+  @Override
   public boolean initialise () {
     super.initialise();
     // Extend the start and end of the curve because the first
@@ -39,6 +39,7 @@ public class SpiralDrawer extends Filter {
     return true;
   }
 
+  @Override
   public void setParameterDefaults() {
     super.setParameterDefaults();
     addParameter("rotation", 90.0f, 0.0f, 360.0f);
@@ -61,7 +62,7 @@ public class SpiralDrawer extends Filter {
     addParameter("mode", new Integer(0), 0, 1);
   }
 
-
+  @Override
   public Filter nextMode() {
     setParameterValue("mode",(Integer)getParameterValue("mode")+1);
     if ((Integer)getParameterValue("mode")>1) {
@@ -82,6 +83,7 @@ public class SpiralDrawer extends Filter {
   float endRadius = 5;
   int numSections = 60;*/
 
+  @Override
   public boolean applyMeatToBuffers() {
 	  //if (true) return true;
     //if (src!=out) out.background(0); else out.image(src.getTexture(),0,0,sc.w,sc.h);

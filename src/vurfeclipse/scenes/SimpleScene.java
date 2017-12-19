@@ -12,7 +12,7 @@ public class SimpleScene extends Scene {
   public SimpleScene(Project host, int w, int h) {
     super(host, w,h);
     
-    setSceneName(this.getClass().getCanonicalName());
+    //setSceneName(this.getClass().getCanonicalName());
     
     this.filterCount = 16;
     this.filters = new Filter[filterCount];

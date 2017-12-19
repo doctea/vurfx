@@ -286,7 +286,11 @@ public class VurfEclipse extends PApplet {
 
 		 //pr = new ParadoxProject(desired_width, desired_height, gfx_mode);
 		 //pr = new SocioSukiProject(desired_width, desired_height, gfx_mode);
-		 pr = new MutanteProject(desired_width, desired_height);
+	 	
+		 //pr = new MutanteProject(desired_width, desired_height);
+	  	 //pr = Project.bootProject(desired_width,  desired_height, "saves/FeralFestProject-test.xml");
+	 	 //pr = Project.bootProject(desired_width,  desired_height, "saves/SavedProject2017-12-17-21-58-53.xml");
+	 	
 		 //pr = new FeralFestProject(desired_width, desired_height);
 		 //pr = new KinectTestProject(desired_width, desired_height, gfx_mode);
 		 //pr = new MagicDustProject(desired_width, desired_height, gfx_mode);
@@ -298,6 +302,9 @@ public class VurfEclipse extends PApplet {
 		 //pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 		 
 		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
+	  	 
+	  	 //pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
+	  	 pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
 		 
 		 PVector resolution = this.getOutputResolution();
 		 
@@ -354,6 +361,8 @@ public class VurfEclipse extends PApplet {
 		 
 		 //delaySetup();
 		 pr.initialiseScenes();
+		 
+		 pr.initialiseStreams();
 		 
 		 ///frame.setLocation(500, 0);
 		 

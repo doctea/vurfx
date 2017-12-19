@@ -3,6 +3,7 @@ package vurfeclipse.scenes;
 import vurfeclipse.*;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -98,9 +99,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 	String sceneName = null;
 	public String getSceneName() {
-		if (this.sceneName==null)
+		if (this.sceneName==null) {
 			//return this.getClass().toString();//.toString(;
-			this.sceneName = this.getClass().getSimpleName() + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();
+			this.sceneName = this.getClass().getSimpleName() + ((VurfEclipse)APP.getApp()).pr.getGUID(this.getClass().getSimpleName()); //toString();
+			System.err.println("Auto-set Scene name to " + this.sceneName);
+		}
 		return sceneName;
 	}
 	public Scene setSceneName(String sn) {
@@ -424,10 +427,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 	public abstract boolean setupFilters();
 	boolean initialisedFilters = false;
+	private boolean setupFilters = false;
 
 	public boolean initialiseFilters () {
 		if (initialisedFilters) return true;
-		setupFilters();
+		if (!setupFilters ) setupFilters();
 		for (int i = 0 ; i < this.filters.length ; i ++) {
 			if (filters[i]!=null) {
 				filters[i].initialise();
@@ -649,60 +653,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 	}
 
-
-
-	public HashMap[] getSerializedMap () {
-		HashMap[] m = new HashMap[this.filters.length];
-		for (int i = 0 ; i < this.filters.length ; i++) {
-			if (filters[i]!=null)
-				m[i] = (HashMap) filters[i].getPresetValues();
-		}
-		return m;
-	}
-	public void loadPreset(String filename) {
-		try {
-			FileInputStream f_in = new FileInputStream("D:\\code\\processing\\sketches\\vurf\\output\\" + filename);
-			ObjectInputStream obj_in = new ObjectInputStream(f_in);
-			HashMap[] values = (HashMap[]) obj_in.readObject();
-			//println("got values " + values);
-			for (int i = 0 ; i < values.length ; i++) {
-				if (values[i]!=null) {
-					Iterator it = values[i].entrySet().iterator();
-					while (it.hasNext()) {
-						Map.Entry e = (Map.Entry)it.next();
-						if (filters[i]!=null)
-							filters[i].changeParameterValue((String)e.getKey(),e.getValue());
-					}
-				}
-			}
-			f_in.close();
-			obj_in.close();
-		} catch (Exception e) {
-			println("error loading preset " + filename + ": " + e);
-		}
-	}
-
-	public void updateSerializeBox() {
-		/*String s = "";
-    for (int i = 0 ; i < this.filters.length ; i ++) {
-      println("filters.length is " + filters.length);
-      if (filters[i]!=null) {
-        s += filters[i].serialize();
-      }
-    }
-    myTextarea.setText(s);*/
-	}
-
 	public String toString() {
 		return super.toString();// + " BUF_OUT:" + getCanvasMapping("out"); //buffers[BUF_OUT];
 	}
-
-	/*public ControllerInterface[] getControls() {
-    return new ControllerInterface[] {
-      new Slider(cp5, null, "slider for " + this.toString(), 0, 10, 5, 10, 10, 100, 20) //, int theX, int theY, int theWidth, int theHeight)
-    };
-
-  }*/
 
 	transient controlP5.Toggle muteController;
 	transient controlP5.Textfield myTextarea;
@@ -951,5 +904,79 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 	public void setPalette(Integer[] intColourArray) {
 		this.palette = intColourArray;
+	}
+	public LinkedHashMap<String, Object> collectSceneSetup() {
+		// collect scene setup for saving
+		LinkedHashMap<String, Object> output = new LinkedHashMap<String,Object>();
+		
+		output.put("class", this.getClass().getName());
+		output.put("name", this.getSceneName());
+		output.put("path", this.getPath());
+		
+		// save all filters
+		LinkedHashMap<String,Object> filters = new LinkedHashMap<String,Object>();
+		for (Filter f : this.getFilters()) {
+			filters.put(f.getPath(), f.collectFilterSetup());
+		}
+		output.put(this.getPath()+"/filter_setup", filters);
+		
+		// save all canvas mappings
+		//for (Entry<String, String> cm : this.getCanvasMappings().entrySet()) {			
+		//}
+		output.put(this.getPath()+"/canvas_setup", this.collectCanvasMappings());
+		
+		return output;
+	}
+	private HashMap<String,String> collectCanvasMappings() {
+		HashMap<String,String> output = new HashMap<String,String> ();
+		for (Entry<String, String> c : this.getCanvasMappings().entrySet()) {
+			output.put(c.getKey(), c.getValue());
+		}
+		return output;
+	}
+	public void readSnapshot(HashMap<String, Object> input) {
+		for (Entry<String, Object> e : input.entrySet()) {
+			if (e.getKey().equals("name")) this.setSceneName((String) e.getValue());	// can also get "name" and "path" here
+			if (e.getKey().endsWith("/filter_setup")) {
+				// loop over the filters here
+				for (Entry<String,Object> fi : ((Map<String, Object>)e.getValue()).entrySet()) {
+					// fi.key is filterpath, fi.value is hashmap of parameters to create filter, including classname as 'class'
+					Filter new_f = Filter.createFilter((String) ((Map<String, Object>)fi.getValue()).get("class"), this);
+					new_f.readSnapshot((Map<String, Object>) fi.getValue());
+					this.addFilter(new_f);
+				}
+				this.setupFilters = true;
+			}
+			if (e.getKey().endsWith("/canvas_setup")) {
+				this.setCanvasMappings((HashMap<String, String>) e.getValue());
+			}
+			
+		}
+
+		
+		// create Filters from saved input filter_setup
+		//for (Entry<String, Object> i : ((HashMap<String, Object>) input.get(this.getPath()+"/filter_setup")).entrySet()) {
+			
+		//}
+		
+	}
+	
+	private void setCanvasMappings(HashMap<String,String> value) {
+		this.buffermap = value;		
+	}
+	public static Scene createScene(String classname, Project host, int width, int height) {
+		Class<?> clazz;
+		try {
+			clazz = Class.forName(classname);
+			System.out.println (clazz.getConstructors());
+			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+			Constructor<?> ctor = clazz.getConstructor(Project.class, Integer.TYPE, Integer.TYPE); //Integer.class, Integer.class); //Scene.class,Integer.TYPE);
+			//Object seq = ctor.newInstance(); //(Scene)null, 0);
+			return (Scene) ctor.newInstance(host,width,height); //(Scene)null, (int)0);		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

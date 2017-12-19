@@ -9,7 +9,9 @@ import controlP5.Group;
 import controlP5.Slider;
 import controlP5.Tab;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.Map.Entry;
 
 import vurfeclipse.parameters.Parameter;
 import processing.core.PGraphics;
@@ -41,6 +43,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
   //PGraphics out;
   //PGraphics src;
+  String canvas_out, canvas_in;
   public transient PGraphics out;
   public transient PGraphics src;
 
@@ -137,8 +140,6 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     return null;
   }
 
-  String canvas_out;
-  String canvas_in;
   public Filter setCanvases(String out, String in) {
     setOutputCanvas(out);
     setInputCanvas(in);
@@ -474,7 +475,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 
   public String getFilterLabel() {
-    if (this.filterLabel.equals("")) filterLabel = this.getClass().getSimpleName() + ((VurfEclipse)APP.getApp()).pr.getGUID(); //toString();//.replace("@","-");
+    if (this.filterLabel.equals("")) filterLabel = this.getClass().getSimpleName() + ((VurfEclipse)APP.getApp()).pr.getGUID(this.getClass().getSimpleName()); //toString();//.replace("@","-");
 
     return this.filterLabel.equals("")?this.toString():this.filterLabel;
   }
@@ -624,12 +625,12 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         		  (Float)(Float)value).setLabel(me.getKey().toString())
           			.setSliderMode(Slider.FLEXIBLE)
         		  .setRange(
-        				  new Float((Float)param.min),
-        				  new Float((Float)param.max)
+        				  new Float((Float)param.getMin()),
+        				  new Float((Float)param.getMax())
         			)
         			.setSize(size*5, size) : //.addCallback(this) :
         value instanceof Integer ?
-          cp5.addSlider(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.min, (Integer)param.max).setSize(size*5, size) : //addCallback(this) :
+          cp5.addSlider(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.getMin(), (Integer)param.getMax()).setSize(size*5, size) : //addCallback(this) :
         value instanceof Boolean ?
           cp5.addToggle(tab.getName() + this + me.getKey()).setState((Boolean)value).setLabel(me.getKey().toString()).setSize(size, size) : //.addCallback(this) :
           /*          value instanceof PVector ?
@@ -761,8 +762,84 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		}		
 	}
 	public Parameter getParameter(String name) {
+		if (this.parameters==null) 
+			this.setParameterDefaults();
 		return this.parameters.get(name);
 		//return null;
 	}
+	
+	public void readSnapshot(Map<String,Object> input) {
+		this.setFilterName((String) input.get("name"));
+		this.setFilterLabel((String) input.get("label"));
+		//this.setDescription(input.get("description"));
+		this.setOutputCanvas((String) input.get("canvas_out"));
+		this.setInputCanvas((String) input.get("canvas_src"));	
+	
+		for (Entry<String, Object> p : ((Map<String, Object>) input.get("parameter_defaults")).entrySet()) {
+			Map<String,Object> para = (Map<String, Object>) p.getValue();
+			this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
+		}		
+	}
+	
+	public HashMap<String,Object> collectFilterSetup() {	// for saving snapshots, save setup of filter
+		HashMap<String,Object> output = new HashMap<String,Object>();
+		
+		output.put("class", this.getClass().getName());
+		output.put("name", this.getFilterName());
+		output.put("label", this.getFilterLabel());
+		output.put("description", this.getDescription());
+		output.put("path", this.getPath());
+		output.put("canvas_out", this.getOutputCanvas());
+		output.put("canvas_src", this.getSourceCanvas());
+		
+		output.put("parameter_defaults", this.collectParameterSetup());
+		
+		return output;
+	}
+	private HashMap<String,Object> collectParameterSetup() {
+		HashMap<String,Object> output = new HashMap<String,Object> ();
+		for (Parameter p : this.getParameters()) {
+			output.put(p.getPath(), p.getParameterSetup());//.getDefaultValue());
+		}
+		return output;
+	}
+	private String getSourceCanvas() {
+		// TODO Auto-generated method stub
+		return this.canvas_in;
+	}
+	private String getOutputCanvas() {
+		// TODO Auto-generated method stub
+		return this.canvas_out;
+	}
+	public static Filter createFilter(String classname, Scene host) {
+		try {
+			Class clazz = Class.forName(classname);
+			//System.out.println (clazz.getConstructors());
+			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+			System.err.println("about to try and get constructor for Filter '" + classname + "'");
+			if (classname.contains("$")) {
+				String[] spl = classname.split("\\$");
+				clazz = Class.forName(spl[0]); //Class.forName(classname); host.getClass();//
+				Class<?> inner = Class.forName(classname);
+				//System.out.println (clazz.getConstructors());
+				//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+				Constructor<?> ctor = inner.getConstructor(clazz); //Scene.class,Integer.TYPE);
+				//Object seq = ctor.newInstance(); //(Scene)null, 0);
+				ctor.setAccessible(true);
+				Filter filt = (Filter) ctor.newInstance(host); //(Scene)null, (int)0);
+				filt.sc = host;
+				return filt;
+			} else {
+				Constructor<?> ctor = clazz.getConstructor(Scene.class); //Scene.class,Integer.TYPE);
+				return (Filter) ctor.newInstance(host); //(Scene)null, (int)0);
+			}
+			//Object seq = ctor.newInstance(); //(Scene)null, 0);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }
 

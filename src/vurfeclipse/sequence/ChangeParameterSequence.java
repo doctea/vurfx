@@ -27,7 +27,7 @@ public class ChangeParameterSequence extends Sequence {
 		HashMap<String,Object> params = super.collectParameters();
 		params.put("filterPath",  filterPath);
 		params.put("parameterName", parameterName);
-		params.put("value", "value");
+		params.put("value", this.value);
 		return params;
 	}
 	
@@ -36,7 +36,7 @@ public class ChangeParameterSequence extends Sequence {
 		super.loadParameters(params);
 		if (params.containsKey("filterPath")) this.filterPath = (String) params.get("filterPath");
 		if (params.containsKey("parameterName")) this.parameterName = (String) params.get("parameterName");
-		if (params.containsKey("value")) this.value = (String) params.get("value");
+		if (params.containsKey("value")) this.value = params.get("value");
 	}
 
 	@Override public ArrayList<Mutable> getMutables () {

@@ -13,6 +13,7 @@ import vurfeclipse.scenes.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -34,6 +35,55 @@ import sun.security.jca.GetInstance.Instance;
 public abstract class Project implements Serializable {
 	public int w,h;
 	public String gfx_mode;
+
+	
+	public static Project bootProject(int w, int h, String filename) {
+		// load a project from XML....!
+		//HashMap<String,HashMap<String,Object>> input = pr.readSnapshotFile(filename);
+		Project pr = new SavedProject(w, h).setSnapshotFile(filename); //.loadSnapshotsetLoaded(loadSnapshot(filename));
+		
+		return pr;
+	}
+
+	public static Project chooseProject(int desired_width, int desired_height, Object what) {
+		// TODO Auto-generated method stub
+		if (what instanceof Class) {
+			return Project.createProject(desired_width, desired_height, (Class)what);
+		} else if (what instanceof String && ((String)what).endsWith(".class")) {
+			// instantiate Project class from what
+			return Project.createProject(desired_width,desired_height, (String)what);
+		} else if (what instanceof String) {
+			// assume filename
+			return Project.bootProject(desired_width, desired_height, (String) what);
+		}
+		return null;
+	}
+
+	private static Project createProject(int desired_width, int desired_height, String classname) {
+		try {
+			return createProject(desired_width,desired_height,Class.forName(classname));
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static Project createProject(int desired_width, int desired_height, Class clazz) {
+		try {
+			//clazz = Class.forName(classname);
+			//System.out.println (clazz.getConstructors());
+			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
+			System.err.println("about to try and get constructor for Project '" + clazz + "'");
+			Constructor<?> ctor = clazz.getConstructor(Integer.TYPE,Integer.TYPE);
+			return (Project) ctor.newInstance(desired_width, desired_height); //(Scene)null, (int)0);
+			//Object seq = ctor.newInstance(); //(Scene)null, 0);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public Project(int w, int h) {
 		this.w = w;
@@ -59,7 +109,7 @@ public abstract class Project implements Serializable {
 		try{
 			if (canvases.get(name)==null) {
 				println("Project#getCanvas couldn't find '" + name + "'!!!!!!!!!!!!!!! - creating one at " + "/" + name + "!");
-				return createCanvas("/"+name,name);
+				return createCanvas(/*"/"+*/name,name);	// disabled adding leading slash 2017-12-12 as part of loading from xml...
 			}
 			//System.out.println("Project#getCanvas('" + name + "') returning " + canvases.get(name) + " with buffer " + canvases.get(name).surf);
 			return canvases.get(name);
@@ -84,6 +134,9 @@ public abstract class Project implements Serializable {
 		mappings.put(getPath()+"inp2", BUF_INP2);
 		mappings.put(getPath()+"temp1", BUF_TEMP1);
 		mappings.put(getPath()+"temp2", BUF_TEMP2);
+	}
+	public HashMap<String, Integer> getBufferMappings() {
+		return (HashMap<String, Integer>)this.mappings;
 	}
 
 	public Canvas createCanvas(String path, String canvasName, int width, int height) {
@@ -386,15 +439,18 @@ public abstract class Project implements Serializable {
 		return false;
 	}
 
+	@Deprecated
 	public Project loadSnapshot() {
 		return loadSnapshot(this.getClass().getSimpleName()+".xml");
 	}
+	@Deprecated
 	public Project loadSnapshot(String filename) {
 		println("loadSnapshot from '" + filename + "'");
 		//return (Project) ((VurfEclipse)APP.getApp()).io.deserialize(filename+".vj", Project.class);
 		//HashMap<String, HashMap<String, Object>> input;
 		return loadSnapshot(readSnapshotFile(filename));
 	}
+	@Deprecated
 	public Project loadSnapshot(HashMap<String, HashMap<String, Object>> input) {
 
 		HashMap<String,Object> target_seq = input.get("/seq");
@@ -426,7 +482,7 @@ public abstract class Project implements Serializable {
 		// process Parameter params - loop over every scene and call loadParameters
 		// DEPRECATED THIS -- FROM NOW ON, SHOULD SAVE THESE UNDER THE /seq/scene_parameters KEY!!
 		if (!target_seq.containsKey("scene_parameters")) {
-			for (Entry<String,HashMap<String,Object>> e : input.entrySet()) {
+			for (Entry<String, HashMap<String, Object>> e : input.entrySet()) {
 				Scene s = (Scene) this.getObjectForPath(e.getKey());
 				if(s==null) {
 					System.err.println ("Couldn't find a targetable for key '"+e.getKey()+"'!!!");
@@ -439,7 +495,7 @@ public abstract class Project implements Serializable {
 		return this;
 	}
 
-	public HashMap<String, HashMap<String,Object>> readSnapshotFile(String filename) {
+	public HashMap<String, HashMap<String, Object>> readSnapshotFile(String filename) {
 		try {
 			//input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
 			return (HashMap<String, HashMap<String, Object>>) XMLSerializer.read(filename);
@@ -482,6 +538,9 @@ public abstract class Project implements Serializable {
 			HashMap<String,Object> sequencerParams = this.sequencer.collectParameters();
 			output.put("/seq", sequencerParams); //new HashMap<String,HashMap<String,Object>>().put("current_sequence", this.sequencer.getCurrentSequenceName()));
 		}
+		
+		LinkedHashMap<String, Object> projectSetup = this.collectProjectSetup();
+		output.put("/project_setup",projectSetup);
 
 		// collect all the scenes
 		//output.putAll(this.collectSceneParameters());
@@ -489,8 +548,20 @@ public abstract class Project implements Serializable {
 		//((VurfEclipse)APP.getApp()).io.serialize(filename, output);
 		return output;
 	}
+	private LinkedHashMap<String, Object> collectProjectSetup() {
+		LinkedHashMap<String, Object> output = new LinkedHashMap<String,Object>();
+		// save buffers/canvases
+		output.put(getPath()+"project_setup/mappings", this.getBufferMappings());
+		// save scene configuration
+			// save filter canvas mappings		
+	
+		for (Scene s : this.getScenes()) {
+			output.put(s.getPath(), s.collectSceneSetup());
+		}
+		
+		return output;
+	}
 	public HashMap<String,HashMap<String,Object>> collectSceneParameters() {
-		// TODO Auto-generated method stub
 		HashMap<String,HashMap<String,Object>> output = new HashMap<String,HashMap<String,Object>>();
 		for (Scene s : this.getScenes()) {
 			output.put(s.getPath(), s.collectParameters());
@@ -813,6 +884,7 @@ public abstract class Project implements Serializable {
 
 	boolean outputDebug = true;
 	private boolean initialised;
+	private HashMap<String,Integer> guids = new HashMap<String,Integer>();
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
 	}
@@ -848,6 +920,18 @@ public abstract class Project implements Serializable {
 		// TODO Auto-generated method stub
 		return (VurfEclipse) APP.getApp();
 	}
+
+
+	abstract public void initialiseStreams();
+
+
+	public Integer getGUID(String simpleName) {
+		// TODO Auto-generated method stub
+		if (!this.guids.containsKey(simpleName)) this.guids.put(simpleName, 0);
+		this.guids.put(simpleName, 1 + this.guids.get(simpleName));
+		return this.guids.get(simpleName);
+	}
+
 
 
 }
