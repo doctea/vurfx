@@ -186,7 +186,7 @@ abstract public class Sequence implements Serializable, Mutable {
 			for (String url : this.mutableListToLoad) {
 				Mutable m = (Mutable) APP.getApp().pr.getObjectForPath(url);
 				if (m!=null) { 
-					this.mutables.add(m);
+					if (!this.mutables.contains(m)) this.mutables.add(m);
 				} else {
 					println("Couldn't find a Mutable to add for " + url +"!");
 				}
