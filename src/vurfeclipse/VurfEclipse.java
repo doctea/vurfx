@@ -304,8 +304,8 @@ public class VurfEclipse extends PApplet {
 		 
 		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
 	  	 
-	  	 pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
-	  	 //pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
+	  	 //pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
+	  	 pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test2.xml");
 		 
 		 PVector resolution = this.getOutputResolution();
 		 
