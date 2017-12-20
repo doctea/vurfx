@@ -8,6 +8,8 @@ import controlP5.ControllerGroup;
 import controlP5.Group;
 import controlP5.Slider;
 import controlP5.Tab;
+import controlP5.Textfield;
+
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -517,9 +519,23 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         //println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
         Object currentValue = getParameterValue(paramName);
         changeValueFor(currentValue,paramName,ev);
+    	if (ev.getController() instanceof Textfield) { // && !currentValue.equals(((Textfield)ev.getController()).getText())) {
+    		//sc.host.disableKeys = false;	// horrible hack to disable keyboard input when a textfield is selected..
+    		((Textfield)ev.getController()).setFocus(true);
+    	}
     } else if (controllers.containsKey(ev.getController()) && ev.getController().isUserInteraction()) {
+    	if (ev.getController() instanceof Textfield) {
+    		if (ev.getAction()==ControlP5.ACTION_ENTER || ev.getAction()==ControlP5.ACTION_CLICK) {
+    			((Textfield)ev.getController()).setFocus(true);
+    			sc.host.disableKeys = true;	// horrible hack to disable keyboard input when a textfield is selected..
+    		} else if (ev.getAction()==ControlP5.ACTION_LEAVE) {
+    			((Textfield)ev.getController()).setFocus(false);
+    			sc.host.disableKeys = false;	// horrible hack to disable keyboard input when a textfield is selected..    			
+    		}
+    	}
+    } else {		
       String paramName = (String)controllers.get(ev.getController());
-      //println("UNHANDLED CONTROL EVENT in " + this + "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue() + " action is " + ev.getAction());
+      println("UNHANDLED CONTROL EVENT in " + this + "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue() + " action is " + ev.getAction());
     }
      /*else if (ev.getAction()==ControlP5.ACTION_PRESSED) {
       if (controllers.containsKey(ev.getController())) {
@@ -542,6 +558,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         }
         else if (currentValue instanceof Integer) {
           this.changeParameterValue(paramName, (int)ev.getController().getValue());
+        } else if (currentValue instanceof String) {
+        	this.changeParameterValue(paramName, ((Textfield)ev.getController()).getText());
         }
         else {
           this.changeParameterValue(paramName, ev.getController().getValue());
@@ -635,8 +653,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
           cp5.addToggle(tab.getName() + this + me.getKey()).setState((Boolean)value).setLabel(me.getKey().toString()).setSize(size, size) : //.addCallback(this) :
           /*          value instanceof PVector ?
            cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :*/
+        value instanceof String ?
+        		cp5.addTextfield(tab.getName() + this + me.getKey()).setSize(size*5, size).setText((String) value).setLabel(me.getKey().toString()) :
           null
-          //cp5.addTextfield(tabName + this + me.getKey()).setValue("value from " + me.getKey() + " " + (String)value.toString()).moveTo(tabName).setLabel("error!")
+          //
       ;
 
       param.setFilterPath(this.getPath());

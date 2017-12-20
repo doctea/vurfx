@@ -607,6 +607,10 @@ public abstract class Project implements Serializable {
 
 	public void sendKeyPressed(char key) {
 		//Scene sc = scenes.iterator().next();//.first();
+		if (disableKeys) {
+			println("keys disabled, ignoring " + key);
+			return;
+		}
 		if (key=='[') {
 			selectPreviousScene();
 		} else if (key==']') {
@@ -885,6 +889,7 @@ public abstract class Project implements Serializable {
 	boolean outputDebug = true;
 	private boolean initialised;
 	private HashMap<String,Integer> guids = new HashMap<String,Integer>();
+	public boolean disableKeys = false;
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
 	}
