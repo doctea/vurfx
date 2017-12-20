@@ -20,6 +20,7 @@ import java.awt.event.WindowStateListener;
 import java.io.PrintStream;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.Map.Entry;
 
 import com.sun.glass.ui.Screen;
 
@@ -303,8 +304,8 @@ public class VurfEclipse extends PApplet {
 		 
 		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
 	  	 
-	  	 //pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
-	  	 pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
+	  	 pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
+	  	 //pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
 		 
 		 PVector resolution = this.getOutputResolution();
 		 
@@ -381,6 +382,8 @@ public class VurfEclipse extends PApplet {
 		 }*/
 		 initialiseGraphics();
 		 //this.setSize(output_width, output_height);
+		 
+		 pr.setupMonitor();
 
 		 //colorMode(ARGB);
 		 colorMode(RGB, 255, 255, 255, 100);
@@ -497,6 +500,9 @@ public class VurfEclipse extends PApplet {
 			this.g.init(output_width, output_height, ARGB);	// important !
 		}
 	
+		 pr.drawMonitor();
+
+		
 		/*if (texWin==null) {
 			GLTextureWindow texWin = new GLTextureWindow(this, 0, 0, this.desired_width, this.desired_height);
 			texWin.setTexture(offscreen.getTexture());
@@ -553,10 +559,13 @@ public class VurfEclipse extends PApplet {
 		 //this.pi
 		 //this.image(offscreen.getSurf(), 0, 0, output_width, output_height);	// actually draw to applet!
 
+		 
 	
 		 if (syphon) drawSyphon (offscreen.getSurf());
 		 if (spout!=null) drawSpout(offscreen.getSurf());
 	
+		 //offscreen.getSurf().endDraw();
+		 
 		 //pgl.endGL();
 	
 		//screenGrab = true;
@@ -566,7 +575,6 @@ public class VurfEclipse extends PApplet {
 		   screenGrab = false;
 		}
 	}
-
 
 	/*****
 	* supporting methods

@@ -76,6 +76,7 @@ public class SavedProject extends Project {
 	@Override
 	public void setupBufferMappings() {
 		this.mappings = (HashMap<String, Integer>) input.get("/project_setup/mappings");
+		if (this.mappings==null) super.setupBufferMappings();
 	}
 
 	public Project setSnapshotFile(String filename) {

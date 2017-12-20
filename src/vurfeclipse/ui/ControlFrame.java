@@ -2,9 +2,13 @@ package vurfeclipse.ui;
 import controlP5.ControlP5;
 import controlP5.*;
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.event.KeyEvent;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
+import vurfeclipse.projects.Project;
+import vurfeclipse.ui.ControlFrame.MonitorCanvas;
 
 public class ControlFrame extends PApplet {
 
@@ -12,6 +16,60 @@ public class ControlFrame extends PApplet {
   PApplet parent;
   ControlP5 cp5;
 
+	public MonitorCanvas getMonitorCanvas(Project pr) {
+		return new MonitorCanvas(parent,pr);
+	}
+
+	public class MonitorCanvas extends controlP5.Canvas {
+		public PImage monitor;
+		private Project pr;
+
+		public MonitorCanvas(PApplet parent, Project pr) {
+			this.pr = pr;
+		}
+
+		@Override
+		synchronized public void draw(PGraphics pg) {
+			// renders a square with randomly changing colors
+			// make changes here.
+			//pg.fill(100);
+			//pg.rect(APP.getApp().random(255)-20, APP.getApp().random(255)-20, 240, 30);
+			//pg.fill(255);
+			//pg.beginDraw();
+
+			//cp5.setGraphics(pr.getCanvas(getPath()+"out").getSurf(), 0, 0);
+
+			if (pr.isInitialised() && pr.monitor!=null && pr.monitor[0]!=null) { //&& APP.getApp().millis()%30==0) {
+				//pg.beginDraw();
+
+				
+				pg.beginDraw();
+				//pg.text("This text is drawn by MyCanvas !!", 0/*APP.getApp().random(255)*/,APP.getApp().random(255));
+				pg.image(//monitor // 
+						//pr.getCanvas("/out").getSurf().get() //getCache(pr.getCanvas("/out").getSurf().get())
+						pr.monitor[0],
+						//,0 ,0, 128, 128
+						0, 20 
+				);
+				//APP.getApp().spout.receiveTexture(pg); //,0,0);
+				
+				int w = 128; int h = 96; int margin_y = 20;
+				for (int i = 0 ; i < pr.monitor.length ; i++) {
+						if (null!=pr.monitor[i]) pg.image(pr.monitor[i], i * w, margin_y, w, h);
+				}
+				
+				pg.endDraw();
+
+				/*pr.getCanvas(getPath()+"out").getSurf().loadPixels();
+				    PImage i = pr.getCanvas(getPath()+"out").getSurf().get(); 
+			    	pg.image(i,0,150,w/8,h/8);
+			    	pg.endDraw();*/
+			}
+			//pg.endDraw();
+			//
+		}
+
+	}
   public ControlFrame(PApplet _parent, int _w, int _h, String _name) {
     super();   
     parent = _parent;
@@ -21,7 +79,7 @@ public class ControlFrame extends PApplet {
   }
 
   public void settings() {
-    size(w, h); 	// P3D);
+    size(w, h, P3D); 	// P3D);
   }
 
   int setupCount = 0;
@@ -74,6 +132,9 @@ public class ControlFrame extends PApplet {
        */
 	 System.out.println("From " + this + ": calling setupControls() on " + VurfEclipse.pr);
 	 VurfEclipse.pr.setupControls(this);
+	 
+     frameRate(30);
+
 	 
 	 //surface.setLocation(10, 10);
 

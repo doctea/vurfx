@@ -25,14 +25,21 @@ import vurfeclipse.sequence.SequenceSequencer;
 import vurfeclipse.sequence.Sequencer;
 import vurfeclipse.streams.*;
 import vurfeclipse.ui.ControlFrame;
+import vurfeclipse.ui.ControlFrame.MonitorCanvas;
 import controlP5.*;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.opengl.PGraphicsOpenGL;
+import processing.opengl.Texture;
 import sun.security.jca.GetInstance.Instance;
 
 
 public abstract class Project implements Serializable {
+	
+	MonitorCanvas cp5canvas;
+	
+
 	public int w,h;
 	public String gfx_mode;
 
@@ -99,11 +106,14 @@ public abstract class Project implements Serializable {
 	int BUF_TEMP1 = 4;
 	int BUF_TEMP2 = 5;
 
-	HashMap<String,Canvas> canvases = new HashMap<String,Canvas>();
+	HashMap<String,Canvas> canvases = new LinkedHashMap<String,Canvas>();
 	public void addCanvas(String name, Canvas canvas) {
 		canvases.put(name,canvas);
 		println("Project#addCanvas added " + name);
 		//makeBuffersCompatible(name,canvas);
+	}
+	public HashMap<String,Canvas> getCanvases() {
+		return this.canvases;
 	}
 	public Canvas getCanvas(String name) {
 		try{
@@ -127,15 +137,15 @@ public abstract class Project implements Serializable {
   } */
 	HashMap<String, Integer> mappings;
 	public void setupBufferMappings() {
-		mappings = new HashMap<String, Integer>();
+		mappings = new LinkedHashMap<String, Integer>();
 		mappings.put(getPath()+"out", BUF_OUT);
-		mappings.put(getPath()+"inp0", BUF_INP0);
-		mappings.put(getPath()+"inp1", BUF_INP1);
-		mappings.put(getPath()+"inp2", BUF_INP2);
+		mappings.put(getPath()+"pix0", BUF_INP0);
+		mappings.put(getPath()+"pix1", BUF_INP1);
 		mappings.put(getPath()+"temp1", BUF_TEMP1);
 		mappings.put(getPath()+"temp2", BUF_TEMP2);
 	}
 	public HashMap<String, Integer> getBufferMappings() {
+		if (this.mappings==null) this.setupBufferMappings();
 		return (HashMap<String, Integer>)this.mappings;
 	}
 
@@ -180,6 +190,13 @@ public abstract class Project implements Serializable {
 
 	//public abstract boolean initialise ();
 	transient PGraphics off;
+
+
+	public PImage[] monitor;
+	private PGraphics monitorpg;
+	private boolean monitorEnabled;
+
+
 	public boolean initialise () {
 		println("Project#initialise:");
 
@@ -389,8 +406,8 @@ public abstract class Project implements Serializable {
 		//public void applyGL(PGraphics gfx) {
 		//Iterator it = Arrays.asList(scenes).iterator();
 
-		PGraphics offscreen = offscreen_canvas.getSurf(); 
-
+		PGraphics offscreen = offscreen_canvas.getSurf();
+		
 		//offscreen.beginDraw();
 		//offscreen.beginDraw();
 		//gfx.clear(0);
@@ -421,7 +438,7 @@ public abstract class Project implements Serializable {
 		}
 		////gfx.image(buffers[BUF_OUT].getTexture(),0,0,w,h);
 
-		//println("Outputting to " + offscreen);
+		//println("Project applygl is Outputting to " + out + " " + out.getSurf());
 		/*offscreen.beginDraw();
     out.getSurf().imageMode(APP.getApp().CENTER);
     offscreen.image(out.getSurf(),0,0,w,h);//w,h);
@@ -430,8 +447,50 @@ public abstract class Project implements Serializable {
 		//offscreen.endDraw();
 		////gfx.image(buffers[BUF_INP1].getTexture(),0,0,w,h);
 		////gfx.image(off.getTexture(),0,0,w,h);
+		
+		//this.cp5canvas.monitor = out.getSurf().get();
+		//this.monitor[BUF_OUT] = out.getSurf().get();
 	}
 
+	
+
+
+	synchronized public void drawMonitor() {
+		if (!this.isInitialised()) return;
+		if (!this.monitorEnabled) return;
+		if (this.monitor == null) {
+			//this.monitor = new PImage[getCanvases().size()];
+			this.monitor = new PImage[getBufferMappings().size()];
+		}
+		if (APP.getApp().millis()%30==0) {
+			int i = 0;
+			int w1 = 128; int h1 = 96; int margin_y = 50;
+			//monitorpg.beginDraw();
+			//for (Entry<String,Canvas> e : getCanvases().entrySet()) {
+			for (Entry<String,Integer> e : this.getBufferMappings().entrySet()) {
+				//this.monitor[i++] = e.getValue().getSurf().get();
+				//e.getValue().getSurf().getCache(monitor[i++]);
+				//e.getValue().getSurf().
+				if (e.getKey().equals("monitor")) continue;
+				
+				this.monitor[i] = getCanvas(e.getKey()).getSurf().get();		// WORKS !!
+				/*monitorpg = getCanvas("/monitor").getSurf();
+				println("got monitorpg " + monitorpg);
+				//monitorpg.beginDraw();
+				monitorpg.image(getCanvas(e.getKey()).getSurf().get(), i * w1, margin_y, w1, h1);*/
+				//monitorpg.text(":"+getCanvas(e.getKey()).canvasName, i * w1, margin_y+h1);
+				//monitorpg.endDraw();
+				
+				i++;
+			}
+			//monitorpg.endDraw();
+			//monitorpg.rect(20, 20, Math.random()*50, Math.random()*50);
+			//this.monitor[0] = monitorpg.get();
+			
+			//println ("i is " + i);
+			//monitor[0] = getCanvas("out").getSurf().get();
+		}		
+	}
 
 	public boolean shouldDrawScene(Scene sc) {
 		if (!sc.isMuted())
@@ -638,6 +697,9 @@ public abstract class Project implements Serializable {
 		} else if (key=='S') {
 			//loadSnapshot();
 			APP.getApp().selectInput("Select a file to load", "loadSnapshot"); //- DOESNT WORK ?
+		} else if (key=='M') {
+			this.monitorEnabled = !this.monitorEnabled;
+			println("Toggled monitor enabled to " + this.monitorEnabled);
 		} else if (this.sequencer.sendKeyPressed(key)) {
 			println ("Key " + key + " handled by sequencer!");
 		} else {
@@ -749,38 +811,11 @@ public abstract class Project implements Serializable {
 
 		Tab monitorTab = cp5.addTab("Monitor");
 
+		
 		//for (String canvas_name : this.canvases.keySet()) {
 		final Project pr = this; //.getCanvas("out");
-		controlP5.Canvas cp5canvas = new controlP5.Canvas() {
-			@Override
-			public synchronized void draw(PGraphics pg) {
-				// renders a square with randomly changing colors
-				// make changes here.
-				//pg.fill(100);
-				//pg.rect(APP.getApp().random(255)-20, APP.getApp().random(255)-20, 240, 30);
-				//pg.fill(255);
-				//pg.beginDraw();
+		cp5canvas = cf.getMonitorCanvas(pr);
 
-				//cp5.setGraphics(pr.getCanvas(getPath()+"out").getSurf(), 0, 0);
-
-				if (pr.isInitialised()) {
-					//pg.beginDraw();
-
-					pg.text("This text is drawn by MyCanvas !!", 0/*APP.getApp().random(255)*/,APP.getApp().random(255));
-					pg.beginDraw();
-					//pg.image((PImage) pr.getCanvas("/out").getSurf().getCache(pr.getCanvas("/out").getSurf()),0 ,0);
-					APP.getApp().spout.receiveTexture(pg); //,0,0);
-					pg.endDraw();
-
-					/*pr.getCanvas(getPath()+"out").getSurf().loadPixels();
-        			    PImage i = pr.getCanvas(getPath()+"out").getSurf().get(); 
-    			    	pg.image(i,0,150,w/8,h/8);
-    			    	pg.endDraw();*/
-				}
-				//pg.endDraw();
-				//
-			}
-		};
 		monitorTab.addCanvas(cp5canvas);
 		//cp5canvas.moveTo(monitorTab);
 		//}
@@ -792,10 +827,16 @@ public abstract class Project implements Serializable {
 
 
 
-	private void setupMonitor(ControlP5 cp5) {
+	public void setupMonitor() {
 		// TODO Auto-generated method stub
 		//controlWindow = cp5.addControlWindow("controlP5window",100,100,width/2,height/2,30);
 		final Project p = this;
+		
+
+		this.monitorpg = this.createCanvas("/monitor", "monitor").getSurf();
+	    //monitorpg.init(w, h, VurfEclipse.ARGB);
+	    //monitorpg.beginDraw(); monitorpg.endDraw();
+
 		//cp5.getWindow().setUpdateMode(ControlWindow.NORMAL);
 		//((VurfEclipse)APP.getApp()).getCW()
 		//ControlWindowCanvas monitor = ((VurfEclipse)APP.getApp()).getCW().control().addCanvas(new ControlWindowCanvas() {
