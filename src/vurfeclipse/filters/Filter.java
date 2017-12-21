@@ -361,18 +361,22 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     	changeParameterValue(paramName, !(Boolean)getParameterValue(paramName));
     }
   }
+  
+  synchronized public Filter addParameter(Parameter parameter, String paramName, Object value) {
+	    if (this.parameters==null) this.setParameterDefaults();
+	    parameters.put(paramName, parameter);
+	    updateParameterValue(paramName, value);
+		return this;
+  }
 
   synchronized public Filter addParameter(String paramName, Object value, Object min, Object max) {
-    if (this.parameters==null) this.setParameterDefaults();
     println(this + "#addParameter(" + paramName + ", " + value + ", " + min + ", " + max + "): " + this.getFilterLabel());
-    parameters.put(paramName, new Parameter(this, paramName, value, min, max));
-    updateParameterValue(paramName, value);
-    return this;
+    return addParameter(new Parameter(this, paramName, value, min, max), paramName, value);
   }
   synchronized public Filter addParameter(String paramName, Object value) {
   	if (value instanceof Float) {
   		return addParameter(paramName, value, -50.0f, 50.0f);
-  	}
+  	} 
     return addParameter(paramName, value, -100, 100);
   }
 
@@ -592,7 +596,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     
     int margin_h = 40;
     int margin_w = 5;
-    /*int row = 0,*/int col = 0;
+    /*int row = 0,*/float col = 0;
     int row_h = 50, col_w = 100;
         
     this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
@@ -637,7 +641,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       Parameter param = (Parameter)me.getValue();
       println("Filter#setupControls() in " + toString() + " doing control for " + param.getName());
       Object value = param.value;
-      controlP5.Controller o =
+      
+      controlP5.Controller o = param.makeController(cp5, tab.getName() + this + me.getKey(), tab, size);
+      
+      /*controlP5.Controller o =
         value instanceof Float ?
           cp5.addSlider(tab.getName() + this + me.getKey()).setValue(
         		  (Float)(Float)value).setLabel(me.getKey().toString())
@@ -647,17 +654,21 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         				  new Float((Float)param.getMax())
         			)
         			.setSize(size*5, size) : //.addCallback(this) :
-        value instanceof Integer ?
-          cp5.addSlider(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.getMin(), (Integer)param.getMax()).setSize(size*5, size) : //addCallback(this) :
+        value instanceof Integer ? (
+        		(Integer)param.getMax()==360 ?
+        				cp5.addKnob(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.getMin(), (Integer)param.getMax()).setSize(size, size)
+        				:
+        				cp5.addSlider(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.getMin(), (Integer)param.getMax()).setSize(size*5, size)  //addCallback(this) :
+        ) :
         value instanceof Boolean ?
           cp5.addToggle(tab.getName() + this + me.getKey()).setState((Boolean)value).setLabel(me.getKey().toString()).setSize(size, size) : //.addCallback(this) :
-          /*          value instanceof PVector ?
-           cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :*/
+          //          value instanceof PVector ?
+           //cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :
         value instanceof String ?
         		cp5.addTextfield(tab.getName() + this + me.getKey()).setSize(size*5, size).setText((String) value).setLabel(me.getKey().toString()) :
           null
           //
-      ;
+      ;*/
 
       param.setFilterPath(this.getPath());
       println("Filter: adding control object for filter with path " + this.getPath());
@@ -677,6 +688,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         		margin_w/2 + (col++*(margin_w+col_w)),
         		margin_h + (row*row_h)
         );
+        if (o.getWidth() < col_w/2) col -= 0.5f;
         if (col > 11) { //(col_w*margin_w)*col>cf.width) { //(5*(cf.width/col_w))) {
         	col = 1;
         	row++;
@@ -703,7 +715,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
     ((ControlGroup<Group>) tab).setBackgroundHeight(margin_h + (row * row_h));
     tab.setColorBackground((int) random(255));
-    tab.setSize(margin_w + (col++*col_w),margin_h + (row * row_h));
+    tab.setSize((int) (margin_w + (col++*col_w)),margin_h + (row * row_h));
     //cp5.linebreak();
 
     return row;

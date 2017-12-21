@@ -3,6 +3,10 @@ package vurfeclipse.parameters;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import controlP5.ControlP5;
+import controlP5.Controller;
+import controlP5.ControllerGroup;
+import controlP5.Slider;
 import processing.core.PVector;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
@@ -30,7 +34,7 @@ public class Parameter implements Serializable, Targetable {
 	Parameter () {
 		//this.controller = cp5.getController(this.controllerName);
 	}
-	Parameter (Filter filter, String name, Object value) {
+	public Parameter (Filter filter, String name, Object value) {
 		this.filter = filter;
 		this.filterPath = filter.getPath();
 		this.name = name;
@@ -171,6 +175,41 @@ public class Parameter implements Serializable, Targetable {
 	}
 	public void setMin(Object min) {
 		this.min = min;
+	}
+
+	public Controller makeController(ControlP5 cp5, String tabName, ControllerGroup tab, int size) {
+		controlP5.Controller o;
+
+		if (value instanceof Float) {
+			if ((Float)getMax()==360.0f) {
+				o = cp5.addKnob(tabName).setConstrained(false).setValue((Float)value).setLabel(getName()).setRange((Float)getMin(), (Float)getMax()).setSize(size*2, size*2);
+			} else {
+				o = cp5.addSlider(tabName).setValue((Float)(Float)value).setLabel(getName())
+						.setSliderMode(Slider.FLEXIBLE)
+						.setRange(
+								new Float((Float)getMin()),
+								new Float((Float)getMax())
+								)
+						.setSize(size*5, size) ;
+			}
+		} else if (value instanceof Integer) {
+			if ((Integer)getMax()==360) {
+				o = cp5.addKnob(tabName).setConstrained(false).setValue((Integer)value).setLabel(getName()).setRange((Integer)getMin(), (Integer)getMax()).setSize(size*2, size*2);
+			} else {
+				o = cp5.addSlider(tabName).setValue((Integer)value).setLabel(getName()).setRange((Integer)getMin(), (Integer)getMax()).setSize(size*5, size);  //addCallback(this) :
+			}
+		} else if (value instanceof Boolean ) {
+			o = cp5.addToggle(tabName).setState((Boolean)value).setLabel(getName()).setSize(size, size); //.addCallback(this) :
+				/*          value instanceof PVector ?
+	           cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :*/
+		} else if (value instanceof String) {
+			o = cp5.addTextfield(tabName).setSize(size*5, size).setText((String) value).setLabel(getName());
+		} else {
+			System.err.println("Unhandled object type " + value.getClass() + " in Parameter#makeController() for " + getName());
+			o = null;
+		}		
+
+		return o;
 	}
 
 }

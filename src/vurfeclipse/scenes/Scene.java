@@ -763,7 +763,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		this.cp5 = cp5;
 		this.tabName = tab.getName();
 
-		int margin = 5;
+		int margin = 10;
 		int lm = 10;
 		int topMargin = 40;
 		int size = 20;

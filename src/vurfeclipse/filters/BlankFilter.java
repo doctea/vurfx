@@ -1,5 +1,6 @@
 package vurfeclipse.filters;
 
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
 
 public class BlankFilter extends Filter {
@@ -40,7 +41,8 @@ public class BlankFilter extends Filter {
   synchronized public void setParameterDefaults () {
     super.setParameterDefaults();
     this.addParameter("alpha", new Integer(255), 0, 255);
-    this.addParameter("bgcolour", new Integer(0), 0, 255);//new Integer(128));
+    //this.addParameter("bgcolour", new Integer(0), 0, 255);//new Integer(128));
+    this.addParameter("bgcolour", VurfEclipse.makeColour(0, 0, 0));
   }
   
   @Override
