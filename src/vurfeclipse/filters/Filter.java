@@ -707,7 +707,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         /*controllers.put(
           o, (String)me.getKey()
         );*/
-        println(this + ": set up Control for " + me.getKey()); // + " (which shouldnt differ from " + param.getName() + " if i've understood my own code .. )");
+        println(this + ": set up Control for " + me.getKey() + " " + o.getClass()); // + " (which shouldnt differ from " + param.getName() + " if i've understood my own code .. )");
       }
       // }
     }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.ControllerGroup;
+import controlP5.Knob;
 import controlP5.Slider;
 import processing.core.PVector;
 import vurfeclipse.APP;
@@ -181,8 +182,8 @@ public class Parameter implements Serializable, Targetable {
 		controlP5.Controller o;
 
 		if (value instanceof Float) {
-			if ((Float)getMax()==360.0f) {
-				o = cp5.addKnob(tabName).setConstrained(false).setValue((Float)value).setLabel(getName()).setRange((Float)getMin(), (Float)getMax()).setSize(size*2, size*2);
+			if (getName().toLowerCase().contains("rotat") ) { //(Float)getMax()==360.0f) {
+				o = cp5.addKnob(tabName).setConstrained(false).setValue((Float)value).setLabel(getName()).setRange((Float)getMin(), (Float)getMax()).setSize(size*2, size*2).setDragDirection(Knob.VERTICAL);
 			} else {
 				o = cp5.addSlider(tabName).setValue((Float)(Float)value).setLabel(getName())
 						.setSliderMode(Slider.FLEXIBLE)
@@ -193,8 +194,15 @@ public class Parameter implements Serializable, Targetable {
 						.setSize(size*5, size) ;
 			}
 		} else if (value instanceof Integer) {
-			if ((Integer)getMax()==360) {
-				o = cp5.addKnob(tabName).setConstrained(false).setValue((Integer)value).setLabel(getName()).setRange((Integer)getMin(), (Integer)getMax()).setSize(size*2, size*2);
+			if (getName().toLowerCase().contains("rotat") ) { //(Integer)getMax()==360) {
+				o = cp5.addKnob(tabName).setConstrained(false).setValue((Integer)value).setLabel(getName()).setRange((Integer)getMin(), (Integer)getMax()).setSize(size*2, size*2).setDragDirection(Knob.VERTICAL);
+			} else if (getName().toLowerCase().endsWith("colour")) {
+				cp5.setAutoSpacing(size*2, size*2);
+				o = cp5.addColorWheel(tabName, 0, 0, size*2).setWidth(size*2).setHeight(size*2).setRGB((Integer)value).setLabel(getName());
+			} else if (getName().toLowerCase().endsWith("mode")) {
+				o = cp5.addKnob(tabName).snapToTickMarks(true).setDragDirection(Knob.VERTICAL)
+						.setNumberOfTickMarks((Integer)getMax())
+						.setConstrained(true).setValue((Integer)value).setLabel(getName()).setRange((Integer)getMin(), (Integer)getMax()).setSize(size*2, size*2);
 			} else {
 				o = cp5.addSlider(tabName).setValue((Integer)value).setLabel(getName()).setRange((Integer)getMin(), (Integer)getMax()).setSize(size*5, size);  //addCallback(this) :
 			}
