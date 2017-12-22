@@ -92,6 +92,15 @@ public class ControlFrame extends PApplet {
   
   @Override
   public void keyPressed () {
-	  ((VurfEclipse)parent).handleKey(key);
+	  if(this.key=='1') {
+		  this.cp5.getWindow().activateTab("Sequencer");
+	  } else if (this.key=='2') {
+		  this.cp5.getWindow().activateTab("Scenes");
+	  } else if (this.key=='3') {
+		  this.cp5.getWindow().activateTab("Monitor");
+	  } else {
+		  ((VurfEclipse)parent).handleKey(key);
+
+	  }	  
   }
 }
