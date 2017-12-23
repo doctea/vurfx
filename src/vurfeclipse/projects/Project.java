@@ -515,13 +515,13 @@ public abstract class Project implements Serializable {
 				+".xml");
 	}
 	public void saveSnapshot(String filename) {
-		println("SAVING SNAPSHOT TO '" + filename + "'");
+		println("SAVING SNAPSHOT TO '" + APP.getApp().sketchPath() + filename + "'");
 
 		//saveIndividualParts(filename);
 		//((VurfEclipse)APP.getApp()).io.serialize(filename + ".vj", this); //getSelectedScene().getFilter(2)); //getCanvas("/out"));
 		//io.serialize("test-serialisation-2", new testsave()); //getCanvas("/out"));
 		try {
-			XMLSerializer.write(collectSnapshot(filename), filename);
+			XMLSerializer.write(collectSnapshot(filename), APP.getApp().sketchPath() + filename);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.err.println("Caught " + e.toString() + " trying to save to '" + filename + "'");
@@ -714,7 +714,9 @@ public abstract class Project implements Serializable {
 		println("Project#setupControls about to loop over scenes ("+scenes.size()+" scenes to process)");
 		Iterator<Scene> i = scenes.iterator();
 		int c = 0;
-
+		
+		//cp5.addConsole(cp5.addTextarea("console", "", 0, 20, cf.displayWidth, cf.displayHeight-20));
+		
 		Tab sceneTab = cp5.addTab("Scenes");
 
 		Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth);

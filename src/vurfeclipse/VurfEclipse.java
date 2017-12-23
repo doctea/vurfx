@@ -133,7 +133,8 @@ public class VurfEclipse extends PApplet {
 	//boolean enablecp5 = false;
 	public static boolean enablecp5 = true;//false;//true; //true;
 
-
+	
+	
 	/////// Minim
 	Minim minim;
 
@@ -227,13 +228,20 @@ public class VurfEclipse extends PApplet {
 		} else {
 			println("size(): Passing size call number " + sizeCount);
 		}
-		super.size(w,h,gfx);
-
+		super.size(w,h,gfx, System.getProperty("user.dir"));
 	}
 
 	int refCount = 0;
 	private boolean finishedSetup;
-
+	
+	@Override
+	public String sketchPath() {
+		return System.getProperty("user.dir") + "/output/";		
+	}
+	@Override
+	public String sketchPath(String where) {
+		return sketchPath() + where;		
+	}
 	
 	@Override
 	public void settings () {
@@ -241,6 +249,8 @@ public class VurfEclipse extends PApplet {
 		 
 		 System.out.println(refCount + ": -------------==================== \\\\/URF/ [1] settings() ===================--------------");
 		 System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		 
+		 System.out.println("sketch directory:" + this.sketchPath());
 
 		 if (this.args!=null) {
 			 List<String> args = Arrays.asList(this.args);
@@ -304,7 +314,8 @@ public class VurfEclipse extends PApplet {
 		 //pr = new MinimalProject(desired_width, desired_height, gfx_mode);
 	  	 
 	  	 //pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
-	  	 pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
+	  	 //pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
+	 	 pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject2017-12-22-20-27-41.xml"); // not a bad one --> output/SavedProject2017-12-22-20-10-39.xml");
 		 
 		 PVector resolution = this.getOutputResolution();
 		 
@@ -577,7 +588,11 @@ public class VurfEclipse extends PApplet {
 	 saveincr++;
 	 //saveFrame("output/image"+saveincr+"."+random(100000)+".tiff");
 	 //saveFrame("output/image-" + dateStamp + "-" +saveincr+".tiff");
-	 saveFrame("output/image-" + dateStamp + "-#####.png");
+	 //saveFrame("output/image-" + dateStamp + "-#####.png");
+	 String filename = pr.getClass().getSimpleName() + "-image-" + dateStamp() + "-" + saveincr + ".png";
+	 filename = /*this.sketchOutputPath() + "/" +*/ filename;
+	 println ("saving screenshot to " + filename);
+	 this.offscreen.getSurf().get().save(filename);
 	}
 
 	/*void fileSelectedProject (File selection) {

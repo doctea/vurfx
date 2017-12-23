@@ -539,7 +539,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     	}
     } else {		
       String paramName = (String)controllers.get(ev.getController());
-      println("UNHANDLED CONTROL EVENT in " + this + "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue() + " action is " + ev.getAction());
+      //println("UNHANDLED CONTROL EVENT in " + this + "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue() + " action is " + ev.getAction());
     }
      /*else if (ev.getAction()==ControlP5.ACTION_PRESSED) {
       if (controllers.containsKey(ev.getController())) {

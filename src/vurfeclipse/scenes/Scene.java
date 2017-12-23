@@ -701,7 +701,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			params.put(f.getPath()+"/mute", new Boolean(f.isMuted()));
 			for (Parameter p : f.getParameters()) {
 				// add params for each parameter here
-				println("collectParameters got " + p.getPath() + " for " + f.getPath());
+				//println("collectParameters got " + p.getPath() + " for " + f.getPath());
 				params.put(p.getPath(), p.value);
 			}
 		}
@@ -710,7 +710,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 	public void loadParameters(HashMap<String,Object> params) {
 		for (Entry<String,Object> e : params.entrySet()) {
-			println("got " + e.getKey() + " with " + e.getValue().getClass().getName());
+			println("loadParameters() got " + e.getKey() + " with " + e.getValue().getClass().getName());
 			if (e.getKey().endsWith("/mute")) {
 				if (host.getObjectForPath(e.getKey())!=null)
 					((Mutable) host.getObjectForPath(e.getKey())).setMuted((Boolean)e.getValue());
