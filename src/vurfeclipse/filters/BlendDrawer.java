@@ -109,6 +109,7 @@ public class BlendDrawer extends ShaderFilter {
 
   synchronized public PShader getFilterNumber(int n) {
     if (this.blendFilters==null) blendFilters = new PShader[blendModes.length];
+    n = n % blendModes.length;
     if (this.blendFilters[n]==null && n<this.blendFilters.length) {
       println("BlendDrawer#getFilterNumber(n) initialising GLTextureFilter " + blendModes[n]);
       this.blendFilters[n] = APP.getApp().loadShader(blendModes[n]); //new PShader(APP.getApp(),blendModes[n]);

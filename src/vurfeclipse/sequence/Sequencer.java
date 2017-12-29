@@ -66,6 +66,9 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	public Stream getStream(String streamName) {
 		return (Stream) this.streams.get(streamName);
 	}
+	public HashMap<String, Stream> getStreams() {
+		return streams;
+	}
 
 	public void toggleStreams() {
 		this.toggleStreams(!this.isStreamsEnabled());
@@ -248,7 +251,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 
 	public boolean runStreams(int time) {
 		if (enableStreams) {
-			Iterator<?> i = streams.entrySet().iterator();
+			Iterator<?> i = this.getStreams().entrySet().iterator();
 			while (i.hasNext()) {
 				Map.Entry e = (Map.Entry) i.next();
 				//println("processStreams in " + this + " for " + e);
@@ -264,7 +267,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 
 	private HashMap<String,HashMap<String,Object>> collectStreamParameters() {
 		HashMap<String,HashMap<String,Object>> params = new HashMap<String,HashMap<String,Object>>();
-		for (Entry<String, Stream> s : this.streams.entrySet()) {
+		for (Entry<String, Stream> s : this.getStreams().entrySet()) {
 			params.put(s.getKey(), s.getValue().collectParameters());
 		}
 		return params;

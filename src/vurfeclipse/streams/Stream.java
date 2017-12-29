@@ -8,6 +8,14 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.*;
 
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
+import controlP5.ControlP5;
+import controlP5.Group;
+import controlP5.ScrollableList;
+import vurfeclipse.APP;
+import vurfeclipse.ui.ControlFrame;
+
 public class Stream implements Serializable {
 	boolean debug = false;
 	String streamName = "Unnamed";
@@ -222,6 +230,78 @@ public class Stream implements Serializable {
 		//streamName = (String) input.get("name");
 		//String paramName = (String) input.get("paramName");
 		
+		return null;
+	}
+	public void setupControls(ControlFrame cf, Group g) {
+		//cf.control().addScrollableList(this.streamName);
+		
+		int n = 0;
+		int margin_y = 20, gap_y = 5, margin_x = 80;
+		
+		int pos_y = 10;
+		
+		  CallbackListener toFront = new CallbackListener() {
+			    public void controlEvent(CallbackEvent theEvent) {
+			        theEvent.getController().bringToFront();
+			        ((ScrollableList)theEvent.getController()).open();
+			    }
+			  };
+
+			  CallbackListener close = new CallbackListener() {
+			    public void controlEvent(CallbackEvent theEvent) {
+			        ((ScrollableList)theEvent.getController()).close();
+			    }
+			  };
+		
+
+		for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
+			for (ParameterCallback c : i.getValue()) {
+				ScrollableList lstParam = cf.control().addScrollableList(i.getKey() + c.toString() + "_" + n).setPosition(0, pos_y);
+				lstParam.moveTo(g).close().setLabel("source");
+				lstParam.addItems(this.getStreamParams());//addItem(i.getKey(), i.getKey())
+				g.add(lstParam);
+				
+				println ("adding gui for " + c);
+				if (c instanceof FormulaCallback) {
+					g.add(cf.control().addTextfield(i.getKey() + "_" + n + "_Expression_" + c.toString()).setText(((FormulaCallback)c).getExpression()).setPosition(margin_x * 2, pos_y).moveTo(g).setLabel("Expression"));
+					
+					final FormulaCallback fc = (FormulaCallback) c; 
+					
+					ScrollableList lstTarget = cf.control().addScrollableList(i.getKey() + "_" + n + "_Target URL")
+							//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+							.setLabel("Target")
+							.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
+							.setPosition(margin_x * 5, pos_y)
+							.setWidth(200)
+							.moveTo(g)
+							.onLeave(close)
+							.onEnter(toFront)
+							.close();
+					
+					//lstTarget.setValue(targetPath);
+					
+					lstTarget.addListenerFor(ScrollableList.ACTION_CLICK, new CallbackListener () {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							// TODO Auto-generated method stub
+							Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget.getValue());
+							//s.entrySet();
+							((FormulaCallback) fc).setTargetPath((String) s.get("text"));
+						}				
+					});
+					
+					g.add(lstTarget);
+				}	
+				pos_y += margin_y + gap_y;
+				n++;
+			}
+		}
+	}
+	
+	private void println(String string) {
+		System.out.println("Stream " + this + ": " + string);		
+	}
+	public String[] getStreamParams() {	
 		return null;
 	}
 

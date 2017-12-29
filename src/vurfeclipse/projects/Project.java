@@ -871,8 +871,8 @@ public abstract class Project implements Serializable {
 
 		return APP.getApp().color(r,g,b);
 	}
-	public Map<? extends String, ? extends Targetable> getTargetURLs() {
-		HashMap<String, Targetable> urls = new HashMap<String, Targetable>();
+	public Map<String, Targetable> getTargetURLs() {
+		LinkedHashMap<String, Targetable> urls = new LinkedHashMap<String, Targetable>();
 
 		// get all the Scene urls that are appropriate
 		Iterator<Scene> it = this.getScenes().iterator();

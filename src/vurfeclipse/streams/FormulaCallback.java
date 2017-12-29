@@ -26,6 +26,9 @@ public class FormulaCallback extends ParameterCallback {
 		e = new com.udojava.evalex.Expression(expression);
 		return this;
 	}
+	public String getExpression () {
+		return expression;
+	}
 	
 	public FormulaCallback setTargetPath(String targetPath) {
 		this.targetPath = targetPath;
@@ -54,6 +57,10 @@ public class FormulaCallback extends ParameterCallback {
 		} 
 		Targetable target = (Targetable) APP.getApp().pr.getObjectForPath(targetPath);
 		//Targetable source = (Targetable) APP.getApp().pr.getObjectForPath(sourcePath);
+		
+		if (target==null) {
+			System.err.println("Caught a null target for path " + targetPath + " in " + this + "!");
+		}
 		
 		if (value instanceof Float || value instanceof Double) {
 			target.target(targetPath, e.eval().floatValue());
