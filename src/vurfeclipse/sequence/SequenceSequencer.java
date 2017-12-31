@@ -25,6 +25,7 @@ import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.*;
 import vurfeclipse.streams.Stream;
 import vurfeclipse.ui.ControlFrame;
+import vurfeclipse.ui.SequenceEditor;
 import controlP5.Accordion;
 import controlP5.Bang;
 import controlP5.CallbackEvent;
@@ -58,6 +59,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	private LinkedList<String> historySequenceNames = new LinkedList<String>();
 	private int historyCursor;
+	private SequenceEditor grpSequenceEditor;
 
 	public SequenceSequencer (Project host, int w, int h) {
 		//super(host, w,h);
@@ -479,6 +481,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		if (!getCurrentSequenceName().equals("")) 
 			this.txtCurrentSequenceName.setValue(this.getCurrentSequenceName());
 		
+		/*if (!getCurrentSequenceName().equals("")) 
+			this.grpSequenceEditor = this.getActiveSequence().makeControls(APP.getApp().getCF().control(), getCurrentSequenceName());*/
+		
 	}
 
 	private void updateGuiProgress(Sequence activeSequence) {
@@ -857,26 +862,26 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		int width = cf.sketchWidth();
 		int height = cf.sketchHeight();
 
-		Tab sceneTab = cp5.addTab(tabName);
+		Tab sequencerTab = cp5.addTab(tabName);
 
 		txtCurrentSequenceName = new Textfield(cp5, "Current Sequence Name")
 				.setPosition(margin_x, margin_y)
 				.setWidth(width/3)
-				.moveTo(sceneTab);
-		sceneTab.add(txtCurrentSequenceName);
+				.moveTo(sequencerTab);
+		sequencerTab.add(txtCurrentSequenceName);
 
 		lstSequences = new controlP5.ListBox(cp5, "sequence names")  	    		
 				.setPosition(width-(width/3), margin_y + 100)
 				.setSize(width/3, height-margin_y-100)
 				.setItemHeight(20)
-				.moveTo(sceneTab)
+				.moveTo(sequencerTab)
 				.setType(ListBox.LIST);
 
 		sldProgress = new controlP5.Slider(cp5, "progress")
 				.setPosition(margin_x, margin_y * 3)
 				.setWidth(width/3)
 				.setHeight(margin_y*2)
-				.moveTo(sceneTab)
+				.moveTo(sequencerTab)
 				.setValue(0.0f);
 		
 		sldTimeScale = new controlP5.Slider(cp5, "timescale")
@@ -884,26 +889,31 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setWidth(width/3)
 				.setHeight(margin_y*2)
 				.setRange(0.01f, 8.0f)
-				.moveTo(sceneTab)
+				.moveTo(sequencerTab)
 				.setValue(0.0f);
 		
 		tglLocked = new controlP5.Toggle(cp5, "locked")
 				.setPosition(margin_x + (width/3), margin_y)
-				.moveTo(sceneTab)
+				.moveTo(sequencerTab)
 				.setValue(0.0f);
 		
 		tglEnabled = new controlP5.Toggle(cp5, "enabled")
 				.setPosition(tglLocked.getWidth() + (margin_x*2) + (width/3), margin_y)
 				.changeValue(this.isSequencerEnabled()?1.0f:0.0f)
-				.moveTo(sceneTab)
+				.moveTo(sequencerTab)
 				;
 		
 		tglStreams = new controlP5.Toggle(cp5, "streams")
 				.setPosition((tglLocked.getWidth()*2) + (margin_x*3) + (width/3), margin_y)
 				.changeValue(this.isStreamsEnabled()?1.0f:0.0f)
-				.moveTo(sceneTab)
+				.moveTo(sequencerTab)
 				;
 		
+		/*this.grpSequenceEditor = (SequenceEditor) new SequenceEditor (cp5, "sequence editor")
+					.moveTo(sequencerTab)
+					.setWidth(cp5.papplet.displayWidth/2)
+					.setHeight(cp5.papplet.displayHeight/5)
+					.setPosition(0,500);*/
 
 		Accordion accordion = cp5.addAccordion("streams").setWidth(cf.displayWidth/2);
 
@@ -933,11 +943,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			c++;
 			//((Scene)i).setupControls(cp5);
 		}
-		accordion.setPosition(0, margin_y * 10);
+		accordion.setPosition(0, margin_y * 15);
 		//accordion.open();
 		accordion.setCollapseMode(Accordion.MULTI);
 
-		accordion.moveTo(sceneTab);
+		accordion.moveTo(sequencerTab);
 
 
 		super.updateGuiStatus();

@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
+
+import controlP5.Accordion;
+import controlP5.ControlP5;
+import controlP5.Group;
+
 import java.util.Map.Entry;
 
 import processing.core.PApplet;
@@ -17,6 +22,7 @@ import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.streams.Stream;
+import vurfeclipse.ui.SequenceEditor;
 import vurfeclipse.filters.Filter;
 
 abstract public class Sequence implements Serializable, Mutable {
@@ -458,5 +464,10 @@ abstract public class Sequence implements Serializable, Mutable {
 				System.err.println("Caught " + e.toString() + " trying to save sequence of class " + toSave.getClass().getSimpleName() + " to '" + filename + "'");
 				e.printStackTrace();
 			}
+		}
+
+		public SequenceEditor makeControls(ControlP5 cp5, String name) {
+			// TODO Auto-generated method stub
+			return new SequenceEditor(cp5, name);
 		}
 }

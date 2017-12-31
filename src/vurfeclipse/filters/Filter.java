@@ -2,6 +2,7 @@ package vurfeclipse.filters;
 import vurfeclipse.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
+import controlP5.ColorWheel;
 import controlP5.ControlGroup;
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
@@ -736,10 +737,22 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     	c.setBroadcast(false);
         if (value instanceof Float)
           c.setValue((Float)value);
-        else if (value instanceof Integer)
-          c.setValue((Integer)value);
+        else if (value instanceof Integer) {
+          if (c instanceof ColorWheel) {
+        	  //System.err.println(this + " for " + name + " with value '"+value+"': funky control event loopback bug means that can't manually change the colour...");
+        	  if ((int)value!=-1 && (int)value!=-16777216) {	// TODO: hacky workaround for bug 'greyscale trap' where you can't move the colour selector UI out of the grey range if certain values get set?
+        		  ((ColorWheel)c).setRGB((Integer) value);	// some funky loopback bug
+        	  }
+          } else {
+              c.setValue((Integer)value);
+          }
+        }
         else if (value instanceof Boolean)
           c.setValue((Boolean)value?1.0f:0.0f);
+        else if (value instanceof String) 
+        	c.setStringValue((String) value);
+        else 
+        	System.err.println("Caught updating control with unhandled type " + value.getClass() + " in " + this);
         c.setBroadcast(true);
     }
     

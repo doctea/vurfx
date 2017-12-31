@@ -1,6 +1,11 @@
 package vurfeclipse.sequence;
 
 import java.util.List;
+
+import controlP5.Accordion;
+import controlP5.ControlP5;
+import controlP5.Group;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,6 +13,7 @@ import java.util.Iterator;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.ui.SequenceEditor;
 
 public class ChainSequence extends Sequence {
 
@@ -140,5 +146,31 @@ public class ChainSequence extends Sequence {
 			this.addSequence(n);
 		}		
 	}
+	
+	
+	@Override
+	public SequenceEditor makeControls(ControlP5 cp5, String name) {
+		// add an accordion to hold the sub-sequences and recurse
+		SequenceEditor sequenceEditor = super.makeControls(cp5, name);
+		
+		cp5.addLabel("Sequence Editor: " + name).moveTo(sequenceEditor);
+		/*Accordion acc = cp5.addAccordion(name + "_acc").moveTo(sequenceEditor).setWidth(cp5.papplet.displayWidth/2).setHeight(cp5.papplet.displayHeight/5).setPosition(0,20);
+		
+		int n = 0;
+		for (Sequence cs : chain) {
+			Group g = cp5.addGroup(name + "_acc_" + n + "_gr").moveTo(acc);
+			g.add(cs.setupControls(cp5, g, name));
+			acc.addItem(g);
+		}
+		
+		sequenceEditor.add(acc);*/
+		int n = 0 ;
+		for (Sequence cs : chain) {
+			cs.makeControls(cp5, name);
+			n++;
+		}
+		
+		return sequenceEditor;
+	}	
 	
 }

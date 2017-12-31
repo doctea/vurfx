@@ -93,6 +93,8 @@ public class Parameter implements Serializable, Targetable {
 				return payload.toString();
 			} else if (this.datatype == PVector.class) {
 				return (PVector)payload;
+			} else {
+				System.err.println("Don't know how to cast " + payload.getClass() + " '" + payload + "'");
 			}
 		} catch (NumberFormatException e) {
 			System.err.println(this + this.getName() + " caught " + e.toString() + " trying to decode " + " alleged " + this.datatype + " of '" + payload + "'");
@@ -110,6 +112,11 @@ public class Parameter implements Serializable, Targetable {
 				this.cast(payload)
 		);
 
+		if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
+			if ((int)payload>(int)this.getMax()) {
+				payload = (int)payload % (int)this.getMax();
+			}
+		}
 		filter.changeParameterValue(name, this.cast(payload));	// was previously updateParameterValue..?!
 
 		return this.value.toString();

@@ -108,7 +108,7 @@ public class TextFlashScene extends Scene {
 		this(host, w, h, new String[] {
 				";)", ":P", "MDMA", "LSD-25", "DMT", "2c-b", "2c-c", "2c-d", "4homet", "delysid", "MDA", "303", "909", "808",
 
-				"take trips", "magic dust", "Socio Suki",
+				//"take trips", "magic dust", "Socio Suki",
 
 				"nice", "dANCe", "rob0t", "ZX", "(:", "#!", "???", "!!", "!!!", "!", "dont panic",
 

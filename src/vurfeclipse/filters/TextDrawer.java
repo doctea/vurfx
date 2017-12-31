@@ -1,6 +1,10 @@
 package vurfeclipse.filters;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 import vurfeclipse.APP;
@@ -165,7 +169,7 @@ public class TextDrawer extends Filter {
       if (zrotation!=0) {
         out.rotateY(PApplet.radians(zrotation));
       }
-      out.text(t, 0, 0);
+      out.text(getText(), 0, 0);
       out.popMatrix();
       out.endDraw();
       currentCache = currentTag;
@@ -174,7 +178,26 @@ public class TextDrawer extends Filter {
     }
   }
   
-  public boolean applyMeatToBuffers() {
+  private String getText() {
+	  DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	  Date date = new Date();
+	  System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
+	  
+	  String hour = new SimpleDateFormat("HH").format(date);
+	  if (hour.equals("23") || hour.equals("17")) {
+		  if (new SimpleDateFormat("mm").format(date).equals("59") || new SimpleDateFormat("mm").format(date).equals("12")) {
+			  return ".." + (60 - Integer.parseInt(new SimpleDateFormat("ss").format(date))) +"..";
+		  }
+		  return dateFormat.format(date);
+	  } else if (hour.equals("00")) {
+		  return "HAPPY NEW YEAR!";
+	  } else {
+		  return "\\VurFX/";
+	  }	  
+	  
+	  //return t;
+}
+public boolean applyMeatToBuffers() {
     //System.out.println("in applymeattobuffers in pointdrawer (" + this + "), src is " + src);
     
     // image draw mode

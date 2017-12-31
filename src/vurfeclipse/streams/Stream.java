@@ -269,10 +269,10 @@ public class Stream implements Serializable {
 					
 					ScrollableList lstTarget = cf.control().addScrollableList(i.getKey() + "_" + n + "_Target URL")
 							//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-							.setLabel("Target")
+							.setLabel(((FormulaCallback)c).targetPath)
 							.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
 							.setPosition(margin_x * 5, pos_y)
-							.setWidth(200)
+							.setWidth((cf.displayWidth/6))
 							.moveTo(g)
 							.onLeave(close)
 							.onEnter(toFront)

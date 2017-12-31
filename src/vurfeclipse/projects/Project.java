@@ -641,7 +641,9 @@ public abstract class Project implements Serializable {
 			((SequenceSequencer) this.sequencer).preserveCurrentSceneParameters();
 		} else if (key=='S') {
 			//loadSnapshot();
-			APP.getApp().selectInput("Select a file to load", "loadSnapshot"); //- DOESNT WORK ?
+			//APP.getApp().selectInput("Select a file to load", "loadSnapshot"); //- DOESNT WORK ?
+			saveSnapshot("SavedProject-NYE.xml");
+			((SequenceSequencer) this.sequencer).preserveCurrentSceneParameters();
 		} else if (this.sequencer.sendKeyPressed(key)) {
 			println ("Key " + key + " handled by sequencer!");
 		} else {

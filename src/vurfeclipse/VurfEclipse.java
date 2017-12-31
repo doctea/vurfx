@@ -159,7 +159,7 @@ public class VurfEclipse extends PApplet {
 	// all false for really low res 
 
 	boolean fullscreen = false;//true;//false;
-	int fullscreen_num = 3;
+	int fullscreen_num = 2;
 
 	int title_adjust = -20; //-100;	// amount to take off the height to compensate for window title, system bar etc
 	/*int
@@ -315,7 +315,8 @@ public class VurfEclipse extends PApplet {
 	  	 
 	  	 //pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
 	  	 //pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
-	 	 pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject2017-12-22-20-27-41.xml"); // not a bad one --> output/SavedProject2017-12-22-20-10-39.xml");
+	 	 //pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject2017-12-22-20-27-41.xml"); // not a bad one --> output/SavedProject2017-12-22-20-10-39.xml");
+	 	 pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject-NYE.xml");
 		 
 		 PVector resolution = this.getOutputResolution();
 		 
@@ -323,13 +324,14 @@ public class VurfEclipse extends PApplet {
 			 //((PGraphicsOpenGL)this.offscreen.getSurf()).updatePixelSize();
 			 println("going fullscreen on " + fullscreen_num);
 			 //this.setSize(output_width, output_height);
-			 this.setSize(desired_width, desired_height);
+			 //this.setSize(desired_width, desired_height);
+			 this.setSize(APP.getApp().displayWidth, APP.getApp().displayHeight);
 			 this.fullScreen(P3D, fullscreen_num);
 			 //this.g.init(desired_width, gw_height, ARGB);
 			 //
 		 } else {
 			 println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
-			 this.size(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
+			 this.size(desired_width, desired_height, P3D);//(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
 		 }
 		 
 		 System.out.println("Finished VurfEclipse#settings() - handing off to setup!");
@@ -391,6 +393,12 @@ public class VurfEclipse extends PApplet {
 			 fs.enter();
 		 }*/
 		 initialiseGraphics();
+		 
+		 //this.getGraphics().setSize(1920, 1080);//.scale(1.5f);
+		 //println("mat is: " + mat.);
+		 //mat.scale(config_aspect.y / config_aspect.x);
+		 //this.getGraphics().setMatrix(mat);
+		 
 		 //this.setSize(output_width, output_height);
 
 		 //colorMode(ARGB);
@@ -543,14 +551,26 @@ public class VurfEclipse extends PApplet {
 		 
 		 //this.imageMode(0);
 		 this.background(0);	// was it always thus?
-		 this.imageMode(CORNERS);
+		 //this.imageMode(CORNERS);
 		 //offscreen.getSurf().imageMode(CENTER);
 		 //this.setSize(APP.getApp().displayWidth, APP.getApp().displayHeight);
 		 //this.g.scale(0.25f);//0.8f); //1.5f);
 		 //this.g.scale(0.75f);
 
 		 //this.image(offscreen.getSurf(), 0, 0, APP.getApp().sketchWidth(), APP.getApp().sketchHeight()); //output_width, output_height);	// actually draw to applet!
-		 this.image(offscreen.getSurf(), 0, 0, APP.getApp().displayWidth, APP.getApp().displayHeight); //output_width, output_height);	// actually draw to applet!
+		 //this.image(offscreen.getSurf(), 0, 0, APP.getApp().displayWidth, APP.getApp().displayHeight); //output_width, output_height);	// actually draw to applet!
+		 if (fullscreen) {	// inside draw loop, have to draw differently if we want to centre the output properly!
+			 //this.getGraphics().setSize(APP.getApp().sketchWidth(), APP.getApp().sketchHeight());
+			 //this.getGraphics().setSize(APP.getApp().displayWidth, APP.getApp().displayHeight);
+			 //offscreen.getSurf().setSize(APP.getApp().sketchWidth(), APP.getApp().sketchHeight());
+			 //this.getGraphics().setSize(output_width, output_height);
+			 //this.getGraphics().setMatrix((PMatrix2D)null);//.getMatrix().transpose();
+			 //println ("rendering at " + APP.getApp().displayWidth + "x" + APP.getApp().displayHeight);
+			 this.image(offscreen.getSurf(), 0, 0, APP.getApp().displayWidth, APP.getApp().displayHeight); //
+			 //this.image(offscreen.getSurf(), 0, 0, output_width, output_height);	// actually draw to applet!
+		 } else {
+			 this.image(offscreen.getSurf(), 0, 0, output_width, output_height);	// actually draw to applet!
+		 }
 		 //this.resetMatrix();
 		 //this.g.init(desired_width, desired_height, ARGB);
 
