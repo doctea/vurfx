@@ -51,7 +51,7 @@ public class FormulaCallback extends ParameterCallback {
 	@Override
 	public void call(Object value) {
 		if (value instanceof Float || value instanceof Double) {
-			e.setVariable("input", BigDecimal.valueOf((float)value));
+			e.setVariable("input", BigDecimal.valueOf((Float)value));
 		} else if (value instanceof Integer || value instanceof Long) {
 			e.setVariable("input", BigDecimal.valueOf((Integer)value));
 		} 

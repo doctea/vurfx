@@ -226,9 +226,9 @@ public class OutputFX3 extends SimpleScene {
 			public void loadParameters(HashMap<String,Object> params) {
 				super.loadParameters(params);
 				if (params.containsKey("grid")) {
-					this.grid = (int) params.get("grid");
+					this.grid = (Integer) params.get("grid");
 				} else {	// no grid saved in snapshot, so try to assume existing one
-					this.grid = (int) getFilter("SyncEffect").getParameterValue("step_x");
+					this.grid = (Integer) getFilter("SyncEffect").getParameterValue("step_x");
 				}
 			}
 

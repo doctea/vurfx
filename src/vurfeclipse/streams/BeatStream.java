@@ -169,7 +169,7 @@ public class BeatStream extends Stream implements Serializable {
 	@Override
 	public void readParameters(HashMap<String, Object> input) {
 		super.readParameters(input);
-		this.setBPM((float) input.get("tempo"));
+		this.setBPM((Float) input.get("tempo"));
 		
 		/*HashMap<String, HashMap<String,Object>> callbacks = (HashMap<String, HashMap<String,Object>>) input.get("callbacks");
 		for (Entry<String, HashMap<String, Object>> i : callbacks.entrySet()) {

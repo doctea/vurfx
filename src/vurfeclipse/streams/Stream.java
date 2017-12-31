@@ -267,7 +267,7 @@ public class Stream implements Serializable {
 					
 					final FormulaCallback fc = (FormulaCallback) c; 
 					
-					ScrollableList lstTarget = cf.control().addScrollableList(i.getKey() + "_" + n + "_Target URL")
+					final ScrollableList lstTarget = cf.control().addScrollableList(i.getKey() + "_" + n + "_Target URL")
 							//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 							.setLabel(((FormulaCallback)c).targetPath)
 							.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))

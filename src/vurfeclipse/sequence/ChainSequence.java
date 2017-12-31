@@ -148,29 +148,5 @@ public class ChainSequence extends Sequence {
 	}
 	
 	
-	@Override
-	public SequenceEditor makeControls(ControlP5 cp5, String name) {
-		// add an accordion to hold the sub-sequences and recurse
-		SequenceEditor sequenceEditor = super.makeControls(cp5, name);
-		
-		cp5.addLabel("Sequence Editor: " + name).moveTo(sequenceEditor);
-		/*Accordion acc = cp5.addAccordion(name + "_acc").moveTo(sequenceEditor).setWidth(cp5.papplet.displayWidth/2).setHeight(cp5.papplet.displayHeight/5).setPosition(0,20);
-		
-		int n = 0;
-		for (Sequence cs : chain) {
-			Group g = cp5.addGroup(name + "_acc_" + n + "_gr").moveTo(acc);
-			g.add(cs.setupControls(cp5, g, name));
-			acc.addItem(g);
-		}
-		
-		sequenceEditor.add(acc);*/
-		int n = 0 ;
-		for (Sequence cs : chain) {
-			cs.makeControls(cp5, name);
-			n++;
-		}
-		
-		return sequenceEditor;
-	}	
 	
 }

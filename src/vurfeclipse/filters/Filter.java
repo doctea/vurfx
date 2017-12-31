@@ -740,7 +740,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
         else if (value instanceof Integer) {
           if (c instanceof ColorWheel) {
         	  //System.err.println(this + " for " + name + " with value '"+value+"': funky control event loopback bug means that can't manually change the colour...");
-        	  if ((int)value!=-1 && (int)value!=-16777216) {	// TODO: hacky workaround for bug 'greyscale trap' where you can't move the colour selector UI out of the grey range if certain values get set?
+        	  if ((Integer)value!=-1 && (Integer)value!=-16777216) {	// TODO: hacky workaround for bug 'greyscale trap' where you can't move the colour selector UI out of the grey range if certain values get set?
         		  ((ColorWheel)c).setRGB((Integer) value);	// some funky loopback bug
         	  }
           } else {

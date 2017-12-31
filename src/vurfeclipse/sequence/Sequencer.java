@@ -158,9 +158,9 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		if (spl[2].equals("toggleLock")) {				// just gets status of lock...
 			if (spl.length>3) payload = spl[3];
 			if (payload instanceof Boolean) {
-				this.toggleLock((boolean) payload);
+				this.toggleLock((Boolean) payload);
 			} else if (payload instanceof String) {
-				this.toggleLock((boolean)payload.equals("true"));
+				this.toggleLock((Boolean)payload.equals("true"));
 			}
 			return "Lock is " + this.toggleLock();
 		} else if (spl[2].equals("stream_setup")) {

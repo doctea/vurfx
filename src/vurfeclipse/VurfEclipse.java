@@ -1,6 +1,6 @@
 package vurfeclipse;
 
-import spout.*;
+//import spout.*;
 
 import processing.core.*;
 import controlP5.*;
@@ -92,9 +92,9 @@ public class VurfEclipse extends PApplet {
 	
 	////// SPOUT STUFF
 	
-	public Spout spout;
+	//public Spout spout;
 	
-	void initSpout(String name) {
+	/*void initSpout(String name) {
 		spout = new Spout(this);
 		spout.createSender("VurFX");
 		spout.createReceiver("VurFX");
@@ -102,7 +102,7 @@ public class VurfEclipse extends PApplet {
 	
 	public void drawSpout(PGraphics p) {
 		spout.sendTexture(p);
-	}
+	}*/
 
 	private static ControlFrame controlFrame;
 
@@ -466,7 +466,7 @@ public class VurfEclipse extends PApplet {
 		   initSyphon(gl, "Vurf");
 		 }*/
 		 if (syphon) {
-			 initSpout("Vurf");
+			 //initSpout("Vurf");
 		 }
 		
 		// https://stackoverflow.com/questions/20551224/how-to-enable-vsync-synchronization-in-processing-2-x
@@ -586,7 +586,7 @@ public class VurfEclipse extends PApplet {
 
 	
 		 if (syphon) drawSyphon (offscreen.getSurf());
-		 if (spout!=null) drawSpout(offscreen.getSurf());
+		 //if (spout!=null) drawSpout(offscreen.getSurf());
 	
 		 //pgl.endGL();
 	

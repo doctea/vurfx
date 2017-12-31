@@ -774,11 +774,11 @@ public abstract class Project implements Serializable {
 				if (pr.isInitialised()) {
 					//pg.beginDraw();
 
-					pg.text("This text is drawn by MyCanvas !!", 0/*APP.getApp().random(255)*/,APP.getApp().random(255));
-					pg.beginDraw();
+					//pg.text("This text is drawn by MyCanvas !!", 0/*APP.getApp().random(255)*/,APP.getApp().random(255));
+					//pg.beginDraw();
 					//pg.image((PImage) pr.getCanvas("/out").getSurf().getCache(pr.getCanvas("/out").getSurf()),0 ,0);
-					APP.getApp().spout.receiveTexture(pg); //,0,0);
-					pg.endDraw();
+					//APP.getApp().spout.receiveTexture(pg); //,0,0);
+					//pg.endDraw();
 
 					/*pr.getCanvas(getPath()+"out").getSurf().loadPixels();
         			    PImage i = pr.getCanvas(getPath()+"out").getSurf().get(); 

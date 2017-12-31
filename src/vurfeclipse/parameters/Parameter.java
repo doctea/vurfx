@@ -113,8 +113,8 @@ public class Parameter implements Serializable, Targetable {
 		);
 
 		if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
-			if ((int)payload>(int)this.getMax()) {
-				payload = (int)payload % (int)this.getMax();
+			if ((Integer)payload>(Integer)this.getMax()) {
+				payload = (Integer)payload % (Integer)this.getMax();
 			}
 		}
 		filter.changeParameterValue(name, this.cast(payload));	// was previously updateParameterValue..?!
