@@ -1,4 +1,4 @@
-package vurfeclipse.sequence;
+package vurfeclipse.sequencers;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

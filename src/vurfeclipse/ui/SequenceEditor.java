@@ -15,10 +15,11 @@ public class SequenceEditor extends Group {
 		return sequence;
 	}
 
-	public void setSequence(String sequenceName, Sequence sequence) {
+	public SequenceEditor setSequence(String sequenceName, Sequence sequence) {
 		this.sequence = sequence;
 		this.sequenceName = sequenceName;
 		setupControls();
+		return this;
 	}
 
 	public SequenceEditor(ControlP5 theControlP5, String theName) {
@@ -29,12 +30,14 @@ public class SequenceEditor extends Group {
 	public SequenceEditor(ControlP5 theControlP5, ControllerGroup<?> theParent, String theName, int theX, int theY, int theW, int theH) {
 		super(theControlP5, theParent, theName, theX, theY, theW, theH);
 		// TODO Auto-generated constructor stub
+		//this.setBarHeight(20);
 	}
 
 	public SequenceEditor setupControls() {
-		cp5.addTextarea("length").moveTo(this);
 		
-		sequence.makeControls(cp5, sequenceName);
+		this.controllers.get().clear();
+		
+		sequence.makeControls(cp5, sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,50);
 	
 		return this;
 	}

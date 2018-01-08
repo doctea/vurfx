@@ -1,4 +1,4 @@
-package vurfeclipse.sequence;
+package vurfeclipse.sequencers;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -481,9 +481,17 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		if (!getCurrentSequenceName().equals("")) 
 			this.txtCurrentSequenceName.setValue(this.getCurrentSequenceName());
 		
-		/*if (!getCurrentSequenceName().equals("")) 
-			this.grpSequenceEditor = this.getActiveSequence().makeControls(APP.getApp().getCF().control(), getCurrentSequenceName());*/
-		
+		if (!getCurrentSequenceName().equals("")) {
+			/*this.grpSequenceEditor.remove();
+			this.grpSequenceEditor = (SequenceEditor) 
+			this.getActiveSequence()
+				.makeControls(APP.getApp().getCF().control(), getCurrentSequenceName())
+					.setSequence(this.getCurrentSequenceName(), getActiveSequence())
+					.moveTo(this.grpSequenceEditor)
+					.setPosition(0,20)
+			;*/
+			this.grpSequenceEditor.setSequence(this.getCurrentSequenceName(), getActiveSequence());
+		}
 	}
 
 	private void updateGuiProgress(Sequence activeSequence) {
@@ -909,11 +917,6 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.moveTo(sequencerTab)
 				;
 		
-		/*this.grpSequenceEditor = (SequenceEditor) new SequenceEditor (cp5, "sequence editor")
-					.moveTo(sequencerTab)
-					.setWidth(cp5.papplet.displayWidth/2)
-					.setHeight(cp5.papplet.displayHeight/5)
-					.setPosition(0,500);*/
 
 		Accordion accordion = cp5.addAccordion("streams").setWidth(cf.displayWidth/2);
 
@@ -954,6 +957,18 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		
 		lstSequences.addItems(this.historySequenceNames);
 		
+		
+		
+		Tab sequencerEditorTab = cp5.addTab(tabName + " Editor");
+
+		this.grpSequenceEditor = (SequenceEditor) new SequenceEditor (cp5, "sequence editor")
+					.setWidth(cp5.papplet.displayWidth/2)
+					.setHeight(cp5.papplet.displayHeight/5)
+					.setBarHeight(10)
+					.setPosition(0,40)
+					.moveTo(sequencerEditorTab)
+					;
+	
 		//this.saveHistoryButton = cf.control().addBang("SAVE sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
 		//zthis.loadHistoryButton = cf.control().addBang("LOAD sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
 		cf.control().addCallback(this);

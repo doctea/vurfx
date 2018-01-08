@@ -153,22 +153,65 @@ public class ChainSequence extends Sequence {
 		// add an accordion to hold the sub-sequences and recurse
 		SequenceEditor sequenceEditor = super.makeControls(cp5, name);
 		
-		cp5.addLabel("Sequence Editor: " + name).moveTo(sequenceEditor);
-		/*Accordion acc = cp5.addAccordion(name + "_acc").moveTo(sequenceEditor).setWidth(cp5.papplet.displayWidth/2).setHeight(cp5.papplet.displayHeight/5).setPosition(0,20);
+		//if (true) return sequenceEditor;
+		
+		//cp5.addLabel("Sequence Editor: " + name).setValue("Sequence Editor: " + name).moveTo(sequenceEditor).setPosition(100,100);
+		Accordion acc = cp5.addAccordion(name + "_acc").moveTo(sequenceEditor)
+				.setWidth(sequenceEditor.getWidth()-10)
+				//.setBackgroundHeight(cp5.papplet.sketchHeight()/5)
+				.setPosition(10,sequenceEditor.getBackgroundHeight())
+				.setBackgroundHeight(10)
+				.setCollapseMode(Accordion.MULTI);
+				;
 		
 		int n = 0;
 		for (Sequence cs : chain) {
-			Group g = cp5.addGroup(name + "_acc_" + n + "_gr").moveTo(acc);
-			g.add(cs.setupControls(cp5, g, name));
+			/*Group g = cp5.addGroup(cs.getClass().getSimpleName() + ": " + name + "         [acc_" + n + "_gr]")
+					.moveTo(acc);*/
+			Group conts = cs.makeControls(cp5, cs.getClass().getSimpleName() + ": " + name + "    [n!: " + n + "]")
+					//.setPosition(0,n*30))
+					.setWidth(cp5.papplet.displayWidth/2);
+			Group g = conts;
+			//g.add(conts);
+			//g.setBackgroundHeight(conts.getBackgroundHeight());
+			println("got a " + cs.getClass().getSimpleName() + " with height " + g.getBackgroundHeight()); 
 			acc.addItem(g);
-		}
-		
-		sequenceEditor.add(acc);*/
-		int n = 0 ;
-		for (Sequence cs : chain) {
-			cs.makeControls(cp5, name);
+			acc.setBackgroundHeight(
+					acc.getBackgroundHeight() + 
+					g.getBackgroundHeight()
+					);
 			n++;
 		}
+		
+		acc.open();
+		
+		//sequenceEditor.add(acc.moveTo(sequenceEditor));
+		//sequenceEditor.setBackgroundHeight(n * 30);
+		
+		sequenceEditor.setBackgroundHeight(sequenceEditor.getBackgroundHeight() + acc.getBackgroundHeight());
+		
+		/*int n = 0;
+		int y = 40;
+		for (Sequence cs : chain) {
+			Group t = cs.makeControls(cp5, "n: " + n + " - " + name + n + " " + cs.toString())
+				.setPosition(10, y) //y) //10 + (20 * n) ) //80 + (n * 30)
+					//+ (n*30)).setColorBackground((int) (Math.random()*255))
+				.moveTo(sequenceEditor); //80 + (n * 30)).moveTo(sequenceEditor);
+			n++;
+			//y += n * 60; //t.getBackgroundHeight();
+			y += 30 + t.getBackgroundHeight();
+			println(this + " for " + cs + ": got backgroundheight " + t.getBackgroundHeight() + " so updating y to " + y);
+		}
+		
+		println (this + ":setting backgroundheight " + y);
+		sequenceEditor.setBackgroundHeight(sequenceEditor.getBackgroundHeight() + y);*/
+		
+		// different approach, flatten all the sequences. since this is a chain sequence, we know how to handle chain sequences
+		/*ArrayList<Sequence> sequences = new ArrayList<Sequence>();
+		//sequences.addAll(this.chain);
+		for (Sequence cs : chain) {
+			if 
+		}*/
 		
 		return sequenceEditor;
 	}	

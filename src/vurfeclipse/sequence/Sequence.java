@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
-import controlP5.Accordion;
 import controlP5.ControlP5;
 import controlP5.Group;
 
@@ -34,7 +33,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	int startTimeMillis;
 	private int lengthMillis = 2000;
 
-	int iteration;
+	public int iteration;
 
 	transient protected ArrayList<Mutable> mutables;// = new ArrayList<Mutable>();
 	protected HashMap<String, HashMap<String,Object>> scene_parameters;
@@ -467,7 +466,30 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 
 		public SequenceEditor makeControls(ControlP5 cp5, String name) {
-			// TODO Auto-generated method stub
-			return new SequenceEditor(cp5, name);
+			SequenceEditor seq = new SequenceEditor(cp5, name);
+			seq.setWidth(cp5.controlWindow.papplet().width);
+
+			cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name).setPosition(80,10).moveTo(seq);
+			if (host!=null) 
+				cp5.addLabel(name + "_host").setValue(host.getPath()).setPosition(80,30).moveTo(seq);
+			
+			cp5.addNumberbox(name + "_length", "length").setValue(getLengthMillis()).setPosition(0,10).moveTo(seq);
+			
+			//seq.setHeight(30);
+			seq.setBackgroundHeight(50);
+			
+			return seq;			
 		}
+
+		public Group makeControlList(ControlP5 cp5, String name) {
+			return null;
+		}
+		
+		
+
+		@Override
+		public String toString() {
+			return super.toString() + " " + this.host!=null?this.host.getPath():"[no host]";
+		}
+
 }

@@ -1,4 +1,4 @@
-package vurfeclipse.sequence;
+package vurfeclipse.sequencers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +13,7 @@ import vurfeclipse.filters.BlankFilter;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.sequence.Sequence;
 
 public class SceneSequencer extends Sequencer implements Targetable {
 	  String activeSceneName = "";

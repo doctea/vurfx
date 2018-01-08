@@ -55,6 +55,7 @@ public class TextDrawer extends Filter {
     addParameter("zrotation", 0, 0, 360);
     addParameter("continuousDraw", new Boolean(true));
     addParameter("motionBlur", new Boolean(true));
+    addParameter("happyNewYear", new Boolean(false));
   }
   @Override
   public void updateParameterValue(String paramName, Object value) {
@@ -179,24 +180,25 @@ public class TextDrawer extends Filter {
   }
   
   private String getText() {
-	  DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-	  Date date = new Date();
-	  System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
-	  
-	  String hour = new SimpleDateFormat("HH").format(date);
-	  if (hour.equals("23") || hour.equals("17")) {
-		  if (new SimpleDateFormat("mm").format(date).equals("59") || new SimpleDateFormat("mm").format(date).equals("12")) {
-			  return ".." + (60 - Integer.parseInt(new SimpleDateFormat("ss").format(date))) +"..";
+	  if ((Boolean)this.getParameter("happyNewYear").value==true) {
+		  DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		  Date date = new Date();
+		  System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
+		  
+		  String hour = new SimpleDateFormat("HH").format(date);
+		  if (hour.equals("23") || hour.equals("17")) {
+			  if (new SimpleDateFormat("mm").format(date).equals("59") || new SimpleDateFormat("mm").format(date).equals("12")) {
+				  return ".." + (60 - Integer.parseInt(new SimpleDateFormat("ss").format(date))) +"..";
+			  }
+			  return dateFormat.format(date);
+		  } else if (hour.equals("00")) {
+			  return "HAPPY NEW YEAR!";
 		  }
-		  return dateFormat.format(date);
-	  } else if (hour.equals("00")) {
-		  return "HAPPY NEW YEAR!";
-	  } else {
-		  return "\\VurFX/";
-	  }	  
-	  
-	  //return t;
+	  }
+
+	  return t;
 }
+  
 public boolean applyMeatToBuffers() {
     //System.out.println("in applymeattobuffers in pointdrawer (" + this + "), src is " + src);
     

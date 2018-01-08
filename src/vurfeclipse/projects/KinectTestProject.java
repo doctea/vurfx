@@ -12,7 +12,7 @@ import processing.core.PApplet;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.Sequence;
-import vurfeclipse.sequence.SceneSequencer;
+import vurfeclipse.sequencers.SceneSequencer;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlenderFX1;
 import vurfeclipse.user.scenes.BlobFX1;

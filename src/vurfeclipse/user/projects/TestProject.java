@@ -4,7 +4,7 @@ import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
-import vurfeclipse.sequence.SequenceSequencer;
+import vurfeclipse.sequencers.SequenceSequencer;
 
 import java.io.Serializable;
 

@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
-import vurfeclipse.sequence.SequenceSequencer;
+import vurfeclipse.sequencers.SequenceSequencer;
 import vurfeclipse.Targetable;
 
 public class SavedProject extends Project {
