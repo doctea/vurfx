@@ -114,7 +114,7 @@ public class VurfEclipse extends PApplet {
 			//controlFrame.setup();
 			//surface.setLocation(20, 20);
 		}
-		println("getCF() returning " + controlFrame);
+		//println("getCF() returning " + controlFrame);
 		return controlFrame;
 	}
 
@@ -316,7 +316,9 @@ public class VurfEclipse extends PApplet {
 	  	 //pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
 	  	 //pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
 	 	 //pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject2017-12-22-20-27-41.xml"); // not a bad one --> output/SavedProject2017-12-22-20-10-39.xml");
-	 	 pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject-NYE.xml");
+	 	 //pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject-NYE.xml");
+	 	
+	 	 pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.MutanteProject.class);
 		 
 		 PVector resolution = this.getOutputResolution();
 		 

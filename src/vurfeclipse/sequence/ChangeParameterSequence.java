@@ -102,6 +102,20 @@ public class ChangeParameterSequence extends Sequence {
 			
 			//final FormulaCallback fc = (FormulaCallback) c; 
 			
+
+		  CallbackListener toFront = new CallbackListener() {
+			    public void controlEvent(CallbackEvent theEvent) {
+			        theEvent.getController().bringToFront();
+			        ((ScrollableList)theEvent.getController()).open();
+			    }
+			  };
+
+			  CallbackListener close = new CallbackListener() {
+			    public void controlEvent(CallbackEvent theEvent) {
+			        ((ScrollableList)theEvent.getController()).close();
+			    }
+			  };
+		
 			ScrollableList lstTarget = cp5.addScrollableList(name + "_Target URL")
 					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 					.setLabel(this.getParameterPath()) //((FormulaCallback)c).targetPath)
@@ -109,8 +123,8 @@ public class ChangeParameterSequence extends Sequence {
 					.setPosition(80, pos_y)
 					.setWidth((cp5.papplet.width/6))
 					.moveTo(g)
-					//.onLeave(close)
-					//.onEnter(toFront)
+					.onLeave(close)
+					.onEnter(toFront)
 					.close();
 			
 			//lstTarget.setValue(targetPath);

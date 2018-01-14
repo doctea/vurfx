@@ -100,7 +100,7 @@ public abstract class Project implements Serializable {
 	int BUF_TEMP2 = 5;
 
 	HashMap<String,Canvas> canvases = new HashMap<String,Canvas>();
-	public void addCanvas(String name, Canvas canvas) {
+	synchronized public void addCanvas(String name, Canvas canvas) {
 		canvases.put(name,canvas);
 		println("Project#addCanvas added " + name);
 		//makeBuffersCompatible(name,canvas);
@@ -156,18 +156,18 @@ public abstract class Project implements Serializable {
 	//GLGraphicsOffScreen buffers[] = new GLGraphicsOffScreen[8];
 
 	//public GLGraphicsOffScreen getOutputBuffer() {
-	public Canvas getOutputCanvas() {
+	synchronized public Canvas getOutputCanvas() {
 		//return buffers[BUF_OUT];
 		return getCanvas(getPath()+"out");
 	}
 
 	protected Sequencer sequencer;
 
-	public boolean processSequencer(int time) {
+	synchronized public boolean processSequencer(int time) {
 		return this.sequencer.runSequences(); //time);// TODO: maybe this is where time should flow in..?
 	}
 
-	public boolean processStreams(int time) {
+	synchronized public boolean processStreams(int time) {
 		return this.sequencer.runStreams(time);
 	}
 
@@ -642,7 +642,7 @@ public abstract class Project implements Serializable {
 		} else if (key=='S') {
 			//loadSnapshot();
 			//APP.getApp().selectInput("Select a file to load", "loadSnapshot"); //- DOESNT WORK ?
-			saveSnapshot("SavedProject-NYE.xml");
+			saveSnapshot("SavedProject-Mutante.xml");
 			((SequenceSequencer) this.sequencer).preserveCurrentSceneParameters();
 		} else if (this.sequencer.sendKeyPressed(key)) {
 			println ("Key " + key + " handled by sequencer!");
@@ -939,6 +939,15 @@ public abstract class Project implements Serializable {
 		if (!this.guids.containsKey(simpleName)) this.guids.put(simpleName, 0);
 		this.guids.put(simpleName, 1 + this.guids.get(simpleName));
 		return this.guids.get(simpleName);
+	}
+
+	public String[] getSceneUrls() {
+		String[] urls = new String[this.getScenes().size()];
+		int n = 0;
+		for (Scene s : this.getScenes()) {
+			urls[n++] = s.getPath();
+		}
+		return urls;
 	}
 
 

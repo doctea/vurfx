@@ -426,7 +426,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		this.changeSequence(sequenceName,true,true);
 	}
 
-	public void changeSequence(String sequenceName, boolean remember, boolean restart) {
+	synchronized public void changeSequence(String sequenceName, boolean remember, boolean restart) {
 		if (this.getActiveSequence()!=null) {		// mute the current sequence 
 			if (restart) this.getActiveSequence().stop();//setMuted(true);
 			// check if this is already the top of the sequence history, if so don't add it again 
@@ -462,36 +462,51 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 
 	private void updateGuiAddHistory(String currentSequenceName, String currentSequenceName2) {
-		if (this.getActiveSequence()!=null && APP.getApp().isReady() && this.lstSequences!=null) 
-			this.lstSequences.addItem(this.getCurrentSequenceName(), this.getCurrentSequenceName());		
+		SequenceSequencer self = this;
+		
+		APP.getApp().getCF().queueUpdate(new Runnable () {
+			@Override
+			public void run() {
+				if (self.getActiveSequence()!=null && APP.getApp().isReady() && self.lstSequences!=null) 
+					self.lstSequences.addItem(self.getCurrentSequenceName(), self.getCurrentSequenceName());
+			}
+		});
 	}
 
 
 	private void updateGuiSequenceChanged(int oldCursor, int newCursor) {
 		if (!APP.getApp().isReady()) return;
-		if (null==this.lstSequences) return;
-		if (this.lstSequences.getItems()==null) return;
-		if (this.lstSequences.getItems().size()==0) return;
+		if (null==lstSequences) return;
+		if (lstSequences.getItems()==null) return;
+		if (lstSequences.getItems().size()==0) return;
 
-		if (oldCursor!=newCursor) this.lstSequences.getItem(oldCursor).put("state", false);
-
-		if (newCursor<=this.lstSequences.getItems().size()) 
-			this.lstSequences.getItem(newCursor).put("state", true);
+		SequenceSequencer self = this;
 		
-		if (!getCurrentSequenceName().equals("")) 
-			this.txtCurrentSequenceName.setValue(this.getCurrentSequenceName());
-		
-		if (!getCurrentSequenceName().equals("")) {
-			/*this.grpSequenceEditor.remove();
-			this.grpSequenceEditor = (SequenceEditor) 
-			this.getActiveSequence()
-				.makeControls(APP.getApp().getCF().control(), getCurrentSequenceName())
-					.setSequence(this.getCurrentSequenceName(), getActiveSequence())
-					.moveTo(this.grpSequenceEditor)
-					.setPosition(0,20)
-			;*/
-			this.grpSequenceEditor.setSequence(this.getCurrentSequenceName(), getActiveSequence());
-		}
+		APP.getApp().getCF().queueUpdate(new Runnable () {
+			@Override
+			public void run() {				
+				if (oldCursor>=0 && oldCursor!=newCursor) 
+					lstSequences.getItem(oldCursor).put("state", false);
+				
+				if (newCursor>=0 && newCursor<=lstSequences.getItems().size()) 
+					lstSequences.getItem(newCursor).put("state", true);
+				
+				if (!getCurrentSequenceName().equals("")) 
+					txtCurrentSequenceName.setValue(getCurrentSequenceName());
+				
+				if (!getCurrentSequenceName().equals("")) {
+					/*this.grpSequenceEditor.remove();
+					this.grpSequenceEditor = (SequenceEditor) 
+					this.getActiveSequence()
+						.makeControls(APP.getApp().getCF().control(), getCurrentSequenceName())
+							.setSequence(this.getCurrentSequenceName(), getActiveSequence())
+							.moveTo(this.grpSequenceEditor)
+							.setPosition(0,20)
+					;*/
+					grpSequenceEditor.setSequence(getCurrentSequenceName(), getActiveSequence());
+				}
+			}
+		});
 	}
 
 	private void updateGuiProgress(Sequence activeSequence) {
@@ -499,19 +514,33 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		if (null==activeSequence) return;
 		if (null==this.sldProgress) return;
 
-		this.sldProgress.changeValue(activeSequence.getPositionPC()*100);
-		this.sldProgress.setLabel("Progress iteration ["+(activeSequence.getPositionIteration()+1)+"/"+max_iterations+"]");
+		SequenceSequencer self = this;
+		
+		APP.getApp().getCF().queueUpdate(new Runnable () {
+			@Override
+			public void run() {
+				sldProgress.changeValue(activeSequence.getPositionPC()*100);
+				sldProgress.setLabel("Progress iteration ["+(activeSequence.getPositionIteration()+1)+"/"+max_iterations+"]");
+			}
+		});
 	}
 
 	public void updateGuiTimeScale(double f) {
 		if (!APP.getApp().isReady()) return;
 		if (null==this.sldTimeScale) return;
 
-		this.sldTimeScale.changeValue((float) f);
+		SequenceSequencer self = this;
+		
+		APP.getApp().getCF().queueUpdate(new Runnable () {
+			@Override
+			public void run() {
+				sldTimeScale.changeValue((float) f);
+			}
+		});
 	}
 
 
-	private boolean shouldRemember(String sequenceName) {
+	synchronized private boolean shouldRemember(String sequenceName) {
 		// TODO Auto-generated method stub
 		if (sequenceName.contains("_next_")) {
 			return false;
@@ -523,9 +552,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	private void addHistorySequenceName(String activeSequenceName2) {
-		println("Added " + activeSequenceName2 + " as the " + this.historySequenceNames.size() + "th history item");
-		historySequenceNames.add(activeSequenceName2);
+	synchronized private void addHistorySequenceName(String activeSequenceName2) {
+		SequenceSequencer self = this;
+		
+		APP.getApp().getCF().queueUpdate(new Runnable () {
+			@Override
+			public void run() {
+				println("Added " + activeSequenceName2 + " as the " + historySequenceNames.size() + "th history item");
+				historySequenceNames.add(activeSequenceName2);
+			}
+		});
 	}
 
 
@@ -998,7 +1034,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				//println("My name is: " + this.lstSequences.getValueLabel().getText());
 				String sequenceName = this.lstSequences.getValueLabel().getText();
 
-				Map<String, Object> test = this.lstSequences.getItem((int)this.lstSequences.getValue());
+				//Map<String, Object> test = this.lstSequences.getItem((int)this.lstSequences.getValue());
 				//sequenceName = (String) test.get("value");
 
 				println("got value " + (int)this.lstSequences.getValue());

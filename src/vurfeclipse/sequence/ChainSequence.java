@@ -27,13 +27,13 @@ public class ChainSequence extends Sequence {
 	public ChainSequence(int lengthMillis) {
 		super(lengthMillis);
 	}
-	public ChainSequence addSequence(Sequence seq) {
+	synchronized public ChainSequence addSequence(Sequence seq) {
 		seq.setLengthMillis(this.getLengthMillis());
 		if (this.host==null) this.host = seq.host;
 		chain.add(seq);
 		return this;
 	}
-	public ChainSequence addSequence(Scene sc, String sequenceName) {
+	synchronized public ChainSequence addSequence(Scene sc, String sequenceName) {
 		return addSequence(sc.getSequence(sequenceName));
 	}
 	
@@ -55,7 +55,7 @@ public class ChainSequence extends Sequence {
 	}
 	
 	@Override
-	public boolean readyToChange(int max_i) {
+	synchronized public boolean readyToChange(int max_i) {
 		//return iteration>=max_i;
 		// assume ready, unless one of the chained items isnt
 		if (super.readyToChange(max_i)) return true;
@@ -68,7 +68,7 @@ public class ChainSequence extends Sequence {
 	
 	
 	@Override
-	public ArrayList<Mutable> getMutables() {
+	synchronized public ArrayList<Mutable> getMutables() {
 		if (this.mutables==null) {
 			ArrayList<Mutable> muts = super.getMutables();// new ArrayList<Mutable>();
 			//if (host!=null) muts.add(host);
@@ -82,7 +82,7 @@ public class ChainSequence extends Sequence {
 	}	
 	
 	@Override
-	public void setValuesForNorm(double pc, int iteration) {
+	synchronized public void setValuesForNorm(double pc, int iteration) {
 		// TODO Auto-generated method stub
 		Iterator<Sequence> it = chain.iterator();
 		while(it.hasNext()) {
@@ -109,7 +109,7 @@ public class ChainSequence extends Sequence {
 	}
 
 	@Override
-	public HashMap<String,Object> collectParameters() {
+	synchronized public HashMap<String,Object> collectParameters() {
 		HashMap<String,Object> params = super.collectParameters();
 		ArrayList<HashMap<String,Object>> chains = new ArrayList<HashMap<String,Object>>();
 		for (Sequence cs : chain) {
@@ -130,7 +130,7 @@ public class ChainSequence extends Sequence {
 	}
 	
 	@Override
-	public void loadParameters(HashMap<String,Object> params) {
+	synchronized public void loadParameters(HashMap<String,Object> params) {
 		super.loadParameters(params);
 		ArrayList<HashMap<String,Object>> chains = (ArrayList<HashMap<String,Object>>) params.get("chain");
 		for (HashMap<String,Object> cs : chains) {
@@ -149,7 +149,7 @@ public class ChainSequence extends Sequence {
 	
 	
 	@Override
-	public SequenceEditor makeControls(ControlP5 cp5, String name) {
+	synchronized public SequenceEditor makeControls(ControlP5 cp5, String name) {
 		// add an accordion to hold the sub-sequences and recurse
 		SequenceEditor sequenceEditor = super.makeControls(cp5, name);
 		
@@ -176,10 +176,7 @@ public class ChainSequence extends Sequence {
 			//g.setBackgroundHeight(conts.getBackgroundHeight());
 			println("got a " + cs.getClass().getSimpleName() + " with height " + g.getBackgroundHeight()); 
 			acc.addItem(g);
-			acc.setBackgroundHeight(
-					acc.getBackgroundHeight() + 
-					g.getBackgroundHeight()
-					);
+			acc.setBackgroundHeight(acc.getBackgroundHeight() + g.getBackgroundHeight());
 			n++;
 		}
 		

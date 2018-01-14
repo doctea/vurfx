@@ -124,10 +124,16 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	}
 
 	protected void updateGuiStatus() {
-		if (this.tglLocked!=null) this.tglLocked.changeValue(this.isLocked()?1.0f:0.0f);
-		if (this.tglEnabled!=null) this.tglEnabled.changeValue(this.isSequencerEnabled()?1.0f:0.0f);
-		if (this.tglStreams!=null) this.tglStreams.changeValue(this.isStreamsEnabled()?1.0f:0.0f);
+		APP.getApp().getCF().queueUpdate(new Runnable () {
+			@Override
+			public void run() {
+				if (tglLocked!=null) tglLocked.changeValue(isLocked()?1.0f:0.0f);
+				if (tglEnabled!=null) tglEnabled.changeValue(isSequencerEnabled()?1.0f:0.0f);
+				if (tglStreams!=null) tglStreams.changeValue(isStreamsEnabled()?1.0f:0.0f);
+			}
+		});
 	}
+			
 
 	public void setForward() {
 		this.forward = true;

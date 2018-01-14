@@ -88,7 +88,7 @@ public class MutanteProject extends Project implements Serializable {
 	  		super.nextSequence();
 	  	}
 	  	@Override
-	  	public boolean runSequences() {
+	  	synchronized public boolean runSequences() {
 	  		if (!APP.getApp().isReady()) return false;
 	  		seq_count++;
 	  		/*if (this.getCurrentSequenceName().contains("_next_")) {
@@ -109,17 +109,18 @@ public class MutanteProject extends Project implements Serializable {
 
   	/// INPUT SCENES
 
-    //final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
-    //final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
+    final SimpleScene ils1 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene1");//.setOutputBuffer(getCanvas("inp0").surf);
+    final SimpleScene ils2 = (SimpleScene) new SimpleScene(this,w,h).setSceneName("ImageListScene2");//.setOutputBuffer(getCanvas("inp1").surf);
     
     int BLOBCOUNT = 5; //20; // set to 50 for production, 5 makes for quick loading!
 
-    //ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"mutante").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
+    ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"mutante").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory(/*"vurf"*/"mutante").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
     
-    ImageListScene ils1 = (ImageListScene) new ImageListScene(this,w,h).setDirectory("mutante").setSceneName("ImageListScene1");//.setDirectory("mutante");
+    //ImageListScene ils1 = (ImageListScene) new ImageListScene(this,w,h).setDirectory("mutante").setSceneName("ImageListScene1");//.setDirectory("mutante");
     //this.addSceneOutputCanvas(ils1, "pix0");
     
-    ImageListScene ils2 = (ImageListScene) new ImageListScene(this,w,h).setDirectory("mutante").setSceneName("ImageListScene2");
+    //ImageListScene ils2 = (ImageListScene) new ImageListScene(this,w,h).setDirectory("mutante").setSceneName("ImageListScene2");
     //this.addSceneOutputCanvas(ils2, "pix1");
 
     this.addSceneOutputCanvas(

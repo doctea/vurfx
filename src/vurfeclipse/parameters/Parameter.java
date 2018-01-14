@@ -185,7 +185,7 @@ public class Parameter implements Serializable, Targetable {
 		this.min = min;
 	}
 
-	public Controller makeController(ControlP5 cp5, String tabName, ControllerGroup tab, int size) {
+	synchronized public Controller makeController(ControlP5 cp5, String tabName, ControllerGroup tab, int size) {
 		controlP5.Controller o;
 
 		if (value instanceof Float) {

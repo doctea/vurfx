@@ -8,8 +8,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.Group;
+import controlP5.ScrollableList;
 
 import java.util.Map.Entry;
 
@@ -465,13 +468,40 @@ abstract public class Sequence implements Serializable, Mutable {
 			}
 		}
 
-		public SequenceEditor makeControls(ControlP5 cp5, String name) {
+		synchronized public SequenceEditor makeControls(ControlP5 cp5, String name) {
 			SequenceEditor seq = new SequenceEditor(cp5, name);
 			seq.setWidth(cp5.controlWindow.papplet().width);
 
 			cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name).setPosition(80,10).moveTo(seq);
-			if (host!=null) 
-				cp5.addLabel(name + "_host").setValue(host.getPath()).setPosition(80,30).moveTo(seq);
+			
+			if (host!=null) { 
+				//cp5.addLabel(name + "_host").setValue(host.getPath()).setPosition(80,30).moveTo(seq);
+
+				  CallbackListener toFront = new CallbackListener() {
+					    public void controlEvent(CallbackEvent theEvent) {
+					        theEvent.getController().bringToFront();
+					        ((ScrollableList)theEvent.getController()).open();
+					    }
+					  };
+
+					  CallbackListener close = new CallbackListener() {
+					    public void controlEvent(CallbackEvent theEvent) {
+					        ((ScrollableList)theEvent.getController()).close();
+					    }
+					  };
+				
+					ScrollableList lstTarget = cp5.addScrollableList(name + "_hostpath")
+							//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+							.setLabel(this.host.getPath()) //((FormulaCallback)c).targetPath)
+							.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+							.setPosition(80, 30)
+							.setWidth((cp5.papplet.width/6))
+							.moveTo(seq)
+							.onLeave(close)
+							.onEnter(toFront)
+							.close();
+					
+			}
 			
 			cp5.addNumberbox(name + "_length", "length").setValue(getLengthMillis()).setPosition(0,10).moveTo(seq);
 			
