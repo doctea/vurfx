@@ -636,14 +636,15 @@ public abstract class Project implements Serializable {
 		} else if (key=='s') {
 			//println(this.getSelectedScene().getSelectedFilter().serialize());
 			//println(this.serialize());
+			((SequenceSequencer) this.sequencer).preserveCurrentSceneParameters();
 
 			saveSnapshot();
-			((SequenceSequencer) this.sequencer).preserveCurrentSceneParameters();
 		} else if (key=='S') {
 			//loadSnapshot();
 			//APP.getApp().selectInput("Select a file to load", "loadSnapshot"); //- DOESNT WORK ?
-			saveSnapshot("SavedProject-Mutante.xml");
 			((SequenceSequencer) this.sequencer).preserveCurrentSceneParameters();
+			
+			saveSnapshot("SavedProject-Mutante.xml");
 		} else if (this.sequencer.sendKeyPressed(key)) {
 			println ("Key " + key + " handled by sequencer!");
 		} else {

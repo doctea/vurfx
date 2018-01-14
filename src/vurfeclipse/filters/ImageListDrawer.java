@@ -43,7 +43,7 @@ public class ImageListDrawer extends Filter {
     this.src_file = src_file;
   }
 
-  @Deprecated
+  
   public ImageListDrawer setDirectory(String directory) {
 	  this.directory = directory;
 	  return this;
@@ -55,9 +55,10 @@ public class ImageListDrawer extends Filter {
     return this;
   }
 
-  @Deprecated
+  
   public ImageListDrawer setCurrentIndex (int index) {
     this.current_image_index = index;
+    this.changeParameterValue("current_image_index", index);
     return this;
   }
 
@@ -67,7 +68,7 @@ public class ImageListDrawer extends Filter {
    }*/
 
   //HashMap<String,PImage> images = new HashMap<String,PImage>();
-  @Deprecated
+  
   ArrayList<String> filenames = new ArrayList<String>();
   
   public ImageListDrawer setFilenames(ArrayList<String> filenames) {
@@ -75,7 +76,7 @@ public class ImageListDrawer extends Filter {
 	  return this;
   }
   
-  @Deprecated
+  
   public ArrayList<String> getFilenames() {
   	if (filenames == null) {
   		this.loadDirectory();
@@ -83,7 +84,7 @@ public class ImageListDrawer extends Filter {
   	return this.filenames;
   }
 
-  @Deprecated
+  
   public void loadFilenames() {
     //filenames = new String[numBlobs];
     //image_srcs = new GLTexture[numBlobs];
@@ -115,21 +116,23 @@ public class ImageListDrawer extends Filter {
     }
   }
 
-  @Deprecated
-  public void loadDirectory() {
+  
+  public ImageListDrawer loadDirectory() {
 	  loadDirectory(this.directory);
+	  return this;
   }
 
-  @Deprecated
-  public void loadDirectory(String directory) {
-	  String path = APP.getApp().sketchPath("bin/data/image-sources/" + directory);	// ffs need this on Windows..
-	  //String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
+  
+  public ImageListDrawer loadDirectory(String directory) {
+	  //String path = APP.getApp().sketchPath("bin/data/image-sources/" + directory);	// ffs need this on Windows..
+	  //String path = APP.getApp().sketchPath("../bin/data/image-sources/" + directory);
+	  String path = APP.getApp().dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
 	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
 	  //String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
 	  File folder = new File(path);
 	  System.out.println(this + "#loadDirectory() got path " + path);
 	  int count = 0;
-	  if (!folder.exists()) return;
+	  if (!folder.exists()) return this;
 	  for (final File fileEntry : folder.listFiles()) {
 		  if (fileEntry.isDirectory()) {
 			  // skip; maybe recurse tho in future
@@ -142,6 +145,7 @@ public class ImageListDrawer extends Filter {
 			  if (count>=numBlobs) break;
 		  }
 	  }
+	  return this;
   }
 
   public void initTextures (ImageRepository IR) {
@@ -162,9 +166,10 @@ public class ImageListDrawer extends Filter {
    return p;//images.get(fn);
    }*/
 
-  @Deprecated
+  
   public PImage getCurrentImage (ImageRepository IR) {
     println(this + "#getCurrentImage for current_image_index: [" + current_image_index + "/" + filenames.size() + "]");
+    current_image_index = (int)this.getParameterValue("current_image_index");
     //PImage p = getImageForFilename(filenames.get(current_image_index));
     //if (!images.containsKey(filenames.get(current_image_index))) {
     /*if(!IR.hasCached(filenames.get(current_image_index), sc.w, sc.h)) {
@@ -188,9 +193,10 @@ public class ImageListDrawer extends Filter {
      return current_image;*/
     //return this.image_srcs[current_image_index];
   }
-  @Deprecated
+  
   public void nextImage () {
     println(this + "#nextImage [" + current_image_index + "/" + filenames.size() + "]");
+    current_image_index = (int)getParameterValue("current_image_index");
     current_image_index++;
     //IR.precache(filenames.get(current_image_index), sc.w, sc.h);
     if (current_image_index >= filenames.size())
@@ -199,6 +205,8 @@ public class ImageListDrawer extends Filter {
       println(this + "#nextImage: haven't got cached " + filenames.get(current_image_index));
       current_image_index++;// = 0;//current_image_index--;
     }
+    
+    this.changeParameterValue("current_image_index", new Integer(current_image_index));
 
     //IR.precache(filenames.get(current_image_index), sc.w, sc.h);#
     //p = IR.cacheLoad(filenames.get(current_image_index), sc.w, sc.h);
@@ -218,6 +226,8 @@ public class ImageListDrawer extends Filter {
     this.addParameter("scale", new Float(1.0f), 1.0f, 5.0f);
     this.addParameter("translate_x", new Integer(0), -sc.w/2, sc.w/2);
     this.addParameter("translate_y", new Integer(0), -sc.h/2, sc.h/2);
+    
+    this.addParameter("current_image_index", new Integer(0), 0, this.filenames.size());
     /*this.addParameter("tint", new Integer(128), 0, 255);//new Integer(128));
      this.addParameter("shape", new Integer(0), 0, b.shapesCount);
      this.addParameter("colour", color(random(255),random(255),random(255),128));*/
@@ -297,7 +307,7 @@ public class ImageListDrawer extends Filter {
     //arrayCopy(src.pixels, out.pixels);
     return true;
   }
-  @Deprecated
+  
 	public void chooseImageIndex(int imageIndex) {
 		this.setCurrentIndex(imageIndex);
 		setSlide(getCurrentImage(ImageRepository.IR));
@@ -308,16 +318,27 @@ public class ImageListDrawer extends Filter {
 	public void setSlide(PImage p) {
 		this.p = p;
 	}
+	
+	@Override
+	synchronized public void updateParameterValue(String paramName, Object value) {
+		//if (!this.parameters.containsKey(paramName)) this.addParameter(paramName, value);
+		//if (paramName!="current_image_index") {
+			super.updateParameterValue(paramName, value);
+		//} else {
+			if (paramName=="current_image_index") 
+				setSlide(getCurrentImage(ImageRepository.IR));
+		//}
 
-  /*public void beginDraw() {
-   //src.loadPixels();
-   //out.loadPixels();
-   out.beginDraw();
-   }
-
-   public void endDraw() {
-   //out.updatePixels();
-   out.endDraw();
-   }*/
+	  /*public void beginDraw() {
+	   //src.loadPixels();
+	   //out.loadPixels();
+	   out.beginDraw();
+	   }
+	
+	   public void endDraw() {
+	   //out.updatePixels();
+	   out.endDraw();
+	   }*/
+	}
 }
 

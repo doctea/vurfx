@@ -114,8 +114,8 @@ public class MutanteProject extends Project implements Serializable {
     
     int BLOBCOUNT = 5; //20; // set to 50 for production, 5 makes for quick loading!
 
-    ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"mutante").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
-    ils2.addFilter(new ImageListDrawer(ils2).setDirectory(/*"vurf"*/"mutante").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
+    ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"mutante").loadDirectory().setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
+    ils2.addFilter(new ImageListDrawer(ils2).setDirectory(/*"vurf"*/"mutante").loadDirectory().setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
     
     //ImageListScene ils1 = (ImageListScene) new ImageListScene(this,w,h).setDirectory("mutante").setSceneName("ImageListScene1");//.setDirectory("mutante");
     //this.addSceneOutputCanvas(ils1, "pix0");

@@ -121,7 +121,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   public Collection<Parameter> getParameters () {
 	  if (this.parameters==null)
 		  this.setParameterDefaults();
-	  return this.parameters.values();
+	  return (Collection<Parameter>) this.parameters.values();
   }
 
   public String getPath () {
@@ -304,7 +304,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
    * PARAMETERS
    *              */
   //HashMap parameters<Parameter> = new HashMap<Parameter> (Parameter.class);// = new HashMap();
-  HashMap<String, Parameter> parameters;// = new HashMap<String,Parameter> ();
+  LinkedHashMap<String, Parameter> parameters;// = new HashMap<String,Parameter> ();
 
   synchronized public Object getParameterValue(String paramName) {
     if (this.parameters==null) this.setParameterDefaults();
@@ -415,7 +415,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
   synchronized public void setParameterDefaults () {
     println("setParameterDefaults in " + this);
     if (this.parameters==null) {
-    	parameters = new HashMap<String, Parameter>();//String.class,Parameter.class);
+    	parameters = new LinkedHashMap<String, Parameter>();//String.class,Parameter.class);
     } else {
     	resetParameters();
     }
@@ -815,19 +815,6 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		//return null;
 	}
 	
-	public void readSnapshot(Map<String,Object> input) {
-		this.setFilterName((String) input.get("name"));
-		this.setFilterLabel((String) input.get("label"));
-		//this.setDescription(input.get("description"));
-		this.setOutputCanvas((String) input.get("canvas_out"));
-		this.setInputCanvas((String) input.get("canvas_src"));	
-	
-		for (Entry<String, Object> p : ((Map<String, Object>) input.get("parameter_defaults")).entrySet()) {
-			Map<String,Object> para = (Map<String, Object>) p.getValue();
-			this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
-		}		
-	}
-	
 	public HashMap<String,Object> collectFilterSetup() {	// for saving snapshots, save setup of filter
 		HashMap<String,Object> output = new HashMap<String,Object>();
 		
@@ -886,6 +873,19 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public void readSnapshot(Map<String, Object> input) {
+		this.setFilterName((String) input.get("name"));
+		this.setFilterLabel((String) input.get("label"));
+		//this.setDescription(input.get("description"));
+		this.setOutputCanvas((String) input.get("canvas_out"));
+		this.setInputCanvas((String) input.get("canvas_src"));	
+	
+		for (Entry<String, Object> p : ((Map<String, Object>) input.get("parameter_defaults")).entrySet()) {
+			Map<String,Object> para = (Map<String, Object>) p.getValue();
+			this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
+		}		
+		
 	}
 
 }

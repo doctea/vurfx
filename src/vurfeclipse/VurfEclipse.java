@@ -242,6 +242,15 @@ public class VurfEclipse extends PApplet {
 	public String sketchPath(String where) {
 		return sketchPath() + where;		
 	}
+
+	@Override
+	public String dataPath(String file) {
+		return this.dataPath() + "/" + file;		
+	}
+	public String dataPath() {
+		return System.getProperty("user.dir") + "/bin/data";
+	}
+
 	
 	@Override
 	public void settings () {

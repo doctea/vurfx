@@ -14,6 +14,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.sun.prism.paint.Color;
+
 import java.util.Set;
 
 import vurfeclipse.APP;
@@ -28,6 +31,7 @@ import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
 import controlP5.Accordion;
 import controlP5.Bang;
+import controlP5.CColor;
 import controlP5.CallbackEvent;
 import controlP5.ControlP5;
 import controlP5.Controller;
@@ -941,7 +945,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.moveTo(sequencerTab)
 				.setValue(0.0f);
 		
-		tglEnabled = new controlP5.Toggle(cp5, "enabled")
+		tglEnabled = new controlP5.Toggle(cp5, "update")
 				.setPosition(tglLocked.getWidth() + (margin_x*2) + (width/3), margin_y)
 				.changeValue(this.isSequencerEnabled()?1.0f:0.0f)
 				.moveTo(sequencerTab)
@@ -954,39 +958,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				;
 		
 
-		Accordion accordion = cp5.addAccordion("streams").setWidth(cf.displayWidth/2);
-
-		//Scene n;
-		for (Entry<String, Stream> i : this.getStreams().entrySet()) {
-			//String tabName = "["+c+"] " + n.getSceneName(); //getClass();
-			//ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
-			//Tab tab = cp5.addTab(tabName);
-
-			String streamName = i.getKey();
-			Group g = cp5.addGroup(streamName);
-
-			//println("added tab " + tabName);
-			//ControllerInterface[] controls = ((Scene)i.next()).getControls();
-			//cp5.begin(10,40);
-			//((Scene)n).setupControls(cf,g);//tab);
-			i.getValue().setupControls(cf,g);
-			println("done setupControls for " + i.getValue());
-			//cp5.end();
-
-			accordion.addItem(g);
-
-			/*for (int n = 0 ; n < controls.length ; n++) {
-        cp5.getTab("Scene " + c).add(controls[n]).moveTo("Scene " + c);
-        //cp5.addSlider(controls[n]).moveTo("Scene " + c);
-      }*/
-			c++;
-			//((Scene)i).setupControls(cp5);
-		}
-		accordion.setPosition(0, margin_y * 15);
-		//accordion.open();
-		accordion.setCollapseMode(Accordion.MULTI);
-
-		accordion.moveTo(sequencerTab);
+		Accordion accordion = this.makeStreamEditor(cf)
+				.setPosition(0, margin_y * 15)
+				.moveTo(sequencerTab);
 
 
 		super.updateGuiStatus();
@@ -1009,6 +983,42 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		//zthis.loadHistoryButton = cf.control().addBang("LOAD sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
 		cf.control().addCallback(this);
 	}
+
+	private Accordion makeStreamEditor(ControlFrame cf) {
+		Accordion accordion = cf.control().addAccordion("streams_editor").setWidth(cf.displayWidth/2);
+
+		//Scene n;
+		for (Entry<String, Stream> i : this.getStreams().entrySet()) {
+			//String tabName = "["+c+"] " + n.getSceneName(); //getClass();
+			//ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
+			//Tab tab = cp5.addTab(tabName);
+
+			String streamName = i.getKey();
+			Group g = cf.control().addGroup(streamName);
+
+			//println("added tab " + tabName);
+			//ControllerInterface[] controls = ((Scene)i.next()).getControls();
+			//cp5.begin(10,40);
+			//((Scene)n).setupControls(cf,g);//tab);
+			i.getValue().setupControls(cf,g);
+			println("done setupControls for " + i.getValue());
+			//cp5.end();
+
+			accordion.addItem(g);
+
+						/*for (int n = 0 ; n < controls.length ; n++) {
+			    cp5.getTab("Scene " + c).add(controls[n]).moveTo("Scene " + c);
+			    //cp5.addSlider(controls[n]).moveTo("Scene " + c);
+			  }*/
+			//c++;
+			//((Scene)i).setupControls(cp5);
+		}		
+		
+		accordion.open().setCollapseMode(Accordion.MULTI);
+		
+		return accordion;
+	}
+
 
 	@Override public void controlEvent (CallbackEvent ev) {
 		//println("controlevent in " + this);
