@@ -223,9 +223,10 @@ public class ImageListDrawer extends Filter {
     //this.setParameterValue("radius", 10.0);
     //this.setParameterValue("rotation", 0.0);
     super.setParameterDefaults();
-    this.addParameter("scale", new Float(1.0f), 1.0f, 5.0f);
     this.addParameter("translate_x", new Integer(0), -sc.w/2, sc.w/2);
     this.addParameter("translate_y", new Integer(0), -sc.h/2, sc.h/2);
+    
+    this.addParameter("scale", new Float(1.0f), 1.0f, 5.0f);
     
     this.addParameter("current_image_index", new Integer(0), 0, this.filenames.size());
     /*this.addParameter("tint", new Integer(128), 0, 255);//new Integer(128));

@@ -37,8 +37,8 @@ public class PlainDrawer extends Filter {
   
   public void setParameterDefaults () {
     super.setParameterDefaults();
-    this.addParameter("tint", new Integer(255), new Integer(0), new Integer(255));
     this.addParameter("rotation", new Integer(0), new Integer(0), new Integer(360));
+    this.addParameter("tint", new Integer(255), new Integer(0), new Integer(255));
   }
   
   public boolean initialise() {
