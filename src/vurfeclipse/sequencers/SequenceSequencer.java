@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.sun.prism.paint.Color;
+import com.sun.xml.internal.bind.v2.runtime.Name;
 
 import java.util.Set;
 
@@ -61,7 +63,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private boolean randomMode = true;
 	private boolean historyMode = false;
 
-	private LinkedList<String> historySequenceNames = new LinkedList<String>();
+	private List<String> historySequenceNames = Collections.synchronizedList(new LinkedList<String>());
 	private int historyCursor;
 	private SequenceEditor grpSequenceEditor;
 
@@ -216,18 +218,21 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			return "Sequencer active Sequence is currently " + activeSequenceName;
 		} else if (spl[2].equals("bank")) {	//  /bank/sequences
 			println ("loading bank for " + spl[3]);
-			if (spl[3].equals("sequences") &&  payload instanceof HashMap<?,?>) {		
-				for (Entry<String,Object> s : ((LinkedHashMap<String,Object>) payload).entrySet()) {
+			if ((spl[3].equals("sequences") || spl[3].equals("history") ) && (payload instanceof HashMap<?,?> || (payload instanceof LinkedHashMap<?,?>))) {		
+				for (Entry<String,Object> s : ((HashMap<String,Object>) payload).entrySet()) {
 					HashMap<String,Object> c = (HashMap<String,Object>)s.getValue();
 					Sequence newSeq = this.createSequence(c);
 					String seqName = (String) c.get("current_sequence_name");
 					println("got seqName " + seqName);
-					seqName = seqName==null?"loaded":seqName;
+					seqName = seqName==null?s.getKey():seqName;
 					this.addSequence(seqName, newSeq);
-					this.addHistorySequenceName(seqName);
+					if (spl[3].equals("history")) this.addHistorySequenceName(seqName);
 				}
 			} else {
-				return this.collectBankSequences();
+				if (spl[3].equals("sequences")) 
+					return this.collectBankSequences();
+				else
+					return this.collectBankHistory();
 			}
 		} else if (spl[2].equals("sequence")) {					// creates a sequence and adds it to the bank, but doesn't switch to it. returns url to change to the sequence
 			if (payload instanceof HashMap<?,?>) {		
@@ -241,7 +246,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			}
 		} else if (spl[2].equals("seed")) {
 			this.getActiveSequence().setSeed((Long)payload);
-			return "Set seed to "+payload;
+			this.getActiveSequence().println("Set seed to "+payload);
+			return payload;			
 		} else {
 			return (super.target(path,  payload));			
 		}
@@ -263,7 +269,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	synchronized public Sequence addSequence(String sequenceName, Sequence sc) {
 		sequences.put(sequenceName, sc);
-		if (activeSequenceName.equals("")) activeSequenceName = sequenceName;
+		
+		if (activeSequenceName.equals("")) {
+			//activeSequenceName = sequenceName;
+			this.changeSequence(sequenceName);
+		}
 		
 		if (isBindToRandom()==true) 
 			this.randomPool.add(sequenceName);
@@ -436,6 +446,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			// check if this is already the top of the sequence history, if so don't add it again 
 		}
 
+		String oldSequenceName = this.activeSequenceName;
 		this.activeSequenceName = sequenceName;
 
 		if (null==this.getActiveSequence()) {
@@ -453,7 +464,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			historyCursor = this.historySequenceNames.size()-1;
 
 			// GUI: add latest sequence to history GUI
-			this.updateGuiAddHistory(this.getCurrentSequenceName(), this.getCurrentSequenceName());
+			this.updateGuiAddHistory(oldSequenceName, sequenceName);
 		}
 		
 		// update gui for changed sequences
@@ -465,35 +476,43 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	private void updateGuiAddHistory(String currentSequenceName, String currentSequenceName2) {
+	private void updateGuiAddHistory(String oldSequenceName, String newSequenceName) {
 		SequenceSequencer self = this;
 		
 		APP.getApp().getCF().queueUpdate(new Runnable () {
 			@Override
 			public void run() {
-				if (self.getActiveSequence()!=null && APP.getApp().isReady() && self.lstSequences!=null) 
-					self.lstSequences.addItem(self.getCurrentSequenceName(), self.getCurrentSequenceName());
+				/*if (self.getActiveSequence()!=null && APP.getApp().isReady() && self.lstHistory!=null) 
+					self.lstHistory.addItem(self.getCurrentSequenceName(), self.getCurrentSequenceName());
+					*/
+				
+				// sync lstHistory with actual history
+				lstHistory.clear();
+				lstHistory.addItems(historySequenceNames);
+				
+				if (lstHistory.getItems().contains("oldSequenceName")) lstHistory.getItem(oldSequenceName).put("state", false);
+				lstHistory.getItem(newSequenceName).put("state", true);
 			}
 		});
 	}
 
 
 	private void updateGuiSequenceChanged(int oldCursor, int newCursor) {
-		if (!APP.getApp().isReady()) return;
-		if (null==lstSequences) return;
-		if (lstSequences.getItems()==null) return;
-		if (lstSequences.getItems().size()==0) return;
+		//if (!APP.getApp().isReady()) return;
+		if (null==lstHistory) return;
+		if (lstHistory.getItems()==null) return;
+		//if (lstHistory.getItems().size()==0) return;
 
 		SequenceSequencer self = this;
 		
 		APP.getApp().getCF().queueUpdate(new Runnable () {
 			@Override
 			public void run() {				
-				if (oldCursor>=0 && oldCursor!=newCursor) 
-					lstSequences.getItem(oldCursor).put("state", false);
+				if (oldCursor>=0 && oldCursor<lstHistory.getItems().size() && oldCursor!=newCursor) 
+					lstHistory.getItem(oldCursor).put("state", false);
 				
-				if (newCursor>=0 && newCursor<=lstSequences.getItems().size()) 
-					lstSequences.getItem(newCursor).put("state", true);
+				if (newCursor>=0 && newCursor<lstHistory.getItems().size()) 
+					lstHistory.getItem(newCursor).put("state", true);
 				
 				if (!getCurrentSequenceName().equals("")) 
 					txtCurrentSequenceName.setValue(getCurrentSequenceName());
@@ -550,7 +569,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			return false;
 		}
 		if (getSequence(sequenceName).readyToChange(0)) {
-			host.println(this.toString() + ": " + sequenceName +" is ready to change for 0, not remembering!");;
+			host.println(this.toString() + ": " + sequenceName +" is ready to change for 0, not remembering!");
+			
 		}
 		return true;
 	}
@@ -559,11 +579,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	synchronized private void addHistorySequenceName(String activeSequenceName2) {
 		SequenceSequencer self = this;
 		
+		this.historySequenceNames.add(activeSequenceName2);
+		
+		//this.update
+		
 		APP.getApp().getCF().queueUpdate(new Runnable () {
 			@Override
 			public void run() {
-				println("Added " + activeSequenceName2 + " as the " + historySequenceNames.size() + "th history item");
-				historySequenceNames.add(activeSequenceName2);
+				//println("Added " + activeSequenceName2 + " as the " + historySequenceNames.size() + "th history item");
+				//historySequenceNames.add(activeSequenceName2);
+				// sync ?
 			}
 		});
 	}
@@ -812,6 +837,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     	loadSequence("test.xml");*/
     } else if (key=='d') {
 		this.preserveCurrentSceneParameters();
+    } else if (key=='v') {
+    	this.preserveCurrentSceneParameters();
+    	this.cloneSequence(this.activeSequenceName, "Copy of " + this.activeSequenceName);
     } else if (super.sendKeyPressed(key)) {
     } else {
     	return false;
@@ -891,7 +919,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	protected Bang loadHistoryButton;
 
 	private Textfield txtCurrentSequenceName;
-	private ListBox lstSequences;
+	private ListBox lstHistory;
 	private Slider sldProgress;
 	private Slider sldTimeScale;
 	@Override public void setupControls (ControlFrame cf, String tabName) {
@@ -918,7 +946,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.moveTo(sequencerTab);
 		sequencerTab.add(txtCurrentSequenceName);
 
-		lstSequences = new controlP5.ListBox(cp5, "sequence names")  	    		
+		lstHistory = new controlP5.ListBox(cp5, "sequence names")  	    		
 				.setPosition(width-(width/3), margin_y + 100)
 				.setSize(width/3, height-margin_y-100)
 				.setItemHeight(20)
@@ -965,9 +993,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		super.updateGuiStatus();
 		
-		lstSequences.addItems(this.historySequenceNames);
-		
-		
+		//lstHistory.addItems(this.historySequenceNames);
 		
 		Tab sequencerEditorTab = cp5.addTab(tabName + " Editor");
 
@@ -985,7 +1011,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 	private Accordion makeStreamEditor(ControlFrame cf) {
-		Accordion accordion = cf.control().addAccordion("streams_editor").setWidth(cf.displayWidth/2);
+		Accordion accordion = cf.control().addAccordion("streams_editor").setWidth(cf.displayWidth/3);
 
 		//Scene n;
 		for (Entry<String, Stream> i : this.getStreams().entrySet()) {
@@ -1021,6 +1047,17 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 
 	@Override public void controlEvent (CallbackEvent ev) {
+		
+		if (ev.getController() instanceof Textfield) {
+			if (ev.getAction()==ControlP5.ACTION_ENTER || ev.getAction()==ControlP5.ACTION_CLICK) {
+				((Textfield)ev.getController()).setFocus(true);
+				host.setDisableKeys(true);	// horrible hack to disable keyboard input when a textfield is selected..
+			} else if (ev.getAction()==ControlP5.ACTION_LEAVE) {
+				((Textfield)ev.getController()).setFocus(false);
+				host.setDisableKeys(false);	// horrible hack to disable keyboard input when a textfield is selected..
+			}
+		}
+		
 		//println("controlevent in " + this);
 		if (ev.getAction()==ControlP5.ACTION_RELEASED) {
 			Controller c = ev.getController();
@@ -1040,16 +1077,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				}
 			}
 		} else if (ev.getAction()==ListBox.ACTION_CLICK) { 
-			if (ev.getController()==this.lstSequences) {
+			if (ev.getController()==this.lstHistory) {
 				//println("My name is: " + this.lstSequences.getValueLabel().getText());
-				String sequenceName = this.lstSequences.getValueLabel().getText();
+				String sequenceName = this.lstHistory.getValueLabel().getText();
 
 				//Map<String, Object> test = this.lstSequences.getItem((int)this.lstSequences.getValue());
 				//sequenceName = (String) test.get("value");
 
-				println("got value " + (int)this.lstSequences.getValue());
+				println("got value " + (int)this.lstHistory.getValue());
 				println("got list-selected sequenceName " + sequenceName);
-				this.histMoveCursorAbsolute((int)this.lstSequences.getValue(),true); //distance, restart);
+				this.histMoveCursorAbsolute((int)this.lstHistory.getValue(),true); //distance, restart);
 				//this.changeSequence(sequenceName, false, true);
 			} else if (ev.getController()==this.tglLocked) {
 				this.toggleLock(ev.getController().getValue()==1.0f);
@@ -1064,6 +1101,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			} else if (ev.getController()==this.sldTimeScale) {
 				//this.getActiveSequence().setValuesForNorm(this.sldTimeScale.getValue(),this.getActiveSequence());
 				this.setTimeScale(sldTimeScale.getValue());
+			} else if (ev.getController()==this.txtCurrentSequenceName) {
+				//TODO: sequencer rename functionality
+				this.renameSequence(this.getCurrentSequenceName(), txtCurrentSequenceName.getText());
+				
+				// TODO: clone the play list entry...
+				//this.addSequence(txtCurrentSequenceName.getText(), this.getActiveSequence()); // TODO: actually clone the active sequence!
+				//this.changeSequence(txtCurrentSequenceName.getText());
 			}
 			/*else if (ev.getController()==this.saveButton) {
         println("save preset " + getSceneName());
@@ -1073,12 +1117,78 @@ public class SequenceSequencer extends Sequencer implements Targetable {
       else if (ev.getController()==this.loadButton) {
         println("load preset");
         this.loadPreset2(getSceneName()); //saveFilenameController.getText());
-      }*/
+      }*/    
+			/*
+		} else if (ev.getController()==this.txtCurrentSequenceName) { // && ev.getController().isUserInteraction()) {
+			//if (ev.getController() instanceof Textfield) {
+				if (
+						//ev.getAction()==Textfield.ACTION_RELEASE
+						//(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_BROADCAST || ev.getAction()==ControlP5.ACTION_DRAG || ev.getAction()==ControlP5.ACTION_RELEASE || ev.getAction()==ControlP5.ACTION_RELEASE_OUTSIDE || ev.getAction()==ControlP5.ACTION_PRESS)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
+						true//ev.getAction()==100
+					) {
+					println("sequencesequencer changed to " + ((Textfield)ev.getController()).getText());
+				} else 
+					
+				if (ev.getController() instanceof Textfield && (ev.getAction()==ControlP5.ACTION_ENTER || ev.getAction()==ControlP5.ACTION_CLICK)) {
+					println("sequencesequencer changed to " + ((Textfield)ev.getController()).getText());
+					((Textfield)ev.getController()).setFocus(true);
+					host.setDisableKeys(true);	// horrible hack to disable keyboard input when a textfield is selected..
+				} else if (ev.getAction()==ControlP5.ACTION_LEAVE) {
+					((Textfield)ev.getController()).setFocus(false);
+					host.setDisableKeys(false);	// horrible hack to disable keyboard input when a textfield is selected..
+				} else {
+					ev.getController().setBroadcast(true);
+					println ("got ev " + ev.getAction());
+				}
+				//if (ev.getController() instanceof Textfield) { // && !currentValue.equals(((Textfield)ev.getController()).getText())) {
+					//sc.host.disableKeys = false;	// horrible hack to disable keyboard input when a textfield is selected..
+					//((Textfield)ev.getController()).setFocus(true);
+				//}
+			//}
+			 * 
+			 */
 		} else {
 			super.controlEvent(ev);
 		}
 	}
 
+
+
+	public void renameSequence(String currentSequenceName, String text) {
+		SequenceSequencer self = this;
+		
+		int place = this.historySequenceNames.indexOf(currentSequenceName);
+		if (place>=0) {
+			this.historySequenceNames.set(place, text);
+		
+			APP.getApp().getCF().queueUpdate(new Runnable () {
+	
+				@Override
+				public void run() {
+					//(Item)self.lstSequences.getItems().get(self.lstSequences.getItems().indexOf(currentSequenceName))
+					
+					//TODO: update the item's name in the history sequence!
+					
+				}			
+			});
+		}
+	}
+	
+	//TODO: plumb this cloneSequence in so it can be activated, and test it!
+	public Sequence cloneSequence(String sequenceName, String newName) {
+		Sequence sequence = this.getSequence(sequenceName);
+		
+		// clone it and add it back to sequences under new name
+		sequence = (Sequence) sequence.clone();
+		// add it to history under new name by switching to it
+		this.addSequence(newName, sequence);
+		changeSequence(newName);
+		
+		return sequence;
+		// clone the play list entry...
+		//this.addSequence(txtCurrentSequenceName.getText(), this.getActiveSequence()); // TODO: actually clone the active sequence!
+		//this.changeSequence(txtCurrentSequenceName.getText());		
+	}
 
 
 	@Override public HashMap<String,Object> collectParameters() {
@@ -1090,12 +1200,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		
 		params.put("/seq/current_sequence_name", this.getCurrentSequenceName());	// just save the name, used when re-loading from xml or hashmap
 		
-		params.put("/seq/bank/sequences", this.collectBankHistory());
+		params.put("/seq/bank/sequences", this.collectBankSequences());
+		
+		params.put("/seq/bank/history",  this.collectBankHistory());
 		
 		return params;
 	}
 
-	private HashMap<String,Object> collectBankHistory() {
+	private LinkedHashMap<String,Object> collectBankHistory() {
 		LinkedHashMap<String,Object> params = new LinkedHashMap<String,Object>();
 		//for (Entry<String, Sequence> s : this.histor.entrySet()) {
 		for (String e : this.historySequenceNames) {
@@ -1115,8 +1227,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 	}
 
-	private HashMap<String,Object> collectBankSequences() {
-		HashMap<String,Object> params = new HashMap<String,Object>();
+	private LinkedHashMap<String,Object> collectBankSequences() {
+		LinkedHashMap<String,Object> params = new LinkedHashMap<String,Object>();
 		for (Entry<String, Sequence> s : this.sequences.entrySet()) {
 			params.put(s.getKey(), s.getValue().collectParameters());
 		}

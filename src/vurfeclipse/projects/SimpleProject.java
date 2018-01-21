@@ -160,5 +160,11 @@ public boolean isSequencerEnabled() {
 	return this.enableSequencer;
 }
 
+@Override
+public void initialiseStreams() {
+	// TODO Auto-generated method stub
+	
+}
+
 
 }

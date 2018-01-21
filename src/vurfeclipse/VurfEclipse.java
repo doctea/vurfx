@@ -21,8 +21,6 @@ import java.io.PrintStream;
 import java.text.MessageFormat;
 import java.util.*;
 
-import com.sun.glass.ui.Screen;
-
 //import javax.media.opengl.*;
 import processing.opengl.*;
 import ch.bildspur.postfx.builder.*;
@@ -106,7 +104,8 @@ public class VurfEclipse extends PApplet {
 
 	private static ControlFrame controlFrame;
 
-	synchronized public ControlFrame getCF() {
+	//synchronized 
+	public ControlFrame getCF() {
 		if (controlFrame==null && enablecp5) {
 			System.out.println("VurfEclipse#getCP5 creating new ControlP5..");
 			//cp5 = new ControlP5(this);
@@ -327,7 +326,9 @@ public class VurfEclipse extends PApplet {
 	 	 //pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject2017-12-22-20-27-41.xml"); // not a bad one --> output/SavedProject2017-12-22-20-10-39.xml");
 	 	 //pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject-NYE.xml");
 	 	
-	 	 pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.MutanteProject.class);
+	 	 //pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.MutanteProject.class);
+	 	 pr = Project.chooseProject(desired_width, desired_height, "output/MutanteProject-incremental.xml");
+	 	
 		 
 		 PVector resolution = this.getOutputResolution();
 		 
@@ -727,6 +728,10 @@ public class VurfEclipse extends PApplet {
 	}
 
 	public void handleKey(char key) {
+		if (this.pr.isDisableKeys()) {
+			println("keys are disabled, ignoring " + key);
+			return;
+		}
 		 try {
 			   if (key == ' ') {
 			     screenGrab = true;

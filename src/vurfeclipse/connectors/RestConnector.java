@@ -63,7 +63,7 @@ public class RestConnector implements Runnable {
 	}
 	
 	@Override
-	public void run() {
+	synchronized public void run() {
 		// TODO Auto-generated method stub
 		IceBreakRestServer rest;
 		

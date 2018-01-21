@@ -1,7 +1,11 @@
 package vurfeclipse.ui;
 
+import java.util.Collections;
+import java.util.List;
+
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
+import controlP5.ControllerInterface;
 import controlP5.Group;
 import vurfeclipse.sequence.ChainSequence;
 import vurfeclipse.sequence.Sequence;
@@ -33,9 +37,13 @@ public class SequenceEditor extends Group {
 		//this.setBarHeight(20);
 	}
 
-	public SequenceEditor setupControls() {
-		
+	synchronized public SequenceEditor setupControls() {
+
+		/*for (ControllerInterface<?> c : Collections.synchronizedList((List) this.controllers)) {
+			this.remove(c);
+		}*/
 		this.controllers.get().clear();
+		//this.remove();
 		
 		sequence.makeControls(cp5, sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,50);
 	

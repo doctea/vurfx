@@ -137,14 +137,14 @@ public class Parameter implements Serializable, Targetable {
 		if (filterPath!=null)
 			((VurfEclipse)APP.getApp()).pr.updateControl(filterPath, name, value);
 		/*controlP5.Controller c = getController();
-    if (c!=null) {
-      if (value instanceof Float)
-        c.setValue((Float)value);
-      else if (value instanceof Integer) 
-        c.setValue((Integer)value);
-      else if (value instanceof Boolean)
-        c.setValue((Boolean)value?1.0:0.0);
-    }*/
+	    if (c!=null) {
+	      if (value instanceof Float)
+	        c.setValue((Float)value);
+	      else if (value instanceof Integer) 
+	        c.setValue((Integer)value);
+	      else if (value instanceof Boolean)
+	        c.setValue((Boolean)value?1.0:0.0);
+	    }*/
 	}
 
 

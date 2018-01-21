@@ -42,6 +42,14 @@ abstract public class Sequence implements Serializable, Mutable {
 	protected HashMap<String, HashMap<String,Object>> scene_parameters;
 	private ArrayList<String> mutableListToLoad;
 
+	public Object clone () {
+		Sequence newSequence = Sequence.makeSequence(this.getClass().getName(), this.host);
+		
+		newSequence.loadParameters(this.collectParameters());
+		
+		return newSequence;
+	}
+	
 	static public Sequence makeSequence(String classname, Scene host) {
 		System.out.println("got classname " + classname);
 		try {
@@ -258,9 +266,9 @@ abstract public class Sequence implements Serializable, Mutable {
 		startTimeMillis = APP.getApp().millis();
 		
 		if (this.scene_parameters!=null) {
-			println(this + " about to set scene_parameters!");
 			for (Entry<String,HashMap<String,Object>> e : scene_parameters.entrySet()) {
 				Scene s = (Scene) this.host.host.getObjectForPath(e.getKey());
+				println(this + " about to set scene_parameters on " + s + "!");
 				if(s==null) {
 					System.err.println ("Couldn't find a targetable for key '"+e.getKey()+"'!!!");
 				} else {

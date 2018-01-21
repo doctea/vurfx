@@ -156,7 +156,8 @@ public class ChainSequence extends Sequence {
 		//if (true) return sequenceEditor;
 		
 		//cp5.addLabel("Sequence Editor: " + name).setValue("Sequence Editor: " + name).moveTo(sequenceEditor).setPosition(100,100);
-		Accordion acc = cp5.addAccordion(name + "_acc").moveTo(sequenceEditor)
+		Accordion acc = cp5.addAccordion(name + "_acc")
+				.moveTo(sequenceEditor)
 				.setWidth(sequenceEditor.getWidth()-10)
 				//.setBackgroundHeight(cp5.papplet.sketchHeight()/5)
 				.setPosition(10,sequenceEditor.getBackgroundHeight())

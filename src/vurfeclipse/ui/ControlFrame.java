@@ -2,6 +2,8 @@ package vurfeclipse.ui;
 import controlP5.ControlP5;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import controlP5.*;
 import processing.core.PApplet;
@@ -89,7 +91,7 @@ public class ControlFrame extends PApplet {
 		return this.cp5;
 	}
 
-	ArrayList<Runnable> updateQueue = new ArrayList<Runnable>();
+	List<Runnable> updateQueue = Collections.synchronizedList(new ArrayList<Runnable>());
 
 	public void draw() {
 		background(190);
@@ -108,8 +110,10 @@ public class ControlFrame extends PApplet {
 		updateQueue.clear();
 	}
 
-	synchronized public void queueUpdate(Runnable runnable) {
-		this.updateQueue.add(runnable);
+	public void queueUpdate(Runnable runnable) {
+		synchronized(this) {
+			this.updateQueue.add(runnable);
+		}
 	}
 
 	@Override

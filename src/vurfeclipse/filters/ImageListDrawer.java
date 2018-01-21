@@ -341,5 +341,21 @@ public class ImageListDrawer extends Filter {
 	   out.endDraw();
 	   }*/
 	}
+	
+	@Override
+	public HashMap<String, Object> collectFilterSetup() {
+		HashMap<String, Object> params = super.collectFilterSetup();
+		
+		params.put("directory", this.directory);
+		return params;
+	}
+	
+	@Override
+	public void readSnapshot(Map<String, Object> input) {
+		if (input.containsKey("directory")) {
+			this.directory = (String) input.get("directory");
+			this.loadDirectory();
+		}
+	}
 }
 

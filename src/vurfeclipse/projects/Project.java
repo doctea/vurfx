@@ -607,7 +607,7 @@ public abstract class Project implements Serializable {
 
 	public void sendKeyPressed(char key) {
 		//Scene sc = scenes.iterator().next();//.first();
-		if (disableKeys) {
+		if (isDisableKeys()) {
 			println("keys disabled, ignoring " + key);
 			return;
 		}
@@ -644,7 +644,8 @@ public abstract class Project implements Serializable {
 			//APP.getApp().selectInput("Select a file to load", "loadSnapshot"); //- DOESNT WORK ?
 			((SequenceSequencer) this.sequencer).preserveCurrentSceneParameters();
 			
-			saveSnapshot("SavedProject-Mutante.xml");
+			saveSnapshot();
+			saveSnapshot("MutanteProject-incremental.xml");
 		} else if (this.sequencer.sendKeyPressed(key)) {
 			println ("Key " + key + " handled by sequencer!");
 		} else {
@@ -949,6 +950,14 @@ public abstract class Project implements Serializable {
 			urls[n++] = s.getPath();
 		}
 		return urls;
+	}
+
+	public boolean isDisableKeys() {
+		return disableKeys;
+	}
+
+	public void setDisableKeys(boolean disableKeys) {
+		this.disableKeys = disableKeys;
 	}
 
 
