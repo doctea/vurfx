@@ -135,12 +135,13 @@ public class Blob implements Serializable {
 	}
 	public void draw(PGraphics out) {
 		out.pushStyle();
-		if (tint!=255) 
+		if (tint!=255) {
 			out.fill(c, tint);
-		else {
+		} else {
 			out.noTint();
 			out.fill(c);
 		}
+		//System.out.println("blob drawing with colour " + c);
 		if (!edge) {
 			out.noStroke();
 		} else {
@@ -323,6 +324,7 @@ public class Blob implements Serializable {
 					compoundBlob[i].setEdge(edge);
 					//compoundBlob[i].setColour(color(random((i/numSpokes)*255.0),random(255.0),random(255.0),255));
 					compoundBlob[i].setColour(this.c); ///1 * color(random(255.0),random(255.0),random(255.0),255));
+					System.out.println("in drawcompoundblob setting colour to " + c);
 					compoundBlob[i].setTint(255);
 					compoundBlob[i].setRadius(((float)i*(float)w/12.0f));
 					compoundBlob[i].setSides(((VurfEclipse)APP.getApp()).constrain(8+i/3,3,12));

@@ -30,6 +30,11 @@ public class BlobFX1 extends SimpleScene {
 		
 		@Override public void onStart() {
 	
+			colour1 = (int) host.getFilter("BlobDrawer").getParameterValue("colour1");
+			colour2 = (int) host.getFilter("BlobDrawer").getParameterValue("colour2");
+			colour3 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour1");
+			colour4 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+			
 			host.getFilter("BlobDrawer2").randomiseParameters(this,new String[] {
 					"numofCircles", "yRadianMod", "xRadianMod", //"numSections", 
 					"endRadius"
@@ -42,6 +47,31 @@ public class BlobFX1 extends SimpleScene {
 			});		
 			
 		}
+		
+		/*@Override public HashMap<String,Object> collectParameters() {
+			HashMap<String,Object> params = super.collectParameters();
+			params.put("colour1", new Integer(colour1));
+			params.put("colour2", new Integer(colour2));
+			params.put("colour3", new Integer(colour3));
+			params.put("colour4", new Integer(colour4));
+			return params;
+		}
+		
+		@Override public void loadParameters(HashMap<String,Object> params) {
+			super.loadParameters(params);
+			
+			if (params.containsKey("colour1")) this.colour1 = (int) params.get("colour1");
+			if (params.containsKey("colour2")) this.colour2 = (int) params.get("colour2");
+			if (params.containsKey("colour3")) this.colour3 = (int) params.get("colour3");
+			if (params.containsKey("colour4")) this.colour4 = (int) params.get("colour4");
+			
+			if (colour1==0) colour1 = randomColorMinimum(196);
+			if (colour2==0) colour2 = randomColorMinimum(196);
+			if (colour3==0) colour3 = randomColorMinimum(196);
+			if (colour4==0) colour4 = randomColorMinimum(196);
+			
+		}*/
+
 	}
 
 
@@ -62,6 +92,12 @@ public class BlobFX1 extends SimpleScene {
 	
 			//float iteration_warp = (float)(1.0f/(float)iteration)*(float)norm;
 			
+			colour1 = (int) host.getFilter("BlobDrawer").getParameterValue("colour1");
+			colour2 = (int) host.getFilter("BlobDrawer").getParameterValue("colour2");
+			colour3 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour1");
+			colour4 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+
+			
 			host.getFilter("BlobDrawer").setParameterValue("totalRotate", (float)norm*360.0f); //PApplet.radians((float)norm*360));
 			host.getFilter("BlobDrawer").setParameterValue("rotation", (float)+norm*180.0f);
 			host.getFilter("BlobDrawer2")
@@ -74,6 +110,9 @@ public class BlobFX1 extends SimpleScene {
 	
 			int col1 = lerpcolour(colour1, colour2, norm); //0.5); //inv_norm);
 			int col2 = lerpcolour(colour3, colour4, norm); //0.5); //norm);
+			
+			host.getFilter("BlobDrawer").setParameterValue("colour", col1);
+			host.getFilter("BlobDrawer2").setParameterValue("colour", col2);
 			
 			((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
 					(int)APP.getApp().red(col1),
@@ -91,10 +130,11 @@ public class BlobFX1 extends SimpleScene {
 		public void onStart() {
 			super.onStart();
 			println("onStart() " + this);
-			colour1 = randomColorMinimum(196);// APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
+			/*colour1 = randomColorMinimum(196);// APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 			colour2 = randomColorMinimum(96);//APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 			colour3 = randomColorMinimum(96); //APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 			colour4 = randomColorMinimum(196); //APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
+			*/
 			((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, /*4, 5, 6, 7 */} ));
 			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, } )); //Blob.SH_TEXTURE, /*5, 6,*/ 7 } ));
 			
@@ -131,6 +171,12 @@ public class BlobFX1 extends SimpleScene {
 	
 	    		//float iteration_warp = (float)(1.0f/(float)iteration)*(float)norm;
 	    		
+				colour1 = (int) host.getFilter("BlobDrawer").getParameterValue("colour1");
+				colour2 = (int) host.getFilter("BlobDrawer").getParameterValue("colour2");
+				colour3 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour1");
+				colour4 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+
+				
 	    		host.getFilter("BlobDrawer").setParameterValue("totalRotate", (float)-norm*360.0f); //PApplet.radians((float)norm*360));
 	    		host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*360.0f);
 	    		//host.getFilter("BlobDrawer2").setParameterValue("rotation", (float)-norm*360.0f);
@@ -157,10 +203,10 @@ public class BlobFX1 extends SimpleScene {
 	    	public void onStart() {
 	    		super.onStart();
 	    		println("onStart() " + this);
-	    		colour1 = randomColorMinimum(196);
+	    		/*colour1 = randomColorMinimum(196);
 	    		colour2 = randomColorMinimum(96);
 	    		colour3 = randomColorMinimum(96);
-	    		colour4 = randomColorMinimum(196);
+	    		colour4 = randomColorMinimum(196);*/
 	   		
 	    		//this.setLengthMillis(500 * (int)(APP.getApp().random(1,10)));
 	    		
@@ -202,27 +248,33 @@ public class BlobFX1 extends SimpleScene {
 			
 			host.getFilter("BlobDrawer2").setParameterValueFromSin("numofCircles", /*APP.getApp().sin(*/(float)inv_norm/*)*/); //0.2f+APP.getApp().sin(iteration_warp/2));
 	
+			colour1 = (int) host.getFilter("BlobDrawer").getParameterValue("colour1");
+			colour2 = (int) host.getFilter("BlobDrawer").getParameterValue("colour2");
+			colour3 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour1");
+			colour4 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour2");
 			
 			int col1 = lerpcolour(colour1, colour2, inv_norm);
-			int col2 = lerpcolour(colour2, colour4, norm);
+			int col2 = lerpcolour(colour3, colour4, norm);
 			
 			((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
 					(int)APP.getApp().red(col1),
 					(int)APP.getApp().green(col1),
-					(int)APP.getApp().blue(col1));
+					(int)APP.getApp().blue(col1),
+					255);
 	
 			((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
 					(int)APP.getApp().red(col2),
 					(int)APP.getApp().green(col2),
-					(int)APP.getApp().blue(col2));
+					(int)APP.getApp().blue(col2),
+					255);
 		}
 		public void onStart() {
 			super.onStart();
 			println("onStart() " + this);
-			colour1 = randomColorMinimum(196);
+			/*colour1 = randomColorMinimum(196);
 			colour2 = randomColorMinimum(96) * 2; // brighter;;
 			colour3 = randomColorMinimum(96) * 2;
-			colour4 = randomColorMinimum(196);
+			colour4 = randomColorMinimum(196);*/
 			
 			((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",random(1.0f)>=0.5f);
 			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",random(1.0f)>=0.5f);
@@ -262,6 +314,11 @@ public class BlobFX1 extends SimpleScene {
 	
 			//float iteration_warp = (float)(1.0f/(float)iteration)*(float)norm;
 	
+			colour1 = (int) host.getFilter("BlobDrawer").getParameterValue("colour1");
+			colour2 = (int) host.getFilter("BlobDrawer").getParameterValue("colour2");
+			colour3 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour1");
+			colour4 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+
 			
 			host.getFilter("BlobDrawer").setParameterValue("totalRotate", (float)norm*360.0f); //PApplet.radians((float)norm*360));
 			host.getFilter("BlobDrawer").setParameterValue("rotation", (float)-norm*180.0f);

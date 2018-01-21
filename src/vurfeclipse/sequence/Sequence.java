@@ -350,12 +350,25 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 	public Color mixColors(Color color1, Color color2, double percent){
 		//percent *= 10.0;
-		percent = APP.getApp().constrain((float) percent, 0f, 1f);//.abs((float) percent); // fix if percent goes out of range
+	  percent = APP.getApp().constrain((float) percent, 0f, 1f);//.abs((float) percent); // fix if percent goes out of range
 	  double inverse_percent = 1.0 - percent;
-	  int redPart = (int) ((color1.getRed()*percent) + (color2.getRed()*inverse_percent));
+	  /*int redPart = (int) ((color1.getRed()*percent) + (color2.getRed()*inverse_percent));
 	  int greenPart = (int) ((color1.getGreen()*percent) + (color2.getGreen()*inverse_percent));
-	  int bluePart = (int) ((color1.getBlue()*percent) + (color2.getBlue()*inverse_percent));
-	  return new Color(redPart, greenPart, bluePart); //, 255);
+	  int bluePart = (int) ((color1.getBlue()*percent) + (color2.getBlue()*inverse_percent));*/
+		int bluePart = (int)((color1.getBlue() + (color2.getBlue() - color1.getBlue()) * percent));
+		int redPart = (int)((color1.getRed() + (color2.getRed() - color1.getRed()) * percent));
+		int greenPart = (int)((color1.getGreen() + (color2.getGreen() - color1.getGreen()) * percent));
+		//(int)(255 * (color1.getBlue() + (color2.getBlue() - color1.getBlue()) * percent))
+
+	  return new Color(redPart, greenPart, bluePart); //, 255);*/
+		//percent /= 100;
+		/*println("got percent " + percent);
+		return new Color(
+				(int)(255 * (color1.getAlpha() + (color2.getAlpha() - color1.getAlpha()) * percent)),
+				(int)(255 * (color1.getRed() + (color2.getRed() - color1.getRed()) * percent)),
+				(int)(255 * (color1.getGreen() + (color2.getGreen() - color1.getGreen()) * percent)),
+				(int)(255 * (color1.getBlue() + (color2.getBlue() - color1.getBlue()) * percent))
+		);*/
 	}
 	
 	  public int lerpcolour (int origin, int dest, double norm) {

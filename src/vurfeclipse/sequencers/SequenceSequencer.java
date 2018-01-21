@@ -31,6 +31,7 @@ import vurfeclipse.sequence.*;
 import vurfeclipse.streams.Stream;
 import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
+import vurfeclipse.ui.StreamEditor;
 import controlP5.Accordion;
 import controlP5.Bang;
 import controlP5.CColor;
@@ -226,8 +227,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 					println("got seqName " + seqName);
 					seqName = seqName==null?s.getKey():seqName;
 					this.addSequence(seqName, newSeq);
-					if (spl[3].equals("history")) this.addHistorySequenceName(seqName);
+					if (spl[3].equals("history")) 
+						this.addHistorySequenceName(seqName);
 				}
+				this.updateGuiHistory();
 			} else {
 				if (spl[3].equals("sequences")) 
 					return this.collectBankSequences();
@@ -253,6 +256,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 		return payload;
 	}
+
+
 
 
 	public Sequence addListSequence(String sequenceName) {
@@ -479,6 +484,26 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private void updateGuiAddHistory(String oldSequenceName, String newSequenceName) {
 		SequenceSequencer self = this;
 		
+		this.updateGuiHistory();
+		
+		APP.getApp().getCF().queueUpdate(new Runnable () {
+			@Override
+			public void run() {
+				/*if (self.getActiveSequence()!=null && APP.getApp().isReady() && self.lstHistory!=null) 
+					self.lstHistory.addItem(self.getCurrentSequenceName(), self.getCurrentSequenceName());
+					*/
+				
+				// sync lstHistory with actual history
+				//lstHistory.clear();
+				//lstHistory.addItems(historySequenceNames);
+				
+				if (lstHistory.getItems().contains(oldSequenceName)) lstHistory.getItem(oldSequenceName).put("state", false);
+				lstHistory.getItem(newSequenceName).put("state", true);
+			}
+		});
+	}
+
+	private void updateGuiHistory() {
 		APP.getApp().getCF().queueUpdate(new Runnable () {
 			@Override
 			public void run() {
@@ -489,9 +514,6 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				// sync lstHistory with actual history
 				lstHistory.clear();
 				lstHistory.addItems(historySequenceNames);
-				
-				if (lstHistory.getItems().contains("oldSequenceName")) lstHistory.getItem(oldSequenceName).put("state", false);
-				lstHistory.getItem(newSequenceName).put("state", true);
 			}
 		});
 	}
@@ -841,9 +863,18 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     	this.preserveCurrentSceneParameters();
     	this.cloneSequence(this.activeSequenceName, "Copy of " + this.activeSequenceName);
     } else if (super.sendKeyPressed(key)) {
-    } else {
-    	return false;
-    }
+    	
+    } else if(key=='1') {
+			APP.getApp().getCF().control().getWindow().activateTab("Sequencer");
+		} else if (key=='2') {
+			APP.getApp().getCF().control().getWindow().activateTab("Sequencer Editor");
+		} else if (key=='3') {
+			APP.getApp().getCF().control().getWindow().activateTab("Scenes");
+		} else if (key=='4') {
+			APP.getApp().getCF().control().getWindow().activateTab("Monitor");
+		} else {
+			return false;
+		}
     return true;
 	}
 
@@ -922,6 +953,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private ListBox lstHistory;
 	private Slider sldProgress;
 	private Slider sldTimeScale;
+	private StreamEditor grpStreamEditor;
 	@Override public void setupControls (ControlFrame cf, String tabName) {
 		super.setupControls(cf, tabName);
 
@@ -986,10 +1018,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				;
 		
 
-		Accordion accordion = this.makeStreamEditor(cf)
+		//Accordion accordion 
+		this.grpStreamEditor = (StreamEditor) new StreamEditor(cp5, "stream editor")//this.makeStreamEditor(cf)
 				.setPosition(0, margin_y * 15)
 				.moveTo(sequencerTab);
-
+		this.grpStreamEditor.setupStreamEditor(cf, this.getStreams());
 
 		super.updateGuiStatus();
 		
@@ -1055,6 +1088,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			} else if (ev.getAction()==ControlP5.ACTION_LEAVE) {
 				((Textfield)ev.getController()).setFocus(false);
 				host.setDisableKeys(false);	// horrible hack to disable keyboard input when a textfield is selected..
+			} else {
+				println("caught " + ev);
 			}
 		}
 		
@@ -1157,21 +1192,17 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	public void renameSequence(String currentSequenceName, String text) {
 		SequenceSequencer self = this;
 		
-		int place = this.historySequenceNames.indexOf(currentSequenceName);
-		if (place>=0) {
-			this.historySequenceNames.set(place, text);
+		this.sequences.put(text, this.getActiveSequence());
 		
-			APP.getApp().getCF().queueUpdate(new Runnable () {
-	
-				@Override
-				public void run() {
-					//(Item)self.lstSequences.getItems().get(self.lstSequences.getItems().indexOf(currentSequenceName))
-					
-					//TODO: update the item's name in the history sequence!
-					
-				}			
-			});
+		int place = this.historySequenceNames.indexOf(currentSequenceName);
+		while (place>=0) {
+			this.historySequenceNames.set(place, text);
+			place = this.historySequenceNames.indexOf(currentSequenceName);
 		}
+
+		historySequenceNames.remove(currentSequenceName);
+		
+		this.updateGuiHistory();
 	}
 	
 	//TODO: plumb this cloneSequence in so it can be activated, and test it!
