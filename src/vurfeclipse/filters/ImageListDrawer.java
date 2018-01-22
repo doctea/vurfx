@@ -272,7 +272,7 @@ public class ImageListDrawer extends Filter {
     //if (fileChanged) {
     //image draw mode
 
-    out.pushMatrix();
+    //out.pushMatrix();
     /*out.translate(
      sc.w - (sc.w/2 * map((Float)getParameterValue("scale"),1.0f,5.0f,0.0f,1.0f)),
      sc.h - (sc.h/2 * map((Float)getParameterValue("scale"),1.0f,5.0f,0.0f,1.0f))
@@ -281,14 +281,19 @@ public class ImageListDrawer extends Filter {
      sc.w*0.5f+(map(5.0-(Float)getParameterValue("scale"),1.0f,5.0f,-0.5f,0.5f)),
      sc.h*0.5f+(map(5.0-(Float)getParameterValue("scale"),1.0f,5.0f,-0.5f,0.5f))
      );      */
-    out.translate((Integer)getParameterValue("translate_x"), (Integer)getParameterValue("translate_y"));
-    out.scale((Float)getParameterValue("scale"));//random(0,100));
+    //out.translate((Integer)getParameterValue("translate_x"), (Integer)getParameterValue("translate_y"));
+    //out.scale((Float)getParameterValue("scale"));//random(0,100));
 
     //p = getCurrentImage(IR);
     if (getSlide()!=null) {
-      //out.image(p, 0, 0, sc.w, sc.h);//sc.w*map((Float)getParameterValue("scale"),1.0,5.0,0.0,1.0),sc.h*map((Float)getParameterValue("scale"),1.0,5.0,0.0,1.0));
-      out.background(getSlide());
-      //out.image(p, 0, 0, sc.w, sc.h);
+      out.imageMode(out.CENTER);
+      //out.image(getSlide(), -0.5f, -0.5f, 0.5f, 0.5f); //, 0, 0, sc.w, sc.h);//sc.w*map((Float)getParameterValue("scale"),1.0,5.0,0.0,1.0),sc.h*map((Float)getParameterValue("scale"),1.0,5.0,0.0,1.0));
+      //if (getSlide().isModified())
+    	  //out.background(getSlide());	// background is death to performance apparently?
+      //out.imageMode(out.);
+      //out.image(getSlide(),0-sc.w/2,0-sc.h/2,sc.w,sc.h);
+      //out.image(getSlide(), -sc.w/2, -sc.h/2, sc.w/2, sc.h/2);
+      out.image(getSlide(),sc.w/2,sc.h/2);
       //out.scale(-1,0);
       //out.translate((Integer)getParameterValue("translate_x"), (Integer)getParameterValue("translate_y"));
       if ((Integer)getParameterValue("translate_x")<0) {
@@ -299,7 +304,7 @@ public class ImageListDrawer extends Filter {
       }
     }
     //setSlide(null);
-    out.popMatrix();
+    //out.popMatrix();
     //fileChanged = false;
     //}
 

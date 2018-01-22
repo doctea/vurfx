@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
+import com.sun.glass.ui.Timer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -82,6 +84,8 @@ public class RestConnector implements Runnable {
 	          //System.out.println(this + ": got request");
 	          //System.exit(1);
 	          rest.setContentType("text/html");
+
+			  Thread.sleep(20);
 	                     
 	          try {
 	        	  rest.write (this.processRequest(parseURL(rest.resource,0), rest.payload, rest.header).toString());

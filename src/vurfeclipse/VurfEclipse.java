@@ -166,7 +166,7 @@ public class VurfEclipse extends PApplet {
 		output_height = (hdRes ? 1080 : mdRes ? 900 :  projRes ? 720  : ultrahiRes ? 1024 : medHiRes ?  720 : hiRes ? 768  : medRes ? 600 : 480) 
 						+ (fullscreen?0:title_adjust);*/
 
-	private int config_width = 1280;
+	private int config_width = 1920; //1280;
 	private PVector config_aspect = RES_16_9;	// RES_16_9 
 
 	int output_width = (int)this.getOutputResolution().x;
@@ -512,7 +512,7 @@ public class VurfEclipse extends PApplet {
 	public int timeMillis;
 	//GLTextureWindow texWin;
 	@Override
-	synchronized public void draw () {
+	public void draw () {
 		//System.out.println("Draw!");
 		if (!isReady()) {
 			//println("Not yet isReady!()");
@@ -598,7 +598,7 @@ public class VurfEclipse extends PApplet {
 
 
 		if (syphon) drawSyphon (offscreen.getSurf());
-		if (spout!=null) drawSpout(offscreen.getSurf());
+		//if (spout!=null) drawSpout(offscreen.getSurf());
 
 		//pgl.endGL();
 

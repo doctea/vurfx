@@ -117,12 +117,14 @@ public class BlobFX1 extends SimpleScene {
 			((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
 					(int)APP.getApp().red(col1),
 					(int)APP.getApp().green(col1),
-					(int)APP.getApp().blue(col1));
+					(int)APP.getApp().blue(col1),
+					255);
 	
 			((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
 					(int)APP.getApp().red(col2),
 					(int)APP.getApp().green(col2),
-					(int)APP.getApp().blue(col2));
+					(int)APP.getApp().blue(col2),
+					255);
 	
 	
 			
@@ -333,13 +335,15 @@ public class BlobFX1 extends SimpleScene {
 			((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
 					(int)APP.getApp().red(col1),
 					(int)APP.getApp().green(col1),
-					(int)APP.getApp().blue(col1)
+					(int)APP.getApp().blue(col1),
+					255
 			);
 	
 			((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
 					(int)APP.getApp().red(col2),
 					(int)APP.getApp().green(col2),
-					(int)APP.getApp().blue(col2));
+					(int)APP.getApp().blue(col2),
+					255);
 		}
 		public void onStart() {
 			super.onStart();

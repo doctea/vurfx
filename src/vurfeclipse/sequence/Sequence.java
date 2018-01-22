@@ -360,7 +360,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		int greenPart = (int)((color1.getGreen() + (color2.getGreen() - color1.getGreen()) * percent));
 		//(int)(255 * (color1.getBlue() + (color2.getBlue() - color1.getBlue()) * percent))
 
-	  return new Color(redPart, greenPart, bluePart); //, 255);*/
+	  return new Color(redPart, greenPart, bluePart, 255); //, 255);*/
 		//percent /= 100;
 		/*println("got percent " + percent);
 		return new Color(

@@ -145,6 +145,34 @@ public class BlendDrawer extends ShaderFilter {
   synchronized public boolean applyMeatToBuffers() {
     //println("in applymeattobuffers in blenddrawer (" + this + "), src is " + src);
 
+	 //if(true)return true;
+    //src = sc.host.getCanvas(this.canvas_in).getSurf();
+    //out = sc.host.getCanvas(this.canvas_out).getSurf();
+
+    //Shader tf = getFilterNumber(currentBlendMode);
+    //glFilter = tf;
+    //tf.set("bottomSampler", out);
+    //tf.set("topSampler", src);
+    //this.shaderFragName = "blend mode " + currentBlendMode;
+    customPass = (CustomPass) this.getPassForBlendMode(currentBlendMode); //Shader(tf,out,src);
+    customPass.shader.set("bottomSampler", out);
+    customPass.shader.set("topSampler", src);
+    customPass.shader.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
+    
+    //tf.set("bottomSampler", out);
+    //tf.set("topSampler",  src);
+    //tf.apply(new PImage[]{src, out}, t); // all are called the same way
+    //t.shader(tf);
+    //println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
+    c.getSurf().beginDraw();
+    //this.filter(src, tf, out); //c.getSurf()); //c.getSurf(), tf);	// WORKING 2017-1022
+    //c.getSurf().image(out,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
+	//c.getSurf().resetShader();
+	//customPass.shader.set(shaderFragName, out);
+	//c.getSurf().shader(customPass.shader);
+    this.filter(src, customPass, c.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
+    c.getSurf().endDraw();
+    
 	//if (true) return super.applyMeatToBuffers();
 	out.beginDraw();
 
@@ -178,33 +206,6 @@ public class BlendDrawer extends ShaderFilter {
         out.rotate(PApplet.radians(rotation));
       }
 
-    //src = sc.host.getCanvas(this.canvas_in).getSurf();
-    //out = sc.host.getCanvas(this.canvas_out).getSurf();
-
-    //Shader tf = getFilterNumber(currentBlendMode);
-    //glFilter = tf;
-    //tf.set("bottomSampler", out);
-    //tf.set("topSampler", src);
-    //this.shaderFragName = "blend mode " + currentBlendMode;
-    customPass = (CustomPass) this.getPassForBlendMode(currentBlendMode); //Shader(tf,out,src);
-    customPass.shader.set("bottomSampler", out);
-    customPass.shader.set("topSampler", src);
-    customPass.shader.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
-    
-    //tf.set("bottomSampler", out);
-    //tf.set("topSampler",  src);
-    //tf.apply(new PImage[]{src, out}, t); // all are called the same way
-    //t.shader(tf);
-    //println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
-    c.getSurf().beginDraw();
-    //this.filter(src, tf, out); //c.getSurf()); //c.getSurf(), tf);	// WORKING 2017-1022
-    //c.getSurf().image(out,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
-	//c.getSurf().resetShader();
-	//customPass.shader.set(shaderFragName, out);
-	//c.getSurf().shader(customPass.shader);
-    this.filter(src, customPass, c.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
-    c.getSurf().endDraw();
-    
 
     /*out.color(this.random(255));
     out.fill(this.random(255));

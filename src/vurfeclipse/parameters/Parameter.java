@@ -203,7 +203,7 @@ public class Parameter implements Serializable, Targetable {
 		} else if (value instanceof Integer) {
 			if (getName().toLowerCase().contains("rotat") ) { //(Integer)getMax()==360) {
 				o = cp5.addKnob(tabName).setConstrained(false).setValue((Integer)value).setLabel(getName()).setRange((Integer)getMin(), (Integer)getMax()).setSize(size*2, size*2).setDragDirection(Knob.VERTICAL);
-			} else if (getName().toLowerCase().contains("colour")) {
+			} else if (getName().toLowerCase().endsWith("colour") || getName().toLowerCase().endsWith("colour1") || getName().toLowerCase().endsWith("colour2") ) {
 				cp5.setAutoSpacing(size*2, size*2);
 				o = cp5.addColorWheel(tabName, 0, 0, size*2).setWidth(size*2).setHeight(size*2).setRGB((Integer)value).setLabel(getName());
 			} else if (getName().toLowerCase().endsWith("mode")) {

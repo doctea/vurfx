@@ -26,7 +26,7 @@ public class ControlFrame extends PApplet {
 	}
 
 	public void settings() {
-		size(w, h); 	// P3D);
+		size(w, h); //, P3D);
 	}
 
 	int setupCount = 0;
@@ -35,6 +35,8 @@ public class ControlFrame extends PApplet {
 		System.out.println("ControlFrame setup count " + setupCount);
 		this.cp5 = new ControlP5(this);
 		cp5.setFont(createFont("Arial",10));
+		frameRate(60);
+
 		/*    
     cp5.addToggle("auto")
        //.plugTo(parent, "auto")
