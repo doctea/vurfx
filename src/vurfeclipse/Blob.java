@@ -316,7 +316,7 @@ public class Blob implements Serializable {
 			compoundBlob[6].x = x+15; compoundBlob[6].y = y+step*5f; 	compoundBlob[6].rot = startAngle;
 			//};
 
-			int numSpokes = 5;
+			int numSpokes = 3;
 			for (int r = 0 ; r < 360 ; r+=(360/numSpokes)) {
 				out.pushMatrix();
 				out.rotate(PApplet.radians(r));
@@ -324,7 +324,7 @@ public class Blob implements Serializable {
 					compoundBlob[i].setEdge(edge);
 					//compoundBlob[i].setColour(color(random((i/numSpokes)*255.0),random(255.0),random(255.0),255));
 					compoundBlob[i].setColour(this.c); ///1 * color(random(255.0),random(255.0),random(255.0),255));
-					System.out.println("in drawcompoundblob setting colour to " + c);
+					//System.out.println("in drawcompoundblob setting colour to " + c);
 					compoundBlob[i].setTint(255);
 					compoundBlob[i].setRadius(((float)i*(float)w/12.0f));
 					compoundBlob[i].setSides(((VurfEclipse)APP.getApp()).constrain(8+i/3,3,12));

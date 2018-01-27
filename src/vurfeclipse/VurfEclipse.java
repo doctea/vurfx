@@ -166,7 +166,7 @@ public class VurfEclipse extends PApplet {
 		output_height = (hdRes ? 1080 : mdRes ? 900 :  projRes ? 720  : ultrahiRes ? 1024 : medHiRes ?  720 : hiRes ? 768  : medRes ? 600 : 480) 
 						+ (fullscreen?0:title_adjust);*/
 
-	private int config_width = 1920; //1280;
+	private int config_width = 1280; //1920
 	private PVector config_aspect = RES_16_9;	// RES_16_9 
 
 	int output_width = (int)this.getOutputResolution().x;
@@ -324,10 +324,10 @@ public class VurfEclipse extends PApplet {
 		//pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
 		//pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
 		//pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject2017-12-22-20-27-41.xml"); // not a bad one --> output/SavedProject2017-12-22-20-10-39.xml");
-		pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject-NYE.xml");
+		//pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject-NYE.xml");
 
 		//pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.MutanteProject.class);
-		//pr = Project.chooseProject(desired_width, desired_height, "output/MutanteProject-incremental.xml");
+		pr = Project.chooseProject(desired_width, desired_height, "output/MutanteProject-incremental.xml");
 
 
 		PVector resolution = this.getOutputResolution();

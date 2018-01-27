@@ -628,6 +628,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 				//.linebreak()
 				;
 
+		
+		cp5.addLabel("in => " + this.canvas_in + "\nout => " + this.canvas_out).setPosition(margin_w + (col*(col_w+margin_w)) + size + 5,margin_h + (row*row_h)).moveTo(grp); 
+		
+		
 		//cp5.addTextlabel("path_" + tab.getName() + getFilterName(), "Path: " + this.getPath()).setSize(size, size).moveTo(grp);//.linebreak();
 
 		col = 1;
