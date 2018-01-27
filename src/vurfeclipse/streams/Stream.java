@@ -172,17 +172,17 @@ public class Stream implements Serializable {
 			}
 		}
 	}
-	
+
 	public HashMap<String, Object> collectParameters() {
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("class",  this.getClass().getName());
 		params.put("name", this.streamName);
-		
+
 		params.put("callbacks", this.collectLinkParameters());
-				
+
 		return params;
 	}
-	
+
 	public HashMap<String, HashMap<String,Object>> collectLinkParameters() {
 		HashMap<String, HashMap<String, Object>> callbacks = new HashMap<String, HashMap<String,Object>> ();
 		for (Entry<String,List<ParameterCallback>> l : this.listeners.entrySet()) {
@@ -206,7 +206,7 @@ public class Stream implements Serializable {
 				this.registerEventListener(i.getKey(), ParameterCallback.makeParameterCallback((HashMap<String, Object>) p.getValue()));
 			}
 		}
-		
+
 		//callbacks = input.
 	}
 	public static Stream makeStream(Object payload) {
@@ -228,34 +228,34 @@ public class Stream implements Serializable {
 			System.err.println("Caught " + e + ": Didn't manage to instantiate " + classname + " might be missing constructor?");
 			e.printStackTrace();
 		}
-		
+
 		//streamName = (String) input.get("name");
 		//String paramName = (String) input.get("paramName");
-		
+
 		return null;
 	}
 	synchronized public void setupControls(ControlFrame cf, Group g) {
 		//cf.control().addScrollableList(this.streamName);
-		
+
 		int n = 0;
 		int margin_y = 20, gap_y = 5, margin_x = 80;
-		
-		int pos_y = 10;
-		
-		  CallbackListener toFront = new CallbackListener() {
-			    public void controlEvent(CallbackEvent theEvent) {
-			        theEvent.getController().bringToFront();
-			        ((ScrollableList)theEvent.getController()).open();
-			    }
-			  };
 
-			  CallbackListener close = new CallbackListener() {
-			    public void controlEvent(CallbackEvent theEvent) {
-			        ((ScrollableList)theEvent.getController()).close();
-			    }
-			  };
-		
-			
+		int pos_y = 10;
+
+		CallbackListener toFront = new CallbackListener() {
+			public void controlEvent(CallbackEvent theEvent) {
+				theEvent.getController().bringToFront();
+				((ScrollableList)theEvent.getController()).open();
+			}
+		};
+
+		CallbackListener close = new CallbackListener() {
+			public void controlEvent(CallbackEvent theEvent) {
+				((ScrollableList)theEvent.getController()).close();
+			}
+		};
+
+
 
 		for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
 			for (ParameterCallback c : i.getValue()) {
@@ -263,19 +263,19 @@ public class Stream implements Serializable {
 				lstParam.moveTo(g).close().setLabel(i.getKey()); //"source");
 				lstParam.addItems(this.getStreamParams());//addItem(i.getKey(), i.getKey())
 				g.add(lstParam);
-				
+
 				println ("adding gui for " + c);
 				if (c instanceof FormulaCallback) {
 
-					  CallbackListener setExpression = new CallbackListener() {
-						    public void controlEvent(CallbackEvent theEvent) {
-						        //((ScrollableList)theEvent.getController()).close();
-						    	((FormulaCallback) c).setExpression(((Textfield)theEvent.getController()).getText());
-						    	((Textfield)theEvent.getController()).setValueLabel(((FormulaCallback) c).getExpression());
-						    }
-						  };
+					CallbackListener setExpression = new CallbackListener() {
+						public void controlEvent(CallbackEvent theEvent) {
+							//((ScrollableList)theEvent.getController()).close();
+							((FormulaCallback) c).setExpression(((Textfield)theEvent.getController()).getText());
+							((Textfield)theEvent.getController()).setValueLabel(((FormulaCallback) c).getExpression());
+						}
+					};
 
-					
+
 					Textfield expression = cf.control().addTextfield(i.getKey() + "_" + n + "_Expression_" + c.toString())
 							.setText(((FormulaCallback)c).getExpression())
 							.setPosition(margin_x * 2, pos_y)
@@ -283,11 +283,11 @@ public class Stream implements Serializable {
 							.setLabel("Expression")
 							.setAutoClear(false); 
 					expression.addListenerFor(Textfield.ACTION_BROADCAST, setExpression);
-					
+
 					g.add(expression);
-					
+
 					final FormulaCallback fc = (FormulaCallback) c; 
-					
+
 					ScrollableList lstTarget = cf.control().addScrollableList(i.getKey() + "_" + n + "_Target URL")
 							//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 							.setLabel(((FormulaCallback)c).targetPath)
@@ -298,9 +298,9 @@ public class Stream implements Serializable {
 							.onLeave(close)
 							.onEnter(toFront)
 							.close();
-					
+
 					//lstTarget.setValue(targetPath);
-					
+
 					lstTarget.addListenerFor(ScrollableList.ACTION_CLICK, new CallbackListener () {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
@@ -310,7 +310,7 @@ public class Stream implements Serializable {
 							((FormulaCallback) fc).setTargetPath((String) s.get("text"));
 						}				
 					});
-					
+
 					g.add(lstTarget);
 				}	
 				pos_y += margin_y + gap_y;
@@ -318,7 +318,7 @@ public class Stream implements Serializable {
 			}
 		}
 	}
-	
+
 	private void println(String string) {
 		System.out.println("Stream " + this + ": " + string);		
 	}
