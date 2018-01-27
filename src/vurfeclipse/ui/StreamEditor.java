@@ -18,7 +18,7 @@ public class StreamEditor extends Group {
 	}
 
 	public Accordion setupStreamEditor(ControlFrame cf, HashMap<String,Stream> streams) {
-		editor = cf.control().addAccordion("streams_editor").setWidth(cf.displayWidth/3).moveTo(this);
+		editor = cf.control().addAccordion("streams_editor").setWidth(2 * (cf.sketchWidth()/3)).moveTo(this);
 
 		//Scene n;
 		for (Entry<String, Stream> i : streams.entrySet()) {
@@ -28,6 +28,7 @@ public class StreamEditor extends Group {
 
 			String streamName = i.getKey();
 			Group g = cf.control().addGroup(streamName);
+			g.setWidth(2 * (cf.sketchWidth()/3));
 
 			//println("added tab " + tabName);
 			//ControllerInterface[] controls = ((Scene)i.next()).getControls();

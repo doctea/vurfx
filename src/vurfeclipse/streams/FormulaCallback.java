@@ -22,6 +22,7 @@ public class FormulaCallback extends ParameterCallback {
 	}
 	
 	public FormulaCallback setExpression(String expression) {
+		System.out.println(this + " setting expression to '" + expression + "'");
 		this.expression = expression;
 		e = new com.udojava.evalex.Expression(expression);
 		return this;

@@ -975,7 +975,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		txtCurrentSequenceName = new Textfield(cp5, "Current Sequence Name")
 				.setPosition(margin_x, margin_y)
 				.setWidth(width/3)
-				.moveTo(sequencerTab);
+				.moveTo(sequencerTab)
+				.setAutoClear(false);
 		sequencerTab.add(txtCurrentSequenceName);
 
 		lstHistory = new controlP5.ListBox(cp5, "sequence names")  	    		

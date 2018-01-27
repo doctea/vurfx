@@ -218,7 +218,7 @@ public class Parameter implements Serializable, Targetable {
 				/*          value instanceof PVector ?
 	           cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :*/
 		} else if (value instanceof String) {
-			o = cp5.addTextfield(tabName).setSize(size*5, size).setText((String) value).setLabel(getName());
+			o = cp5.addTextfield(tabName).setSize(size*5, size).setText((String) value).setLabel(getName()).setAutoClear(false);
 		} else {
 			System.err.println("Unhandled object type " + value.getClass() + " in Parameter#makeController() for " + getName());
 			o = null;

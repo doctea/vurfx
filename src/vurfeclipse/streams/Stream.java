@@ -13,6 +13,8 @@ import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.Group;
 import controlP5.ScrollableList;
+import controlP5.Textfield;
+import processing.event.KeyEvent;
 import vurfeclipse.APP;
 import vurfeclipse.ui.ControlFrame;
 
@@ -232,7 +234,7 @@ public class Stream implements Serializable {
 		
 		return null;
 	}
-	public void setupControls(ControlFrame cf, Group g) {
+	synchronized public void setupControls(ControlFrame cf, Group g) {
 		//cf.control().addScrollableList(this.streamName);
 		
 		int n = 0;
@@ -253,17 +255,36 @@ public class Stream implements Serializable {
 			    }
 			  };
 		
+			
 
 		for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
 			for (ParameterCallback c : i.getValue()) {
 				ScrollableList lstParam = cf.control().addScrollableList(i.getKey() + c.toString() + "_" + n).setPosition(0, pos_y);
-				lstParam.moveTo(g).close().setLabel("source");
+				lstParam.moveTo(g).close().setLabel(i.getKey()); //"source");
 				lstParam.addItems(this.getStreamParams());//addItem(i.getKey(), i.getKey())
 				g.add(lstParam);
 				
 				println ("adding gui for " + c);
 				if (c instanceof FormulaCallback) {
-					g.add(cf.control().addTextfield(i.getKey() + "_" + n + "_Expression_" + c.toString()).setText(((FormulaCallback)c).getExpression()).setPosition(margin_x * 2, pos_y).moveTo(g).setLabel("Expression"));
+
+					  CallbackListener setExpression = new CallbackListener() {
+						    public void controlEvent(CallbackEvent theEvent) {
+						        //((ScrollableList)theEvent.getController()).close();
+						    	((FormulaCallback) c).setExpression(((Textfield)theEvent.getController()).getText());
+						    	((Textfield)theEvent.getController()).setValueLabel(((FormulaCallback) c).getExpression());
+						    }
+						  };
+
+					
+					Textfield expression = cf.control().addTextfield(i.getKey() + "_" + n + "_Expression_" + c.toString())
+							.setText(((FormulaCallback)c).getExpression())
+							.setPosition(margin_x * 2, pos_y)
+							.moveTo(g)
+							.setLabel("Expression")
+							.setAutoClear(false); 
+					expression.addListenerFor(Textfield.ACTION_BROADCAST, setExpression);
+					
+					g.add(expression);
 					
 					final FormulaCallback fc = (FormulaCallback) c; 
 					
@@ -272,7 +293,7 @@ public class Stream implements Serializable {
 							.setLabel(((FormulaCallback)c).targetPath)
 							.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
 							.setPosition(margin_x * 5, pos_y)
-							.setWidth((cf.displayWidth/6))
+							.setWidth((cf.sketchWidth()/5))
 							.moveTo(g)
 							.onLeave(close)
 							.onEnter(toFront)
