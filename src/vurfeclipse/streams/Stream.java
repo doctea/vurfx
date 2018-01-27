@@ -30,7 +30,8 @@ public class Stream implements Serializable {
 	}
 	// Message >- [targetId] -< Callback
 
-	ConcurrentHashMap<String, List<ParameterCallback>> listeners = new ConcurrentHashMap<String, List<ParameterCallback>>();
+	//ConcurrentHashMap<String, List<ParameterCallback>> listeners = new ConcurrentHashMap<String, List<ParameterCallback>>();
+	LinkedList<ParameterCallback> listeners = new LinkedList<ParameterCallback>();
 	// targetId -< Callback
 
 	ConcurrentHashMap<String,Collection> messages = new ConcurrentHashMap<String, Collection>();
@@ -47,22 +48,24 @@ public class Stream implements Serializable {
 		//or use a string to group them + mark groups for deletion during message processing
 
 		System.out.println("in " + this + " - registerEventListener(" + paramName + ", " + callback + ")");
-		List<ParameterCallback> dis = this.getListenerList(paramName);
+		List<ParameterCallback> dis = this.getListenerList(); //paramName);
+		callback.setStreamSource(paramName);
 		dis.add(callback);
-		dis = this.getListenerList(paramName);
+		//dis = this.getListenerList(paramName);
 		System.out.println("listsize is now " + dis.size());
 		System.out.println("listener size is " + listeners.size());
 	}
 
-	synchronized public List<ParameterCallback> getListenerList(String paramName) {
-		List<ParameterCallback> l;
+	synchronized public List<ParameterCallback> getListenerList() {
+		/*List<ParameterCallback> l;
 		if (!listeners.containsKey(paramName)) {
 			System.out.println("getListenerList(" + paramName + ") adding new list because isn't set");
 			l = new LinkedList<ParameterCallback>();
 			this.listeners.put(paramName, l);
 		}
 
-		return this.listeners.get(paramName);
+		return this.listeners.get(paramName);*/
+		return this.listeners;
 	}
 	synchronized public List<Object> getMessagesList(String paramName) {
 		List<?> l;
@@ -100,7 +103,7 @@ public class Stream implements Serializable {
 
 	synchronized public void deliverEvents () {
 		boolean debug = false;
-		Iterator<Entry<String, List<ParameterCallback>>> p = listeners.entrySet().iterator();
+		//LinkedList<ParameterCallback> emitters = (LinkedList<ParameterCallback>) listeners.iterator(); //iterator();
 
 		if (debug) System.out.println("deliverEvents() in " + this);
 		if (debug) System.out.println("there are " + listeners.size() + " feeds .. ");
@@ -109,11 +112,14 @@ public class Stream implements Serializable {
 		////  for each listener callback (B) HashMap - b
 		////    for each message (C) HashMap
 		////       call B(C)
-		while (p.hasNext()) {
-			Map.Entry<String,List<ParameterCallback>> e_l = (Map.Entry<String,List<ParameterCallback>>) p.next();
-			String tagName = (String)e_l.getKey();
-			if (debug) System.out.println("For listeners with " + e_l.getKey() + " got " + e_l.getValue());
+		//while (emitters.hasNext()) {
+		for (ParameterCallback callback : listeners) {
+			//Map.Entry<String,List<ParameterCallback>> e_l = (Map.Entry<String,List<ParameterCallback>>) callback; //emitters.next();
+			String tagName = this.getMessageNameForStreamSource(callback.getStreamSource()); //(String)e_l.getKey();
+			//if (debug) System.out.println("For listeners with " + e_l.getKey() + " got " + e_l.getValue());
 
+			debug = true;
+			if (debug) println ("got callback " + callback + " and stream " + tagName); //got stream source to deliver to ")
 			//List sub_l = e_l.getValue();
 
 			//ArrayList<ParameterCallback> toDeleteList = new ArrayList<ParameterCallback> ();
@@ -121,6 +127,7 @@ public class Stream implements Serializable {
 			/// now loop over all the messages
 			//List mess = (List)messages.get(tagName);
 			List<Object> mess = getMessagesList(tagName);
+						
 			if (mess!=null) {
 				Iterator<Object> m = mess.iterator();
 				while (m.hasNext()) {
@@ -128,31 +135,31 @@ public class Stream implements Serializable {
 					//Object v = in.getValue();
 					Object v = m.next();
 
-					Iterator<?> callbacks = ((List<?>)e_l.getValue()).iterator();
-					while (callbacks.hasNext()) {
+					//Iterator<?> callbacks = ((List<?>)e_l.getValue()).iterator();
+					//while (callbacks.hasNext()) {
 						//Map.Entry e_b = (Map.Entry) b.next();
-						ParameterCallback callback = (ParameterCallback) callbacks.next();
+						//ParameterCallback callback = (ParameterCallback) callbacks.next();
 						if (debug) System.out.println("got callback " + callback);
 
 						if (debug) System.out.println("Delivering " + v + " to " + callback + "...");
-						if (callback.shouldDie) {
+						/*if (callback.shouldDie) {
 							callbacks.remove();
 							//((List)e_l.getValue()).remove(callback);
 							//toDeleteList.add(callbacks);
-						} else {
+						} else {*/
 							try {
 								callback.call(v);
 							} catch (Exception e) {
 								System.out.println("Stream " + this + " caught " + e.toString() + " while attempting to process callback for " + v + " on " + callback + "!");
 								e.printStackTrace();
 							}
-						}
+						//}
 						if (debug) System.out.println("Delivered " + v + " to " + callback + ".");
 
 						//((List)messages.get(tagName)).remove(v);
+						m.remove();
 					}
 					if (debug) System.out.println("Removing delivered messages?");
-					m.remove();
 					//mess.remove(v);
 
 					//System.out.println("--got " + e_b.getKey() + " : " + e_b.getValue());
@@ -166,13 +173,16 @@ public class Stream implements Serializable {
             ((List)messages.get(me.getKey())).remove(v);
           }*/
 
-				}
+				//}
 			} else {
 				System.out.println ("Could't find tagName " + tagName + "?!");
 			}
 		}
 	}
 
+	private String getMessageNameForStreamSource(String streamSource) {
+		return streamSource.split("/")[1];
+	}
 	public HashMap<String, Object> collectParameters() {
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("class",  this.getClass().getName());
@@ -183,27 +193,39 @@ public class Stream implements Serializable {
 		return params;
 	}
 
-	public HashMap<String, HashMap<String,Object>> collectLinkParameters() {
-		HashMap<String, HashMap<String, Object>> callbacks = new HashMap<String, HashMap<String,Object>> ();
-		for (Entry<String,List<ParameterCallback>> l : this.listeners.entrySet()) {
+	public LinkedList<HashMap<String,Object>> collectLinkParameters() {
+		LinkedList<HashMap<String,Object>> callbacks = new LinkedList<HashMap<String,Object>> ();
+		/*int index = 0;
+		for (ParameterCallback l : this.listeners) {
 			//callbacks.put(l.getKey(), l.getValue());
 			HashMap<String,Object> links = new HashMap<String,Object> ();
-			int index = 0;
-			for (ParameterCallback pc : l.getValue()) {
-				links.put(l.getKey() + (index++), pc.collectParameters());
-			}
-			callbacks.put(l.getKey(), links);
+			//for (ParameterCallback pc : l.getValue()) {
+				links.put(l.getStreamSource() + "_" + (index++), l.collectParameters());
+			//}
+			callbacks.put(l.getStreamSource(), links);
+		}*/
+		
+		for (ParameterCallback l : this.listeners) {
+			callbacks.add(l.collectParameters());
 		}
+				
 		return callbacks;
 	}
 
 	public void readParameters(HashMap<String, Object> input) {
 		this.streamName = (String) input.get("name");
-		HashMap<String, HashMap<String,Object>> callbacks = (HashMap<String, HashMap<String,Object>>) input.get("callbacks");
-		for (Entry<String, HashMap<String, Object>> i : callbacks.entrySet()) {
-			//this.registerEventListener(paramName, ParameterCallback.createParameterCallback(i.getValue().get("class")));
-			for (Entry<String, Object> p : ((HashMap<String,Object>)i.getValue()).entrySet()) {
-				this.registerEventListener(i.getKey(), ParameterCallback.makeParameterCallback((HashMap<String, Object>) p.getValue()));
+		if (input.get("callbacks") instanceof HashMap) {
+			HashMap<String, HashMap<String,Object>> callbacks = (HashMap<String, HashMap<String,Object>>) input.get("callbacks");
+			for (Entry<String, HashMap<String, Object>> i : callbacks.entrySet()) {
+				//this.registerEventListener(paramName, ParameterCallback.createParameterCallback(i.getValue().get("class")));
+				for (Entry<String, Object> p : ((HashMap<String,Object>)i.getValue()).entrySet()) {
+					this.registerEventListener(this.streamName + "/" + i.getKey(), ParameterCallback.makeParameterCallback((HashMap<String, Object>) p.getValue()));
+				}
+			}
+		} else {
+			// new List style
+			for (HashMap<String, Object> params : (LinkedList<HashMap<String,Object>>)input.get("callbacks")) {
+				this.registerEventListener((String)params.get("streamSource"), ParameterCallback.makeParameterCallback(params));
 			}
 		}
 
@@ -257,11 +279,11 @@ public class Stream implements Serializable {
 
 
 
-		for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
-			for (ParameterCallback c : i.getValue()) {
-				ScrollableList lstParam = cf.control().addScrollableList(i.getKey() + c.toString() + "_" + n).setPosition(0, pos_y);
-				lstParam.moveTo(g).close().setLabel(i.getKey()); //"source");
-				lstParam.addItems(this.getStreamParams());//addItem(i.getKey(), i.getKey())
+		//for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
+			for (ParameterCallback c : this.listeners) { //i.getValue()) {
+				ScrollableList lstParam = cf.control().addScrollableList(c.getStreamSource() + c.toString() + "_" + n).setPosition(0, pos_y);
+				lstParam.moveTo(g).close().setLabel(c.getStreamSource()); //"source");
+				lstParam.addItems(this.getEmitterNames());//addItem(i.getKey(), i.getKey())
 				g.add(lstParam);
 
 				println ("adding gui for " + c);
@@ -276,7 +298,7 @@ public class Stream implements Serializable {
 					};
 
 
-					Textfield expression = cf.control().addTextfield(i.getKey() + "_" + n + "_Expression_" + c.toString())
+					Textfield expression = cf.control().addTextfield(c.getStreamSource() + "_" + n + "_Expression_" + c.toString())
 							.setText(((FormulaCallback)c).getExpression())
 							.setPosition(margin_x * 2, pos_y)
 							.moveTo(g)
@@ -288,7 +310,7 @@ public class Stream implements Serializable {
 
 					final FormulaCallback fc = (FormulaCallback) c; 
 
-					ScrollableList lstTarget = cf.control().addScrollableList(i.getKey() + "_" + n + "_Target URL")
+					ScrollableList lstTarget = cf.control().addScrollableList(c.getStreamSource() + "_" + n + "_Target URL")
 							//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 							.setLabel(((FormulaCallback)c).targetPath)
 							.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
@@ -316,13 +338,13 @@ public class Stream implements Serializable {
 				pos_y += margin_y + gap_y;
 				n++;
 			}
-		}
+		//}
 	}
 
 	private void println(String string) {
 		System.out.println("Stream " + this + ": " + string);		
 	}
-	public String[] getStreamParams() {	
+	public String[] getEmitterNames() {	
 		return null;
 	}
 
