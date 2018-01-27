@@ -9,15 +9,15 @@ import java.util.HashMap;
   public void call (Object value);
 }*/
 public abstract class ParameterCallback implements Serializable {
-  /*public void call(String eventName, int time, Object value) {
+	/*public void call(String eventName, int time, Object value) {
     call(value);
   }*/
-	
-  
-  boolean shouldDie = false;
-  
-  
-  abstract public void call(Object value);
+
+
+	boolean shouldDie = false;
+
+
+	abstract public void call(Object value);
 
 
 	public HashMap<String,Object> collectParameters() {
@@ -46,10 +46,10 @@ public abstract class ParameterCallback implements Serializable {
 			System.err.println("Caught " + e + ": Didn't manage to instantiate " + classname + " might be missing constructor?");
 			e.printStackTrace();
 		}
-		
+
 		//streamName = (String) input.get("name");
 		//String paramName = (String) input.get("paramName");
-		
+
 		return null;
 	}
 
