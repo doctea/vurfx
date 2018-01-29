@@ -162,6 +162,7 @@ public class ChainSequence extends Sequence {
 				//.setBackgroundHeight(cp5.papplet.sketchHeight()/5)
 				.setPosition(10,sequenceEditor.getBackgroundHeight())
 				.setBackgroundHeight(10)
+				.setBarHeight(15)
 				.setCollapseMode(Accordion.MULTI);
 				;
 		
@@ -178,6 +179,7 @@ public class ChainSequence extends Sequence {
 			println("got a " + cs.getClass().getSimpleName() + " with height " + g.getBackgroundHeight()); 
 			acc.addItem(g);
 			acc.setBackgroundHeight(acc.getBackgroundHeight() + g.getBackgroundHeight());
+			acc.setBarHeight(15);
 			n++;
 		}
 		

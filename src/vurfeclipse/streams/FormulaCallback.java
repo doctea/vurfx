@@ -7,6 +7,7 @@ import com.udojava.evalex.*;
 
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.parameters.Parameter;
 
 public class FormulaCallback extends ParameterCallback {
 
@@ -25,6 +26,10 @@ public class FormulaCallback extends ParameterCallback {
 		System.out.println(this + " setting expression to '" + expression + "'");
 		this.expression = expression;
 		e = new com.udojava.evalex.Expression(expression);
+		
+		//e.setVariable("MAX", (BigDecimal) ((Parameter)APP.getApp().pr.getObjectForPath(this.targetPath)).getMax());	// doesn't work, may need to cast all the different datatypes?
+		//e.setVariable("MIN", (BigDecimal) ((Parameter)APP.getApp().pr.getObjectForPath(this.targetPath)).getMin());
+		
 		return this;
 	}
 	public String getExpression () {

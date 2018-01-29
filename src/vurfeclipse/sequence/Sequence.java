@@ -517,6 +517,8 @@ abstract public class Sequence implements Serializable, Mutable {
 							.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
 							.setPosition(80, 30)
 							.setWidth((cp5.papplet.width/6))
+							.setBarHeight(15)
+							.setItemHeight(15)
 							.moveTo(seq)
 							.onLeave(close)
 							.onEnter(toFront)

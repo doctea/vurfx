@@ -13,9 +13,21 @@ public abstract class ParameterCallback implements Serializable {
     call(value);
   }*/
 
+	String streamSource;
+	
+	public boolean reactsTo(String streamSource) {
+		return (streamSource.equals(this.streamSource));
+	}
+
+	public String getStreamSource() {
+		return streamSource;
+	}
+
+	public void setStreamSource(String streamSource) {
+		this.streamSource = streamSource;
+	}
 
 	boolean shouldDie = false;
-
 
 	abstract public void call(Object value);
 
@@ -23,6 +35,7 @@ public abstract class ParameterCallback implements Serializable {
 	public HashMap<String,Object> collectParameters() {
 		HashMap<String,Object> params = new HashMap<String,Object> ();
 		params.put("class", this.getClass().getName());
+		params.put("streamSource", streamSource);
 		return params;
 	}
 
@@ -55,6 +68,7 @@ public abstract class ParameterCallback implements Serializable {
 
 
 	public void readParameters(HashMap<String, Object> input) {
+		if (input.containsKey("streamSource")) this.streamSource = (String) input.get("streamSource"); 
 		return;
 	}
 }

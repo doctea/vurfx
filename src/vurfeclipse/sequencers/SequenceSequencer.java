@@ -860,8 +860,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     } else if (key=='d') {
 		this.preserveCurrentSceneParameters();
     } else if (key=='v') {
-    	this.preserveCurrentSceneParameters();
-    	this.cloneSequence(this.activeSequenceName, "Copy of " + this.activeSequenceName);
+    	//this.preserveCurrentSceneParameters();
+    	HashMap<String, HashMap<String, Object>> current_parameters = this.host.collectSceneParameters();
+    	Sequence seq = this.cloneSequence(this.activeSequenceName, "Copy of " + this.activeSequenceName);
+    	seq.setSceneParameters(current_parameters);
+    	seq.start();
     } else if (super.sendKeyPressed(key)) {
     	
     } else if(key=='1') {
@@ -983,6 +986,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setPosition(width-(width/3), margin_y + 100)
 				.setSize(width/3, height-margin_y-100)
 				.setItemHeight(20)
+				.setBarHeight(15)
 				.moveTo(sequencerTab)
 				.setType(ListBox.LIST);
 
