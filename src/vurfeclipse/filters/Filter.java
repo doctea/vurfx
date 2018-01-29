@@ -336,6 +336,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		if (this.parameters==null) this.setParameterDefaults();
 		try {
 			parameters.get(paramName).setValueFromSin((Float)f);
+		} catch (NullPointerException e) {
+			println("Error - caught null pointer exception trying to set '" + paramName + "' to " + f + " in " + this);
 		} catch (ClassCastException e) {
 			println("Error - caught trying to set " + paramName + " to a " + f.getClass());
 		}

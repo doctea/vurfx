@@ -198,6 +198,13 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		} else if (key=='m') {
 			this.toggleStreams();
 			println("toggled enableStreams to " + this.enableStreams);
+		} else if (key=='!') {
+			println("Panic mode - attempting reset of bits of GUI that might have gone wrong");
+			for (ScrollableList c : APP.getApp().getCF().control().getAll(ScrollableList.class)) {
+				c.open();
+				println("opening and closing " + c);
+				c.close();
+			}
 		} else {
 			return false;
 		}

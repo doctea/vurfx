@@ -10,10 +10,12 @@ import controlP5.ControlP5;
 import controlP5.ScrollableList;
 import vurfeclipse.APP;
 import vurfeclipse.filters.Filter;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.streams.FormulaCallback;
 import vurfeclipse.ui.SequenceEditor;
+import vurfeclipse.Targetable;
 
 public class ChangeParameterSequence extends Sequence {
 	String filterPath, parameterName;
@@ -61,7 +63,7 @@ public class ChangeParameterSequence extends Sequence {
 	}
 	
 	@Override
-	public void setValuesForNorm(double pc, int iteration) {
+	synchronized public void setValuesForNorm(double pc, int iteration) {
 		// TODO Auto-generated method stub
 		((Filter)host.host
 				.getObjectForPath(filterPath))
@@ -77,7 +79,6 @@ public class ChangeParameterSequence extends Sequence {
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 		((Filter)host.host
 				.getObjectForPath(filterPath))
 				.changeParameterValue(parameterName, value);
@@ -87,6 +88,8 @@ public class ChangeParameterSequence extends Sequence {
 	public SequenceEditor makeControls(ControlP5 cp5, String name) {
 		// add an accordion to hold the sub-sequences and recurse
 		SequenceEditor sequenceEditor = super.makeControls(cp5, name);
+		
+		ChangeParameterSequence sequence = this;
 
 		int pos_y = 60, margin_x = 10;
 		SequenceEditor g = sequenceEditor;
@@ -107,6 +110,7 @@ public class ChangeParameterSequence extends Sequence {
 			    public void controlEvent(CallbackEvent theEvent) {
 			        theEvent.getController().bringToFront();
 			        ((ScrollableList)theEvent.getController()).open();
+			        theEvent.getController().bringToFront();
 			    }
 			  };
 
@@ -121,7 +125,8 @@ public class ChangeParameterSequence extends Sequence {
 					.setLabel(this.getParameterPath()) //((FormulaCallback)c).targetPath)
 					.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
 					.setPosition(80, pos_y)
-					.setWidth((cp5.papplet.width/6))
+					.setWidth((cp5.papplet.width/3))
+					.setBarHeight(16).setItemHeight(16)
 					.moveTo(g)
 					.onLeave(close)
 					.onEnter(toFront)
@@ -129,15 +134,20 @@ public class ChangeParameterSequence extends Sequence {
 			
 			//lstTarget.setValue(targetPath);
 			
-			/*lstTarget.addListenerFor(ScrollableList.ACTION_CLICK, new CallbackListener () {
+			lstTarget.addListenerFor(ScrollableList.ACTION_BROADCAST, new CallbackListener () {
 				@Override
-				public void controlEvent(CallbackEvent theEvent) {
+				synchronized public void controlEvent(CallbackEvent theEvent) {
 					// TODO Auto-generated method stub
 					Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget.getValue());
 					//s.entrySet();
-					((FormulaCallback) fc).setTargetPath((String) s.get("text"));
+					Parameter p = (Parameter) host.host.getObjectForPath((String)s.get("text"));
+					synchronized(sequence) {
+						sequence.setHost(((Filter)host.host.getObjectForPath(p.getFilterPath())).sc);
+						sequence.filterPath = p.getFilterPath();
+						sequence.parameterName = p.getName();//((String) s.get("text")).substring(((String)s.get("text")).lastIndexOf('/')); //)//t.getsetTargetPath((String) s.get("text"));
+					}
 				}				
-			});*/
+			});
 			
 			g.add(lstTarget);		
 		//seq.setHeight(30);

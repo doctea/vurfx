@@ -118,7 +118,7 @@ public class Stream implements Serializable {
 			String tagName = this.getMessageNameForStreamSource(callback.getStreamSource()); //(String)e_l.getKey();
 			//if (debug) System.out.println("For listeners with " + e_l.getKey() + " got " + e_l.getValue());
 
-			debug = true;
+			//debug = true;
 			if (debug) println ("got callback " + callback + " and stream " + tagName); //got stream source to deliver to ")
 			//List sub_l = e_l.getValue();
 
