@@ -2,7 +2,7 @@
 
 by Tristan Rowley (c) 2012-present (except where using code copyright others or public domain!), doctea@gmail.com
 
-a rough and hacky java-based VJ/music video/trippy visuals application thing based on Processing 3.  With glsl shaders, SimpleOpenNI/Kinect rgb and depth support.
+a rough and hacky java-based VJ/music video/lightsynth/semi-automated/trippy visuals application thing based on Processing 3.  With glsl shaders, SimpleOpenNI/Kinect rgb and depth support.
 
 uses cp5, many other libraries I'm sure - TODO: ADD LINKS AND STUFF
 
