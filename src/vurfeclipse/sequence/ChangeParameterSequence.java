@@ -1,5 +1,6 @@
 package vurfeclipse.sequence;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,17 +19,37 @@ import vurfeclipse.ui.SequenceEditor;
 import vurfeclipse.Targetable;
 
 public class ChangeParameterSequence extends Sequence {
+	
+	com.udojava.evalex.Expression e;
+	
 	String filterPath, parameterName;
+	String expression = "input";
+
 	Object value;
 	
+	
+	public String getExpression() {
+		return expression;
+	}
+
+	public void setExpression(String expression) {
+		this.expression = expression;
+		e = new com.udojava.evalex.Expression(expression);
+	}
+
 	public ChangeParameterSequence() { super(); }
 	
-	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object value, int length) {
+	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object value, String expression, int length) {
 		//super(host,length);
 		super(host,length);
 		this.filterPath = filterPath;
 		this.parameterName = parameterName;
 		this.value = value;
+		this.setExpression(expression);
+	}
+	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object value, int length) {	// compatibility constructor
+		//super(host,length);
+		this(host,filterPath,parameterName,value,"input",length); 
 	}
 	
 	@Override
@@ -37,6 +58,7 @@ public class ChangeParameterSequence extends Sequence {
 		params.put("filterPath",  filterPath);
 		params.put("parameterName", parameterName);
 		params.put("value", this.value);
+		params.put("expression", this.expression);
 		return params;
 	}
 	
@@ -46,6 +68,7 @@ public class ChangeParameterSequence extends Sequence {
 		if (params.containsKey("filterPath")) this.filterPath = (String) params.get("filterPath");
 		if (params.containsKey("parameterName")) this.parameterName = (String) params.get("parameterName");
 		if (params.containsKey("value")) this.value = params.get("value");
+		if (params.containsKey("expression")) this.setExpression((String) params.get("value"));
 	}
 
 	@Override public ArrayList<Mutable> getMutables () {
@@ -64,10 +87,13 @@ public class ChangeParameterSequence extends Sequence {
 	
 	@Override
 	synchronized public void setValuesForNorm(double pc, int iteration) {
-		// TODO Auto-generated method stub
+		if (e==null) e = new com.udojava.evalex.Expression(expression);
+		e.setVariable("input", BigDecimal.valueOf(pc));
+		e.setVariable("iteration", BigDecimal.valueOf(iteration));
+		BigDecimal value = e.eval();
 		((Filter)host.host
 				.getObjectForPath(filterPath))
-				.changeParameterValueFromSin(parameterName, (float)Math.sin(pc));		
+				.changeParameterValueFromSin(parameterName, (float)Math.sin(value.doubleValue()));		
 	}
 
 	@Override
