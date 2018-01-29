@@ -40,7 +40,7 @@ public class Stream implements Serializable {
 	/*public void finish () {
     this.listeners = null;//.dispose();
     this.messages = null;//.dispose();
-  }*/
+  	}*/
 
 	synchronized public void registerEventListener (String paramName, ParameterCallback callback) {
 		//List dis = this.getOrAddParameter(paramName);  //this.dispatchers.get(paramName);
@@ -127,7 +127,7 @@ public class Stream implements Serializable {
 			/// now loop over all the messages
 			//List mess = (List)messages.get(tagName);
 			List<Object> mess = getMessagesList(tagName);
-						
+
 			if (mess!=null) {
 				Iterator<Object> m = mess.iterator();
 				while (m.hasNext()) {
@@ -137,34 +137,34 @@ public class Stream implements Serializable {
 
 					//Iterator<?> callbacks = ((List<?>)e_l.getValue()).iterator();
 					//while (callbacks.hasNext()) {
-						//Map.Entry e_b = (Map.Entry) b.next();
-						//ParameterCallback callback = (ParameterCallback) callbacks.next();
-						if (debug) System.out.println("got callback " + callback);
+					//Map.Entry e_b = (Map.Entry) b.next();
+					//ParameterCallback callback = (ParameterCallback) callbacks.next();
+					if (debug) System.out.println("got callback " + callback);
 
-						if (debug) System.out.println("Delivering " + v + " to " + callback + "...");
-						/*if (callback.shouldDie) {
+					if (debug) System.out.println("Delivering " + v + " to " + callback + "...");
+					/*if (callback.shouldDie) {
 							callbacks.remove();
 							//((List)e_l.getValue()).remove(callback);
 							//toDeleteList.add(callbacks);
 						} else {*/
-							try {
-								callback.call(v);
-							} catch (Exception e) {
-								System.out.println("Stream " + this + " caught " + e.toString() + " while attempting to process callback for " + v + " on " + callback + "!");
-								e.printStackTrace();
-							}
-						//}
-						if (debug) System.out.println("Delivered " + v + " to " + callback + ".");
-
-						//((List)messages.get(tagName)).remove(v);
-						m.remove();
+					try {
+						callback.call(v);
+					} catch (Exception e) {
+						System.out.println("Stream " + this + " caught " + e.toString() + " while attempting to process callback for " + v + " on " + callback + "!");
+						e.printStackTrace();
 					}
-					if (debug) System.out.println("Removing delivered messages?");
-					//mess.remove(v);
+					//}
+					if (debug) System.out.println("Delivered " + v + " to " + callback + ".");
 
-					//System.out.println("--got " + e_b.getKey() + " : " + e_b.getValue());
+					//((List)messages.get(tagName)).remove(v);
+					m.remove();
+				}
+				if (debug) System.out.println("Removing delivered messages?");
+				//mess.remove(v);
 
-					/*Iterator m = ((List)messages.get(e_b.getKey())).iterator();
+				//System.out.println("--got " + e_b.getKey() + " : " + e_b.getValue());
+
+				/*Iterator m = ((List)messages.get(e_b.getKey())).iterator();
           while (m.hasNext()) {
             Map.Entry in = (Map.Entry)m.next();
             Object v = in.getValue();
@@ -204,11 +204,11 @@ public class Stream implements Serializable {
 			//}
 			callbacks.put(l.getStreamSource(), links);
 		}*/
-		
+
 		for (ParameterCallback l : this.listeners) {
 			callbacks.add(l.collectParameters());
 		}
-				
+
 		return callbacks;
 	}
 
@@ -280,64 +280,69 @@ public class Stream implements Serializable {
 
 
 		//for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
-			for (ParameterCallback c : this.listeners) { //i.getValue()) {
-				ScrollableList lstParam = cf.control().addScrollableList(c.getStreamSource() + c.toString() + "_" + n).setPosition(0, pos_y);
-				lstParam.moveTo(g).close().setLabel(c.getStreamSource()); //"source");
-				lstParam.addItems(this.getEmitterNames());//addItem(i.getKey(), i.getKey())
-				g.add(lstParam);
+		for (ParameterCallback c : this.listeners) { //i.getValue()) {
+			ScrollableList lstParam = cf.control().addScrollableList(c.getStreamSource() + c.toString() + "_" + n)
+					.setPosition(0, pos_y)
+					.setWidth(margin_x * 2)
+					.setBarHeight(16).setItemHeight(16)
+					;
+			lstParam.moveTo(g).close().setLabel(c.getStreamSource()); //"source");
+			lstParam.addItems(this.getEmitterNames());//addItem(i.getKey(), i.getKey())
+			g.add(lstParam);
 
-				println ("adding gui for " + c);
-				if (c instanceof FormulaCallback) {
+			println ("adding gui for " + c);
+			if (c instanceof FormulaCallback) {
 
-					CallbackListener setExpression = new CallbackListener() {
-						public void controlEvent(CallbackEvent theEvent) {
-							//((ScrollableList)theEvent.getController()).close();
-							((FormulaCallback) c).setExpression(((Textfield)theEvent.getController()).getText());
-							((Textfield)theEvent.getController()).setValueLabel(((FormulaCallback) c).getExpression());
-						}
-					};
+				CallbackListener setExpression = new CallbackListener() {
+					public void controlEvent(CallbackEvent theEvent) {
+						//((ScrollableList)theEvent.getController()).close();
+						((FormulaCallback) c).setExpression(((Textfield)theEvent.getController()).getText());
+						((Textfield)theEvent.getController()).setValueLabel(((FormulaCallback) c).getExpression());
+					}
+				};
 
 
-					Textfield expression = cf.control().addTextfield(c.getStreamSource() + "_" + n + "_Expression_" + c.toString())
-							.setText(((FormulaCallback)c).getExpression())
-							.setPosition(margin_x * 2, pos_y)
-							.moveTo(g)
-							.setLabel("Expression")
-							.setAutoClear(false); 
-					expression.addListenerFor(Textfield.ACTION_BROADCAST, setExpression);
+				Textfield expression = cf.control().addTextfield(c.getStreamSource() + "_" + n + "_Expression_" + c.toString())
+						.setText(((FormulaCallback)c).getExpression())
+						.setPosition((int) margin_x * 2.25f, pos_y)
+						.moveTo(g)
+						.setLabel("Expression")
+						.setAutoClear(false); 
+				expression.addListenerFor(Textfield.ACTION_BROADCAST, setExpression);
 
-					g.add(expression);
+				g.add(expression);
 
-					final FormulaCallback fc = (FormulaCallback) c; 
+				final FormulaCallback fc = (FormulaCallback) c; 
 
-					ScrollableList lstTarget = cf.control().addScrollableList(c.getStreamSource() + "_" + n + "_Target URL")
-							//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-							.setLabel(((FormulaCallback)c).targetPath)
-							.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
-							.setPosition(margin_x * 5, pos_y)
-							.setWidth((cf.sketchWidth()/5))
-							.moveTo(g)
-							.onLeave(close)
-							.onEnter(toFront)
-							.close();
+				ScrollableList lstTarget = cf.control().addScrollableList(c.getStreamSource() + "_" + n + "_Target URL")
+						//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+						.setLabel(((FormulaCallback)c).targetPath)
+						.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
+						.setPosition(margin_x * 5, pos_y)
+						.setWidth((cf.sketchWidth()/3))
+						.moveTo(g)
+						.onLeave(close)
+						.onEnter(toFront)
+						.setBarHeight(expression.getHeight()).setItemHeight(expression.getHeight())
+						.close();
 
-					//lstTarget.setValue(targetPath);
+				//lstTarget.setValue(targetPath);
 
-					lstTarget.addListenerFor(ScrollableList.ACTION_CLICK, new CallbackListener () {
-						@Override
-						public void controlEvent(CallbackEvent theEvent) {
-							// TODO Auto-generated method stub
-							Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget.getValue());
-							//s.entrySet();
-							((FormulaCallback) fc).setTargetPath((String) s.get("text"));
-						}				
-					});
+				lstTarget.addListenerFor(ScrollableList.ACTION_CLICK, new CallbackListener () {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						// TODO Auto-generated method stub
+						Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget.getValue());
+						//s.entrySet();
+						((FormulaCallback) fc).setTargetPath((String) s.get("text"));
+					}				
+				});
 
-					g.add(lstTarget);
-				}	
-				pos_y += margin_y + gap_y;
-				n++;
-			}
+				g.add(lstTarget);
+			}	
+			pos_y += margin_y + gap_y;
+			n++;
+		}
 		//}
 	}
 

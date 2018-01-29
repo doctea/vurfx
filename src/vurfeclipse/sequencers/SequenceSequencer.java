@@ -983,6 +983,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setPosition(width-(width/3), margin_y + 100)
 				.setSize(width/3, height-margin_y-100)
 				.setItemHeight(20)
+				.setBarHeight(15)
 				.moveTo(sequencerTab)
 				.setType(ListBox.LIST);
 
