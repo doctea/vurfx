@@ -9,6 +9,7 @@ import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.ScrollableList;
+import controlP5.Textfield;
 import vurfeclipse.APP;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.parameters.Parameter;
@@ -87,10 +88,13 @@ public class ChangeParameterSequence extends Sequence {
 	
 	@Override
 	synchronized public void setValuesForNorm(double pc, int iteration) {
+		
+		// evaluate value to pass based on expression
 		if (e==null) e = new com.udojava.evalex.Expression(expression);
 		e.setVariable("input", BigDecimal.valueOf(pc));
 		e.setVariable("iteration", BigDecimal.valueOf(iteration));
 		BigDecimal value = e.eval();
+		
 		((Filter)host.host
 				.getObjectForPath(filterPath))
 				.changeParameterValueFromSin(parameterName, (float)Math.sin(value.doubleValue()));		
@@ -127,7 +131,24 @@ public class ChangeParameterSequence extends Sequence {
 		
 		//println ("adding gui for " + c);
 		//if (c instanceof FormulaCallback) {
-			//g.add(cp5.addTextfield(name + "_Expression").setText(((FormulaCallback)c).getExpression()).setPosition(margin_x * 2, pos_y).moveTo(g).setLabel("Expression"));
+			Textfield txtExpression = cp5.addTextfield(name + "_Expression")
+					.setText(this.getExpression())
+					.setPosition((cp5.papplet.width/3) + margin_x * 10, pos_y)
+					.moveTo(g).setLabel("Expression")
+					.setAutoClear(false);
+			
+			// TODO: add callback handler to actually set expression
+
+			CallbackListener setExpression = new CallbackListener() {
+				public void controlEvent(CallbackEvent theEvent) {
+					//((ScrollableList)theEvent.getController()).close();
+					setExpression(((Textfield)theEvent.getController()).getText());
+					((Textfield)theEvent.getController()).setValueLabel(sequence.getExpression());
+				}
+			};
+			txtExpression.addListenerFor(txtExpression.ACTION_BROADCAST,setExpression);
+			
+			g.add(txtExpression);
 			
 			//final FormulaCallback fc = (FormulaCallback) c; 
 			
