@@ -114,6 +114,7 @@ public class FeralFestProject extends Project {
 
 		ils1.addFilter(new ImageListDrawer(ils1).setDirectory(/*"vurf"*/"feralfest").setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer1").nextMode());
 		ils2.addFilter(new ImageListDrawer(ils2).setDirectory("feralfest"/*"ds2014"*/).setCurrentIndex(2).setNumBlobs(30/*200*/).setFilterName("ImageListDrawer2").nextMode());
+		
 
 		/*ils2.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
     ils2.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
@@ -223,6 +224,9 @@ public class FeralFestProject extends Project {
 		blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect0",0).setOutputCanvas("/pix0").setFilterName("kinect0"))).setCanvas("depth", "/pix1");//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
 		//blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect1",1).setOutputCanvas("/pix1").setFilterName("kinect1")));
 
+		blendScene.addFilter(new WebcamFilter(ils2).setOutputCanvas("/pix0"));
+
+		
 		/*blendScene.addSequence("_next_camera", new SimpleSequence() {
     	int camera = 0;
     	int max_camera = 2;
@@ -412,7 +416,7 @@ public class FeralFestProject extends Project {
 		TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
 				new TunnelScene(this, w, h).setCanvas("temp", "/temp2").setSceneName("TunnelScene1")
 				//.addFilter(new BlendDrawer()))
-				, "/out", "/out"
+				, "/pix0", "/out"
 				);
 		int tunnel_weight = 1;
 		switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), tunnel_weight);

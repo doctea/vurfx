@@ -2,8 +2,9 @@ package vurfeclipse.filters;
 
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
-import codeanticode.gsvideo.*;
+//import codeanticode.gsvideo.*;
 import processing.core.PGraphics;
+import processing.video.*;
 
 
 /*void captureEvent(GSCapture cam) {
@@ -18,7 +19,7 @@ public class WebcamFilter extends Filter {
   
   int cameraNumber = 0;
 
-  transient GSCapture webcamStream;
+  transient Capture webcamStream;
   
   transient PGraphics tex;
   
@@ -31,7 +32,7 @@ public class WebcamFilter extends Filter {
     this.capW = capW;
     this.capH = capH;
   }
-  WebcamFilter(Scene sc) {
+  public WebcamFilter(Scene sc) {
     this(sc, sc.w, sc.h);
   }
   public WebcamFilter(Scene sc, int cameraNumber) {
@@ -42,75 +43,26 @@ public class WebcamFilter extends Filter {
   int capW = 640, capH = 480;
   
   public boolean initialise() {
-      webcamStream = new GSCapture(APP.getApp(), capW, capH); //, cameraName); //, global_fps);
+      webcamStream = new Capture(APP.getApp(), capW, capH); //, cameraName); //, global_fps);
       //webcamStream = new GSCapture(APP, 640, 480, cameraName); //, global_fps);      
       //webcamStream = new GSCapture(APP, capW, capH, global_fps);
       
       System.out.println("WebcamFilter initialised for cameraNumber: " + this.cameraNumber);
       System.out.println("WebcamFilter OUT is " + out);
       
-      if (pixelMode) {
-        //tex = new GLTexture(APP.getApp(),sc.w,sc.h);
-    	tex = this.sc.host.createCanvas(getPath() + "/ca/buffer",this.getFilterLabel(), capW,capH).getSurf();
-        //webcamStream.setPixelDest(tex);
-        webcamStream.setPixelDest(tex, true);
-        //webcamStream.setPixelDest(out.getTexture());
-      }
       webcamStream.start();
       System.out.println("webcam initialise?");
       //APP.exit();
       return true;
   }	  
   
-  public boolean disable_initialise() {
-    /*try {
-      quicktime.QTSession.open();
-    } catch (quicktime.QTException qte) { 
-      qte.printStackTrace();
-    }*/
-    
-    //webcamStream = new GSCapture(APP, sc.w, sc.h, 30);
-    
-    String[] cameras = GSCapture.list();
-    if (cameraNumber >= cameras.length ) {
-      System.out.println("No camera available for " + cameraNumber + "!");
-      //APP.exit();
-      return false;
-    } else {
-      //String cameraName = "USB Video Class Video:" + this.cameraNumber;
-      String cameraName = cameras[cameraNumber]; //"USB Video Class Video:" + this.cameraNumber;
-      
-      //webcamStream = new GSCapture(APP, capW, capH, cameraName, global_fps);
-      //webcamStream = new GSCapture(APP, capW, capH, cameraName);    
-      //webcamStream = new GSCapture(APP, capW, capH);          
-      webcamStream = new GSCapture(APP.getApp(), capW, capH); //, cameraName); //, global_fps);
-      //webcamStream = new GSCapture(APP, 640, 480, cameraName); //, global_fps);      
-      //webcamStream = new GSCapture(APP, capW, capH, global_fps);
-      
-      System.out.println("WebcamFilter initialised for cameraNumber: " + this.cameraNumber);
-      System.out.println("WebcamFilter OUT is " + out);
-      
-      if (pixelMode) {
-        //tex = new GLTexture(APP.getApp(),sc.w,sc.h);
-        tex = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel()).getSurf();
-        //webcamStream.setPixelDest(tex);
-        webcamStream.setPixelDest(tex, true);
-        //webcamStream.setPixelDest(out.getTexture());
-      }
-      webcamStream.start();
-      System.out.println("webcam initialise?");
-      //APP.exit();
-      return true;
-    }
-  }
-  
   public boolean applyMeatToBuffers() {
     //System.out.println("applyMeatToBuffers()");
     if (webcamStream!=null && webcamStream.available()) {
       //System.out.println("got webcamstream");
-      webcamStream.read();
+      //webcamStream.read();
       
-      if (!pixelMode) {
+      /*if (!pixelMode) {
         webcamStream.loadPixels();
         //out.loadPixels();
         //out.pixels = webcamStream.pixels;
@@ -119,11 +71,20 @@ public class WebcamFilter extends Filter {
       } else {
         //if (tex.putPixelsIntoTexture()) {
     	if (tex.isModified()) {
-    	  tex.updatePixels();
+    	  tex.updatePixels();*/
+      		//out.scale(1.0f);
+      if (webcamStream.available() == true) {
+    	  webcamStream.read();
           out.beginDraw();
-          out.image(tex,0,0,sc.w,sc.h);
+          //out.scale(1.0f); //-1,-1);
+          out.pushMatrix();
+          //out.scale(-1.0f, 1.0f);
+          //out.image(webcamStream,0,0,sc.w,sc.h);
+          out.set(0, 0,  webcamStream);
+          out.popMatrix();
           out.endDraw();
-        }
+        /*}
+      }*/
       }
       return true;
     } else {

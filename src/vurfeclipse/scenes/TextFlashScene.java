@@ -274,7 +274,7 @@ public class TextFlashScene extends Scene {
 			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 		}
 		@Override public void onStart() {
-			((TextDrawer)(host.host.getSceneForPath(getPath()).getFilter("BlendDrawer"))).setText("FeralFest");
+			((TextDrawer)(host.host.getSceneForPath(getPath()).getFilter("TextDrawer"))).setText("FeralFest");
 			if (random(0f,1.0f)>=0.5f)
 				((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setBlendMode((Integer)getRandomArrayElement(new Integer[] { 3, 4, 8, 8, 8, 9, 12 }));
 			//((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setMuted((random(0f,1.0f)>=0.25f));

@@ -158,7 +158,7 @@ public class VurfEclipse extends PApplet {
 	// all false for really low res 
 
 	boolean fullscreen = false;//true;//false;
-	int fullscreen_num = 2;
+	int fullscreen_num = 3;
 
 	int title_adjust = -20; //-100;	// amount to take off the height to compensate for window title, system bar etc
 	/*int
@@ -321,13 +321,13 @@ public class VurfEclipse extends PApplet {
 
 		//pr = new MinimalProject(desired_width, desired_height, gfx_mode);
 
-		//pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
+		pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
 		//pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
 		//pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject2017-12-22-20-27-41.xml"); // not a bad one --> output/SavedProject2017-12-22-20-10-39.xml");
 		//pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject-NYE.xml");
 
 		//pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.MutanteProject.class);
-		pr = Project.chooseProject(desired_width, desired_height, "output/MutanteProject-incremental.xml");
+		//pr = Project.chooseProject(desired_width, desired_height, "output/MutanteProject-incremental.xml");
 
 
 		PVector resolution = this.getOutputResolution();
@@ -538,7 +538,7 @@ public class VurfEclipse extends PApplet {
 		timeMillis = millis();
 
 		//if (enableStreams)
-		pr.processStreams(timeMillis);
+		//  pr.processStreams(timeMillis);
 
 		//if (enableSequencer)
 		pr.processSequencer(timeMillis);
