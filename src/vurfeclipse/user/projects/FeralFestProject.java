@@ -416,7 +416,7 @@ public class FeralFestProject extends Project {
 		TunnelScene ts1 =  (TunnelScene) this.addSceneInputOutputCanvas(
 				new TunnelScene(this, w, h).setCanvas("temp", "/temp2").setSceneName("TunnelScene1")
 				//.addFilter(new BlendDrawer()))
-				, "/pix0", "/out"
+				, "/out", "/out"
 				);
 		int tunnel_weight = 1;
 		switcher.bindSequence("tunnel_1_blob_pulse_1", new ChainSequence(2000).addSequence(ts1, "preset 1").addSequence(blobScene, "preset 1"), tunnel_weight);
@@ -613,13 +613,13 @@ public class FeralFestProject extends Project {
 
 	@Override
 	public void initialiseStreams() {
-	    this.getSceneForPath("/sc/PlasmaScene").registerCallbackPreset(this.getSequencer().getStream("beat"), "beat_8", "warp");
+	    this.getSceneForPath("/sc/PlasmaScene").registerCallbackPreset(this.getSequencer().getStream("beat"), "beat/beat_8", "warp");
 	    this.getSceneForPath("/sc/TextFlash")
 	    	//.registerCallbackPreset("beat","beat_1", "random")
 			//.registerCallbackPreset("beat","beat_8", "rotate")
-			.registerCallbackPreset("beat","beat_16","swivel");
+			.registerCallbackPreset("beat","beat/beat_16","swivel");
 	    this.getSceneForPath("/sc/BadTVScene1")
-	    	.registerCallbackPreset(this.getSequencer().getStream("beat"), "beat_8", "warp");
+	    	.registerCallbackPreset(this.getSequencer().getStream("beat"), "beat/beat_8", "warp");
 	}
 
 }

@@ -158,7 +158,7 @@ public class VurfEclipse extends PApplet {
 	// all false for really low res 
 
 	boolean fullscreen = false;//true;//false;
-	int fullscreen_num = 3;
+	int fullscreen_num = 2;
 
 	int title_adjust = -20; //-100;	// amount to take off the height to compensate for window title, system bar etc
 	/*int
@@ -538,7 +538,7 @@ public class VurfEclipse extends PApplet {
 		timeMillis = millis();
 
 		//if (enableStreams)
-		//  pr.processStreams(timeMillis);
+		pr.processStreams(timeMillis);
 
 		//if (enableSequencer)
 		pr.processSequencer(timeMillis);

@@ -77,10 +77,12 @@ public class Stream implements Serializable {
 	}
 
 	synchronized public void addEvent(String paramName, Object value) {
-		if (debug) System.out.println("add event to " + paramName + "'" + value + "'");
+		if (debug) 
+			System.out.println("add event to " + paramName + "'" + value + "'");
 		this.getMessagesList(paramName).add(value);
 
-		if (debug) System.out.println("events for " + paramName + " now " + this.getMessagesList(paramName));
+		if (debug) 
+			System.out.println("events for " + paramName + " now " + this.getMessagesList(paramName));
 
 	}
 
@@ -102,10 +104,10 @@ public class Stream implements Serializable {
 	}
 
 	synchronized public void deliverEvents () {
-		boolean debug = false;
+		boolean debug = this.debug = false;
 		//LinkedList<ParameterCallback> emitters = (LinkedList<ParameterCallback>) listeners.iterator(); //iterator();
 
-		if (debug) System.out.println("deliverEvents() in " + this);
+		if (debug) System.out.println("--------------- deliverEvents() in " + this + "------------------------");
 		if (debug) System.out.println("there are " + listeners.size() + " feeds .. ");
 
 		////for each listener section "test" "sine" (A)  HashMap   - p
@@ -113,13 +115,14 @@ public class Stream implements Serializable {
 		////    for each message (C) HashMap
 		////       call B(C)
 		//while (emitters.hasNext()) {
+		
 		for (ParameterCallback callback : listeners) {
 			//Map.Entry<String,List<ParameterCallback>> e_l = (Map.Entry<String,List<ParameterCallback>>) callback; //emitters.next();
 			String tagName = this.getMessageNameForStreamSource(callback.getStreamSource()); //(String)e_l.getKey();
 			//if (debug) System.out.println("For listeners with " + e_l.getKey() + " got " + e_l.getValue());
 
-			//debug = true;
-			if (debug) println ("got callback " + callback + " and stream " + tagName); //got stream source to deliver to ")
+			//debug = false;
+			if (debug) println ("got callback listener " + callback + " for stream " + tagName); //got stream source to deliver to ")
 			//List sub_l = e_l.getValue();
 
 			//ArrayList<ParameterCallback> toDeleteList = new ArrayList<ParameterCallback> ();
@@ -127,6 +130,9 @@ public class Stream implements Serializable {
 			/// now loop over all the messages
 			//List mess = (List)messages.get(tagName);
 			List<Object> mess = getMessagesList(tagName);
+			
+			if (debug)
+				println("got " + mess.size() + " messages for " + tagName);
 
 			if (mess!=null) {
 				Iterator<Object> m = mess.iterator();
@@ -139,7 +145,7 @@ public class Stream implements Serializable {
 					//while (callbacks.hasNext()) {
 					//Map.Entry e_b = (Map.Entry) b.next();
 					//ParameterCallback callback = (ParameterCallback) callbacks.next();
-					if (debug) System.out.println("got callback " + callback);
+					//if (debug) System.out.println("got callback " + callback);
 
 					if (debug) System.out.println("Delivering " + v + " to " + callback + "...");
 					/*if (callback.shouldDie) {
@@ -157,10 +163,10 @@ public class Stream implements Serializable {
 					if (debug) System.out.println("Delivered " + v + " to " + callback + ".");
 
 					//((List)messages.get(tagName)).remove(v);
-					m.remove();
 				}
 				if (debug) System.out.println("Removing delivered messages?");
 				//mess.remove(v);
+				
 
 				//System.out.println("--got " + e_b.getKey() + " : " + e_b.getValue());
 
@@ -178,9 +184,12 @@ public class Stream implements Serializable {
 				System.out.println ("Could't find tagName " + tagName + "?!");
 			}
 		}
+
+		this.messages.clear();
 	}
 
 	private String getMessageNameForStreamSource(String streamSource) {
+		//println("!!! streamSource is " + streamSource);
 		return streamSource.split("/")[1];
 	}
 	public HashMap<String, Object> collectParameters() {
