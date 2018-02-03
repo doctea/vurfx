@@ -10,6 +10,7 @@ import processing.core.PApplet;
 import processing.event.KeyEvent;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
+import vurfeclipse.sequencers.SequenceSequencer;
 
 public class ControlFrame extends PApplet {
 
@@ -122,6 +123,17 @@ public class ControlFrame extends PApplet {
 	public void keyPressed () {
 
 			((VurfEclipse)parent).handleKey(key);
+	}
+
+	public void updateGuiStreamEditor() {
+		final ControlFrame self = this;
+		this.queueUpdate(new Runnable() {
+			@Override
+			public void run() {
+				((SequenceSequencer)VurfEclipse.pr.getSequencer()).updateGuiStreamEditor(self); //.streamEditor.setupControl(this, VurfEclipse.pr.getSequencer().getStreams());
+	
+			}
+		});
 	}
 
 }

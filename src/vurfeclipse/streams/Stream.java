@@ -8,9 +8,11 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.*;
 
+import controlP5.Button;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.ControllerInterface;
 import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Textfield;
@@ -30,8 +32,7 @@ public class Stream implements Serializable {
 	}
 	// Message >- [targetId] -< Callback
 
-	//ConcurrentHashMap<String, List<ParameterCallback>> listeners = new ConcurrentHashMap<String, List<ParameterCallback>>();
-	LinkedList<ParameterCallback> listeners = new LinkedList<ParameterCallback>();
+	List<ParameterCallback> listeners = Collections.synchronizedList(new LinkedList<ParameterCallback>());
 	// targetId -< Callback
 
 	ConcurrentHashMap<String,Collection> messages = new ConcurrentHashMap<String, Collection>();
@@ -276,30 +277,65 @@ public class Stream implements Serializable {
 
 		int pos_y = 10;
 
-		//for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
-		for (ParameterCallback callback : this.listeners) { //i.getValue()) {
-			ScrollableList lstParam = cf.control().addScrollableList(callback.getStreamSource() + callback.toString() + "_" + n)
-					.setPosition(0, pos_y)
-					.setWidth(margin_x * 2)
-					.setBarHeight(16).setItemHeight(16)
-					;
-			lstParam.moveTo(g).close().setLabel(callback.getStreamSource()); //"source");
-			lstParam.addItems(this.getEmitterNames());//addItem(i.getKey(), i.getKey())
-			g.add(lstParam);
-			
-			lstParam.addListenerFor(lstParam.ACTION_BROADCAST, new CallbackListener() {
+
+		final Stream self = this;
+
+		g.add(cf.control().addButton(this.toString() + "_add").setLabel("ADD")
+			.setPosition(margin_x, pos_y)
+			.moveTo(g)
+			.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
-					// should set new stream source on the callback
-					// also tell the Sequencer to regenerate UI
-					Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)theEvent.getController().getValue());
-					callback.setStreamSource((String) s.get("text"));
-					//s.entrySet();
-					//((FormulaCallback) fc).setTargetPath((String) s.get("text"));
-				}				
-			});
+					// add a new callback 
+					ParameterCallback callback = makeCallback(self.getEmitterNames()[0]);					
+					self.registerEventListener(self.getEmitterNames()[0], callback);
+					
+					// and refresh gui
+					cf.updateGuiStreamEditor();
+				}
+			})
+		);
+		
+		g.add(cf.control().addButton(this.toString() + "_refresh").setLabel("REFRESH")
+				.setPosition(margin_x * 2, pos_y)
+				.moveTo(g)
+				.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						// and refresh gui
+						cf.updateGuiStreamEditor();
+					}
+				})
+			);
 
-			println ("adding gui for " + callback);			
+		pos_y += margin_y + gap_y;
+		
+		
+		//for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
+		for (ParameterCallback callback : this.listeners) { //i.getValue()) {
+			println ("adding gui for " + callback);
+			
+			g.add(this.makeEmitterSelector(cf, callback, callback.getStreamSource() + callback.toString() + "_" + n)
+				.moveTo(g)
+				.setPosition(0, pos_y)
+			);
+			
+			
+			// add '[x]' button to remove mapping
+			g.add(new Button(cf.control(), callback + "_del_"+n).setLabel("[x]")
+					.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
+
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							synchronized(self) {
+								listeners.remove(callback);
+								
+								cf.updateGuiStreamEditor(); // this causes crash for some reason ?
+							}
+						}					
+					})
+					.moveTo(g).setPosition(margin_x*1.5f, pos_y).setWidth(margin_x/4));
+			
 			g.add(callback.makeControls(cf, n + "_" + streamName).moveTo(g).setPosition(margin_x * 2.25f, pos_y));
 			
 			//margin_y += g.
@@ -308,9 +344,47 @@ public class Stream implements Serializable {
 			pos_y += margin_y + gap_y * 2;
 			n++;
 		}
+		
 		//}
 	}
 
+	protected ParameterCallback makeCallback(String string) {
+		return new FormulaCallback().setTargetPath("/sc/BlankerScene/BlankFilter/pa/alpha").setExpression("input").setStreamSource(string);		
+	}
+	
+	private Group makeEmitterSelector(ControlFrame cf, ParameterCallback callback, String name) {
+		
+		Group g = new Group(cf.control(), name + "_select_group").hideBar();
+		
+		ScrollableList lstParam = cf.control().addScrollableList(name)
+				//.setPosition(0, pos_y)
+				//.setWidth(margin_x * 2)
+				.setBarHeight(16).setItemHeight(16)
+				;
+		lstParam
+			//.moveTo(g)
+			.close().setLabel(callback.getStreamSource()); //"source");
+		lstParam.addItems(this.getEmitterNames());//addItem(i.getKey(), i.getKey())
+		
+		//g.add(lstParam);
+		
+		lstParam.addListenerFor(lstParam.ACTION_BROADCAST, new CallbackListener() {
+			@Override
+			public void controlEvent(CallbackEvent theEvent) {
+				// should set new stream source on the callback
+				// also tell the Sequencer to regenerate UI
+				Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)theEvent.getController().getValue());
+				callback.setStreamSource((String) s.get("text"));
+				//s.entrySet();
+				//((FormulaCallback) fc).setTargetPath((String) s.get("text"));
+			}				
+		});
+		
+		g.add(lstParam.moveTo(g));
+		return g;
+
+		//return lstParam;
+	}
 	private void println(String string) {
 		System.out.println("Stream " + this + ": " + string);		
 	}

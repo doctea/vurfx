@@ -18,6 +18,7 @@ public class StreamEditor extends Group {
 	}
 
 	public Accordion setupStreamEditor(ControlFrame cf, HashMap<String,Stream> streams) {
+		if (editor!=null) editor.remove();
 		editor = cf.control().addAccordion("streams_editor").setWidth(2 * (cf.sketchWidth()/3)).moveTo(this);
 
 		//Scene n;
@@ -51,5 +52,5 @@ public class StreamEditor extends Group {
 		editor.open().setCollapseMode(Accordion.MULTI);
 		
 		return editor;
-	}
+	}	
 }

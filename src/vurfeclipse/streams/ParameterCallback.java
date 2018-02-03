@@ -33,8 +33,9 @@ public abstract class ParameterCallback implements Serializable {
 		return streamSource;
 	}
 
-	public void setStreamSource(String streamSource) {
+	public ParameterCallback setStreamSource(String streamSource) {
 		this.streamSource = streamSource;
+		return this;
 	}
 
 	boolean shouldDie = false;

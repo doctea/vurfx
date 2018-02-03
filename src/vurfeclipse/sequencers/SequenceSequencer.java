@@ -1082,6 +1082,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		
 		return accordion;
 	}
+	
+	synchronized public void updateGuiStreamEditor(ControlFrame cf) {
+		this.grpStreamEditor.setupStreamEditor(cf, this.getStreams());
+	}
 
 
 	@Override public void controlEvent (CallbackEvent ev) {
