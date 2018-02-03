@@ -15,10 +15,10 @@ public class BeatStream extends Stream implements Serializable {
 
 
 	private float stepDivisions[] = {
-			/*128.0, 64.0,*/32.0f, 16.0f, 8.0f, 4.0f, 3.0f, 2.0f, 1.0f,  //MAKE SURE TO CHANGE stepMarker value below if edit this line!!
+			128.0f, 64.0f,32.0f, 16.0f, 8.0f, 4.0f, 3.0f, 2.0f, 1.0f,  //MAKE SURE TO CHANGE stepMarker value below if edit this line!!
 			0.5f, 0.25f, 0.125f, 0.0625f, 0.03125f, 0.015625f
 	};
-	private int stepMarker = 7; // the number of >=1 values in above array
+	private int stepMarker = 9; // the number of >=1 values in above array
 	int lastDealtStepTime[] = new int[stepDivisions.length]; //stepCount];
 	float stepLengths[] = new float[stepDivisions.length]; //stepCount];
 
@@ -90,6 +90,8 @@ public class BeatStream extends Stream implements Serializable {
 		stepLengths[stepMarker+1] = beatLength * 4;
 		stepLengths[stepMarker+2] = beatLength * 8;
 		stepLengths[stepMarker+3] = beatLength * 16;
+		stepLengths[stepMarker+4] = beatLength * 32;
+		stepLengths[stepMarker+5] = beatLength * 64;
 	}    
 
 	int skippedCount = 0;
@@ -181,7 +183,8 @@ public class BeatStream extends Stream implements Serializable {
 	@Override
 	public String[] getEmitterNames() {	
 		return new String[] {
-				"beat_1","beat_2", "beat_3", "beat_4", "beat_5", "beat_6", "beat_7", "beat_8", "beat_9", "beat_10", "beat_11", "beat_12", "beat_13", "beat_14", "beat_15", "beat_16",
+				"beat_1","beat_2", /*"beat_3",*/ "beat_4", /*"beat_5", "beat_6", "beat_7",*/ "beat_8", /*"beat_9", "beat_10", "beat_11", "beat_12", "beat_13", "beat_14", "beat_15",*/ "beat_16",
+					"beat_32", "beat_64",
 				"bar_1","bar_2", "bar_3", "bar_4", "bar_5", "bar_6", "bar_7", "bar_8", "bar_9", "bar_10", "bar_11", "bar_12", "bar_13", "bar_14", "bar_15", "bar_16",
 		};
 	}

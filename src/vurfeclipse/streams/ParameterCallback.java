@@ -3,6 +3,16 @@ package vurfeclipse.streams;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
+import java.util.Map;
+
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
+import controlP5.ControlP5;
+import controlP5.Group;
+import controlP5.ScrollableList;
+import controlP5.Textfield;
+import vurfeclipse.APP;
+import vurfeclipse.ui.ControlFrame;
 
 
 /*interface ParameterCallback {
@@ -71,6 +81,13 @@ public abstract class ParameterCallback implements Serializable {
 		if (input.containsKey("streamSource")) this.streamSource = (String) input.get("streamSource"); 
 		return;
 	}
+
+	public Group makeControls(ControlFrame cf, String name) {
+		Group g = new Group(cf.control(), name + "_group");
+		
+		return g;
+	}
+
 }
 
 
