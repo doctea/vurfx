@@ -39,8 +39,8 @@ public class SequenceEditor extends Group {
 		}*/
 		this.controllers.get().clear();
 		//this.remove();
-		
-		sequence.makeControls(cp5, sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,50);
+		if (sequence!=null) 
+			sequence.makeControls(cp5, sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,50);
 	
 		return this;
 	}

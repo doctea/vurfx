@@ -81,7 +81,7 @@ public class VurfEclipse extends PApplet {
 
 	////// SPOUT STUFF
 
-	public Spout spout;
+	/*public Spout spout;
 
 	void initSpout(String name) {
 		spout = new Spout(this);
@@ -91,7 +91,7 @@ public class VurfEclipse extends PApplet {
 
 	public void drawSpout(PGraphics p) {
 		spout.sendTexture(p);
-	}
+	}*/
 
 	private static ControlFrame controlFrame;
 
@@ -487,9 +487,9 @@ public class VurfEclipse extends PApplet {
 		 if (syphon) {
 		   initSyphon(gl, "Vurf");
 		 }*/
-		if (syphon) {
+		/*if (syphon) {
 			initSpout("Vurf");
-		}
+		}*/
 
 		// https://stackoverflow.com/questions/20551224/how-to-enable-vsync-synchronization-in-processing-2-x
 		PJOGL pgl = (PJOGL)beginPGL();
@@ -745,6 +745,9 @@ public class VurfEclipse extends PApplet {
 		try {
 			if (key == ' ') {
 				screenGrab = true;
+			} else if (key == '¬') {		// debug -- try to restart the control panel if its fucked up!
+				this.controlFrame = null;
+				this.setupControls();
 			}
 			/*else if (key=='/') {
 			     enableStreams = !enableStreams;
