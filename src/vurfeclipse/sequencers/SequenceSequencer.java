@@ -26,6 +26,7 @@ import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.projects.Project;
+import vurfeclipse.projects.SavedProject;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.*;
 import vurfeclipse.streams.Stream;
@@ -950,7 +951,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
+	public String getProjectName() {
+		return this.txtProjectName.getText();
+	}
 
 	protected Bang saveHistoryButton;
 	protected Bang loadHistoryButton;
@@ -960,6 +965,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private Slider sldProgress;
 	private Slider sldTimeScale;
 	private StreamEditor grpStreamEditor;
+	private Textfield txtProjectName;
+	
 	@Override public void setupControls (ControlFrame cf, String tabName) {
 		super.setupControls(cf, tabName);
 
@@ -1025,6 +1032,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.moveTo(sequencerTab)
 				;
 		
+		
+		txtProjectName = new controlP5.Textfield(cp5, "project_name")
+				.setText(APP.getApp().pr.getProjectFilename())
+				.setPosition(cf.sketchWidth()-200, margin_y)
+				.setWidth(200)
+				.moveTo(sequencerTab)
+				.setAutoClear(false)
+		;
 
 		//Accordion accordion 
 		this.grpStreamEditor = (StreamEditor) new StreamEditor(cp5, "stream editor")//this.makeStreamEditor(cf)
@@ -1243,8 +1258,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		
 		params.put("/seq/current_sequence_name", this.getCurrentSequenceName());	// just save the name, used when re-loading from xml or hashmap
 		
-		params.put("/seq/bank/sequences", this.collectBankSequences());
-		
+		if (APP.getApp().pr instanceof SavedProject) {		// TODO: FIX THIS SOMEHOW if this is a loaded Project then save the entire bank 'cos its probably quite reasonable and small
+			params.put("/seq/bank/sequences", this.collectBankSequences());
+		} else {											// if this is a Project loaded from a class then there is probably tens of thousands of Sequences in the bank, so only save the history instead 
+			params.put("/seq/bank/sequences", this.collectBankHistory());
+		}
 		params.put("/seq/bank/history",  this.collectBankHistory());
 		
 		return params;

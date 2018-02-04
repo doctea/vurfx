@@ -11,7 +11,7 @@ import vurfeclipse.Targetable;
 
 public class SavedProject extends Project {
 
-	private String filename;
+	//private String filename;
 	private HashMap<String, Object> input;
 	private HashMap<String, HashMap<String, Object>> inputAll;
 
@@ -80,10 +80,7 @@ public class SavedProject extends Project {
 		this.mappings = (HashMap<String, Integer>) input.get("/project_setup/mappings");
 	}
 
-	public Project setSnapshotFile(String filename) {
-		this.filename = filename;
-		return this;
-	}
+
 
 	@Override
 	  public boolean setupSequencer() {

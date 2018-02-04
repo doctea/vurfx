@@ -184,20 +184,7 @@ public class Blob implements Serializable {
 					//System.out.println("doing poly?");
 					polygon(out, /*doPolyRand?(int)random(3,8):*/numSides, 0, 0, R, R, 0);
 				} else if (getShape()==SH_FLOWER) {
-					polygon(out, /*doPolyRand?(int)random(3,8):*/numSides, 0, 0, R, R, 0);
-					out.pushMatrix();
-					out.rotate(rot*2);
-					for (int i = 0; i < 360; i+=20) {
-						float x = PApplet.sin(PApplet.radians(i)) * R/2.0f;
-						float y = PApplet.cos(PApplet.radians(i)) * R/2.0f;
-						out.pushMatrix();
-						out.translate(x,y);
-						out.rotate(rot*4.0f);
-						polygon(out, numSides, 0, 0, R/4.0f, R/4.0f, 0);
-						out.popMatrix();
-						//polygon(out, numSides, x, y, R/4, R/4, 0);
-					}
-					out.popMatrix();
+					this.polygonFlower(out, 0, 0, R);
 				} else if (getShape()==SH_TEXTURE) {
 					float units_w = 1.0f, units_h = 0.75f;
 					float new_w = units_w * R/2.0f;///*sc.w * (sc.w/*/units_w*R;///4;//);  
@@ -229,6 +216,74 @@ public class Blob implements Serializable {
 	}
 
 
+	private void polygonFlower(PGraphics out, int cx, int cy, float R) {
+		boolean newMode = false;
+		if (!newMode) {
+			polygon(out, /*doPolyRand?(int)random(3,8):*/numSides, 0, 0, R, R, 0);
+			for (int i = 0; i < 360; i+=20) {
+				//PShape ring = this.getShapePolygon(6);
+				
+				float x = PApplet.sin(PApplet.radians(i)) * R/2.0f;// * R/2.0f;
+				float y = PApplet.cos(PApplet.radians(i)) * R/2.0f;// * R/2.0f;
+				polygon(out, numSides, x, y, R/4.0f,R/4.0f,0);						
+			}
+		} else {
+			PShape flower = 
+				this.getShapePolygon(6); 
+				//this.getShapeFlower();
+			
+			//flower.setFill(out.fillColor);
+			flower.setFill(out.fillColor);
+			flower.setTint(tint);
+			flower.setStrokeWeight(strokeSize);
+			//flower.setFill(true);
+			//flower.draw(out);
+			out.resetMatrix();
+			out.shape(flower, cx, cy, R, R);
+			out.text("test",  0, 0, R, R);
+
+		}
+	}
+
+	PShape flowerShape;
+	private PShape getShapeFlower() {
+		if (false || flowerShape==null) {
+			flowerShape = APP.getApp().createShape(PShape.GROUP);
+					
+			PShape body = this.getShapePolygon(6);
+			body.resetMatrix();
+			//body.scale(4);
+			//out.rotate(rot*2);
+			//flowerShape.beginShape();
+			for (int i = 0; i < 360; i+=20) {
+				
+				PShape ring = this.getShapePolygon(6);
+				//PShape ring = APP.getApp().createShape(PShape.RECT); //, 6);
+				//PShape ring = APP.getApp().createShape(RE)
+				
+				float x = PApplet.sin(PApplet.radians(i)) * 2.0f;// * R/2.0f;
+				float y = PApplet.cos(PApplet.radians(i)) * 2.0f;// * R/2.0f;
+				
+				ring.translate(x, y);
+				//ring.setFill(255);
+				
+				body.addChild(ring);
+				//out.pushMatrix();
+				//out.translate(x,y);
+				//out.rotate(rot*4.0f);
+				//polygon(out, numSides, 0, 0, R/4.0f, R/4.0f, 0);
+				//out.popMatrix();
+				//polygon(out, numSides, x, y, R/4, R/4, 0);
+			}
+			//flowerShape.setFill(255);
+			flowerShape.addChild(body);
+			//flowerShape.endShape();
+		}
+		return flowerShape;
+	}
+
+
+
 	//void polygon(PGraphics out, int n, float cx, float cy, float r)
 	void polygon(PGraphics out, int n, float cx, float cy, float r)
 	{
@@ -238,59 +293,86 @@ public class Blob implements Serializable {
 	float TWO_PI = PApplet.TWO_PI;
 	float[] twopi_lookup = new float[] { 3, TWO_PI/1, TWO_PI/2, TWO_PI/3, TWO_PI/4, TWO_PI/5, TWO_PI/6, TWO_PI/7, TWO_PI/8, TWO_PI/9, TWO_PI/10, TWO_PI/11, TWO_PI/12, TWO_PI/13, TWO_PI/14, TWO_PI/15, TWO_PI/16 };
 
-	PShape[] polygons = new PShape[20];
+	static PShape[] polygons = new PShape[20];
+	
+
+
+	private PShape getShapePolygon(int n) {
+		if (false||polygons[n]==null) {
+			System.out.println("Blob: generating polygon with " + n + " sides");
+	
+			PShape newshape = APP.getApp().createShape();
+			
+			newshape.beginShape();//.beginShape();
+	
+			float angle = twopi_lookup[n];
+	
+			for (int i = 0; i < n; i++)
+			{
+				float calc = angle * i ; //startAngle + angle * (float)i;
+				newshape.vertex(
+						//cx + w *  
+						//1.0f * 
+						((VurfEclipse)APP.getApp()).cos(calc),
+						//cy + h * 
+						//1.0f * 
+						((VurfEclipse)APP.getApp()).sin(calc)
+						);
+			}
+			newshape.endShape(PApplet.CLOSE);
+			newshape.setTint(255);
+			//newshape.setFill(255);
+			newshape.setStrokeWeight(strokeSize);
+			polygons[n] = newshape;
+		}
+		
+		return polygons[n];
+	}
 	
 	//void polygon(PGraphics out, int n, float cx, float cy, float w, float h, float startAngle)
 	void polygon(PGraphics out, int n, float cx, float cy, float w, float h, float startAngle)
 	{
 		if (n > 2)
 		{
-			
-			/*
-			 * 			//float angle = TWO_PI/n;
-			float angle = twopi_lookup[n];
-			
-			//if (polygons[n]==null) {
-				PShape newshape = new PShape();
-				newshape.beginShape(PApplet.CLOSE);//.beginShape();
+			boolean newMode = false;
+			if (newMode) {
+				// this is attempt to use PShapes to draw the polygons instead of drawing vertexes in direct mode -- doesn't work (blank output, although did get output at some points during debug i think when messing wtih setfill etc?) but actually seems slower..?
+				PShape s = this.getShapePolygon(6); //polygons[n];
+				
+				out.pushMatrix();
+				out.rotate(startAngle);
+				out.translate(cx, cy);
+				out.scale(w/2.0f,h/2.0f);
+				s.setFill(out.fillColor);
+				//s.setTint(255);
+				//s.setFill(64);
+
+				out.shape(s);//, 0, cy, w, h);
+				//out.shape(s, cx, cy, w/2.0f, h/2.0f);
+				//out.shape(s, cx + w,cy + h, w/2.0f,h/2.0f);
+				//out.shape(s, 0, 0,300,300);
+				//out.scale(w, h);
+				//out.text("test", 0,0,0);
+				out.popMatrix();
+
+			} else {
+				//float angle = TWO_PI/n;
+				float angle = twopi_lookup[n];
+
+				/* The horizontal "radius" is one half the width;
+	       the vertical "radius" is one half the height */
+				w = w / 2.0f;
+				h = h / 2.0f;
+
+				out.beginShape();
 				for (int i = 0; i < n; i++)
 				{
-					float calc = i; //startAngle + angle * (float)i;
-					newshape.vertex(
-							//cx + w *  
-								1.0f * ((VurfEclipse)APP.getApp()).cos(calc),
-							//cy + h * 
-								1.0f * ((VurfEclipse)APP.getApp()).sin(calc)
-					);
+					float calc = startAngle + angle * (float)i;
+					out.vertex(cx + w * ((VurfEclipse)APP.getApp()).cos(calc),
+							cy + h * ((VurfEclipse)APP.getApp()).sin(calc));
 				}
-				newshape.endShape(PApplet.CLOSE);
-				polygons[n] = newshape;
-			//}
-			PShape s = polygons[n];
-			
-			out.pushMatrix();
-			out.rotate(startAngle + angle);
-			out.shape(s, cx, cy, w, h);
-			out.shape(s, 0, 0,300,300);
-			out.popMatrix();
-			
-			 */
-			//float angle = TWO_PI/n;
-			float angle = twopi_lookup[n];
-
-			/* The horizontal "radius" is one half the width;
-       the vertical "radius" is one half the height */
-			w = w / 2.0f;
-			h = h / 2.0f;
-
-			out.beginShape();
-			for (int i = 0; i < n; i++)
-			{
-				float calc = startAngle + angle * (float)i;
-				out.vertex(cx + w * ((VurfEclipse)APP.getApp()).cos(calc),
-						cy + h * ((VurfEclipse)APP.getApp()).sin(calc));
+				out.endShape(PApplet.CLOSE);
 			}
-			out.endShape(PApplet.CLOSE);
 		}
 	}
 

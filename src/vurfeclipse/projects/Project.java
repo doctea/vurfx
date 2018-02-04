@@ -522,8 +522,9 @@ public abstract class Project implements Serializable {
 		//io.serialize("test-serialisation-2", new testsave()); //getCanvas("/out"));
 		try {
 			XMLSerializer.write(collectSnapshot(filename), APP.getApp().sketchPath() + filename);
+			println("SAVED!");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			println("CAUGHT ERROR SAVING!");
 			System.err.println("Caught " + e.toString() + " trying to save to '" + filename + "'");
 			e.printStackTrace();
 		}
@@ -645,7 +646,9 @@ public abstract class Project implements Serializable {
 			((SequenceSequencer) this.sequencer).preserveCurrentSceneParameters();
 			
 			saveSnapshot();
-			saveSnapshot("MutanteProject-incremental.xml");
+			//saveSnapshot("MutanteProject-incremental.xml");
+			saveSnapshot(((SequenceSequencer) this.sequencer).getProjectName());
+			
 		} else if (this.sequencer.sendKeyPressed(key)) {
 			println ("Key " + key + " handled by sequencer!");
 		} else {
@@ -896,6 +899,7 @@ public abstract class Project implements Serializable {
 	private boolean initialised;
 	private HashMap<String,Integer> guids = new HashMap<String,Integer>();
 	public boolean disableKeys = false;
+	protected String filename;
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
 	}
@@ -960,6 +964,18 @@ public abstract class Project implements Serializable {
 		this.disableKeys = disableKeys;
 	}
 
+	public String getProjectFilename() {
+		if (this.filename==null || this.filename=="") {
+			this.filename = "Project-"+this.getClass().getSimpleName()+"_Incremental.xml";
+		} 
+		
+		return filename;
+	}
+	
+	public Project setSnapshotFile(String filename) {
+		this.filename = filename;
+		return this;
+	}
 
 
 }
