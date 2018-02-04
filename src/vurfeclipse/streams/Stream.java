@@ -16,11 +16,12 @@ import controlP5.ControllerInterface;
 import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Textfield;
+import processing.core.PApplet;
 import processing.event.KeyEvent;
 import vurfeclipse.APP;
 import vurfeclipse.ui.ControlFrame;
 
-public class Stream implements Serializable {
+abstract public class Stream implements Serializable {
 	boolean debug = false;
 	String streamName = "Unnamed";
 
@@ -80,6 +81,7 @@ public class Stream implements Serializable {
 	synchronized public void addEvent(String paramName, Object value) {
 		if (debug) 
 			System.out.println("add event to " + paramName + "'" + value + "'");
+		
 		this.getMessagesList(paramName).add(value);
 
 		if (debug) 
@@ -96,13 +98,14 @@ public class Stream implements Serializable {
 		processEventMeat(time);
 	}
 
-	public void processEventMeat(int time) {
+	abstract public void processEventMeat(int time);
+	/*public void processEventMeat(int time) {
 		if (debug) System.out.println("EventProcessor processEventMeat(" + time + ")");
 		addEvent("test", new Integer(time));
-		/*messages.get("test").put(
-      new Integer(random(255))
-    );*/
-	}
+		//messages.get("test").put(
+		//new Integer(random(255))
+		//);
+	}*/
 
 	synchronized public void deliverEvents () {
 		boolean debug = this.debug = false;
@@ -110,6 +113,7 @@ public class Stream implements Serializable {
 
 		if (debug) System.out.println("--------------- deliverEvents() in " + this + "------------------------");
 		if (debug) System.out.println("there are " + listeners.size() + " feeds .. ");
+		
 
 		////for each listener section "test" "sine" (A)  HashMap   - p
 		////  for each listener callback (B) HashMap - b
@@ -119,18 +123,35 @@ public class Stream implements Serializable {
 		
 		for (ParameterCallback callback : listeners) {
 			//Map.Entry<String,List<ParameterCallback>> e_l = (Map.Entry<String,List<ParameterCallback>>) callback; //emitters.next();
+			if (debug) { println ("--");
+				println("stream source is '" + callback.getStreamSource() + "'");
+			}
 			String tagName = this.getMessageNameForStreamSource(callback.getStreamSource()); //(String)e_l.getKey();
 			//if (debug) System.out.println("For listeners with " + e_l.getKey() + " got " + e_l.getValue());
 
 			//debug = false;
-			if (debug) println ("got callback listener " + callback + " for stream " + tagName); //got stream source to deliver to ")
+			if (debug) 
+				//println ("got callback listener " + callback + " for stream tagname '" + tagName +"'"); //got stream source to deliver to ")
+				println ("stream tagname '" + tagName +"'"); //got stream source to deliver to ")
 			//List sub_l = e_l.getValue();
 
 			//ArrayList<ParameterCallback> toDeleteList = new ArrayList<ParameterCallback> ();
 
 			/// now loop over all the messages
 			//List mess = (List)messages.get(tagName);
+							
 			List<Object> mess = getMessagesList(tagName);
+			
+
+			if (debug && this instanceof OscStream) {
+				println("hello OscStream world with " + listeners.size() + " listeners");
+				println("got " + mess.size() + " messages for '" + tagName + "'");
+				if (mess.size()==0) {
+					for (String k : messages.keySet()) {
+						println("there are messages for '" + k + "'");
+					}
+				}
+			}
 			
 			if (debug)
 				println("got " + mess.size() + " messages for " + tagName);
@@ -287,14 +308,16 @@ public class Stream implements Serializable {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
 					// add a new callback 
-					ParameterCallback callback = makeCallback(self.getEmitterNames()[0]);					
-					self.registerEventListener(self.getEmitterNames()[0], callback);
+					String emitterName = self.getEmitterNames()==null?"":self.getEmitterNames()[0];
+					ParameterCallback callback = makeCallback(emitterName);					
+					self.registerEventListener(emitterName, callback);
 					
 					// and refresh gui
 					cf.updateGuiStreamEditor();
 				}
 			})
 		);
+
 		
 		g.add(cf.control().addButton(this.toString() + "_refresh").setLabel("REFRESH")
 				.setPosition(margin_x * 2, pos_y)
@@ -345,14 +368,16 @@ public class Stream implements Serializable {
 			n++;
 		}
 		
+		g.setBackgroundHeight(pos_y + margin_y);
+		
 		//}
 	}
 
 	protected ParameterCallback makeCallback(String string) {
-		return new FormulaCallback().setTargetPath("/sc/BlankerScene/BlankFilter/pa/alpha").setExpression("input").setStreamSource(string);		
+		return new FormulaCallback().setTargetPath("/sc/BlankerScene/fl/BlankFilter/pa/alpha").setExpression("input").setStreamSource(string);		
 	}
 	
-	private Group makeEmitterSelector(ControlFrame cf, ParameterCallback callback, String name) {
+	protected Group makeEmitterSelector(ControlFrame cf, ParameterCallback callback, String name) {
 		
 		Group g = new Group(cf.control(), name + "_select_group").hideBar();
 		
@@ -385,7 +410,7 @@ public class Stream implements Serializable {
 
 		//return lstParam;
 	}
-	private void println(String string) {
+	protected void println(String string) {
 		System.out.println("Stream " + this + ": " + string);		
 	}
 	public String[] getEmitterNames() {	

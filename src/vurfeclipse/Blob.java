@@ -238,11 +238,43 @@ public class Blob implements Serializable {
 	float TWO_PI = PApplet.TWO_PI;
 	float[] twopi_lookup = new float[] { 3, TWO_PI/1, TWO_PI/2, TWO_PI/3, TWO_PI/4, TWO_PI/5, TWO_PI/6, TWO_PI/7, TWO_PI/8, TWO_PI/9, TWO_PI/10, TWO_PI/11, TWO_PI/12, TWO_PI/13, TWO_PI/14, TWO_PI/15, TWO_PI/16 };
 
+	PShape[] polygons = new PShape[20];
+	
 	//void polygon(PGraphics out, int n, float cx, float cy, float w, float h, float startAngle)
 	void polygon(PGraphics out, int n, float cx, float cy, float w, float h, float startAngle)
 	{
 		if (n > 2)
 		{
+			
+			/*
+			 * 			//float angle = TWO_PI/n;
+			float angle = twopi_lookup[n];
+			
+			//if (polygons[n]==null) {
+				PShape newshape = new PShape();
+				newshape.beginShape(PApplet.CLOSE);//.beginShape();
+				for (int i = 0; i < n; i++)
+				{
+					float calc = i; //startAngle + angle * (float)i;
+					newshape.vertex(
+							//cx + w *  
+								1.0f * ((VurfEclipse)APP.getApp()).cos(calc),
+							//cy + h * 
+								1.0f * ((VurfEclipse)APP.getApp()).sin(calc)
+					);
+				}
+				newshape.endShape(PApplet.CLOSE);
+				polygons[n] = newshape;
+			//}
+			PShape s = polygons[n];
+			
+			out.pushMatrix();
+			out.rotate(startAngle + angle);
+			out.shape(s, cx, cy, w, h);
+			out.shape(s, 0, 0,300,300);
+			out.popMatrix();
+			
+			 */
 			//float angle = TWO_PI/n;
 			float angle = twopi_lookup[n];
 

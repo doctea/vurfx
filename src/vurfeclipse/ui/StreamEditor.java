@@ -19,7 +19,7 @@ public class StreamEditor extends Group {
 
 	public Accordion setupStreamEditor(ControlFrame cf, HashMap<String,Stream> streams) {
 		if (editor!=null) editor.remove();
-		editor = cf.control().addAccordion("streams_editor").setWidth(2 * (cf.sketchWidth()/3)).moveTo(this);
+		editor = cf.control().addAccordion("streams_editor").setWidth(2 * (cf.sketchWidth()/3)).moveTo(this).setBarHeight(20);
 
 		//Scene n;
 		for (Entry<String, Stream> i : streams.entrySet()) {
@@ -38,6 +38,8 @@ public class StreamEditor extends Group {
 			i.getValue().setupControls(cf,g);
 			//println("done setupControls for " + i.getValue());
 			//cp5.end();
+			
+			//g.setBackgroundHeight(g.getBackgroundHeight()+c.getBackgroundHeight());
 
 			editor.addItem(g);
 

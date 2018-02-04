@@ -84,6 +84,9 @@ public class Parameter implements Serializable, Targetable {
 	public Object cast(Object payload) {
 		try {
 			if (this.datatype == Integer.class) {
+				if (payload instanceof Float) {
+					return ((Float) payload).intValue();
+				}
 				return Integer.parseInt(payload.toString());
 			} else if (this.datatype == Float.class || this.datatype == Double.class) {
 				return (Float)Float.parseFloat(payload.toString());
@@ -97,6 +100,7 @@ public class Parameter implements Serializable, Targetable {
 				System.err.println("Don't know how to cast " + payload.getClass() + " '" + payload + "'");
 			}
 		} catch (NumberFormatException e) {
+			System.err.println("got payload type " + payload.getClass() + " but expected " + this.datatype);
 			System.err.println(this + this.getName() + " caught " + e.toString() + " trying to decode " + " alleged " + this.datatype + " of '" + payload + "'");
 			e.printStackTrace();
 		}
@@ -108,15 +112,21 @@ public class Parameter implements Serializable, Targetable {
 	public Object target(String path, Object payload) {
 		//filter.println("Parameter " + getName() + " targeted with " + " path " + " and " + payload);
 		//this.value = this.datatype.cast(payload);
+
+
+		//System.out.println("payload is " + payload + ", max is " + getMax() + ", cast payload is " + this.cast(payload));
+		if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
+			if ((int)this.cast(payload)>(int)this.getMax()) {
+				//System.out.println ("payload is " + (int)this.cast(payload) + " and max is " + getMax() + " - mod should be " + (new Integer(((int)this.cast(payload)) % (int)this.getMax())));
+				payload = new Integer((int)this.cast(payload) % (int)this.getMax());
+				//System.out.println("wrapped payload is " + payload);
+			}
+		}
+		
 		setValue(
 				this.cast(payload)
 		);
-
-		if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
-			if ((int)payload>(int)this.getMax()) {
-				payload = (int)payload % (int)this.getMax();
-			}
-		}
+		
 		filter.changeParameterValue(name, this.cast(payload));	// was previously updateParameterValue..?!
 
 		return this.value.toString();

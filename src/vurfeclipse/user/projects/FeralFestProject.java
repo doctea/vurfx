@@ -57,6 +57,9 @@ public class FeralFestProject extends Project {
 	public boolean setupStreams () {
 		BeatStream beatStream = new BeatStream("Beat Stream", tempo, APP.getApp().millis());
 		this.getSequencer().addStream("beat", beatStream);
+		
+		OscStream oscStream = new OscStream("Osc Stream");
+		this.getSequencer().addStream("osc", oscStream);
 
 		return true;
 	}

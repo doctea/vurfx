@@ -13,6 +13,7 @@ import vurfeclipse.user.projects.*;
 import vurfeclipse.user.projects.TestProject;
 //import codeanticode.glgraphics.*;
 import ddf.minim.*;
+import oscP5.OscMessage;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
@@ -772,4 +773,10 @@ public class VurfEclipse extends PApplet {
 		this.spout.receiveTexture(rcvd);
 		return rcvd;
 	}*/
+	
+
+	public void oscEvent (OscMessage theOscMessage) {
+		println("got oscmessage " + theOscMessage);
+	}
+
 }
