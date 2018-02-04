@@ -115,16 +115,20 @@ public class BlobFX1 extends SimpleScene {
 			host.getFilter("BlobDrawer2").setParameterValue("colour", col2);
 			
 			((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
+					255,
 					(int)APP.getApp().red(col1),
 					(int)APP.getApp().green(col1),
-					(int)APP.getApp().blue(col1),
-					255);
+					(int)APP.getApp().blue(col1)//,
+					//255
+					);
 	
 			((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
+					255,
 					(int)APP.getApp().red(col2),
 					(int)APP.getApp().green(col2),
-					(int)APP.getApp().blue(col2),
-					255);
+					(int)APP.getApp().blue(col2)//,
+					//255
+					);
 	
 	
 			
@@ -191,16 +195,20 @@ public class BlobFX1 extends SimpleScene {
 	    		int col2 = lerpcolour(colour3, colour4, inv_norm);
 	    		
 	    		((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
+	    				255,
 	    				(int)APP.getApp().red(col1),
 	    				(int)APP.getApp().green(col1),
-	    				(int)APP.getApp().blue(col1),
-	    				255);
+	    				(int)APP.getApp().blue(col1)//,
+	    				//255
+	    				);
 	
 	    		((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
+	    				255,
 	    				(int)APP.getApp().red(col2),
 	    				(int)APP.getApp().green(col2),
-	    				(int)APP.getApp().blue(col2),
-	    				255);
+	    				(int)APP.getApp().blue(col2)//,
+	    				//255
+	    				);
 	    	}
 	    	public void onStart() {
 	    		super.onStart();
@@ -259,16 +267,20 @@ public class BlobFX1 extends SimpleScene {
 			int col2 = lerpcolour(colour3, colour4, norm);
 			
 			((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
+					255,
 					(int)APP.getApp().red(col1),
 					(int)APP.getApp().green(col1),
-					(int)APP.getApp().blue(col1),
-					255);
+					(int)APP.getApp().blue(col1)
+					//,255
+					);
 	
 			((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
+					255,
 					(int)APP.getApp().red(col2),
 					(int)APP.getApp().green(col2),
-					(int)APP.getApp().blue(col2),
-					255);
+					(int)APP.getApp().blue(col2)
+					//,255
+					);
 		}
 		public void onStart() {
 			super.onStart();
@@ -333,17 +345,20 @@ public class BlobFX1 extends SimpleScene {
 			int col2 = lerpcolour(colour3, colour4, inv_norm);
 			
 			((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
+					255,
 					(int)APP.getApp().red(col1),
 					(int)APP.getApp().green(col1),
-					(int)APP.getApp().blue(col1),
-					255
+					(int)APP.getApp().blue(col1)
+					//255
 			);
 	
 			((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
+					255,
 					(int)APP.getApp().red(col2),
 					(int)APP.getApp().green(col2),
-					(int)APP.getApp().blue(col2),
-					255);
+					(int)APP.getApp().blue(col2)
+					//,255
+					);
 		}
 		public void onStart() {
 			super.onStart();
