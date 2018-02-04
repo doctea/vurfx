@@ -1,14 +1,10 @@
 package vurfeclipse.user.scenes;
 
-import processing.core.PApplet;
-import vurfeclipse.Canvas;
 import vurfeclipse.filters.*;
 import vurfeclipse.projects.Project;
-import vurfeclipse.scenes.Scene;
 import vurfeclipse.scenes.SimpleScene;
 import vurfeclipse.sequence.ChainSequence;
 import vurfeclipse.sequence.Sequence;
-import java.util.*;
 
 public class TunnelScene extends SimpleScene {
 

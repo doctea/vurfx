@@ -3,18 +3,11 @@ package vurfeclipse.scenes;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import vurfeclipse.APP;
-import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.Filter;
-import vurfeclipse.filters.KaleidoFilter;
-import vurfeclipse.filters.MirrorFilter;
-import vurfeclipse.filters.PhaseRGBFilter;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.streams.FormulaCallback;
-import vurfeclipse.streams.ParameterCallback;
-import vurfeclipse.user.scenes.BlenderFX1;
 
 public class BadTVScene extends Scene {
 	//int filterCount = 2;

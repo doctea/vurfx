@@ -1,12 +1,7 @@
 package vurfeclipse.filters;
 
 
-import vurfeclipse.APP;
-import vurfeclipse.Canvas;
-import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
-import processing.core.PGraphics;
-import processing.opengl.PShader;
 
 public class ToonFilter extends ShaderFilter {
   public ToonFilter(Scene sc) {

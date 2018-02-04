@@ -1,16 +1,11 @@
 package vurfeclipse.scenes;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import processing.core.PFont;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.Filter;
-import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.filters.TextDrawer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.sequence.ChangeParameterSequence;

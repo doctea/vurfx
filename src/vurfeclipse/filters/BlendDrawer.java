@@ -1,12 +1,8 @@
 package vurfeclipse.filters;
 
 
-import java.util.HashMap;
-
 import ch.bildspur.postfx.pass.Pass;
 import processing.core.PApplet;
-import processing.core.PGraphics;
-import processing.core.PImage;
 import processing.opengl.PShader;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
@@ -165,18 +161,18 @@ public class BlendDrawer extends ShaderFilter {
     //t.shader(tf);
     //println("Applying shader " + currentBlendMode + " " + tf.toString() + " to " + out.toString());
     
-    c.getSurf().beginDraw();
+    temporary_canvas.getSurf().beginDraw();
     if (true) {	// this version is faster
-        c.getSurf().image(src,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
+        temporary_canvas.getSurf().image(src,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
     	//c.getSurf().resetShader();
-        c.getSurf().shader(customPass.shader);
+        temporary_canvas.getSurf().shader(customPass.shader);
     } else {
-    	this.filter(src, customPass, c.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
+    	this.filter(src, customPass, temporary_canvas.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
     }
     //this.filter(src, tf, out); //c.getSurf()); //c.getSurf(), tf);	// WORKING 2017-1022
 	//customPass.shader.set(shaderFragName, out);
     //this.filter(src, customPass, c.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
-    c.getSurf().endDraw();
+    temporary_canvas.getSurf().endDraw();
     
 	//if (true) return super.applyMeatToBuffers();
 	out.beginDraw();
@@ -220,7 +216,7 @@ public class BlendDrawer extends ShaderFilter {
     //out.image(t,x,y,w,h);
     out.imageMode(out.CENTER);
     //out.image(t,x,y);
-    out.image(c.getSurf(),
+    out.image(temporary_canvas.getSurf(),
     		0,0
     		,w,h	// added to try and support hi-res display of blobs 2015-07-12
     		//w * (Float)getParameterValue("X"),

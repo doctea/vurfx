@@ -5,20 +5,15 @@ import java.util.Map;
 
 import ch.bildspur.postfx.PostFXSupervisor;
 import ch.bildspur.postfx.Supervisor;
-import ch.bildspur.postfx.builder.PostFX;
 import ch.bildspur.postfx.pass.Pass;
 import ch.bildspur.postfx.pass.SobelPass;
-import net.neilcsmith.praxis.video.pgl.PGLShader;
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
-import vurfeclipse.filters.ShaderFilter.CustomPass;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
-import vurfeclipse.user.scenes.OutputFX1;
 import processing.opengl.*;
 
 
@@ -76,7 +71,7 @@ public class ShaderFilter extends Filter {
 	String shaderFragName;
 	String shaderVertName;
 
-	transient Canvas c;
+	transient Canvas temporary_canvas;
 	transient protected CustomPass customPass;
 
 	public ShaderFilter(Scene sc) {
@@ -171,6 +166,7 @@ public class ShaderFilter extends Filter {
 		glFilter.set("dest_tex_size_y", (float)sc.h);
 		glFilter.set("dest_tex_size",  new PVector((float)sc.w,(float)sc.h));
 		customPass = this.getPassForShader(glFilter,out,src); //, shaderFragName, shaderVertName);
+		//customPass = this.getPassForShader(glFilter,temporary_canvas.getSurf(),src); //, shaderFragName, shaderVertName);
 		//glFilter.set("bottomSampler", out);
 
 		//if (glFilter.hasParameter("width")) glFilter.setParameterValue("width", sc.w);
@@ -211,7 +207,7 @@ public class ShaderFilter extends Filter {
     params.wrappingU = GLTextureParameters.REPEAT;
     params.wrappingV = GLTextureParameters.REPEAT;*/
 		//t = new GLTexture(APP.getApp(),sc.w,sc.h, params);
-		c = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel());
+		temporary_canvas = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel());
 
 		return true;
 	}
@@ -243,15 +239,23 @@ public class ShaderFilter extends Filter {
 		//t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
 		//println("About to apply " + this.shaderFragName);
 		customPass.shader.set("src_tex_unit0", src);
-		c.getSurf().beginDraw();
-		this.filter(src/*c.getSurf()*/, customPass, c.getSurf()); //out);
+		temporary_canvas.getSurf().beginDraw();
+		
+	    if (true) {	// this version is faster (when used in blenddrawer anyway? no proof its beneficial here)
+	        temporary_canvas.getSurf().image(src,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
+	    	//c.getSurf().resetShader();
+	        temporary_canvas.getSurf().shader(customPass.shader);
+	    } else {
+	    	this.filter(src, customPass, temporary_canvas.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
+	    }
+		//this.filter(src/*c.getSurf()*/, customPass, temporary_canvas.getSurf()); //out);
 		//c.getSurf().resetShader();
 		//c.getSurf().shader(customPass.shader);
-		c.getSurf().endDraw();
+		temporary_canvas.getSurf().endDraw();
 
 		out.beginDraw();
 		out.imageMode(APP.getApp().CORNERS);
-		out.image(c.getSurf(),0,0,sc.w,sc.h);
+		out.image(temporary_canvas.getSurf(),0,0,sc.w,sc.h);
 		/*out.color(255,128,96);
 	out.rect(0, 0, 50, 50);
     out.rect(50, 50, 100, 100);*/

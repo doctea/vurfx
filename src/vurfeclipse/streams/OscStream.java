@@ -1,18 +1,13 @@
 package vurfeclipse.streams;
 
-import java.util.Map;
-
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.Group;
-import controlP5.ScrollableList;
 import controlP5.Textfield;
-import vurfeclipse.APP;
 import vurfeclipse.ui.ControlFrame;
 
 
 import oscP5.*;
-import netP5.*;
 
 public class OscStream extends Stream implements OscEventListener {
 

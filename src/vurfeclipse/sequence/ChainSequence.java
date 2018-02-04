@@ -1,7 +1,5 @@
 package vurfeclipse.sequence;
 
-import java.util.List;
-
 import controlP5.Accordion;
 import controlP5.ControlP5;
 import controlP5.Group;

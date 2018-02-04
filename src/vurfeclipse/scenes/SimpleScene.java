@@ -2,7 +2,6 @@ package vurfeclipse.scenes;
 
 import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
-import vurfeclipse.sequence.Sequence;
 
 public class SimpleScene extends Scene {
   //Filter[] filters;// = new Filter[filterCount];

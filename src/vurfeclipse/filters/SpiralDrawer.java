@@ -4,8 +4,6 @@ package vurfeclipse.filters;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import vurfeclipse.APP;
-import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
 
 public class SpiralDrawer extends Filter {

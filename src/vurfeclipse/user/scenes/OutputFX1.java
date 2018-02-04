@@ -1,7 +1,6 @@
 package vurfeclipse.user.scenes;
 import java.util.ArrayList;
 
-import vurfeclipse.APP;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.filters.ToonFilter;
 import vurfeclipse.projects.Project;

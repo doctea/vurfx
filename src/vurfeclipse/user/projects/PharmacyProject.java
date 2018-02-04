@@ -12,8 +12,6 @@ import java.util.*;
 
 import processing.core.PApplet;
 import processing.core.PVector;
-import vurfeclipse.filters.*;
-import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.ChainSequence;
 import vurfeclipse.sequence.ChangeParameterSequence;
 import vurfeclipse.sequence.Sequence;

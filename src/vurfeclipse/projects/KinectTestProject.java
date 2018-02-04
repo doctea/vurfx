@@ -9,8 +9,6 @@ import java.io.Serializable;
 import java.util.*;
 
 import processing.core.PApplet;
-import vurfeclipse.filters.*;
-import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequencers.SceneSequencer;
 import vurfeclipse.streams.*;

@@ -3,23 +3,11 @@ package vurfeclipse.scenes;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import processing.core.PFont;
 import processing.core.PImage;
-import vurfeclipse.APP;
 import vurfeclipse.ImageRepository;
-import vurfeclipse.VurfEclipse;
-import vurfeclipse.filters.BlendDrawer;
-import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.ImageListDrawer;
-import vurfeclipse.filters.TextDrawer;
 import vurfeclipse.projects.Project;
-import vurfeclipse.sequence.ChangeParameterSequence;
 import vurfeclipse.sequence.Sequence;
-import vurfeclipse.sequence.ShowSceneSequence;
-import vurfeclipse.streams.ParameterCallback;
 
 public class ImageListScene extends SimpleScene {
 	//int filterCount = 2;

@@ -1,21 +1,12 @@
 package vurfeclipse.filters;
-import processing.core.PConstants.*;
-//import codeanticode.glgraphics.GLGraphicsOffScreen;
-//import codeanticode.glgraphics.*;
-import vurfeclipse.*;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PShape;
 import processing.core.*;
-import processing.*;
-import processing.opengl.*;
-import processing.opengl.PGraphicsOpenGL.*;
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
-import vurfeclipse.scenes.SimpleScene;
-import SimpleOpenNI.*;
 import SimpleOpenNI.*;
 
 

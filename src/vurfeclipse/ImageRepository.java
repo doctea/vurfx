@@ -2,8 +2,6 @@ package vurfeclipse;
 
 import java.util.*;
 
-import processing.core.PApplet;
-import processing.core.PGraphics;
 import processing.core.PImage;
 
 public class ImageRepository {

@@ -1,7 +1,5 @@
 package vurfeclipse;
 
-import processing.core.PApplet;
-
 public class APP {
 	static public VurfEclipse a;
 	

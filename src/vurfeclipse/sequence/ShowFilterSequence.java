@@ -3,7 +3,6 @@ package vurfeclipse.sequence;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 

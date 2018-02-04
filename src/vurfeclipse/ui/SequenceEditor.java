@@ -1,13 +1,8 @@
 package vurfeclipse.ui;
 
-import java.util.Collections;
-import java.util.List;
-
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
-import controlP5.ControllerInterface;
 import controlP5.Group;
-import vurfeclipse.sequence.ChainSequence;
 import vurfeclipse.sequence.Sequence;
 
 public class SequenceEditor extends Group {

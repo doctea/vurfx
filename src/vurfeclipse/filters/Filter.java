@@ -1,5 +1,4 @@
 package vurfeclipse.filters;
-import vurfeclipse.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ColorWheel;
@@ -7,8 +6,6 @@ import controlP5.ControlGroup;
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
 import controlP5.Group;
-import controlP5.Slider;
-import controlP5.Tab;
 import controlP5.Textfield;
 
 import java.io.Serializable;
@@ -284,7 +281,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		this.setMuted(true);
 	}
 
-	public String serialize() {
+	/*
+	 * old & unused?
+	   public String serialize() {
 		//return this.muted + ":" + this.parameters.serialize();
 		String s = "{";
 		if (parameters!=null) {
@@ -297,7 +296,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		s += "}";
 		return s;
 		//return "not implemented";
-	}
+	}*/
 
 	/*
 	 *
@@ -387,9 +386,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 	synchronized public void updateAllParameterValues() {
 		if (this.parameters==null) this.setParameterDefaults();
-		Iterator i = parameters.entrySet().iterator();
-		while (i.hasNext ()) {
-			Map.Entry me = (Map.Entry)i.next();
+		for (Entry<String, Parameter> me : parameters.entrySet()) {
 			this.updateParameterValue((String)me.getKey(), ((Parameter)me.getValue()).value);
 		}
 	}
@@ -425,10 +422,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 	synchronized public HashMap<String,Object> getPresetValues () {
 		HashMap<String,Object> h = new HashMap<String,Object>();
-		Iterator i = parameters.entrySet().iterator();
-		while(i.hasNext()) {
-			Map.Entry me = (Map.Entry)i.next();
-			h.put((String)me.getKey(), ((Parameter)me.getValue()).value);
+		for (Map.Entry<String,Parameter> me : parameters.entrySet()) {
+			h.put(me.getKey(), me.getValue().value);
 		}
 		h.put("muted", this.muted);
 		return h;
@@ -641,15 +636,12 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		if (parameters==null)
 			setParameterDefaults();
 
-		Iterator i = parameters.entrySet().iterator();
-		//controlP5.Controller c = cp5.addSlider("die");
-		while (i.hasNext ()) {
-			Map.Entry me = (Map.Entry)i.next();
+		for (Map.Entry<String,Parameter> me : parameters.entrySet()) {
 			//this.updateParameterValue((String)me.getKey(), me.getValue());
 			//Object value = me.getValue();
 			Parameter param = (Parameter)me.getValue();
 			println("Filter#setupControls() in " + toString() + " doing control for " + param.getName());
-			Object value = param.value;
+			//Object value = param.value;
 
 			controlP5.Controller o = param.makeController(cp5, tab.getName() + this + me.getKey(), tab, size);
 

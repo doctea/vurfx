@@ -2,16 +2,10 @@ package vurfeclipse.user.scenes;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import vurfeclipse.APP;
-import vurfeclipse.filters.BlendDrawer;
-import vurfeclipse.filters.KaleidoFilter;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
-import vurfeclipse.sequence.ChainSequence;
 import vurfeclipse.sequence.Sequence;
-import vurfeclipse.sequence.ShowFilterSequence;
-import vurfeclipse.user.scenes.OutputFX1.OutputSequence1;
 
 public class OutputFX3 extends SimpleScene {
 	public OutputFX3(Project pr, int w, int h) {

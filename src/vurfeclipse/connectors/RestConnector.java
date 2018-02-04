@@ -1,13 +1,9 @@
 package vurfeclipse.connectors;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
-import com.sun.glass.ui.Timer;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -15,11 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import vurfeclipse.Targetable;
-import vurfeclipse.filters.Filter;
-import vurfeclipse.parameters.Parameter;
 import vurfeclipse.projects.Project;
-import vurfeclipse.scenes.Mutable;
-import vurfeclipse.scenes.Scene;
 import IceBreakRestServer.*; 
 
 class RestMessage {

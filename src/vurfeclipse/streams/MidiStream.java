@@ -1,8 +1,6 @@
 package vurfeclipse.streams;
 
 import java.io.Serializable;
-import java.util.*;
-
 import themidibus.*;
 
 public class MidiStream extends Stream implements Serializable { 

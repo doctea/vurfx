@@ -3,15 +3,7 @@ package vurfeclipse.streams;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
-import java.util.Map;
-
-import controlP5.CallbackEvent;
-import controlP5.CallbackListener;
-import controlP5.ControlP5;
 import controlP5.Group;
-import controlP5.ScrollableList;
-import controlP5.Textfield;
-import vurfeclipse.APP;
 import vurfeclipse.ui.ControlFrame;
 
 
@@ -22,6 +14,16 @@ public abstract class ParameterCallback implements Serializable {
 	/*public void call(String eventName, int time, Object value) {
     call(value);
   }*/
+
+	boolean enabled = true;
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	String streamSource;
 	
@@ -42,11 +44,18 @@ public abstract class ParameterCallback implements Serializable {
 
 	abstract public void call(Object value);
 
+	public void __call(Object value) {
+		if (enabled) {
+			call(value);
+		}
+	}
 
+	
 	public HashMap<String,Object> collectParameters() {
 		HashMap<String,Object> params = new HashMap<String,Object> ();
 		params.put("class", this.getClass().getName());
 		params.put("streamSource", streamSource);
+		params.put("enabled", enabled);
 		return params;
 	}
 
@@ -77,9 +86,9 @@ public abstract class ParameterCallback implements Serializable {
 		return null;
 	}
 
-
 	public void readParameters(HashMap<String, Object> input) {
-		if (input.containsKey("streamSource")) this.streamSource = (String) input.get("streamSource"); 
+		if (input.containsKey("streamSource")) this.streamSource = (String) input.get("streamSource");
+		if (input.containsKey("enabled")) 		this.enabled = (Boolean)input.get("enabled");
 		return;
 	}
 

@@ -1,8 +1,5 @@
 package vurfeclipse;
 
-import controlP5.*;
-//controlP5.ControlWindow cw;
-
 /*
 class ControlManager {
   // takes care of the user interface

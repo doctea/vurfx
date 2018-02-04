@@ -3,8 +3,6 @@ package vurfeclipse.sequence;
 import java.util.HashMap;
 
 import vurfeclipse.APP;
-import vurfeclipse.projects.Project;
-import vurfeclipse.scenes.Scene;
 
 public class SavedSequence extends Sequence {
 

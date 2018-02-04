@@ -1,5 +1,4 @@
 package vurfeclipse.scenes;
-import vurfeclipse.*;
 import vurfeclipse.filters.*;
 import vurfeclipse.projects.Project;
 

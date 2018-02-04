@@ -1,10 +1,7 @@
 package vurfeclipse.scenes;
 
-import vurfeclipse.*;
 import vurfeclipse.filters.*;
 import vurfeclipse.projects.Project;
-import vurfeclipse.streams.*;
-import vurfeclipse.scenes.*;
 
 public class VideoScene extends Scene {
   //int filterCount = 2;

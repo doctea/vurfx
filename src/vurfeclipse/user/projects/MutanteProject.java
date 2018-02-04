@@ -1,26 +1,13 @@
 package vurfeclipse.user.projects;
 import vurfeclipse.APP;
-import vurfeclipse.Blob;
 import vurfeclipse.Canvas;
-import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.*;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
 
-import java.awt.Color;
 import java.io.Serializable;
-import java.util.*;
-
-import processing.core.PApplet;
-import processing.core.PVector;
-import vurfeclipse.filters.*;
-import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.ChainSequence;
-import vurfeclipse.sequence.ChangeParameterSequence;
 import vurfeclipse.sequence.Sequence;
-import vurfeclipse.sequence.ShowSceneSequence;
-import vurfeclipse.sequence.SimpleSequence;
-import vurfeclipse.sequencers.SceneSequencer;
 import vurfeclipse.sequencers.SequenceSequencer;
 import vurfeclipse.streams.*;
 import vurfeclipse.user.scenes.BlenderFX1;

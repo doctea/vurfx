@@ -1,7 +1,6 @@
 package vurfeclipse.filters;
 
 
-import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;

@@ -10,19 +10,16 @@ import java.util.Map.Entry;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
-import vurfeclipse.*;
 import vurfeclipse.filters.*;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.streams.*;
 import vurfeclipse.ui.ControlFrame;
-import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.*;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
-import controlP5.Tab;
 import controlP5.Textlabel;
 
 public abstract class Scene implements CallbackListener, Serializable, Mutable, Targetable {
@@ -880,9 +877,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		}
 
 		// loop over all the Filters; add the URLs for each Filter
-		Iterator fit = s.getFilters().iterator();
-		while (fit.hasNext()) {
-			Filter f = (Filter) fit.next();
+		for (Filter f : s.getFilters()) {
 			urls.putAll(f.getTargetURLs());
 		}
 

@@ -7,11 +7,8 @@ import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.RestConnector;
 import vurfeclipse.connectors.XMLSerializer;
-import vurfeclipse.filters.*;
 import vurfeclipse.scenes.*;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -23,13 +20,9 @@ import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequencers.SceneSequencer;
 import vurfeclipse.sequencers.SequenceSequencer;
 import vurfeclipse.sequencers.Sequencer;
-import vurfeclipse.streams.*;
 import vurfeclipse.ui.ControlFrame;
 import controlP5.*;
-import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PImage;
-import sun.security.jca.GetInstance.Instance;
 
 
 public abstract class Project implements Serializable {
@@ -51,7 +44,7 @@ public abstract class Project implements Serializable {
 			return Project.createProject(desired_width, desired_height, (Class)what);
 		} else if (what instanceof String && ((String)what).endsWith(".class")) {
 			// instantiate Project class from what
-			return Project.createProject(desired_width,desired_height, (String)what);
+			return Project.createProject(desired_width,desired_height, (String)((String)what).subSequence(0, ((String)what).length()-6));
 		} else if (what instanceof String) {
 			// assume filename
 			return Project.bootProject(desired_width, desired_height, (String) what);
@@ -88,7 +81,7 @@ public abstract class Project implements Serializable {
 	public Project(int w, int h) {
 		this.w = w;
 		this.h = h;
-		this.gfx_mode = gfx_mode;
+		//this.gfx_mode = gfx_mode;
 	}
 
 	int BUF_OUT = 0;
@@ -909,7 +902,7 @@ public abstract class Project implements Serializable {
 		return this.initialised;
 	}
 	public void target(String key, Object value) {
-		println("#target("+key+","+value+")");
+		//println("#target("+key+","+value+")");
 
 		Targetable t = (Targetable) this.getObjectForPath(key);
 		if (t==null) {

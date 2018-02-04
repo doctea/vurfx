@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.udojava.evalex.*;
-
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.Group;
@@ -13,7 +11,6 @@ import controlP5.ScrollableList;
 import controlP5.Textfield;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
-import vurfeclipse.parameters.Parameter;
 import vurfeclipse.ui.ControlFrame;
 
 public class FormulaCallback extends ParameterCallback {

@@ -13,17 +13,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-
-import com.sun.prism.paint.Color;
-import com.sun.xml.internal.bind.v2.runtime.Name;
-
-import java.util.Set;
 
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
-import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.projects.SavedProject;
@@ -35,7 +28,6 @@ import vurfeclipse.ui.SequenceEditor;
 import vurfeclipse.ui.StreamEditor;
 import controlP5.Accordion;
 import controlP5.Bang;
-import controlP5.CColor;
 import controlP5.CallbackEvent;
 import controlP5.ControlP5;
 import controlP5.Controller;
@@ -203,7 +195,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	@Override
 	public Object target(String path, Object payload) {
-		println(this + "#target('"+path+"', '"+payload+"')");
+		//println(this + "#target('"+path+"', '"+payload+"')");
 
 		String[] spl = path.split("/",4); // TODO: much better URL and parameter checking.
 		if (spl[2].equals("changeTo")) {	   
@@ -222,7 +214,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			}
 			return "Sequencer active Sequence is currently " + activeSequenceName;
 		} else if (spl[2].equals("bank")) {	//  /bank/sequences
-			println ("loading bank for " + spl[3]);
+			//println ("loading bank for " + spl[3]);
 			if ((spl[3].equals("sequences") || spl[3].equals("history") ) && (payload instanceof HashMap<?,?> || (payload instanceof LinkedHashMap<?,?>))) {		
 				for (Entry<String,Object> s : ((HashMap<String,Object>) payload).entrySet()) {
 					HashMap<String,Object> c = (HashMap<String,Object>)s.getValue();
@@ -1066,7 +1058,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		cf.control().addCallback(this);
 	}
 
-	private Accordion makeStreamEditor(ControlFrame cf) {
+	protected Accordion makeStreamEditor(ControlFrame cf) {
 		Accordion accordion = cf.control().addAccordion("streams_editor").setWidth(cf.displayWidth/3);
 
 		//Scene n;
@@ -1121,7 +1113,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 		
 		//println("controlevent in " + this);
-		if (ev.getAction()==ControlP5.ACTION_RELEASED) {
+		if (ev.getAction()==ControlP5.ACTION_RELEASE) {
 			Controller c = ev.getController();
 			if (ev.getController()==this.saveHistoryButton) {
 				try {

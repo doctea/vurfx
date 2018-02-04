@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 import controlP5.Accordion;
 import controlP5.ControlP5;
 import controlP5.Group;
-import vurfeclipse.sequencers.Sequencer;
 import vurfeclipse.streams.Stream;
 
 public class StreamEditor extends Group {

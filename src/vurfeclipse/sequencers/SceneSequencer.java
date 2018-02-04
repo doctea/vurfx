@@ -1,16 +1,12 @@
 package vurfeclipse.sequencers;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
-import vurfeclipse.filters.BlankFilter;
-import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.Sequence;

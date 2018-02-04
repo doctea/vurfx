@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import controlP5.*;
 import processing.core.PApplet;
-import processing.event.KeyEvent;
-import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.sequencers.SequenceSequencer;
 

@@ -2,11 +2,9 @@ package vurfeclipse.scenes;
 
 import java.util.ArrayList;
 
-import vurfeclipse.APP;
 import vurfeclipse.filters.BlankFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.sequence.Sequence;
-import vurfeclipse.user.scenes.OutputFX1;
 
 public class BlankerScene extends SimpleScene {
 

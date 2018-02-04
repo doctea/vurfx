@@ -9,23 +9,13 @@ import controlP5.*;
 
 import vurfeclipse.projects.*;
 import vurfeclipse.ui.ControlFrame;
-import vurfeclipse.user.projects.*;
-import vurfeclipse.user.projects.TestProject;
 //import codeanticode.glgraphics.*;
 import ddf.minim.*;
-import oscP5.OscMessage;
-
-import java.awt.BorderLayout;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
 import java.io.PrintStream;
-import java.text.MessageFormat;
 import java.util.*;
 
 //import javax.media.opengl.*;
 import processing.opengl.*;
-import ch.bildspur.postfx.builder.*;
-import ch.bildspur.postfx.pass.*;
 import ch.bildspur.postfx.*;
 
 
@@ -173,8 +163,8 @@ public class VurfEclipse extends PApplet {
 	int output_width = (int)this.getOutputResolution().x;
 	int output_height= (int)this.getOutputResolution().y;
 
-	int desired_width 	= output_width; //(int)(output_width*1.5f);
-	int desired_height 	= output_height; //(int)(output_height*1.5f);
+	//int desired_width 	= output_width; //(int)(output_width*1.5f);
+	//int desired_height 	= output_height; //(int)(output_height*1.5f);
 
 	//int[] texID;
 
@@ -261,16 +251,26 @@ public class VurfEclipse extends PApplet {
 
 		System.out.println("sketch directory:" + this.sketchPath());
 
+		String choice = "";
+		
 		if (this.args!=null) {
 			List<String> args = Arrays.asList(this.args);
 			System.out.println("Passed command line arguments: " + Arrays.deepToString(this.args));
-			if (args.contains("fullscreen")) {
+			if (args.contains("-fullscreen")) {
 				println("Setting fullscreen = true from commandline switch!");
 				this.fullscreen = true;
 			}
-			if (args.contains("fullscreen_num")) {
-				this.fullscreen_num = Integer.parseInt(args.get(args.indexOf("fullscreen_num")+1));
+			if (args.contains("-fullscreen_num")) {
+				this.fullscreen_num = Integer.parseInt(args.get(args.indexOf("-fullscreen_num")+1));
 				println("Setting fullscreen_num = " + this.fullscreen_num + " from commandline switch!");
+			}
+			if (args.contains("-load")) {
+				choice = args.get(args.indexOf("-load")+1);
+				println("Loading file / class " + choice);
+			}
+			if (args.contains("-width")) {
+				config_width = Integer.parseInt(args.get(args.indexOf("-width")+1));
+				println("got resolution width " + config_width);
 			}
 		}
 
@@ -292,7 +292,7 @@ public class VurfEclipse extends PApplet {
 		io = new IOUtils();
 
 		//// instantiate a project to display
-		println("Instantiating Project at " + desired_width + "x" + desired_height);
+		println("Instantiating Project at " + this.getOutputResolution()); //desired_width + "x" + desired_height);
 
 		//pr = new TestProject(desired_width, desired_height, gfx_mode);
 		//pr = new SimpleProject(desired_width, desired_height, gfx_mode);
@@ -321,17 +321,26 @@ public class VurfEclipse extends PApplet {
 		//pr = new NewJourneyProject(desired_width, desired_height, gfx_mode);
 
 		//pr = new MinimalProject(desired_width, desired_height, gfx_mode);
-
-		pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
+		
+		//pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.FeralFestProject.class);
 		//pr = Project.chooseProject(desired_width, desired_height, "saves/FeralFestProject-test.xml");
 		//pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject2017-12-22-20-27-41.xml"); // not a bad one --> output/SavedProject2017-12-22-20-10-39.xml");
 		//pr = Project.chooseProject(desired_width, desired_height, "output/SavedProject-NYE.xml");
 
 		//pr = Project.chooseProject(desired_width, desired_height, vurfeclipse.user.projects.MutanteProject.class);
 		//pr = Project.chooseProject(desired_width, desired_height, "output/MutanteProject-incremental.xml");
-
+		
+		if (choice.equals("")) {
+			choice = "vurfeclipse.user.projects.FeralFestProject.class";
+			println("No choice of project made!!! Setting default project to '" + choice + "'");
+		}
 
 		PVector resolution = this.getOutputResolution();
+		
+		int desired_width = (int) resolution.x, desired_height = (int) resolution.y;
+		output_width = desired_width; output_height = desired_height;
+		pr = Project.chooseProject(desired_width, desired_height, choice);
+
 
 		if (fullscreen) {
 			//((PGraphicsOpenGL)this.offscreen.getSurf()).updatePixelSize();
@@ -773,10 +782,5 @@ public class VurfEclipse extends PApplet {
 		this.spout.receiveTexture(rcvd);
 		return rcvd;
 	}*/
-	
-
-	public void oscEvent (OscMessage theOscMessage) {
-		println("got oscmessage " + theOscMessage);
-	}
 
 }

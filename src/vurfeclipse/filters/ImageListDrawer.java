@@ -3,9 +3,6 @@ package vurfeclipse.filters;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-//import java.nio.file.Files;
-//import java.nio.file.Paths;
-import com.google.common.io.Files;
 //import com.google.common.io.Paths;
 import java.util.*;
 

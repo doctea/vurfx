@@ -3,7 +3,6 @@ package vurfeclipse.filters;
 
 import java.util.*;
 
-import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.Blob;
 import vurfeclipse.VurfEclipse;

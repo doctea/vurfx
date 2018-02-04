@@ -10,8 +10,6 @@ import java.io.Serializable;
 import java.util.*;
 
 import processing.core.PApplet;
-import vurfeclipse.filters.*;
-import vurfeclipse.scenes.*;
 import vurfeclipse.streams.*;
 
 public class SocioSukiVideo2Project extends Project implements Serializable {

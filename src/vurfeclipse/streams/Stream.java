@@ -11,14 +11,9 @@ import java.util.concurrent.*;
 import controlP5.Button;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
-import controlP5.ControlP5;
-import controlP5.ControllerInterface;
 import controlP5.Group;
 import controlP5.ScrollableList;
-import controlP5.Textfield;
-import processing.core.PApplet;
-import processing.event.KeyEvent;
-import vurfeclipse.APP;
+import controlP5.Toggle;
 import vurfeclipse.ui.ControlFrame;
 
 abstract public class Stream implements Serializable {
@@ -176,7 +171,7 @@ abstract public class Stream implements Serializable {
 							//toDeleteList.add(callbacks);
 						} else {*/
 					try {
-						callback.call(v);
+						callback.__call(v);
 					} catch (Exception e) {
 						System.out.println("Stream " + this + " caught " + e.toString() + " while attempting to process callback for " + v + " on " + callback + "!");
 						e.printStackTrace();
@@ -341,13 +336,29 @@ abstract public class Stream implements Serializable {
 			g.add(this.makeEmitterSelector(cf, callback, callback.getStreamSource() + callback.toString() + "_" + n)
 				.moveTo(g)
 				.setPosition(0, pos_y)
-			);
+			);			
+			
+			// add 'on' button to enable.disable
+			g.add(new Toggle(cf.control(), callback + "_enabled_"+n).setValue(callback.isEnabled()).setLabel("on")
+					.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							synchronized(self) {
+								//listeners.remove(callback);
+								callback.setEnabled(((Toggle)theEvent.getController()).getBooleanValue());
+								
+								//cf.updateGuiStreamEditor(); // this causes crash for some reason ?
+							}
+						}					
+					})
+					.moveTo(g).setPosition(margin_x*1.5f, pos_y).setWidth(margin_x/4));
+			
+			g.add(callback.makeControls(cf, n + "_" + streamName).moveTo(g).setPosition(margin_x * 2.25f, pos_y));
 			
 			
 			// add '[x]' button to remove mapping
 			g.add(new Button(cf.control(), callback + "_del_"+n).setLabel("[x]")
 					.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
-
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
 							synchronized(self) {
@@ -357,9 +368,10 @@ abstract public class Stream implements Serializable {
 							}
 						}					
 					})
-					.moveTo(g).setPosition(margin_x*1.5f, pos_y).setWidth(margin_x/4));
+					.moveTo(g).setPosition(margin_x*2f, pos_y).setWidth(margin_x/4));
 			
 			g.add(callback.makeControls(cf, n + "_" + streamName).moveTo(g).setPosition(margin_x * 2.25f, pos_y));
+									
 			
 			//margin_y += g.
 			margin_y = g.getHeight() + gap_y;

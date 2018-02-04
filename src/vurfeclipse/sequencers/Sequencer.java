@@ -1,28 +1,17 @@
 package vurfeclipse.sequencers;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import controlP5.Bang;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
-import controlP5.ControlP5;
-import controlP5.ListBox;
 import controlP5.ScrollableList;
-import controlP5.Tab;
-import controlP5.Textfield;
 import controlP5.Toggle;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.projects.Project;
-import vurfeclipse.scenes.Scene;
 import vurfeclipse.streams.Stream;
 import vurfeclipse.ui.ControlFrame;
 
@@ -264,11 +253,9 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 
 	public boolean runStreams(int time) {
 		if (enableStreams) {
-			Iterator<?> i = this.getStreams().entrySet().iterator();
-			while (i.hasNext()) {
-				Map.Entry e = (Map.Entry) i.next();
+			for (Map.Entry<String,Stream> e : this.getStreams().entrySet()) {
 				//println("processStreams in " + this + " for " + e);
-				Stream s = (Stream) e.getValue();
+				Stream s = e.getValue();
 				s.processEvents(time);
 				s.deliverEvents();
 			}

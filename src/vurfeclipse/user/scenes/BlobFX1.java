@@ -1,12 +1,8 @@
 package vurfeclipse.user.scenes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.Blob;
-import vurfeclipse.Canvas;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.BlobDrawer;
 import vurfeclipse.projects.Project;

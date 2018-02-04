@@ -15,9 +15,7 @@ import vurfeclipse.filters.Filter;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
-import vurfeclipse.streams.FormulaCallback;
 import vurfeclipse.ui.SequenceEditor;
-import vurfeclipse.Targetable;
 
 public class ChangeParameterSequence extends Sequence {
 	

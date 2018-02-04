@@ -18,12 +18,9 @@ import java.util.Map.Entry;
 
 import processing.core.PApplet;
 import vurfeclipse.APP;
-import vurfeclipse.Targetable;
 import vurfeclipse.connectors.XMLSerializer;
-import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
-import vurfeclipse.streams.Stream;
 import vurfeclipse.ui.SequenceEditor;
 import vurfeclipse.filters.Filter;
 
@@ -373,8 +370,9 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 	  public int lerpcolour (int origin, int dest, double norm) {
 	  	//if (true) return origin;
-	  	if (true) return mixColors(new Color(origin), new Color(dest), norm).getRGB();
-	  	
+	  	//if (true) 
+	  		return mixColors(new Color(origin), new Color(dest), norm).getRGB();
+	  	/*
 		  int or,og,ob,oa;
 		  int dr,dg,db,da;
 		  or = (int)APP.getApp().red(origin);//(origin>>24) & 0xFF;//(int)APP.getApp().red(origin);
@@ -409,7 +407,7 @@ abstract public class Sequence implements Serializable, Mutable {
 
 		  println("Blending between (" + or +","+og+","+ob+") and (" + dr + "," + dg + "," + db + ") @ " + norm + " ::: got (" + outr + "," + outg + "," + outb + ")");
 
-		  return APP.getApp().color(outr,outg,outb);
+		  return APP.getApp().color(outr,outg,outb);*/
 	  }
 
 	  public int randomColorMinimum(int minimum) {

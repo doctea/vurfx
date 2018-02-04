@@ -2,7 +2,6 @@ package vurfeclipse.scenes;
 
 import vurfeclipse.filters.*;
 import vurfeclipse.projects.Project;
-import vurfeclipse.scenes.*;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.DebugDrawer;
 import vurfeclipse.filters.DiskWriterFilter;

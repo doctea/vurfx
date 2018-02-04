@@ -3,10 +3,6 @@ package vurfeclipse.filters;
 import java.util.HashMap;
 
 import processing.core.PGraphics;
-import processing.core.PVector;
-import vurfeclipse.filters.*;
-import vurfeclipse.scenes.*;
-import vurfeclipse.streams.*;
 import vurfeclipse.*;
 import vurfeclipse.scenes.Scene;
 

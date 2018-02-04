@@ -5,7 +5,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import vurfeclipse.APP;
-import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
 import codeanticode.gsvideo.*;
 import processing.core.PGraphics;

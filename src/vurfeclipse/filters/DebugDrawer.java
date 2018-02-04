@@ -2,7 +2,6 @@ package vurfeclipse.filters;
 
 
 import processing.core.PApplet;
-import sun.security.krb5.internal.HostAddress;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
