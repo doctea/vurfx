@@ -30,6 +30,7 @@ public class StreamEditor extends Group {
 			String streamName = i.getKey();
 			Group g = cf.control().addGroup(streamName);
 			g.setWidth(2 * (cf.sketchWidth()/3));
+			g.setBarHeight(20);
 
 			//println("added tab " + tabName);
 			//ControllerInterface[] controls = ((Scene)i.next()).getControls();

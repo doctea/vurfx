@@ -175,9 +175,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		urls.put("/seq/seed", this);
 		urls.put("/seq/changeTo", this);
 		urls.put("/seq/sequence", this);
+		
+		urls.put("/seq/bank/sequences", this);
+		urls.put("/seq/bank/history", this);
 
 		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
-		while (it.hasNext()) {
+		/*while (it.hasNext()) {
 			Entry<String, Sequence> e = it.next();
 			//int count = 0;
 
@@ -186,12 +189,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			urls.put("/seq/sequence/" + e.getKey(), this);
 
 			// this loop processes each Sequence for the current Sequence; dont think we need to add a URL for each of em!
-			/*Iterator<Sequence> sit = e.getValue().iterator();
-				   while (sit.hasNext()) {
-					Sequence seq = sit.next();
+			//Iterator<Sequence> sit = e.getValue().iterator();
+				//   while (sit.hasNext()) {
+					//Sequence seq = sit.next();
 					//urls.put("/seq/" + e.getKey() + "/" + count, seq);
-				}*/
-		}
+				//}
+		}*/
 
 		return urls;
 	}
