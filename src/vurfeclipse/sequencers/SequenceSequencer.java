@@ -60,6 +60,37 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private List<String> historySequenceNames = Collections.synchronizedList(new LinkedList<String>());
 	private int historyCursor;
 	private SequenceEditor grpSequenceEditor;
+	
+	
+	// oneshot functionality
+	Sequence oneshot = null;
+	int oneshotStart;
+	
+	public boolean startOneShot(String sequenceName) {
+		this.oneshot = this.getSequence(sequenceName);
+		this.oneshotStart = APP.getApp().timeMillis;
+		return this.oneshot != null;
+	}
+	
+	public boolean processOneShot() {
+		//this.oneshot = null;
+		if (this.oneshot==null) return false;
+		if (this.oneshot.readyToChange(1)) {
+			this.oneshot = null;
+			return false;
+		}
+		
+		println("processOneShot processing " + this.oneshotStart);
+		// calculate time
+		int position = APP.getApp().timeMillis - this.oneshotStart;
+		println ("position is " + position);
+		double pc = 1.0d / ((double)oneshot.getLengthMillis() / (double)position);
+		println ("oneshot got pc " + pc);
+		this.oneshot.setValuesForNorm(pc);
+		
+		return true;
+	}
+	
 
 	public SequenceSequencer (Project host, int w, int h) {
 		//super(host, w,h);
@@ -132,6 +163,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			}
 			stopSequencesFlag = false;
 		}
+		
+		this.processOneShot();
+		
 		//println(this+"#runSequences");
 		// probably want to move this up to Sequencer and do super.runSequences()
 		if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
@@ -870,7 +904,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		} else if (key=='3') {
 			APP.getApp().getCF().control().getWindow().activateTab("Scenes");
 		} else if (key=='4') {
-			APP.getApp().getCF().control().getWindow().activateTab("Monitor");
+			APP.getApp().getCF().control().getWindow().activateTab("Monitor"); 
+		} else if (key=='U') {
+			println("starting oneshot!");
+			this.startOneShot((String)this.sequences.keySet().toArray()[0]);
 		} else {
 			return false;
 		}

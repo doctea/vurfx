@@ -107,9 +107,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
 	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
-	<classpathentry kind="lib" path="lib/user/GSVideo/library/gstreamer-java.jar"/>
-	<classpathentry kind="lib" path="lib/user/GSVideo/library/GSVideo.jar"/>
-	<classpathentry kind="lib" path="lib/user/GSVideo/library/jna.jar"/>
 	<classpathentry kind="lib" path="lib/user/fullscreen/library/fullscreen.jar"/>
 	<classpathentry kind="lib" path="lib/user/PostFX/library/PostFX.jar" sourcepath="lib/user/PostFX/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/processing 336"/>
@@ -119,12 +116,12 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar"/>
-	<classpathentry kind="lib" path="lib/user/spout/library/spout.jar" sourcepath="lib/user/spout/src">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/spout/library"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/EvalEx-1.18.jar"/>
 	<classpathentry kind="lib" path="lib/user/oscP5/library/oscP5.jar" sourcepath="lib/user/oscP5/src"/>
+	<classpathentry kind="lib" path="lib/base/core/core.jar"/>
+	<classpathentry kind="lib" path="lib/base/core/jna-platform.jar"/>
+	<classpathentry kind="lib" path="lib/base/core/jna.jar"/>
+	<classpathentry kind="lib" path="lib/base/core/core/library/jogl-all.jar"/>
+	<classpathentry kind="lib" path="lib/base/core/core/library/gluegen-rt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
