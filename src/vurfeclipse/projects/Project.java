@@ -207,6 +207,9 @@ public abstract class Project implements Serializable {
 	public Object getObjectForPath(String path) {
 		// loop over the scenes and check for one with the same name as the first part of path; then pass the rest to getObjectForPath() for the second part..
 		if (path=="/") return this;
+		if (path==null) {
+			println("caught the golbin");
+		}
 		String[] spl = path.split("/",5); //, 3);
 		//println("spl[1] is " + spl[1]);
 		if ("sc".equals(spl[1])) {
@@ -606,14 +609,16 @@ public abstract class Project implements Serializable {
 			println("keys disabled, ignoring " + key);
 			return;
 		}
-		if (key=='[') {
+		/*if (key=='[') {
 			selectPreviousScene();
 		} else if (key==']') {
 			selectNextScene();
-		} else if (key=='-') {
+		} else*/ 
+		if (key=='-') {
 			Iterator<Scene> i = scenes.iterator();
 			while(i.hasNext())
 				((Scene)i.next()).sendKeyPressed('-');
+		
 			/* if (key=='\'') {  // SOLO SCENE
 	      Iterator i = scenes.iterator();
 	      while (i.hasNext()) {
@@ -627,7 +632,7 @@ public abstract class Project implements Serializable {
 			/* }else if (key=='p') {
     	println(rsConn.getURLs().toString());
     	System.exit(0);
-    } */ 
+    }  */
 		} else if (key=='s') {
 			//println(this.getSelectedScene().getSelectedFilter().serialize());
 			//println(this.serialize());
@@ -642,10 +647,9 @@ public abstract class Project implements Serializable {
 			saveSnapshot();
 			//saveSnapshot("MutanteProject-incremental.xml");
 			saveSnapshot(((SequenceSequencer) this.sequencer).getProjectName());
-			
 		} else if (this.sequencer.sendKeyPressed(key)) {
 			println ("Key " + key + " handled by sequencer!");
-		} else {
+		} /*else {
 			Scene sc = this.getSelectedScene();
 
 			if (sc==null) {
@@ -654,7 +658,7 @@ public abstract class Project implements Serializable {
 			}
 
 			sc.sendKeyPressed(key);
-		}
+		}*/
 	}
 
 	public void finish() {
