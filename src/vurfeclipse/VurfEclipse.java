@@ -1,6 +1,6 @@
 package vurfeclipse;
 
-import spout.*;
+//import spout.*;
 
 import processing.core.*;
 import controlP5.*;
@@ -745,7 +745,7 @@ public class VurfEclipse extends PApplet {
 		try {
 			if (key == ' ') {
 				screenGrab = true;
-			} else if (key == '¬') {		// debug -- try to restart the control panel if its fucked up!
+			} else if (key == '*') {		// debug -- try to restart the control panel if its fucked up!
 				this.controlFrame = null;
 				this.setupControls();
 			}

@@ -64,10 +64,10 @@ public class ChangeParameterSequence extends Sequence {
 	@Override
 	public void loadParameters(HashMap<String,Object> params) {
 		super.loadParameters(params);
-		if (params.containsKey("filterPath")) this.filterPath = (String) params.get("filterPath");
+		if (params.containsKey("filterPath"))	this.filterPath = (String) params.get("filterPath");
 		if (params.containsKey("parameterName")) this.parameterName = (String) params.get("parameterName");
-		if (params.containsKey("value")) this.value = params.get("value");
-		if (params.containsKey("expression")) this.setExpression((String) params.get("value"));
+		if (params.containsKey("value")) 		this.value = params.get("value");
+		if (params.containsKey("expression")) 	this.setExpression((String) params.get("expression"));
 	}
 
 	@Override public ArrayList<Mutable> getMutables () {
@@ -107,9 +107,14 @@ public class ChangeParameterSequence extends Sequence {
 
 	@Override
 	public void onStop() {
-		((Filter)host.host
-				.getObjectForPath(filterPath))
-				.changeParameterValue(parameterName, value);
+		try {
+			((Filter)host.host
+					.getObjectForPath(filterPath))
+					.changeParameterValue(parameterName, value);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

@@ -38,17 +38,15 @@ public class ChainSequence extends Sequence {
 	@Override public void start() {
 		super.start();
 		if (this.scene_parameters==null) {
-			Iterator<Sequence> it = chain.iterator();
-			while(it.hasNext()) {
-				it.next().start();
+			for (Sequence seq : chain) {
+				seq.start();
 			}
 		}
 	}
 	@Override public void stop() {
 		super.stop();
-		Iterator<Sequence> it = chain.iterator();
-		while(it.hasNext()) {
-			it.next().stop();
+		for (Sequence seq : chain) {
+			seq.stop();
 		}
 	}
 	
@@ -57,9 +55,8 @@ public class ChainSequence extends Sequence {
 		//return iteration>=max_i;
 		// assume ready, unless one of the chained items isnt
 		if (super.readyToChange(max_i)) return true;
-		Iterator<Sequence> it = chain.iterator();
-		while(it.hasNext()) {
-			if (!it.next().readyToChange(max_i)) return false;
+		for (Sequence seq : chain) {
+			if (!seq.readyToChange(max_i)) return false;
 		}
 		return true;
 	}	
@@ -70,9 +67,8 @@ public class ChainSequence extends Sequence {
 		if (this.mutables==null) {
 			ArrayList<Mutable> muts = super.getMutables();// new ArrayList<Mutable>();
 			//if (host!=null) muts.add(host);
-			Iterator<Sequence> it = chain.iterator();
-			while(it.hasNext()) {
-				muts.addAll(it.next().getMutables());
+			for (Sequence seq : chain) {
+				muts.addAll(seq.getMutables());
 			}
 			this.mutables = muts;
 		}
@@ -81,10 +77,8 @@ public class ChainSequence extends Sequence {
 	
 	@Override
 	synchronized public void setValuesForNorm(double pc, int iteration) {
-		// TODO Auto-generated method stub
-		Iterator<Sequence> it = chain.iterator();
-		while(it.hasNext()) {
-			it.next().setValuesForNorm(pc,iteration);
+		for (Sequence seq : chain) { 
+			seq.setValuesForNorm(pc,iteration);
 		}
 	}
 
