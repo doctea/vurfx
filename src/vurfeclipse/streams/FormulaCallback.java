@@ -72,11 +72,16 @@ public class FormulaCallback extends ParameterCallback {
 			System.err.println("Caught a null target for path " + targetPath + " in " + this + "!");
 		}
 		
-		if (value instanceof Float || value instanceof Double) {
+		if (value instanceof Float || value instanceof Double ||
+			value instanceof Integer || value instanceof Long
+				) {
 			target.target(targetPath, e.eval().floatValue());
-		} else if (value instanceof Integer || value instanceof Long) {
+			//System.out.println(this.getStreamSource() + " processing Float|Double " + value + ": setting " + targetPath + " to " + e.eval().floatValue());
+		}
+		/*} else if (value instanceof Integer || value instanceof Long) {
 			target.target(targetPath, e.eval().intValue());
-		} else if (value instanceof Boolean) {
+			System.out.println(this.getStreamSource() + " processing Integer|Long " + value + ": setting targetPath to " + e.eval().intValue());
+		}*/ else if (value instanceof Boolean) {
 			target.target(targetPath, e.eval().floatValue()==1.0f);
 		}
 	}
