@@ -34,6 +34,7 @@ import controlP5.ControlP5Base;
 import controlP5.Controller;
 import controlP5.Group;
 import controlP5.ListBox;
+import controlP5.Numberbox;
 import controlP5.Slider;
 import controlP5.Tab;
 import controlP5.Textfield;
@@ -574,7 +575,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		APP.getApp().getCF().queueUpdate(new Runnable () {
 			@Override
-			public void run() {				
+			public void run() {
+				
+				txtSeed.setText(""+getActiveSequence().getSeed());
+				
 				if (oldCursor>=0 && oldCursor<lstHistory.getItems().size() && oldCursor!=newCursor) 
 					lstHistory.getItem(oldCursor).put("state", false);
 
@@ -1003,6 +1007,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	protected Bang loadHistoryButton;
 
 	private Textfield txtCurrentSequenceName;
+	private Textfield txtSeed;
 	private ListBox lstHistory;
 	private Slider sldProgress;
 	private Slider sldTimeScale;
@@ -1028,10 +1033,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		txtCurrentSequenceName = new Textfield(cp5, "Current Sequence Name")
 				.setPosition(margin_x, margin_y)
-				.setWidth(width/3)
+				//.setWidth(width/4)
 				.moveTo(sequencerTab)
 				.setAutoClear(false);
 		sequencerTab.add(txtCurrentSequenceName);
+		
+		txtSeed = new Textfield(cp5, "Seed")
+				.setPosition(margin_x + txtCurrentSequenceName.getWidth() + margin_x, margin_y)
+				.setAutoClear(false)
+				//.setWidth(width/3)
+				.moveTo(sequencerTab);
 
 		lstHistory = new controlP5.ListBox(cp5, "sequence names")  	    		
 				.setPosition(width-(width/3), margin_y + 100)
@@ -1222,6 +1233,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				// TODO: clone the play list entry...
 				//this.addSequence(txtCurrentSequenceName.getText(), this.getActiveSequence()); // TODO: actually clone the active sequence!
 				//this.changeSequence(txtCurrentSequenceName.getText());
+			} else if (ev.getController()==this.txtSeed) {
+				this.getActiveSequence().setSeed(Long.parseLong(this.txtSeed.getText()));
 			}
 			/*else if (ev.getController()==this.saveButton) {
         println("save preset " + getSceneName());

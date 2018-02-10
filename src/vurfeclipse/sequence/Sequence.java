@@ -256,8 +256,6 @@ abstract public class Sequence implements Serializable, Mutable {
 
 
 	public void start() {
-		this.rng.setSeed(seed);
-
 		setMuted(false);
 		iteration = 0;
 		startTimeMillis = APP.getApp().millis();
@@ -267,6 +265,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 	// sets parameters to initial position but doesn't reset timer
 	public void restart() {
+		this.rng.setSeed(seed);
 		if (this.scene_parameters!=null) {
 			for (Entry<String,HashMap<String,Object>> e : scene_parameters.entrySet()) {
 				Scene s = (Scene) this.host.host.getObjectForPath(e.getKey());
