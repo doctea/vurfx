@@ -172,11 +172,11 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 
 
 	    for (float y = -1.0; y <= 1.0; y += 1.0) {
-	        float maxDist = 5.0/200.0;
-	        float dist = y/200.0;
+	        float maxDist = 5.0/500.0; // original 200.0;
+	        float dist = y/500.0; // original 200.0;
 	    	staticVal += 	staticV(vec2(uv.x,uv.y+dist)) *
 	    					(maxDist-abs(dist)) *
-	    					1.5;
+	    					0.5; // original 1.5;
 	    }
 
         
