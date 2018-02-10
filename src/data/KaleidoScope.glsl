@@ -13,10 +13,10 @@ void main(void)
     vec2 tex_coord = vertTexCoord.st;
 
     //vec4 ts = textureSize2D(src_tex_unit0);
-    if (mirror_x==1 && tex_coord.x > 0.5) {
+    if (mirror_x==1 && tex_coord.x >= 0.5) {
       tex_coord.xy = vec2(1.0-tex_coord.x, tex_coord.y);
     }
-    if (mirror_y==1 && tex_coord.y > 0.5) {
+    if (mirror_y==1 && tex_coord.y >= 0.5) {
       tex_coord.xy = vec2(tex_coord.x, 1.0-tex_coord.y);
     }
 
