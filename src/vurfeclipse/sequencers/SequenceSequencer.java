@@ -56,8 +56,6 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	private boolean bindToRandom = true;
 	private boolean randomMode = true;
-	private boolean historyMode = false;
-
 	private List<String> historySequenceNames = Collections.synchronizedList(new LinkedList<String>());
 	private int historyCursor;
 	private SequenceEditor grpSequenceEditor;
@@ -427,7 +425,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 
 	public void nextSequence() {
-		if (historyMode) {
+		if (this.isHistoryMode()) {
 			this.histNextSequence(1, true);
 		} else if (randomMode) {
 			randomSequence();
@@ -892,8 +890,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		} else if (key=='B') { // dump entire current sequencer bank to separate .xml files
 			this.saveBankSequences(this.host.getClass().getSimpleName());
 		} else if (key=='p') {
-			this.historyMode = !this.historyMode;
-			println ("historyMode set to " + historyMode);
+			this.togglePlaylist(!this.isHistoryMode());
 		} else if (key=='d') {
 			this.preserveCurrentSceneParameters();
 		} else if (key=='v') {
@@ -1011,7 +1008,6 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private Slider sldTimeScale;
 	private StreamEditor grpStreamEditor;
 	private Textfield txtProjectName;
-
 	@Override public void setupControls (ControlFrame cf, String tabName) {
 		super.setupControls(cf, tabName);
 
@@ -1061,19 +1057,28 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setValue(0.0f);
 
 		tglLocked = new controlP5.Toggle(cp5, "locked")
-				.setPosition(margin_x + (width/3), margin_y)
+				.setPosition(2*margin_x + (width/3), margin_y)
 				.moveTo(sequencerTab)
 				.setValue(0.0f);
 
 		tglEnabled = new controlP5.Toggle(cp5, "update")
-				.setPosition(tglLocked.getWidth() + (margin_x*2) + (width/3), margin_y)
+				//.setPosition(tglLocked.getWidth() + (margin_x*2) + (width/3), margin_y)
+				.setPosition(tglLocked.getPosition()[0] + tglLocked.getWidth() + margin_x, margin_y)
 				.changeValue(this.isSequencerEnabled()?1.0f:0.0f)
 				.moveTo(sequencerTab)
 				;
 
 		tglStreams = new controlP5.Toggle(cp5, "streams")
-				.setPosition((tglLocked.getWidth()*2) + (margin_x*3) + (width/3), margin_y)
+				//.setPosition((tglLocked.getWidth()*2) + (margin_x*3) + (width/3), margin_y)
+				.setPosition(tglEnabled.getPosition()[0] + tglLocked.getWidth() + margin_x, margin_y)
 				.changeValue(this.isStreamsEnabled()?1.0f:0.0f)
+				.moveTo(sequencerTab)
+				;
+		
+		tglPlaylist = new controlP5.Toggle(cp5, "playlist")
+				//.setPosition((tglLocked.getWidth()*3) + (margin_x*4) + (width/3), margin_y)
+				.setPosition(tglStreams.getPosition()[0] + tglLocked.getWidth() + margin_x, margin_y)
+				.changeValue(this.isHistoryMode()?1.0f:0.0f)
 				.moveTo(sequencerTab)
 				;
 
@@ -1201,6 +1206,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				this.toggleEnabled(ev.getController().getValue()==1.0f);
 			} else if (ev.getController()==this.tglStreams) {
 				this.toggleStreams(ev.getController().getValue()==1.0f);
+			} else if (ev.getController()==this.tglPlaylist) {
+				this.togglePlaylist(ev.getController().getValue()==1.0f);
 			}
 		} else if (ev.getAction()==ControlP5.ACTION_BROADCAST) {
 			if (ev.getController()==this.sldProgress) {
@@ -1259,6 +1266,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 	}
 
+
+
+	private void togglePlaylist(boolean b) {
+		this.setHistoryMode(b);		
+	}
 
 
 	public void renameSequence(String currentSequenceName, String text) {

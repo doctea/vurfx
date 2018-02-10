@@ -18,7 +18,6 @@ import vurfeclipse.ui.ControlFrame;
 abstract public class Sequencer implements Serializable, Targetable, CallbackListener {
 	public Project host;
 
-	boolean locked = false;
 	boolean forward = false;
 
 	boolean outputDebug = true;
@@ -39,14 +38,19 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	protected Toggle tglLocked;
 	protected Toggle tglEnabled;
 	protected Toggle tglStreams;
+	protected Toggle tglPlaylist;
 
-	private boolean enableSequencer = true;
 
 	/////////// Event stuff
 	//public abstract boolean initialise();
 	boolean enableStreams = true;
+	private boolean enableSequencer = true;
+	private boolean historyMode = false;
+	boolean locked = false;
+
 	
 	private HashMap<String,Stream> streams = new HashMap<String,Stream>();
+
 	
 	public void addStream(String streamName, Stream st) {
 		//this.streams.put(streamName, st);
@@ -119,6 +123,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 				if (tglLocked!=null) tglLocked.changeValue(isLocked()?1.0f:0.0f);
 				if (tglEnabled!=null) tglEnabled.changeValue(isSequencerEnabled()?1.0f:0.0f);
 				if (tglStreams!=null) tglStreams.changeValue(isStreamsEnabled()?1.0f:0.0f);
+				if (tglPlaylist!=null) tglPlaylist.changeValue(isHistoryMode()?1.0f:0.0f);
 			}
 		});
 	}
@@ -271,6 +276,13 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 			params.put(s.getKey(), s.getValue().collectParameters());
 		}
 		return params;
+	}
+	public boolean isHistoryMode() {
+		return historyMode;
+	}
+	public void setHistoryMode(boolean historyMode) {
+		this.historyMode = historyMode;
+		this.updateGuiStatus();
 	}
 
 	
