@@ -755,7 +755,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 		ControlP5 cp5 = cf.control();
 		println("Scene#setupControls() in " + this);
-		if (doneControls) return;
+		//if (doneControls) return;
 		doneControls = true;
 		this.cp5 = cp5;
 		this.tabName = tab.getName();

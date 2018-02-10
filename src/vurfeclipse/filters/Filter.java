@@ -574,7 +574,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	boolean controlsSetup = false;
 	public synchronized int setupControls(ControlFrame cf, ControllerGroup tab, int row) {
 		ControlP5 cp5 = cf.control();
-		if (controlsSetup) return 0;
+		//if (controlsSetup) return 0;
 		controlsSetup = true;
 		println("Filter#setupControls() for "  + this + ": " + tab.getName());
 		/*if (count++>20) {

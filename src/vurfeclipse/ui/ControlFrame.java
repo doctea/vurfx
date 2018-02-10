@@ -26,6 +26,11 @@ public class ControlFrame extends PApplet {
 	public void settings() {
 		size(w, h); //, P3D);
 	}
+	
+	@Override
+	public void exit() {
+		System.out.println("NOW!");
+	}
 
 	int setupCount = 0;
 	public void setup() {
