@@ -2,6 +2,7 @@ package vurfeclipse.user.scenes;
 import java.util.ArrayList;
 
 import vurfeclipse.filters.BlendDrawer;
+import vurfeclipse.filters.FeedbackFilter;
 import vurfeclipse.filters.KaleidoFilter;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.projects.Project;
@@ -26,11 +27,17 @@ public class OutputFX2 extends SimpleScene {
 	    //os2.setCanvas("pix0","/pix0");
 	    //os2.setCanvas("blendresult", "/blendresult");
 
-	    os2.addFilter(new ShaderFilter(os2,"Feedback.glsl")
+	    
+	    os2.addFilter(new FeedbackFilter(os2).setFilterName("Feedback")
+	    		/*ShaderFilter(os2,"Feedback.glsl")
 	    		.setFilterName("Feedback")
 	    		.addParameter("dirs", new Integer(9), 1, 16)
 	    		.addParameter("amp", new Float(4.1f), 0.5f, 10f)
 	    		.addParameter("radio", new Float(7.0f), 3.0f, 15f)
+	    		.addParameter("distance_r", new Integer(2), 0, 8)
+	    		.addParameter("distance_g", new Integer(4), 0, 8)
+	    		.addParameter("distance_b", new Integer(6), 0, 8)
+	    		.addParameter("distance_a", new Integer(8), 0, 8)*/
 	    		.setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("src"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
 	    os2.addFilter(new KaleidoFilter(os2).setFilterName("Kaleido").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("src"))); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));

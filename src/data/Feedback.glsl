@@ -17,6 +17,7 @@ uniform float amp;
 //#define radio 3.//0.5
 //#define amp 2.
 
+uniform int distance_r,distance_g,distance_b,distance_a;
  
 void main(void)
 {
@@ -25,7 +26,8 @@ void main(void)
 	vec4 sum = vec4(0.0)*0.01;
 	
 	//different distance for each color
-	vec4 d=vec4(2,4,6,8);
+	//vec4 d=vec4(2,4,6,8);
+	vec4 d=vec4(distance_r,distance_g,distance_b,distance_a);
 	
    //iterate 9 times to get samples around the current point for median calculation
    for(int j=0; j<dirs; j++){
