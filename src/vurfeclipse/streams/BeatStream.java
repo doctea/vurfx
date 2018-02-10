@@ -3,8 +3,13 @@ package vurfeclipse.streams;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
+import controlP5.Group;
+import controlP5.Textfield;
 import processing.core.PApplet;
 import vurfeclipse.APP;
+import vurfeclipse.ui.ControlFrame;
 
 public class BeatStream extends Stream implements Serializable { 
 	private float bpm = 125.0f;
@@ -187,6 +192,44 @@ public class BeatStream extends Stream implements Serializable {
 					"beat_32", "beat_64",
 				"bar_1","bar_2", "bar_3", "bar_4", "bar_5", "bar_6", "bar_7", "bar_8", "bar_9", "bar_10", "bar_11", "bar_12", "bar_13", "bar_14", "bar_15", "bar_16",
 		};
+	}
+	
+	@Override
+	synchronized public void setupControls(ControlFrame cf, Group g) {
+		super.setupControls(cf, g);
+		int margin_y = 20, gap_y = 5, margin_x = 80;
+
+		int pos_y = 10;
+
+		final BeatStream self = this;
+
+		g.add(cf.control().addTextfield(this.toString() + "_tempo").setLabel("BPM").setText(""+this.bpm).setWidth(margin_x/2)
+			.setPosition(margin_x * 3, pos_y)
+			.moveTo(g)
+			.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					self.setBPM(Float.parseFloat(((Textfield)theEvent.getController()).getText()));
+					
+					// and refresh gui
+					cf.updateGuiStreamEditor();
+				}
+			})
+		);
+		
+		g.add(cf.control().addButton(this.toString() + "_resetstart").setLabel("Reset Start")
+				.setPosition(margin_x * 5, pos_y)
+				.moveTo(g)
+				.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						self.startTime = APP.getApp().timeMillis;
+						
+						// and refresh gui
+						cf.updateGuiStreamEditor();
+					}
+				})
+			);
 	}
 	
 }

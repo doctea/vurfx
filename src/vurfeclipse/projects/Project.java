@@ -724,7 +724,7 @@ public abstract class Project implements Serializable {
 		
 		Tab sceneTab = cp5.addTab("Scenes");
 
-		Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth);
+		Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth).setBarHeight(20);
 
 		Scene n;
 		while(i.hasNext()) {
@@ -734,7 +734,7 @@ public abstract class Project implements Serializable {
 			//ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
 			//Tab tab = cp5.addTab(tabName);
 
-			Group g = cp5.addGroup(tabName);
+			Group g = cp5.addGroup(tabName).setBarHeight(20);
 
 			println("added tab " + tabName);
 			//ControllerInterface[] controls = ((Scene)i.next()).getControls();
@@ -973,5 +973,10 @@ public abstract class Project implements Serializable {
 	public Project setSnapshotFile(String filename) {
 		this.filename = filename;
 		return this;
+	}
+
+	public String[] getCanvasPaths() {
+		return this.canvases.keySet().toArray(new String[0]);
+		//return null;
 	}
 }

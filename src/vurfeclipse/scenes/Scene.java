@@ -20,6 +20,7 @@ import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
+import controlP5.ScrollableList;
 import controlP5.Textlabel;
 
 public abstract class Scene implements CallbackListener, Serializable, Mutable, Targetable {
@@ -751,6 +752,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	private Integer[] palette;
 
 	private Textlabel lblSceneMapping;
+
+	private ControllerGroup tab;
 	public void setupControls(ControlFrame cf, ControllerGroup tab) {
 
 		ControlP5 cp5 = cf.control();
@@ -758,6 +761,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		//if (doneControls) return;
 		doneControls = true;
 		this.cp5 = cp5;
+		this.tab = tab;
 		this.tabName = tab.getName();
 
 		int margin = 10;
@@ -779,21 +783,64 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 				;
 		this.muteController.getCaptionLabel().alignY(ControlP5.CENTER);
 
-		this.lblSceneMapping = cp5.addLabel(tabName+"_scenemappings")
+		/*this.lblSceneMapping = cp5.addLabel(tabName+"_scenemappings")
 				.setPosition(this.muteController.getWidth() + margin * 10, margin)
 				.setWidth(cf.sketchWidth())
 				.setLabel("output mappings")
 				.moveTo(tab)
-				;
-
-		String mappingString = "";
+				;*/
+		/*String mappingString = "";
 		for (Entry<String, String> map : this.getCanvasMappings().entrySet()) {
 			mappingString += "{";
 			mappingString += map.getKey() + " => " + map.getValue();
 			mappingString += "}, ";
 		}
 		this.lblSceneMapping.setStringValue(mappingString);
-		println("got scene mapping " + mappingString);
+		println("got scene mapping " + mappingString);*/
+
+		
+		CallbackListener toFront = new CallbackListener() {
+			public void controlEvent(CallbackEvent theEvent) {
+				theEvent.getController().bringToFront();
+				((ScrollableList)theEvent.getController()).open();
+			}
+		};
+
+		CallbackListener close = new CallbackListener() {
+			public void controlEvent(CallbackEvent theEvent) {
+				((ScrollableList)theEvent.getController()).close();
+			}
+		};
+		
+		Scene self = this;
+		
+		int start_x = (int) this.muteController.getWidth() + margin * 8; //(this.lblSceneMapping.getPosition()[0] + margin + this.lblSceneMapping.getWidth());
+		int margin_w = 200;
+		for (Entry<String, String> map : this.getCanvasMappings().entrySet()) {
+			cp5.addLabel(tabName + map.getKey() +  "_canvaspath_label").setText(map.getKey()+":-").setPosition(start_x, margin-12).setWidth(30).setLabel(map.getKey()).moveTo(tab);
+			ScrollableList lstTarget = new ScrollableList(cp5,tabName + map.getKey() +  "_canvaspath")
+					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+					.setLabel(map.getValue()) //((FormulaCallback)c).targetPath)
+					//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+					.addItems(host.getCanvasPaths())
+					.setPosition(start_x, margin)
+					.setWidth(margin_w)
+					.setBarHeight(15)
+					.setItemHeight(15)
+					.moveTo(tab)
+					.onLeave(close)
+					.onEnter(toFront)
+					.close()
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							int index = (int) theEvent.getController().getValue();
+							self.setCanvas(map.getKey(), (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
+						}
+					});
+			 start_x += (margin + (margin_w)) + margin/2;
+		}
+		
 	
 
 		currentY += size + margin;
@@ -971,6 +1018,29 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		return null;
+	}
+	public synchronized void moveFilter(Filter f, int direction) {
+		for (int i = 0 ; i < this.filterCount; i++) {
+			if (i+direction<0 || i+direction>this.filterCount-1) continue;
+			if (this.filters[i]==f) {
+				Filter t;
+				t = filters[i+direction];
+				filters[i+direction] = f;
+				filters[i] = t;
+				break;
+			}
+		}		
+	}
+	synchronized public void refreshControls() {
+		this.setupControls(host.getApp().getCF(), tab);
+		tab.setWidth(host.getApp().getCF().sketchWidth());
+	}
+	public String getMappingForCanvas(String canvas_in) {
+		if (canvas_in==null) return null;
+		for (Entry<String, String> c : this.getCanvasMappings().entrySet()) {
+			if (canvas_in.equals(c.getValue())) return c.getKey();
 		}
 		return null;
 	}

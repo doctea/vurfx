@@ -1,4 +1,5 @@
 package vurfeclipse.filters;
+import controlP5.Button;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ColorWheel;
@@ -6,6 +7,7 @@ import controlP5.ControlGroup;
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
 import controlP5.Group;
+import controlP5.ScrollableList;
 import controlP5.Textfield;
 
 import java.io.Serializable;
@@ -572,6 +574,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 	int count = 0;
 	boolean controlsSetup = false;
+	private Button moveUpButton;
+	private Button moveDownButton;
 	public synchronized int setupControls(ControlFrame cf, ControllerGroup tab, int row) {
 		ControlP5 cp5 = cf.control();
 		//if (controlsSetup) return 0;
@@ -599,35 +603,124 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		/*int row = 0,*/float col = 0;
 		int row_h = 50, col_w = 100;
 
-		this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
-				.setPosition(margin_w + (col*col_w),margin_h + (row*row_h))
-				.setLabel("Mute " + this.getFilterLabel())
-				.setSize(size*2, size)
-				.setValue(this.isMuted())
-				.setState(this.isMuted())
-				//.setPosition(lm, currentY+=(size+margin))
-				//.plugTo(this, "setMuted")
-				//.plugTo(this)
-				.moveTo(grp)
-				//.addCallback(this)
-				;
+			
+			Filter self = this;
+			
 
-		this.muteController.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingY(2*cp5.getFont().getHeight());
-		this.muteController.getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setPaddingY(2*cp5.getFont().getHeight());//.setPaddingY(cp5.getFont().getHeight());
+			if (row!=0) {
+				this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + getFilterName())
+						.setLabel("^")
+						.setSize(size, size)
+						.setPosition(margin_w + (col*col_w),margin_h + (row*row_h)-3)
+						.setHeight(12)
+						.moveTo(grp)
+						.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+							@Override
+							public void controlEvent(CallbackEvent theEvent) {
+								self.sc.moveFilter(self, -1);
+								self.sc.refreshControls();
+							}					
+						})
+						;
+			}
 
-		this.nextModeButton = cp5.addButton("nextmode_" + tab.getName() + getFilterName())
-				.setLabel(">|")
-				.setSize(size, size)
-				.setPosition(margin_w + (col*(col_w+margin_w)) + size + 5,margin_h + (row*row_h))
-				.moveTo(grp)
-				//.plugTo(this)
-				//.addCallback(this)
-				//.linebreak()
-				;
+			this.moveDownButton = cp5.addButton("movedown_" + tab.getName() + getFilterName())
+					.setLabel("^")
+					.setSize(size, size)
+					.setPosition(margin_w + (col*col_w),margin_h + (row*row_h)+13)
+					.setHeight(12)
+					.moveTo(grp)
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							self.sc.moveFilter(self, 1);
+							self.sc.refreshControls();
+						}					
+					})
+					;
 
 		
-		cp5.addLabel("canvases_" + tab.getName() + getFilterName()).setValueLabel("in => " + this.canvas_in + "\nout => " + this.canvas_out).setPosition(margin_w + (col*(col_w+margin_w)) + size + 5,margin_h + (row*row_h)).moveTo(grp); 
+			this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
+					.setPosition(this.moveDownButton.getWidth()+this.moveDownButton.getPosition()[0]+margin_w/*(margin_w*4) + (col*(col_w+margin_w)) + size + 5*/,margin_h + (row*row_h))
+					.setLabel("Mute " + this.getFilterLabel())
+					.setSize(size*2, size)
+					.setValue(this.isMuted())
+					.setState(this.isMuted())
+					.moveTo(grp)
+					;
+
+			this.muteController.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingY(2*cp5.getFont().getHeight());
+			this.muteController.getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setPaddingY(2*cp5.getFont().getHeight());//.setPaddingY(cp5.getFont().getHeight());
+
+			this.nextModeButton = cp5.addButton("nextmode_" + tab.getName() + getFilterName())
+					.setLabel(">|")
+					.setSize(size, size)
+					.setPosition(this.muteController.getWidth()+this.muteController.getPosition()[0]+margin_w/*(margin_w*2) + (col*(col_w+margin_w)) + size + 5*/,margin_h + (row*row_h))
+					.moveTo(grp)
+					;
+			
+			
+		/*cp5.addLabel("canvases_" + tab.getName() + getFilterName())
+			.setValueLabel("in => " + this.canvas_in + "\nout => " + this.canvas_out)
+			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h))
+			.moveTo(grp);*/
+			CallbackListener toFront = new CallbackListener() {
+				public void controlEvent(CallbackEvent theEvent) {
+					theEvent.getController().bringToFront();
+					((ScrollableList)theEvent.getController()).open();
+				}
+			};
+
+			CallbackListener close = new CallbackListener() {
+				public void controlEvent(CallbackEvent theEvent) {
+					((ScrollableList)theEvent.getController()).close();
+				}
+			};
+			
+		String[] canvases = sc.getCanvasMappings().keySet().toArray(new String[0]);
+		ScrollableList lstCanvas = cp5.addScrollableList("inp_" + tab.getName() + getFilterName())
+			.setLabel(sc.getMappingForCanvas(this.canvas_in))
+			.addItems(canvases)
+			.setHeight(10)
+			.setWidth(size*2)
+			.setItemHeight(10)
+			.moveTo(grp)
+			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)-3)
+			.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					int index = (int) theEvent.getController().getValue();
+					self.setOutputCanvas((String) ((ScrollableList)theEvent.getController()).getItem(index).get("value"));
+				}				
+			})
+			.onLeave(close)
+			.onEnter(toFront)
+			.close()
+			;
+
+		cp5.addScrollableList("out_" + tab.getName() + getFilterName())
+		.addItems(canvases)
+			.setLabel(sc.getMappingForCanvas(this.canvas_out))
+			.setHeight(10)
+			.setWidth(size*2)
+			.setItemHeight(10)
+			.moveTo(grp)
+			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)+13)
+			.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					int index = (int) theEvent.getController().getValue();
+					self.setOutputCanvas((String) ((ScrollableList)theEvent.getController()).getItem(index).get("value"));
+				}				
+			})
+			.onLeave(close)
+			.onEnter(toFront)
+			.close()
+			;
+
 		
+		
+		int param_start_w = margin_w*8;
 		
 		//cp5.addTextlabel("path_" + tab.getName() + getFilterName(), "Path: " + this.getPath()).setSize(size, size).moveTo(grp);//.linebreak();
 
@@ -686,7 +779,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 				o.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER);//.setPaddingY(2*cp5.getFont().getHeight());
 				o.getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE);//.setPaddingY(cp5.getFont().getHeight());
 				o.setPosition(
-						margin_w/2 + (col++*(margin_w+col_w)),
+						param_start_w + margin_w/2 + (col++*(margin_w+col_w)),
 						margin_h + (row*row_h)
 						);
 				if (o.getWidth() < col_w/2) col -= 0.5f;
