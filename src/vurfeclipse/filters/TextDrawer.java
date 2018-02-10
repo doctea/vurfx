@@ -53,6 +53,9 @@ public class TextDrawer extends Filter {
     addParameter("colour", 255, 0, 255);
     addParameter("rotation", 0, 0, 360);
     addParameter("zrotation", 0, 0, 360);
+    addParameter("scale", new Float(1.0f), 0.01f, 4.0f);
+    addParameter("translate_x", new Float(0.0f), -1.0f, 1.0f);
+    addParameter("translate_y", new Float(0.0f), -1.0f, 1.0f);
     addParameter("continuousDraw", new Boolean(true));
     addParameter("motionBlur", new Boolean(true));
     addParameter("happyNewYear", new Boolean(false));
@@ -154,11 +157,11 @@ public class TextDrawer extends Filter {
       
       out.beginDraw();
       //out.clear(0);
+      out.pushMatrix();
       out.background(0,0,0,0);
       out.fill(colour);
       out.textFont(getFont(), fontHeight); //256);
       //out.textSize(256);
-      out.pushMatrix();
       out.textAlign(PApplet.CENTER);
       //out.text(t, w/2, (h/2)+128);
       //out.translate(w/2,(h/2)+(fontHeight/2));///2);
@@ -170,6 +173,11 @@ public class TextDrawer extends Filter {
       if (zrotation!=0) {
         out.rotateY(PApplet.radians(zrotation));
       }
+      out.translate(
+    		  w*(Float)this.getParameterValue("translate_x"), 
+    		  h*(Float)this.getParameterValue("translate_y")
+      ); 
+      out.scale((float) this.getParameterValue("scale"));
       out.text(getText(), 0, 0);
       out.popMatrix();
       out.endDraw();
