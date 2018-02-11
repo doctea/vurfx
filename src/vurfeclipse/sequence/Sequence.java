@@ -26,6 +26,7 @@ import vurfeclipse.filters.Filter;
 
 abstract public class Sequence implements Serializable, Mutable {
 	//Scene sc;
+	private boolean debug = false;
 	
 	public Random rng = new Random(); //1337);
 	long seed = rng.nextLong();
@@ -48,7 +49,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	}
 	
 	static public Sequence makeSequence(String classname, Scene host) {
-		System.out.println("got classname " + classname);
+		//System.out.println("Sequence#makeSequence(): got classname '" + classname + "'");
 		try {
 			Sequence seq;
 			try {
@@ -79,7 +80,7 @@ abstract public class Sequence implements Serializable, Mutable {
 			return (Sequence) seq;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.err.println("Caught " + e + ": Didn't manage to instantiate " + classname + " might be missing constructor?");
+			System.err.println("Sequence#makeSequence caught " + e + ": Didn't manage to instantiate " + classname + " might be missing constructor?");
 			e.printStackTrace();
 		}
 		return null;
@@ -125,6 +126,7 @@ abstract public class Sequence implements Serializable, Mutable {
 
 	protected Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
 	private boolean disableHostMute;
+
 	public Sequence (Scene host, int sequenceLengthMillis) {
 		this(sequenceLengthMillis);
 		this.host = host;
@@ -160,18 +162,18 @@ abstract public class Sequence implements Serializable, Mutable {
 
 	public float random(float max) {
 		float ret = (float) (this.rng.nextDouble()*max);
-		println("random(" + max + ") returning " + ret);
+		if (debug) println("random(" + max + ") returning " + ret);
 		return ret;
 	}
 	public float random(float min, float max) {
 		float ret = min + (this.rng.nextFloat()*max);
-		println("random(" + min + "f, " + max + "f returning " + ret + "f");
+		if (debug) println("random(" + min + "f, " + max + "f returning " + ret + "f");
 		return ret;
 	}
 	public int random(int min, int max) {
 		int random = this.rng.nextInt((1+max-min));
 		int ret = min + random;
-		println("random(" + min + ","+max+ ") returning " + ret);
+		if (debug) println("random(" + min + ","+max+ ") returning " + ret);
 		return ret;
 	}
 

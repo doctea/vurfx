@@ -7,6 +7,7 @@ import processing.core.PImage;
 public class ImageRepository {
 
   static public ImageRepository IR;
+  static boolean debug = false;
 
   transient HashMap<String, PImage> images = new HashMap<String, PImage> ();
 
@@ -38,7 +39,7 @@ public class ImageRepository {
 		  image.loadPixels();
 		  reverse.updatePixels();
 		  reverse.loadPixels();
-		  System.out.println("ImageRepository#getReversePImage: reversing " + image);
+		  if (debug) System.out.println("ImageRepository#getReversePImage: reversing " + image);
 		   /*for (int i = 0; i < image.width; i++) {
 			     // Begin loop for height
 			     for (int j = 0; j < image.height; j++) {
@@ -65,7 +66,7 @@ public class ImageRepository {
   public PImage cacheLoad(final String fn, final int w, final int h) {
     if (!images.containsKey(fn)) {
       //if (images.size()>50) images.remove(random(0,images.size()));
-      System.out.println("ImageRepository#cacheImage('" + fn + "', already " + images.size());
+      if (debug) System.out.println("ImageRepository#cacheImage('" + fn + "', already " + images.size());
       PImage p = ((VurfEclipse)APP.getApp()).loadImage("data/image-sources/" + fn);
       //PImage p = getReversePImage(((VurfEclipse)APP.getApp()).loadImage("data/image-sources/" + fn));
       if (p!=null) {
@@ -76,14 +77,12 @@ public class ImageRepository {
         //GLTexture current_image = new GLTexture(APP,APP.width,APP.height);
         //current_image.putImage(p);
         p = null;
-      }
-      else {
+      } else {
         System.out.println("ImageRepository#cacheImage: error loading data/image-sources/" + fn);
         //filenames.remove(filenames.indexOf(fn));
       }
-    }
-    else {
-      System.out.println("ImageRepository#cacheImage: already cached " + fn + " (" + images.size() + " items cached)");
+    } else {
+      if (debug) System.out.println("ImageRepository#cacheImage: already cached " + fn + " (" + images.size() + " items cached)");
     }
     return images.get(fn);
   }
@@ -99,7 +98,7 @@ public class ImageRepository {
     //new Thread() {
       //public void run () {
         if (!images.containsKey(fn)) {
-          System.out.println("ImageRepository#precache: precaching " + fn);
+          if (debug) System.out.println("ImageRepository#precache: precaching " + fn);
           cacheLoad(fn, w, h);
         }
       //}

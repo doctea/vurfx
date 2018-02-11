@@ -137,7 +137,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	}
 
 	public Object getObjectForPath(String path) {
-		System.out.println("getObjectForPath " + path);
+		if (debug) println("getObjectForPath " + path);
 		//System.exit(1);
 		String[] spl = path.split("/",2);
 		if (spl[0].equals("mute")) return this;
@@ -581,11 +581,12 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	private Button moveDownButton;
 	private ScrollableList lstInputCanvas;
 	private ScrollableList lstOutputCanvas;
+	protected boolean debug = false;
 	public synchronized int setupControls(ControlFrame cf, ControllerGroup tab, int row) {
 		ControlP5 cp5 = cf.control();
 		//if (controlsSetup) return 0;
 		controlsSetup = true;
-		println("Filter#setupControls() for "  + this + ": " + tab.getName());
+		if (debug) println("Filter#setupControls() for "  + this + ": " + tab.getName());
 		/*if (count++>20) {
       println("Exiting because setupControls count is " + count + " in " + this);
       System.exit(0);
@@ -747,7 +748,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			//this.updateParameterValue((String)me.getKey(), me.getValue());
 			//Object value = me.getValue();
 			Parameter param = (Parameter)me.getValue();
-			println("Filter#setupControls() in " + toString() + " doing control for " + param.getName());
+			if (debug) println("Filter#setupControls() in " + toString() + " doing control for " + param.getName());
 			//Object value = param.value;
 
 			controlP5.Controller o = param.makeController(cp5, tab.getName() + this + me.getKey(), tab, size);
@@ -779,7 +780,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
       ;*/
 
 			param.setFilterPath(this.getPath());
-			println("Filter: adding control object for filter with path " + this.getPath());
+			if (debug) println("Filter: adding control object for filter with path " + this.getPath());
 
 
 			//col = 2;
@@ -815,7 +816,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 				/*controllers.put(
           o, (String)me.getKey()
         );*/
-				println(this + ": set up Control for " + me.getKey() + " " + o.getClass()); // + " (which shouldnt differ from " + param.getName() + " if i've understood my own code .. )");
+				if (debug) println(this + ": set up Control for " + me.getKey() + " " + o.getClass()); // + " (which shouldnt differ from " + param.getName() + " if i've understood my own code .. )");
 			}
 			// }
 		}
@@ -867,7 +868,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 
 	synchronized public Object target(String path, Object payload) {
-		println("#target('"+path+"', '"+payload+"'");
+		if (debug) println("#target('"+path+"', '"+payload+"'");
 		if ("/mute".equals(path.substring(path.length()-5, path.length()))) {
 			this.toggleMute();
 			return this.isMuted()?"Muted":"Unmuted";
@@ -890,17 +891,17 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 		urls.put(f.getPath() + "/mute", f);
 		urls.put(f.getPath() + "/nextMode", f);
-		println("added Filter's url '" + f.getPath() + "/mute' mapped to " + f);
+		if (debug) println("added Filter's url '" + f.getPath() + "/mute' mapped to " + f);
 
 		Iterator<Parameter> pit = f.getParameters().iterator();
 		while (pit.hasNext()) {
 			Parameter p = pit.next();
-			println("added Parameter's url '" + p.getPath() + "' mapped to " + p);
+			if (debug) println("added Parameter's url '" + p.getPath() + "' mapped to " + p);
 			urls.put(p.getPath(), p);
-			if (p.getName().equals("text")) {
-				println("got text!");
+			/*if (p.getName().equals("text")) {
+				if (debug) println("got text!");
 				//System.exit(0);
-			}
+			}*/
 		}
 
 		urls.putAll(getCustomTargetURLs());
@@ -909,7 +910,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	}
 	synchronized public void randomiseParameters(Sequence seq,String[] parameters) {
 		for (String p : parameters ) {
-			println("Randomising parameter " + p + " in " + this.toString());
+			if (debug) println("Randomising parameter " + p + " in " + this.toString());
 			this.setParameterValueFromSin(p, seq.random(0f, 2f)-1f);
 		}		
 	}
@@ -955,7 +956,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			Class clazz = Class.forName(classname);
 			//System.out.println (clazz.getConstructors());
 			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
-			System.err.println("about to try and get constructor for Filter '" + classname + "'");
+			System.out.println("Filter#createFilter(): about to try and get constructor for classname '" + classname + "'");
 			if (classname.contains("$")) {
 				String[] spl = classname.split("\\$");
 				clazz = Class.forName(spl[0]); //Class.forName(classname); host.getClass();//

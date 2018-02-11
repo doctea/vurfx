@@ -26,6 +26,11 @@ import processing.core.PGraphics;
 
 
 public abstract class Project implements Serializable {
+
+	boolean outputDebug = true;
+	boolean debug = false;
+
+	
 	public int w,h;
 	public String gfx_mode;
 
@@ -67,7 +72,7 @@ public abstract class Project implements Serializable {
 			//clazz = Class.forName(classname);
 			//System.out.println (clazz.getConstructors());
 			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
-			System.err.println("about to try and get constructor for Project '" + clazz + "'");
+			System.err.println("Project#createProject: about to try and get constructor for Project '" + clazz + "'");
 			Constructor<?> ctor = clazz.getConstructor(Integer.TYPE,Integer.TYPE);
 			return (Project) ctor.newInstance(desired_width, desired_height); //(Scene)null, (int)0);
 			//Object seq = ctor.newInstance(); //(Scene)null, 0);
@@ -95,7 +100,7 @@ public abstract class Project implements Serializable {
 	HashMap<String,Canvas> canvases = new HashMap<String,Canvas>();
 	synchronized public void addCanvas(String name, Canvas canvas) {
 		canvases.put(name,canvas);
-		println("Project#addCanvas added " + name);
+		if (debug) println("Project#addCanvas added " + name);
 		//makeBuffersCompatible(name,canvas);
 	}
 	public Canvas getCanvas(String name) {
@@ -135,10 +140,10 @@ public abstract class Project implements Serializable {
 	public Canvas createCanvas(String path, String canvasName, int width, int height) {
 		//mappings.put(path + "/" + name, makeCanvas(w,h,gfx_mode,name));
 		//int w = this.w, h = this.h;
-		println("createCanvas for '" + canvasName + "'");
+		if (debug) println("createCanvas for '" + canvasName + "'");
 		Canvas c = Canvas.makeCanvas(width,height,gfx_mode,canvasName);
 		addCanvas(path, c);
-		println("Project#createCanvas('" + path + "','" + canvasName + "') got '" + c.getSurf() + "'");
+		if (debug) println("Project#createCanvas('" + path + "','" + canvasName + "') got '" + c.getSurf() + "'");
 		return c;
 	}
 
@@ -208,7 +213,7 @@ public abstract class Project implements Serializable {
 		// loop over the scenes and check for one with the same name as the first part of path; then pass the rest to getObjectForPath() for the second part..
 		if (path=="/") return this;
 		if (path==null) {
-			println("caught the golbin");
+			System.err.println("Caught getObjectForPath() passed a null path in " + this);
 		}
 		String[] spl = path.split("/",5); //, 3);
 		//println("spl[1] is " + spl[1]);
@@ -258,7 +263,7 @@ public abstract class Project implements Serializable {
 	};
 
 	public boolean initialiseBuffers() {
-		println(this.toString() + " initialising buffers");
+		if (debug) println(this.toString() + " initialising buffers");
 		return true;
 	};
 
@@ -350,8 +355,6 @@ public abstract class Project implements Serializable {
 		println("Selecting " + (sc.isMuted()?"MUTED":"LIVE") + " Scene[" + index + "] " + sc);
 		selectedScene = sc;//scenes.get(index);
 	}
-
-
 	public Scene getSelectedScene() {
 		if (selectedScene==null)
 			selectedScene = scenes.iterator().next();
@@ -892,8 +895,7 @@ public abstract class Project implements Serializable {
 		return urls;
 	}
 
-
-	boolean outputDebug = true;
+	
 	private boolean initialised;
 	private HashMap<String,Integer> guids = new HashMap<String,Integer>();
 	public boolean disableKeys = false;
@@ -913,7 +915,7 @@ public abstract class Project implements Serializable {
 		if (t==null) {
 			System.err.println("#target("+key+","+value+") in " + this + " couldn't find the object to target!");
 		} else {
-			println("#target("+key+","+value + ") got targetable object " + t.getClass() + " " + t);
+			if (debug) println("#target("+key+","+value + ") got targetable object " + t.getClass() + " " + t);
 
 			if (value instanceof Parameter) {
 				key = ((Parameter)value).getName();

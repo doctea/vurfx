@@ -24,6 +24,10 @@ import controlP5.ScrollableList;
 import controlP5.Textlabel;
 
 public abstract class Scene implements CallbackListener, Serializable, Mutable, Targetable {
+	
+	boolean outputDebug = true;
+	private boolean debug;
+	
 	// Scene stuff
 	public int w,h;
 
@@ -89,7 +93,6 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		return this;
 	}
 
-	boolean outputDebug = true;
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("S " + (text.contains((this.toString()))? text : this+": "+text));
 	}
@@ -675,6 +678,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	transient controlP5.Button saveButton;
 	transient controlP5.Button loadButton;
 
+
+
 	public synchronized void controlEvent (CallbackEvent ev) {
 		if (!ev.getController().isUserInteraction()) return;
 		if (ev.getAction()==ControlP5.ACTION_PRESS) {
@@ -722,7 +727,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 	public void loadParameters(HashMap<String,Object> params) {
 		for (Entry<String,Object> e : params.entrySet()) {
-			println("loadParameters() got " + e.getKey() + " with " + e.getValue().getClass().getName());
+			if (debug) println("loadParameters() got " + e.getKey() + " with " + e.getValue().getClass().getName());
 			if (e.getKey().endsWith("/mute")) {
 				if (host.getObjectForPath(e.getKey())!=null)
 					((Mutable) host.getObjectForPath(e.getKey())).setMuted((Boolean)e.getValue());
@@ -771,7 +776,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	public void setupControls(ControlFrame cf, ControllerGroup tab) {
 
 		ControlP5 cp5 = cf.control();
-		println("Scene#setupControls() in " + this);
+		if (debug) println("Scene#setupControls() in " + this);
 		//if (doneControls) return;
 		doneControls = true;
 		this.cp5 = cp5;
@@ -894,7 +899,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		int row = 0;
 		for (int i = 0 ; i < this.filters.length ; i ++) {
 			if (filters[i]!=null) {
-				println(">>>>>>>>>>>>>>>>>About to setupControls for " + filters[i]);
+				if (debug) println(">>>>>>>>>>>>>>>>>About to setupControls for " + filters[i]);
 				//cp5.addToggle("mute_" + tabName + "["+i+"]: " + filters[i])
 				/*filters[i].muteController = cp5.addToggle("mute_" + tabName + "["+i+"]: " + filters[i])
            .setLabel("Mute " + filters[i])
@@ -908,7 +913,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
            ;*/
 				row = filters[i].setupControls(cf,tab,row);
 
-				println("<<<<<<<<<<<<<<<<did setupcontrols for " + filters[i]);
+				if (debug) println("<<<<<<<<<<<<<<<<did setupcontrols for " + filters[i]);
 
 			}
 		}
@@ -916,7 +921,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 	@Override
 	public Object target(String path, Object payload) {
-		println("#target('"+path+"', '"+payload+"')");
+		if (debug) println("#target('"+path+"', '"+payload+"')");
 		if (path.endsWith("/mute")) { //"/mute".equals(path.substring(path.length()-5, path.length()))) {
 			this.toggleMute();
 			return this.isMuted()?"Muted":"Unmuted";
@@ -934,7 +939,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		// add a 'mute' url for the Scene
 		if (s instanceof Mutable) {
 			urls.put(s.getPath() + "/mute", s);
-			println(this + ": added Scene's url '" + s.getPath() + "/mute' mapped to " + s);
+			if (debug) println(this + ": added Scene's url '" + s.getPath() + "/mute' mapped to " + s);
 		}
 
 		// loop over all the Filters; add the URLs for each Filter
@@ -1024,7 +1029,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		Class<?> clazz;
 		try {
 			clazz = Class.forName(classname);
-			System.out.println (clazz.getConstructors());
+			//System.out.println (clazz.getConstructors());
 			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
 			Constructor<?> ctor = clazz.getConstructor(Project.class, Integer.TYPE, Integer.TYPE); //Integer.class, Integer.class); //Scene.class,Integer.TYPE);
 			//Object seq = ctor.newInstance(); //(Scene)null, 0);
