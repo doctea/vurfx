@@ -11,7 +11,11 @@ import vurfeclipse.projects.*;
 import vurfeclipse.ui.ControlFrame;
 //import codeanticode.glgraphics.*;
 import ddf.minim.*;
+
+import java.awt.Color;
 import java.io.PrintStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 //import javax.media.opengl.*;
@@ -786,4 +790,31 @@ public class VurfEclipse extends PApplet {
 		return rcvd;
 	}*/
 
+	public Color createDefaultColorFromName(final String name) {
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("MD5");
+			
+			byte[] thedigest = md.digest(name.getBytes());
+			String dig = "";//new String(thedigest);
+			for (int i = 0 ; i < thedigest.length ; i++) {
+				//thedigest[i] = new Byte(Byte.toString(thedigest[i]));//.byteAt(0);
+				dig += Integer.toHexString(thedigest[i]);
+			}
+
+		    String md5 = "#" + dig.substring(0, 6); //new String(thedigest).substring(0, 6);
+		    Color defaultColor = Color.decode(md5);
+		    int darkness = ((defaultColor.getRed() * 299) + (defaultColor.getGreen() * 587) + (defaultColor.getBlue() * 114)) / 1000;
+		    if (darkness > 125) {
+		        defaultColor = defaultColor.darker();
+		    }
+		    return defaultColor;
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+	
 }

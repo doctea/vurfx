@@ -1,5 +1,6 @@
 package vurfeclipse.filters;
 import controlP5.Button;
+import controlP5.CColor;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ColorWheel;
@@ -10,6 +11,7 @@ import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Textfield;
 
+import java.awt.Color;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -18,6 +20,7 @@ import java.util.Map.Entry;
 import vurfeclipse.parameters.Parameter;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import sun.security.provider.MD5;
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.Pathable;
@@ -576,6 +579,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	boolean controlsSetup = false;
 	private Button moveUpButton;
 	private Button moveDownButton;
+	private ScrollableList lstInputCanvas;
+	private ScrollableList lstOutputCanvas;
 	public synchronized int setupControls(ControlFrame cf, ControllerGroup tab, int row) {
 		ControlP5 cp5 = cf.control();
 		//if (controlsSetup) return 0;
@@ -678,14 +683,15 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			};
 			
 		String[] canvases = sc.getCanvasMappings().keySet().toArray(new String[0]);
-		ScrollableList lstCanvas = cp5.addScrollableList("inp_" + tab.getName() + getFilterName())
+		lstInputCanvas = new ScrollableList(cp5,"canvas_input_" + tab.getName() + getFilterName())
 			.setLabel(sc.getMappingForCanvas(this.canvas_in))
-			.addItems(canvases)
+			.addItems(sc.getCanvasMappings().keySet().toArray(new String[0]))
+			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)-3)
 			.setHeight(10)
 			.setWidth(size*2)
+			.setBarHeight(10)
 			.setItemHeight(10)
 			.moveTo(grp)
-			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)-3)
 			.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
@@ -697,15 +703,23 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			.onEnter(toFront)
 			.close()
 			;
+		//grp.add(lstInputCanvas);
+		
+		/*
+		Color c = APP.getApp().createDefaultColorFromName(this.filterName);
+		grp.setColor(new CColor(c.getRed(),c.getGreen(),c.getBlue(),c.getAlpha(), col_w)); //
+		*/
+		
 
-		cp5.addScrollableList("out_" + tab.getName() + getFilterName())
-		.addItems(canvases)
+		lstOutputCanvas = new ScrollableList(cp5,"canvas_out_" + tab.getName() + getFilterName())
+			.addItems(canvases)
 			.setLabel(sc.getMappingForCanvas(this.canvas_out))
 			.setHeight(10)
+			.setBarHeight(10)
 			.setWidth(size*2)
 			.setItemHeight(10)
-			.moveTo(grp)
 			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)+13)
+			.moveTo(grp)
 			.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
@@ -978,6 +992,19 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		}		
 
 	}
+	public void changeCanvas(String oldCanvasPath, String canvasPath) {
+		if (this.canvas_in.equals(oldCanvasPath)) {
+			this.setInputCanvas(canvasPath);
+		}
+		if (this.canvas_out.equals(oldCanvasPath)) {
+			this.setOutputCanvas(canvasPath);
+		}
+		
+		this.lstInputCanvas.setItems(sc.getCanvasMappings().keySet().toArray(new String[0]));
+		this.lstOutputCanvas.setItems(sc.getCanvasMappings().keySet().toArray(new String[0]));
+				
+	}
+	
 
 }
 
