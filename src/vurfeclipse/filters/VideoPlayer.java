@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
-import codeanticode.gsvideo.*;
 import processing.core.PGraphics;
+import processing.video.Movie;
 
 public class VideoPlayer extends Filter {
-  transient GSMovie stream;
+  transient Movie stream;
   String filename;
 
   transient PGraphics tex;
@@ -69,8 +69,8 @@ public class VideoPlayer extends Filter {
 
   //Thread loader =  new Thread() {
 
-  transient GSMovie oldStream;
-  transient GSMovie newStream;
+  transient Movie oldStream;
+  transient Movie newStream;
   boolean changing = false;
   Thread changerThread;
   private int startDelay;
@@ -99,10 +99,10 @@ public class VideoPlayer extends Filter {
 
         println("Loaded new.." + filename);
         //GSMovie newStream;
-        if (newStream!=null) { newStream.stop(); newStream.delete(); }
-        newStream = new GSMovie(APP.getApp(),filename);
+        if (newStream!=null) { newStream.stop(); newStream.dispose(); }
+        newStream = new Movie(APP.getApp(),filename);
         //newTex = new GLTexture(APP, sc.w, sc.h);
-        newStream.setPixelDest(tex, true);
+        //newStream.setPixelDest(tex, true);
         newStream.volume(volume);
         println("Set volume and pixeldest..");
         //if (!((VurfEclipse)APP.getApp()).exportMode)
@@ -125,7 +125,7 @@ public class VideoPlayer extends Filter {
         if (oldStream!=null) {
 	        oldStream.pause();
 	        oldStream.stop();
-	        oldStream.delete();
+	        oldStream.dispose();
 	        oldStream = null;
 	        //oldTex.delete();
         }
@@ -196,10 +196,10 @@ public class VideoPlayer extends Filter {
 
     println("Loading video " + filename);
     try {
-       stream = new GSMovie(APP.getApp(),filename);
+       stream = new Movie(APP.getApp(),filename);
       //stream = new GSMovie(APP,"U:\\videos\\Tomorrows World - sinclair c5\\tworld84.dv.ff.avi");
       //stream.setPixelDest(out.getTexture());
-      stream.setPixelDest(tex, true);
+      //stream.setPixelDest(tex, true);
       stream.volume(volume);
 
       if (this.startDelay>0)
@@ -240,7 +240,9 @@ public class VideoPlayer extends Filter {
       this.setFilterLabel("VideoPlayer - " + filename);
     }*/
     if (stream!=null ) {
-      if (!stream.isSeeking() && stream.available()) {
+      if (
+    		  //!stream.isSeeking() && 
+    		  stream.available()) {
         stream.volume(volume);
 
         stream.read();
@@ -255,7 +257,7 @@ public class VideoPlayer extends Filter {
 
 
         //out.getTexture().putPixelsIntoTexture();
-        tex.updatePixels(); //.loadPixels();
+        //tex.updatePixels(); //.loadPixels();
         if (stream.isModified()) {
         //if (tex.putPixelsIntoTexture()) {
           out.beginDraw();
@@ -271,12 +273,12 @@ public class VideoPlayer extends Filter {
         out.pixels = webcamStream.pixels;
         out.updatePixels();*/
         return false;
-      } else if (!stream.isSeeking()) {  // available
+      } /*else if (!stream.isSeeking()) {  // available
     	out.beginDraw();
         out.image(tex,0,0,sc.w,sc.h);
         out.endDraw();
         return true;
-      }
+      } */
     } else {
       println("Stream is null!");
     }
