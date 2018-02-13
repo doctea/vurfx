@@ -50,7 +50,7 @@ public class TunnelScene extends SimpleScene {
 		}
 
 		@Override
-		public void setValuesForNorm(double pc, int iteration) {
+		public void __setValuesForNorm(double pc, int iteration) {
 			// TODO Auto-generated method stub
 			for (int i = 1 ; i <= 6 ; i++) {
 			//for (float f = 0.1f ; f < 2.0f ; f+)
@@ -94,7 +94,7 @@ public class TunnelScene extends SimpleScene {
 		}
 
 		@Override
-		public void setValuesForNorm(double pc, int iteration) {
+		public void __setValuesForNorm(double pc, int iteration) {
 			if (loop) if (iteration%2==0) pc = 1.0f-pc;	// go up and down again
 		
 			for (int i = 1 ; i <= 6 ; i++) {
@@ -121,7 +121,7 @@ public class TunnelScene extends SimpleScene {
 		}
 		
 		@Override
-		public void setValuesForNorm(double pc, int iteration) {
+		public void __setValuesForNorm(double pc, int iteration) {
 			//super.setValuesForNorm(1f, iteration);
 		}
 		
@@ -151,7 +151,7 @@ public class TunnelScene extends SimpleScene {
 		}
 		
 		@Override
-		public void setValuesForNorm(double pc, int iteration) {
+		public void __setValuesForNorm(double pc, int iteration) {
 			//super.setValuesForNorm(1f, iteration);
 		}
 		
@@ -181,7 +181,7 @@ public class TunnelScene extends SimpleScene {
 		}
 		
 		@Override
-		public void setValuesForNorm(double pc, int iteration) {
+		public void __setValuesForNorm(double pc, int iteration) {
 			//super.setValuesForNorm(1f, iteration);
 		}
 		

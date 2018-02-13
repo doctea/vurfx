@@ -79,7 +79,7 @@ public class BlobFX1 extends SimpleScene {
 			// TODO Auto-generated constructor stub
 			super(blobFX1, length);
 		}
-		public void setValuesForNorm(double norm, int iteration) {
+		public void __setValuesForNorm(double norm, int iteration) {
 			//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
 			double inv_norm = PApplet.constrain((float)
 					((iteration%2==0) ? norm : (float)(1.0f-norm)),
@@ -164,7 +164,7 @@ public class BlobFX1 extends SimpleScene {
 	    		// TODO Auto-generated constructor stub
 	    		super((BlobFX1) scene, i);
 	    	}
-			public void setValuesForNorm(double norm, int iteration) {
+			public void __setValuesForNorm(double norm, int iteration) {
 				//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
 				double inv_norm = PApplet.constrain((float)
 						((iteration%2==0) ? norm : (float)(1.0f-norm)),
@@ -236,7 +236,7 @@ public class BlobFX1 extends SimpleScene {
 			// TODO Auto-generated constructor stub
 			super((BlobFX1) scene, i);
 		}
-		public void setValuesForNorm(double norm, int iteration) {
+		public void __setValuesForNorm(double norm, int iteration) {
 			//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
 			double inv_norm = PApplet.constrain((float)
 					((iteration%2==0) ? norm : (float)(1.0f-norm)),
@@ -315,7 +315,7 @@ public class BlobFX1 extends SimpleScene {
 			// TODO Auto-generated constructor stub
 			super((BlobFX1) scene, i);
 		}
-		public void setValuesForNorm(double norm, int iteration) {
+		public void __setValuesForNorm(double norm, int iteration) {
 			//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
 			double inv_norm = PApplet.constrain((float)
 					((iteration%2==0) ? norm : (float)(1.0f-norm)),
@@ -404,7 +404,7 @@ public class BlobFX1 extends SimpleScene {
 		}
 		@Override public void onStop() {	}
 		@Override
-		public void setValuesForNorm(double pc, int iteration) {
+		public void __setValuesForNorm(double pc, int iteration) {
 			// TODO Auto-generated method stub
 			
 		}	

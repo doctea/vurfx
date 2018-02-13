@@ -84,7 +84,7 @@ public PharmacyProject(int w, int h) {
 
     	boolean alreadyRan = false;
 
-			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+			@Override public void __setValuesForNorm(double pc, int iteration) { super.__setValuesForNorm(pc, iteration);}
 			@Override public void onStop() {
 				//super.onStop();
 				if (this.alreadyRan) return;
@@ -106,7 +106,7 @@ public PharmacyProject(int w, int h) {
 			}
     });
     video1.addSequence("stop_pix0", new ShowSceneSequence(video1, 0) {
-			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+			@Override public void __setValuesForNorm(double pc, int iteration) { super.__setValuesForNorm(pc, iteration);}
 			@Override public void onStop() {
 				//super.onStop();
 				video1.setMuted(true);
@@ -220,7 +220,7 @@ public PharmacyProject(int w, int h) {
     				getSceneForPath("/sc/PlasmaScene").nextFilterMode();
     			}
 					@Override
-					public void setValuesForNorm(double pc, int iteration) {
+					public void __setValuesForNorm(double pc, int iteration) {
 							//getSceneForPath("/sc/VideoScene1").setMuted(false);
 							getSceneForPath("/sc/PlasmaScene").setMuted((int)(pc*1000.0)%2==0);
 							getSceneForPath("/sc/TunnelScene").setMuted((int)(pc*1000.0)%2!=0);

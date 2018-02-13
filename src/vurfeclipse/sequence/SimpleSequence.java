@@ -2,7 +2,7 @@ package vurfeclipse.sequence;
 
 abstract public class SimpleSequence extends Sequence {
 	@Override
-	public void setValuesForNorm(double pc, int iteration) {
+	public void __setValuesForNorm(double pc, int iteration) {
 		// TODO Auto-generated method stub
 
 	}
