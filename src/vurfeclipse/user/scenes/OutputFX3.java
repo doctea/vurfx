@@ -87,7 +87,7 @@ public class OutputFX3 extends SimpleScene {
 			}
 			
 			@Override
-			public void setValuesForNorm(double pc, int iteration) {
+			public void __setValuesForNorm(double pc, int iteration) {
 				getFilter("SyncEffect").changeParameterValueFromSin("step_x", Math.abs((float)Math.sin(pc)));
 				getFilter("SyncEffect").changeParameterValueFromSin("step_y", (float)Math.sin(pc));
 			}
@@ -116,7 +116,7 @@ public class OutputFX3 extends SimpleScene {
 			}
 
 			@Override
-			public void setValuesForNorm(double pc, int iteration) {
+			public void __setValuesForNorm(double pc, int iteration) {
 				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/3.0f*10f));
 				getFilter("SyncEffect").changeParameterValueFromSin("step_y", (float)Math.sin(pc/3.0f*10f));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
@@ -145,7 +145,7 @@ public class OutputFX3 extends SimpleScene {
 			}
 
 			@Override
-			public void setValuesForNorm(double pc, int iteration) {
+			public void __setValuesForNorm(double pc, int iteration) {
 				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/3.0*10f));
 				getFilter("SyncEffect").changeParameterValueFromSin("step_y", -(float)Math.sin(pc/3.0*10f));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
@@ -175,7 +175,7 @@ public class OutputFX3 extends SimpleScene {
 			}
 
 			@Override
-			public void setValuesForNorm(double pc, int iteration) {
+			public void __setValuesForNorm(double pc, int iteration) {
 				getFilter("SyncEffect").changeParameterValueFromSin("step_x", (float)Math.sin(pc/6*10));
 				getFilter("SyncEffect").changeParameterValueFromSin("step_y", -(float)Math.sin(pc/6*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/1.5*10));
@@ -227,7 +227,7 @@ public class OutputFX3 extends SimpleScene {
 			}
 
 			@Override
-			public void setValuesForNorm(double pc, int iteration) {
+			public void __setValuesForNorm(double pc, int iteration) {
 				getFilter("SyncEffect").changeParameterValue("step_x", (float)grid); //(float)Math.sin(pc/1.5*10));
 				getFilter("SyncEffect").changeParameterValue("step_y", (float)grid); //-(float)Math.sin(pc/1.5*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/1.5*10));

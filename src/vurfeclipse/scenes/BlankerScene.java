@@ -40,7 +40,7 @@ public class BlankerScene extends SimpleScene {
 			return new ArrayList<Mutable>();
 		}		
 		@Override
-		public void setValuesForNorm(double norm, int iteration) {
+		public void __setValuesForNorm(double norm, int iteration) {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 			//if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
 			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
@@ -92,7 +92,7 @@ public class BlankerScene extends SimpleScene {
 			super(sc, i);
 			// TODO Auto-generated constructor stub
 		}
-		@Override public void setValuesForNorm(double norm, int iteration) {
+		@Override public void __setValuesForNorm(double norm, int iteration) {
 			getFilter("BlankFilter").changeParameterValue("alpha", 32 + (int) (200 * norm));
 		}
 		@Override public void onStart() {

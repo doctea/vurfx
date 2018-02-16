@@ -131,7 +131,7 @@ public class SocioSukiProject extends Project implements Serializable {
     ils2.addFilter(pd);*/
 
     ils1.addSequence("next", new ShowSceneSequence(ils1, 0) {
-			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+			@Override public void __setValuesForNorm(double pc, int iteration) { super.__setValuesForNorm(pc, iteration);}
 			@Override public void onStop() { super.onStop(); }
 	
 			@Override
@@ -146,7 +146,7 @@ public class SocioSukiProject extends Project implements Serializable {
 			}
 		});
     ils2.addSequence("next", new ShowSceneSequence(ils1, 0) {
-			@Override public void setValuesForNorm(double pc, int iteration) { super.setValuesForNorm(pc, iteration);}
+			@Override public void __setValuesForNorm(double pc, int iteration) { super.__setValuesForNorm(pc, iteration);}
 			@Override public void onStop() { super.onStop(); }
 	
 			@Override

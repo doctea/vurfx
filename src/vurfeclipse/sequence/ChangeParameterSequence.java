@@ -85,7 +85,7 @@ public class ChangeParameterSequence extends Sequence {
 	}
 	
 	@Override
-	synchronized public void setValuesForNorm(double pc, int iteration) {
+	synchronized public void __setValuesForNorm(double pc, int iteration) {
 		
 		// evaluate value to pass based on expression
 		if (e==null) e = new com.udojava.evalex.Expression(expression);

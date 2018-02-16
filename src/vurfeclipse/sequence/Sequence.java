@@ -35,6 +35,8 @@ abstract public class Sequence implements Serializable, Mutable {
 	private int lengthMillis = 2000;
 
 	public int iteration;
+	
+	public boolean enabled = true;
 
 	transient protected ArrayList<Mutable> mutables;// = new ArrayList<Mutable>();
 	protected HashMap<String, HashMap<String,Object>> scene_parameters;
@@ -98,6 +100,8 @@ abstract public class Sequence implements Serializable, Mutable {
 		// if it is active sequence then update the scene_parameters with the host.host's collectSceneParameters, though
 		params.put("scene_parameters", this.getSceneParameters());
 		
+		params.put("enabled", this.isEnabled());
+		
 		//params.put("current_sequence_name", APP.getApp().dateStamp());
 		
 		ArrayList<String> mutableUrls = new ArrayList<String> ();
@@ -121,6 +125,9 @@ abstract public class Sequence implements Serializable, Mutable {
 		if (params.containsKey("scene_parameters")) this.scene_parameters = (HashMap<String, HashMap<String, Object>>) params.get("scene_parameters");
 		if (params.containsKey("mutableUrls")) {
 			this.mutableListToLoad = (ArrayList<String>)params.get("mutableUrls");
+		}
+		if (params.containsKey("enabled")) {
+			this.setEnabled((Boolean) params.get("enabled"));
 		}
 	}
 
@@ -315,6 +322,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	}
 	
 	public void setValuesForTime() {
+		if (this.isEnabled()) return ;
 		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is
 		int now = APP.getApp().millis();
 		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d );
@@ -331,14 +339,27 @@ abstract public class Sequence implements Serializable, Mutable {
 		//println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
 		double pc = getPCForElapsed(elapsed);
 		//pc *= (100.0*(Math.sin(pc)-0.5f));	// TODO: timewarping effect, for later explration when i've figured out how to refactor this... probably change setValuesForTime to utilise Streams instead of going off timemillis, and then have that link go through a 'filter'
-		setValuesForNorm(pc,iteration);
-		this.current_pc = (float) pc;
+		__setValuesForNorm(pc,iteration);
 	}
 
 	public void setValuesForNorm(double pc) {
 		setValuesForNorm(pc,0);
 	}
-	abstract public void setValuesForNorm(double pc, int iteration);
+	public void setValuesForNorm(double pc, int iteration) {
+		if (enabled) {
+			__setValuesForNorm(pc, iteration);
+			this.current_pc = (float) pc;
+		}
+	}
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	abstract public void __setValuesForNorm(double pc, int iteration);
 
 	abstract public void onStart();
 	abstract public void onStop();
@@ -495,9 +516,18 @@ abstract public class Sequence implements Serializable, Mutable {
 
 		synchronized public SequenceEditor makeControls(ControlP5 cp5, String name) {
 			SequenceEditor seq = new SequenceEditor(cp5, name);
+			Sequence self = this;
 			seq.setWidth(cp5.controlWindow.papplet().width);
 
-			cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name).setPosition(80,10).moveTo(seq);
+			cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name)
+				.setPosition(80,10).moveTo(seq);
+			
+			cp5.addToggle(name + "_enabled").setLabel("enabled").setValue(this.isEnabled()?1.0f:0.0f).setPosition(0,30).moveTo(seq).addListenerFor(cp5.ACTION_BROADCAST,  new CallbackListener() {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					self.setEnabled(!self.isEnabled());
+				}
+			});
 
 			if (host!=null) { 
 				//cp5.addLabel(name + "_host").setValue(host.getPath()).setPosition(80,30).moveTo(seq);

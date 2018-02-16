@@ -44,7 +44,7 @@ public class ShowFilterSequence extends Sequence {
 	}
 	
 	@Override
-	public void setValuesForNorm(double pc, int iteration) {
+	public void __setValuesForNorm(double pc, int iteration) {
 		// TODO Auto-generated method stub
 
 	}
