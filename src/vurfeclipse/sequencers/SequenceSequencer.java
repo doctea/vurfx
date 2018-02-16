@@ -609,14 +609,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		if (null==this.sldProgress) return;
 
 		SequenceSequencer self = this;
-
-		APP.getApp().getCF().queueUpdate(new Runnable () {
-			@Override
-			public void run() {
-				sldProgress.changeValue(activeSequence.getPositionPC()*100);
-				sldProgress.setLabel("Progress iteration ["+(activeSequence.getPositionIteration()+1)+"/"+max_iterations+"]");
-			}
-		});
+		
+		synchronized(this) {
+			APP.getApp().getCF().queueUpdate(new Runnable () {
+				@Override
+				public void run() {
+					sldProgress.changeValue(activeSequence.getPositionPC()*100);
+					sldProgress.setLabel("Progress iteration ["+(activeSequence.getPositionIteration()+1)+"/"+max_iterations+"]");
+				}
+			});
+		}
 	}
 
 	public void updateGuiTimeScale(double f) {
