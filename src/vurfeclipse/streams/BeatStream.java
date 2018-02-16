@@ -1,6 +1,7 @@
 package vurfeclipse.streams;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import controlP5.CallbackEvent;
@@ -17,7 +18,8 @@ public class BeatStream extends Stream implements Serializable {
 	private int tolerance = 50;
 
 	int startTime;
-
+	
+	int beat = 0;
 
 	private float stepDivisions[] = {
 			128.0f, 64.0f,32.0f, 16.0f, 8.0f, 4.0f, 3.0f, 2.0f, 1.0f,  //MAKE SURE TO CHANGE stepMarker value below if edit this line!!
@@ -70,8 +72,10 @@ public class BeatStream extends Stream implements Serializable {
 	}
 
 	public void setBPM(float bpm) {
+		beat += stepCounter[2]/2; // set the beat offset to the current beat, so the song position progresses
+		println("got beat " + beat);
 		this.bpm = bpm;
-		this.setupStepLengths(bpm);
+		this.setupStepLengths(bpm); 
 		stepCounter = new int[stepDivisions.length];
 		lastDealtStepTime = new int[stepDivisions.length];
 		startTime = APP.getApp().millis();
@@ -100,6 +104,8 @@ public class BeatStream extends Stream implements Serializable {
 	}    
 
 	int skippedCount = 0;
+
+	private Textfield txtBPM;
 
 	public void processEventMeat(int time) {
 		// detect if we're near a beat.
@@ -148,7 +154,7 @@ public class BeatStream extends Stream implements Serializable {
 								//if (usedEvents.contains(eventName)) {
 								clearEvents(eventName);  // old beats aren't interesting
 								//addEvent(eventName, stepCounter[n] + "th " + eventName + " at " + time);
-								addEvent(eventName, stepCounter[n]/2);// + "th " + eventName + " at " + time);
+								addEvent(eventName, beat + (stepCounter[n]/2));// + "th " + eventName + " at " + time);
 								//addEvent((stepDivisions[n]<1?"bar":"beat"), eventName + "@" + time);
 								addEvent((n>stepMarker?"bar":"beat"), stepCounter[n] + "th " + eventName + "@" + time);
 
@@ -203,7 +209,7 @@ public class BeatStream extends Stream implements Serializable {
 
 		final BeatStream self = this;
 
-		g.add(cf.control().addTextfield(this.toString() + "_tempo").setLabel("BPM").setText(""+this.bpm).setWidth(margin_x/2)
+		this.txtBPM = cf.control().addTextfield(this.toString() + "_tempo").setLabel("BPM").setText(""+this.bpm).setWidth(margin_x/2)
 			.setPosition(margin_x * 3, pos_y)
 			.moveTo(g)
 			.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
@@ -214,8 +220,8 @@ public class BeatStream extends Stream implements Serializable {
 					// and refresh gui
 					cf.updateGuiStreamEditor();
 				}
-			})
-		);
+			});
+		g.add(this.txtBPM);
 		
 		g.add(cf.control().addButton(this.toString() + "_resetstart").setLabel("Reset Start")
 				.setPosition(margin_x * 5, pos_y)
@@ -230,6 +236,106 @@ public class BeatStream extends Stream implements Serializable {
 					}
 				})
 			);
+	}
+	
+	int bpm_numsamples = 8;
+	int[] bpm_counter = new int[bpm_numsamples];
+	int bpm_last = APP.getApp().timeMillis;
+	int bpm_index = 0;
+	
+	DecimalFormat df = new DecimalFormat("#.##");
+	
+	@Override
+	public boolean sendKeyPressed(char key) {
+		if (key=='\n') {
+			println("BPM COUNTER!");
+			int gap = APP.getApp().timeMillis - bpm_last;	// time since last press
+			if (gap>3000) {		// if over 3 seconds, restart
+				println("BPM COUNTER resetting as last press was over 3 seconds ago - discarding press");
+				bpm_index = 0;	
+				bpm_counter = new int[bpm_numsamples];
+				bpm_last = APP.getApp().timeMillis; // set start time
+				return true;
+			}
+			bpm_last = APP.getApp().timeMillis; // set start time
+ 
+			/*if (bpm_index>=bpm_numsamples || bpm_index == -1) {
+				bpm_index = 0;
+				bpm_counter = new int[bpm_numsamples];
+			}*/
+			/*if (
+					//bpm_index>=bpm_numsamples || 
+				APP.getApp().timeMillis > bpm_last + 3000) {
+				
+				println ("3 seconds since last press or looping, resetting");
+				// reset array & counter
+				//bpm_counter = new int[bpm_numsamples];
+				
+				//bpm_counter[bpm_index] = 0;
+				//bpm_index++;
+				if (bpm_index>=bpm_numsamples) bpm_index = 1;
+			}*/
+			if (bpm_index>=bpm_numsamples) bpm_index = 0;
+			
+			//bpm_counter[bpm_index] = bpm_start - APP.getApp().timeMillis;
+				//int distance = (bpm_last - APP.getApp().timeMillis) - bpm_counter[bpm_index-1];
+				bpm_counter[bpm_index] = gap;
+				println ("collected sample " + gap + " at " + bpm_index);
+				bpm_index++;
+			
+			//if (bpm_index>bpm_numsamples/2) {
+
+				println ("got " + bpm_numsamples + ", calculate bpm based on averages!");
+				//float diff = bpm_counter[bpm_numsamples-1] - bpm_counter[0]; // get distance between first and last beat, in millis
+				// TODO: should actually average the difference between each beat
+				/*int[] averages = new int[bpm_numsamples];
+				for (int i = 1 ; i < bpm_index-1 ; i++) {
+					averages[i] = bpm_counter[i] - bpm_counter[i-1];
+				}*/
+				int total = 0;
+				int samples = 0;
+				for (int i = 0 ; i < bpm_numsamples ; i++) {
+					if (bpm_counter[i]>0) {
+						samples ++;
+						println ("av " + i + " = " + bpm_counter[i]);
+						total += bpm_counter[i];
+					}
+				}
+				if (samples>1) {
+					float average = total / samples;
+					println ("got average " + average);
+					
+					//println ("got diff " + diff);
+					
+					float diff = average/1000.0f; //bpm_numsamples;
+					println ("got beat diff " + diff);
+					
+					// diff 1.500; want to turn that into 120bpm...
+					// 60 * diff
+					
+					// turn length of 4 beats in to beats per minute..
+					// s = d / t
+					// divide num_samples by diff ?
+					//float bpm = 60.0f * bpm_numsamples * diff;
+					float bpm = bpm_numsamples / diff;
+					println ("got pre-bpm " + bpm);
+					bpm *= 60.0f / (float)bpm_numsamples;
+					//bpm *= 60.0f;
+					bpm = Float.valueOf(df.format(Math.round(bpm)));
+					println ("got new bpm " + bpm + "?");
+					//bpm_index = 0;
+					this.setBPM(bpm);
+					this.updateGuiBPM(bpm);
+				}
+					
+			} else {
+				//println("collected sample " + (bpm_index-1) + " at "  + bpm_counter[bpm_index-1]);
+			}
+		//}
+		return false;
+	}
+	private void updateGuiBPM(float bpm) {
+		APP.getApp().getCF().updateGuiStreamEditor();
 	}
 	
 }

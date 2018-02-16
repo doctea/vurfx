@@ -428,6 +428,10 @@ abstract public class Stream implements Serializable {
 	public String[] getEmitterNames() {	
 		return null;
 	}
+	public boolean sendKeyPressed(char key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	/*
     while (p.hasNext()) {

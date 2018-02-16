@@ -199,12 +199,20 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 				println("opening and closing " + c);
 				c.close();
 			}
+		} else if (this.sendKeyPressedToStreams(key)) {
+			println("a stream dealt with keypress " + key  + "!");
 		} else {
 			return false;
 		}
 		return true;
 	}
 
+	private boolean sendKeyPressedToStreams(char key) {
+		for (Stream s : this.getStreams().values()) {
+			if (s.sendKeyPressed(key)) return true;
+		}
+		return false;
+	}
 	public void setupControls(ControlFrame cf, String tabName) {
 		// TODO Auto-generated method stub
 		//this.sequencer.setupControls(cf, tabname);

@@ -228,8 +228,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		//out.loadPixels();
 		//src.loadPixels();
 		//println("beginDraw in " + this + "{");
-		if (out==null) setOutputCanvas(canvas_out);
-		if (src==null) setInputCanvas(canvas_in);
+		if (out==null) 
+			setOutputCanvas(canvas_out);
+		if (src==null) 
+			setInputCanvas(canvas_in);
 		out.beginDraw();
 		/*if (!out.displayable()) {
     	println("can't draw to out " + out +"!");
@@ -602,7 +604,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     		.setText("ffs?").setLabel("wtaf?").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
     grp.setTitle("asdfasdf");*/
-		Group grp = (Group) tab;
+		ControllerGroup grp = (ControllerGroup) tab;
 
 		int margin_h = 40;
 		int margin_w = 5;
@@ -683,12 +685,28 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 				}
 			};
 			
+			
 		String[] canvases = sc.getCanvasMappings().keySet().toArray(new String[0]);
+
+		/*new ScrollableList(cp5,"test_" + tab.getName())
+			.moveTo(grp)
+			.addItems(canvases) //new String[] { "test", "another", "value", "blah" })
+			.setPosition(0,40)
+			.onLeave(close)
+			.onEnter(toFront)
+			.close()			
+			//.setHeight(10)
+			.setWidth(size*2)
+			//.setBarHeight(10)
+			//.setItemHeight(10)	
+		; */
+			
 		lstInputCanvas = new ScrollableList(cp5,"canvas_input_" + tab.getName() + getFilterName())
+			.setValueLabel(sc.getMappingForCanvas(canvas_in))
 			.setLabel(sc.getMappingForCanvas(this.canvas_in))
 			.addItems(sc.getCanvasMappings().keySet().toArray(new String[0]))
 			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)-3)
-			.setHeight(10)
+			//.setHeight(10)	// this breaks the dropdown!
 			.setWidth(size*2)
 			.setBarHeight(10)
 			.setItemHeight(10)
@@ -696,8 +714,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
-					int index = (int) theEvent.getController().getValue();
-					self.setOutputCanvas((String) ((ScrollableList)theEvent.getController()).getItem(index).get("value"));
+					int index = (int) ((ScrollableList)theEvent.getController()).getValue();
+					Map<String,Object> selected = ((ScrollableList)theEvent.getController()).getItem(index);
+					String mapName = (String) selected.get("name");
+					String canvas_name = sc.getCanvasMapping(mapName); 
+					self.setInputCanvas(canvas_name);
 				}				
 			})
 			.onLeave(close)
@@ -715,7 +736,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		lstOutputCanvas = new ScrollableList(cp5,"canvas_out_" + tab.getName() + getFilterName())
 			.addItems(canvases)
 			.setLabel(sc.getMappingForCanvas(this.canvas_out))
-			.setHeight(10)
+			//.setHeight(10)
 			.setBarHeight(10)
 			.setWidth(size*2)
 			.setItemHeight(10)
@@ -724,8 +745,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
-					int index = (int) theEvent.getController().getValue();
-					self.setOutputCanvas((String) ((ScrollableList)theEvent.getController()).getItem(index).get("value"));
+					int index = (int) ((ScrollableList)theEvent.getController()).getValue();
+					Map<String,Object> selected = ((ScrollableList)theEvent.getController()).getItem(index);
+					String mapName = (String) selected.get("name");
+					String canvas_name = sc.getCanvasMapping(mapName); 
+					self.setOutputCanvas(canvas_name);
 				}				
 			})
 			.onLeave(close)
