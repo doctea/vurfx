@@ -960,7 +960,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 		return output;
 	}
-	private HashMap<String,Object> collectParameterSetup() {
+	protected HashMap<String,Object> collectParameterSetup() {
 		HashMap<String,Object> output = new HashMap<String,Object> ();
 		for (Parameter p : this.getParameters()) {
 			output.put(p.getPath(), p.getParameterSetup());//.getDefaultValue());
@@ -1015,7 +1015,6 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			Map<String,Object> para = (Map<String, Object>) p.getValue();
 			this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
 		}		
-
 	}
 	public void changeCanvas(String oldCanvasPath, String canvasPath) {
 		if (this.canvas_in.equals(oldCanvasPath)) {

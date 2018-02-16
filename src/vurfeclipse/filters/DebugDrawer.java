@@ -1,9 +1,13 @@
 package vurfeclipse.filters;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
 
 
@@ -29,9 +33,9 @@ public class DebugDrawer extends Filter {
 
   public void setParameterDefaults() {
     super.setParameterDefaults();
-    addParameter("beat", 0);
-    addParameter("bar", 0);
-    addParameter("scene", 0);
+    addParameter("beat", new Integer(0), 0, Integer.MAX_VALUE);
+    addParameter("bar", 0, 0, Integer.MAX_VALUE);
+    addParameter("scene", 0, 0, Integer.MAX_VALUE);
     addParameter("test", 0);
   }
 
@@ -127,4 +131,16 @@ public class DebugDrawer extends Filter {
 
     return true;
   }
+  
+	public HashMap<String,Object> collectFilterSetup() {
+		HashMap<String,Object> output = super.collectFilterSetup();
+		output.put("mode",new Integer(this.mode));
+		return output;
+	}
+	
+	public void readSnapshot(Map<String, Object> input) {
+		super.readSnapshot(input);
+		
+		if (input.containsKey("mode")) this.mode = (Integer) input.get("mode");
+	}
 }

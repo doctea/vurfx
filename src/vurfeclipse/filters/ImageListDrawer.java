@@ -127,7 +127,7 @@ public class ImageListDrawer extends Filter {
 	  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
 	  //String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
 	  File folder = new File(path);
-	  System.out.println(this + "#loadDirectory() got path " + path);
+	  println("#loadDirectory() got path " + path);
 	  int count = 0;
 	  if (!folder.exists()) return this;
 	  for (final File fileEntry : folder.listFiles()) {

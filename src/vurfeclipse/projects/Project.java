@@ -198,7 +198,7 @@ public abstract class Project implements Serializable {
     	setupControls(((VurfEclipse)APP.getApp()).getCF());
     }*/
 
-		setupRest();
+		if (APP.getApp().restEnabled) setupRest();
 		setupExposed();
 
 		initialised = true;

@@ -658,6 +658,8 @@ public class VurfEclipse extends PApplet {
 	}*/
 
 	private ControlP5 cp5;
+
+	public boolean restEnabled = false;
 	@Override
 	public void keyPressed() {
 		handleKey(key);
