@@ -339,7 +339,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		//println(this + " iteration " + iteration + " | pc: " + ((int)(100*pc)) + "% (diff " + diff + "/" + lengthMillis + ", scale " + scale +")");
 		double pc = getPCForElapsed(elapsed);
 		//pc *= (100.0*(Math.sin(pc)-0.5f));	// TODO: timewarping effect, for later explration when i've figured out how to refactor this... probably change setValuesForTime to utilise Streams instead of going off timemillis, and then have that link go through a 'filter'
-		__setValuesForNorm(pc,iteration);
+		setValuesForNorm(pc,iteration);
 	}
 
 	public void setValuesForNorm(double pc) {
@@ -490,6 +490,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 
 		public float getPositionPC() {
+			println("getPositionPC returning " + current_pc);
 			return this.current_pc;
 		}
 
