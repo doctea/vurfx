@@ -1227,7 +1227,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			}
 		} else if (ev.getAction()==ControlP5.ACTION_BROADCAST) {
 			if (ev.getController()==this.sldProgress) {
-				this.getActiveSequence().setValuesForNorm(this.sldProgress.getValue(),this.getActiveSequence().iteration);
+				this.getActiveSequence().setValuesForNorm(this.sldProgress.getValue()/100.0,this.getActiveSequence().iteration);
 			} else if (ev.getController()==this.sldTimeScale) {
 				//this.getActiveSequence().setValuesForNorm(this.sldTimeScale.getValue(),this.getActiveSequence());
 				this.setTimeScale(sldTimeScale.getValue());
