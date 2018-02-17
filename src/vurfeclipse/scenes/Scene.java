@@ -995,31 +995,29 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		}
 		return output;
 	}
+	@SuppressWarnings("unchecked")
 	public void readSnapshot(Map<String, Object> input) {
-		for (Entry<String, Object> e : input.entrySet()) {
-			if (e.getKey().equals("name")) this.setSceneName((String) e.getValue());	// can also get "name" and "path" here
-			if (e.getKey().endsWith("/filter_setup")) {
-				// loop over the filters here
-				for (Entry<String,Object> fi : ((Map<String, Object>)e.getValue()).entrySet()) {
-					// fi.key is filterpath, fi.value is hashmap of parameters to create filter, including classname as 'class'
-					Filter new_f = Filter.createFilter((String) ((Map<String, Object>)fi.getValue()).get("class"), this);
-					new_f.readSnapshot((Map<String, Object>) fi.getValue());
-					this.addFilter(new_f);
-				}
-				this.setupFilters = true;
-			}
-			if (e.getKey().endsWith("/canvas_setup")) {
-				this.setCanvasMappings((HashMap<String, String>) e.getValue());
-			}
+		if (input.containsKey("name")) 
+			this.setSceneName((String) input.get("name"));	// can also get "name" and "path" here
 			
+		if (input.containsKey(this.getPath()+"/canvas_setup")) {
+			this.setCanvasMappings((HashMap<String, String>) input.get(this.getPath()+"/canvas_setup")); //e.getValue());
 		}
-
 		
+		if (input.containsKey(this.getPath()+"/filter_setup")) {
+			// loop over the filters here
+			for (Entry<String,Object> fi : ((Map<String,Object>) input.get(this.getPath()+"/filter_setup")).entrySet()) { //((Map<String, Object>)e.getValue()).entrySet()) {
+				// fi.key is filterpath, fi.value is hashmap of parameters to create filter, including classname as 'class'
+				Filter new_f = Filter.createFilter((String) ((Map<String, Object>)fi.getValue()).get("class"), this);
+				new_f.readSnapshot((Map<String, Object>) fi.getValue());
+				this.addFilter(new_f);
+			}
+			this.setupFilters = true;
+		}
 		// create Filters from saved input filter_setup
 		//for (Entry<String, Object> i : ((HashMap<String, Object>) input.get(this.getPath()+"/filter_setup")).entrySet()) {
 			
 		//}
-		
 	}
 	
 	private void setCanvasMappings(HashMap<String,String> value) {
