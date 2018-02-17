@@ -700,11 +700,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			//.setBarHeight(10)
 			//.setItemHeight(10)	
 		; */
-			
+
 		lstInputCanvas = new ScrollableList(cp5,"canvas_input_" + tab.getName() + getFilterName())
-			.setValueLabel(sc.getMappingForCanvas(canvas_in))
 			.setLabel(sc.getMappingForCanvas(this.canvas_in))
-			.addItems(sc.getCanvasMappings().keySet().toArray(new String[0]))
+			.addItems(canvases)
 			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)-3)
 			//.setHeight(10)	// this breaks the dropdown!
 			.setWidth(size*2)
@@ -734,8 +733,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		
 
 		lstOutputCanvas = new ScrollableList(cp5,"canvas_out_" + tab.getName() + getFilterName())
-			.addItems(canvases)
 			.setLabel(sc.getMappingForCanvas(this.canvas_out))
+			//.addItems(canvases)
+			.addItems(canvases)
 			//.setHeight(10)
 			.setBarHeight(10)
 			.setWidth(size*2)
@@ -1004,6 +1004,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		}
 		return null;
 	}
+	@SuppressWarnings("unchecked")
 	public void readSnapshot(Map<String, Object> input) {
 		this.setFilterName((String) input.get("name"));
 		this.setFilterLabel((String) input.get("label"));
@@ -1024,8 +1025,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			this.setOutputCanvas(canvasPath);
 		}
 		
-		this.lstInputCanvas.setItems(sc.getCanvasMappings().keySet().toArray(new String[0]));
-		this.lstOutputCanvas.setItems(sc.getCanvasMappings().keySet().toArray(new String[0]));
+		if (this.lstInputCanvas!=null) 	this.lstInputCanvas.setItems(sc.getCanvasMappings().keySet().toArray(new String[0]));
+		if (this.lstOutputCanvas!=null) this.lstOutputCanvas.setItems(sc.getCanvasMappings().keySet().toArray(new String[0]));
 				
 	}
 	
