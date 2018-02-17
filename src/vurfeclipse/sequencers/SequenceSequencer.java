@@ -1015,6 +1015,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private Slider sldTimeScale;
 	private StreamEditor grpStreamEditor;
 	private Textfield txtProjectName;
+	
 	@Override public void setupControls (ControlFrame cf, String tabName) {
 		super.setupControls(cf, tabName);
 
@@ -1052,6 +1053,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setItemHeight(20)
 				.setBarHeight(15)
 				.moveTo(sequencerTab)
+				.setItems(this.historySequenceNames)
 				.setType(ListBox.LIST);
 
 		sldProgress = new controlP5.Slider(cp5, "progress")
@@ -1117,6 +1119,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		Tab sequencerEditorTab = cp5.addTab(tabName + " Editor");
 
 		this.grpSequenceEditor = (SequenceEditor) new SequenceEditor (cp5, "sequence editor")
+				.setSequence(this.getCurrentSequenceName(), getActiveSequence())
 				.setWidth(cp5.papplet.displayWidth/2)
 				.setHeight(cp5.papplet.displayHeight/5)
 				.setBarHeight(10)
