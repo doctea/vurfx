@@ -376,75 +376,7 @@ public class VurfEclipse extends PApplet {
 
 		return p;
 	}
-
-	@Override
-	public void setup () {	// was public void setup() {
-		refCount++;
-		println(refCount + ": -------------==================== \\\\/URF/ [2] setup() ===================--------------");
-
-		//this.g.setSize(1920,1080); //desired_width/2, desired_height);
-		//this.g.setSize(Screen.getMainScreen().getWidth(), Screen.getMainScreen().getHeight());
-
-
-		/*if (refCount==1) {
-			 System.out.println("returning from setup() because refCount is " + refCount); 
-			 return;
-		 }*/
-
-		//if (enablecp5 && refCount==1) setupControls();
-
-		//pr.setupSequencer();
-		//pr.initialiseScenes();
-
-		pr.initialise();
-
-		//delaySetup();
-		pr.initialiseScenes();
-
-		pr.initialiseStreams();
-
-		///frame.setLocation(500, 0);
-
-		println("About to call getCF() in " + this + "#setup()");
-		getCF(); // start up control frame
-		println("Finished getCF() call!");
-		//System.out.println("about to call setupControls on " + pr.toString());
-		//pr.setupControls(getCF());
-
-
-		//frameRate(global_fps);
-
-		/*if (fullscreen) {
-			 fs = new FullScreen(this);
-			 fs.enter();
-		 }*/
-		initialiseGraphics();
-
-		//this.getGraphics().setSize(1920, 1080);//.scale(1.5f);
-		//println("mat is: " + mat.);
-		//mat.scale(config_aspect.y / config_aspect.x);
-		//this.getGraphics().setMatrix(mat);
-
-		//this.setSize(output_width, output_height);
-
-		//colorMode(ARGB);
-		colorMode(RGB, 255, 255, 255, 100);
-
-		cursor(CROSS);
-
-		//noSmooth();
-		//tint(255);
-		noTint();
-
-		//System.out.println("Initialising " + pr);
-		//pr.initialise();
-
-		println("Finished VurfEclipse setup(); handing off to draw()...");
-		this.finishedSetup = true;
-		//this.ready = true;
-		//System.exit(0);
-	}
-
+	
 
 
 	private void delaySetup() {
@@ -512,6 +444,89 @@ public class VurfEclipse extends PApplet {
 		//setFxs(new PostFXSupervisor(this, output_width, output_height));
 	}
 
+
+	@Override
+	public void setup () {	// was public void setup() {
+		refCount++;
+		println(refCount + ": -------------==================== \\\\/URF/ [2] setup() ===================--------------");
+
+		//this.g.setSize(1920,1080); //desired_width/2, desired_height);
+		//this.g.setSize(Screen.getMainScreen().getWidth(), Screen.getMainScreen().getHeight());
+
+
+		/*if (refCount==1) {
+			 System.out.println("returning from setup() because refCount is " + refCount); 
+			 return;
+		 }*/
+
+		//if (enablecp5 && refCount==1) setupControls();
+
+		//pr.setupSequencer();
+		//pr.initialiseScenes();
+
+		pr.initialise();
+
+		//delaySetup();
+		pr.initialiseScenes();
+
+		pr.initialiseStreams();
+
+		///frame.setLocation(500, 0);
+
+		println("About to call getCF() in " + this + "#setup()");
+		getCF(); // start up control frame
+		println("Finished getCF() call!");
+		//System.out.println("about to call setupControls on " + pr.toString());
+		//pr.setupControls(getCF());
+
+
+		//frameRate(global_fps);
+
+		/*if (fullscreen) {
+			 fs = new FullScreen(this);
+			 fs.enter();
+		 }*/
+		initialiseGraphics();
+
+		//this.getGraphics().setSize(1920, 1080);//.scale(1.5f);
+		//println("mat is: " + mat.);
+		//mat.scale(config_aspect.y / config_aspect.x);
+		//this.getGraphics().setMatrix(mat);
+
+		//this.setSize(output_width, output_height);
+
+		//colorMode(ARGB);
+		colorMode(RGB, 255, 255, 255, 100);
+
+		cursor(CROSS);
+
+		//noSmooth();
+		//tint(255);
+		noTint();
+
+		//System.out.println("Initialising " + pr);
+		//pr.initialise();
+
+		if (getFxs()==null) {
+			setFxs(new PostFXSupervisor(this,output_width,output_height)); //.setResolution(output_width, output_height); //, 1920, 1080)); //output_width, output_height));
+			//this.setSize(desired_width, desired_height);
+			//this.g.init(APP.getApp().displayWidth, APP.getApp().displayHeight, ARGB);	// important !
+			this.g.init(output_width, output_height, ARGB);	// important !
+		}
+		
+		if (offscreen==null) 
+			offscreen = pr.getCanvas("/out"); //, this.sketchWidth(), this.sketchHeight()); //output_width, output_height); //pr.createCanvas("/out", "Main out");
+
+		
+		offscreen.getSurf().imageMode(CENTER);
+
+		println("Finished VurfEclipse setup(); handing off to draw()...");
+		this.finishedSetup = true;
+		//this.ready = true;
+		//System.exit(0);
+	}
+
+
 	public boolean isReady() {
 		return ( this.finishedSetup &&		//false	&& /// false to debug without drawing ! 
 				(this.pr!=null && this.pr.isInitialised()));
@@ -535,12 +550,6 @@ public class VurfEclipse extends PApplet {
 			println("is ready!");
 		}*/
 
-		if (getFxs()==null) {
-			setFxs(new PostFXSupervisor(this,output_width,output_height)); //.setResolution(output_width, output_height); //, 1920, 1080)); //output_width, output_height));
-			//this.setSize(desired_width, desired_height);
-			//this.g.init(APP.getApp().displayWidth, APP.getApp().displayHeight, ARGB);	// important !
-			this.g.init(output_width, output_height, ARGB);	// important !
-		}
 
 		/*if (texWin==null) {
 			GLTextureWindow texWin = new GLTextureWindow(this, 0, 0, this.desired_width, this.desired_height);
@@ -560,15 +569,15 @@ public class VurfEclipse extends PApplet {
 		//offscreen.beginDraw();
 
 		//pgl.beginGL();
-		if (offscreen==null) 
-			offscreen = pr.getCanvas("/out"); //, this.sketchWidth(), this.sketchHeight()); //output_width, output_height); //pr.createCanvas("/out", "Main out");
+		//if (offscreen==null) 
+			//offscreen = pr.getCanvas("/out"); //, this.sketchWidth(), this.sketchHeight()); //output_width, output_height); //pr.createCanvas("/out", "Main out");
 
-		if (frameCount>25) {	// skip rendering first 25 frames
-			offscreen.getSurf().imageMode(CENTER);
+		//	if (frameCount>25) {	// skip rendering first 25 frames
+			//offscreen.getSurf().imageMode(CENTER);
 			pr.applyGL(offscreen, output_width, output_height);
 			//pr.applyGL(offscreen, this.displayWidth, this.displayHeight); //.displayWidth(), this.doHeight());
 			//texWin.render();
-		}
+		//}
 		//offscreen.endDraw();
 
 		/*if (gw!=null) {
