@@ -719,7 +719,6 @@ public abstract class Project implements Serializable {
 		Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth).setBarHeight(20);
 
 		for (Scene n : scenes) {
-			n = (Scene)i.next();
 			println(c + ": Project#setupControls() got scene " + n.getSceneName());
 			String tabName = "["+c+"] " + n.getSceneName(); //getClass();
 			//ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
