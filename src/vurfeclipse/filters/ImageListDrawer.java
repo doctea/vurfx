@@ -354,6 +354,7 @@ public class ImageListDrawer extends Filter {
 	
 	@Override
 	public void readSnapshot(Map<String, Object> input) {
+		super.readSnapshot(input);
 		if (input.containsKey("directory")) {
 			this.directory = (String) input.get("directory");
 			this.loadDirectory();
