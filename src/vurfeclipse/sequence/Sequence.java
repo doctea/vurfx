@@ -490,7 +490,6 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 
 		public float getPositionPC() {
-			println("getPositionPC returning " + current_pc);
 			return this.current_pc;
 		}
 
