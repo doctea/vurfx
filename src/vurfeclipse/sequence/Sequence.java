@@ -322,7 +322,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	}
 	
 	public void setValuesForTime() {
-		if (this.isEnabled()) return ;
+		if (!this.isEnabled()) return ;
 		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is
 		int now = APP.getApp().millis();
 		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d );
@@ -522,10 +522,10 @@ abstract public class Sequence implements Serializable, Mutable {
 			cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name)
 				.setPosition(80,10).moveTo(seq);
 			
-			cp5.addToggle(name + "_enabled").setLabel("enabled").setValue(this.isEnabled()?1.0f:0.0f).setPosition(0,30).moveTo(seq).addListenerFor(cp5.ACTION_BROADCAST,  new CallbackListener() {
+			cp5.addToggle(name + "_enabled").changeValue(this.isEnabled()?1.0f:0.0f)/*.setLabel("enabled")*/.setPosition(0,30).moveTo(seq).addListenerFor(cp5.ACTION_BROADCAST,  new CallbackListener() {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
-					self.setEnabled(!self.isEnabled());
+					self.setEnabled(theEvent.getController().getValue()==1.0f); //!self.isEnabled());
 				}
 			});
 
