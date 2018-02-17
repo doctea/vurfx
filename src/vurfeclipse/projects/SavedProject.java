@@ -55,8 +55,8 @@ public class SavedProject extends Project {
 			String path 	= (String) i.getKey(); //getInput("path");
 		
 			Scene new_sc = vurfeclipse.scenes.Scene.createScene(clazz, this, this.w, this.h);
-			new_sc.readSnapshot(sc_in);
 			new_sc.host = this;
+			new_sc.readSnapshot(sc_in);
 			//new_sc.setSceneName((String) getInput("name"));
 			this.addScene(new_sc);
 		}
