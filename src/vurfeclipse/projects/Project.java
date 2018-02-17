@@ -219,9 +219,7 @@ public abstract class Project implements Serializable {
 		//println("spl[1] is " + spl[1]);
 		if ("sc".equals(spl[1])) {
 			//println("got sc, looking for " + spl[2]);
-			Iterator<Scene> it = scenes.iterator();
-			while (it.hasNext()) {
-				Scene s = (Scene)it.next();
+			for (Scene s : this.getScenes()) {
 				//println("Project#getObjectForPath("+path+") checked '" + s.getSceneName() + "' against '" + spl[1] + "'"); //against stored scene " + s.getSceneName());
 				if (s.getSceneName().equals(spl[2])) { //getSceneName().equals(s)) {
 					//println("Found " + s.getSceneName());
@@ -269,9 +267,7 @@ public abstract class Project implements Serializable {
 
 	public boolean initialiseScenes() {
 		println("== initialiseScenes() in " + this);
-		Iterator<Scene> it = scenes.iterator();
-		while(it.hasNext()) {
-			Scene sc = (Scene) it.next();
+		for (Scene sc : scenes) {
 			sc.initialise();
 			sc.initialiseFilters();
 			if (selectedScene==null) selectedScene = sc;
@@ -406,9 +402,7 @@ public abstract class Project implements Serializable {
 		//offscreen.background(APP.getApp().random(255));
 
 		//offscreen.endDraw();
-		Iterator<Scene> it = scenes.iterator();
-		while(it.hasNext()) {
-			Scene sc = (Scene) it.next();
+		for (Scene sc : scenes) {
 			//println("Applying to " + sc.toString() + " to " + sc.getSceneName());
 			//sc.applyGL(gfx);
 			if (shouldDrawScene(sc)) {
@@ -576,9 +570,7 @@ public abstract class Project implements Serializable {
 
 	@Deprecated
 	public void saveIndividualParts(String filename) {
-		Iterator<Scene> it = scenes.iterator();
-		while (it.hasNext()) {
-			Scene ss = (Scene)it.next();
+		for (Scene ss : scenes) {
 			println("Serialising " + ss + " " + ss.getSceneName());
 			IOUtils.makeProjectFolder(filename);
 			IOUtils.serialize(filename + "/scene" + ss + ".sc", ss);
@@ -618,9 +610,8 @@ public abstract class Project implements Serializable {
 			selectNextScene();
 		} else*/ 
 		if (key=='-') {
-			Iterator<Scene> i = scenes.iterator();
-			while(i.hasNext())
-				((Scene)i.next()).sendKeyPressed('-');
+			for (Scene i : scenes) 
+				i.sendKeyPressed('-');
 		
 			/* if (key=='\'') {  // SOLO SCENE
 	      Iterator i = scenes.iterator();
@@ -665,9 +656,8 @@ public abstract class Project implements Serializable {
 	}
 
 	public void finish() {
-		Iterator<Scene> i = scenes.iterator();
-		while (i.hasNext()) {
-			((Scene)i.next()).finish();
+		for (Scene i : scenes) {
+			i.finish();
 		}
 		/*i = streams.entrySet().iterator();
     while (i.hasNext()) {
@@ -720,7 +710,6 @@ public abstract class Project implements Serializable {
     			.addItems(this.getAvailableFiles());*/
 
 		println("Project#setupControls about to loop over scenes ("+scenes.size()+" scenes to process)");
-		Iterator<Scene> i = scenes.iterator();
 		int c = 0;
 		
 		//cp5.addConsole(cp5.addTextarea("console", "", 0, 20, cf.displayWidth, cf.displayHeight-20));
@@ -729,8 +718,7 @@ public abstract class Project implements Serializable {
 
 		Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth).setBarHeight(20);
 
-		Scene n;
-		while(i.hasNext()) {
+		for (Scene n : scenes) {
 			n = (Scene)i.next();
 			println(c + ": Project#setupControls() got scene " + n.getSceneName());
 			String tabName = "["+c+"] " + n.getSceneName(); //getClass();
@@ -883,9 +871,7 @@ public abstract class Project implements Serializable {
 		LinkedHashMap<String, Targetable> urls = new LinkedHashMap<String, Targetable>();
 
 		// get all the Scene urls that are appropriate
-		Iterator<Scene> it = this.getScenes().iterator();
-		while (it.hasNext()) {
-			Scene s = (Scene) it.next();
+		for (Scene s : getScenes()) {
 			urls.putAll(s.getTargetURLs());
 		}
 
