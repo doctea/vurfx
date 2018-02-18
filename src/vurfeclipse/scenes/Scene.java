@@ -824,10 +824,12 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		println("got scene mapping " + mappingString);*/
 
 		
-		CallbackListener toFront = new CallbackListener() {
+		/*CallbackListener toFront = new CallbackListener() {
 			public void controlEvent(CallbackEvent theEvent) {
-				theEvent.getController().getParent().bringToFront();
 				theEvent.getController().bringToFront();
+				theEvent.getController().getParent().bringToFront();
+				println ("parent is " + theEvent.getController().getParent());
+				println ("parent's parent is " + theEvent.getController().getParent().getParent());
 				((ScrollableList)theEvent.getController()).open();
 			}
 		};
@@ -836,7 +838,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			public void controlEvent(CallbackEvent theEvent) {
 				((ScrollableList)theEvent.getController()).close();
 			}
-		};
+		};*/
 		
 		Scene self = this;
 		
@@ -853,9 +855,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 					.setWidth(margin_w)
 					.setBarHeight(15)
 					.setItemHeight(15)
+					.setHeight(5 * 15)
 					.moveTo(tab)
-					.onLeave(close)
-					.onEnter(toFront)
+					.onLeave(cf.close)
+					.onEnter(cf.toFront)
 					.close()
 					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 						@Override
