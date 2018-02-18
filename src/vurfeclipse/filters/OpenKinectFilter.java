@@ -57,6 +57,8 @@ public class OpenKinectFilter extends Filter {
 
 	@Override
 	public boolean initialise () {
+		  super.initialise();
+
 		//setParameterDefaults();
 		//this.setMuted(this.muted);	// 2017-10-29
 

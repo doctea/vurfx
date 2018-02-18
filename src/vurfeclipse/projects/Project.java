@@ -35,6 +35,57 @@ public abstract class Project implements Serializable {
 	public String gfx_mode;
 
 	
+	class MyAccordion extends Accordion {
+
+		public MyAccordion(ControlP5 theControlP5, String theName) {
+			super(theControlP5, theName);
+			// TODO Auto-generated constructor stub
+		}
+
+		int lastPosition = -1;
+		ControllerInterface lastController = null;
+		
+				@Override public Accordion bringToFront( ControllerInterface< ? > theController ) {
+					if ( _myParent instanceof Tab ) {
+						moveTo( ( Tab ) _myParent );
+					} else {
+						_myParent.bringToFront( theController );
+					}
+					
+					lastPosition = controllers.get().indexOf(theController);
+					lastController = theController;
+					
+					// attempted workaround for https://github.com/sojamo/controlp5/issues/44
+					
+					/*if ( theController != this ) {
+						if ( controllers.get( ).contains( theController ) ) {
+							controllers.get().remove( theController );
+							controllers.add( theController );
+						}
+					}*/
+					return me;
+				}
+				/*
+				@Override public Accordion close() {
+					ControllerList cl = new ControllerList();
+					//for (ControllerInterface c : controllers.get()) {
+					for (int i = 0 ; i < controllers.get().size() ; i++) {
+						if (i == lastPosition) {
+							cl.add(lastController);
+						} else if (i>lastPosition) {
+							cl.add(controllers.get(i+1));
+						} else {
+							cl.add(controllers.get(i));
+						}
+					}
+					controllers = cl;
+					
+					return me;		
+					return super.close();
+				}*/
+
+	}
+	
 	public static Project bootProject(int w, int h, String filename) {
 		// load a project from XML....!
 		//HashMap<String,HashMap<String,Object>> input = pr.readSnapshotFile(filename);
@@ -718,7 +769,8 @@ public abstract class Project implements Serializable {
 		
 		Tab sceneTab = cp5.addTab("Scenes");
 
-		Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth).setBarHeight(20);
+		//Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth).setBarHeight(20);
+		Accordion accordion = new MyAccordion(cp5, "acc").setWidth(cf.displayWidth).setBarHeight(20);
 
 		for (Scene n : scenes) {
 			println(c + ": Project#setupControls() got scene " + n.getSceneName());

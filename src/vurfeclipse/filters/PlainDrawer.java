@@ -43,7 +43,7 @@ public class PlainDrawer extends Filter {
   
   public boolean initialise() {
     // set up inital variables or whatevs 
-    return true;
+    return super.initialise();
   }
   
   public boolean applyMeatToBuffers() {

@@ -43,6 +43,8 @@ public class WebcamFilter extends Filter {
 	int capW = 640, capH = 480;
 
 	public boolean initialise() {
+		  super.initialise();
+
 		webcamStream = new Capture(APP.getApp(), capW, capH); //, cameraName); //, global_fps);
 		//webcamStream = new GSCapture(APP, 640, 480, cameraName); //, global_fps);      
 		//webcamStream = new GSCapture(APP, capW, capH, global_fps);

@@ -176,6 +176,8 @@ public class VideoPlayer extends Filter {
   }
 
   public boolean initialise() {
+	  super.initialise();
+
     /*try {
       quicktime.QTSession.open();
     } catch (quicktime.QTException qte) {

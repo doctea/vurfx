@@ -459,8 +459,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 				//if (filters[i].out==null) filters[i].out = getCanvas("out").getSurf();
 				//if (filters[i].src==null) filters[i].src = getCanvas("src").getSurf(); //setInputCanvas(getCanvas("src"));
 
-				if (filters[i].out==null) filters[i].setOutputCanvas(getCanvasMapping("out"));
-				if (filters[i].src==null) filters[i].setInputCanvas(getCanvasMapping("src"));
+				//if (filters[i].out==null) filters[i].setOutputCanvas(getCanvasMapping("out"));
+				//if (filters[i].src==null) filters[i].setInputCanvas(getCanvasMapping("src"));
 				
 				/*for (Entry<String,String> cm : getCanvasMappings().entrySet()) {
 					getCanvasMapping(cm.getKey());

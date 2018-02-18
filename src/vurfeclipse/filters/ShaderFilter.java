@@ -193,6 +193,7 @@ public class ShaderFilter extends Filter {
 
 	transient PShader glFilter;
 	public boolean initialise() {
+		super.initialise();
 		// set up inital variables or whatevs
 		//temp = new int[sc.w*sc.h];
 		pixelCount = sc.w*sc.h;

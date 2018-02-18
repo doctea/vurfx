@@ -444,6 +444,19 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	public boolean initialise () {
 		//setParameterDefaults();
 		this.setMuted(this.muted);	// 2017-10-29
+		
+		//if (filters[i].out==null) filters[i].setOutputCanvas(getCanvasMapping("out"));
+		//if (filters[i].src==null) filters[i].setInputCanvas(getCanvasMapping("src"));
+		
+		if (out==null) {
+			println("out is null in " + this + ", canvas_out is " + canvas_out + " setting to default " + sc.getCanvasMapping("src"));
+			setOutputCanvas(sc.getCanvasMapping("out"));
+		}
+		if (src==null) {
+			println("src is null in " + this + ", canvas_in is " + canvas_in + " setting to default " + sc.getCanvasMapping("src"));
+			setInputCanvas(sc.getCanvasMapping("src"));
+		}
+		
 		return true;
 	}
 
