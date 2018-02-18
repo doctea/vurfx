@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 //import com.google.common.io.Paths;
 import java.util.*;
+import java.util.Map.Entry;
 
 import processing.core.PImage;
 import vurfeclipse.*;
@@ -283,6 +284,7 @@ public class ImageListDrawer extends Filter {
 
     //p = getCurrentImage(IR);
     if (getSlide()!=null) {
+      out.pushMatrix();
       out.imageMode(out.CENTER);
       //out.image(getSlide(), -0.5f, -0.5f, 0.5f, 0.5f); //, 0, 0, sc.w, sc.h);//sc.w*map((Float)getParameterValue("scale"),1.0,5.0,0.0,1.0),sc.h*map((Float)getParameterValue("scale"),1.0,5.0,0.0,1.0));
       //if (getSlide().isModified())
@@ -290,7 +292,10 @@ public class ImageListDrawer extends Filter {
       //out.imageMode(out.);
       //out.image(getSlide(),0-sc.w/2,0-sc.h/2,sc.w,sc.h);
       //out.image(getSlide(), -sc.w/2, -sc.h/2, sc.w/2, sc.h/2);
-      out.image(getSlide(),sc.w/2,sc.h/2);
+      out.translate(sc.w/2, sc.h/2);
+      out.scale((Float)getParameterValue("scale"));
+      out.image(getSlide(),0,0);
+      
       //out.scale(-1,0);
       //out.translate((Integer)getParameterValue("translate_x"), (Integer)getParameterValue("translate_y"));
       if ((Integer)getParameterValue("translate_x")<0) {
@@ -299,6 +304,7 @@ public class ImageListDrawer extends Filter {
       else if ((Integer)getParameterValue("translate_x")>0) {
         out.image(getSlide(), 0-sc.w, 0, sc.w, sc.h);
       }
+      out.popMatrix();
     }
     //setSlide(null);
     //out.popMatrix();
@@ -354,7 +360,7 @@ public class ImageListDrawer extends Filter {
 	
 	@Override
 	public void readSnapshot(Map<String, Object> input) {
-		super.readSnapshot(input);
+		//super.readSnapshot(input);	// TODO: a conundum; if we don't do this on first load then [the GUI crashes when opening the accordion???? a bunch of shouldn't be getting set up properly, however appears to work after fixing order of getCF() load??..?]; if we do do this then ImageListDrawer doesn't appear to output to the correct canvas..?
 		if (input.containsKey("directory")) {
 			this.directory = (String) input.get("directory");
 			this.loadDirectory();
