@@ -235,6 +235,7 @@ public class ImageListDrawer extends Filter {
 
 
   public boolean initialise() {
+	  super.initialise();
     // set up inital variables or whatevs
     //image_src = new GLTexture(APP,sc.w,sc.h);
     //PImage im = loadImage(fileName); //"image48173.40247.jpg");
@@ -281,6 +282,8 @@ public class ImageListDrawer extends Filter {
      );      */
     //out.translate((Integer)getParameterValue("translate_x"), (Integer)getParameterValue("translate_y"));
     //out.scale((Float)getParameterValue("scale"));//random(0,100));
+	  
+	  //println("drawing to " + out + " " + canvas_out);
 
     //p = getCurrentImage(IR);
     if (getSlide()!=null) {
@@ -334,7 +337,7 @@ public class ImageListDrawer extends Filter {
 		//if (paramName!="current_image_index") {
 			super.updateParameterValue(paramName, value);
 		//} else {
-			if (paramName=="current_image_index") 
+			if (paramName.equals("current_image_index"))  
 				setSlide(getCurrentImage(ImageRepository.IR));
 		//}
 
@@ -360,7 +363,7 @@ public class ImageListDrawer extends Filter {
 	
 	@Override
 	public void readSnapshot(Map<String, Object> input) {
-		//super.readSnapshot(input);	// TODO: a conundum; if we don't do this on first load then [<del>the GUI crashes when opening the accordion????</del> a bunch of stuff shouldn't be getting set up properly, however appears to work after fixing order of getCF() load??..?]; if we do do this then ImageListDrawer doesn't appear to output to the correct canvas..?
+		super.readSnapshot(input);	// TODO: a conundum; if we don't do this on first load then a bunch of stuff doesn't get set up properly; if we do do this then ImageListDrawer doesn't appear to output to the correct canvas..?
 		if (input.containsKey("directory")) {
 			this.directory = (String) input.get("directory");
 			this.loadDirectory();
