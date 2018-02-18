@@ -1,5 +1,8 @@
 package vurfeclipse.ui;
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.ScrollableList;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -137,5 +140,19 @@ public class ControlFrame extends PApplet {
 			}
 		});
 	}
+	
+	public CallbackListener toFront = new CallbackListener() {
+		public void controlEvent(CallbackEvent theEvent) {
+			theEvent.getController().bringToFront();
+			theEvent.getController().getParent().bringToFront();
+			((ScrollableList)theEvent.getController()).open();
+		}
+	};
+
+	public CallbackListener close = new CallbackListener() {
+		public void controlEvent(CallbackEvent theEvent) {
+			((ScrollableList)theEvent.getController()).close();
+		}
+	};
 
 }

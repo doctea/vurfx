@@ -11,6 +11,7 @@ import java.util.Iterator;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
 
 public class ChainSequence extends Sequence {
@@ -141,10 +142,11 @@ public class ChainSequence extends Sequence {
 	
 	
 	@Override
-	synchronized public SequenceEditor makeControls(ControlP5 cp5, String name) {
+	synchronized public SequenceEditor makeControls(ControlFrame cf, String name) {
 		// add an accordion to hold the sub-sequences and recurse
-		SequenceEditor sequenceEditor = super.makeControls(cp5, name);
+		SequenceEditor sequenceEditor = super.makeControls(cf, name);
 		
+		ControlP5 cp5 = cf.control();
 		//if (true) return sequenceEditor;
 		
 		//cp5.addLabel("Sequence Editor: " + name).setValue("Sequence Editor: " + name).moveTo(sequenceEditor).setPosition(100,100);
@@ -162,7 +164,7 @@ public class ChainSequence extends Sequence {
 		for (Sequence cs : chain) {
 			/*Group g = cp5.addGroup(cs.getClass().getSimpleName() + ": " + name + "         [acc_" + n + "_gr]")
 					.moveTo(acc);*/
-			Group conts = cs.makeControls(cp5, cs.getClass().getSimpleName() + ": " + name + "    [n!: " + n + "]")
+			Group conts = cs.makeControls(cf, cs.getClass().getSimpleName() + ": " + name + "    [n!: " + n + "]")
 					//.setPosition(0,n*30))
 					.setWidth(cp5.papplet.displayWidth/2);
 			Group g = conts;

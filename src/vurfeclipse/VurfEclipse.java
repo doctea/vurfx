@@ -473,9 +473,6 @@ public class VurfEclipse extends PApplet {
 
 		///frame.setLocation(500, 0);
 
-		println("About to call getCF() in " + this + "#setup()");
-		getCF(); // start up control frame
-		println("Finished getCF() call!");
 		//System.out.println("about to call setupControls on " + pr.toString());
 		//pr.setupControls(getCF());
 
@@ -524,6 +521,10 @@ public class VurfEclipse extends PApplet {
 		this.finishedSetup = true;
 		//this.ready = true;
 		//System.exit(0);
+
+		println("About to call getCF() in " + this + "#setup()");
+		getCF(); // start up control frame
+		println("Finished getCF() call!");
 	}
 
 

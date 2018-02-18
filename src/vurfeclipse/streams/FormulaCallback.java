@@ -99,20 +99,6 @@ public class FormulaCallback extends ParameterCallback {
 		
 		int margin_x = 5, pos_y = 0;
 
-
-		CallbackListener toFront = new CallbackListener() {
-			public void controlEvent(CallbackEvent theEvent) {
-				theEvent.getController().bringToFront();
-				((ScrollableList)theEvent.getController()).open();
-			}
-		};
-
-		CallbackListener close = new CallbackListener() {
-			public void controlEvent(CallbackEvent theEvent) {
-				((ScrollableList)theEvent.getController()).close();
-			}
-		};
-
 		final FormulaCallback self = this;
 
 		// set up the Expression textfield
@@ -149,7 +135,7 @@ public class FormulaCallback extends ParameterCallback {
 				//.setPosition(margin_x * 10, pos_y)
 				.setPosition(margin_x + expression.getWidth() + margin_x, pos_y)
 				.setWidth((cf.sketchWidth()/3))
-				.onLeave(close).onEnter(toFront)
+				.onLeave(cf.close).onEnter(cf.toFront)
 				.setBarHeight(expression.getHeight()).setItemHeight(expression.getHeight())
 				.close();
 

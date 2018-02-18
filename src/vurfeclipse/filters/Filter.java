@@ -850,6 +850,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		tab.setColorBackground((int) random(255));
 		tab.setSize((int) (margin_w + (col++*col_w)),margin_h + (row * row_h));
 		//cp5.linebreak();
+		
+		tab.bringToFront();
 
 		return row;
 	}
@@ -1006,11 +1008,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	}
 	@SuppressWarnings("unchecked")
 	public void readSnapshot(Map<String, Object> input) {
-		this.setFilterName((String) input.get("name"));
-		this.setFilterLabel((String) input.get("label"));
+		this.setFilterName((String) 	input.get("name"));
+		this.setFilterLabel((String) 	input.get("label"));
 		//this.setDescription(input.get("description"));
-		this.setOutputCanvas((String) input.get("canvas_out"));
-		this.setInputCanvas((String) input.get("canvas_src"));	
+		if (input.containsKey("canvas_out")) this.setOutputCanvas((String) 	input.get("canvas_out"));
+		if (input.containsKey("canvas_src")) this.setInputCanvas((String) 	input.get("canvas_src"));	
 
 		for (Entry<String, Object> p : ((Map<String, Object>) input.get("parameter_defaults")).entrySet()) {
 			Map<String,Object> para = (Map<String, Object>) p.getValue();

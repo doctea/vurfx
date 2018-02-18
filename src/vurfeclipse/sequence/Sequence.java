@@ -21,6 +21,7 @@ import vurfeclipse.APP;
 import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
 import vurfeclipse.filters.Filter;
 
@@ -514,7 +515,9 @@ abstract public class Sequence implements Serializable, Mutable {
 			}
 		}
 
-		synchronized public SequenceEditor makeControls(ControlP5 cp5, String name) {
+		synchronized public SequenceEditor makeControls(ControlFrame cf, String name) {
+			ControlP5 cp5 = cf.control();
+			
 			SequenceEditor seq = new SequenceEditor(cp5, name);
 			Sequence self = this;
 			seq.setWidth(cp5.controlWindow.papplet().width);
@@ -532,19 +535,6 @@ abstract public class Sequence implements Serializable, Mutable {
 			if (host!=null) { 
 				//cp5.addLabel(name + "_host").setValue(host.getPath()).setPosition(80,30).moveTo(seq);
 
-				CallbackListener toFront = new CallbackListener() {
-					public void controlEvent(CallbackEvent theEvent) {
-						theEvent.getController().bringToFront();
-						((ScrollableList)theEvent.getController()).open();
-					}
-				};
-
-				CallbackListener close = new CallbackListener() {
-					public void controlEvent(CallbackEvent theEvent) {
-						((ScrollableList)theEvent.getController()).close();
-					}
-				};
-
 				ScrollableList lstTarget = cp5.addScrollableList(name + "_hostpath")
 						//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 						.setLabel(this.host.getPath()) //((FormulaCallback)c).targetPath)
@@ -554,8 +544,8 @@ abstract public class Sequence implements Serializable, Mutable {
 						.setBarHeight(15)
 						.setItemHeight(15)
 						.moveTo(seq)
-						.onLeave(close)
-						.onEnter(toFront)
+						.onLeave(cf.close)
+						.onEnter(cf.toFront)
 						.close();
 
 			}

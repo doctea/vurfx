@@ -51,6 +51,8 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	
 	private HashMap<String,Stream> streams = new HashMap<String,Stream>();
 
+	public ControlFrame cf;
+
 	
 	public void addStream(String streamName, Stream st) {
 		//this.streams.put(streamName, st);
@@ -216,7 +218,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	public void setupControls(ControlFrame cf, String tabName) {
 		// TODO Auto-generated method stub
 		//this.sequencer.setupControls(cf, tabname);
-
+		this.cf = cf;
 
 	}
 

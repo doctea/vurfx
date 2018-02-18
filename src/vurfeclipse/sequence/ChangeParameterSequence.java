@@ -15,6 +15,7 @@ import vurfeclipse.filters.Filter;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
 
 public class ChangeParameterSequence extends Sequence {
@@ -118,15 +119,16 @@ public class ChangeParameterSequence extends Sequence {
 	}
 	
 	@Override
-	public SequenceEditor makeControls(ControlP5 cp5, String name) {
+	public SequenceEditor makeControls(ControlFrame cf, String name) {
 		// add an accordion to hold the sub-sequences and recurse
-		SequenceEditor sequenceEditor = super.makeControls(cp5, name);
+		SequenceEditor sequenceEditor = super.makeControls(cf, name);
 		
 		ChangeParameterSequence sequence = this;
 
 		int pos_y = 60, margin_x = 10;
 		SequenceEditor g = sequenceEditor;
 
+		ControlP5 cp5 = cf.control();
 		/*ScrollableList lstParam = cp5.addScrollableList(name + "_target").setPosition(0, pos_y);
 		lstParam.moveTo(g).close().setLabel("source");
 		lstParam.addItems(this.getStreamParams());//addItem(i.getKey(), i.getKey())
@@ -154,22 +156,7 @@ public class ChangeParameterSequence extends Sequence {
 			g.add(txtExpression);
 			
 			//final FormulaCallback fc = (FormulaCallback) c; 
-			
-
-		  CallbackListener toFront = new CallbackListener() {
-			    public void controlEvent(CallbackEvent theEvent) {
-			        theEvent.getController().bringToFront();
-			        ((ScrollableList)theEvent.getController()).open();
-			        theEvent.getController().bringToFront();
-			    }
-			  };
-
-			  CallbackListener close = new CallbackListener() {
-			    public void controlEvent(CallbackEvent theEvent) {
-			        ((ScrollableList)theEvent.getController()).close();
-			    }
-			  };
-		
+				
 			ScrollableList lstTarget = cp5.addScrollableList(name + "_Target URL")
 					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 					.setLabel(this.getParameterPath()) //((FormulaCallback)c).targetPath)
@@ -178,8 +165,8 @@ public class ChangeParameterSequence extends Sequence {
 					.setWidth((cp5.papplet.width/3))
 					.setBarHeight(16).setItemHeight(16)
 					.moveTo(g)
-					.onLeave(close)
-					.onEnter(toFront)
+					.onLeave(cf.close)
+					.onEnter(cf.toFront)
 					.close();
 			
 			//lstTarget.setValue(targetPath);

@@ -216,6 +216,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	public Scene setCanvas(String canvasName, String canvasPath) {
 		println("setCanvas() setting canvasName '" + canvasName + "' to canvasPath '" + canvasPath + "'");
 
+
+		
+		buffermap.put(canvasName, canvasPath);
+		
 		if (buffermap.containsKey(canvasName)) {
 			// notify all filters that canvas has changed
 			
@@ -225,8 +229,6 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 				}
 			}
 		}
-		
-		buffermap.put(canvasName, canvasPath);
 		
 
 		
@@ -459,6 +461,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 				if (filters[i].out==null) filters[i].setOutputCanvas(getCanvasMapping("out"));
 				if (filters[i].src==null) filters[i].setInputCanvas(getCanvasMapping("src"));
+				
+				/*for (Entry<String,String> cm : getCanvasMappings().entrySet()) {
+					getCanvasMapping(cm.getKey());
+				}*/
 
 				filters[i].start();// 2017-10-29 --- filters were never getting started and so buffers not being initialised..?
 
@@ -820,6 +826,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		
 		CallbackListener toFront = new CallbackListener() {
 			public void controlEvent(CallbackEvent theEvent) {
+				theEvent.getController().getParent().bringToFront();
 				theEvent.getController().bringToFront();
 				((ScrollableList)theEvent.getController()).open();
 			}

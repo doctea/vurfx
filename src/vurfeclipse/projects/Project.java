@@ -100,13 +100,15 @@ public abstract class Project implements Serializable {
 	HashMap<String,Canvas> canvases = new HashMap<String,Canvas>();
 	synchronized public void addCanvas(String name, Canvas canvas) {
 		canvases.put(name,canvas);
-		if (debug) println("Project#addCanvas added " + name);
+		if (debug) 
+			println("Project#addCanvas added " + name);
+		
 		//makeBuffersCompatible(name,canvas);
 	}
 	public Canvas getCanvas(String name) {
 		try{
 			if (canvases.get(name)==null) {
-				println("Project#getCanvas couldn't find '" + name + "'!!!!!!!!!!!!!!! - creating one at " + "/" + name + "!");
+				println("Project#getCanvas couldn't find '" + name + "'!!!!!!!!!!!!!!! - creating one at " + name + "!");
 				return createCanvas(/*"/"+*/name,name);	// disabled adding leading slash 2017-12-12 as part of loading from xml...
 			}
 			//System.out.println("Project#getCanvas('" + name + "') returning " + canvases.get(name) + " with buffer " + canvases.get(name).surf);

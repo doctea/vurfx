@@ -207,7 +207,9 @@ public class ShaderFilter extends Filter {
     params.wrappingU = GLTextureParameters.REPEAT;
     params.wrappingV = GLTextureParameters.REPEAT;*/
 		//t = new GLTexture(APP.getApp(),sc.w,sc.h, params);
-		temporary_canvas = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel());
+		temporary_canvas =
+				this.sc.host.createCanvas(this.getPath()+"/tmp", this.getFilterLabel());
+				//this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel());
 
 		return true;
 	}

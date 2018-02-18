@@ -532,7 +532,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		this.updateGuiHistory();
 
-		APP.getApp().getCF().queueUpdate(new Runnable () {
+		if (APP.getApp().isReady()) APP.getApp().getCF().queueUpdate(new Runnable () {
 			@Override
 			public void run() {
 				/*if (self.getActiveSequence()!=null && APP.getApp().isReady() && self.lstHistory!=null) 
@@ -550,7 +550,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 	private void updateGuiHistory() {
-		APP.getApp().getCF().queueUpdate(new Runnable () {
+		if (APP.getApp().isReady()) APP.getApp().getCF().queueUpdate(new Runnable () {
 			@Override
 			public void run() {
 				/*if (self.getActiveSequence()!=null && APP.getApp().isReady() && self.lstHistory!=null) 
@@ -573,7 +573,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		SequenceSequencer self = this;
 
-		APP.getApp().getCF().queueUpdate(new Runnable () {
+		if (APP.getApp().isReady()) APP.getApp().getCF().queueUpdate(new Runnable () {
 			@Override
 			public void run() {
 				
@@ -611,7 +611,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		SequenceSequencer self = this;
 		
 		synchronized(this) {
-			APP.getApp().getCF().queueUpdate(new Runnable () {
+			if (APP.getApp().isReady()) APP.getApp().getCF().queueUpdate(new Runnable () {
 				@Override
 				public void run() {
 					sldProgress.changeValue(activeSequence.getPositionPC()*100);
@@ -627,7 +627,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		SequenceSequencer self = this;
 
-		APP.getApp().getCF().queueUpdate(new Runnable () {
+		if (APP.getApp().isReady()) APP.getApp().getCF().queueUpdate(new Runnable () {
 			@Override
 			public void run() {
 				sldTimeScale.changeValue((float) f);
@@ -643,7 +643,6 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 		if (getSequence(sequenceName).readyToChange(0)) {
 			host.println(this.toString() + ": " + sequenceName +" is ready to change for 0, not remembering!");
-
 		}
 		return true;
 	}
@@ -656,14 +655,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		//this.update
 
-		APP.getApp().getCF().queueUpdate(new Runnable () {
-			@Override
-			public void run() {
-				//println("Added " + activeSequenceName2 + " as the " + historySequenceNames.size() + "th history item");
-				//historySequenceNames.add(activeSequenceName2);
-				// sync ?
-			}
-		});
+		if (APP.getApp().isReady()) {
+			APP.getApp().getCF().queueUpdate(new Runnable () {
+				@Override
+				public void run() {
+					//println("Added " + activeSequenceName2 + " as the " + historySequenceNames.size() + "th history item");
+					//historySequenceNames.add(activeSequenceName2);
+					// sync ?
+				}
+			});
+		}
 	}
 
 

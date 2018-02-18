@@ -397,6 +397,8 @@ abstract public class Stream implements Serializable {
 				//.setPosition(0, pos_y)
 				//.setWidth(margin_x * 2)
 				.setBarHeight(16).setItemHeight(16)
+				.onLeave(cf.close)
+				.onEnter(cf.toFront)
 				;
 		lstParam
 			//.moveTo(g)
