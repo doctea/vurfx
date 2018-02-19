@@ -133,7 +133,7 @@ public class TextDrawer extends Filter {
   public String currentCache = "";
   public void drawText() {
     if (t==null) return;
-    String currentTag = this.t + ":" + getFont() + ":" + t.length() + ":" + this.rotation + ":" + this.zrotation + ":" + this.motionBlur ;
+    String currentTag = this.t + ":" + getFont() + ":" + t.length() + ":" + this.rotation + ":" + this.zrotation + ":" + this.motionBlur;
     if (continuousDraw || !currentTag.equals(currentCache)) {
       //System.out.println("currentTag drawing " + currentTag + "(cached is " + currentCache + ")");
       int fontHeight = 

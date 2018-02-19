@@ -264,6 +264,13 @@ public class BlendDrawer extends ShaderFilter {
     return this;
     //println("Switched to currentBlendMode " + currentBlendMode + " " + blendModes[currentBlendMode]);
   }
+  
+	public void beginDraw () {
+		//out().beginDraw();
+	}
+	public void endDraw () {
+		//out().endDraw();
+	}
 
 
 }

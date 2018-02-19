@@ -257,7 +257,7 @@ public class ShaderFilter extends Filter {
 		temporary_canvas.getSurf().endDraw();
 
 		PGraphics out = out();
-		out .beginDraw();
+		out.beginDraw();
 		out.imageMode(APP.getApp().CORNERS);
 		out.image(temporary_canvas.getSurf(),0,0,sc.w,sc.h);
 		/*out.color(255,128,96);

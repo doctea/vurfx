@@ -216,8 +216,6 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	public Scene setCanvas(String canvasName, String canvasPath) {
 		println("setCanvas() setting canvasName '" + canvasName + "' to canvasPath '" + canvasPath + "'");
 
-
-		
 		buffermap.put(canvasName, canvasPath);
 		
 		/*if (buffermap.containsKey(canvasName)) {
