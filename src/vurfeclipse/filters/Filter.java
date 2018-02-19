@@ -76,10 +76,16 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	}
 
 	public PGraphics out() {
+		/*Canvas canvas = sc.getCanvas(alias_out);
+		//println("out() got canvas " + sc.getCanvasMapping(alias_out) + " from '" + alias_out + "'; surface is " + canvas.getSurf());
+		return canvas.getSurf();*/
 		return sc.getCanvas(alias_out).getSurf();
 	}
 	public PGraphics in() {
-		return sc.getCanvas(alias_out).getSurf();
+		/*Canvas canvas = sc.getCanvas(alias_in);
+		//println("in() got canvas " + sc.getCanvasMapping(alias_in) + " from '" + alias_in + "'; surface is " + canvas.getSurf());
+		return canvas.getSurf();*/
+		return sc.getCanvas(alias_in).getSurf();
 	}
 
 
@@ -480,9 +486,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		}*/
 		if (this.getAlias_out()==null) {
 			this.setAlias_out("out");
+			out();
 		}
 		if (this.getAlias_in()==null) {
 			this.setAlias_in("src");
+			in();
 		}
 		
 		return true;
