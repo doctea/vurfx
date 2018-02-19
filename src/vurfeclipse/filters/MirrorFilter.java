@@ -86,7 +86,8 @@ public class MirrorFilter extends Filter {
     */
     
     //out.beginDraw();
-
+	  PGraphics out = out();
+	  PGraphics src = in();
     //GLTexture t = new GLTexture(APP,sc.w,sc.h);
     //t.copy(src.getTexture());
 	t.image(src,0,0,sc.w,sc.h);

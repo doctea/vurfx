@@ -86,7 +86,9 @@ public class SpiralDrawer extends Filter {
 	  //if (true) return true;
     //if (src!=out) out.background(0); else out.image(src.getTexture(),0,0,sc.w,sc.h);
     //if (src!=out)
-    out.background(0,0,0,0);
+	  
+    PGraphics out = out();
+	out.background(0,0,0,0);
     //out.background(128,0,0,0);
     //out.setDefaultBlend();
     //out.background(src.getTexture());
@@ -176,6 +178,7 @@ public class SpiralDrawer extends Filter {
       //float new_w = /*sc.w/*/(sc.w/4*theta*thetaspeed);//theta;
       //float new_h = /*sc.h/*/(sc.h/4*theta*thetaspeed);//theta;
 
+	  PGraphics out = out();
       out.pushMatrix();
 
       out.translate(spiralCenter.x, spiralCenter.y);    // move to the spiral center
@@ -214,7 +217,7 @@ public class SpiralDrawer extends Filter {
         out.rect(-2,-2,new_w+4,new_h+4);
       }
       //out.noTint();
-      out.image(src,0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
+      out.image(in(),0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
       //out.image(src.getTexture(),0,0,new_w,new_h);
       out.popMatrix();
       /*out.fill(random(255),random(255),random(255),random(255));

@@ -42,12 +42,12 @@ class FeedbackScene extends Scene {
     filters[i] = new BlankFilter(this);
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     //filters[i].setCanvases(getCanvas("out"),getCanvas("out"));
-    filters[i].setCanvases(getCanvasMapping("out"),getCanvasMapping("out"));
+    filters[i].setAliases("out","out");
     filters[i].initialise();
     
     filters[++i] = new FilterChain(this, "Webcam 1 Image into BUF_SRC");
     //filters[i].setBuffers(buffers[BUF_SRC], buffers[BUF_SRC]);
-    filters[i].setCanvases(getCanvasMapping("src"),getCanvasMapping("src"));    
+    filters[i].setAliases("src","src");    
     ((FilterChain)filters[i]).addFilterDefaults(new WebcamFilter(this,1));
     ((FilterChain)filters[i]).addFilterDefaults(new MirrorFilter(this)); /// hmmm including this here gives mad mirror-flicker... wonder if this is because the webcam is slower than the draw() loop..?
     //((FilterChain)filters[i]).addFilter((new PlainDrawer(this)).setBuffers(buffers[BUF_TEMP],buffers[BUF_SRC]));
@@ -69,7 +69,7 @@ class FeedbackScene extends Scene {
     filters[i].initialise();*/    
     
     //filters[++i] = (new GLColourFilter(this)).setBuffers(buffers[BUF_TEMP],buffers[BUF_SRC]); //copy from SRC to TEMP
-    filters[++i] = (new GLColourFilter(this)).setCanvases(getCanvasMapping("temp"),getCanvasMapping("src")); //copy from SRC to TEMP
+    filters[++i] = (new GLColourFilter(this)).setAliases("temp","src"); //copy from SRC to TEMP
     filters[i].setFilterName("GLColourFilter BUF_SRC -> BUF_TEMP");
     //filters[++i] = (new ColourFilter(this)).setBuffers(buffers[BUF_OUT],buffers[BUF_SRC]); //copy from SRC to TEMP
     //filters[++i] = (new PlainDrawer(this)).setBuffers(buffers[BUF_TEMP],buffers[BUF_SRC]); //copy from SRC to TEMP
@@ -91,21 +91,21 @@ class FeedbackScene extends Scene {
     filters[++i] = new PlainDrawer(this);
     filters[i].setFilterName("PlainDrawer BUF_TEMP -> BUF_OUT");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_TEMP]); 
-    filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("temp"));
+    filters[i].setAliases("out","temp");
     filters[i].initialise();
 
     
     filters[++i] = new PlainDrawer(this);
     filters[i].setFilterName("PlainDrawer BUF_SRC -> BUF_OUT");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_SRC]);
-    filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("src"));    
+    filters[i].setAliases("out","src");    
     filters[i].initialise();
     
 
     filters[++i] = new BlendDrawer(this);//, 0, 0, w/4, h/4);
     filters[i].setFilterName("BlendDrawer BUF_SRC2 -> BUF_OUT");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_SRC2]);
-    filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("inp2"));
+    filters[i].setAliases("out","inp2");
     /*final Filter fa = filters[i];
     beatStream.registerEventListener("bar_2", 
       new ParameterCallback () {
@@ -125,13 +125,13 @@ class FeedbackScene extends Scene {
     filters[++i] = new BlendDrawer(this,0,0,w/2,h/2,35);//, 0, 0, w/4, h/4);
     filters[i].setFilterName("FEEDBACK: Rotated BlendDrawer BUF_SRC2 -> BUF_TEMP3");
     //filters[i].setBuffers(buffers[BUF_TEMP3], buffers[BUF_SRC2]);
-    filters[i].setCanvases(getCanvasMapping("temp3"), getCanvasMapping("src2"));
+    filters[i].setAliases("temp3", "src2");
     ((BlendDrawer)filters[i]).setBlendMode(12);
     filters[i].initialise();
     
     filters[++i] = new KaleidoFilter(this);
     //filters[i].setBuffers(buffers[BUF_TEMP3], buffers[BUF_TEMP3]);
-    filters[i].setCanvases(getCanvasMapping("temp3"), getCanvasMapping("temp3"));
+    filters[i].setAliases("temp3","temp3");
     filters[i].initialise();
     
     filters[++i] = new BlendDrawer(this);
@@ -139,7 +139,7 @@ class FeedbackScene extends Scene {
     //((BlendDrawer)filters[i]).setBlendMode(12);
     filters[i].setFilterName("FEEDBACK: PlainDrawer BUF_TEMP2 -> BUF_OUT");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_TEMP3]);
-    filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("temp3"));
+    filters[i].setAliases("out","temp3");
     filters[i].initialise();
 
 
@@ -172,7 +172,7 @@ class FeedbackScene extends Scene {
 
     filters[++i] = new MirrorFilter(this);
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
-    filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    
+    filters[i].setAliases(getCanvasMapping("out"), getCanvasMapping("out"));    
     filters[i].setMuted(true);
     final Filter t = filters[i];
     /*beatStream.registerEventListener("beat_8", 
@@ -191,7 +191,7 @@ class FeedbackScene extends Scene {
     filters[++i] = new ShaderFilter(this,"Feedback.glsl"); 
     filters[i].setFilterName("Feedback");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
-    filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    
+    filters[i].setAliases("out","out");    
     filters[i].setMuted(true);
     final Filter fbk = filters[i];
     /*beatStream.registerEventListener("beat_1", 
@@ -212,7 +212,7 @@ class FeedbackScene extends Scene {
     filters[++i] = new ShaderFilter(this,"Edges.glsl"); 
     filters[i].setFilterName("Edges");
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
-    filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    
+    filters[i].setAliases("out", "out");    
     filters[i].setMuted(true);
     filters[i].initialise();    
 
@@ -224,7 +224,7 @@ class FeedbackScene extends Scene {
     //filters[++i] = new ShaderFilter(this,"KaleidoScope.xml"); 
     //filters[i].setBuffers(buffers[BUF_SRC], buffers[BUF_SRC]);
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
-    filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    
+    filters[i].setAliases("out", "out");    
     filters[i].setMuted(true);
     final Filter tk = filters[i];
     /*beatStream.registerEventListener("bar_1", 
@@ -296,7 +296,7 @@ class FeedbackScene extends Scene {
 
     filters[++i] = new DiskWriterFilter(this,"testoutput.ogg"); 
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
-    filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("out"));    
+    filters[i].setAliases("out", "out");    
     //filters[i].setMute(true);
     filters[i].initialise();     
 
@@ -337,7 +337,7 @@ class FeedbackScene extends Scene {
       }
     );
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_SRC]);
-    filters[i].setCanvases(getCanvasMapping("out"), getCanvasMapping("src"));    
+    filters[i].setAliases("out", "src");    
     filters[i].initialise();
     return true;
   }

@@ -198,7 +198,7 @@ public SocioSukiVideoProject(int w, int h) {
     //s.initialise();
     final SpiralDrawer sd = (SpiralDrawer) new SpiralDrawer(blobScene2)
       //.setBuffers(s.buffers[s.BUF_TEMP],buffers[BUF_INP2]) //OUT]) //TEMP1])
-      .setCanvases(blobScene2.getCanvasMapping("pix0")/*"temp"*/, "/pix0")
+      .setAliases("pix0", "/pix0")
       //.registerCallbackPreset("beat", "beat_16", "spin"))
       ;
     blobScene2.addFilter(sd);
@@ -396,6 +396,12 @@ public SocioSukiVideoProject(int w, int h) {
 public boolean isSequencerEnabled() {
 	// TODO Auto-generated method stub
 	return this.enableSequencer;
+}
+
+@Override
+public void initialiseStreams() {
+	// TODO Auto-generated method stub
+	
 }
 
 }

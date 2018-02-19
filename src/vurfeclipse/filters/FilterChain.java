@@ -31,7 +31,7 @@ public class FilterChain extends Filter {
   }
   public void addFilterDefaults(Filter f) {
     //f.setBuffers(out,src);
-    f.setCanvases(canvas_out,canvas_in);
+    f.setAliases(alias_out, alias_in);
     this.addFilter(f);
   }
 

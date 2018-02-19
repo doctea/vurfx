@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.parameters.Parameter;
@@ -50,6 +51,7 @@ public class DebugDrawer extends Filter {
   int lineCount = 0;
   void drawDebug(String label, Object value) {
     lineCount++;
+    PGraphics out = out();
     out.textAlign(PApplet.LEFT);
     out.fill(128);
     out.text(label +":" + value, x, lineCount*20);
@@ -99,6 +101,7 @@ public class DebugDrawer extends Filter {
   }
 
   public boolean applyMeatToBuffers() {
+	  PGraphics out = out();
     out.pushStyle();
     lineCount = 0;
     out.textSize(25);
@@ -138,6 +141,7 @@ public class DebugDrawer extends Filter {
 		return output;
 	}
 	
+	@Override
 	public void readSnapshot(Map<String, Object> input) {
 		super.readSnapshot(input);
 		

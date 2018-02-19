@@ -198,7 +198,7 @@ public class OpenNIFilter extends Filter {
   }
 
   public void drawRGB() {
-	    if (newFrame==true && out!=null && rgb!=null && /*rgb!=newRgb &&*/ sc!=null) { // && (rgb==null || newRgb.isModified())) {
+	    if (newFrame==true && out()!=null && rgb!=null && /*rgb!=newRgb &&*/ sc!=null) { // && (rgb==null || newRgb.isModified())) {
 	        newFrame = false;
 
 			    //GLGraphicsOffScreen out = sc.getCanvas("rgb").getSurf();
@@ -212,8 +212,8 @@ public class OpenNIFilter extends Filter {
 	        //out.image(t,0,0,sc.w,sc.h);//,(float)0,(float)0,(float)sc.w,(float)sc.h);
 	        // by jove!
 	        //out.copy(rgb, 0, 0, out.width, out.height, 0, 0, rgb.width, rgb.height);
-	        out.copy(rgb, 0, 0, rgb.width, rgb.height, 0, 0, out.width, out.height);
-	        out.fill(255);
+	        out().copy(rgb, 0, 0, rgb.width, rgb.height, 0, 0, out().width, out().height);
+	        out().fill(255);
 	        //out.rect(sc.w/2,sc.h/2,40,40);
 	        //newRgb.delete();
 
@@ -268,6 +268,7 @@ public class OpenNIFilter extends Filter {
 
 
   public void drawPointCloud() {
+	  PGraphics out = out();
 	  out.perspective(APP.getApp().radians(45),
               (float)out.width/(float)out.height,
               10,15000);

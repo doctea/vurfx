@@ -151,8 +151,8 @@ public class BlendDrawer extends ShaderFilter {
     //tf.set("topSampler", src);
     //this.shaderFragName = "blend mode " + currentBlendMode;
     customPass = (CustomPass) this.getPassForBlendMode(currentBlendMode); //Shader(tf,out,src);
-    customPass.shader.set("bottomSampler", out);
-    customPass.shader.set("topSampler", src);
+    customPass.shader.set("bottomSampler", out());
+    customPass.shader.set("topSampler", in());
     customPass.shader.set("Opacity", new Float((Float)this.getParameterValue("Opacity")));
     
     //tf.set("bottomSampler", out);
@@ -163,11 +163,11 @@ public class BlendDrawer extends ShaderFilter {
     
     temporary_canvas.getSurf().beginDraw();
     if (true) {	// this version is faster
-        temporary_canvas.getSurf().image(src,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
+        temporary_canvas.getSurf().image(in(),0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
     	//c.getSurf().resetShader();
         temporary_canvas.getSurf().shader(customPass.shader);
     } else {
-    	this.filter(src, customPass, temporary_canvas.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
+    	this.filter(in(), customPass, temporary_canvas.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
     }
     //this.filter(src, tf, out); //c.getSurf()); //c.getSurf(), tf);	// WORKING 2017-1022
 	//customPass.shader.set(shaderFragName, out);
@@ -175,7 +175,7 @@ public class BlendDrawer extends ShaderFilter {
     temporary_canvas.getSurf().endDraw();
     
 	//if (true) return super.applyMeatToBuffers();
-	out.beginDraw();
+	out().beginDraw();
 
     // image draw mode
     //out.getTexture().blend();
@@ -184,12 +184,12 @@ public class BlendDrawer extends ShaderFilter {
     //out.image(src.getTexture(),x,y,w,h);
     /*if (t!=null)
       t.clear(0);*/
-    out.pushMatrix();
+    out().pushMatrix();
 
     //println ("x and y are " + (Float)getParameterValue("X") + "," +  (Float)getParameterValue("Y"));
 
-    out.translate(w/2, h/2);
-    out.translate(
+    out().translate(w/2, h/2);
+    out().translate(
     		w*(Float)getParameterValue("X"),
     		h*(Float)getParameterValue("Y")
     );
@@ -197,14 +197,14 @@ public class BlendDrawer extends ShaderFilter {
     float x = (Float)getParameterValue("X");
 
     //if ((Float)getParameterValue("Zoom")!=1.0f) {
-    	out.scale((Float)getParameterValue("Scale"));
+    	out().scale((Float)getParameterValue("Scale"));
     //}
     /*x = (int) PApplet.map(((Float)getParameterValue("X")),-2.0f,2.0f,-2*w,2*w);
     y = (int) PApplet.map(((Float)getParameterValue("Y")),-2.0f,2.0f,-2.0f*h,2.0f*h);*/
 
     rotation = (Integer) getParameterValue("Rotate");
     if (rotation!=0) {
-        out.rotate(PApplet.radians(rotation));
+        out().rotate(PApplet.radians(rotation));
       }
 
 
@@ -212,11 +212,11 @@ public class BlendDrawer extends ShaderFilter {
     out.fill(this.random(255));
     out.rect(random(sc.w), random(sc.h), random(100), random(100));*/
 
-    int im = out.imageMode;// to restore imageMode
+    int im = out().imageMode;// to restore imageMode
     //out.image(t,x,y,w,h);
-    out.imageMode(out.CENTER);
+    out().imageMode(out().CENTER);
     //out.image(t,x,y);
-    out.image(temporary_canvas.getSurf(),
+    out().image(temporary_canvas.getSurf(),
     		0,0
     		,w,h	// added to try and support hi-res display of blobs 2015-07-12
     		//w * (Float)getParameterValue("X"),
@@ -224,18 +224,18 @@ public class BlendDrawer extends ShaderFilter {
     );
 
 
-    out.imageMode(im);
+    out().imageMode(im);
     
 
     
     //if (rotation!=0) {
-      out.popMatrix();
+      out().popMatrix();
     //}
       //out.ellipse(random(sc.w), random(sc.h), random(100), random(100));
       
 
 
-      out.endDraw();
+      out().endDraw();
     // pixel copy mode
       //arrayCopy(src.pixels, out.pixels);
 
@@ -251,7 +251,7 @@ public class BlendDrawer extends ShaderFilter {
 
   private Pass getPassForBlendMode(int currentBlendMode) {
 	// TODO Auto-generated method stub
-	return this.getPassForShader(this.getFilterNumber(currentBlendMode), out, src);
+	return this.getPassForShader(this.getFilterNumber(currentBlendMode), out(), in());
   }
 
   public Filter nextMode () {
@@ -264,6 +264,13 @@ public class BlendDrawer extends ShaderFilter {
     return this;
     //println("Switched to currentBlendMode " + currentBlendMode + " " + blendModes[currentBlendMode]);
   }
+  
+	public void beginDraw () {
+		//out().beginDraw();
+	}
+	public void endDraw () {
+		//out().endDraw();
+	}
 
 
 }

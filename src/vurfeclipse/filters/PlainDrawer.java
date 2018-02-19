@@ -2,6 +2,7 @@ package vurfeclipse.filters;
 
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import vurfeclipse.scenes.Scene;
 
 public class PlainDrawer extends Filter {
@@ -54,6 +55,9 @@ public class PlainDrawer extends Filter {
     //out.setBlendMode(REPLACE);
     //tint(128);
     //if (rotation!=0) {
+	PGraphics out = out();
+	PGraphics src = in();
+	
     out.pushMatrix();
     //out.imageMode(PApplet.CENTER);
     out.tint(255,(Integer)getParameterValue("tint"));    
@@ -80,17 +84,17 @@ public class PlainDrawer extends Filter {
     return true;
   }
   
-  public void beginDraw() {
+  /*public void beginDraw() {
     //src.loadPixels();
     //out.loadPixels();
-    if (out==null) setOutputCanvas(canvas_out);
-    if (src==null) setInputCanvas(canvas_in);
-    out.beginDraw();
+    //if (getOut()==null) setOutputCanvas(canvas_out);
+    //if (src==null) setInputCanvas(canvas_in);
+    getOut().beginDraw();
   }
   
   public void endDraw() {
     //out.updatePixels();
-    out.endDraw();
-  }
+    getOut().endDraw();
+  }*/
   
 }

@@ -222,7 +222,7 @@ public class TunnelScene extends SimpleScene {
 		//this.w = w*2; this.h = h*2;
 		
 		this.addFilter(	//,0,0,w*2,h*2
-				new BlendDrawer(this).setFilterName("Blend_6").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
+				new BlendDrawer(this).setAlias_in("src").setAlias_out("temp").setFilterName("Blend_6")
 					.changeParameterValue("Scale", new Float(2.0f))
 					.changeParameterValue("Opacity", new Float(0.05f))
 					.changeParameterValue("BlendMode", new Integer(8))
@@ -237,7 +237,7 @@ public class TunnelScene extends SimpleScene {
 		);*/
 		
 		this.addFilter(
-				new BlendDrawer(this).setFilterName("Blend_5").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
+				new BlendDrawer(this).setFilterName("Blend_5").setAlias_in("src").setAlias_out("temp")
 					.changeParameterValue("Scale", new Float(1.5f))
 					.changeParameterValue("Opacity", new Float(0.1f))
 					.changeParameterValue("BlendMode", new Integer(8))
@@ -245,31 +245,31 @@ public class TunnelScene extends SimpleScene {
 					//.changeParameterValue("Y", new Float(0.25f))
 		);
 		this.addFilter(
-				new BlendDrawer(this).setFilterName("Blend_4").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
+				new BlendDrawer(this).setFilterName("Blend_4").setAlias_in("src").setAlias_out("temp")
 					.changeParameterValue("Scale", new Float(0.75f))
 					.changeParameterValue("Opacity", new Float(0.3f))
 					.changeParameterValue("BlendMode", new Integer(3))
 		);
 		this.addFilter(
-				new BlendDrawer(this).setFilterName("Blend_3").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
+				new BlendDrawer(this).setFilterName("Blend_3").setAlias_in("src").setAlias_out("temp")
 					.changeParameterValue("Scale", new Float(0.5f))
 					.changeParameterValue("Opacity", new Float(0.5f))
 					.changeParameterValue("BlendMode", new Integer(8))
 		);		
 		this.addFilter(
-				new BlendDrawer(this).setFilterName("Blend_2").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
+				new BlendDrawer(this).setFilterName("Blend_2").setAlias_in("src").setAlias_out("temp")
 					.changeParameterValue("Scale", new Float(0.25f))
 					.changeParameterValue("Opacity", new Float(0.6f))
 		);		
 		this.addFilter(
-				new BlendDrawer(this).setFilterName("Blend_1").setInputCanvas(getCanvasMapping("src")).setOutputCanvas(getCanvasMapping("temp"))
+				new BlendDrawer(this).setFilterName("Blend_1").setAlias_in("src").setAlias_out("temp")
 					.changeParameterValue("Scale", new Float(0.1f))
 					.changeParameterValue("Opacity", new Float(0.6f))
 					.changeParameterValue("BlendMode", new Integer(3))
 		);				
 
 		this.addFilter(
-				new BlendDrawer(this, host.w, host.h).setFilterName("Blend_7").setInputCanvas(getCanvasMapping("temp")).setOutputCanvas(getCanvasMapping("out"))
+				new BlendDrawer(this, host.w, host.h).setFilterName("Blend_7").setAlias_in("temp").setAlias_out("out")
 				.changeParameterValue("Opacity", new Float(0.5f)));
 
 		

@@ -78,9 +78,11 @@ public class BlenderFX1 extends SimpleScene {
     	Scene bl1 = this;
 	    //bl1.setOutputCanvas("/out");
     	//setCanvas("out","/out");
-	    bl1.addFilter(new PlainDrawer(bl1).setCanvases(getCanvasMapping("out"),getCanvasMapping("pix0")));//getCanvasMapping("pix0"))); //"/pix0"));
+	    bl1.addFilter(new PlainDrawer(bl1).setAliases("out","pix0")); //Canvases(getCanvasMapping("out"),getCanvasMapping("pix0")));//getCanvasMapping("pix0"))); //"/pix0"));
 	    //bl1.addFilter(new PlainDrawer(bl1).setInputCanvas(getCanvasMapping("pix1")));//getCanvasMapping("pix0"))); //"/pix0"));
-	    bl1.addFilter(new BlendDrawer(bl1).setCanvases(getCanvasMapping("out"),getCanvasMapping("pix1")).setFilterName("BlendDrawer1")); //getCanvasMapping("pix1"))); //"/pix1"));
+	    bl1.addFilter(new BlendDrawer(bl1).setAliases("out","pix1")
+	    		//"getCanvasMapping("out"),getCanvasMapping("pix1"))"
+	    				.setFilterName("BlendDrawer1")); //getCanvasMapping("pix1"))); //"/pix1"));
 	    //bl1.addFilter(new MirrorFilter(bl1).setFilterName("Mirror").changeParameterValue("mirror_y", true)).setInputCanvas(bl1.getCanvasMapping("out"));
 	    //System.exit(0);
 	    return true;

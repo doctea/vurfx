@@ -21,11 +21,11 @@ public class OutputFX1 extends SimpleScene {
 	    this.addFilter(new ShaderFilter(this,"Pixelate.glsl")
 	    		.addParameter("pixel_size", new Float(25.0f),new Float(0.0f),new Float((float)this.w/8))
 	    		.setFilterName("Pixelate")
-	    		.setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("src"))
+	    		.setAliases("out","src")
 	    ); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 	    this.addFilter(new ToonFilter(this)//,"ToonVert.glsl")
 	    		.setFilterName("Toon")
-	    		.setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("src"))
+	    		.setAliases("out","src")
 	    ); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
 	    return true;

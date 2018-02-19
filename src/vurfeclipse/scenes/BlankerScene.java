@@ -15,7 +15,7 @@ public class BlankerScene extends SimpleScene {
 
 	@Override
 	public boolean setupFilters () {
-		BlankFilter bf = (BlankFilter) new BlankFilter(this).setFilterName("BlankFilter").setOutputCanvas(getCanvasMapping("out"));
+		BlankFilter bf = (BlankFilter) new BlankFilter(this).setFilterName("BlankFilter").setAlias_out("out");
 		this.addFilter(bf);
 		return true;
 	}

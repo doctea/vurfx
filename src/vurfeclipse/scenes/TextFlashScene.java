@@ -120,10 +120,10 @@ public class TextFlashScene extends Scene {
 		//println("DemoScene initialised " + this + " - filtercount is " + filterCount);
 		int i = 0;
 
-		filters[i] = new TextDrawer(this).setFilterName("TextDrawer").setCanvases(getCanvasMapping("temp"),getCanvasMapping("out"));//setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);
+		filters[i] = new TextDrawer(this).setFilterName("TextDrawer").setAliases("temp","out");//setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);
 		final TextDrawer ftd = (TextDrawer) filters[i];
 
-		filters[++i] = new BlendDrawer(this).setFilterName("BlendDrawer").setCanvases(getCanvasMapping("out"),getCanvasMapping("temp")); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
+		filters[++i] = new BlendDrawer(this).setFilterName("BlendDrawer").setAliases("out","temp"); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
 		final BlendDrawer fbd = (BlendDrawer) filters[i];
 		((BlendDrawer)filters[i]).setBlendMode(9);
 

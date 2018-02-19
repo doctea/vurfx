@@ -73,8 +73,8 @@ public class BlobDrawer extends SpiralDrawer {
 		} else if(paramName.equals("tint")) {
 	    	b.setTint((Integer)value);
 		} else if(paramName.equals("shape")) {   // there goes my hero <3
-	    	if (src==null) src = sc.getCanvas("pix0").getSurf();
-	    	if (src!=null) b.setInput(src);
+	    	if (in()==null) setAlias_in("pix0"); //src = sc.getCanvas("pix0").getSurf();
+	    	if (in()!=null) b.setInput(in());
 	    	b.setShape((Integer)value);
 	    } else if(paramName.equals("colour")) {
 	    	println("got colour change to" + value);
@@ -122,7 +122,7 @@ public class BlobDrawer extends SpiralDrawer {
 		b.setRotation((int)Math.toRadians((currentRadian)));
 		//System.out.println("currentRadian is " + currentRadian);
 		//b.setTint(128);
-		b.draw(out,src);
+		b.draw(out,in());
 		//out.tint(128);
 		//out.ellipse(0,0,currRadius/8,currRadius/8);
 
