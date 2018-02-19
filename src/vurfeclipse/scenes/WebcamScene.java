@@ -52,7 +52,7 @@ public class WebcamScene extends Scene {
     
     filters[i] = new FilterChain(this, "Webcam 0 Image into " + getCanvasMapping("out"));
     //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
-    filters[i].setOutputCanvas(getCanvasMapping("out"));
+    filters[i].setAlias_out("out");
     ((FilterChain)filters[i]).addFilterDefaults(new WebcamFilter(this,capW,capH));
     //((FilterChain)filters[i]).addFilterDefaults(new MirrorFilter(this)); /// hmmm including this here gives mad mirror-flicker... wonder if this is because the webcam is slower than the draw() loop..?
     //((FilterChain)filters[i]).addFilter((new PlainDrawer(this)).setBuffers(buffers[BUF_TEMP],buffers[BUF_SRC]));

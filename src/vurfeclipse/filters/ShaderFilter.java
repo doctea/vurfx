@@ -59,7 +59,7 @@ public class ShaderFilter extends Filter {
 		return output;
 	}
 	
-	//@Override
+	@Override
 	public void readSnapshot(Map<String,Object> input) {
 		super.readSnapshot(input);
 		this.shaderFragName = (String) input.get("shaderFragName");
@@ -161,11 +161,11 @@ public class ShaderFilter extends Filter {
 		//glFilter.unbind();
 		glFilter.init();
 
-		glFilter.set("src_tex_unit0", src);
+		glFilter.set("src_tex_unit0", in());
 		glFilter.set("dest_tex_size_x", (float)sc.w);
 		glFilter.set("dest_tex_size_y", (float)sc.h);
 		glFilter.set("dest_tex_size",  new PVector((float)sc.w,(float)sc.h));
-		customPass = this.getPassForShader(glFilter,out,src); //, shaderFragName, shaderVertName);
+		customPass = this.getPassForShader(glFilter,out(),in()); //, shaderFragName, shaderVertName);
 		//customPass = this.getPassForShader(glFilter,temporary_canvas.getSurf(),src); //, shaderFragName, shaderVertName);
 		//glFilter.set("bottomSampler", out);
 
@@ -241,22 +241,23 @@ public class ShaderFilter extends Filter {
 
 		//t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
 		//println("About to apply " + this.shaderFragName);
-		customPass.shader.set("src_tex_unit0", src);
+		customPass.shader.set("src_tex_unit0", in());
 		temporary_canvas.getSurf().beginDraw();
 		
 	    if (true) {	// this version is faster (when used in blenddrawer anyway? no proof its beneficial here)
-	        temporary_canvas.getSurf().image(src,0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
+	        temporary_canvas.getSurf().image(in(),0,0,sc.w,sc.h);	// WORKING 2017-10-29 //draw what's currently in the output buffer onto the temporary output buffer
 	    	//c.getSurf().resetShader();
 	        temporary_canvas.getSurf().shader(customPass.shader);
 	    } else {
-	    	this.filter(src, customPass, temporary_canvas.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
+	    	this.filter(in(), customPass, temporary_canvas.getSurf()); //c.getSurf()); //c.getSurf(), tf);	// filter the temporary input buffer using src as input
 	    }
 		//this.filter(src/*c.getSurf()*/, customPass, temporary_canvas.getSurf()); //out);
 		//c.getSurf().resetShader();
 		//c.getSurf().shader(customPass.shader);
 		temporary_canvas.getSurf().endDraw();
 
-		out.beginDraw();
+		PGraphics out = out();
+		out .beginDraw();
 		out.imageMode(APP.getApp().CORNERS);
 		out.image(temporary_canvas.getSurf(),0,0,sc.w,sc.h);
 		/*out.color(255,128,96);
@@ -308,7 +309,7 @@ public class ShaderFilter extends Filter {
 
 	@Deprecated
 	protected void filter(PGraphics source, PShader shader) {
-		filter(source, shader, out);
+		filter(source, shader, out());
 	}
 
 	public void applyPass(PostFXSupervisor fxs, PShader shader) {
@@ -334,8 +335,8 @@ public class ShaderFilter extends Filter {
 		//t = new GLTexture(APP.getApp(),sc.w,sc.h,params);
 		//t = this.sc.host.createCanvas("/shaderfilter/"+this.getFilterName(), this.getFilterLabel()).getSurf();
 		//}
-		if (src==null) setInputCanvas(canvas_in);
-		if (out==null) setOutputCanvas(canvas_out);
+		//if (src==null) setInputCanvas(canvas_in);
+		//if (out==null) setOutputCanvas(canvas_out);
 		//if (glFilter==null) glFilter = APP.getApp().loadShader(shaderName); //new GLTextureFilter(APP.getApp(), shaderName);
 	}
 

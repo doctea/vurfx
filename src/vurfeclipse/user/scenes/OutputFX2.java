@@ -38,12 +38,12 @@ public class OutputFX2 extends SimpleScene {
 	    		.addParameter("distance_g", new Integer(4), 0, 8)
 	    		.addParameter("distance_b", new Integer(6), 0, 8)
 	    		.addParameter("distance_a", new Integer(8), 0, 8)*/
-	    		.setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("src"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    		.setAliases("out","src")); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
-	    os2.addFilter(new KaleidoFilter(os2).setFilterName("Kaleido").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("src"))); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    os2.addFilter(new KaleidoFilter(os2).setFilterName("Kaleido").setAliases("out","src")); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 	    //os.addFilter(new GLColourFilter(os).setFilterName("GLColourFilter"));
 
-	    os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("pix0")).setParameterValue("BlendMode",8));
+	    os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setAliases("out", "pix0").setParameterValue("BlendMode",8));
 	    //os.addFilter(new BlendDrawer(os).setFilterName("BlendDrawer inp0 to out").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0")).setParameterValue("BlendMode",9));
 
 	    return true;

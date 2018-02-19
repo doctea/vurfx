@@ -262,10 +262,10 @@ public class VideoPlayer extends Filter {
         //tex.updatePixels(); //.loadPixels();
         if (stream.isModified()) {
         //if (tex.putPixelsIntoTexture()) {
-          out.beginDraw();
+          out().beginDraw();
           //if ((int)((VurfEclipse)APP.getApp()).random(100)<20)  println("VideoPlayer>>>video writing to " + out);
-          out.image(tex,0,0,sc.w,sc.h);
-          out.endDraw();
+          out().image(tex,0,0,sc.w,sc.h);
+          out().endDraw();
           return true;
         }
 

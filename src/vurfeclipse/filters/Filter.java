@@ -48,9 +48,39 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 	//PGraphics out;
 	//PGraphics src;
-	String canvas_out, canvas_in;
-	public transient PGraphics out;
-	public transient PGraphics src;
+	//@Deprecated String canvas_out, canvas_in;
+	//@Deprecated public transient PGraphics out;
+	//@Deprecated public transient PGraphics src;
+	
+	String alias_out, alias_in;
+
+
+	public String getAlias_in() {
+		return alias_in;
+	}
+	public String getAlias_out() {
+		return alias_out;
+	}
+	public Filter setAlias_in(String alias_in) {
+		this.alias_in = alias_in;
+		return this;
+	}
+	public Filter setAlias_out(String alias_out) {
+		this.alias_out = alias_out;
+		return this;
+	}
+	public Filter setAliases(String alias_out, String alias_in) {
+		this.setAlias_out(alias_out);
+		this.setAlias_in(alias_in);
+		return this;
+	}
+
+	public PGraphics out() {
+		return sc.getCanvas(alias_out).getSurf();
+	}
+	public PGraphics in() {
+		return sc.getCanvas(alias_out).getSurf();
+	}
 
 
 	boolean outputDebug = true;
@@ -84,15 +114,6 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     this(sc);
     this.setBuffers(out, src);
   }*/
-	Filter(Scene sc, String out, String src) {
-		this(sc);
-		this.setCanvases(out,src);
-	}
-	Filter(Scene sc, String out, String src, String filterLabel) {
-		this(sc, out, src);
-		this.filterLabel = filterLabel;
-		this.filterName = filterLabel;
-	}
 	/*Filter(Scene sc, GLGraphicsOffScreen out, GLGraphicsOffScreen src, String filterLabel) {
     this(sc, out, src);
     this.filterLabel = filterLabel;
@@ -103,8 +124,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		this.filterName = filterLabel;
 	}
 
-	public void setFilterLabel (String fl) {
+	public Filter setFilterLabel (String fl) {
 		this.filterLabel = fl;
+		return this;
 	}
 	public Filter setFilterName (String fl) {
 		this.filterName = fl;
@@ -147,14 +169,14 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		return null;
 	}
 
-	public Filter setCanvases(String out, String in) {
+	/*@Deprecated public Filter setCanvases(String out, String in) {
 		setOutputCanvas(out);
 		setInputCanvas(in);
-		/*this.canvas_out = out;
-    this.canvas_in = in;*/
+		//this.canvas_out = out;
+    //this.canvas_in = in;
 		return this;
 	}
-	public Filter setInputCanvas(String in) {
+	@Deprecated public Filter setInputCanvas(String in) {
 		println("Filter#setInputCanvas('" + src + "') in " + this + " replacing '" + this.canvas_in + "' with '" + in + "'");
 		this.canvas_in = in;
 		Canvas c = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_in);
@@ -162,14 +184,14 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			this.src = c.getSurf();
 		return this;
 	}
-	public Filter setOutputCanvas(String out) {
+	@Deprecated public Filter setOutputCanvas(String out) {
 		println("Filter#setOutputCanvas('" + out + "') in " + this + " replacing '" + this.canvas_out + "' with '" + out + "'");
 		this.canvas_out = out;
 		Canvas c = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out);
 		if (null!=c)
 			this.out = c.getSurf(); //pr.getCanvas(canvas_out).getSurf();
 		return this;
-	}
+	}*/
 
 	/*
 	 *   BUFFERS AND DRAWING
@@ -228,11 +250,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		//out.loadPixels();
 		//src.loadPixels();
 		//println("beginDraw in " + this + "{");
-		if (out==null) 
+		/*if (out==null) 
 			setOutputCanvas(canvas_out);
 		if (src==null) 
-			setInputCanvas(canvas_in);
-		out.beginDraw();
+			setInputCanvas(canvas_in);*/
+		out().beginDraw();
 		/*if (!out.displayable()) {
     	println("can't draw to out " + out +"!");
     }*/
@@ -240,7 +262,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	}
 	public void endDraw () {
 		//println("endDraw in " + this + "{");
-		out.endDraw();
+		out().endDraw();
 		//out.updatePixels();
 		//println("} endDraw in " + this);
 		//out.updatePixels();
@@ -448,13 +470,19 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		//if (filters[i].out==null) filters[i].setOutputCanvas(getCanvasMapping("out"));
 		//if (filters[i].src==null) filters[i].setInputCanvas(getCanvasMapping("src"));
 		
-		if (out==null) {
+		/*if (getOut()==null) {
 			println("out is null in " + this + ", canvas_out is " + canvas_out + " setting to default " + sc.getCanvasMapping("src"));
-			setOutputCanvas(sc.getCanvasMapping("out"));
+			//setOutputCanvas(sc.getCanvasMapping("out"));
 		}
-		if (src==null) {
+		if (getIn()==null) {
 			println("src is null in " + this + ", canvas_in is " + canvas_in + " setting to default " + sc.getCanvasMapping("src"));
 			setInputCanvas(sc.getCanvasMapping("src"));
+		}*/
+		if (this.getAlias_out()==null) {
+			this.setAlias_out("out");
+		}
+		if (this.getAlias_in()==null) {
+			this.setAlias_in("src");
 		}
 		
 		return true;
@@ -467,8 +495,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	}
 	public boolean start() {  // stop processing when eg unmuted REMEMBER TO FIGURE OUT WHERE WE HAVE TO CALL THIS IN OUR PROCESSING LOOPS..!
 		println("start()");
-		this.setInputCanvas(this.canvas_in);
-		this.setOutputCanvas(this.canvas_out);
+		//this.setInputCanvas(this.canvas_in);
+		//this.setOutputCanvas(this.canvas_out);
 		return true;
 	}
 
@@ -483,12 +511,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	//}
 
 	public PImage getFinalImage() {
-		return this.out.get(0, 0, sc.w, sc.h);
+		return this.out().get(0, 0, sc.w, sc.h);
 	}
 
 	public void drawLayerText (String label) {
 		int lineCount = 2;
 		int x = sc.w/2;
+		PGraphics out = out();
 		out.pushStyle();
 		out.fill(128);
 		out.text(label, x-150, lineCount*20);
@@ -507,8 +536,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	}
 	public String getDescription () {
 		return (this.filterLabel!=""?"'"+filterLabel+"': ":"") +
-				this.toString() + " " + (this.isMuted()?"MUTED":"") +
-				" (out: " + out + ", src: " + src + ")";
+				this.toString() + " " + (this.isMuted()?"MUTED":"");
+				//+ " (out: " + out + ", src: " + src + ")";
 	}
 
 	public void dispose() {
@@ -715,7 +744,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		; */
 
 		lstInputCanvas = new ScrollableList(cp5,"canvas_input_" + tab.getName() + getFilterName())
-			.setLabel(sc.getMappingForCanvas(this.canvas_in))
+			.setLabel(this.getAlias_in()) //sc.getMappingForCanvas(this.canvas_in))
 			.addItems(canvases)
 			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)-3)
 			//.setHeight(10)	// this breaks the dropdown!
@@ -729,8 +758,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 					int index = (int) ((ScrollableList)theEvent.getController()).getValue();
 					Map<String,Object> selected = ((ScrollableList)theEvent.getController()).getItem(index);
 					String mapName = (String) selected.get("name");
-					String canvas_name = sc.getCanvasMapping(mapName); 
-					self.setInputCanvas(canvas_name);
+					//String canvas_name = sc.getCanvasMapping(mapName); 
+					//self.setInputCanvas(canvas_name);
+					self.setAlias_in(mapName);
 				}				
 			})
 			.onLeave(close)
@@ -746,7 +776,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		
 
 		lstOutputCanvas = new ScrollableList(cp5,"canvas_out_" + tab.getName() + getFilterName())
-			.setLabel(sc.getMappingForCanvas(this.canvas_out))
+			.setLabel(this.getAlias_out()) //sc.getMappingForCanvas(this.canvas_out))
 			//.addItems(canvases)
 			.addItems(canvases)
 			//.setHeight(10)
@@ -761,8 +791,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 					int index = (int) ((ScrollableList)theEvent.getController()).getValue();
 					Map<String,Object> selected = ((ScrollableList)theEvent.getController()).getItem(index);
 					String mapName = (String) selected.get("name");
-					String canvas_name = sc.getCanvasMapping(mapName); 
-					self.setOutputCanvas(canvas_name);
+					//String canvas_name = sc.getCanvasMapping(mapName); 
+					//self.setOutputCanvas(canvas_name);
+					self.setAlias_out(mapName);
 				}				
 			})
 			.onLeave(close)
@@ -968,8 +999,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		output.put("label", this.getFilterLabel());
 		output.put("description", this.getDescription());
 		output.put("path", this.getPath());
-		output.put("canvas_out", this.getOutputCanvas());
-		output.put("canvas_src", this.getSourceCanvas());
+		//output.put("canvas_out", this.getOutputCanvas());
+		//output.put("canvas_src", this.getSourceCanvas());
+		output.put("alias_out", this.getAlias_out());
+		output.put("alias_in", this.getAlias_in());
 
 		output.put("parameter_defaults", this.collectParameterSetup());
 
@@ -982,14 +1015,14 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		}
 		return output;
 	}
-	private String getSourceCanvas() {
+	/*private String getSourceCanvas() {
 		// TODO Auto-generated method stub
 		return this.canvas_in;
 	}
 	private String getOutputCanvas() {
 		// TODO Auto-generated method stub
 		return this.canvas_out;
-	}
+	}*/
 	public static Filter createFilter(String classname, Scene host) {
 		try {
 			Class clazz = Class.forName(classname);
@@ -1019,31 +1052,34 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		}
 		return null;
 	}
+	
 	@SuppressWarnings("unchecked")
 	public void readSnapshot(Map<String, Object> input) {
 		this.setFilterName((String) 	input.get("name"));
 		this.setFilterLabel((String) 	input.get("label"));
 		//this.setDescription(input.get("description"));
-		if (input.containsKey("canvas_out")) this.setOutputCanvas((String) 	input.get("canvas_out"));
-		if (input.containsKey("canvas_src")) this.setInputCanvas((String) 	input.get("canvas_src"));	
+		if (input.containsKey("canvas_out")) {	// backwards compatibility
+			//this.setOutputCanvas((String) 	input.get("canvas_out"));
+			this.setAlias_out(sc.getMappingForCanvas((String)input.get("canvas_out")));
+		}
+		if (input.containsKey("canvas_src")) {	// backwards compatibility
+			//this.setInputCanvas((String) 	input.get("canvas_src"));	
+			this.setAlias_in(sc.getMappingForCanvas((String)input.get("canvas_src")));
+		}
+		
+		if (input.containsKey("alias_out")) this.setAlias_out((String)input.get("alias_out"));
+		if (input.containsKey("alias_in")) this.setAlias_in((String)input.get("alias_in"));
 
 		for (Entry<String, Object> p : ((Map<String, Object>) input.get("parameter_defaults")).entrySet()) {
 			Map<String,Object> para = (Map<String, Object>) p.getValue();
 			this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
 		}		
 	}
-	public void changeCanvas(String oldCanvasPath, String canvasPath) {
-		if (this.canvas_in.equals(oldCanvasPath)) {
-			this.setInputCanvas(canvasPath);
-		}
-		if (this.canvas_out.equals(oldCanvasPath)) {
-			this.setOutputCanvas(canvasPath);
-		}
-		
+	
+	/*	public void changeCanvas(String oldCanvasPath, String canvasPath) {
 		if (this.lstInputCanvas!=null) 	this.lstInputCanvas.setItems(sc.getCanvasMappings().keySet().toArray(new String[0]));
 		if (this.lstOutputCanvas!=null) this.lstOutputCanvas.setItems(sc.getCanvasMappings().keySet().toArray(new String[0]));
-				
-	}
+	}*/
 	
 
 }

@@ -23,7 +23,7 @@ public class PlainScene extends Scene {
     
     filters[i] = new PlainDrawer(this);
     filters[i].setFilterName("PlainDrawer BUF_SRC -> BUF_OUT");
-    filters[i].setCanvases(getCanvasMapping("out"),getCanvasMapping("src"));//buffers[BUF_OUT], buffers[BUF_SRC]); 
+    filters[i].setAliases("out","src");//buffers[BUF_OUT], buffers[BUF_SRC]); 
     filters[i].initialise();
 
     

@@ -31,8 +31,8 @@ public class BlankFilter extends Filter {
     //out.image(src,0,0);
     //out.pixels = src.pixels;
     //out.background(bgcolour, alpha);
-	out.fill(bgcolour,alpha);
-	out.rect(0,0,sc.w,sc.h);
+	out().fill(bgcolour,alpha);
+	out().rect(0,0,sc.w,sc.h);
     return true;
   }
   

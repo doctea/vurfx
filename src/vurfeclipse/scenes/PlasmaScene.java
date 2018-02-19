@@ -87,12 +87,12 @@ public class PlasmaScene extends Scene {
 		//// START PLASMA SCENE
 		//plasmaScene.setCanvas("pix0","/pix0");
 		//os2.setCanvas("blendresult", "/blendresult");
-		addFilter(new PlasmaDrawer(this).setFilterName("Plasma").setCanvases(this.getCanvasMapping("temp1"), this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+		addFilter(new PlasmaDrawer(this).setFilterName("Plasma").setAliases("temp1","out")); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
 		//addFilter(new PhaseRGBFilter(this).setFilterName("PhaseRGB").setInputCanvas(getCanvasMapping("out")).setOutputCanvas(getCanvasMapping("out")));
-		addFilter(new PhaseRGBFilter(this).setFilterName("PhaseRGB").setInputCanvas(this.getCanvasMapping("temp1")).setOutputCanvas(getCanvasMapping("temp1")));
+		addFilter(new PhaseRGBFilter(this).setFilterName("PhaseRGB").setAlias_in("temp1").setAlias_out("temp1"));
 
-		addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setInputCanvas(this.getCanvasMapping("temp1")).setOutputCanvas(this.getCanvasMapping("out")));
+		addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setAlias_in("temp1").setAlias_out("out"));
 
 		return true;
 	}

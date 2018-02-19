@@ -50,7 +50,7 @@ public class WebcamFilter extends Filter {
 		//webcamStream = new GSCapture(APP, capW, capH, global_fps);
 
 		System.out.println("WebcamFilter initialised for cameraNumber: " + this.cameraNumber);
-		System.out.println("WebcamFilter OUT is " + out);
+		System.out.println("WebcamFilter OUT is " + out());
 
 		webcamStream.start();
 		System.out.println("webcam initialise?");
@@ -64,14 +64,14 @@ public class WebcamFilter extends Filter {
 			//System.out.println("got webcamstream");
 			if (webcamStream.available() == true) {
 				webcamStream.read();
-				out.beginDraw();
+				out().beginDraw();
 				//out.scale(1.0f); //-1,-1);
-				out.pushMatrix();
+				out().pushMatrix();
 				//out.scale(-1.0f, 1.0f);
 				//out.image(webcamStream,0,0,sc.w,sc.h);
-				out.set(0, 0,  webcamStream);
-				out.popMatrix();
-				out.endDraw();
+				out().set(0, 0,  webcamStream);
+				out().popMatrix();
+				out().endDraw();
 			}
 			return true;
 		} else {

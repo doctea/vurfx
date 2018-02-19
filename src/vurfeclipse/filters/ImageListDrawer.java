@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import processing.core.PGraphics;
 import processing.core.PImage;
 import vurfeclipse.*;
 import vurfeclipse.scenes.Scene;
@@ -287,6 +288,7 @@ public class ImageListDrawer extends Filter {
 
     //p = getCurrentImage(IR);
     if (getSlide()!=null) {
+    	PGraphics out = out();
       out.pushMatrix();
       out.imageMode(out.CENTER);
       //out.image(getSlide(), -0.5f, -0.5f, 0.5f, 0.5f); //, 0, 0, sc.w, sc.h);//sc.w*map((Float)getParameterValue("scale"),1.0,5.0,0.0,1.0),sc.h*map((Float)getParameterValue("scale"),1.0,5.0,0.0,1.0));

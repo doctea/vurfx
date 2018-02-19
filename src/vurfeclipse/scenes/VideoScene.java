@@ -26,7 +26,7 @@ public class VideoScene extends Scene {
     int i = 0;
     
     filters[i] = new FilterChain(this, "VideoPlayer for " + filename); //VideoPlayer(this, filename); //"data/video/129-Probe 7 - Over and Out(1)-00.mkv");
-    filters[i].setCanvases(getCanvasMapping("out"),getCanvasMapping("out"));//setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
+    filters[i].setAliases("out","out");//setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
     final VideoPlayer vs = (VideoPlayer) new VideoPlayer(this, filename).setFilterName("video");
     vs.loadDirectory("video-sources/");
     ((FilterChain)filters[i]).addFilterDefaults(vs);

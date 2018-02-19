@@ -24,7 +24,7 @@ public class OutputFX3 extends SimpleScene {
 	    //os2.setCanvas("blendresult", "/blendresult");
 
 	    os2.addFilter(new ShaderFilter(os2,"SyncEffect.glsl")
-		    	.setFilterName("SyncEffect").setCanvases(os2.getCanvasMapping("out"), os2.getCanvasMapping("src"))
+		    	.setFilterName("SyncEffect").setAliases("out","src")
 					.addParameter("step_x", 2.5f, 1.0f, 16.0f)
 					.addParameter("step_y", 2.5f, 1.0f, 16.0f)
 					.addParameter("offset_x", 2.0f, -4.0f, 4.0f)

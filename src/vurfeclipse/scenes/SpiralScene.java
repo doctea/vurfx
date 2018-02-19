@@ -102,11 +102,11 @@ public class SpiralScene extends Scene {
     
     //filters[i] = new ShaderFilter(this, "Porthole.xml").setBuffers(buffers[BUF_TEMP],inp);
     
-    filters[i] = new SpiralDrawer(this).setFilterName("SpiralDrawer").setCanvases(getCanvasMapping("temp"), getCanvasMapping("inp0")); //setBuffers(buffers[BUF_TEMP], inp);
+    filters[i] = new SpiralDrawer(this).setFilterName("SpiralDrawer").setAliases("temp","inp0"); //setBuffers(buffers[BUF_TEMP], inp);
     //filters[++i] = new SpiralDrawer(this).setBuffers(buffers[BUF_TEMP], buffers[BUF_TEMP]);
     
 
-    filters[++i] = new BlendDrawer(this).setFilterName("BlendDrawer").setCanvases(getCanvasMapping("out"), getCanvasMapping("temp")); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
+    filters[++i] = new BlendDrawer(this).setFilterName("BlendDrawer").setAliases("out","temp"); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
     final BlendDrawer fbd = (BlendDrawer) filters[i];
     ((BlendDrawer)filters[i]).setBlendMode(9);
     

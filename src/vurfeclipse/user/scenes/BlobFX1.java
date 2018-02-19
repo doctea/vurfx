@@ -397,9 +397,9 @@ public class BlobFX1 extends SimpleScene {
 		}*/
 		@Override public void onStart () { 
 			this.println("texture sequence starting .. ");
-			host.getFilter("BlobDrawer").setInputCanvas(host.getCanvasMapping("pix0"));//host.getCanvasMapping("pix0"));
+			//host.getFilter("BlobDrawer").setInputCanvas(host.getCanvasMapping("pix0"));//host.getCanvasMapping("pix0"));
 			host.getFilter("BlobDrawer").changeParameterValue("shape", Blob.SH_TEXTURE);
-			host.getFilter("BlobDrawer2").setInputCanvas(host.getCanvasMapping("out")); //host.getCanvasMapping("pix1"));
+			//host.getFilter("BlobDrawer2").setInputCanvas(host.getCanvasMapping("out")); //host.getCanvasMapping("pix1"));
 			host.getFilter("BlobDrawer2").changeParameterValue("shape", Blob.SH_TEXTURE);
 		}
 		@Override public void onStop() {	}
@@ -444,14 +444,14 @@ public class BlobFX1 extends SimpleScene {
 		
 	  //this.addFilter(new BlobDrawer(this,ov_w,ov_h)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer").setCanvases(this.getCanvasMapping("temp2"),this.getCanvasMapping("pix0")));
 	  //this.addFilter(new BlobDrawer(this,ov_w,ov_h)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer2").changeParameterValue("shape", 2).setCanvases(this.getCanvasMapping("temp3"),this.getCanvasMapping("pix1")));
-	  this.addFilter(new BlobDrawer(this,w,h)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer").setCanvases(this.getCanvasMapping("temp2"),this.getCanvasMapping("pix0")));
-	  this.addFilter(new BlobDrawer(this,w,h)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer2").changeParameterValue("shape", 2).setCanvases(this.getCanvasMapping("temp3"),this.getCanvasMapping("pix1")));
+	  this.addFilter(new BlobDrawer(this,w,h)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer").setAliases("temp2","pix0")); //Canvases(this.getCanvasMapping("temp2"),this.getCanvasMapping("pix0")));
+	  this.addFilter(new BlobDrawer(this,w,h)/*.setImage("ds2014/dseye.png")*/.setFilterName("BlobDrawer2").changeParameterValue("shape", 2).setAliases("temp3","pix1"));
 
 	  
     //this.addFilter(new BlendDrawer(this,ov_w/2,ov_h/2,ov_w,ov_h).setFilterName("BlendDrawer").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp2")));
     //this.addFilter(new BlendDrawer(this,ov_w/2,ov_h/2,ov_w,ov_h).setFilterName("BlendDrawer2").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp3")));
-    this.addFilter(new BlendDrawer(this, host.w, host.h).setFilterName("BlendDrawer").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp2")));
-    this.addFilter(new BlendDrawer(this, host.w, host.h).setFilterName("BlendDrawer2").setCanvases(this.getCanvasMapping("out"),this.getCanvasMapping("temp3")));
+    this.addFilter(new BlendDrawer(this, host.w, host.h).setFilterName("BlendDrawer").setAliases("out","temp2"));
+    this.addFilter(new BlendDrawer(this, host.w, host.h).setFilterName("BlendDrawer2").setAliases("out","temp3"));
     //this.setMuted(true);
     
 	    //((BlobDrawer)this.getFilter("BlobDrawer")).loadSVG(APP.getApp().dataPath("image-sources/reindeer.svg"));

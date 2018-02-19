@@ -7,6 +7,7 @@ import java.util.Date;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PGraphics;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
@@ -155,6 +156,8 @@ public class TextDrawer extends Filter {
       	out.rect(0,0,w,h);
       }*/
       
+      PGraphics out = out();
+      
       out.beginDraw();
       //out.clear(0);
       out.pushMatrix();
@@ -228,8 +231,8 @@ public boolean applyMeatToBuffers() {
     //src.loadPixels();
     //out.loadPixels();
     //out.beginDraw();
-    if (out==null) setOutputCanvas(canvas_out);
-    if (src==null) setInputCanvas(canvas_in);
+    //if (out==null) setOutputCanvas(canvas_out);
+    //if (src==null) setInputCanvas(canvas_in);
     //if (font==null) font = APP.loadFont("LCDSolid-128.vlw");
   }
   

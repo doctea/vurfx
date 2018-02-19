@@ -17,16 +17,6 @@ public class OpenKinectFilter extends Filter {
 		// TODO Auto-generated constructor stub
 	}
 
-	public OpenKinectFilter(Scene sc, String out, String src) {
-		super(sc, out, src);
-		// TODO Auto-generated constructor stub
-	}
-
-	public OpenKinectFilter(Scene sc, String out, String src, String filterLabel) {
-		super(sc, out, src, filterLabel);
-		// TODO Auto-generated constructor stub
-	}
-
 	public OpenKinectFilter(Scene sc, String filterLabel, int device) {
 		super(sc, filterLabel);
 		this.device = device;
@@ -82,7 +72,7 @@ public class OpenKinectFilter extends Filter {
 			  //out.image(kinect.getVideoImage(), 512*2, 424, 512, 424);
 			  if ((Boolean)this.getParameterValue("rgb")==true) {
 				  //drawRGB();
-				  out.image(kinect.getVideoImage(), 0, 0, sc.w, sc.h); 
+				  out().image(kinect.getVideoImage(), 0, 0, sc.w, sc.h); 
 				  //out.image(kinect.getDepthImage(), 0, 0, sc.w, sc.h); 
 			  }
 
