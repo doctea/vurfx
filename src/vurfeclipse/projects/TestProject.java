@@ -16,14 +16,17 @@ import vurfeclipse.scenes.SimpleScene;
 import vurfeclipse.scenes.SpiralScene;
 import vurfeclipse.scenes.TextFlashScene;
 import vurfeclipse.scenes.WebcamScene;
-import vurfeclipse.streams.*;
+import vurfeclipse.streams.BeatStream;
+import vurfeclipse.streams.NumberStream;
+import vurfeclipse.streams.ParameterCallback;
+import vurfeclipse.streams.Stream;
 
 public class TestProject extends Project {
   
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
   
-  public TestProject(int w, int h, String gfx_mode) {
-    super(w,h,gfx_mode);
+  public TestProject(int w, int h) {
+    super(w,h);
   }
   
   public boolean initialiseBuffers() {
@@ -38,13 +41,13 @@ public class TestProject extends Project {
   }
   
   public boolean setupStreams () {
-    Stream stream = new Stream("Test Stream");
+    //Stream stream = new Stream("Test Stream");
     BeatStream beatStream = new BeatStream("Beat Stream", 130.0, ((VurfEclipse)APP.getApp()).millis());
-    this.addStream("test", stream);
-    this.addStream("beat", beatStream);
+    //this.getSequencer().addStream("test", stream);
+    this.getSequencer().addStream("beat", beatStream);
     
     NumberStream numberStream = new NumberStream("Number Stream", 130.0f, 69, ((VurfEclipse)APP.getApp()).millis());
-    this.addStream("number", numberStream);
+    this.getSequencer().addStream("number", numberStream);
     
     return true;
   }
@@ -131,15 +134,16 @@ public class TestProject extends Project {
     s.initialise();
     final SpiralDrawer sd = (SpiralDrawer) new SpiralDrawer(s)
       //.setBuffers(s.buffers[s.BUF_TEMP],buffers[BUF_INP2]) //OUT]) //TEMP1])
-      .setCanvases(s.getCanvasMapping("temp"), "/inp2")
+      //.setCanvases(s.getCanvasMapping("temp"), "/inp2")
+    	  .setAliases("temp", "src")
       //.registerCallbackPreset("beat", "beat_16", "spin"))
       ;        
     s.addFilter(sd);
     //s.addFilter(new BlendDrawer(s).setBuffers(s.buffers[s.BUF_TEMP],s.buffers[s.BUF_TEMP]));
     final BlobDrawer bd = (BlobDrawer) new BlobDrawer(s)
       //.setBuffers(s.buffers[s.BUF_TEMP2],s.buffers[s.BUF_TEMP1])
-      .setOutputCanvas(s.getCanvasMapping("temp2"))
-      .setInputCanvas("/inp1")
+      .setAlias_out("temp2")
+      .setAlias_in("src")
       //.setOutputBuffer(s.buffers[s.BUF_TEMP2])
       //.setInputBuffer(buffers[BUF_INP1])
       .changeParameterValue("xRadianMod", -1.0)
@@ -148,13 +152,13 @@ public class TestProject extends Project {
       //.setBuffers(s.buffers[s.BUF_TEMP2],s.buffers[s.BUF_TEMP1])
       //.setOutputBuffer(s.buffers[s.BUF_TEMP3])
       //.setInputBuffer(buffers[BUF_INP1])
-      .setOutputCanvas(s.getCanvasMapping("temp3"))
-      .setInputCanvas("/inp1")
+      .setAlias_out("temp3")
+      .setAlias_in("src")
       //.setInputBuffer(s.buffers[s.BUF_TEMP2])
       .changeParameterValue("yRadianMod", -1.0)
       .changeParameterValue("shape", 5)
       ;
-    getStream("beat").registerEventListener("beat_16",new ParameterCallback() {
+    getSequencer().getStream("beat").registerEventListener("beat_16",new ParameterCallback() {
           public void call(Object value) {
             int i = (Integer)value;
             //bd.setParameterValue("xRadianMod",map(i%64,0,64,-1.0,1.0));
@@ -181,7 +185,7 @@ public class TestProject extends Project {
             //bd.setParameterValue("yRadianMod",map(i%16,0,8,-1.0,1.0));
           }
       });
-    getStream("beat").registerEventListener("beat_16",new ParameterCallback() {
+    getSequencer().getStream("beat").registerEventListener("beat_16",new ParameterCallback() {
           public void call(Object value) {
             int i = (Integer)value;
             sd.changeParameterValue("totalRotate",PApplet.radians(i*10));
@@ -190,11 +194,11 @@ public class TestProject extends Project {
     });
     s.addFilter(bd);
     s.addFilter(bd2);
-    s.addFilter(new GLColourFilter(s).setCanvases(s.getCanvasMapping("temp3"),s.getCanvasMapping("temp3"))); //setBuffers(s.buffers[s.BUF_TEMP3],s.buffers[s.BUF_TEMP3]));
-    s.addFilter(((BlendDrawer)new BlendDrawer(s).setInputCanvas(s.getCanvasMapping("temp3")))); //.setInputBuffer(s.buffers[s.BUF_TEMP3]))); //.setParameterValue("BlendMode",4));//BlendMode(6));
-    s.addFilter(new BlendDrawer(s).setInputCanvas(s.getCanvasMapping("temp2")).changeParameterValue("Opacity", 0.5f));
+    s.addFilter(new GLColourFilter(s).setAliases("temp3","temp3")); //setBuffers(s.buffers[s.BUF_TEMP3],s.buffers[s.BUF_TEMP3]));
+    s.addFilter(((BlendDrawer)new BlendDrawer(s).setAlias_in("temp3"))); //.setInputBuffer(s.buffers[s.BUF_TEMP3]))); //.setParameterValue("BlendMode",4));//BlendMode(6));
+    s.addFilter(new BlendDrawer(s).setAlias_in("temp2").changeParameterValue("Opacity", 0.5f));
       //setInputBuffer(s.buffers[s.BUF_TEMP2]).changeParameterValue("Opacity", 0.5));//.setParameterValue("BlendMode",9));
-    s.addFilter(new BlendDrawer(s).setInputCanvas(s.getCanvasMapping("temp"))); //Buffer(s.buffers[s.BUF_TEMP]));//.setParameterValue("BlendMode",4));
+    s.addFilter(new BlendDrawer(s).setAlias_in("temp")); //Buffer(s.buffers[s.BUF_TEMP]));//.setParameterValue("BlendMode",4));
     //this.addSceneOutput(s, buffers[BUF_OUT]);
     this.addSceneOutputCanvas(s, "/out");
     
@@ -242,6 +246,12 @@ public class TestProject extends Project {
     
     return true;
   }
+
+@Override
+public void initialiseStreams() {
+	// TODO Auto-generated method stub
+	
+}
   
   
 }
