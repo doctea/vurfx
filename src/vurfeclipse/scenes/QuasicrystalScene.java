@@ -68,11 +68,11 @@ public class QuasicrystalScene extends Scene {
 	    		return this;
 	    	}*/
 
-	    }.setFilterName("Quasicrystal").setCanvases("/temp1", this.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
+	    }.setFilterName("Quasicrystal").setAliases("temp1", "out")); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));    //os.addFilter(new ShaderFilter(os,"CrossHatch.xml").setFilterName("CrossHatch").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("out"))); //setBuffers(ss.buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 
-	    addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setInputCanvas("/temp1").setOutputCanvas(this.getCanvasMapping("out")));
+	    addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setAlias_in("temp1").setAlias_out("out"));
 
-	    addFilter(new PhaseRGBFilter(this).setFilterName("PhaseRGB").setInputCanvas(getCanvasMapping("out")).setOutputCanvas(getCanvasMapping("out")));
+	    addFilter(new PhaseRGBFilter(this).setFilterName("PhaseRGB").setAlias_in("out").setAlias_out("out"));
 
 	    return true;
   }

@@ -1,6 +1,7 @@
 package vurfeclipse.filters;
 
 
+import processing.core.PGraphics;
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
 import vurfeclipse.VurfEclipse;
@@ -75,10 +76,14 @@ public class GLColourFilter extends ShaderFilter {
       t = src.getTexture();
     }*/
 
-    Canvas t = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_in);//.getTexture();
+    //Canvas t = ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_in);//.getTexture();
 
     //t.filter(glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out).getSurf());//.getTexture());
-    this.filter(t.getSurf(), glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out).getSurf());
+    //this.filter(t.getSurf(), glFilter, ((VurfEclipse)APP.getApp()).pr.getCanvas(canvas_out).getSurf());
+	  
+	PGraphics t = in();  
+	
+    this.filter(t, glFilter, out());
 
     return true;
   }

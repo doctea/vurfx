@@ -100365,7 +100365,8 @@
           </void>
           <void method="put">
            <string>class</string>
-           <string>vurfeclipse.filters.OpenKinectFilter</string>
+           <!-- <string>vurfeclipse.filters.OpenKinectFilter</string> -->
+		<string>vurfeclipse.filters.PlainDrawer</string>
           </void>
          </object>
         </void>
