@@ -209,9 +209,9 @@ public class FeralFestProject extends Project {
 		blendScene.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
 		blendScene.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
 
-		//blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
-		//blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setOutputCanvas("/pix0").setFilterName("kinect1")));
-		blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect0",0).setOutputCanvas("/pix0").setFilterName("kinect0"))).setCanvas("depth", "/pix1");//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+		//blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setAlias_out("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+		//blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setAlias_out("/pix0").setFilterName("kinect1")));
+		blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect0",0).setAlias_out("/pix0").setFilterName("kinect0"))).setCanvas("depth", "/pix1");//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
 		//blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect1",1).setOutputCanvas("/pix1").setFilterName("kinect1")));
 
 		//blendScene.addFilter(new WebcamFilter(ils2).setOutputCanvas("/pix0"));

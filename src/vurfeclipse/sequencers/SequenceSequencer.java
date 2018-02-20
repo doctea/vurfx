@@ -801,6 +801,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		for (File file : dir.listFiles()) {
 			if (file.getName().startsWith(host.getClass().getSimpleName()) && file.getName().endsWith((".xml"))) {
+				println("bindSavedSequences() got " + file.getName());
 				//textFiles.add(file.getName());
 				HashMap<String, Object> input = this.host.readSnapshotFile("saves/"+file.getName()).get("/seq");//.get("/seq/sequence");
 				HashMap<String,Object> sequence_settings = (HashMap<String,Object>)(input.containsKey("/seq/sequence") ? input.get("/seq/sequence") : input.get("/seq/changeTo"));
