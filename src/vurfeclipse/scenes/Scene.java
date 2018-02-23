@@ -60,10 +60,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 	//Canvas[] canvases = new Canvas[BUF_MAX];
 
-	protected int filterCount;
-
 	//transient
-	public transient Filter[] filters;// = new Filter[filterCount];
+	//public transient Filter[] filters;// = new Filter[filterCount];
+	public List<Filter> filters = Collections.synchronizedList(new ArrayList<Filter>());
 
 	transient protected HashMap<String,Sequence> sequences = new HashMap<String,Sequence>();
 
@@ -141,7 +140,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 
 	public Filter getFilter(String name) {
-		for (int i = 0 ; i < filters.length ; i++) {
+		for (Filter f : this.filters) {
+			if (f.getFilterName().equals(name)) return f;
+		}
+		return null;
+		/*for (int i = 0 ; i < filters.length ; i++) {
 			if (filters[i]!=null) {
 				//println("Scene#getFilter(" + name + ") checking '" + name + "' against '" + filters[i].getFilterName() + "'");
 				if (filters[i].getFilterName().equals(name)) {
@@ -149,17 +152,18 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 				}
 			}
 		}
-		return null;
+		return null;*/
 	}
 
-	public ArrayList<Filter> getFilters () {
-		ArrayList<Filter> f = new ArrayList<Filter>();
+	public List<Filter> getFilters () {
+		return filters;
+		/*ArrayList<Filter> f = new ArrayList<Filter>();
 		for (int i = 0 ; i < filters.length ; i++) {
 			if (filters[i]!=null) {
 				f.add(filters[i]);
 			}
 		}
-		return f;
+		return f;*/
 	}
 
 	public String getPath() {
@@ -273,8 +277,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 
 
-	public Scene addFilter(Filter f) {
-		if (this.filters==null) this.filters = new Filter[filterCount];
+	public Filter addFilter(Filter f) {
+		/*if (this.filters==null) this.filters = new Filter[filterCount];
 		int filterNumber = -1;
 		for (int i = 0 ; i < filterCount ; i++) {
 			if (filters[i]==null) {
@@ -294,17 +298,19 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			//if (f.out==null) f.out = filters[filterNumber-1].out;
 
 			if (highestFilter<filterNumber) highestFilter = filterNumber;
-		}
-		return this;
+		}*/
+		f.sc = this;
+		this.filters.add(f);
+		return f;
 	}
 
 
-	int highestFilter = filterCount;
+	//int highestFilter = filterCount;
 	public int selectedFilter = 0;
 	public void selectFilter(int sf) {
-		if (sf>=filterCount) sf = 0;
-		if (sf<0) sf = filters.length;
-		if (this.filters[sf]!=null) {
+		if (sf>=filters.size()) sf = 0;
+		if (sf<0) sf = filters.size();//.length;
+		if (this.filters.get(sf)!=null) {
 			this.selectedFilter = sf;
 		} else {
 			selectFilter(sf+1);
@@ -312,37 +318,34 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 
 	public Filter getFilter(int index) {
-		return filters[index];
+		return filters.get(index);
 	}
-	public Filter getSelectedFilter() {
+	/*public Filter getSelectedFilter() {
 		return filters[selectedFilter];
-	}
+	}*/
 	public String getSelectedFilterDescription() {
-		if(this.filters[selectedFilter]!=null)
-			return "["+this.selectedFilter+"]:" + this.filters[this.selectedFilter].getDescription();
+		if(this.filters.get(selectedFilter)!=null)
+			return "["+this.selectedFilter+"]:" + this.filters.get(this.selectedFilter).getDescription();
 		else
 			return "no filter selected in " + this;
 		//return "["+this.selectedFilter+"]:" + this.filters[this.selectedFilter].toString();
 	}
-	public void toggleMuteSelected() {
+	/*public void toggleMuteSelected() {
 		this.filters[this.selectedFilter].toggleMute();
 	}
 	public boolean selectedMuteStatus () {
 		return this.filters[this.selectedFilter].isMuted();
 		//return this.filters[this.selectedFilter].muted;
-	}
+	}*/
 	public void muteAll() {
-		for (int i = 0 ; i < filters.length ; i++) {
-			if (filters[i]!=null) {
-				//filters[i].muted = true;
-				filters[i].setMuted(true);
-			}
+		for (Filter f : filters) {
+			f.setMuted(true);
 		}
 	}
 	public void nextFilterMode() {
-		this.filters[this.selectedFilter].nextMode();
+		this.filters.get(this.selectedFilter).nextMode();
 	}
-
+/*
 	public void selectNext() {
 		this.selectFilter(this.selectedFilter+1);
 	}
@@ -371,7 +374,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		filters[swap] = temp;
 		//this.selectPrevious();
 	}
-
+*/
 	/*public Scene setOutputCanvas(Canvas canvas) {
     setOutputBuffer(canvas.surf);
     return this;
@@ -447,27 +450,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	public boolean initialiseFilters () {
 		if (initialisedFilters) return true;
 		if (!setupFilters ) setupFilters();
-		for (int i = 0 ; i < this.filters.length ; i ++) {
-			if (filters[i]!=null) {
-				filters[i].initialise();
-
-				/*if (filters[i].out==null) filters[i].out = buffers[BUF_OUT];
-        if (filters[i].src==null) filters[i].src = buffers[BUF_SRC];*/
-
-				//if (filters[i].out==null) filters[i].out = getCanvas("out").getSurf();
-				//if (filters[i].src==null) filters[i].src = getCanvas("src").getSurf(); //setInputCanvas(getCanvas("src"));
-
-				//if (filters[i].out==null) filters[i].setOutputCanvas(getCanvasMapping("out"));
-				//if (filters[i].src==null) filters[i].setInputCanvas(getCanvasMapping("src"));
-				
-				/*for (Entry<String,String> cm : getCanvasMappings().entrySet()) {
-					getCanvasMapping(cm.getKey());
-				}*/
-
-				filters[i].start();// 2017-10-29 --- filters were never getting started and so buffers not being initialised..?
-
-			}
+		for (Filter f : this.filters) {
+			f.initialise();
+			f.start();
 		}
+
 		initialisedFilters = true;
 		return true;
 	}
@@ -481,9 +468,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 	public void toggleMute(int filterNumber) {
 		//this.filters[filterNumber].muted=!this.fmuted;
-		this.filters[filterNumber].toggleMute();
-		if (this.filters[filterNumber]!=null) {
-			println("Muting [" + filterNumber + "]: " + this.filters[filterNumber] + " now " + this.filters[filterNumber].isMuted());
+		this.filters.get(filterNumber).toggleMute();
+		if (this.filters.get(filterNumber)!=null) {
+			println("Muting [" + filterNumber + "]: " + this.filters.get(filterNumber) + " now " + filters.get(filterNumber).isMuted());
 		}
 
 	}
@@ -497,7 +484,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	// copy visible layer at end to scene output frame
 
 	int prof_loadbegintimes = 0;
-	int prof_filtertimes[] = new int[filterCount];
+	//int prof_filtertimes[] = new int[filterCount];
 
 	public void applyGLtoCanvas(Canvas canvas) {
 		applyGL(canvas.getSurf());
@@ -511,27 +498,19 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 		//gfx.rect(100, 100, 200,200);
 
-		//println(this + " applyGL start loop: ");
-		for (int i = 0 ; i < filterCount ; i++) {
-			//println("checking " + i);
-			if (filters[i]!=null) {
-				if (!filters[i].isMuted()) {
-					//println("not muted " + i );
-					//filters[i].apply(f);
-					////f.setPixelMap(filters[i].apply(f));
-					////f.img = filters[i].getFinalImage();
-					//int p_beforeapply = millis();
-					filters[i].beginDraw();
-					//filters[i].drawLayerText();
-					//if (filters[i] instanceof PlainDrawer || filters[i] instanceof KaleidoFilter) println(filters[i] + " has out of " + filters[i].out);
-					//println(this + " drawing filter " + i + " " + filters[i]);
-					filters[i].applyToBuffers();
-					filters[i].endDraw();
-					//buffers[BUF_OUT].background(i*(255/8));
-					//prof_filtertimes[i] += millis() - p_beforeapply;
-				}
+
+		for (Filter f : filters) {
+			if (!f.isMuted()) {
+				f.beginDraw();
+				//filters[i].drawLayerText();
+				//if (filters[i] instanceof PlainDrawer || filters[i] instanceof KaleidoFilter) println(filters[i] + " has out of " + filters[i].out);
+				//println(this + " drawing filter " + i + " " + filters[i]);
+				f.applyToBuffers();
+				f.endDraw();
+				//buffers[BUF_OUT].background(i*(255/8));
+				//prof_filtertimes[i] += millis() - p_beforeapply;
 			}
-		}
+			}
 		//println(this + " applyGL end loop");
 		//println("-------------------------------");
 		//println(this + " applyGL(): copying " + buffers[BUF_OUT] + " to " + gfx);// + " in " + this);
@@ -544,7 +523,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 
 
-	public String getProfileDescription () {
+	/*public String getProfileDescription () {
 		String ret = "";
 		//for (int i = 0 ; i<prof_loadbegintimes.length ; i++) {
 		for (int i = 0 ; i<prof_filtertimes.length ; i++) {
@@ -555,19 +534,19 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		//ret += (String)prof_loadbegintimes;
 
 		return ret;
-	}
+	}*/
 
 	/////////// Callbacks stuff
 
 	public void changeFilterParameterValue(int index, String paramName, Object value) {
 		if (null!=filters)
-			if (null!=filters[index])
-				filters[index].changeParameterValue(paramName,value);
+			if (null!=filters.get(index))
+				filters.get(index).changeParameterValue(paramName,value);
 	}
 	public void changeFilterParameterValueFromSin(int index, String paramName, float s) {
 		if(null!=filters)
-			if (null!=filters[index])
-				filters[index].changeParameterValueFromSin(paramName,s);
+			if (null!=filters.get(index))
+				filters.get(index).changeParameterValueFromSin(paramName,s);
 	}
 
 
@@ -609,10 +588,9 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 
 	public void finish() {
-		if (filters!=null)
-			for (int i = 0 ; i < filterCount ; i++) {
-				if (filters[i]!=null) filters[i].dispose();
-			}
+		for (Filter f : filters) {
+			f.dispose();
+		}
 	}
 
 	public void sendKeyPressed(char key) {
@@ -659,15 +637,15 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
     } else*/
 		else if (key=='-') {
 			int oldFilter = sc.selectedFilter;
-			sc.selectFilter(sc.highestFilter);
-			if (sc.filters[sc.selectedFilter] instanceof DebugDrawer) {
-				sc.toggleMuteSelected();
+			sc.selectFilter(sc.filters.size());
+			if (sc.filters.get(sc.selectedFilter) instanceof DebugDrawer) {
+				sc.filters.get(sc.selectedFilter).toggleMute();
 			}
 			sc.selectFilter(oldFilter);
-			println("Selected sc " + sc.getSelectedFilterDescription());
+			//println("Selected sc " + sc.getSelectedFilterDescription());
 		} else if (key=='=') {
-			sc.selectFilter(sc.highestFilter);
-			println("Selected sc " + sc.getSelectedFilterDescription());
+			sc.selectFilter(sc.filters.size());
+			//println("Selected sc " + sc.getSelectedFilterDescription());
 		}
 
 	}
@@ -906,9 +884,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		//   for (int i = 0 ; i < filterCount ; i ++) {
 		//println("in " + this + " filters length is " + this.filters.length);
 		int row = 0;
-		for (int i = 0 ; i < this.filters.length ; i ++) {
-			if (filters[i]!=null) {
-				if (debug) println(">>>>>>>>>>>>>>>>>About to setupControls for " + filters[i]);
+		for (Filter f : filters) {
+				if (debug) println(">>>>>>>>>>>>>>>>>About to setupControls for " + f);
 				//cp5.addToggle("mute_" + tabName + "["+i+"]: " + filters[i])
 				/*filters[i].muteController = cp5.addToggle("mute_" + tabName + "["+i+"]: " + filters[i])
            .setLabel("Mute " + filters[i])
@@ -920,12 +897,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
            .addCallback(filters[i])
            .linebreak()
            ;*/
-				row = filters[i].setupControls(cf,tab,row);
+				row = f.setupControls(cf,tab,row);
 
-				if (debug) println("<<<<<<<<<<<<<<<<did setupcontrols for " + filters[i]);
+				if (debug) println("<<<<<<<<<<<<<<<<did setupcontrols for " + f);
 
 			}
-		}
 	}
 
 	@Override
@@ -944,6 +920,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 	public HashMap<String,Targetable> getTargetURLs() {
 		HashMap<String, Targetable> urls = new HashMap<String,Targetable>();
+		debug = true;
 		Scene s = this;
 		// add a 'mute' url for the Scene
 		if (s instanceof Mutable) {
@@ -1048,13 +1025,13 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		return null;
 	}
 	public synchronized void moveFilter(Filter f, int direction) {
-		for (int i = 0 ; i < this.filterCount; i++) {
-			if (i+direction<0 || i+direction>this.filterCount-1) continue;
-			if (this.filters[i]==f) {
+		for (int i = 0 ; i < this.filters.size() ; i++) {
+			if (i+direction<0 || i+direction>this.filters.size()-1) continue;
+			if (this.filters.get(i)==f) {
 				Filter t;
-				t = filters[i+direction];
-				filters[i+direction] = f;
-				filters[i] = t;
+				t = filters.get(i+direction);
+				filters.set(i+direction,f);
+				filters.set(i,t);
 				break;
 			}
 		}		
@@ -1069,5 +1046,26 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			if (canvas_in.equals(c.getValue())) return c.getKey();
 		}
 		return null;
+	}
+	
+	
+	
+	List<Runnable> updateQueue = Collections.synchronizedList(new ArrayList<Runnable>());
+
+	public synchronized void processUpdateQueue() {
+		for (Runnable q : updateQueue) {
+			q.run();
+		}
+		this.clearQueue();	
+	}
+
+	synchronized private void clearQueue() {
+		updateQueue.clear();
+	}
+
+	public void queueUpdate(Runnable runnable) {
+		synchronized(this) {
+			this.updateQueue.add(runnable);
+		}
 	}
 }

@@ -29,10 +29,11 @@ public class FilterChain extends Filter {
     filters[fCount] = f;
     fCount++;
   }
-  public void addFilterDefaults(Filter f) {
+  public FilterChain addFilterDefaults(Filter f) {
     //f.setBuffers(out,src);
     f.setAliases(alias_out, alias_in);
     this.addFilter(f);
+    return this;
   }
 
   public Filter nextMode () {

@@ -20,7 +20,6 @@ public class PlasmaScene extends Scene {
 	public PlasmaScene(Project host, int w, int h) {
 		super(host, w, h);
 
-		this.filterCount = 3;
 	}
 
 	public void setupCallbackPresets () {

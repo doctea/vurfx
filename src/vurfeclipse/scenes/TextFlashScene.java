@@ -95,7 +95,6 @@ public class TextFlashScene extends Scene {
 
 	public TextFlashScene(Project host, int w, int h, String[] values) {
 		super(host,w,h);
-		this.filterCount = 4;
 		this.values = values;
 	}
 
@@ -116,16 +115,18 @@ public class TextFlashScene extends Scene {
 
 	public boolean setupFilters () {
 		//super.initialise();
-		filters = new Filter[filterCount];
+		//filters = new Filter[filterCount];
 		//println("DemoScene initialised " + this + " - filtercount is " + filterCount);
-		int i = 0;
+		//int i = 0;
 
-		filters[i] = new TextDrawer(this).setFilterName("TextDrawer").setAliases("temp","out");//setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);
-		final TextDrawer ftd = (TextDrawer) filters[i];
+		
+		
+		addFilter(new TextDrawer(this).setFilterName("TextDrawer").setAliases("temp","out"));//setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);
+		//final TextDrawer ftd = (TextDrawer) filters[i];
 
-		filters[++i] = new BlendDrawer(this).setFilterName("BlendDrawer").setAliases("out","temp"); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
-		final BlendDrawer fbd = (BlendDrawer) filters[i];
-		((BlendDrawer)filters[i]).setBlendMode(9);
+		final BlendDrawer fbd = (BlendDrawer) addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setAliases("out","temp")); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
+		//final BlendDrawer fbd = (BlendDrawer) filters[i];
+		fbd.setBlendMode(9);
 
 		//filters[++i] = new ShaderFilter(this,"negateFrag.glsl").setCanvases(getCanvasMapping("out"), getCanvasMapping("temp"));//.addParameter("Opacity", new Float(0.5f), 0f, 1f);
 
@@ -140,10 +141,6 @@ public class TextFlashScene extends Scene {
         }
       }
     );*/
-
-
-
-		highestFilter = i;
 		return true;
 	}
 
@@ -177,10 +174,10 @@ public class TextFlashScene extends Scene {
 			int i = Integer.parseInt(value.toString());
 			if (i%2==0) {
 				//this.toggleMute();
-				//changeFilterParameterValue(1
-				if (filters[1]!=null) self.filters[1].setMuted(false);
+				//changeFilterParameterValue(
+				filters.get(1).setMuted(false);
 			} else {
-				if (filters[1]!=null) self.filters[1].setMuted(true);
+				filters.get(1).setMuted(true);
 			}
 		}
 	}

@@ -13,8 +13,7 @@ public class SimpleScene extends Scene {
     
     //setSceneName(this.getClass().getCanonicalName());
     
-    this.filterCount = 16;
-    this.filters = new Filter[filterCount];
+    //this.filters = new Filter[filterCount];
   }
   
   public boolean setupFilters () {

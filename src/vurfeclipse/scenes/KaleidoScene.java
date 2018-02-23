@@ -13,12 +13,11 @@ class KaleidoScene extends Scene {
   KaleidoScene(Project host, int w, int h) {
     super(host, w, h);
     
-    this.filterCount = 3;
   }
   
   public boolean setupFilters () {
     //super.initialise();
-    filters = new Filter[filterCount];
+    //filters = new Filter[filterCount];
     int i = 0;
     
     /*filters[++i] = new BlankFilter(this);
@@ -26,18 +25,17 @@ class KaleidoScene extends Scene {
     filters[i].initialise();*/
     
     //filters[i] = new MirrorFilter(this).setBuffers(buffers[BUF_OUT],buffers[BUF_SRC]);
-    filters[i] = new MirrorFilter(this).setFilterName("MirrorFilter").setAliases("out","src"); //buffers[BUF_OUT],buffers[BUF_SRC]);    
-    filters[i].setMuted(true);
+    this.addFilter(new MirrorFilter(this).setFilterName("MirrorFilter").setAliases("out","src")).setMuted(true); //buffers[BUF_OUT],buffers[BUF_SRC]);    
     
-    filters[++i] = new KaleidoFilter(this).setFilterName("KaleidoFilter").setAliases("out","out");//buffers[BUF_OUT],buffers[BUF_OUT]);
+    this.addFilter(new KaleidoFilter(this).setFilterName("KaleidoFilter").setAliases("out","out"));//buffers[BUF_OUT],buffers[BUF_OUT]);
     
-    println ("just created kaleido " + filters[i].getFilterName());
+    //println ("just created kaleido " + filters[i].getFilterName());
     //System.exit(0);
     
     
-    final Filter cf = filters[i];
+    //final Filter cf = filters[i];
     
-    highestFilter = i;
+    //highestFilter = i;
     return true;
   }
   

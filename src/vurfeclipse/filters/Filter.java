@@ -665,6 +665,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			Filter self = this;
 			
 
+
+
 			if (row!=0) {
 				this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + getFilterName())
 						.setLabel("^")
@@ -722,7 +724,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			.setValueLabel("in => " + this.canvas_in + "\nout => " + this.canvas_out)
 			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h))
 			.moveTo(grp);*/
-			CallbackListener toFront = new CallbackListener() {
+			/*CallbackListener toFront = new CallbackListener() {
 				public void controlEvent(CallbackEvent theEvent) {
 					theEvent.getController().bringToFront();
 					((ScrollableList)theEvent.getController()).open();
@@ -733,7 +735,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 				public void controlEvent(CallbackEvent theEvent) {
 					((ScrollableList)theEvent.getController()).close();
 				}
-			};
+			};*/
 			
 			
 		String[] canvases = sc.getCanvasMappings().keySet().toArray(new String[0]);
@@ -758,6 +760,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			//.setHeight(10)	// this breaks the dropdown!
 			.setWidth(size*2)
 			.setBarHeight(10)
+			.setHeight(10 * 4)
 			.setItemHeight(10)
 			.moveTo(grp)
 			.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
@@ -771,8 +774,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 					self.setAlias_in(mapName);
 				}				
 			})
-			.onLeave(close)
-			.onEnter(toFront)
+			.onLeave(cf.close)
+			.onEnter(cf.toFront)
 			.close()
 			;
 		//grp.add(lstInputCanvas);
@@ -790,6 +793,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			//.setHeight(10)
 			.setBarHeight(10)
 			.setWidth(size*2)
+			.setHeight(10 * 4)
 			.setItemHeight(10)
 			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)+13)
 			.moveTo(grp)
@@ -804,14 +808,50 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 					self.setAlias_out(mapName);
 				}				
 			})
-			.onLeave(close)
-			.onEnter(toFront)
+			.onLeave(cf.close)
+			.onEnter(cf.toFront)
 			.close()
 			;
 
 		
+		//
+		Button cloneButton = cp5.addButton("clone_"+ tab.getName() + getFilterName())
+				.setLabel("clone")
+				.setSize(size, size)
+				.setPosition(lstOutputCanvas.getPosition()[0] + (size*2.5f) + (col*col_w),margin_h + (row*row_h)-3)
+				.setHeight(12)
+				.moveTo(grp)
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						//self.sc.moveFilter(self, -1);
+						//self.sc.refreshControls();
+
+						HashMap<String,Object> setup = self.collectFilterSetup();
+						Filter newf = Filter.createFilter(self.getClass().getName(), self.sc);
+						String newName = "copy of " + self.getFilterName();
+						
+						sc.queueUpdate(new Runnable() {
+
+							@Override
+							public void run() {								
+								println("CLONING!  new name is " + newName);
+								newf.setFilterName(newName).readSnapshot(setup).setFilterName(newName);
+								
+								//synchronized(self) {
+								sc.addFilter(newf);
+								newf.initialise();
+								newf.start();
+								sc.refreshControls();								
+							}});
+						//}
+					}					
+				});
 		
-		int param_start_w = margin_w*8;
+		
+		
+		
+		int param_start_w = margin_w*15;
 		
 		//cp5.addTextlabel("path_" + tab.getName() + getFilterName(), "Path: " + this.getPath()).setSize(size, size).moveTo(grp);//.linebreak();
 
@@ -1037,7 +1077,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			//System.out.println (clazz.getConstructors());
 			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
 			System.out.println("Filter#createFilter(): about to try and get constructor for classname '" + classname + "'");
-			if (classname.contains("$")) {
+			if (classname.contains("$")) {	// its an inner class
 				String[] spl = classname.split("\\$");
 				clazz = Class.forName(spl[0]); //Class.forName(classname); host.getClass();//
 				Class<?> inner = Class.forName(classname);
@@ -1051,7 +1091,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 				return filt;
 			} else {
 				Constructor<?> ctor = clazz.getConstructor(Scene.class); //Scene.class,Integer.TYPE);
-				return (Filter) ctor.newInstance(host); //(Scene)null, (int)0);
+				Filter filt = (Filter) ctor.newInstance(host); //(Scene)null, (int)0);
+				filt.sc = host;
+				return filt;
 			}
 			//Object seq = ctor.newInstance(); //(Scene)null, 0);
 		} catch (Exception e) {
@@ -1062,7 +1104,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void readSnapshot(Map<String, Object> input) {
+	public Filter readSnapshot(Map<String, Object> input) {
 		this.setFilterName((String) 	input.get("name"));
 		this.setFilterLabel((String) 	input.get("label"));
 		//this.setDescription(input.get("description"));
@@ -1082,6 +1124,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			Map<String,Object> para = (Map<String, Object>) p.getValue();
 			this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
 		}		
+		
+		return this;
 	}
 	
 	/*	public void changeCanvas(String oldCanvasPath, String canvasPath) {

@@ -12,7 +12,6 @@ public class VideoScene extends Scene {
   VideoScene(Project host, int w, int h) {
     super(host, w, h);
     
-    this.filterCount = 3;
   }
   public VideoScene(Project host, int w, int h, String filename) {
     this(host,w,h);

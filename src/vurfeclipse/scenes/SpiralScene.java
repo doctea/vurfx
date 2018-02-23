@@ -20,7 +20,6 @@ public class SpiralScene extends Scene {
     //this.inp = inp;
     setCanvas("inp0", canvas);
     
-    this.filterCount = 4;
   }
   
   
@@ -93,22 +92,21 @@ public class SpiralScene extends Scene {
   
   public boolean setupFilters () {
     //super.initialise();
-    filters = new Filter[filterCount];
+    //filters = new Filter[filterCount];
     //println("DemoScene initialised " + this + " - filtercount is " + filterCount);
-    int i = 0;
+    //int i = 0;
     
     //filters[i] = new TextDrawer(this).setBuffers(buffers[BUF_TEMP],buffers[BUF_TEMP]);
     //final TextDrawer ftd = (TextDrawer) filters[i];
     
     //filters[i] = new ShaderFilter(this, "Porthole.xml").setBuffers(buffers[BUF_TEMP],inp);
     
-    filters[i] = new SpiralDrawer(this).setFilterName("SpiralDrawer").setAliases("temp","inp0"); //setBuffers(buffers[BUF_TEMP], inp);
+    addFilter(new SpiralDrawer(this).setFilterName("SpiralDrawer").setAliases("temp","inp0")); //setBuffers(buffers[BUF_TEMP], inp);
     //filters[++i] = new SpiralDrawer(this).setBuffers(buffers[BUF_TEMP], buffers[BUF_TEMP]);
     
 
-    filters[++i] = new BlendDrawer(this).setFilterName("BlendDrawer").setAliases("out","temp"); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
-    final BlendDrawer fbd = (BlendDrawer) filters[i];
-    ((BlendDrawer)filters[i]).setBlendMode(9);
+    final BlendDrawer fbd = (BlendDrawer) addFilter(new BlendDrawer(this).setFilterName("BlendDrawer").setAliases("out","temp")); //setBuffers(buffers[BUF_OUT],buffers[BUF_TEMP]);
+    fbd.setBlendMode(9);
     
     /*
     host.getStream("beat").registerEventListener("beat_8",
@@ -124,7 +122,6 @@ public class SpiralScene extends Scene {
     );
     */    
     
-    highestFilter = i;
     return true;
   }
   

@@ -364,12 +364,14 @@ public class ImageListDrawer extends Filter {
 	}
 	
 	@Override
-	public void readSnapshot(Map<String, Object> input) {
+	public ImageListDrawer readSnapshot(Map<String, Object> input) {
 		super.readSnapshot(input);	// TODO: a conundum; if we don't do this on first load then a bunch of stuff doesn't get set up properly; if we do do this then ImageListDrawer doesn't appear to output to the correct canvas..?
 		if (input.containsKey("directory")) {
 			this.directory = (String) input.get("directory");
 			this.loadDirectory();
 		}
+		
+		return this;
 	}
 }
 

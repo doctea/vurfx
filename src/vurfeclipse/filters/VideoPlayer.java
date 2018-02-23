@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
 import processing.core.PGraphics;
-import processing.video.Movie;
+import processing.video.*;
 
 public class VideoPlayer extends Filter {
   transient Movie stream;

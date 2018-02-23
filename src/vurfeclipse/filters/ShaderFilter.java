@@ -60,10 +60,11 @@ public class ShaderFilter extends Filter {
 	}
 	
 	@Override
-	public void readSnapshot(Map<String,Object> input) {
+	public ShaderFilter readSnapshot(Map<String,Object> input) {
 		super.readSnapshot(input);
 		this.shaderFragName = (String) input.get("shaderFragName");
 		this.shaderVertName = (String) input.get("shaderVertName");
+		return this;
 	}
 
 	

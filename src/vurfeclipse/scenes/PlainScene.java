@@ -12,7 +12,6 @@ public class PlainScene extends Scene {
   public PlainScene(Project host, int w, int h) {
     super(host, w, h);
     
-    this.filterCount = 32;
   }
   
   public boolean setupFilters () {

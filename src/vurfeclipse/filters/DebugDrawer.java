@@ -69,9 +69,8 @@ public class DebugDrawer extends Filter {
     drawDebug("SelectedFilter", selectedScene.getSelectedFilterDescription());
     //while (i.hasNext()) {
       //Filter f = (Filter)i.next();
-    for (int c = 0; c<selectedScene.filters.length;c++) {
-      Filter f = selectedScene.filters[c];
-      if (f!=null) {
+    int c = 0;
+    for (Filter f : selectedScene.filters) {
         String pad = c==selectedScene.selectedFilter?"*":" ";
         drawDebug(pad + "["+c+"]" + pad,
           f!=null?
@@ -79,8 +78,7 @@ public class DebugDrawer extends Filter {
             f.getFilterLabel() + " (" + f.toString() + ")"
             :"--"
           );
-      }
-      //c++;
+      c++;
     }
   }
 
@@ -142,9 +140,11 @@ public class DebugDrawer extends Filter {
 	}
 	
 	@Override
-	public void readSnapshot(Map<String, Object> input) {
+	public Filter readSnapshot(Map<String, Object> input) {
 		super.readSnapshot(input);
 		
 		if (input.containsKey("mode")) this.mode = (Integer) input.get("mode");
+		
+		return this;
 	}
 }

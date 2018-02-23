@@ -14,7 +14,6 @@ public class WebcamScene extends Scene {
     super(host, w, h);
     this.capW = capW;
     this.capH = capH;
-    this.filterCount = 32;
   }
   /*public WebcamScene(Project host, int w, int h, int cameraNumber) {
     this(host,w,h);

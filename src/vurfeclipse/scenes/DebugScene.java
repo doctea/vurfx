@@ -10,13 +10,12 @@ public class DebugScene extends Scene {
   public DebugScene(Project host, int w, int h) {
     super(host, w, h);
     
-    this.filterCount = 3;
   }
   
   public boolean setupFilters () {
     //super.initialise();
-    filters = new Filter[filterCount];
-    int i = 0;
+    //filters = new Filter[filterCount];
+    //int i = 0;
     
     /*filters[++i] = new BlankFilter(this);
     filters[i].setBuffers(buffers[BUF_OUT],buffers[BUF_OUT]);
@@ -54,7 +53,7 @@ public class DebugScene extends Scene {
     //filters[i].initialise();
     addFilter(cf);
     
-    highestFilter = i;
+    //highestFilter = i;
     return true;
   }
   

@@ -99,12 +99,12 @@ public class ControlFrame extends PApplet {
 		return this.cp5;
 	}
 
-	List<Runnable> updateQueue = Collections.synchronizedList(new ArrayList<Runnable>());
-
 	public void draw() {
 		background(190);
 		this.processUpdateQueue();
 	}
+	
+	List<Runnable> updateQueue = Collections.synchronizedList(new ArrayList<Runnable>());
 
 	synchronized private void processUpdateQueue() {
 		for (Runnable q : updateQueue) {
@@ -114,7 +114,6 @@ public class ControlFrame extends PApplet {
 	}
 
 	synchronized private void clearQueue() {
-		// TODO Auto-generated method stub
 		updateQueue.clear();
 	}
 

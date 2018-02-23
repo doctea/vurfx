@@ -19,7 +19,6 @@ public class BadTVScene extends Scene {
 	public BadTVScene(Project host, int w, int h) {
 		super(host, w, h);
 
-		this.filterCount = 3;
 	}
 
 	public void setupCallbackPresets () {

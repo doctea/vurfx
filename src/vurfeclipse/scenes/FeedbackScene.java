@@ -15,6 +15,7 @@ import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.filters.WebcamFilter;
 import vurfeclipse.streams.*;
 
+@Deprecated
 class FeedbackScene extends Scene {
   //int filterCount = 2;
   
@@ -23,12 +24,11 @@ class FeedbackScene extends Scene {
   FeedbackScene(Project host, int w, int h) {
     super(host, w, h);
     
-    this.filterCount = 32;
   }
   
   public boolean setupFilters () {
     //super.initialise();
-    filters = new Filter[filterCount];
+    //filters = new Filter[filterCount];
     
     /*Stream stream = new Stream("Test Stream");
     BeatStream beatStream = new BeatStream("Beat Stream", 125.0);
@@ -38,22 +38,13 @@ class FeedbackScene extends Scene {
     BeatStream beatStream = (BeatStream) host.getSequencer().getStream("beat");
        
     //println("DemoScene initialised " + this + " - filtercount is " + filterCount);
-    int i = 0;
-    filters[i] = new BlankFilter(this);
-    //filters[i].setBuffers(buffers[BUF_OUT], buffers[BUF_OUT]);
-    //filters[i].setCanvases(getCanvas("out"),getCanvas("out"));
-    filters[i].setAliases("out","out");
-    filters[i].initialise();
+    addFilter(new BlankFilter(this).setAliases("out","out")).initialise();
     
-    filters[++i] = new FilterChain(this, "Webcam 1 Image into BUF_SRC");
-    //filters[i].setBuffers(buffers[BUF_SRC], buffers[BUF_SRC]);
-    filters[i].setAliases("src","src");    
-    ((FilterChain)filters[i]).addFilterDefaults(new WebcamFilter(this,1));
-    ((FilterChain)filters[i]).addFilterDefaults(new MirrorFilter(this)); /// hmmm including this here gives mad mirror-flicker... wonder if this is because the webcam is slower than the draw() loop..?
-    //((FilterChain)filters[i]).addFilter((new PlainDrawer(this)).setBuffers(buffers[BUF_TEMP],buffers[BUF_SRC]));
-    //((FilterChain)filters[i]).addFilter((new ColourFilter(this)).setBuffers(buffers[BUF_TEMP],buffers[BUF_SRC]));
-    //filters[i].setMute(true);
-    filters[i].initialise();   
+    addFilter(new FilterChain(this, "Webcam 1 Image into BUF_SRC")
+    		.addFilterDefaults(new WebcamFilter(this,1))
+    		.addFilterDefaults(new MirrorFilter(this))
+    		.setAliases("src","src")
+    ).initialise();
     
     /*filters[++i] = new FilterChain(this, "Webcam 0 Image into BUF_SRC2");
     filters[i].setBuffers(buffers[BUF_SRC2], buffers[BUF_SRC2]);

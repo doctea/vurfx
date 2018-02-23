@@ -458,6 +458,10 @@ public abstract class Project implements Serializable {
 		for (Scene sc : scenes) {
 			//println("Applying to " + sc.toString() + " to " + sc.getSceneName());
 			//sc.applyGL(gfx);
+			
+			// run anything waiting to be run in this thread
+			sc.processUpdateQueue();
+			
 			if (shouldDrawScene(sc)) {
 				//println("Should draw " + sc + " to " + out.getSurf());
 				sc.applyGLtoCanvas(out); //getCanvas(getPath()+"out"));
@@ -621,7 +625,7 @@ public abstract class Project implements Serializable {
 		return params;
 	}
 
-	@Deprecated
+	/*@Deprecated
 	public void saveIndividualParts(String filename) {
 		for (Scene ss : scenes) {
 			println("Serialising " + ss + " " + ss.getSceneName());
@@ -640,7 +644,7 @@ public abstract class Project implements Serializable {
 				}
 			}
 		}
-	}
+	}*/
 
 	public String getSequenceName () {
 		if (this.sequencer!=null) return this.sequencer.getCurrentSequenceName();
