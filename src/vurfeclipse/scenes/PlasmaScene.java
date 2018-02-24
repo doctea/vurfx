@@ -73,9 +73,9 @@ public class PlasmaScene extends Scene {
 		}
 		@Override
 		public Filter nextMode() {
-			changeParameterValue("colourMode", new Integer(((Integer)getParameterValue("colourMode")+1)));
+			setParameterValue("colourMode", new Integer(((Integer)getParameterValue("colourMode")+1)));
 			if ((Integer)getParameterValue("colourMode")>colourModeCount) {
-				changeParameterValue("colourMode", new Integer(0));
+				setParameterValue("colourMode", new Integer(0));
 			}
 			return this;
 		}

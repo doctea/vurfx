@@ -566,15 +566,18 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		//println(this + " got event " + ev + " : " + ev.getController() + ev.getController().getValue());
 		if (!ev.getController().isUserInteraction()) return;
 		//println(this + " got event " + ev + " : " + ev.getController() + ev.getController().getValue());
-		if (ev.getController()==this.muteController &&
-				/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
+		/*		if (ev.getController()==this.muteController &&
+				//ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || 
 				ev.getAction()==ControlP5.ACTION_PRESS) {
 			println("Setting mute state on " + this + " to " + muteController.getState());
 			this.setMuted(muteController.getState());
-		} else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_PRESS) {
+		} else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_BROADCAST) {
 			this.nextMode();
-		} else if (controllers.containsKey(ev.getController()) &&
-				(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_BROADCAST || ev.getAction()==ControlP5.ACTION_DRAG || ev.getAction()==ControlP5.ACTION_RELEASE || ev.getAction()==ControlP5.ACTION_RELEASE_OUTSIDE || ev.getAction()==ControlP5.ACTION_PRESS)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
+			
+		} else */
+			if (controllers.containsKey(ev.getController()) &&
+				(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_BROADCAST)) //
+					//|| ev.getAction()==ControlP5.ACTION_DRAG || ev.getAction()==ControlP5.ACTION_RELEASE || ev.getAction()==ControlP5.ACTION_RELEASE_OUTSIDE || ev.getAction()==ControlP5.ACTION_PRESS)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
 				) {
 			String paramName = (String)controllers.get(ev.getController());
 			//println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
@@ -664,9 +667,6 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			
 			Filter self = this;
 			
-
-
-
 			if (row!=0) {
 				this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + getFilterName())
 						.setLabel("^")
@@ -707,16 +707,32 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 					.setValue(this.isMuted())
 					.setState(this.isMuted())
 					.moveTo(grp)
-					;
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
+							//ev.getAction()==ControlP5.ACTION_PRESS) {
+							println("Setting mute state on " + this + " to " + muteController.getState());
+							self.setMuted(muteController.getState());							
+						}
+					});
 
 			this.muteController.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingY(2*cp5.getFont().getHeight());
 			this.muteController.getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setPaddingY(2*cp5.getFont().getHeight());//.setPaddingY(cp5.getFont().getHeight());
 
-			this.nextModeButton = cp5.addButton("nextmode_" + tab.getName() + getFilterName())
+			this.nextModeButton = cp5.addButton("nextmode_" + tab.getName() + getFilterName() + " " + getPath())
 					.setLabel(">|")
 					.setSize(size, size)
 					.setPosition(this.muteController.getWidth()+this.muteController.getPosition()[0]+margin_w/*(margin_w*2) + (col*(col_w+margin_w)) + size + 5*/,margin_h + (row*row_h))
 					.moveTo(grp)
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							self.nextMode();
+						}
+						
+					})
 					;
 			
 			
@@ -832,7 +848,6 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 						String newName = "copy of " + self.getFilterName();
 						
 						sc.queueUpdate(new Runnable() {
-
 							@Override
 							public void run() {								
 								println("CLONING!  new name is " + newName);

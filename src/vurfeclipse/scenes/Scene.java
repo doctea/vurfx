@@ -902,6 +902,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 				if (debug) println("<<<<<<<<<<<<<<<<did setupcontrols for " + f);
 
 			}
+		
+		//tab.setSize(50, currentY);//.setHeight( currentY);
 	}
 
 	@Override
@@ -1037,8 +1039,16 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		}		
 	}
 	synchronized public void refreshControls() {
-		this.setupControls(host.getApp().getCF(), tab);
-		tab.setWidth(host.getApp().getCF().sketchWidth());
+		Scene self = this;
+		
+		host.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {
+				self.setupControls(host.getApp().getCF(), tab);
+				tab.setWidth(host.getApp().getCF().sketchWidth());
+			}
+		});
+
 	}
 	public String getMappingForCanvas(String canvas_in) {
 		if (canvas_in==null) return null;

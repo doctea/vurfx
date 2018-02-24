@@ -1,8 +1,12 @@
 package vurfeclipse.streams;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
@@ -126,11 +130,13 @@ public class FormulaCallback extends ParameterCallback {
 
 		
 		// set up the Target dropdown
+		SortedSet<String> keys = new TreeSet<String>(APP.getApp().pr.getTargetURLs().keySet());
+		String[] targetUrls = keys.toArray(new String[0]);
 		
 		ScrollableList lstTarget = cf.control().addScrollableList(name + self.getStreamSource() + "_" /* n +*/ + "_Target URL")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 				.setLabel(((FormulaCallback)self).targetPath)
-				.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
+				.addItems(targetUrls)
 				.moveTo(g)
 				//.setPosition(margin_x * 10, pos_y)
 				.setPosition(margin_x + expression.getWidth() + margin_x, pos_y)

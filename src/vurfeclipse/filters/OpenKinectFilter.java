@@ -2,6 +2,9 @@ package vurfeclipse.filters;
 
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
+
+import org.openkinect.processing.*;
+
 import processing.core.PGraphics;
 
 

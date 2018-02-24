@@ -934,7 +934,7 @@ public abstract class Project implements Serializable {
 
 		// get all the Sequencer urls
 		urls.putAll(sequencer.getTargetURLs());
-
+		
 		return urls;
 	}
 

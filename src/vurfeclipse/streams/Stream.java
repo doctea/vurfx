@@ -287,7 +287,7 @@ abstract public class Stream implements Serializable {
 	}
 	synchronized public void setupControls(ControlFrame cf, Group g) {
 		//cf.control().addScrollableList(this.streamName);
-
+		synchronized (g) {
 		int n = 0;
 		int margin_y = 20, gap_y = 5, margin_x = 80;
 
@@ -382,6 +382,7 @@ abstract public class Stream implements Serializable {
 		
 		g.setBackgroundHeight(pos_y + margin_y);
 		
+		}
 		//}
 	}
 
