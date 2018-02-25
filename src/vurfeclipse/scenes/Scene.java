@@ -20,6 +20,7 @@ import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
+import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Textlabel;
 
@@ -756,6 +757,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	private Textlabel lblSceneMapping;
 
 	private ControllerGroup tab;
+	private Group controlGroup;
 	public void setupControls(ControlFrame cf, ControllerGroup tab) {
 
 		ControlP5 cp5 = cf.control();
@@ -772,6 +774,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		int size = 20;
 
 		int currentY = topMargin;
+		
+		/*if (null!=this.controlGroup) this.controlGroup.remove();
+		this.controlGroup = cp5.addGroup(this.getSceneName() + "_controlGroup_");
+
+		tab = controlGroup;*/
 
 		this.muteController = cp5.addToggle("mute_"+tabName)
 				.setPosition(margin, margin)
@@ -903,6 +910,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 			}
 		
+		//this.tab.add(controlGroup.moveTo(tab).setWidth(tab.getWidth()).setBackgroundHeight(tab.getHeight()).setPosition(0,0));
 		//tab.setSize(50, currentY);//.setHeight( currentY);
 	}
 
@@ -1038,12 +1046,21 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			}
 		}		
 	}
+	
+	public void removeFilter(Filter newf) {
+		println("Removing filter " + newf);
+		newf.dispose();
+		filters.remove(newf);
+	}
+	
 	synchronized public void refreshControls() {
 		Scene self = this;
 		
 		host.getApp().getCF().queueUpdate(new Runnable() {
 			@Override
 			public void run() {
+				//tab.remove();
+				tab.update();
 				self.setupControls(host.getApp().getCF(), tab);
 				tab.setWidth(host.getApp().getCF().sketchWidth());
 			}
@@ -1078,4 +1095,5 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			this.updateQueue.add(runnable);
 		}
 	}
+
 }

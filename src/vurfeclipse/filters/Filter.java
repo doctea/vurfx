@@ -6,6 +6,7 @@ import controlP5.CallbackListener;
 import controlP5.ColorWheel;
 import controlP5.ControlGroup;
 import controlP5.ControlP5;
+import controlP5.Controller;
 import controlP5.ControllerGroup;
 import controlP5.Group;
 import controlP5.ScrollableList;
@@ -550,6 +551,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 	public void dispose() {
 		this.stop();
+		for (Controller c : this.controllers.keySet()) {
+			c.remove();
+		}
+		this.controllers = null;
+		this.controllerMapping = null;
 	}
 
 
@@ -575,7 +581,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			this.nextMode();
 			
 		} else */
-			if (controllers.containsKey(ev.getController()) &&
+			/*if (controllers.containsKey(ev.getController()) &&
 				(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_BROADCAST)) //
 					//|| ev.getAction()==ControlP5.ACTION_DRAG || ev.getAction()==ControlP5.ACTION_RELEASE || ev.getAction()==ControlP5.ACTION_RELEASE_OUTSIDE || ev.getAction()==ControlP5.ACTION_PRESS)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
 				) {
@@ -587,7 +593,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 				//sc.host.disableKeys = false;	// horrible hack to disable keyboard input when a textfield is selected..
 				((Textfield)ev.getController()).setFocus(true);
 			}
-		} else if (controllers.containsKey(ev.getController()) && ev.getController().isUserInteraction()) {
+		} else*/ /*if (controllers.containsKey(ev.getController()) && ev.getController().isUserInteraction()) {
 			if (ev.getController() instanceof Textfield) {
 				if (ev.getAction()==ControlP5.ACTION_ENTER || ev.getAction()==ControlP5.ACTION_CLICK) {
 					((Textfield)ev.getController()).setFocus(true);
@@ -597,10 +603,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 					sc.host.setDisableKeys(false);	// horrible hack to disable keyboard input when a textfield is selected..    			
 				}
 			}
-		} else {		
+		} else {*/		
 			String paramName = (String)controllers.get(ev.getController());
 			//println("UNHANDLED CONTROL EVENT in " + this + "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue() + " action is " + ev.getAction());
-		}
+		//}
 		/*else if (ev.getAction()==ControlP5.ACTION_PRESSED) {
       if (controllers.containsKey(ev.getController())) {
         println("getcontroller is " + ev.getController());
@@ -726,12 +732,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 					.setPosition(this.muteController.getWidth()+this.muteController.getPosition()[0]+margin_w/*(margin_w*2) + (col*(col_w+margin_w)) + size + 5*/,margin_h + (row*row_h))
 					.moveTo(grp)
 					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
 							self.nextMode();
-						}
-						
+						}						
 					})
 					;
 			
@@ -834,7 +838,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		Button cloneButton = cp5.addButton("clone_"+ tab.getName() + getFilterName())
 				.setLabel("clone")
 				.setSize(size, size)
-				.setPosition(lstOutputCanvas.getPosition()[0] + (size*2.5f) + (col*col_w),margin_h + (row*row_h)-3)
+				.setPosition(lstOutputCanvas.getPosition()[0] + (size*2.5f) + (col*col_w),margin_h + (row*row_h)-5)
 				.setHeight(12)
 				.moveTo(grp)
 				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
@@ -863,6 +867,31 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 					}					
 				});
 		
+		Button deleteButton = cp5.addButton("delete_"+ tab.getName() + getFilterName())
+				.setLabel("delete")
+				.setSize(size, size)
+				.setPosition(lstOutputCanvas.getPosition()[0] + (size*2.5f) + (col*col_w),margin_h + (row*row_h)+15)
+				.setHeight(12)
+				.moveTo(grp)
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						sc.queueUpdate(new Runnable() {
+							@Override
+							public void run() {								
+								println("DELETING " + self); //!  new name is " + newName);
+								//self.lstOutputCanvas.getParent().remove();
+								/*for (Entry<Controller, String> c : self.controllers.entrySet() ) {
+									((Controller)c.getKey()).getParent().remove();
+								}*/
+								//self.controllers.clear();
+								//self.controllerMapping.clear();
+								sc.removeFilter(self);
+								sc.refreshControls();
+							}});
+						//}
+					}					
+				});
 		
 		
 		

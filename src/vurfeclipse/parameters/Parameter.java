@@ -3,11 +3,14 @@ package vurfeclipse.parameters;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.ControllerGroup;
 import controlP5.Knob;
 import controlP5.Slider;
+import controlP5.Textfield;
 import processing.core.PVector;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
@@ -198,6 +201,8 @@ public class Parameter implements Serializable, Targetable {
 	synchronized public Controller makeController(ControlP5 cp5, String tabName, ControllerGroup tab, int size) {
 		controlP5.Controller o;
 
+		Parameter self = this;
+		
 		if (value instanceof Float) {
 			if (getName().toLowerCase().contains("rotat") ) { //(Float)getMax()==360.0f) {
 				o = cp5.addKnob(tabName).setConstrained(false).setValue((Float)value).setLabel(getName()).setRange((Float)getMin(), (Float)getMax()).setSize(size*2, size*2).setDragDirection(Knob.VERTICAL);
@@ -232,7 +237,49 @@ public class Parameter implements Serializable, Targetable {
 		} else {
 			System.err.println("Unhandled object type " + value.getClass() + " in Parameter#makeController() for " + getName());
 			o = null;
+			
+			return null;
 		}		
+		
+		if (o instanceof Textfield)  {
+			o.addListenerFor(cp5.ACTION_ENTER /*cp5.ACTION_CLICK*/, new CallbackListener() {			
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					((Textfield)theEvent.getController()).setFocus(true);
+					self.filter.sc.host.setDisableKeys(true);	// horrible hack to disable keyboard input when a textfield is selected..				
+			}	
+			});
+			
+			o.addListenerFor(cp5.ACTION_LEAVE, new CallbackListener() {			
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					((Textfield)theEvent.getController()).setFocus(false);
+					filter.sc.host.setDisableKeys(false);	// horrible hack to disable keyboard input when a textfield is selected..   			
+			}	
+			});
+			
+		}
+		
+		
+		
+		o.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+
+			@Override
+			public void controlEvent(CallbackEvent theEvent) {
+				/*String paramName = (String)controllers.get(ev.getController());
+				//println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
+				Object currentValue = getParameterValue(paramName);*/
+				String paramName = self.getName();
+				Object currentValue = self.filter.getParameterValue(self.getName());
+				
+				self.filter.changeValueFor(currentValue,paramName,theEvent);
+				if (theEvent.getController() instanceof Textfield) { // && !currentValue.equals(((Textfield)ev.getController()).getText())) {
+					//sc.host.disableKeys = false;	// horrible hack to disable keyboard input when a textfield is selected..
+					((Textfield)theEvent.getController()).setFocus(true);
+				}				
+			}
+			
+		});
 
 		return o;
 	}
