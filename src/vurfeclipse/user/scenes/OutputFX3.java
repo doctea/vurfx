@@ -228,13 +228,12 @@ public class OutputFX3 extends SimpleScene {
 
 			@Override
 			public void __setValuesForNorm(double pc, int iteration) {
-				getFilter("SyncEffect").changeParameterValue("step_x", (float)grid); //(float)Math.sin(pc/1.5*10));
-				getFilter("SyncEffect").changeParameterValue("step_y", (float)grid); //-(float)Math.sin(pc/1.5*10));
+				changeFilterParameterValue("SyncEffect", "step_x", (float)grid); //(float)Math.sin(pc/1.5*10));
+				changeFilterParameterValue("SyncEffect", "step_y", (float)grid); //-(float)Math.sin(pc/1.5*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/1.5*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", -(float)Math.sin(pc/1.5*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_x", (float)Math.sin(pc/3.0*10));
 				//getFilter("SyncEffect").changeParameterValueFromSin("offset_y", (float)Math.sin(pc/3.0*10));
-
 			}
 
 			@Override

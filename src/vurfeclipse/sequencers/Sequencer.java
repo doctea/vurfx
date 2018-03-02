@@ -48,6 +48,9 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	private boolean historyMode = false;
 	boolean locked = false;
 
+
+	int ticks = 0; //for tracking sequencer position when paused
+	int last = 0;
 	
 	private HashMap<String,Stream> streams = new HashMap<String,Stream>();
 
@@ -262,7 +265,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		}*/
 		timeScale = f;
 		((SequenceSequencer)this).updateGuiTimeScale(f);
-		if (APP.getApp().isReady() && ((SequenceSequencer)this).getActiveSequence()!=null) ((SequenceSequencer)this).getActiveSequence().setValuesForTime();
+		//if (APP.getApp().isReady() && ((SequenceSequencer)this).getActiveSequence()!=null) ((SequenceSequencer)this).getActiveSequence().setValuesForTime(this.ticks);
 		// TODO Auto-generated method stub
 	}
 

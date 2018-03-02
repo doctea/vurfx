@@ -538,7 +538,21 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}*/
 
 	/////////// Callbacks stuff
-
+	public void changeFilterParameterValue(String filterName, String paramName, Object value) {
+		try {
+			getFilter(filterName).changeParameterValue(paramName, value);
+		} catch (NullPointerException e) {
+			println("caught " + e + " - probably null filter for " + filterName + " or null parameter for " + paramName + " or null value for " + value);
+		}
+	}
+	public void changeFilterParameterValueFromSin(String filterName, String paramName, float s) {
+		try {
+			getFilter(filterName).changeParameterValueFromSin(paramName, s);
+		} catch (NullPointerException e) {
+			println("caught " + e + " - probably null filter for " + filterName + " or null parameter for " + paramName + " or null value for " + s);
+		}
+	}
+	
 	public void changeFilterParameterValue(int index, String paramName, Object value) {
 		if (null!=filters)
 			if (null!=filters.get(index))
@@ -547,7 +561,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	public void changeFilterParameterValueFromSin(int index, String paramName, float s) {
 		if(null!=filters)
 			if (null!=filters.get(index))
-				filters.get(index).changeParameterValueFromSin(paramName,s);
+				filters.get(index).changeParameterValueFromSin(paramName, s);
 	}
 
 
@@ -1049,7 +1063,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	
 	public void removeFilter(Filter newf) {
 		println("Removing filter " + newf);
-		newf.dispose();
+		//newf.dispose();
 		filters.remove(newf);
 	}
 	

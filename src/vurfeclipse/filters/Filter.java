@@ -554,8 +554,25 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		for (Controller c : this.controllers.keySet()) {
 			c.remove();
 		}
-		this.controllers = null;
-		this.controllerMapping = null;
+		this.controllers.clear();// = null;
+		this.controllerMapping.clear();// = null;
+		this.muteController.remove();
+		this.nextModeButton.remove();
+		this.moveDownButton.remove();
+		this.moveUpButton.remove();
+		this.lstInputCanvas.remove();
+		this.lstOutputCanvas.remove();
+		this.cloneButton.remove();
+		this.deleteButton.remove();
+		this.muteController = null;
+		this.nextModeButton = null;
+		this.moveDownButton = null;
+		this.moveUpButton = null;
+		this.lstInputCanvas = null;
+		this.lstOutputCanvas = null;
+		this.cloneButton = null;
+		this.deleteButton = null;
+
 	}
 
 
@@ -604,7 +621,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 				}
 			}
 		} else {*/		
+		/*f (controllers!=null) {
 			String paramName = (String)controllers.get(ev.getController());
+		}*/
 			//println("UNHANDLED CONTROL EVENT in " + this + "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue() + " action is " + ev.getAction());
 		//}
 		/*else if (ev.getAction()==ControlP5.ACTION_PRESSED) {
@@ -643,6 +662,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	private ScrollableList lstInputCanvas;
 	private ScrollableList lstOutputCanvas;
 	protected boolean debug = false;
+	private Button cloneButton;
+	private Button deleteButton;
+
 	public synchronized int setupControls(ControlFrame cf, ControllerGroup tab, int row) {
 		ControlP5 cp5 = cf.control();
 		//if (controlsSetup) return 0;
@@ -834,65 +856,66 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			;
 
 		
-		//
-		Button cloneButton = cp5.addButton("clone_"+ tab.getName() + getFilterName())
-				.setLabel("clone")
-				.setSize(size, size)
-				.setPosition(lstOutputCanvas.getPosition()[0] + (size*2.5f) + (col*col_w),margin_h + (row*row_h)-5)
-				.setHeight(12)
-				.moveTo(grp)
-				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-					@Override
-					public void controlEvent(CallbackEvent theEvent) {
-						//self.sc.moveFilter(self, -1);
-						//self.sc.refreshControls();
-
-						HashMap<String,Object> setup = self.collectFilterSetup();
-						Filter newf = Filter.createFilter(self.getClass().getName(), self.sc);
-						String newName = "copy of " + self.getFilterName();
-						
-						sc.queueUpdate(new Runnable() {
-							@Override
-							public void run() {								
-								println("CLONING!  new name is " + newName);
-								newf.setFilterName(newName).readSnapshot(setup).setFilterName(newName);
-								
-								//synchronized(self) {
-								sc.addFilter(newf);
-								newf.initialise();
-								newf.start();
-								sc.refreshControls();								
-							}});
-						//}
-					}					
-				});
-		
-		Button deleteButton = cp5.addButton("delete_"+ tab.getName() + getFilterName())
-				.setLabel("delete")
-				.setSize(size, size)
-				.setPosition(lstOutputCanvas.getPosition()[0] + (size*2.5f) + (col*col_w),margin_h + (row*row_h)+15)
-				.setHeight(12)
-				.moveTo(grp)
-				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-					@Override
-					public void controlEvent(CallbackEvent theEvent) {
-						sc.queueUpdate(new Runnable() {
-							@Override
-							public void run() {								
-								println("DELETING " + self); //!  new name is " + newName);
-								//self.lstOutputCanvas.getParent().remove();
-								/*for (Entry<Controller, String> c : self.controllers.entrySet() ) {
-									((Controller)c.getKey()).getParent().remove();
-								}*/
-								//self.controllers.clear();
-								//self.controllerMapping.clear();
-								sc.removeFilter(self);
-								sc.refreshControls();
-							}});
-						//}
-					}					
-				});
-		
+		boolean enableClone = false;
+		if (enableClone ) {	// 2018-03-02, delete button doesn't work so remove them for now
+			cloneButton = cp5.addButton("clone_"+ tab.getName() + getFilterName())
+					.setLabel("clone")
+					.setSize(size, size)
+					.setPosition(lstOutputCanvas.getPosition()[0] + (size*2.5f) + (col*col_w),margin_h + (row*row_h)-5)
+					.setHeight(12)
+					.moveTo(grp)
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							//self.sc.moveFilter(self, -1);
+							//self.sc.refreshControls();
+	
+							HashMap<String,Object> setup = self.collectFilterSetup();
+							Filter newf = Filter.createFilter(self.getClass().getName(), self.sc);
+							String newName = "copy of " + self.getFilterName();
+							
+							sc.queueUpdate(new Runnable() {
+								@Override
+								public void run() {								
+									println("CLONING!  new name is " + newName);
+									newf.setFilterName(newName).readSnapshot(setup).setFilterName(newName);
+									
+									//synchronized(self) {
+									sc.addFilter(newf);
+									newf.initialise();
+									newf.start();
+									sc.refreshControls();								
+								}});
+							//}
+						}					
+					});
+			
+			deleteButton = cp5.addButton("delete_"+ tab.getName() + getFilterName())
+					.setLabel("delete")
+					.setSize(size, size)
+					.setPosition(lstOutputCanvas.getPosition()[0] + (size*2.5f) + (col*col_w),margin_h + (row*row_h)+15)
+					.setHeight(12)
+					.moveTo(grp)
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							sc.queueUpdate(new Runnable() {
+								@Override
+								public void run() {								
+									println("DELETING " + self); //!  new name is " + newName);
+									//self.lstOutputCanvas.getParent().remove();
+									/*for (Entry<Controller, String> c : self.controllers.entrySet() ) {
+										((Controller)c.getKey()).getParent().remove();
+									}*/
+									//self.controllers.clear();
+									//self.controllerMapping.clear();
+									sc.removeFilter(self);
+									sc.refreshControls();
+								}});
+							//}
+						}					
+					});
+		}
 		
 		
 		int param_start_w = margin_w*15;

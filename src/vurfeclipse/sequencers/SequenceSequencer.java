@@ -96,7 +96,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		println ("oneshot got pc " + pc);
 		this.oneshot.setValuesForNorm(pc);
 		this.oneshot.setValuesForNorm(this.oneshot.getPCForElapsed(elapsed));*/
-		this.oneshot.setValuesForTime();
+		this.oneshot.setValuesForTime(APP.getApp().timeMillis - oneshotStart);
 
 		return true;
 	}
@@ -163,6 +163,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	@Override
 	synchronized public boolean runSequences() {
+		println("ticks is " + ticks);
 		if (!APP.getApp().isReady()) return false;
 		if (!this.isSequencerEnabled()) return false;
 		if (stopSequencesFlag) {
@@ -174,6 +175,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		this.processOneShot();
 
+		if (last==0) last = APP.getApp().timeMillis;
+		
+		ticks += APP.getApp().timeMillis - last;
+		
+		last = APP.getApp().timeMillis;
+		
 		//println(this+"#runSequences");
 		// probably want to move this up to Sequencer and do super.runSequences()
 		if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
@@ -184,7 +191,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		//host.setTimeScale(0.1f);
 
-		if (getActiveSequence()!=null) getActiveSequence().setValuesForTime();
+		if (getActiveSequence()!=null) getActiveSequence().setValuesForTime(this.ticks);
 
 		//gui : update current progress
 		if (getActiveSequence()!=null) this.updateGuiProgress(getActiveSequence());
@@ -503,6 +510,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		if (null==this.getActiveSequence()) {
 			println("Got NULL for " + this.activeSequenceName + "!");
 			return;
+		} else {
+			this.getActiveSequence().iteration = 0;
 		}
 
 		int oldCursor = historyCursor;
@@ -1176,6 +1185,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	@Override public void controlEvent (CallbackEvent ev) {
 
+		if (!ev.getController().isUserInteraction()) return;
+		
 		if (ev.getController() instanceof Textfield) {
 			if (ev.getAction()==ControlP5.ACTION_ENTER || ev.getAction()==ControlP5.ACTION_CLICK) {
 				((Textfield)ev.getController()).setFocus(true);
