@@ -603,7 +603,14 @@ abstract public class Sequence implements Serializable, Mutable {
 
 			}
 			
-			cp5.addNumberbox(name + "_length", "length").setValue(getLengthMillis()).setPosition(0,10).moveTo(seq);
+			cp5.addNumberbox(name + "_length", "length").setValue(getLengthMillis()).setPosition(0,10).moveTo(seq).addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					self.setLengthMillis((int) theEvent.getController().getValue());					
+				}
+				
+			});
 			
 			//seq.setHeight(30);
 			seq.setBackgroundHeight(50);
