@@ -116,6 +116,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		return this.toggleEnabled(!this.isSequencerEnabled());
 	}
 	public boolean toggleEnabled(boolean payload) {
+		this.last = 0;
 		this.enableSequencer = payload;
 		this.updateGuiStatus();
 		return enableSequencer;		

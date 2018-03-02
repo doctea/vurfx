@@ -65,6 +65,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	// oneshot functionality
 	Sequence oneshot = null;
 	int oneshotStart;
+	private boolean debug;
 
 	public boolean startOneShot(String sequenceName) {
 		this.oneshot = (Sequence) this.getSequence(sequenceName).clone();
@@ -163,7 +164,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	@Override
 	synchronized public boolean runSequences() {
-		println("ticks is " + ticks);
+		if (debug) println("ticks is " + ticks);
 		if (!APP.getApp().isReady()) return false;
 		if (!this.isSequencerEnabled()) return false;
 		if (stopSequencesFlag) {
@@ -1078,7 +1079,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setPosition(margin_x, margin_y * 5)
 				.setWidth(width/3)
 				.setHeight(margin_y*2)
-				.setRange(0.01f, 8.0f)
+				.setRange(0.000000001f, 8.0f)
 				.moveTo(sequencerTab)
 				.setValue(0.0f);
 

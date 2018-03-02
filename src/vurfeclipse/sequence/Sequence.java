@@ -364,12 +364,12 @@ abstract public class Sequence implements Serializable, Mutable {
 		if (last==0) last = now;
 		
 		double delta = now - last;
-		println("got delta " + delta + " because now is " + now + " and last is " + last);
+		if (debug) println("got delta " + delta + " because now is " + now + " and last is " + last);
 		
 		last = now;
 				
 		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d );
-		scale /= 10.0d;
+		//scale /= 20.0d;
 		//now = (int) (((double)now) * scale);
 		/*
 		double elapsed = now - startTimeMillis;
@@ -381,7 +381,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		double pc;// = getPCForDelta(((double)delta * scale));
 		
 		pc = PApplet.constrain(
-				current_pc + (float) ((double)(delta * scale) / 1000.0d), //(double)lengthMillis), 
+				current_pc + (float) ((double)(delta * scale) / lengthMillis), //(double)lengthMillis), 
 				0.000000001f, 1.0f //0.999999999f
 		);
 		
@@ -392,7 +392,7 @@ abstract public class Sequence implements Serializable, Mutable {
 			iteration++;	
 		}
 		
-		println("so got pc " + pc);
+		if (debug) println("so got pc " + pc);
 		setValuesForNorm(pc, iteration);
 	}
 
