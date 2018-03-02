@@ -269,7 +269,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		setMuted(false);
 		iteration = 0;
 		//startTimeMillis = APP.getApp().millis();
-		current_pc = 0.0f;
+		current_pc = 0.01f;
 		last = 0;
 
 		this.restart();	// set initial parameters
@@ -386,13 +386,19 @@ abstract public class Sequence implements Serializable, Mutable {
 		);
 		
 		if (pc>=1.0f) { 
-			current_pc = 0.0f;
-			pc = 0.0f;
+			current_pc = 0.01f;
+			pc = 0.01f;
 			last = 0;
 			iteration++;	
+		} else if (pc<0.01f) {
+			current_pc = 0.999999f;
+			pc = 0.999999f;
+			last = 0;
+			iteration--;
 		}
 		
 		if (debug) println("so got pc " + pc);
+		
 		setValuesForNorm(pc, iteration);
 	}
 
@@ -603,11 +609,19 @@ abstract public class Sequence implements Serializable, Mutable {
 
 			}
 			
-			cp5.addNumberbox(name + "_length", "length").setValue(getLengthMillis()).setPosition(0,10).moveTo(seq).addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+			cp5.addNumberbox(name + "_length", "length")
+				.setRange(0.1f, 300.0f)
+				.setDecimalPrecision(4)
+				.setScrollSensitivity(0.1f)
+				.setSensitivity(0.1f)
+				.setValue((float)getLengthMillis()/1000.0f)
+				.setPosition(0,10)
+				.moveTo(seq)
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
-					self.setLengthMillis((int) theEvent.getController().getValue());					
+					self.setLengthMillis((int) (theEvent.getController().getValue()*1000.0f));					
 				}
 				
 			});
