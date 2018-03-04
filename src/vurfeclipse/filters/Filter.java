@@ -585,6 +585,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 
 
 	@Override
+	@Deprecated
 	public void controlEvent (CallbackEvent ev) {
 		//println(this + " got event " + ev + " : " + ev.getController() + ev.getController().getValue());
 		if (!ev.getController().isUserInteraction()) return;
@@ -676,7 +677,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
     }*/
 
 		int size = 20;
-		cp5.addCallback(this);
+		//cp5.addCallback(this);	// don't need this anymore as callbacks are handled by individual controllers
 		//cp5.addTextlabel(tabName + this.toString()).setText(getFilterLabel()).linebreak();
 
 		/*Group grp = cp5.addGroup("group_" + tab.getName() + "_" + getFilterName()).moveTo(tab);
@@ -856,7 +857,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			;
 
 		
-		boolean enableClone = false;
+		boolean enableClone = true;
 		if (enableClone ) {	// 2018-03-02, delete button doesn't work so remove them for now
 			cloneButton = cp5.addButton("clone_"+ tab.getName() + getFilterName())
 					.setLabel("clone")
@@ -910,6 +911,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 									//self.controllers.clear();
 									//self.controllerMapping.clear();
 									sc.removeFilter(self);
+									self.removeControls(cp5);
 									sc.refreshControls();
 								}});
 							//}
@@ -1015,6 +1017,29 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		return row;
 	}
 
+	protected void removeControls(ControlP5 cp5) {
+		for (Controller c : this.controllers.keySet()) {
+			c.remove();
+		}
+		this.controllers.clear();// = null;
+		this.controllerMapping.clear();// = null;
+		this.muteController.remove();
+		this.nextModeButton.remove();
+		this.moveDownButton.remove();
+		this.moveUpButton.remove();
+		this.lstInputCanvas.remove();
+		this.lstOutputCanvas.remove();
+		this.cloneButton.remove();
+		this.deleteButton.remove();
+		this.muteController = null;
+		this.nextModeButton = null;
+		this.moveDownButton = null;
+		this.moveUpButton = null;
+		this.lstInputCanvas = null;
+		this.lstOutputCanvas = null;
+		this.cloneButton = null;
+		this.deleteButton = null;		
+	}
 	synchronized public void setControllerMapping(String paramName, controlP5.Controller o) {
 		if (controllerMapping==null) controllerMapping = new HashMap<String,controlP5.Controller> ();
 		controllerMapping.put(paramName, o);

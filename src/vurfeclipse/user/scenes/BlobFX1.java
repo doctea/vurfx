@@ -88,12 +88,6 @@ public class BlobFX1 extends SimpleScene {
 	
 			//float iteration_warp = (float)(1.0f/(float)iteration)*(float)norm;
 			
-			colour1 = (int) host.getFilter("BlobDrawer").getParameterValue("colour1");
-			colour2 = (int) host.getFilter("BlobDrawer").getParameterValue("colour2");
-			colour3 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour1");
-			colour4 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour2");
-
-			
 			host.getFilter("BlobDrawer").setParameterValue("totalRotate", (float)norm*360.0f); //PApplet.radians((float)norm*360));
 			host.getFilter("BlobDrawer").setParameterValue("rotation", (float)+norm*180.0f);
 			host.getFilter("BlobDrawer2")
@@ -103,7 +97,13 @@ public class BlobFX1 extends SimpleScene {
 			
 			host.getFilter("BlobDrawer2").setParameterValueFromSin("numofCircles", /*APP.getApp().sin(*/(float)inv_norm/*)*/); //0.2f+APP.getApp().sin(iteration_warp/2));
 			
-	
+			// set colours
+			// TODO: move these start/end values parameters of the sequence instead of parameters of the blobdrawer
+			colour1 = (int) host.getFilter("BlobDrawer").getParameterValue("colour1");
+			colour2 = (int) host.getFilter("BlobDrawer").getParameterValue("colour2");
+			colour3 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour1");
+			colour4 = (int) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+			
 			int col1 = lerpcolour(colour1, colour2, norm); //0.5); //inv_norm);
 			int col2 = lerpcolour(colour3, colour4, norm); //0.5); //norm);
 			
@@ -125,9 +125,6 @@ public class BlobFX1 extends SimpleScene {
 					(int)APP.getApp().blue(col2)//,
 					//255
 					);
-	
-	
-			
 		}
 		public void onStart() {
 			super.onStart();
