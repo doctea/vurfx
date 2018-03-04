@@ -1079,7 +1079,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setPosition(margin_x, margin_y * 5)
 				.setWidth(width/3)
 				.setHeight(margin_y*2)
-				.setRange(-8.0f/*0.000000001f*/, 8.0f)
+				.setRange(-4.0f/*0.000000001f*/, 4.0f)
 				.moveTo(sequencerTab)
 				.setValue(0.0f);
 

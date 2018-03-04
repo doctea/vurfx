@@ -276,6 +276,9 @@ public class VurfEclipse extends PApplet {
 				config_width = Integer.parseInt(args.get(args.indexOf("-width")+1));
 				println("got resolution width " + config_width);
 			}
+			if (args.contains("-nodraw")) {
+				this.enableRendering = false;
+			}
 		}
 
 		//size(output_width, output_height + gw_height, gfx_mode);
@@ -540,6 +543,8 @@ public class VurfEclipse extends PApplet {
 	 *
 	 ********/
 	public int timeMillis;
+
+	private boolean enableRendering = true;
 	//GLTextureWindow texWin;
 	@Override
 	public void draw () {
@@ -575,7 +580,9 @@ public class VurfEclipse extends PApplet {
 
 		//	if (frameCount>25) {	// skip rendering first 25 frames
 			//offscreen.getSurf().imageMode(CENTER);
+		if (this.isEnableRendering()) {
 			pr.applyGL(offscreen, output_width, output_height);
+		}
 			//pr.applyGL(offscreen, this.displayWidth, this.displayHeight); //.displayWidth(), this.doHeight());
 			//texWin.render();
 		//}
@@ -635,6 +642,9 @@ public class VurfEclipse extends PApplet {
 	}
 
 
+	private boolean isEnableRendering() {
+		return this.enableRendering;
+	}
 	/*****
 	 * supporting methods
 	 *****/
