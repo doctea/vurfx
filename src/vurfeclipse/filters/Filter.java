@@ -1171,14 +1171,32 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		}
 		return output;
 	}
-	/*private String getSourceCanvas() {
-		// TODO Auto-generated method stub
-		return this.canvas_in;
+	
+	@SuppressWarnings("unchecked")
+	public Filter readSnapshot(Map<String, Object> input) {
+		this.setFilterName((String) 	input.get("name"));
+		this.setFilterLabel((String) 	input.get("label"));
+		//this.setDescription(input.get("description"));
+		if (input.containsKey("canvas_out")) {	// backwards compatibility
+			//this.setOutputCanvas((String) 	input.get("canvas_out"));
+			this.setAlias_out(sc.getMappingForCanvas((String)input.get("canvas_out")));
+		}
+		if (input.containsKey("canvas_src")) {	// backwards compatibility
+			//this.setInputCanvas((String) 	input.get("canvas_src"));	
+			this.setAlias_in(sc.getMappingForCanvas((String)input.get("canvas_src")));
+		}
+		
+		if (input.containsKey("alias_out")) this.setAlias_out((String)input.get("alias_out"));
+		if (input.containsKey("alias_in")) this.setAlias_in((String)input.get("alias_in"));
+
+		for (Entry<String, Object> p : ((Map<String, Object>) input.get("parameter_defaults")).entrySet()) {
+			Map<String,Object> para = (Map<String, Object>) p.getValue();
+			this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
+		}		
+		
+		return this;
 	}
-	private String getOutputCanvas() {
-		// TODO Auto-generated method stub
-		return this.canvas_out;
-	}*/
+
 	public static Filter createFilter(String classname, Scene host) {
 		try {
 			Class clazz = Class.forName(classname);
@@ -1211,30 +1229,6 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public Filter readSnapshot(Map<String, Object> input) {
-		this.setFilterName((String) 	input.get("name"));
-		this.setFilterLabel((String) 	input.get("label"));
-		//this.setDescription(input.get("description"));
-		if (input.containsKey("canvas_out")) {	// backwards compatibility
-			//this.setOutputCanvas((String) 	input.get("canvas_out"));
-			this.setAlias_out(sc.getMappingForCanvas((String)input.get("canvas_out")));
-		}
-		if (input.containsKey("canvas_src")) {	// backwards compatibility
-			//this.setInputCanvas((String) 	input.get("canvas_src"));	
-			this.setAlias_in(sc.getMappingForCanvas((String)input.get("canvas_src")));
-		}
-		
-		if (input.containsKey("alias_out")) this.setAlias_out((String)input.get("alias_out"));
-		if (input.containsKey("alias_in")) this.setAlias_in((String)input.get("alias_in"));
-
-		for (Entry<String, Object> p : ((Map<String, Object>) input.get("parameter_defaults")).entrySet()) {
-			Map<String,Object> para = (Map<String, Object>) p.getValue();
-			this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
-		}		
-		
-		return this;
-	}
 	
 	/*	public void changeCanvas(String oldCanvasPath, String canvasPath) {
 		if (this.lstInputCanvas!=null) 	this.lstInputCanvas.setItems(sc.getCanvasMappings().keySet().toArray(new String[0]));

@@ -194,7 +194,7 @@ public class BlendDrawer extends ShaderFilter {
     		h*(Float)getParameterValue("Y")
     );
     
-    float x = (Float)getParameterValue("X");
+    //float x = (Float)getParameterValue("X");
 
     //if ((Float)getParameterValue("Zoom")!=1.0f) {
     	out().scale((Float)getParameterValue("Scale"));
@@ -205,7 +205,7 @@ public class BlendDrawer extends ShaderFilter {
     rotation = (Integer) getParameterValue("Rotate");
     if (rotation!=0) {
         out().rotate(PApplet.radians(rotation));
-      }
+    }
 
 
     /*out.color(this.random(255));

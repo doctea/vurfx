@@ -221,11 +221,11 @@ public class Parameter implements Serializable, Targetable {
 			} else if (getName().toLowerCase().endsWith("colour") || getName().toLowerCase().endsWith("colour1") || getName().toLowerCase().endsWith("colour2") ) {
 				cp5.setAutoSpacing(size*2, size*2);
 				o = cp5.addColorWheel(tabName, 0, 0, size*2).setWidth(size*2).setHeight(size*2).setRGB((Integer)value).setLabel(getName());
-			} else if (getName().toLowerCase().endsWith("mode")) {
+			} /*else if (getName().toLowerCase().endsWith("mode")) {
 				o = cp5.addKnob(tabName).snapToTickMarks(true).setDragDirection(Knob.VERTICAL)
 						.setNumberOfTickMarks((Integer)getMax())
 						.setConstrained(true).setValue((Integer)value).setLabel(getName()).setRange((Integer)getMin(), (Integer)getMax()).setSize(size*2, size*2);
-			} else {
+			} */else {
 				o = cp5.addSlider(tabName).setValue((Integer)value).setLabel(getName()).setRange((Integer)getMin(), (Integer)getMax()).setSize(size*5, size);  //addCallback(this) :
 			}
 		} else if (value instanceof Boolean ) {
