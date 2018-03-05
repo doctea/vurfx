@@ -125,8 +125,7 @@ public class ControlFrame extends PApplet {
 
 	@Override
 	public void keyPressed () {
-
-			((VurfEclipse)parent).handleKey(key);
+		((VurfEclipse)parent).handleKey(key);
 	}
 
 	public void updateGuiStreamEditor() {

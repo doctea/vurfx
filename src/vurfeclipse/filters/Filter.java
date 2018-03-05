@@ -885,7 +885,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 									sc.addFilter(newf);
 									newf.initialise();
 									newf.start();
-									sc.refreshControls();								
+									sc.refreshControls();
 								}});
 							//}
 						}					
@@ -911,8 +911,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 									//self.controllers.clear();
 									//self.controllerMapping.clear();
 									sc.removeFilter(self);
-									self.removeControls(cp5);
-									sc.refreshControls();
+									/*APP.getApp().getCF().queueUpdate(new Runnable() {
+										@Override
+										public void run() {*/
+											self.removeControls(cp5);
+											sc.refreshControls();											
+										/*}
+									});*/
 								}});
 							//}
 						}					
@@ -1017,28 +1022,30 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		return row;
 	}
 
-	protected void removeControls(ControlP5 cp5) {
-		for (Controller c : this.controllers.keySet()) {
-			c.remove();
+	public void removeControls(ControlP5 cp5) {
+		synchronized (this) {
+			for (Controller c : this.controllers.keySet()) {
+				c.remove();
+			}
+			this.controllers.clear();// = null;
+			this.controllerMapping.clear();// = null;
+			if (this.muteController!=null) this.muteController.remove();
+			if (this.nextModeButton!=null) this.nextModeButton.remove();
+			if (this.moveDownButton!=null) this.moveDownButton.remove();
+			if (this.moveUpButton!=null) this.moveUpButton.remove();
+			if (this.lstInputCanvas!=null) this.lstInputCanvas.remove();
+			if (this.lstOutputCanvas!=null) this.lstOutputCanvas.remove();
+			if (this.cloneButton!=null) this.cloneButton.remove();
+			if (this.deleteButton!=null) this.deleteButton.remove();
+			if (this.muteController!=null) this.muteController = null;
+			if (this.nextModeButton!=null) this.nextModeButton = null;
+			if (this.moveDownButton!=null) this.moveDownButton = null;
+			if (this.moveUpButton!=null) this.moveUpButton = null;
+			if (this.lstInputCanvas!=null) this.lstInputCanvas = null;
+			if (this.lstOutputCanvas!=null) this.lstOutputCanvas = null;
+			if (this.cloneButton!=null) this.cloneButton = null;
+			if (this.deleteButton!=null) this.deleteButton = null;
 		}
-		this.controllers.clear();// = null;
-		this.controllerMapping.clear();// = null;
-		this.muteController.remove();
-		this.nextModeButton.remove();
-		this.moveDownButton.remove();
-		this.moveUpButton.remove();
-		this.lstInputCanvas.remove();
-		this.lstOutputCanvas.remove();
-		this.cloneButton.remove();
-		this.deleteButton.remove();
-		this.muteController = null;
-		this.nextModeButton = null;
-		this.moveDownButton = null;
-		this.moveUpButton = null;
-		this.lstInputCanvas = null;
-		this.lstOutputCanvas = null;
-		this.cloneButton = null;
-		this.deleteButton = null;		
 	}
 	synchronized public void setControllerMapping(String paramName, controlP5.Controller o) {
 		if (controllerMapping==null) controllerMapping = new HashMap<String,controlP5.Controller> ();

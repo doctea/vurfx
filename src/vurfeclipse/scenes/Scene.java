@@ -16,6 +16,7 @@ import vurfeclipse.projects.Project;
 import vurfeclipse.streams.*;
 import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.sequence.*;
+import controlP5.Accordion;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
@@ -924,6 +925,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 			}
 		
+		//tab.update(); //.setHeight(currentY);
+		
 		//this.tab.add(controlGroup.moveTo(tab).setWidth(tab.getWidth()).setBackgroundHeight(tab.getHeight()).setPosition(0,0));
 		//tab.setSize(50, currentY);//.setHeight( currentY);
 	}
@@ -1065,6 +1068,14 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		println("Removing filter " + newf);
 		//newf.dispose();
 		filters.remove(newf);
+		
+		/*APP.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {
+				//if (newf!=null) newf.removeControls(cp5);*/
+				//refreshControls();											
+			/*}
+		});*/
 	}
 	
 	synchronized public void refreshControls() {
@@ -1074,9 +1085,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			@Override
 			public void run() {
 				//tab.remove();
-				tab.update();
+				//tab.update();
 				self.setupControls(host.getApp().getCF(), tab);
 				tab.setWidth(host.getApp().getCF().sketchWidth());
+				((Accordion)tab.getParent()).updateItems();		// automatically readjust tab heights to fit new controls*
 			}
 		});
 
