@@ -1023,28 +1023,37 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	}
 
 	public void removeControls(ControlP5 cp5) {
-		synchronized (this) {
-			for (Controller c : this.controllers.keySet()) {
-				c.remove();
-			}
-			this.controllers.clear();// = null;
-			this.controllerMapping.clear();// = null;
-			if (this.muteController!=null) this.muteController.remove();
-			if (this.nextModeButton!=null) this.nextModeButton.remove();
-			if (this.moveDownButton!=null) this.moveDownButton.remove();
-			if (this.moveUpButton!=null) this.moveUpButton.remove();
-			if (this.lstInputCanvas!=null) this.lstInputCanvas.remove();
-			if (this.lstOutputCanvas!=null) this.lstOutputCanvas.remove();
-			if (this.cloneButton!=null) this.cloneButton.remove();
-			if (this.deleteButton!=null) this.deleteButton.remove();
-			if (this.muteController!=null) this.muteController = null;
-			if (this.nextModeButton!=null) this.nextModeButton = null;
-			if (this.moveDownButton!=null) this.moveDownButton = null;
-			if (this.moveUpButton!=null) this.moveUpButton = null;
-			if (this.lstInputCanvas!=null) this.lstInputCanvas = null;
-			if (this.lstOutputCanvas!=null) this.lstOutputCanvas = null;
-			if (this.cloneButton!=null) this.cloneButton = null;
-			if (this.deleteButton!=null) this.deleteButton = null;
+		synchronized (cp5) {
+
+			APP.getApp().getCF().queueUpdate(new Runnable() {
+
+				@Override
+				public void run() {
+					for (Controller c : controllers.keySet()) {
+						c.remove();
+					}
+					controllers.clear();// = null;
+					controllerMapping.clear();// = null;
+					
+					if (muteController!=null) muteController.remove();
+					if (nextModeButton!=null) nextModeButton.remove();
+					if (moveDownButton!=null) moveDownButton.remove();
+					if (moveUpButton!=null) moveUpButton.remove();
+					if (lstInputCanvas!=null) lstInputCanvas.remove();
+					if (lstOutputCanvas!=null) lstOutputCanvas.remove();
+					if (cloneButton!=null) cloneButton.remove();
+					if (deleteButton!=null) deleteButton.remove();
+					if (muteController!=null) muteController = null;
+					if (nextModeButton!=null) nextModeButton = null;
+					if (moveDownButton!=null) moveDownButton = null;
+					if (moveUpButton!=null) moveUpButton = null;
+					if (lstInputCanvas!=null) lstInputCanvas = null;
+					if (lstOutputCanvas!=null) lstOutputCanvas = null;
+					if (cloneButton!=null) cloneButton = null;
+					if (deleteButton!=null) deleteButton = null;					
+				}				
+			});
+
 		}
 	}
 	synchronized public void setControllerMapping(String paramName, controlP5.Controller o) {
