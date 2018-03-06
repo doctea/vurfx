@@ -16,17 +16,12 @@ public class PlainScene extends Scene {
   
   public boolean setupFilters () {
     //super.initialise();
-    filters = new Filter[filterCount];
+    //filters = new Filter[filterCount];
     
     int i = 0;
     
-    filters[i] = new PlainDrawer(this);
-    filters[i].setFilterName("PlainDrawer BUF_SRC -> BUF_OUT");
-    filters[i].setAliases("out","src");//buffers[BUF_OUT], buffers[BUF_SRC]); 
-    filters[i].initialise();
+    addFilter(new PlainDrawer(this).setFilterName("PlainDrawer BUF_SRC -> BUF_OUT").setAliases("out","src")).initialise();
 
-    
-    highestFilter = i;
     return true;
   }
   
