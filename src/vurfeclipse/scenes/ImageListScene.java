@@ -58,7 +58,7 @@ public class ImageListScene extends SimpleScene {
 
 		String a = this.getCanvasMapping("out");
 
-		this.addFilter(new ImageListDrawer(this).setFilenames(this.getFilenames()).setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer")).setOutputCanvas(this.getCanvasMapping("out")); //.nextMode());
+		this.addFilter(new ImageListDrawer(this).setFilenames(this.getFilenames()).setCurrentIndex(5).setNumBlobs(BLOBCOUNT/*200*/).setFilterName("ImageListDrawer")).setAlias_out("out"); //.nextMode());
 		//this.addFilter(new BlendDrawer(this).setCanvases(this.getCanvasMapping("out"), this.getCanvasMapping("pix0")).setOutputCanvas(getCanvasMapping("out")));
 
 		return true;
