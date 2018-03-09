@@ -103,7 +103,7 @@ public class VideoPlayer extends Filter {
         newStream = new Movie(APP.getApp(),filename);
         //newTex = new GLTexture(APP, sc.w, sc.h);
         //newStream.setPixelDest(tex, true);
-        newStream.volume(volume);
+        newStream.volume(volume);		//TODO: why doesn't this compile on MacOSX?
         println("Set volume and pixeldest..");
         //if (!((VurfEclipse)APP.getApp()).exportMode)
           newStream.play();

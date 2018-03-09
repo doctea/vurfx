@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.connectors.XMLSerializer;
+import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.projects.SavedProject;
 import vurfeclipse.scenes.Scene;
@@ -1370,7 +1371,15 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return params;
 	}
 
+	public void notifyRemoval(Filter newf) {
+		super.notifyRemoval(newf);
+		for (Entry<String, Sequence> s : sequences.entrySet()) {
+			s.getValue().notifyRemoval(newf);
+		}		
+	}
 
+
+	
 	public void saveBankSequences (String filename) {
 		for (Entry<String, Sequence> s : this.sequences.entrySet()) {
 			s.getValue().saveSequencePreset("bank_" + filename + "_" + s.getKey() + ".xml");

@@ -2,12 +2,12 @@ package vurfeclipse.filters;
 
 import vurfeclipse.*;
 
-import codeanticode.glgraphics.GLGraphicsOffScreen;
 import dLibs.freenect.toolbox.*;
 import dLibs.freenect.constants.*;
 import dLibs.freenect.interfaces.*;
 import dLibs.freenect.*;
 import peasy.*; // peasycam
+import processing.core.PGraphics;
 import processing.core.PImage;
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
@@ -15,7 +15,7 @@ import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
 
 
-public class dlibKinectFilter extends Filter {
+public class dlibKinectFilter extends GenericKinectFilter {
 
   Kinect kinect_;                      // main kinect-object
   KinectFrameVideo kinect_video_;      // video frame
@@ -32,22 +32,25 @@ public class dlibKinectFilter extends Filter {
   //Kinect kinect;
 
   //PGraphics depth;
-  PGraphics depth;
+  /*PGraphics depth;
 
   boolean enable_depth = true;
   boolean enable_rgb = true;
 
-  PImage i_img, i_depth;
+  PImage i_img, i_depth;*/
 
   public dlibKinectFilter(Scene sc) {
     super(sc);
+  }
+  public dlibKinectFilter(Scene sc, int cameraNumber) {
+	  super(sc, cameraNumber);
   }
 
 PeasyCam cam;
 
 
   public boolean initialise() {
-    kinect_ = new Kinect(0);  //create a main kinect instance with index 0
+    kinect_ = new Kinect(cameraNumber);  //create a main kinect instance with index 0
 
     kinect_video_ = new KinectFrameVideo(VIDEO_FORMAT._RGB_);    // create a video instance
     kinect_depth_ = new KinectFrameDepth(DEPTH_FORMAT._11BIT_);  // create a depth instance
@@ -132,11 +135,11 @@ PeasyCam cam;
     int cam_w_ = kinectFrame_size_x;
     int cam_h_ = kinectFrame_size_y;
 
-    out.background(0);
+    out().background(0);
 
-    out.strokeWeight(3);
+    out().strokeWeight(3);
 
-    out.stroke((int)((VurfEclipse)APP.getApp()).random(255));
+    out().stroke((int)((VurfEclipse)APP.getApp()).random(255));
     //out.rect((int)APP.random(100),(int)APP.random(100),50,50);
 
 
@@ -150,22 +153,34 @@ PeasyCam cam;
         //out.rect((int)APP.random(100),(int)APP.random(100),50,50);
 
         // do some color mapping, we need a proper calibration file to get good results
-        out.stroke(kinect_3d[index1].getColor() ); //get color from video frame
+        out().stroke(kinect_3d[index1].getColor() ); //get color from video frame
 
         float cx = kinect_3d[index1].x;
         float cy = kinect_3d[index1].y;
         float cz = kinect_3d[index1].z;
-        out.pushMatrix();
-        out.translate(sc.w/2+cx*sc.w/2,sc.h/2+cy*sc.h/2,cz);
-        out.point(0, 0, 0);
+        out().pushMatrix();
+        out().translate(sc.w/2+cx*sc.w/2,sc.h/2+cy*sc.h/2,cz);
+        out().point(0, 0, 0);
         //out.rect(0,0,5,5);
-        out.popMatrix();
+        out().popMatrix();
         //out.point(cx, cy, cz*100);
         //out.rect(cx,cy,5,5);
 
       }
     }
   }
+
+	@Override
+	public void drawVideoImage(PGraphics out, int x, int y, int w, int h) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void drawDepthImage(PGraphics out_depth, int x, int y, int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
 

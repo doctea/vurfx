@@ -1067,6 +1067,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	public void removeFilter(Filter newf) {
 		println("Removing filter " + newf);
 		//newf.dispose();
+		notifyRemoval(newf);
+		
 		filters.remove(newf);
 		
 		/*APP.getApp().getCF().queueUpdate(new Runnable() {
@@ -1078,6 +1080,14 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		});*/
 	}
 	
+	private void notifyRemoval(Filter newf) {
+		// loop through:
+		//   Streams
+		//   Sequences?
+		//   any other things that listen to Filters..?
+		//   and disable/remove them so that errors aren't thrown
+		APP.getApp().pr.getSequencer().notifyRemoval(newf);
+	}
 	synchronized public void refreshControls() {
 		Scene self = this;
 		

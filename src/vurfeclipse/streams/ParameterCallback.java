@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import controlP5.Group;
+import vurfeclipse.filters.Filter;
 import vurfeclipse.ui.ControlFrame;
 
 
@@ -96,6 +97,10 @@ public abstract class ParameterCallback implements Serializable {
 		Group g = new Group(cf.control(), name + "_group");
 		
 		return g;
+	}
+
+	public void notifyRemoval(Filter newf) {
+		
 	}
 
 }

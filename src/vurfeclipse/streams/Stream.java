@@ -14,6 +14,7 @@ import controlP5.CallbackListener;
 import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Toggle;
+import vurfeclipse.filters.Filter;
 import vurfeclipse.ui.ControlFrame;
 
 abstract public class Stream implements Serializable {
@@ -434,6 +435,11 @@ abstract public class Stream implements Serializable {
 	public boolean sendKeyPressed(char key) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	public void notifyRemoval(Filter newf) {
+		for (ParameterCallback c : this.listeners) {
+			c.notifyRemoval(newf);
+		}
 	}
 
 	/*

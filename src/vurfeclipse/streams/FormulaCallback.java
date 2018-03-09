@@ -15,6 +15,7 @@ import controlP5.ScrollableList;
 import controlP5.Textfield;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.filters.Filter;
 import vurfeclipse.ui.ControlFrame;
 
 public class FormulaCallback extends ParameterCallback {
@@ -52,7 +53,7 @@ public class FormulaCallback extends ParameterCallback {
 	@Override
 	public HashMap<String,Object> collectParameters () {
 		HashMap<String,Object> params = super.collectParameters();
-		params.put("expression",  this.expression);
+		params.put("expression", this.expression);
 		params.put("targetPath", this.targetPath);
 		return params;
 	}
@@ -161,6 +162,13 @@ public class FormulaCallback extends ParameterCallback {
 		// done, return group
 
 		return g;
+	}
+	
+	@Override
+	public void notifyRemoval(Filter newf) {
+		super.notifyRemoval(newf);
+		if (newf.getTargetURLs().containsKey(this.targetPath))
+			this.setEnabled(false);
 	}
 
 }

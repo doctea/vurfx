@@ -187,7 +187,7 @@ public class OpenNIFilter extends Filter {
 		rt.start();
 	}*/
 
-	  if ((Boolean)this.getParameterValue("rgb")==true) drawRGB();
+	if ((Boolean)this.getParameterValue("rgb")==true) drawRGB();
 
     if ((Boolean)this.getParameterValue("depth")==true) drawDepth();
 

@@ -78,12 +78,12 @@ class PatternDrawer extends Filter {
   ArrayList<Blob> blobs = new ArrayList<Blob> ();
 
   public boolean drawPattern() {
-    out.background(((VurfEclipse)APP.getApp()).makeColour(255,255,255,0));
+    out().background(((VurfEclipse)APP.getApp()).makeColour(255,255,255,0));
     Iterator<Blob> it = blobs.iterator();
     while (it.hasNext()) {
       Blob b = it.next();
 
-      b.draw(out);
+      b.draw(out());
     }
     return true;
   }

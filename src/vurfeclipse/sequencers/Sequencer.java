@@ -11,7 +11,9 @@ import controlP5.ScrollableList;
 import controlP5.Toggle;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
+import vurfeclipse.sequence.Sequence;
 import vurfeclipse.streams.Stream;
 import vurfeclipse.ui.ControlFrame;
 
@@ -298,6 +300,11 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		this.historyMode = historyMode;
 		this.updateGuiStatus();
 	}
-
 	
+	public void notifyRemoval(Filter newf) {
+		for (Entry<String, Stream> s : getStreams().entrySet()) {
+			s.getValue().notifyRemoval(newf);
+		}
+	}
+
 }

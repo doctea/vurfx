@@ -67,12 +67,12 @@ class PointDrawer extends Filter {
     //src.loadPixels();
     //src.getTexture().loadPixels();
     //src.loadTexture();
-    out.beginDraw(); // need this for 'snow'
+    out().beginDraw(); // need this for 'snow'
   }
   public void endDraw () {
     //out.loadPixels();
     //out.loadTexture();
-    out.endDraw(); // need this for 'snow'
+    out().endDraw(); // need this for 'snow'
   }
 
   int skipFrame = 0, skipLimit = 10;
@@ -88,7 +88,8 @@ class PointDrawer extends Filter {
     //GLTexture t = src.getTexture();
     //int[] src_temp = new int[sc.w*sc.h];
     //if (skipFrame++>2) {
-      src.getTexture().getBuffer(src_temp);
+      //in().getTexture().getBuffer(src_temp);
+	  src_temp = in().pixels;
       //skipFrame = 0;
       //return;
     //}
@@ -110,14 +111,14 @@ class PointDrawer extends Filter {
       //color pix = img.pixels[sc.w*y-1+((sc.w+offsetx)-x-1)];
       //color pix = src.pixels[(sc.w*blobs[b].y)+blobs[b].x];
       //color pix = src.pixels[(sc.w*blobs[b].y)+blobs[b].x];
-      int pix = src_temp[(sc.w*blobs[b].y)+blobs[b].x];
+      int pix = src_temp[(int) ((sc.w*blobs[b].y)+blobs[b].x)];
 
       //if (tinted) out.tint(255); else out.noTint();
 
       //System.out.println("got colour " + pix);
       blobs[b].setColour(pix);
 
-      blobs[b].draw(out);
+      blobs[b].draw(out());
       /*
       out.noStroke();
       out.fill(pix);

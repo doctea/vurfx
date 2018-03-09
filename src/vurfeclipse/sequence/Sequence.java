@@ -639,4 +639,10 @@ abstract public class Sequence implements Serializable, Mutable {
 			return super.toString() + " " + this.host!=null?this.host.getPath():"[no host]";
 		}
 
+		public void notifyRemoval(Filter newf) {
+			// TODO Auto-generated method stub
+			// detect if passed Filter is used by this Sequence
+			// if so then disable this Sequence
+		}
+
 }

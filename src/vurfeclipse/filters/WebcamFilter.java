@@ -52,7 +52,8 @@ public class WebcamFilter extends Filter {
 		System.out.println("WebcamFilter initialised for cameraNumber: " + this.cameraNumber);
 		System.out.println("WebcamFilter OUT is " + out());
 
-		webcamStream.start();
+		webcamStream.start(); //TODO: why doesn't this compile on macosx..?
+		//webcamStream.run();
 		System.out.println("webcam initialise?");
 		//APP.exit();
 		return true;

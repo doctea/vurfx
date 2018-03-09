@@ -550,7 +550,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	}
 
 	public void dispose() {
-		this.stop();
+		/*this.stop();
 		for (Controller c : this.controllers.keySet()) {
 			c.remove();
 		}
@@ -572,7 +572,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		this.lstOutputCanvas = null;
 		this.cloneButton = null;
 		this.deleteButton = null;
-
+		 */
 	}
 
 
