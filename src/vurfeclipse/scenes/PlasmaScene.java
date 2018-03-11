@@ -80,6 +80,99 @@ public class PlasmaScene extends Scene {
 			return this;
 		}
 	}
+	
+	public class MandlebrotDrawer extends ShaderFilter {
+		public MandlebrotDrawer() {
+			super(null,"mandlebrot.glsl");
+		}
+		public MandlebrotDrawer(Scene sc) {
+			super(sc,"mandlebrot.glsl");
+		}
+		@Override
+		public void setParameterDefaults() {
+			super.setParameterDefaults();
+			addParameter("x", new Float(0.0f), -1.5f, 1.5f); //-640.0f, 640.0f); //Integer(w/16), 0, w*2);
+			addParameter("y", new Float(0.0f), -1.5f, 1.5f); //-480.0f, 480.0f); //Integer(h/16), 0, h*2);
+			addParameter("scale", new Float(1.0f), -1.0f, 1.0f); //Integer(h/16), 0, h*2);
+			addParameter("rotate", new Float(0.0f), 0.0f, 360.0f); //Integer(h/16), 0, h*2);
+			addParameter("iter", new Integer(100), 0, 5000); //Integer(h/16), 0, h*2);
+			//addParameter("u_time_2", new Integer(10), 0, 1000000);
+		}
+		/*@Override
+		public Filter nextMode() {
+			setParameterValue("colourMode", new Integer(((Integer)getParameterValue("colourMode")+1)));
+			if ((Integer)getParameterValue("colourMode")>colourModeCount) {
+				setParameterValue("colourMode", new Integer(0));
+			}
+			return this;
+		}*/
+	}
+	
+	public class MandlebulbDrawer extends ShaderFilter {
+		public MandlebulbDrawer() {
+			super(null,"mandlebulb.glsl");
+		}
+		public MandlebulbDrawer(Scene sc) {
+			super(sc,"mandlebulb.glsl");
+		}
+		@Override
+		public void setParameterDefaults() {
+			super.setParameterDefaults();
+			/*
+			#define cameraPos vec3(cameraPos_x, cameraPos_y, cameraPos_z)
+			#define cameraLookat vec3(cameraLookat_x, cameraLookat_y, cameraLookat_z)
+			#define lightDir vec3(lightDir_x, lightDir_y, lightDir_z)
+			#define lightColour vec3(lightColor_x, lightColor_y, lightColor_z)
+			
+			uniform float specular;
+			uniform float specularHardness;
+			//uniform vec3 diffuse;
+			#define diffuse vec3(diffuse_x, diffuse_y, diffuse_z)
+			uniform float ambientFactor;
+			uniform bool ao;
+			uniform bool shadows;
+			uniform bool rotateWorld;
+			uniform bool antialias;*/
+			this.addParameter("cameraPos_x", new Float(0.0f), -5000.0f, 5000.0f);
+			this.addParameter("cameraPos_y", new Float(0.0f), -5000.0f, 5000.0f);
+			this.addParameter("cameraPos_z", new Float(0.0f), -5000.0f, 5000.0f);
+			
+			this.addParameter("cameraLookat_x", new Float(0.0f), -5000.0f, 5000.0f);
+			this.addParameter("cameraLookat_y", new Float(0.0f), -5000.0f, 5000.0f);
+			this.addParameter("cameraLookat_z", new Float(0.0f), -5000.0f, 5000.0f);
+			
+			this.addParameter("lightDir_x", new Float(0.0f), -500000.0f, 500000.0f);
+			this.addParameter("lightDir_y", new Float(0.0f), -500000.0f, 500000.0f);
+			this.addParameter("lightDir_z", new Float(0.0f), -500000.0f, 500000.0f);
+			
+			this.addParameter("lightColour_x", new Float(0.0f), -50.0f, 50.0f);
+			this.addParameter("lightColour_y", new Float(0.0f), -50.0f, 50.0f);
+			this.addParameter("lightColour_z", new Float(0.0f), -50.0f, 50.0f);
+		
+			this.addParameter("diffuse_x", new Float(0.0f), -50.0f, 50.0f);
+			this.addParameter("diffuse_y", new Float(0.0f), -50.0f, 50.0f);
+			this.addParameter("diffuse_z", new Float(0.0f), -50.0f, 50.0f);
+			
+			this.addParameter("specular", 5.0f);
+			this.addParameter("specularHardness", 5.0f);
+			
+			this.addParameter("ambientFactor", 5.0f);
+			
+			this.addParameter("rotateWorld", new Boolean(true));
+			this.addParameter("ao", new Boolean(true));
+			this.addParameter("antialias", new Boolean(true));
+			this.addParameter("shadows", new Boolean(true));
+			
+		}
+		@Override
+		public Filter nextMode() {
+			setParameterValue("colourMode", new Integer(((Integer)getParameterValue("colourMode")+1)));
+			if ((Integer)getParameterValue("colourMode")>colourModeCount) {
+				setParameterValue("colourMode", new Integer(0));
+			}
+			return this;
+		}
+	}
 
 	@Override
 	public boolean setupFilters () {

@@ -2,15 +2,42 @@
 precision highp float;
 #endif
 
-uniform float time;
+#define time u_time_2
+
 //uniform vec2 resolution;
-uniform vec3 cameraPos;
-uniform vec3 cameraLookat;
-uniform vec3 lightDir;
-uniform vec3 lightColour;
+//uniform vec3 cameraPos;
+//uniform vec3 cameraLookat;
+//uniform vec3 lightDir;
+//uniform vec3 lightColour;
+
+uniform int time;
+
+uniform float cameraPos_x;
+uniform float cameraPos_y;
+uniform float cameraPos_z;
+uniform float cameraLookat_x;
+uniform float cameraLookat_y;
+uniform float cameraLookat_z;
+uniform float lightDir_x;
+uniform float lightDir_y;
+uniform float lightDir_z;
+uniform float lightColour_x;
+uniform float lightColour_y;
+uniform float lightColour_z;
+uniform float diffuse_x;
+uniform float diffuse_y;
+uniform float diffuse_z;
+
+
+#define cameraPos vec3(cameraPos_x, cameraPos_y, cameraPos_z)
+#define cameraLookat vec3(cameraLookat_x, cameraLookat_y, cameraLookat_z)
+#define lightDir vec3(lightDir_x, lightDir_y, lightDir_z)
+#define lightColour vec3(lightColour_x, lightColour_y, lightColour_z)
+
 uniform float specular;
 uniform float specularHardness;
-uniform vec3 diffuse;
+//uniform vec3 diffuse;
+#define diffuse vec3(diffuse_x, diffuse_y, diffuse_z)
 uniform float ambientFactor;
 uniform bool ao;
 uniform bool shadows;
