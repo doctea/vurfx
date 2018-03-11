@@ -105,6 +105,7 @@ abstract public class Stream implements Serializable {
 
 	synchronized public void deliverEvents () {
 		boolean debug = this.debug = false;
+		//if (this instanceof OscStream) debug = true;
 		//LinkedList<ParameterCallback> emitters = (LinkedList<ParameterCallback>) listeners.iterator(); //iterator();
 
 		if (debug) System.out.println("--------------- deliverEvents() in " + this + "------------------------");
@@ -140,11 +141,12 @@ abstract public class Stream implements Serializable {
 			
 
 			if (debug && this instanceof OscStream) {
-				println("hello OscStream world with " + listeners.size() + " listeners");
-				println("got " + mess.size() + " messages for '" + tagName + "'");
+				//debug = true;
+				//println("hello OscStream world with " + listeners.size() + " listeners");
+				//println("got " + mess.size() + " messages for '" + tagName + "'");
 				if (mess.size()==0) {
 					for (String k : messages.keySet()) {
-						println("there are messages for '" + k + "'");
+						println("there are " + messages.size() + " messages for '" + k + "'");
 					}
 				}
 			}
@@ -165,7 +167,7 @@ abstract public class Stream implements Serializable {
 					//ParameterCallback callback = (ParameterCallback) callbacks.next();
 					//if (debug) System.out.println("got callback " + callback);
 
-					//if (debug) 
+					if (debug) 
 						System.out.println("Delivering " + v + " to " + callback + "...");
 					/*if (callback.shouldDie) {
 							callbacks.remove();
@@ -291,7 +293,7 @@ abstract public class Stream implements Serializable {
 		//cf.control().addScrollableList(this.streamName);
 		synchronized (g) {
 		int n = 0;
-		int margin_y = 20, gap_y = 5, margin_x = 80;
+		int margin_y = 20, gap_y = 5, margin_x = 20;
 
 		int pos_y = 10;
 
@@ -317,7 +319,7 @@ abstract public class Stream implements Serializable {
 
 		
 		g.add(cf.control().addButton(this.toString() + "_refresh").setLabel("REFRESH")
-				.setPosition(margin_x * 2, pos_y)
+				.setPosition(margin_x * 8, pos_y)
 				.moveTo(g)
 				.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
 					@Override
@@ -333,15 +335,19 @@ abstract public class Stream implements Serializable {
 		
 		//for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
 		for (ParameterCallback callback : this.listeners) { //i.getValue()) {
+			int pos_x = 5;
+
 			println ("adding gui for " + callback);
 			
 			g.add(this.makeEmitterSelector(cf, callback, callback.getStreamSource() + callback.toString() + "_" + n)
 				.moveTo(g)
-				.setPosition(0, pos_y)
+				.setPosition(pos_x, pos_y)
 			);			
 			
+			pos_x += margin_x * 6;
+			
 			// add 'on' button to enable.disable
-			g.add(new Toggle(cf.control(), callback + "_enabled_"+n).setValue(callback.isEnabled()).setLabel("on")
+			g.add(new Toggle(cf.control(), this.toString() + "_" + callback + "_enabled_"+n).setValue(callback.isEnabled()).setLabel("on")
 					.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
@@ -353,13 +359,12 @@ abstract public class Stream implements Serializable {
 							}
 						}					
 					})
-					.moveTo(g).setPosition(margin_x*1.5f, pos_y).setWidth(margin_x/4));
+					.moveTo(g).setPosition(pos_x, pos_y).setWidth(margin_x));
 			
-			g.add(callback.makeControls(cf, n + "_" + streamName).moveTo(g).setPosition(margin_x * 2.25f, pos_y));
-			
+			pos_x += margin_x * 1.5;
 			
 			// add '[x]' button to remove mapping
-			g.add(new Button(cf.control(), callback + "_del_"+n).setLabel("[x]")
+			g.add(new Button(cf.control(), this.toString() + "_" + callback + "_del_"+n).setLabel("[x]")
 					.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
@@ -370,10 +375,29 @@ abstract public class Stream implements Serializable {
 							}
 						}					
 					})
-					.moveTo(g).setPosition(margin_x*2f, pos_y).setWidth(margin_x/4));
+					.moveTo(g).setPosition(pos_x, pos_y).setWidth(margin_x));
+			pos_x += margin_x * 1.5f;
+
+
+			g.add(new Toggle(cf.control(), this.toString() + "_" + callback + "_latching_"+n).setValue(callback.isLatching()).setLabel("L")
+					.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							synchronized(self) {
+								//listeners.remove(callback);
+								callback.setLatching(((Toggle)theEvent.getController()).getBooleanValue());
+								//cf.updateGuiStreamEditor(); // this causes crash for some reason ?
+							}
+						}					
+					})
+					.moveTo(g).setPosition(pos_x, pos_y).setWidth(margin_x));
+			pos_x += margin_x * 1.5f;
 			
-			g.add(callback.makeControls(cf, n + "_" + streamName).moveTo(g).setPosition(margin_x * 2.25f, pos_y));
-									
+
+			g.add(callback.makeControls(cf, n + "_" + streamName).moveTo(g).setPosition(pos_x, pos_y));
+			//g.add(callback.makeControls(cf, n + "_" + streamName).moveTo(g).setPosition(margin_x * 2.25f, pos_y));
+			pos_x += margin_x * 1.5f;
+		
 			
 			//margin_y += g.
 			margin_y = g.getHeight() + gap_y;

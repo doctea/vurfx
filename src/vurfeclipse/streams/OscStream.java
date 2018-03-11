@@ -14,22 +14,23 @@ public class OscStream extends Stream implements OscEventListener {
 	OscP5 oscP5;
 	
 	public OscStream() {
+		if (oscP5==null) {
 		  oscP5 = new OscP5(this,12000);
-		  oscP5.addListener(this);
+		  //oscP5.addListener(this);
+		}
 	}
 
 	public OscStream(String streamName) {
 		super(streamName);
-
-		  oscP5 = new OscP5(this,12000);
-		  oscP5.addListener(this);
+	    oscP5 = new OscP5(this,12000);
+		//oscP5.addListener(this);
 	}
 	
 	@Override
 	public synchronized void registerEventListener(String paramName, ParameterCallback callback) {
 		// TODO Auto-generated method stub
 		super.registerEventListener(paramName, callback);
-		if(callback instanceof FormulaCallback) ((FormulaCallback) callback).latching = true;
+		//if(callback instanceof ParameterCallback) ((ParameterCallback) callback).latching = true;
 	}
 	
 	@Override
@@ -71,22 +72,23 @@ public class OscStream extends Stream implements OscEventListener {
 		return streamSource;		
 	}
 
+	int messageCount = 0;
 	@Override
 	public void oscEvent (OscMessage theOscMessage) {
-		//println("got oscmessage " + theOscMessage);
+		//println("got oscmessage #" + messageCount++ + " " + theOscMessage.hashCode());
 		//
 		//if (theOscMessage.checkTypetag("f")) {
 		//println("got type tag: " + theOscMessage.typetag());
 		//println("got addrpattern '" + theOscMessage.addrPattern() + "', floatvalue " + theOscMessage.get(0).floatValue());
 		if (theOscMessage.checkTypetag("f")) {
-			this.addEvent(/*this.streamName +*/theOscMessage.addrPattern()/*.replaceFirst("/","")*/, Float.parseFloat(""+theOscMessage.get(0).floatValue()));
+			this.addEvent(/*this.streamName +*/theOscMessage.addrPattern().replaceFirst("/",""), Float.parseFloat(""+theOscMessage.get(0).floatValue()));
 		} else if (theOscMessage.checkTypetag("i")) {
-			this.addEvent(theOscMessage.addrPattern(), theOscMessage.get(0).intValue());
-			println("added event for " + theOscMessage.addrPattern().replaceFirst("/","") + " '" + theOscMessage.get(0).intValue() + "'");
+			this.addEvent(theOscMessage.addrPattern().replaceFirst("/",""), theOscMessage.get(0).intValue());
+			//println("added event for " + theOscMessage.addrPattern().replaceFirst("/","") + " '" + theOscMessage.get(0).intValue() + "'");
 		} else if (theOscMessage.checkTypetag("l")) {
-			this.addEvent(theOscMessage.addrPattern(), theOscMessage.get(0).longValue());
+			this.addEvent(theOscMessage.addrPattern().replaceFirst("/",""), theOscMessage.get(0).longValue());
 		} else if (theOscMessage.checkTypetag("s")) {
-			this.addEvent(theOscMessage.addrPattern(), theOscMessage.get(0).stringValue());
+			this.addEvent(theOscMessage.addrPattern().replaceFirst("/",""), theOscMessage.get(0).stringValue());
 		} else {
 			println("unhandled typetag " + theOscMessage.get(0).toString());
 		}
