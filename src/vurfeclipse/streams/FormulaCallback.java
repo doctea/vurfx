@@ -25,7 +25,11 @@ public class FormulaCallback extends ParameterCallback {
 	
 	String expression;
 	
+	boolean latching = false;
+	
 	com.udojava.evalex.Expression e;
+
+	private BigDecimal latching_value = new BigDecimal(0);
 	
 	public FormulaCallback() {
 		e = new com.udojava.evalex.Expression(expression);
@@ -65,9 +69,21 @@ public class FormulaCallback extends ParameterCallback {
 
 	@Override
 	public void call(Object value) {
+		//if (latching_value==null) latching_value = new BigDecimal(0);
+		
 		if (value instanceof Float || value instanceof Double) {
-			e.setVariable("input", BigDecimal.valueOf((float)value));
+			if (latching) {
+				latching_value.add(BigDecimal.valueOf((float)value));
+				value = latching_value.floatValue();// new Float(latching_value); //((Float)value) += latching_value;
+				System.out.println("latched " + value);
+			}
+			e.setVariable("input", BigDecimal.valueOf((Float)value));
 		} else if (value instanceof Integer || value instanceof Long) {
+			if (latching) {
+				latching_value = latching_value.add(BigDecimal.valueOf((Integer)value));
+				value = latching_value.intValue();
+				System.out.println("latched " + value);
+			}
 			e.setVariable("input", BigDecimal.valueOf((Integer)value));
 		} 
 		Targetable target = (Targetable) APP.getApp().pr.getObjectForPath(targetPath);

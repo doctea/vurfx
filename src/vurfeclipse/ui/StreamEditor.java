@@ -10,6 +10,8 @@ import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
 import controlP5.Group;
+import vurfeclipse.APP;
+import vurfeclipse.streams.OscStream;
 import vurfeclipse.streams.Stream;
 
 public class StreamEditor extends Group {
@@ -23,7 +25,7 @@ public class StreamEditor extends Group {
 	public ControllerGroup setupStreamEditor(ControlFrame cf, HashMap<String,Stream> streams) {
 		if (editor!=null) editor.remove();
 		Group outer = new Group(cf.cp5, "streams_editor_outer").moveTo(this).hideBar();
-		int pos_y = 20, margin_x = 20;
+		int pos_y = 0, margin_x = 20;
 		outer.add(new Button(cf.control(),this.toString() + "_add osc").setLabel("ADD OSC")
 				.setPosition(margin_x * 2, pos_y)
 				.moveTo(outer)
@@ -32,10 +34,12 @@ public class StreamEditor extends Group {
 					public void controlEvent(CallbackEvent theEvent) {
 						// and refresh gui
 						//cf.stream
+						APP.getApp().pr.getSequencer().addStream("OSC", new OscStream("Osc Stream"));
 						cf.updateGuiStreamEditor();
 					}
 				})
 			);
+		pos_y += 20;
 
 		editor = cf.control().addAccordion("streams_editor").setWidth(2 * (cf.sketchWidth()/3)).moveTo(outer).setBarHeight(20).setPosition(2,pos_y);
 

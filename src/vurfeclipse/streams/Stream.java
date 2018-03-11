@@ -165,7 +165,8 @@ abstract public class Stream implements Serializable {
 					//ParameterCallback callback = (ParameterCallback) callbacks.next();
 					//if (debug) System.out.println("got callback " + callback);
 
-					if (debug) System.out.println("Delivering " + v + " to " + callback + "...");
+					//if (debug) 
+						System.out.println("Delivering " + v + " to " + callback + "...");
 					/*if (callback.shouldDie) {
 							callbacks.remove();
 							//((List)e_l.getValue()).remove(callback);
@@ -206,7 +207,7 @@ abstract public class Stream implements Serializable {
 		this.messages.clear();
 	}
 
-	private String getMessageNameForStreamSource(String streamSource) {
+	protected String getMessageNameForStreamSource(String streamSource) {
 		//println("!!! streamSource is " + streamSource);
 		if (streamSource.split("/").length>1)
 			return streamSource.split("/")[1];
