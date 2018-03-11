@@ -2,6 +2,7 @@ package vurfeclipse.user.scenes;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
@@ -104,9 +105,17 @@ public class OutputFX3 extends SimpleScene {
 				// TODO Auto-generated method stub
 
 			}
+			@Override
+			public boolean notifyRemoval(Filter newf) {
+				if (getFilter("SyncEffect")==newf) {
+					this.setEnabled(false);
+					return true;
+				}
+				return false;
+			}
 		}
 
-		class SyncSequence2 extends Sequence {
+		class SyncSequence2 extends SyncSequence {
 			public SyncSequence2() {
 				super();
 			}
@@ -138,7 +147,7 @@ public class OutputFX3 extends SimpleScene {
 			}
 		}
 
-		class SyncSequence3 extends Sequence {
+		class SyncSequence3 extends SyncSequence {
 			public SyncSequence3(OutputFX3 outputFX2, int i) {
 				// TODO Auto-generated constructor stub
 				super(outputFX2, i);
@@ -168,7 +177,7 @@ public class OutputFX3 extends SimpleScene {
 			}
 		}
 		
-		class SyncSequence4 extends Sequence {
+		class SyncSequence4 extends SyncSequence {
 			public SyncSequence4(OutputFX3 outputFX2, int i) {
 				// TODO Auto-generated constructor stub
 				super(outputFX2, i);
@@ -246,6 +255,14 @@ public class OutputFX3 extends SimpleScene {
 			public void onStop() {
 				// TODO Auto-generated method stub
 
+			}
+			@Override
+			public boolean notifyRemoval(Filter newf) {
+				if (getFilter("SyncEffect")==newf) {
+					this.setEnabled(false);
+					return true;
+				}
+				return false;
 			}
 		}
 		

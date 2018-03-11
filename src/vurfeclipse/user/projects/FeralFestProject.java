@@ -123,7 +123,7 @@ public class FeralFestProject extends Project {
 
     final PlainDrawer pd = (PlainDrawer)new PlainDrawer(ils2).setFilterName("Source Switcher").setInputCanvas("/pix1");
     ils2.addFilter(pd);*/
-
+/*
 		ils1.addSequence("next", new ShowSceneSequence(ils1, 0) {
 			@Override public void __setValuesForNorm(double pc, int iteration) { super.__setValuesForNorm(pc, iteration);}
 			@Override public void onStop() { super.onStop(); }
@@ -155,7 +155,7 @@ public class FeralFestProject extends Project {
 			}
 
 		});
-
+*/
 
 		//ils2.addFilter(new OpenNIFilter(ils2).setFilterName("kinect"));
 		//ils1.setCanvas("pix1","/pix1");
@@ -211,7 +211,9 @@ public class FeralFestProject extends Project {
 
 		//blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setAlias_out("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
 		//blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setAlias_out("/pix0").setFilterName("kinect1")));
-		blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect0",0).setAlias_out("/pix0").setFilterName("kinect0")));//.setAlias("depth", "/pix1");//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+		blendScene.addFilter(
+				new OpenKinectFilter(blendScene,0).setAlias_out("pix0").setFilterName("kinect0")
+		);//.setAlias("depth", "/pix1");//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
 		//blendScene.addFilter(((OpenKinectFilter) new OpenKinectFilter(blendScene,"Kinect1",1).setOutputCanvas("/pix1").setFilterName("kinect1")));
 
 		//blendScene.addFilter(new WebcamFilter(ils2).setOutputCanvas("/pix0"));
@@ -595,10 +597,6 @@ public class FeralFestProject extends Project {
 	    rsConn.expose("/seq/changeTo/" + "text_word_take trips");
 	    rsConn.expose("/seq/changeTo/" + "text_word_magic dust");
 	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");*/
-	}
-
-	public boolean isSequencerEnabled() {
-		return this.enableSequencer;
 	}
 
 	@Override

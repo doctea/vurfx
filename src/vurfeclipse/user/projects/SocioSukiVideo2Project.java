@@ -484,11 +484,6 @@ public SocioSukiVideo2Project(int w, int h) {
     
     return true;
   }
-
-public boolean isSequencerEnabled() {
-	// TODO Auto-generated method stub
-	return this.enableSequencer;
-}
   
   
 }

@@ -79,6 +79,18 @@ public class TunnelScene extends SimpleScene {
 			// TODO Auto-generated method stub
 			
 		}
+
+		@Override
+		public boolean notifyRemoval(Filter newf) {
+			boolean relevant = false;
+			for (int i = 1 ; i <= 6 ; i++) {
+				if (host.getFilter("Blend_"+i)==newf) {
+					this.setEnabled(false);
+					relevant = true;
+				}
+			}
+			return relevant;
+		}
 		
 	}
 	

@@ -158,7 +158,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	
 	@Override public Object target(String path, Object payload) {
 		if (path.equals("/seq/timeScale")) {
-			this.setTimeScale((Double)payload);
+			this.setTimeScale(Double.parseDouble(payload.toString()));
 			return payload;
 		}
 		
@@ -301,10 +301,15 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		this.updateGuiStatus();
 	}
 	
-	public void notifyRemoval(Filter newf) {
+	public boolean notifyRemoval(Filter newf) {
+		boolean relevant = false;
 		for (Entry<String, Stream> s : getStreams().entrySet()) {
-			s.getValue().notifyRemoval(newf);
+			boolean t = s.getValue().notifyRemoval(newf);
+			if (t==true) relevant = true;
 		}
+		if (relevant) APP.getApp().getCF().updateGuiStreamEditor(); //this.updateGuiStreamEditor();
+		
+		return relevant;
 	}
 
 }

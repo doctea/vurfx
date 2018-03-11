@@ -393,11 +393,6 @@ public SocioSukiVideoProject(int w, int h) {
 	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");*/
   }
 
-public boolean isSequencerEnabled() {
-	// TODO Auto-generated method stub
-	return this.enableSequencer;
-}
-
 @Override
 public void initialiseStreams() {
 	// TODO Auto-generated method stub

@@ -1,6 +1,7 @@
 package vurfeclipse.user.scenes;
 import java.util.ArrayList;
 
+import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.ShaderFilter;
 import vurfeclipse.filters.ToonFilter;
 import vurfeclipse.projects.Project;
@@ -96,6 +97,16 @@ public class OutputFX1 extends SimpleScene {
 			if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Pixelate").toggleMute();
 		}
 		@Override public void onStop() {	}
+		@Override
+		public boolean notifyRemoval(Filter newf) {
+			if (	host.host.getSceneForPath(getPath()).getFilter("Toon") == newf || 
+					host.host.getSceneForPath(getPath()).getFilter("Pixelate")==newf
+				) {
+				this.setEnabled(false);
+				return true;
+			}
+			return false;
+		}
 	}
 }
 

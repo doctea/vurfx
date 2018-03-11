@@ -3,6 +3,7 @@ package vurfeclipse.scenes;
 import java.util.ArrayList;
 
 import vurfeclipse.filters.BlankFilter;
+import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.sequence.Sequence;
 
@@ -45,7 +46,14 @@ public class BlankerScene extends SimpleScene {
 			//if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
 			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 		}
-		
+		@Override
+		public boolean notifyRemoval(Filter newf) {
+			if (newf==host.getFilter("BlankFilter")) {
+				this.setEnabled(false);
+				return true;
+			}
+			return false;
+		}
 	}		
 	
 	public class Standard extends BlankSequence {
@@ -62,6 +70,7 @@ public class BlankerScene extends SimpleScene {
 			getFilter("BlankFilter").changeParameterValue("alpha", 255);
 		}
 		@Override public void onStop() {	}
+
 	}
 	
 	public class Feedback extends BlankSequence {

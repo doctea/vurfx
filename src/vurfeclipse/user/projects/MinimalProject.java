@@ -32,7 +32,7 @@ public class MinimalProject extends Project implements Serializable {
   //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
 	
 	float tempo = 150.0f; //10.0f; //150.0f;
-	boolean enableSequencer = true;
+	public boolean enableSequencer = true;
 
   public MinimalProject(int w, int h) {
     super(w,h);
@@ -111,8 +111,8 @@ public class MinimalProject extends Project implements Serializable {
     blendScene.setCanvas("pix0","/pix0");	//NOZ KINECT ENABLE
     blendScene.setCanvas("pix1","/pix1");	// NOZ KINECT ENABLE
     
-    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setOutputCanvas("/pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
-    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setOutputCanvas("/pix0").setFilterName("kinect1")));
+    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,1).setAlias_out("pix0").setFilterName("kinect0")));//.setDepthOutputCanvasName("pix1"));	// NOZ KINECT ENABLE
+    blendScene.addFilter(((OpenNIFilter) new OpenNIFilter(blendScene,0).setAlias_out("pix0").setFilterName("kinect1")));
     blendScene.setCanvas("depth", "/pix1"); // NOZ KINECT ENABLE
     
     blendScene.addSequence("_next_camera", new SimpleSequence() {
@@ -143,6 +143,13 @@ public class MinimalProject extends Project implements Serializable {
 			@Override
 			public boolean readyToChange(int max_i) {
 				return true;				
+			}
+
+			@Override
+			public boolean notifyRemoval(Filter newf) {
+				if (newf == blendScene.getFilter("kinect"+camera))
+					return true;
+				return false;
 			}
     });
     
@@ -358,9 +365,10 @@ public class MinimalProject extends Project implements Serializable {
   public void setupExposed() {
   }
 
-public boolean isSequencerEnabled() {
-	// TODO Auto-generated method stub
-	return this.enableSequencer;
-}
+	@Override
+	public void initialiseStreams() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

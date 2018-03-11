@@ -96,11 +96,11 @@ public class FormulaCallback extends ParameterCallback {
 		return this.getClass().getSimpleName()+ " { expression => '"+expression+"', targetPath => '"+targetPath+"' } ";
 	}
 
-
 	@Override
 	public Group makeControls(ControlFrame cf, String name) {
 		
-		Group g = super.makeControls(cf, name);
+		//Group 
+		g = super.makeControls(cf, name);
 		
 		int margin_x = 5, pos_y = 0;
 
@@ -165,10 +165,13 @@ public class FormulaCallback extends ParameterCallback {
 	}
 	
 	@Override
-	public void notifyRemoval(Filter newf) {
-		super.notifyRemoval(newf);
-		if (newf.getTargetURLs().containsKey(this.targetPath))
+	public boolean notifyRemoval(Filter newf) {
+		//boolean relevant = super.notifyRemoval(newf);
+		if (newf.getTargetURLs().containsKey(this.targetPath)) {
 			this.setEnabled(false);
+			return true;
+		}
+		return false; //relevant;
 	}
 
 }

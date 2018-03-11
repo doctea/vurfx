@@ -326,7 +326,7 @@ abstract public class Stream implements Serializable {
 					}
 				})
 			);
-
+		
 		pos_y += margin_y + gap_y;
 		
 		
@@ -436,10 +436,14 @@ abstract public class Stream implements Serializable {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	public void notifyRemoval(Filter newf) {
+	public boolean notifyRemoval(Filter newf) {
+		boolean relevant = false;
 		for (ParameterCallback c : this.listeners) {
-			c.notifyRemoval(newf);
+			boolean t = c.notifyRemoval(newf);
+			if (t==true) 
+				relevant = true;
 		}
+		return relevant;
 	}
 
 	/*

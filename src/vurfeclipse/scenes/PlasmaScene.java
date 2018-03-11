@@ -136,9 +136,17 @@ public class PlasmaScene extends Scene {
 
 		}
 		@Override public void onStop() {	}
+		@Override
+		public boolean notifyRemoval(Filter newf) {
+			if (newf == host.getFilter("PhaseRGB")) {
+				this.setEnabled(false);
+				return true;
+			}
+			return false;
+		}
 	}
 
-	public class RGBFilterSequence2 extends Sequence {
+	public class RGBFilterSequence2 extends RGBFilterSequence1 {
 		public RGBFilterSequence2() {}
 		public RGBFilterSequence2(PlasmaScene plasmaFX1, int i) {
 			// TODO Auto-generated constructor stub
@@ -157,21 +165,11 @@ public class PlasmaScene extends Scene {
 			host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm*norm));
 			host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
 		}
-		@Override public void onStart() {
-			//this.setLengthMillis((int)random(1,5) * 500);
-			/*for (int i = 0 ; i < random(2,10) ; i++)
-				host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
-			for (int i = 0 ; i < random(2,10) ; i++)
-				host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
-			host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int)random(0,((PlasmaScene)this.host).colourModeCount)));
 
-			host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
-
-		}
 		@Override public void onStop() {	}
 	}
 
-	public class RGBFilterSequence3 extends Sequence {
+	public class RGBFilterSequence3 extends RGBFilterSequence1 {
 		public RGBFilterSequence3() {}
 
 		public RGBFilterSequence3(PlasmaScene plasmaFX1, int i) {
@@ -193,17 +191,7 @@ public class PlasmaScene extends Scene {
 			host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
 			host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
 		}
-		@Override public void onStart() {
-			//this.setLengthMillis((int)random(1,5) * 500);
-			/*for (int i = 0 ; i < random(2,10) ; i++)
-				host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
-			for (int i = 0 ; i < random(2,10) ; i++)
-				host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
-			host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) random(0,((PlasmaScene)this.host).colourModeCount)));
 
-			host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
-
-		}
 		@Override public void onStop() {	}
 	}
 

@@ -151,6 +151,14 @@ public class BadTVScene extends Scene {
 
 		}
 		@Override public void onStop() {	}
+		@Override
+		public boolean notifyRemoval(Filter newf) {
+			if (newf==host.getFilter("BadTV")) {
+				this.setEnabled(false);
+				return true;
+			}
+			return false;
+		}
 	}
 
 }

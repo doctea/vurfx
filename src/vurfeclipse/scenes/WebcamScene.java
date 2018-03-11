@@ -3,6 +3,7 @@ package vurfeclipse.scenes;
 import vurfeclipse.filters.*;
 import vurfeclipse.projects.Project;
 
+@Deprecated
 public class WebcamScene extends Scene {
   //int filterCount = 2;
   

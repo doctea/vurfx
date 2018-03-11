@@ -258,11 +258,6 @@ public class TestProject extends Project implements Serializable {
 		return true;
 	}
 
-	public boolean isSequencerEnabled() {
-		// TODO Auto-generated method stub
-		return this.enableSequencer;
-	}
-
 	@Override
 	public void initialiseStreams() {
 

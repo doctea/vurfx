@@ -10,7 +10,7 @@ import processing.core.PGraphics;
 
 public class OpenKinectFilter extends GenericKinectFilter {
 
-	private int device;
+	private int device = 0;
 	Kinect kinect;
 
 	public OpenKinectFilter(Scene sc) {

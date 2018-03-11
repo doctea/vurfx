@@ -4,7 +4,11 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import controlP5.Accordion;
+import controlP5.Button;
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.ControllerGroup;
 import controlP5.Group;
 import vurfeclipse.streams.Stream;
 
@@ -16,9 +20,24 @@ public class StreamEditor extends Group {
 		
 	}
 
-	public Accordion setupStreamEditor(ControlFrame cf, HashMap<String,Stream> streams) {
+	public ControllerGroup setupStreamEditor(ControlFrame cf, HashMap<String,Stream> streams) {
 		if (editor!=null) editor.remove();
-		editor = cf.control().addAccordion("streams_editor").setWidth(2 * (cf.sketchWidth()/3)).moveTo(this).setBarHeight(20);
+		Group outer = new Group(cf.cp5, "streams_editor_outer").moveTo(this).hideBar();
+		int pos_y = 20, margin_x = 20;
+		outer.add(new Button(cf.control(),this.toString() + "_add osc").setLabel("ADD OSC")
+				.setPosition(margin_x * 2, pos_y)
+				.moveTo(outer)
+				.addListenerFor(outer.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						// and refresh gui
+						//cf.stream
+						cf.updateGuiStreamEditor();
+					}
+				})
+			);
+
+		editor = cf.control().addAccordion("streams_editor").setWidth(2 * (cf.sketchWidth()/3)).moveTo(outer).setBarHeight(20).setPosition(2,pos_y);
 
 		//Scene n;
 		for (Entry<String, Stream> i : streams.entrySet()) {
@@ -53,6 +72,6 @@ public class StreamEditor extends Group {
 		
 		editor.open().setCollapseMode(Accordion.MULTI);
 		
-		return editor;
+		return outer;//editor;
 	}	
 }

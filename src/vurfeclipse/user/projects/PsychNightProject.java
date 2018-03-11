@@ -44,9 +44,9 @@ public PsychNightProject(int w, int h) {
   }
 
   public boolean setupStreams () {
-    Stream stream = new Stream("Test Stream");
+    //Stream stream = new Stream("Test Stream");
     BeatStream beatStream = new BeatStream("Beat Stream", 120.0f, APP.getApp().millis());
-    this.getSequencer().addStream("test", stream);
+    //this.getSequencer().addStream("test", stream);
     this.getSequencer().addStream("beat", beatStream);
 
     BeatStream beatStream2 = new BeatStream("Beat Stream 2", 60.0f, APP.getApp().millis());
@@ -644,9 +644,10 @@ public PsychNightProject(int w, int h) {
     return true;
   }
 
-public boolean isSequencerEnabled() {
+@Override
+public void initialiseStreams() {
 	// TODO Auto-generated method stub
-	return this.enableSequencer;
+	
 }
 
 

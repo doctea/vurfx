@@ -271,9 +271,4 @@ public PharmacyProject(int w, int h) {
 	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");*/
   }
 
-public boolean isSequencerEnabled() {
-	// TODO Auto-generated method stub
-	return this.enableSequencer;
-}
-
 }

@@ -155,11 +155,6 @@ protected SimpleProject(int w, int h, String gfx_mode) {
     return true;
   }
 
-public boolean isSequencerEnabled() {
-	// TODO Auto-generated method stub
-	return this.enableSequencer;
-}
-
 @Override
 public void initialiseStreams() {
 	// TODO Auto-generated method stub

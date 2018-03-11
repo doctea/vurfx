@@ -289,6 +289,8 @@ public abstract class Project implements Serializable {
 					}
 				}
 			}
+		} else if ("seq".equals(spl[1])) {
+			return this.sequencer;
 		}
 		//println("couldn't find object for path " + path + "!");
 		return null;
@@ -943,6 +945,7 @@ public abstract class Project implements Serializable {
 	private HashMap<String,Integer> guids = new HashMap<String,Integer>();
 	public boolean disableKeys = false;
 	protected String filename;
+
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
 	}
@@ -1024,4 +1027,5 @@ public abstract class Project implements Serializable {
 		return this.canvases.keySet().toArray(new String[0]);
 		//return null;
 	}
+
 }

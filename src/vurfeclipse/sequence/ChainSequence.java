@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import vurfeclipse.APP;
+import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.ui.ControlFrame;
@@ -208,6 +209,16 @@ public class ChainSequence extends Sequence {
 		}*/
 		
 		return sequenceEditor;
+	}
+
+	@Override
+	public boolean notifyRemoval(Filter newf) {
+		boolean relevant = false;
+		for (Sequence s : this.chain) {
+			if (s.notifyRemoval(newf))
+				relevant = true;
+		}
+		return relevant;
 	}	
 	
 }

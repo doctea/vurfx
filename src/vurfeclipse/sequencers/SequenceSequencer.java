@@ -576,6 +576,20 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
+	private void updateGuiSequence() {
+
+		SequenceSequencer self = this;
+
+		if (APP.getApp().isReady()) APP.getApp().getCF().queueUpdate(new Runnable () {
+			@Override
+			public void run() {
+				//self.setupControls(cf, tabName);
+				grpSequenceEditor.setSequence(getCurrentSequenceName(), getActiveSequence());	// in case above doesn't set things up properly
+			}
+		});
+		
+	}
+
 	private void updateGuiSequenceChanged(int oldCursor, int newCursor) {
 		//if (!APP.getApp().isReady()) return;
 		if (null==lstHistory) return;
@@ -1028,9 +1042,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private Slider sldTimeScale;
 	private StreamEditor grpStreamEditor;
 	private Textfield txtProjectName;
+	private String tabName;
 	
 	@Override public void setupControls (ControlFrame cf, String tabName) {
 		super.setupControls(cf, tabName);
+		
+		this.tabName = tabName;
 
 		println("Project#setupControls about to grab cp5 before scene loop..");
 		final ControlP5 cp5 = cf.control();
@@ -1371,15 +1388,28 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return params;
 	}
 
-	public void notifyRemoval(Filter newf) {
-		super.notifyRemoval(newf);
+	public boolean notifyRemoval(Filter newf) {
+		boolean relevant = super.notifyRemoval(newf);
+		
+		relevant = this.getActiveSequence().notifyRemoval(newf) || relevant;
+		
+		if (relevant) 
+			this.updateGuiSequence();
+		
 		for (Entry<String, Sequence> s : sequences.entrySet()) {
-			s.getValue().notifyRemoval(newf);
-		}		
+			boolean t = s.getValue().notifyRemoval(newf);
+			if (t==true) 
+				relevant = t;
+		}
+		if (relevant) 
+			this.updateGuiSequence();
+		
+		return relevant;
 	}
 
 
 	
+
 	public void saveBankSequences (String filename) {
 		for (Entry<String, Sequence> s : this.sequences.entrySet()) {
 			s.getValue().saveSequencePreset("bank_" + filename + "_" + s.getKey() + ".xml");

@@ -93,14 +93,15 @@ public abstract class ParameterCallback implements Serializable {
 		return;
 	}
 
+	Group g;
 	public Group makeControls(ControlFrame cf, String name) {
-		Group g = new Group(cf.control(), name + "_group");
+		g = new Group(cf.control(), name + "_group");
 		
 		return g;
 	}
 
-	public void notifyRemoval(Filter newf) {
-		
+	public boolean notifyRemoval(Filter newf) {
+		return false;
 	}
 
 }

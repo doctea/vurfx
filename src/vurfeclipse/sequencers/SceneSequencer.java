@@ -54,7 +54,10 @@ public class SceneSequencer extends Sequencer implements Targetable {
 		  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
 			  println(this+"#runSequences(): is readyToChange, calling randomScene()");
 			  randomScene();
+			  ticks = 0;
 		  }
+		  
+		  ticks++;
 		  
 		  ArrayList<Sequence> seqs = switched_sequences.get(activeSceneName);
 		  if (seqs!=null) {
@@ -62,7 +65,7 @@ public class SceneSequencer extends Sequencer implements Targetable {
 			  while (it.hasNext()) {
 				  Sequence sq = (Sequence)it.next();
 				  //println(this+"#runSequences(): Setting values on " + sq);
-				  sq.setValuesForTime();
+				  sq.setValuesForTime(this.ticks);
 			  }
 		  }
 		return true;

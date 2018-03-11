@@ -1067,7 +1067,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	public void removeFilter(Filter newf) {
 		println("Removing filter " + newf);
 		//newf.dispose();
-		notifyRemoval(newf);
+		//if (
+				notifyRemoval(newf);//) {
+			//APP.getApp().getCF().updateGuiStreamEditor();
+		//}
 		
 		filters.remove(newf);
 		
@@ -1080,13 +1083,13 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		});*/
 	}
 	
-	private void notifyRemoval(Filter newf) {
+	private boolean notifyRemoval(Filter newf) {
 		// loop through:
 		//   Streams
 		//   Sequences?
 		//   any other things that listen to Filters..?
 		//   and disable/remove them so that errors aren't thrown
-		APP.getApp().pr.getSequencer().notifyRemoval(newf);
+		return APP.getApp().pr.getSequencer().notifyRemoval(newf);
 	}
 	synchronized public void refreshControls() {
 		Scene self = this;

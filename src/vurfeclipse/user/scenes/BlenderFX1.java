@@ -1,6 +1,7 @@
 package vurfeclipse.user.scenes;
 
 import vurfeclipse.filters.BlendDrawer;
+import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.PlainDrawer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.Scene;
@@ -8,7 +9,27 @@ import vurfeclipse.scenes.SimpleScene;
 import vurfeclipse.sequence.Sequence;
 
 public class BlenderFX1 extends SimpleScene {
-    class BlendSequence1 extends Sequence {
+	
+    abstract class BlendSequence extends Sequence {
+    	public BlendSequence() {}
+		public BlendSequence(BlenderFX1 blenderFX1, int i) {
+			super (blenderFX1, i);
+		}
+
+		@Override
+		public boolean notifyRemoval(Filter newf) {
+			if (host.getFilter("BlendDrawer1")==newf) {
+				this.setEnabled(false);
+				return true;
+			}
+			return false;
+		}
+    	
+    	
+    }
+
+	
+    class BlendSequence1 extends BlendSequence {
     	public BlendSequence1() {}
 		public BlendSequence1(BlenderFX1 blenderFX1, int i) {
 			// TODO Auto-generated constructor stub
@@ -33,7 +54,7 @@ public class BlenderFX1 extends SimpleScene {
 		}*/
 	}
 
-	class BlendSequence2 extends Sequence {
+	class BlendSequence2 extends BlendSequence {
 		public BlendSequence2() {}
 		public BlendSequence2(BlenderFX1 blenderFX1, int i) {
 			// TODO Auto-generated constructor stub

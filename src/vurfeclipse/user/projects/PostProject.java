@@ -559,11 +559,6 @@ public PostProject(int w, int h, String gfx_mode) {
     
     return true;
   }
-
-public boolean isSequencerEnabled() {
-	// TODO Auto-generated method stub
-	return this.enableSequencer;
-}
   
   
 }

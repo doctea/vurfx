@@ -5,6 +5,7 @@ import vurfeclipse.APP;
 import vurfeclipse.Blob;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.BlobDrawer;
+import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.Sequence;
@@ -68,6 +69,18 @@ public class BlobFX1 extends SimpleScene {
 			
 		}*/
 
+		@Override
+		public boolean notifyRemoval(Filter newf) {
+			if (	host.getFilter("BlobDrawer")==newf ||
+					host.getFilter("BlobDrawer2")==newf ||
+					host.getFilter("BlendDrawer")==newf ||
+					host.getFilter("BlendDrawer2")==newf
+				) {
+				this.setEnabled(false);
+				return true;
+			}
+			return false;
+		}
 	}
 
 
@@ -149,6 +162,7 @@ public class BlobFX1 extends SimpleScene {
 			
 			//toggleOutputs();	
 		}
+
 	}
 
 
@@ -379,34 +393,6 @@ public class BlobFX1 extends SimpleScene {
 		
 		}    	
 	}
-
-
-
-	public class TextureSequence extends Sequence {
-		int colour1, colour2, colour3, colour4;    	
-		public TextureSequence(BlobFX1 host, int i) {
-			super((Scene)host,i);
-		}
-		/*@Override public ArrayList<Mutable> getMutables() {
-			ArrayList<Mutable> muts = new ArrayList<Mutable>();
-			muts.add(host);//host.getFilter("BlendDrawer1"));
-			return muts;
-		}*/
-		@Override public void onStart () { 
-			this.println("texture sequence starting .. ");
-			//host.getFilter("BlobDrawer").setInputCanvas(host.getCanvasMapping("pix0"));//host.getCanvasMapping("pix0"));
-			host.getFilter("BlobDrawer").changeParameterValue("shape", Blob.SH_TEXTURE);
-			//host.getFilter("BlobDrawer2").setInputCanvas(host.getCanvasMapping("out")); //host.getCanvasMapping("pix1"));
-			host.getFilter("BlobDrawer2").changeParameterValue("shape", Blob.SH_TEXTURE);
-		}
-		@Override public void onStop() {	}
-		@Override
-		public void __setValuesForNorm(double pc, int iteration) {
-			// TODO Auto-generated method stub
-			
-		}	
-	}
-
 
 
 	public BlobFX1(Project pr, int w, int h) {

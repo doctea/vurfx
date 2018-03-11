@@ -3,6 +3,7 @@ package vurfeclipse.sequence;
 import java.util.HashMap;
 
 import vurfeclipse.APP;
+import vurfeclipse.filters.Filter;
 
 public class SavedSequence extends Sequence {
 
@@ -42,6 +43,13 @@ public class SavedSequence extends Sequence {
 	public void onStop() {
 		// TODO Auto-generated method stub
 
+	}
+
+
+	@Override
+	public boolean notifyRemoval(Filter newf) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

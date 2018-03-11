@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import processing.core.PImage;
 import vurfeclipse.ImageRepository;
+import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.ImageListDrawer;
 import vurfeclipse.projects.Project;
 import vurfeclipse.sequence.Sequence;
@@ -231,6 +232,10 @@ public class ImageListScene extends SimpleScene {
 			((ImageListScene)host).chooseImageIndex(this.imageIndex);
 		}
 		@Override public void onStop() {	}
+		@Override
+		public boolean notifyRemoval(Filter newf) {
+			return false;
+		}
 	}
 
 	@Override

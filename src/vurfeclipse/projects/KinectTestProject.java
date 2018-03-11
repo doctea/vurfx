@@ -60,7 +60,8 @@ public KinectTestProject(int w, int h) {
     
     //ils2.setCanvas("pix0","/pix0");
     //ils1.setCanvas("pix1","/pix1");
-    ils1.addFilter(((OpenNIFilter) new OpenNIFilter(ils1).setOutputCanvas("/rgb").setFilterName("kinect")));//.setDepthOutputCanvasName("pix1"));
+    ils1.addFilter(((OpenNIFilter) new OpenNIFilter(ils1).setAlias_out("rgb").setFilterName("kinect")));//.setDepthOutputCanvasName("pix1"));
+    ils1.setCanvas("rgb", "/rgb");
     ils1.setCanvas("depth", "/depth");
 
     this.addSceneOutputCanvas(
@@ -209,9 +210,10 @@ public KinectTestProject(int w, int h) {
     return true;
   }
 
-public boolean isSequencerEnabled() {
+@Override
+public void initialiseStreams() {
 	// TODO Auto-generated method stub
-	return this.enableSequencer;
+	
 }
   
   

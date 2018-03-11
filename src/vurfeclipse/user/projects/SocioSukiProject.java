@@ -586,9 +586,4 @@ public class SocioSukiProject extends Project implements Serializable {
 	    rsConn.expose("/seq/changeTo/" + "text_word_merry xmas");*/
   }
 
-public boolean isSequencerEnabled() {
-	// TODO Auto-generated method stub
-	return this.enableSequencer;
-}
-
 }

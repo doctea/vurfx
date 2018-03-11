@@ -272,6 +272,14 @@ public class TextFlashScene extends Scene {
 			//((BlendDrawer)host.host.getSceneForPath(getPath()).getFilter("BlendDrawer")).setMuted((random(0f,1.0f)>=0.25f));
 		}
 		@Override public void onStop() {	}
+		@Override
+		public boolean notifyRemoval(Filter newf) {
+				if (newf==getFilter("TextDrawer") || newf==getFilter("BlendDrawer")) {
+					this.setEnabled(false);
+					return true;
+				}
+			return false;
+		}
 	}
 
 }

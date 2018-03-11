@@ -327,6 +327,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 
 
+	@Deprecated
 	private double getPCForDelta(double d) {
 		double pc;
 		/*if (lengthMillis==0) {
@@ -407,7 +408,12 @@ abstract public class Sequence implements Serializable, Mutable {
 	}
 	public void setValuesForNorm(double pc, int iteration) {
 		if (enabled) {
-			__setValuesForNorm(pc, iteration);
+			try {
+				__setValuesForNorm(pc, iteration);
+			} catch (Exception e) {
+				println("Caught " + e + " while trying to setValuesForNorm in " + this);
+				if (debug) e.printStackTrace(System.err);
+			}
 			this.current_pc = (float) pc;
 		}
 	}
@@ -639,10 +645,11 @@ abstract public class Sequence implements Serializable, Mutable {
 			return super.toString() + " " + this.host!=null?this.host.getPath():"[no host]";
 		}
 
-		public void notifyRemoval(Filter newf) {
-			// TODO Auto-generated method stub
+		abstract
+		public boolean notifyRemoval(Filter newf);/* {
 			// detect if passed Filter is used by this Sequence
 			// if so then disable this Sequence
-		}
+			return false;
+		}*/
 
 }

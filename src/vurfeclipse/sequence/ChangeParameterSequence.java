@@ -205,4 +205,13 @@ public class ChangeParameterSequence extends Sequence {
 		return super.toString() + " " + this.getParameterPath();
 	}
 
+	@Override
+	public boolean notifyRemoval(Filter newf) {
+		if (newf.getPath().equals(this.filterPath)) {
+			this.setEnabled(false);
+			return true;
+		}
+		return false;
+	}
+
 }

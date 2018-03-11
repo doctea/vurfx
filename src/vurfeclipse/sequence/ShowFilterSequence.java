@@ -3,6 +3,7 @@ package vurfeclipse.sequence;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 
@@ -58,6 +59,14 @@ public class ShowFilterSequence extends Sequence {
 	public void onStop() {
 		// TODO Auto-generated method stub
 
+	}
+	@Override
+	public boolean notifyRemoval(Filter newf) {
+		if (newf.getPath().equals(filterPath)) {
+			this.setEnabled(false);
+			return true;
+		}
+		return false;
 	}
 
 }
