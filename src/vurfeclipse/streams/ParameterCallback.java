@@ -49,7 +49,7 @@ public abstract class ParameterCallback implements Serializable {
 
 	public void __call(Object value) {
 		if (isEnabled()) {
-			if (latching) {
+			if (isLatching()) {
 				latching_value = latching_value.add(BigDecimal.valueOf(1)); //Parameter.classvalue));
 				//value = latching_value.floatValue();// new Float(latching_value); //((Float)value) += latching_value;
 				//System.out.println(count + " " + this + " latched " + value);
@@ -99,8 +99,10 @@ public abstract class ParameterCallback implements Serializable {
 
 	public void readParameters(HashMap<String, Object> input) {
 		if (input.containsKey("streamSource")) 	this.streamSource 	= (String) input.get("streamSource");
-		if (input.containsKey("enabled")) 		this.enabled 		= (Boolean)input.get("enabled");
-		if (input.containsKey("latching")) 		this.latching 		= (Boolean)input.get("latching");
+		if (input.containsKey("enabled")) 		this.setEnabled((Boolean)input.get("enabled"));
+		if (input.containsKey("latching")) 		{
+			this.setLatching((Boolean)input.get("latching"));
+		}
 		return;
 	}
 
@@ -122,6 +124,9 @@ public abstract class ParameterCallback implements Serializable {
 	}
 
 	public void setLatching(boolean latching) {
+		if (latching==true) {
+			System.out.println("caught setlatchinging true!");
+		}
 		this.latching = latching;
 	}
 

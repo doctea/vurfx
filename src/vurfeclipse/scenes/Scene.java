@@ -947,7 +947,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 	public HashMap<String,Targetable> getTargetURLs() {
 		HashMap<String, Targetable> urls = new HashMap<String,Targetable>();
-		debug = true;
+		debug = false;
 		Scene s = this;
 		// add a 'mute' url for the Scene
 		if (s instanceof Mutable) {

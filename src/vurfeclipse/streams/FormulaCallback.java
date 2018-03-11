@@ -59,6 +59,7 @@ public class FormulaCallback extends ParameterCallback {
 	}
 	
 	public void readParameters(HashMap<String, Object> input) {
+		super.readParameters(input);
 		this.setTargetPath((String) input.get("targetPath"));
 		this.setExpression((String) input.get("expression"));
 	}
