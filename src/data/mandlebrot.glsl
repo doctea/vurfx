@@ -21,7 +21,8 @@ void main() {
     vec2 z, c;
     vec2 TexCoord = vertTexCoord.st;
 
-    c.x = 1.3333 * (TexCoord.x - 0.5) * scale - x; //center.x;
+    c.x = //1.3333 *
+    		(TexCoord.x - 0.5) * scale - x; //center.x;
     c.y = (TexCoord.y - 0.5) * scale - y; //center.y;
 
     //c.x = rotate/60.0 * cos(c.x);
