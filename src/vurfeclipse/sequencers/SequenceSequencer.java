@@ -421,7 +421,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		if (chosen<0) chosen = 0;
 		//changeSequence((String)sequences.keySet().toArray()[chosen]);
 		println("Chose random element " + chosen + " of " + count + "('" + (String)randomPool.get(chosen) + "')");
-		changeSequence((String)randomPool.toArray()[chosen]);
+		
+		Sequence newseq = this.getSequence((String)randomPool.toArray()[chosen]);
+		newseq = (Sequence)newseq.clone();
+		String newname = "r:" + (String)randomPool.toArray()[chosen];
+		this.addSequence(newname, newseq);
+		
+		changeSequence(newname); //(String)randomPool.toArray()[chosen]);
 		/*} catch (Exception e) {
 		  	this.println("randomSequence() with chosen " + chosen + " (of count " + count + ") caught " + e);
 		  }*/
@@ -1366,8 +1372,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		params.put("/seq/current_sequence_name", this.getCurrentSequenceName());	// just save the name, used when re-loading from xml or hashmap
 
 		if (APP.getApp().pr instanceof SavedProject) {		// TODO: FIX THIS SOMEHOW if this is a loaded Project then save the entire bank 'cos its probably quite reasonable and small
+			println("Saved project, so saving Bank Sequences!");
 			params.put("/seq/bank/sequences", this.collectBankSequences());
-		} else {											// if this is a Project loaded from a class then there is probably tens of thousands of Sequences in the bank, so only save the history instead 
+		} else {											// if this is a Project loaded from a class then there is probably tens of thousands of Sequences in the bank, so only save the history instead
+			println("Not a SavedProject, so saving the History as the Bank!");
 			params.put("/seq/bank/sequences", this.collectBankHistory());
 		}
 		params.put("/seq/bank/history",  this.collectBankHistory());
