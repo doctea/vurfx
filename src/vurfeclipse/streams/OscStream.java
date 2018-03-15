@@ -81,7 +81,7 @@ public class OscStream extends Stream implements OscEventListener {
 		//println("got type tag: " + theOscMessage.typetag());
 		//println("got addrpattern '" + theOscMessage.addrPattern() + "', floatvalue " + theOscMessage.get(0).floatValue());
 		if (theOscMessage.checkTypetag("f")) {
-			this.addEvent(/*this.streamName +*/theOscMessage.addrPattern().replaceFirst("/",""), Float.parseFloat(""+theOscMessage.get(0).floatValue()));
+			this.addEvent(theOscMessage.addrPattern().replaceFirst("/",""), Float.parseFloat(""+theOscMessage.get(0).floatValue()));
 		} else if (theOscMessage.checkTypetag("i")) {
 			this.addEvent(theOscMessage.addrPattern().replaceFirst("/",""), theOscMessage.get(0).intValue());
 			//println("added event for " + theOscMessage.addrPattern().replaceFirst("/","") + " '" + theOscMessage.get(0).intValue() + "'");

@@ -103,7 +103,7 @@ public class VideoPlayer extends Filter {
         newStream = new Movie(APP.getApp(),filename);
         //newTex = new GLTexture(APP, sc.w, sc.h);
         //newStream.setPixelDest(tex, true);
-        newStream.volume(volume);		//TODO: why doesn't this compile on MacOSX?
+        //newStream.volume(volume);		//TODO: why doesn't this compile on MacOSX?
         println("Set volume and pixeldest..");
         //if (!((VurfEclipse)APP.getApp()).exportMode)
           newStream.play();
@@ -202,7 +202,7 @@ public class VideoPlayer extends Filter {
       //stream = new GSMovie(APP,"U:\\videos\\Tomorrows World - sinclair c5\\tworld84.dv.ff.avi");
       //stream.setPixelDest(out.getTexture());
       //stream.setPixelDest(tex, true);
-      stream.volume(volume);
+      //stream.volume(volume);
 
       if (this.startDelay>0)
     	  Thread.sleep(startDelay);
@@ -245,7 +245,7 @@ public class VideoPlayer extends Filter {
       if (
     		  //!stream.isSeeking() && 
     		  stream.available()) {
-        stream.volume(volume);
+        //stream.volume(volume);
 
         stream.read();
         //println("got gsvideo stream read");
