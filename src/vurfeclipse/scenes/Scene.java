@@ -839,11 +839,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			}
 		};*/
 		
-		Scene self = this;
+		final Scene self = this;
 		
 		int start_x = (int) this.muteController.getWidth() + margin * 8; //(this.lblSceneMapping.getPosition()[0] + margin + this.lblSceneMapping.getWidth());
 		int margin_w = 200;
-		for (Entry<String, String> map : this.getCanvasMappings().entrySet()) {
+		for (final Entry<String, String> map : this.getCanvasMappings().entrySet()) {
 			cp5.addLabel(tabName + map.getKey() +  "_canvaspath_label").setText(map.getKey()+":-").setPosition(start_x, margin-12).setWidth(30).setLabel(map.getKey()).moveTo(tab);
 			ScrollableList lstTarget = new ScrollableList(cp5,tabName + map.getKey() +  "_canvaspath")
 					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
@@ -1092,7 +1092,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		return APP.getApp().pr.getSequencer().notifyRemoval(newf);
 	}
 	synchronized public void refreshControls() {
-		Scene self = this;
+		final Scene self = this;
 		
 		host.getApp().getCF().queueUpdate(new Runnable() {
 			@Override

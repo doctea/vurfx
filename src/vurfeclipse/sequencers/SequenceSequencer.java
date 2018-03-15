@@ -255,7 +255,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			if (payload instanceof String) {
 				this.startOneShot((String)payload);
 			} else if (payload instanceof Integer || payload instanceof Float) {
-				this.startOneShot((String) ((Entry) this.sequences.entrySet().toArray()[(int)payload]).getKey());
+				this.startOneShot((String) ((Entry) this.sequences.entrySet().toArray()[(Integer)payload]).getKey());
 			}
 		} else if (spl[2].equals("changeTo")) {	   
 			if (spl.length>3) 									// if given a named sequence as either the last query portion 
@@ -544,7 +544,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	private void updateGuiAddHistory(String oldSequenceName, String newSequenceName) {
+	private void updateGuiAddHistory(final String oldSequenceName, final String newSequenceName) {
 		SequenceSequencer self = this;
 
 		this.updateGuiHistory();
@@ -596,7 +596,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		
 	}
 
-	private void updateGuiSequenceChanged(int oldCursor, int newCursor) {
+	private void updateGuiSequenceChanged(final int oldCursor, final int newCursor) {
 		//if (!APP.getApp().isReady()) return;
 		if (null==lstHistory) return;
 		if (lstHistory.getItems()==null) return;
@@ -634,7 +634,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		});
 	}
 
-	private void updateGuiProgress(Sequence activeSequence) {
+	private void updateGuiProgress(final Sequence activeSequence) {
 		if (!APP.getApp().isReady()) return;
 		if (null==activeSequence) return;
 		if (null==this.sldProgress) return;
@@ -652,7 +652,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 	}
 
-	public void updateGuiTimeScale(double f) {
+	public void updateGuiTimeScale(final double f) {
 		if (!APP.getApp().isReady()) return;
 		if (null==this.sldTimeScale) return;
 

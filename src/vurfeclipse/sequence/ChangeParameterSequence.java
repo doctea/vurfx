@@ -123,7 +123,7 @@ public class ChangeParameterSequence extends Sequence {
 		// add an accordion to hold the sub-sequences and recurse
 		SequenceEditor sequenceEditor = super.makeControls(cf, name);
 		
-		ChangeParameterSequence sequence = this;
+		final ChangeParameterSequence sequence = this;
 
 		int pos_y = 60, margin_x = 10;
 		SequenceEditor g = sequenceEditor;
@@ -157,7 +157,7 @@ public class ChangeParameterSequence extends Sequence {
 			
 			//final FormulaCallback fc = (FormulaCallback) c; 
 				
-			ScrollableList lstTarget = cp5.addScrollableList(name + "_Target URL")
+			final ScrollableList lstTarget = cp5.addScrollableList(name + "_Target URL")
 					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 					.setLabel(this.getParameterPath()) //((FormulaCallback)c).targetPath)
 					.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))

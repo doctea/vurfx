@@ -22,7 +22,7 @@ public class StreamEditor extends Group {
 		
 	}
 
-	public ControllerGroup setupStreamEditor(ControlFrame cf, HashMap<String,Stream> streams) {
+	public ControllerGroup setupStreamEditor(final ControlFrame cf, HashMap<String,Stream> streams) {
 		if (editor!=null) editor.remove();
 		Group outer = new Group(cf.cp5, "streams_editor_outer").moveTo(this).hideBar();
 		int pos_y = 0, margin_x = 20;

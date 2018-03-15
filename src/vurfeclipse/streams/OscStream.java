@@ -34,7 +34,7 @@ public class OscStream extends Stream implements OscEventListener {
 	}
 	
 	@Override
-	protected Group makeEmitterSelector(ControlFrame cf, ParameterCallback callback, String name) {
+	protected Group makeEmitterSelector(ControlFrame cf, final ParameterCallback callback, String name) {
 		Group g = new Group(cf.control(), name + "_select_group").hideBar();
 		
 		int margin_x = 10;

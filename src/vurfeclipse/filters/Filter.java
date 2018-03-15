@@ -667,7 +667,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	private Button deleteButton;
 
 	public synchronized int setupControls(ControlFrame cf, ControllerGroup tab, int row) {
-		ControlP5 cp5 = cf.control();
+		final ControlP5 cp5 = cf.control();
 		//if (controlsSetup) return 0;
 		controlsSetup = true;
 		if (debug) println("Filter#setupControls() for "  + this + ": " + tab.getName());
@@ -694,7 +694,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		int row_h = 50, col_w = 100;
 
 			
-			Filter self = this;
+			final Filter self = this;
 			
 			if (row!=0) {
 				this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + getFilterName())
@@ -871,9 +871,9 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 							//self.sc.moveFilter(self, -1);
 							//self.sc.refreshControls();
 	
-							HashMap<String,Object> setup = self.collectFilterSetup();
-							Filter newf = Filter.createFilter(self.getClass().getName(), self.sc);
-							String newName = "copy of " + self.getFilterName();
+							final HashMap<String,Object> setup = self.collectFilterSetup();
+							final Filter newf = Filter.createFilter(self.getClass().getName(), self.sc);
+							final String newName = "copy of " + self.getFilterName();
 							
 							sc.queueUpdate(new Runnable() {
 								@Override
@@ -1074,7 +1074,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			else if (value instanceof Integer) {
 				if (c instanceof ColorWheel) {
 					//System.err.println(this + " for " + name + " with value '"+value+"': funky control event loopback bug means that can't manually change the colour...");
-					if ((int)value!=-1 && (int)value!=-16777216) {	// TODO: hacky workaround for bug 'greyscale trap' where you can't move the colour selector UI out of the grey range if certain values get set?
+					if ((Integer)value!=-1 && (Integer)value!=-16777216) {	// TODO: hacky workaround for bug 'greyscale trap' where you can't move the colour selector UI out of the grey range if certain values get set?
 						((ColorWheel)c).setRGB((Integer) value);	// some funky loopback bug
 					}
 				} else {

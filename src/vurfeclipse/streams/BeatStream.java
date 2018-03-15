@@ -224,7 +224,7 @@ public class BeatStream extends Stream implements Serializable {
 	@Override
 	public void readParameters(HashMap<String, Object> input) {
 		super.readParameters(input);
-		this.setBPM((float) input.get("tempo"));
+		this.setBPM((Float) input.get("tempo"));
 
 		/*HashMap<String, HashMap<String,Object>> callbacks = (HashMap<String, HashMap<String,Object>>) input.get("callbacks");
 		for (Entry<String, HashMap<String, Object>> i : callbacks.entrySet()) {
@@ -245,7 +245,7 @@ public class BeatStream extends Stream implements Serializable {
 	}
 
 	@Override
-	synchronized public void setupControls(ControlFrame cf, Group g) {
+	synchronized public void setupControls(final ControlFrame cf, Group g) {
 		super.setupControls(cf, g);
 		int margin_y = 20, gap_y = 5, margin_x = 80;
 
@@ -384,7 +384,7 @@ public class BeatStream extends Stream implements Serializable {
 		//}
 		return false;
 	}
-	private void updateGuiBPM(float bpm) {
+	private void updateGuiBPM(final float bpm) {
 		//APP.getApp().getCF().updateGuiStreamEditor();
 		APP.getApp().getCF().queueUpdate(new Runnable() {
 			@Override

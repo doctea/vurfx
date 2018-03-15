@@ -584,7 +584,7 @@ abstract public class Sequence implements Serializable, Mutable {
 			ControlP5 cp5 = cf.control();
 			
 			SequenceEditor seq = new SequenceEditor(cp5, name);
-			Sequence self = this;
+			final Sequence self = this;
 			seq.setWidth(cp5.controlWindow.papplet().width);
 
 			cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name)

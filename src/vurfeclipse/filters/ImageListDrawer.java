@@ -195,7 +195,7 @@ public class ImageListDrawer extends Filter {
   
   public void nextImage () {
 	  if (debug) println(this + "#nextImage [" + current_image_index + "/" + filenames.size() + "]");
-    current_image_index = (int)getParameterValue("current_image_index");
+    current_image_index = (Integer)getParameterValue("current_image_index");
     current_image_index++;
     //IR.precache(filenames.get(current_image_index), sc.w, sc.h);
     if (current_image_index >= filenames.size())

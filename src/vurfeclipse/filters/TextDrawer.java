@@ -180,7 +180,7 @@ public class TextDrawer extends Filter {
     		  w*(Float)this.getParameterValue("translate_x"), 
     		  h*(Float)this.getParameterValue("translate_y")
       ); 
-      out.scale((float) this.getParameterValue("scale"));
+      out.scale((Float) this.getParameterValue("scale"));
       out.text(getText(), 0, 0);
       out.popMatrix();
       out.endDraw();

@@ -289,7 +289,7 @@ abstract public class Stream implements Serializable {
 
 		return null;
 	}
-	synchronized public void setupControls(ControlFrame cf, Group g) {
+	synchronized public void setupControls(final ControlFrame cf, Group g) {
 		//cf.control().addScrollableList(this.streamName);
 		synchronized (g) {
 		int n = 0;
@@ -334,7 +334,7 @@ abstract public class Stream implements Serializable {
 		
 		
 		//for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
-		for (ParameterCallback callback : this.listeners) { //i.getValue()) {
+		for (final ParameterCallback callback : this.listeners) { //i.getValue()) {
 			int pos_x = 5;
 
 			println ("adding gui for " + callback);
@@ -416,7 +416,7 @@ abstract public class Stream implements Serializable {
 		return new FormulaCallback().setTargetPath("/sc/BlankerScene/fl/BlankFilter/pa/alpha").setExpression("input").setStreamSource(string);		
 	}
 	
-	protected Group makeEmitterSelector(ControlFrame cf, ParameterCallback callback, String name) {
+	protected Group makeEmitterSelector(ControlFrame cf, final ParameterCallback callback, String name) {
 		
 		Group g = new Group(cf.control(), name + "_select_group").hideBar();
 		

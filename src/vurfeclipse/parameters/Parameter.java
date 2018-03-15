@@ -119,9 +119,9 @@ public class Parameter implements Serializable, Targetable {
 
 		//System.out.println("payload is " + payload + ", max is " + getMax() + ", cast payload is " + this.cast(payload));
 		if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
-			if ((int)this.cast(payload)>(int)this.getMax()) {
+			if ((Integer)this.cast(payload)>(Integer)this.getMax()) {
 				//System.out.println ("payload is " + (int)this.cast(payload) + " and max is " + getMax() + " - mod should be " + (new Integer(((int)this.cast(payload)) % (int)this.getMax())));
-				payload = new Integer((int)this.cast(payload) % (int)this.getMax());
+				payload = new Integer((Integer)this.cast(payload) % (Integer)this.getMax());
 				//System.out.println("wrapped payload is " + payload);
 			}
 		}
@@ -201,7 +201,7 @@ public class Parameter implements Serializable, Targetable {
 	synchronized public Controller makeController(ControlP5 cp5, String tabName, ControllerGroup tab, int size) {
 		controlP5.Controller o;
 
-		Parameter self = this;
+		final Parameter self = this;
 		
 		if (value instanceof Float) {
 			if (getName().toLowerCase().contains("rotat") ) { //(Float)getMax()==360.0f) {
