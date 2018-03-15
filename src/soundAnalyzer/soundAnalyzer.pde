@@ -95,8 +95,8 @@ void setup() {
    * and the port of the remote location address are the same, hence you will
    * send messages back to this sketch.
    */
-  myRemoteLocation = new NetAddress("127.0.0.1", 12001);
-  ResolumeLocation = new NetAddress("127.0.0.1", 12000);//7000);
+  myRemoteLocation = new NetAddress("255.255.255.255" /*127.0.0.1"*/, 12001);
+  ResolumeLocation = new NetAddress("255.255.255.255" /*127.0.0.1"*/, 12000);//7000);
 }
 
 
@@ -151,14 +151,19 @@ void animateBeatCircle() {
   Ani.to(this, 0.2, "beatEllipseSize", 60, Ani.EXPO_OUT);
 }
 
-void mousePressed() {
+void mouseMoved() {
   /* in the following different ways of creating osc messages are shown by example */
-  OscMessage myMessage = new OscMessage("/test");
-
-  myMessage.add(123); /* add an int to the osc message */
-
-  /* send the message */
-  oscP5.send(myMessage, myRemoteLocation);
+  if (mousePressed) {
+    OscMessage myMessage = new OscMessage("/mouseY");
+    myMessage.add(mouseY); /* add an int to the osc message */
+  
+    OscMessage myMessage2 = new OscMessage("/mouseX");
+    myMessage2.add(mouseX); /* add an int to the osc message */
+  
+    /* send the message */
+    oscP5.send(myMessage, ResolumeLocation);
+    oscP5.send(myMessage2, ResolumeLocation);
+  }
 }
 
 void sendTrigger() {
