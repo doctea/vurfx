@@ -2,6 +2,8 @@
 
 #!! ERROR: proces is undefined. Use list command to see defined gitignore types !!#
 
+.classpath
+
 ## library src
 lib/*/*/*/
 lib/*/*/
