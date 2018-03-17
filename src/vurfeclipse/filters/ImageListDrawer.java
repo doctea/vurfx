@@ -177,7 +177,7 @@ public class ImageListDrawer extends Filter {
     if (filenames.size()==0)
       return null;//current_image_index)
     //return IR.getImageForFilename(filenames.get(current_image_index), sc.w, sc.h);
-    if (current_image_index>=filenames.size()) return null;
+    if (current_image_index>=filenames.size() || current_image_index<0) return null;
     return IR.getImageForFilename(filenames.get(current_image_index), sc.w, sc.h);
 
     /*if (this.image_srcs[current_image_index]==null)

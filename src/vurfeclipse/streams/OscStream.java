@@ -4,6 +4,7 @@ import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.Group;
 import controlP5.Textfield;
+import vurfeclipse.APP;
 import vurfeclipse.ui.ControlFrame;
 
 
@@ -31,6 +32,50 @@ public class OscStream extends Stream implements OscEventListener {
 		// TODO Auto-generated method stub
 		super.registerEventListener(paramName, callback);
 		//if(callback instanceof ParameterCallback) ((ParameterCallback) callback).latching = true;
+	}
+	
+	@Override
+	synchronized public void setupControls(final ControlFrame cf, Group g) {
+		super.setupControls(cf, g);
+		int margin_y = 20, gap_y = 5, margin_x = 80;
+
+		int pos_y = 10;
+
+		final OscStream self = this;
+
+		/*this.txtBPM = cf.control().addTextfield(this.toString() + "_tempo").setLabel("BPM").setText(""+this.bpm).setWidth(margin_x/2)
+				.setPosition(margin_x * 3, pos_y)
+				.moveTo(g)
+				.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						self.setBPM(Float.parseFloat(((Textfield)theEvent.getController()).getText()));
+
+						// and refresh gui
+						cf.updateGuiStreamEditor();
+					}
+				});
+		g.add(this.txtBPM);*/
+
+		/*g.add(cf.control().addButton(this.toString() + "_resetstart").setLabel("Reset Start")
+				.setPosition(margin_x * 5, pos_y)
+				.moveTo(g)
+				.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						synchronized (self) {
+							self.startTime = APP.getApp().timeMillis;
+							beat = 0;
+							self.setBPM(self.bpm);
+							//lastDealtStepTime = new int[stepDivisions.length];
+							//Arrays.fill(lastDealtStepTime, startTime);
+
+							// and refresh gui
+							//cf.updateGuiStreamEditor();
+						}
+					}
+				})
+				);*/
 	}
 	
 	@Override
