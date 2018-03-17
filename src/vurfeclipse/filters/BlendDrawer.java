@@ -211,6 +211,9 @@ public class BlendDrawer extends ShaderFilter {
     /*out.color(this.random(255));
     out.fill(this.random(255));
     out.rect(random(sc.w), random(sc.h), random(100), random(100));*/
+    
+    
+    
 
     int im = out().imageMode;// to restore imageMode
     //out.image(t,x,y,w,h);

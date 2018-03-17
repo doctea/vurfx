@@ -149,7 +149,8 @@ public class Parameter implements Serializable, Targetable {
 		// lerp between new value and last value
 		//System.out.println("setValue, value is already " + this.value + ", new value is " + value);
 		if (this.value!=null) {
-			value = lerpValue(this.value==null?this.defaultValue:this.value, value);
+			//if (!value.equals(value))
+				value = lerpValue(this.value==null?this.defaultValue:this.value, value);
 		}
 		
 		this.value = value;
@@ -171,14 +172,16 @@ public class Parameter implements Serializable, Targetable {
 	int lastLerped;
 	//int smoothingThresholdMillis = 100;
 	private Object lerpValue(Object o, Object n) {
+		boolean debug = true;
 		int smoothingThresholdMillis = 100; // higher values == slower blends between parameters
+		int scalingThresholdMillis = 100;//(int)delta;
 		float delta = 0.1f + (float)(APP.getApp().millis() - lastLerped);
 		if (delta>smoothingThresholdMillis) {
 			lastLerped = APP.getApp().millis();
 			return n;
 		}
 		//println("delta is " + ((float)(APP.getApp().millis() - lastLerped)/100));
-		println("delta is " + delta);
+		if (debug) println("delta is " + delta);
 		//delta *= 10.0f;
 		//delta = delta/delta;
 		//delta = smoothingThresholdMillis * delta;
@@ -189,15 +192,14 @@ public class Parameter implements Serializable, Targetable {
 						0.01f + Math.abs (1.1f - delta), // * 10.0f;
 						0.0f, 1.0f
 						);*/
-				APP.getApp().map(delta, (float)0.5f, (float)smoothingThresholdMillis, 0.1f, 1.0f);
+				APP.getApp().map(delta, (float)0.5f, (float)scalingThresholdMillis, 0.1f, 1.0f);
 				///200.0f;
 				//	;
-		println("scale is " + scale);
-		lastLerped = APP.getApp().millis(); 
+		if (debug) println("scale is " + scale);
 		Object output = null;
 		if (o instanceof Integer) {
-			int diff = (int) (((Integer)n - (((Integer)o))));
-			println("diff is " + diff);
+			int diff = (int) (((Integer)n - (((Integer)o)))/2);
+			if (debug) println("diff is " + diff);
 			//output = new Integer((Integer)o + diff); //(Integer)o + (((Integer)o - (((Integer)n))/2));
 			output = new Integer((Integer)o + (int)(scale * diff)); //(((Integer)n - (Integer)o))/2);
 		} else if (o instanceof Float) {
@@ -209,8 +211,10 @@ public class Parameter implements Serializable, Targetable {
 			System.out.println("lerpValue() in " + this + ": unhandled object type " + o.getClass());
 		}
 		if (output!=null) {
-			println("lerp: " + o + " via " + output + " to " + n);
-			println("--lerp");
+			if (debug) println("lerp: " + o + " via " + output + " to " + n);
+			if (debug) println("--lerp");
+			
+			lastLerped = APP.getApp().millis(); 
 			return output;
 		} else {
 			return n;

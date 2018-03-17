@@ -1144,7 +1144,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		//Accordion accordion 
 		this.grpStreamEditor = (StreamEditor) new StreamEditor(cp5, "stream editor")//this.makeStreamEditor(cf)
-				.setPosition(0, margin_y * 15)
+				.setPosition(0, margin_y * 10)
 				.moveTo(sequencerTab);
 		this.grpStreamEditor.setupStreamEditor(cf, this.getStreams());
 

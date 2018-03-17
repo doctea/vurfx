@@ -105,11 +105,16 @@ void draw() {
 
   stroke(255);
 
+  //float avc = 0;
+  float[] buff_left = in.left.toArray(); //new float[in.left.size()];
+  float[] buff_right = in.right.toArray(); //new float[in.left.size()];
   for (int i = 0; i < in.bufferSize () - 1; i++)
   {
-    line( i, 50 + in.left.get(i)*50, i+1, 50 + in.left.get(i+1)*50 );
-    line( i, 150 + in.right.get(i)*50, i+1, 150 + in.right.get(i+1)*50 );
+    line( i, 50 + buff_left[i]*50, i+1, 50 + buff_left[i+1]*50 );
+    line( i, 150 + buff_right[i]*50, i+1, 150 + buff_right[i+1]*50 );
+    //avc += in.left.level();
   }
+  //avc = avc/(float)in.bufferSize();
 
   if (debug) {
     println(" ");
@@ -127,12 +132,16 @@ void draw() {
     }
     beatEllipseSize = 30;
     animateBeatCircle();
-    //sendTrigger();
+    sendTrigger();
     if (sendToResolume) {
       sendOSCToResolume();
     }
     lastTimeBeat = millis();
   }
+
+  //sendTimeSin();
+  sendVolumes(in.left.level(), in.right.level());
+
 
   fill(255);
   ellipse(width/2, height/2, beatEllipseSize, beatEllipseSize);
@@ -176,11 +185,30 @@ int count = 0;
 void sendOSCToResolume() {
   count++;
   String target = "/layer"+ layerNr + "/clip" + clipNr + "/connect";
-  println(count + " sending to target " + target);
+  println(count + " sending '1' to target " + target);
   OscMessage myMessage = new OscMessage(target);
   myMessage.add(1); //count); //1);
   oscP5.send(myMessage, ResolumeLocation);
 }
+
+void sendTimeSin() {
+  count++;
+  String target = "/timeSin"; //layer"+ layerNr + "/clip" + clipNr + "/connect";
+  println(count + " sending '" + sin(millis()) + "' to target " + target);
+  OscMessage myMessage = new OscMessage(target);
+  myMessage.add(sin(millis())); //count); //1);
+  oscP5.send(myMessage, ResolumeLocation);
+}
+
+void sendVolumes(float left, float right) {
+  count++;
+  String target = "/volumes"; //layer"+ layerNr + "/clip" + clipNr + "/connect";
+  println(count + " sending '" + left + "' to target " + target);
+  OscMessage myMessage = new OscMessage(target);
+  myMessage.add(left); //count); //1);
+  oscP5.send(myMessage, ResolumeLocation);
+}
+
 
 /* incoming osc message are forwarded to the oscEvent method. */
 void oscEvent(OscMessage theOscMessage) {

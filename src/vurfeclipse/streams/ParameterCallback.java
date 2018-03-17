@@ -50,7 +50,13 @@ public abstract class ParameterCallback implements Serializable {
 	public void __call(Object value) {
 		if (isEnabled()) {
 			if (isLatching()) {
-				latching_value = latching_value.add(BigDecimal.valueOf(1)); //Parameter.classvalue));
+				if (value instanceof Float || value instanceof Double) {
+					latching_value = latching_value.add(BigDecimal.valueOf((Float)value)); //Parameter.classvalue));	
+				} else if (value instanceof Integer || value instanceof Long) {
+					latching_value = latching_value.add(BigDecimal.valueOf((Integer)value)); //Parameter.classvalue));
+				} else {
+					latching_value = latching_value.add(BigDecimal.valueOf(1));
+				}
 				//value = latching_value.floatValue();// new Float(latching_value); //((Float)value) += latching_value;
 				//System.out.println(count + " " + this + " latched " + value);
 				value = latching_value.doubleValue(); //((Parameter)getObjectForPath(targetPath)).cast(value);
