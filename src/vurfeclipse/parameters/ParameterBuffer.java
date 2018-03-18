@@ -32,11 +32,11 @@ public class ParameterBuffer {
 			if (value instanceof Float || value instanceof Double) {
 				//latching_value = latching_value.add(BigDecimal.valueOf((Float)value)); //Parameter.classvalue));
 				if (latching_value==null) latching_value = new Float(0);
-				value = new Float ((Float)latching_value + (Float)value);
+				value = (Float)latching_value + (Float)value;
 			} else if (value instanceof Integer || value instanceof Long) {
 				//latching_value = latching_value.add(BigDecimal.valueOf((Integer)value)); //Parameter.classvalue));
 				if (latching_value==null) latching_value = new Integer(0);
-				value = new Integer((Integer)latching_value + (Integer)value);
+				value = (Integer)latching_value + (Integer)value;
 			} else if (value instanceof BigDecimal) {
 				if (latching_value==null) latching_value = new BigDecimal(0);
 				value = ((BigDecimal) latching_value).add((BigDecimal) value); //Parameter.classvalue));
@@ -67,8 +67,8 @@ public class ParameterBuffer {
 	int lastLerped;
 	//int smoothingThresholdMillis = 100;
 	private Object lerpValue(Object o, Object n) {
-		smoothingThresholdMillis = 200;
-		scalingThresholdMillis = 100;
+		//smoothingThresholdMillis = 200;
+		//scalingThresholdMillis = 100;
 		boolean debug = false; //true;
 
 		float delta = 0.1f + (float)(APP.getApp().millis() - lastLerped);
@@ -92,22 +92,25 @@ public class ParameterBuffer {
 				///200.0f;
 				//	;
 		if (debug) println("scale is " + scale);
+
 		Object output = null;
-		if (o instanceof Integer) {
+		if (o instanceof Integer) {		if(true) return n;
 			int diff = (int) (((Integer)n - (((Integer)o)))/2);
 			if (debug) println("diff is " + diff);
 			//output = new Integer((Integer)o + diff); //(Integer)o + (((Integer)o - (((Integer)n))/2));
 			output = new Integer((Integer)o + (int)(scale * diff)); //(((Integer)n - (Integer)o))/2);
-		} else if (o instanceof BigDecimal && (n instanceof Float || n instanceof Double)) {
+		} else if (o instanceof BigDecimal && (n instanceof Float || n instanceof Double)) {		if(true) return n;
 			float diff = (Float)n - ((BigDecimal)o).floatValue();
-		    output = new BigDecimal(((BigDecimal)o).floatValue() + scale * diff);
+		  output = new BigDecimal(((BigDecimal)o).floatValue() + scale * diff);
 		} else if (o instanceof BigDecimal && n instanceof BigDecimal) {
-			BigDecimal diff = ((BigDecimal)n).subtract(((BigDecimal)o));
-		    output = ((BigDecimal)o).add(diff.multiply(new BigDecimal((float)scale)));//.floatValue() + scale * diff);
+			float fo = ((BigDecimal)o).floatValue(), fn = ((BigDecimal)n).floatValue();
+			//BigDecimal diff = ((BigDecimal)n).subtract(((BigDecimal)o));
+			float diff = fn - fo;
+		  output = new BigDecimal(fo + scale * diff); //((BigDecimal)o).add(diff.multiply(new BigDecimal((float)scale)));//.floatValue() + scale * diff);
 		} else if (o instanceof Float) {
 			//return point1 + alpha * (point2 - point1);
 			if (((Float) o).isInfinite() || (((Float)o).isNaN())) return n;
-			output = new Float((Float)o + scale * ((Float)n - (Float)o));//+ (((Float)o) - ((((Float)n))/2.0f));//);
+			output = (Float)o + scale * ((Float)n - (Float)o);//+ (((Float)o) - ((((Float)n))/2.0f));//);
 			//output = n;
 		} else {
 			System.out.println("lerpValue() in " + this + ": unhandled object type " + o.getClass());

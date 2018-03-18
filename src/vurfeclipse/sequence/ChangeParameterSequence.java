@@ -103,7 +103,7 @@ public class ChangeParameterSequence extends Sequence {
 		e.setVariable("iteration", BigDecimal.valueOf(iteration));
 		BigDecimal value = e.eval();
 		
-		println("got value " + value);
+		//println("got value " + value);
 		
 		if (paramBuffer!=null)
 			value = (BigDecimal) paramBuffer.getValue(value, false);	// lerp
