@@ -145,8 +145,8 @@ abstract public class Stream implements Serializable {
 				//println("hello OscStream world with " + listeners.size() + " listeners");
 				//println("got " + mess.size() + " messages for '" + tagName + "'");
 				if (mess.size()==0) {
-					for (String k : messages.keySet()) {
-						println("there are " + messages.size() + " messages for '" + k + "'");
+					for (Object k : mess.toArray()) { //messages.keySet()) {
+						println("there are " + mess.size() + " messages for '" + k + "'");
 					}
 				}
 			}

@@ -120,7 +120,7 @@ public class OscStream extends Stream implements OscEventListener {
 	int messageCount = 0;
 	@Override
 	public void oscEvent (OscMessage theOscMessage) {
-		//println("got oscmessage #" + messageCount++ + " " + theOscMessage.hashCode());
+		if (debug) println("got oscmessage #" + messageCount++ + " " + theOscMessage.hashCode() + " @ " + theOscMessage.addrPattern() + " value '" + theOscMessage.get(0).floatValue() +"'");
 		//
 		//if (theOscMessage.checkTypetag("f")) {
 		//println("got type tag: " + theOscMessage.typetag());

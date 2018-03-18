@@ -1220,7 +1220,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				((Textfield)ev.getController()).setFocus(false);
 				host.setDisableKeys(false);	// horrible hack to disable keyboard input when a textfield is selected..
 			} else {
-				println("caught " + ev);
+				//println("caught " + ev);
 			}
 		}
 

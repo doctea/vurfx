@@ -935,7 +935,16 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	public Object target(String path, Object payload) {
 		if (debug) println("#target('"+path+"', '"+payload+"')");
 		if (path.endsWith("/mute")) { //"/mute".equals(path.substring(path.length()-5, path.length()))) {
-			this.toggleMute();
+			/*if (payload instanceof Float) {
+				this.setMuted((Float)payload>=1.0f);
+			} else if (payload instanceof Integer) {
+				this.setMuted(((Integer)payload).equals(1));
+			} else*/
+			if (payload instanceof Boolean) {
+				this.setMuted((Boolean)payload);
+			} else {
+				this.toggleMute();
+			}
 			return this.isMuted()?"Muted":"Unmuted";
 		}
 		return payload;
