@@ -43,7 +43,7 @@ public class OutputFX2 extends SimpleScene {
 	    os2.addFilter(new KaleidoFilter(os2).setFilterName("Kaleido").setAliases("out","src")); //buffers[ss.BUF_OUT],ss.buffers[ss.BUF_SRC]));
 	    //os.addFilter(new GLColourFilter(os).setFilterName("GLColourFilter"));
 
-	    os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setAliases("out", "pix0").setParameterValue("BlendMode",8));
+	    os2.addFilter(new BlendDrawer(os2).setFilterName("BlendDrawer pix0 to out").setAliases("out", "pix0").changeParameterValue("BlendMode",8));
 	    //os.addFilter(new BlendDrawer(os).setFilterName("BlendDrawer inp0 to out").setCanvases(os.getCanvasMapping("out"), os.getCanvasMapping("inp0")).setParameterValue("BlendMode",9));
 
 	    return true;

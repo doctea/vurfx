@@ -116,7 +116,6 @@ public class Parameter implements Serializable, Targetable {
 		//filter.println("Parameter " + getName() + " targeted with " + " path " + " and " + payload);
 		//this.value = this.datatype.cast(payload);
 
-
 		//System.out.println("payload is " + payload + ", max is " + getMax() + ", cast payload is " + this.cast(payload));
 		if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
 			if ((Integer)this.cast(payload)>(Integer)this.getMax()) {

@@ -72,6 +72,9 @@ public class FormulaCallback extends ParameterCallback {
 		//System.out.println ("FormuaCallback called with " + value);
 		
 		if (value instanceof Float || value instanceof Double) {
+			if (((Float)value).isNaN()) {
+				System.out.println("caught the goblin");
+			}
 			e.setVariable("input", BigDecimal.valueOf(Double.parseDouble(value.toString())));
 		} else if (value instanceof Integer || value instanceof Long) {
 			e.setVariable("input", BigDecimal.valueOf(Integer.parseInt(value.toString()))); //.valueOf((Integer)value));

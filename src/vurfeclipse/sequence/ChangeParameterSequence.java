@@ -13,6 +13,7 @@ import controlP5.Textfield;
 import vurfeclipse.APP;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.parameters.Parameter;
+import vurfeclipse.parameters.ParameterBuffer;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
 import vurfeclipse.ui.ControlFrame;
@@ -27,6 +28,8 @@ public class ChangeParameterSequence extends Sequence {
 
 	Object value;
 	
+	ParameterBuffer paramBuffer;
+	
 	
 	public String getExpression() {
 		return expression;
@@ -37,7 +40,9 @@ public class ChangeParameterSequence extends Sequence {
 		e = new com.udojava.evalex.Expression(expression);
 	}
 
-	public ChangeParameterSequence() { super(); }
+	public ChangeParameterSequence() { 
+		super(); 
+	}
 	
 	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object value, String expression, int length) {
 		//super(host,length);
@@ -46,6 +51,9 @@ public class ChangeParameterSequence extends Sequence {
 		this.parameterName = parameterName;
 		this.value = value;
 		this.setExpression(expression);
+		
+		this.paramBuffer = new ParameterBuffer();
+		
 	}
 	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object value, int length) {	// compatibility constructor
 		//super(host,length);
@@ -93,6 +101,8 @@ public class ChangeParameterSequence extends Sequence {
 		e.setVariable("input", BigDecimal.valueOf(pc));
 		e.setVariable("iteration", BigDecimal.valueOf(iteration));
 		BigDecimal value = e.eval();
+		
+		value = (BigDecimal) paramBuffer.getValue(value, false);
 		
 		((Filter)host.host
 				.getObjectForPath(filterPath))

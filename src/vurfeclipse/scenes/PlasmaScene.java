@@ -166,9 +166,9 @@ public class PlasmaScene extends Scene {
 		}
 		@Override
 		public Filter nextMode() {
-			setParameterValue("colourMode", new Integer(((Integer)getParameterValue("colourMode")+1)));
+			changeParameterValue("colourMode", new Integer(((Integer)getParameterValue("colourMode")+1)));
 			if ((Integer)getParameterValue("colourMode")>colourModeCount) {
-				setParameterValue("colourMode", new Integer(0));
+				changeParameterValue("colourMode", new Integer(0));
 			}
 			return this;
 		}
@@ -213,9 +213,9 @@ public class PlasmaScene extends Scene {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
 			//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
-			host.getFilter("PhaseRGB").setParameterValueFromSin("rshift", (float)Math.sin(norm));
-			host.getFilter("PhaseRGB").setParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
-			host.getFilter("PhaseRGB").setParameterValueFromSin("bshift", (float)Math.sin(norm*norm*norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm*norm*norm));
 		}
 		@Override public void onStart() {
 			//this.setLengthMillis((int)random(1,5) * 500);
@@ -223,7 +223,7 @@ public class PlasmaScene extends Scene {
 				host.host.getSceneForPath("/ImageListScene1").getFilter("ImageListDrawer1").nextMode();
 			for (int i = 0 ; i < random(2,10) ; i++)
 				host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
-			host.getFilter("Plasma").setParameterValue("colourMode",new Integer ((int) random(0,((PlasmaScene)this.host).colourModeCount)));
+			host.getFilter("Plasma").changeParameterValue("colourMode",new Integer ((int) random(0,((PlasmaScene)this.host).colourModeCount)));
 
 			host.getFilter("PhaseRGB").setMuted(random(0.0f,1.0f)>=0.33f);
 
@@ -254,9 +254,9 @@ public class PlasmaScene extends Scene {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
 			//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
-			host.getFilter("PhaseRGB").setParameterValueFromSin("gshift", (float)Math.sin(norm));
-			host.getFilter("PhaseRGB").setParameterValueFromSin("bshift", (float)Math.sin(norm*norm));
-			host.getFilter("PhaseRGB").setParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm*norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
 		}
 
 		@Override public void onStop() {	}
@@ -280,9 +280,9 @@ public class PlasmaScene extends Scene {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
 			//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
-			host.getFilter("PhaseRGB").setParameterValueFromSin("bshift", (float)Math.sin(norm));
-			host.getFilter("PhaseRGB").setParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
-			host.getFilter("PhaseRGB").setParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
+			host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm*norm*norm));
 		}
 
 		@Override public void onStop() {	}

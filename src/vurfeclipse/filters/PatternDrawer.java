@@ -14,7 +14,7 @@ class PatternDrawer extends Filter {
 
   public Filter nextMode () {
     b.nextShape();
-    this.setParameterValue("shape", b.getShape());//(Integer)this.getParameterValue("shape")+1);
+    this.changeParameterValue("shape", b.getShape());//(Integer)this.getParameterValue("shape")+1);
     return this;
   }
 

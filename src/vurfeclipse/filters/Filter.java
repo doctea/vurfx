@@ -350,7 +350,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		//else
 		//  return "unknown";
 	}
-	synchronized public Filter setParameterValue(String paramName, Object value) {
+	synchronized private Filter setParameterValue(String paramName, Object value) {
 		if (this.parameters==null) this.setParameterDefaults();
 		//println("setParameterValue ('"+ paramName + "', '" + value + "')");
 		//if (this.parameters.size()==0) setParameterDefaults();
@@ -367,7 +367,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
      }*/
 		return this;
 	}
-	synchronized public Filter setParameterValueFromSin(String paramName, Object f) {
+	synchronized private Filter setParameterValueFromSin(String paramName, Object f) {
 		if (this.parameters==null) this.setParameterDefaults();
 		try {
 			parameters.get(paramName).setValueFromSin((Float)f);

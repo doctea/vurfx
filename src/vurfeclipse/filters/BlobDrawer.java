@@ -12,7 +12,7 @@ public class BlobDrawer extends SpiralDrawer {
 
 	public Filter nextMode () {
 		b.nextShape();
-		this.setParameterValue("shape", b.getShape());//(Integer)this.getParameterValue("shape")+1);
+		this.changeParameterValue("shape", b.getShape());//(Integer)this.getParameterValue("shape")+1);
 		return this;
 	}
 
@@ -77,7 +77,7 @@ public class BlobDrawer extends SpiralDrawer {
 	    	if (in()!=null) b.setInput(in());
 	    	b.setShape((Integer)value);
 	    } else if(paramName.equals("colour")) {
-	    	println("got colour change to" + value);
+	    	//println("got colour change to" + value);
 	    	b.setColour((Integer)value);
 	    } else {
 	    	super.updateParameterValue(paramName, value);

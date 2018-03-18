@@ -62,9 +62,9 @@ public class SpiralDrawer extends Filter {
 
   @Override
   public Filter nextMode() {
-    setParameterValue("mode",(Integer)getParameterValue("mode")+1);
+    changeParameterValue("mode",(Integer)getParameterValue("mode")+1);
     if ((Integer)getParameterValue("mode")>1) {
-      setParameterValue("mode",new Integer(0));
+      changeParameterValue("mode",new Integer(0));
     }
     return this;
   }
