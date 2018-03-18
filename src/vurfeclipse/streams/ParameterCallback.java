@@ -54,7 +54,7 @@ public abstract class ParameterCallback implements Serializable {
 	private Object lerpValue(Object o, Object n) {
 		boolean debug = false;
 		int smoothingThresholdMillis = 100; // higher values == slower blends between parameters
-		int scalingThresholdMillis = 500;//(int)delta;
+		int scalingThresholdMillis = 100;//(int)delta;
 		float delta = 0.1f + (float)(APP.getApp().millis() - lastLerped);
 		if (delta>smoothingThresholdMillis) {
 			lastLerped = APP.getApp().millis();
@@ -129,8 +129,9 @@ public abstract class ParameterCallback implements Serializable {
 			if (this.last_value!=null) {
 				//if (!value.equals(value))
 					value = lerpValue(this.last_value, value);
-					last_value = value;
 			}
+			
+			last_value = value;
 
 			call(value);
 		}

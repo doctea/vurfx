@@ -203,9 +203,10 @@ void sendTimeSin() {
 void sendVolumes(float left, float right) {
   count++;
   String target = "/volumes"; //layer"+ layerNr + "/clip" + clipNr + "/connect";
-  println(count + " sending '" + left + "' to target " + target);
+  float v = left;
+  println(count + " sending '" + v + "' to target " + target);
   OscMessage myMessage = new OscMessage(target);
-  myMessage.add(left); //count); //1);
+  myMessage.add(v); //count); //1);
   oscP5.send(myMessage, ResolumeLocation);
 }
 
