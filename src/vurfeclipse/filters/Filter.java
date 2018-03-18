@@ -396,7 +396,6 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		return this;
 	}
 	synchronized public void toggleParameterValue(String paramName) {
-		// TODO Auto-generated method stub
 		if (getParameterValue(paramName) instanceof Boolean) {
 			changeParameterValue(paramName, !(Boolean)getParameterValue(paramName));
 		}
@@ -1086,7 +1085,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			else if (value instanceof String) 
 				c.setStringValue((String) value);
 			else 
-				System.err.println("Caught updating control with unhandled type " + value.getClass() + " in " + this);
+				System.err.println("Caught updating control with unhandled type " + (value!=null?value.getClass():"null") + " in " + this);
 			c.setBroadcast(true);
 		}
 

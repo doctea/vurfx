@@ -42,9 +42,10 @@ public class ChangeParameterSequence extends Sequence {
 
 	public ChangeParameterSequence() { 
 		super(); 
+		this.paramBuffer = new ParameterBuffer(10,50);
 	}
 	
-	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object value, String expression, int length) {
+	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object startValue, String expression, int length) {
 		//super(host,length);
 		super(host,length);
 		this.filterPath = filterPath;
@@ -52,7 +53,7 @@ public class ChangeParameterSequence extends Sequence {
 		this.value = value;
 		this.setExpression(expression);
 		
-		this.paramBuffer = new ParameterBuffer();
+		this.paramBuffer = new ParameterBuffer(10,50);
 		
 	}
 	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object value, int length) {	// compatibility constructor
@@ -102,11 +103,15 @@ public class ChangeParameterSequence extends Sequence {
 		e.setVariable("iteration", BigDecimal.valueOf(iteration));
 		BigDecimal value = e.eval();
 		
-		value = (BigDecimal) paramBuffer.getValue(value, false);
+		println("got value " + value);
+		
+		if (paramBuffer!=null)
+			value = (BigDecimal) paramBuffer.getValue(value, false);	// lerp
 		
 		((Filter)host.host
 				.getObjectForPath(filterPath))
-				.changeParameterValueFromSin(parameterName, (float)Math.sin(value.doubleValue()));		
+				//.changeParameterValueFromSin(parameterName, (float)value.doubleValue());//(float)Math.sin(value.doubleValue()));		
+				.changeParameterValue(parameterName, (float)value.doubleValue());
 	}
 
 	@Override

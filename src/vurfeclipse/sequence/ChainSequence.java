@@ -39,12 +39,20 @@ public class ChainSequence extends Sequence {
 	
 	@Override public void start() {
 		super.start();
-		if (this.scene_parameters==null) {
+		
+		if (!(this.chain.size()>0)) this.initialiseDefaultChain();
+
+		if (this.scene_parameters==null) {		
 			for (Sequence seq : chain) {
 				seq.start();
 			}
 		}
 	}
+	
+	protected void initialiseDefaultChain() {
+		
+	}
+
 	@Override public void stop() {
 		super.stop();
 		for (Sequence seq : chain) {
@@ -126,19 +134,23 @@ public class ChainSequence extends Sequence {
 	@Override
 	synchronized public void loadParameters(HashMap<String,Object> params) {
 		super.loadParameters(params);
-		ArrayList<HashMap<String,Object>> chains = (ArrayList<HashMap<String,Object>>) params.get("chain");
-		for (HashMap<String,Object> cs : chains) {
-			// cs contains info to build a new ChainSequence and attach it
-			//ChainSequence n = new ChainSequence(this.host, (Integer) cs.get("lengthMillis"));
-			if (cs==null) {
-				println("skipping null chain sequence from broken save file :(");
-				continue;
-			}
-			if (cs.containsKey("scene_parameters")) cs.remove("scene_parameters");	// don't load scene_parameters for chained sequences, since if there are any they are there from an old version of save format
-			Sequence n = Sequence.makeSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
-			n.loadParameters(cs);
-			this.addSequence(n);
-		}		
+		if (params.containsKey("chain")) {
+			ArrayList<HashMap<String,Object>> chains = (ArrayList<HashMap<String,Object>>) params.get("chain");
+			for (HashMap<String,Object> cs : chains) {
+				// cs contains info to build a new ChainSequence and attach it
+				//ChainSequence n = new ChainSequence(this.host, (Integer) cs.get("lengthMillis"));
+				if (cs==null) {
+					println("skipping null chain sequence from broken save file :(");
+					continue;
+				}
+				if (cs.containsKey("scene_parameters")) cs.remove("scene_parameters");	// don't load scene_parameters for chained sequences, since if there are any they are there from an old version of save format
+				Sequence n = Sequence.makeSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
+				n.loadParameters(cs);
+				this.addSequence(n);
+			}		
+		} else {
+			this.initialiseDefaultChain();
+		}
 	}
 	
 	
@@ -178,7 +190,8 @@ public class ChainSequence extends Sequence {
 			n++;
 		}
 		
-		acc.open();
+		if (n>0)
+			acc.open();
 		
 		//sequenceEditor.add(acc.moveTo(sequenceEditor));
 		//sequenceEditor.setBackgroundHeight(n * 30);

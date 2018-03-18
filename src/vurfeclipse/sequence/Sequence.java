@@ -409,10 +409,14 @@ abstract public class Sequence implements Serializable, Mutable {
 	public void setValuesForNorm(double pc, int iteration) {
 		if (enabled) {
 			try {
+				/*if (this.host.getPath().equals("/sc/BlobScene")) {
+					println("badger");
+				}*/
 				__setValuesForNorm(pc, iteration);
 			} catch (Exception e) {
 				println("Caught " + e + " while trying to setValuesForNorm in " + this);
-				if (debug) e.printStackTrace(System.err);
+				//if (debug) 
+					e.printStackTrace(System.err);
 			}
 			this.current_pc = (float) pc;
 		}
