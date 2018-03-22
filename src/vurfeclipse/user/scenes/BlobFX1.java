@@ -104,8 +104,8 @@ public class BlobFX1 extends SimpleScene {
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "input*180", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(1), "(0.1+if(iteration%2==0,input,1-input))*5", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(1), "if(iteration%2==0,input,1-input)*20", this.getLengthMillis()));		
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "(0.1+if(iteration%2==0,input,1-input))*5", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "60 * (1+sin(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));		
 		}
 		
 				
@@ -220,11 +220,11 @@ public class BlobFX1 extends SimpleScene {
 	    			.changeParameterValueFromSin("radius", APP.getApp().sin((float)(inv_norm))) ///2f)))
 	    		;
 	    		*/
-		    		
-					colour1 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour1");
-					colour2 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour2");
-					colour3 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour1");
-					colour4 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+	    		
+				colour1 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour1");
+				colour2 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour2");
+				colour3 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour1");
+				colour4 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour2");
 
 	   		
 	    		int col1 = lerpcolour(colour1, colour2, inv_norm);
@@ -380,14 +380,12 @@ public class BlobFX1 extends SimpleScene {
 					((iteration%2==0) ? norm : (float)(1.0f-norm)),
 							0.0f,1.0f); //1.0f-norm : norm;// : norm;
 			
-
-			
-			host.getFilter("BlobDrawer").changeParameterValue("totalRotate", (float)norm*360.0f); //PApplet.radians((float)norm*360));
+			/*host.getFilter("BlobDrawer").changeParameterValue("totalRotate", (float)norm*360.0f); //PApplet.radians((float)norm*360));
 			host.getFilter("BlobDrawer").changeParameterValue("rotation", (float)-norm*180.0f);
 			host.getFilter("BlobDrawer2")
 				.changeParameterValue("totalRotate", PApplet.abs((float)norm*180.0f)) // was 720
 				.changeParameterValueFromSin("radius", PApplet.sin((float)(inv_norm))) ///2f)))
-			;
+			;*/
 			
 			//System.out.println("norm: " + norm + ", inv_norm: " + inv_norm);
 	
@@ -398,7 +396,7 @@ public class BlobFX1 extends SimpleScene {
 			colour3 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour1");
 			colour4 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour2");
 
-			
+					
 			int col1 = lerpcolour(colour1, colour2, inv_norm);
 			int col2 = lerpcolour(colour3, colour4, inv_norm);
 			

@@ -270,8 +270,6 @@ public class Parameter implements Serializable, Targetable {
 			
 		}
 		
-		
-		
 		o.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 
 			@Override
