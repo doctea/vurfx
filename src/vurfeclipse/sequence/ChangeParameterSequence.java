@@ -102,6 +102,8 @@ public class ChangeParameterSequence extends Sequence {
 		e.setVariable("input", BigDecimal.valueOf(pc));
 		e.setVariable("iteration", BigDecimal.valueOf(iteration));
 		BigDecimal value = e.eval();
+		if (value==null)
+			println("caught null returned from eval(input = " + pc + ", iteration = " + iteration + ")");
 		
 		//println("got value " + value);
 		
@@ -124,7 +126,8 @@ public class ChangeParameterSequence extends Sequence {
 	@Override
 	public void onStop() {
 		try {
-			((Filter)host.host
+			if (value!=null)
+				((Filter)host.host
 					.getObjectForPath(filterPath))
 					.changeParameterValue(parameterName, value);
 		} catch (Exception e) {

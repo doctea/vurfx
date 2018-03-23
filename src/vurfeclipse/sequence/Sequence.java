@@ -415,7 +415,7 @@ abstract public class Sequence implements Serializable, Mutable {
 				__setValuesForNorm(pc, iteration);
 			} catch (Exception e) {
 				println("Caught " + e + " while trying to setValuesForNorm in " + this);
-				//if (debug) 
+				if (debug) 
 					e.printStackTrace(System.err);
 			}
 			this.current_pc = (float) pc;

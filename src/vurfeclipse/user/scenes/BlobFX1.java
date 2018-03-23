@@ -1,5 +1,7 @@
 package vurfeclipse.user.scenes;
 
+import java.util.HashMap;
+
 import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.Blob;
@@ -13,7 +15,7 @@ import vurfeclipse.sequence.ChangeParameterSequence;
 import vurfeclipse.sequence.Sequence;
 
 public class BlobFX1 extends SimpleScene {
-
+	
 	abstract class SpinnerSequence extends ChainSequence {
 		int colour1, colour2, colour3, colour4;    	
 		public SpinnerSequence() { }
@@ -50,7 +52,7 @@ public class BlobFX1 extends SimpleScene {
 			
 		}
 		
-		/*@Override public HashMap<String,Object> collectParameters() {
+		@Override public HashMap<String,Object> collectParameters() {
 			HashMap<String,Object> params = super.collectParameters();
 			params.put("colour1", new Integer(colour1));
 			params.put("colour2", new Integer(colour2));
@@ -72,7 +74,7 @@ public class BlobFX1 extends SimpleScene {
 			if (colour3==0) colour3 = randomColorMinimum(196);
 			if (colour4==0) colour4 = randomColorMinimum(196);
 			
-		}*/
+		}
 
 		@Override
 		public boolean notifyRemoval(Filter newf) {
@@ -101,11 +103,12 @@ public class BlobFX1 extends SimpleScene {
 
 		@Override
 		protected void initialiseDefaultChain() {
+			super.initialiseDefaultChain();
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "input*180", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "(0.1+if(iteration%2==0,input,1-input))*5", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "60 * (1+sin(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));		
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "5 * (1+sin(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "20 * (1+sin(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));		
 		}
 		
 				
@@ -200,11 +203,12 @@ public class BlobFX1 extends SimpleScene {
 	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "-input*360", this.getLengthMillis()));
 	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
 	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*180", this.getLengthMillis()));
-	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(1), "sin(if(iteration%2==0,input))*5", this.getLengthMillis()));
+	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(1), "5 * (1+sin(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
 	  			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "if(iteration%2==0,input,1-input)*20", this.getLengthMillis()));		
 	  		}
 	    	
 			public void __setValuesForNorm(double norm, int iteration) {
+				super.__setValuesForNorm(norm, iteration);
 				//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
 				double inv_norm = PApplet.constrain((float)
 						((iteration%2==0) ? norm : (float)(1.0f-norm)),
@@ -282,11 +286,12 @@ public class BlobFX1 extends SimpleScene {
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "-input*360", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "if(iteration%2==0,input)*5", this.getLengthMillis()));	//sin
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "if(iteration%2==0,input,1-input)*20", this.getLengthMillis()));	//sin		
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "5 * (1+sin(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));	//sin
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "20 * (sin(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));	//sin		
 		}
 		
 		public void __setValuesForNorm(double norm, int iteration) {
+			super.__setValuesForNorm(norm, iteration);
 			//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
 			double inv_norm = PApplet.constrain((float)
 					((iteration%2==0) ? norm : (float)(1.0f-norm)),
@@ -371,10 +376,11 @@ public class BlobFX1 extends SimpleScene {
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*180", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "1.0+(if(iteration%2==0,input))*5", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "5 * (1.0+sin(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
 			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "if(iteration%2==0,input,1-input)*20", this.getLengthMillis()));		
 		}
 		public void __setValuesForNorm(double norm, int iteration) {
+			super.__setValuesForNorm(norm, iteration);
 			//double inv_norm = (iteration%2==0) ? 1.0f-norm : norm;
 			double inv_norm = PApplet.constrain((float)
 					((iteration%2==0) ? norm : (float)(1.0f-norm)),

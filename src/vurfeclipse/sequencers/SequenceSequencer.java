@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
@@ -1108,6 +1109,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setValue(0.0f);
 
 		tglLocked = new controlP5.Toggle(cp5, "locked")
+				.setColorActive(VurfEclipse.makeColour(255, 0, 0))
 				.setPosition(2*margin_x + (width/3), margin_y)
 				.moveTo(sequencerTab)
 				.setValue(0.0f);

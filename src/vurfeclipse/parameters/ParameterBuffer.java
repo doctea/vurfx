@@ -94,23 +94,31 @@ public class ParameterBuffer {
 		if (debug) println("scale is " + scale);
 
 		Object output = null;
-		if (o instanceof Integer) {		if(true) return n;
+		if (o instanceof Integer) {		
+			//if(true) return n;
 			int diff = (int) (((Integer)n - (((Integer)o)))/2);
 			if (debug) println("diff is " + diff);
+			
+			if (Math.abs(diff) > Math.abs((Integer)o)/2) scale *= 10.0;
 			//output = new Integer((Integer)o + diff); //(Integer)o + (((Integer)o - (((Integer)n))/2));
 			output = new Integer((Integer)o + (int)(scale * diff)); //(((Integer)n - (Integer)o))/2);
 		} else if (o instanceof BigDecimal && (n instanceof Float || n instanceof Double)) {		if(true) return n;
 			float diff = (Float)n - ((BigDecimal)o).floatValue();
-		  output = new BigDecimal(((BigDecimal)o).floatValue() + scale * diff);
+			if (Math.abs(diff) > Math.abs((Float)o)/2) scale *= 10.0;
+			output = new BigDecimal(((BigDecimal)o).floatValue() + scale * diff);
 		} else if (o instanceof BigDecimal && n instanceof BigDecimal) {
-			float fo = ((BigDecimal)o).floatValue(), fn = ((BigDecimal)n).floatValue();
+			float 	fo = ((BigDecimal)o).floatValue(), 
+					fn = ((BigDecimal)n).floatValue();
 			//BigDecimal diff = ((BigDecimal)n).subtract(((BigDecimal)o));
 			float diff = fn - fo;
-		  output = new BigDecimal(fo + scale * diff); //((BigDecimal)o).add(diff.multiply(new BigDecimal((float)scale)));//.floatValue() + scale * diff);
+			if (Math.abs(diff) > Math.abs((Float)o)/2) scale *= 10.0;
+			output = new BigDecimal(fo + scale * diff); //((BigDecimal)o).add(diff.multiply(new BigDecimal((float)scale)));//.floatValue() + scale * diff);
 		} else if (o instanceof Float) {
 			//return point1 + alpha * (point2 - point1);
 			if (((Float) o).isInfinite() || (((Float)o).isNaN())) return n;
-			output = (Float)o + scale * ((Float)n - (Float)o);//+ (((Float)o) - ((((Float)n))/2.0f));//);
+			float diff = ((Float)n - (Float)o);
+			if (Math.abs(diff) > Math.abs((Float)o)/2) scale *= 10.0;
+			output = (Float)o + scale * diff;//+ (((Float)o) - ((((Float)n))/2.0f));//);
 			//output = n;
 		} else {
 			System.out.println("lerpValue() in " + this + ": unhandled object type " + o.getClass());

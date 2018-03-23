@@ -43,6 +43,9 @@ public class ControlFrame extends PApplet {
 		cp5.setFont(createFont("Arial",10));
 		frameRate(60);
 
+		//cp5.getPointer().enable(); // experimental .. 
+
+		
 		/*    
     cp5.addToggle("auto")
        //.plugTo(parent, "auto")

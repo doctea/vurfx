@@ -804,6 +804,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 				//.plugTo(this, "setMuted")
 				//.addCallback(this)
 				.moveTo(tab)
+				.setColorActive(VurfEclipse.makeColour(255, 0, 0))
+				.setColorBackground(VurfEclipse.makeColour(0, 255, 0))
 				;
 		this.muteController.getCaptionLabel().alignY(ControlP5.CENTER);
 

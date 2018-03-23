@@ -184,6 +184,10 @@ public class VurfEclipse extends PApplet {
 	private static final PVector RES_16_9 	= new PVector( 16,  9 );
 	private static final PVector RES_16_10 	= new PVector( 16, 10 );
 
+	public static final int MOUSE_LEFT = 37;
+	public static final int MOUSE_RIGHT = 39;
+	public static final int MOUSE_MIDDLE = 3;
+
 	boolean screenGrab = false;
 
 	//Scene sc;

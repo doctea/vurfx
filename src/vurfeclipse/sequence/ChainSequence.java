@@ -40,9 +40,10 @@ public class ChainSequence extends Sequence {
 	@Override public void start() {
 		super.start();
 		
-		if (!(this.chain.size()>0)) this.initialiseDefaultChain();
+		if (!(this.chain.size()>0)) this.initialiseDefaultChain(); 
 
 		if (this.scene_parameters==null) {		
+			//this.initialiseDefaultChain();
 			for (Sequence seq : chain) {
 				seq.start();
 			}
@@ -50,7 +51,9 @@ public class ChainSequence extends Sequence {
 	}
 	
 	protected void initialiseDefaultChain() {
-		
+		for (Sequence seq : chain) 
+			if (seq instanceof ChainSequence) 
+				((ChainSequence)seq).initialiseDefaultChain();
 	}
 
 	@Override public void stop() {
