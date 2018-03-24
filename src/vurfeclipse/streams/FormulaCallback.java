@@ -95,7 +95,7 @@ public class FormulaCallback extends ParameterCallback {
 		
 		Float floatValue = e.eval().floatValue();
 		//lblOutputValue.setValueLabel(floatValue.toString());
-		this.updateGuiOutputValue(value.toString());
+		this.updateGuiOutputValue(floatValue.toString());
 		
 		if (value instanceof Float || value instanceof Double ||
 			value instanceof Integer || value instanceof Long
