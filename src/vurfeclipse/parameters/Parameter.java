@@ -247,6 +247,10 @@ public class Parameter implements Serializable, Targetable {
 	           cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :*/
 		} else if (value instanceof String) {
 			o = cp5.addTextfield(tabName).setSize(size*5, size).setText((String) value).setLabel(getName()).setAutoClear(false);
+		} else if (value instanceof PVector) {
+			println ("Known but unhandled object type PVector in Parameter#makeController() for " + getName());
+			o = null;
+			return null;
 		} else if (value == null) {
 			System.err.println("Unhandled null value for Parameter#makeController() for " + getName());
 			o = null;
@@ -301,6 +305,11 @@ public class Parameter implements Serializable, Targetable {
 		});
 
 		return o;
+	}
+	public boolean isCircular() {
+		return (getName().toLowerCase().contains("rotat")); 
+		//if ((int)this.getMax()==360)
+		//return false;
 	}
 
 }

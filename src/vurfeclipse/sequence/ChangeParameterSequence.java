@@ -10,6 +10,7 @@ import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.ScrollableList;
 import controlP5.Textfield;
+import controlP5.Textlabel;
 import vurfeclipse.APP;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.parameters.Parameter;
@@ -95,8 +96,16 @@ public class ChangeParameterSequence extends Sequence {
 	}
 	
 	@Override
+	public void start() {
+		this.paramBuffer.setCircular(((Filter)host.host.getObjectForPath(filterPath)).getParameter(parameterName).isCircular());
+	}
+	
+	@Override
 	synchronized public void __setValuesForNorm(double pc, int iteration) {
-		
+				
+		if (((Double)pc).isNaN()) {
+			println("Caught NaN in __setValuesForNorm ");
+		}
 		// evaluate value to pass based on expression
 		if (e==null) e = new com.udojava.evalex.Expression(expression);
 		e.setVariable("input", BigDecimal.valueOf(pc));
@@ -105,15 +114,39 @@ public class ChangeParameterSequence extends Sequence {
 		if (value==null)
 			println("caught null returned from eval(input = " + pc + ", iteration = " + iteration + ")");
 		
-		//println("got value " + value);
+		this.updateGuiInputValue("iteration " + iteration + " | pc: " + pc);
+		
+		//println(this + ": got value " + value);
 		
 		if (paramBuffer!=null)
 			value = (BigDecimal) paramBuffer.getValue(value, false);	// lerp
+		
+		this.updateGuiOutputValue(value.toString());
 		
 		((Filter)host.host
 				.getObjectForPath(filterPath))
 				//.changeParameterValueFromSin(parameterName, (float)value.doubleValue());//(float)Math.sin(value.doubleValue()));		
 				.changeParameterValue(parameterName, (float)value.doubleValue());
+	}
+
+	private void updateGuiOutputValue(final String value) {
+		/*APP.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {*/
+				if (lblOutputValue!=null)
+					lblOutputValue.setValueLabel(value);
+			/*}
+		});		*/
+	}
+
+	private void updateGuiInputValue(final String value) {
+		/*APP.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {*/
+				if (lblInputValue!=null)
+					lblInputValue.setValueLabel(value);
+			/*}
+		});		*/
 	}
 
 	@Override
@@ -135,6 +168,9 @@ public class ChangeParameterSequence extends Sequence {
 			e.printStackTrace();
 		}
 	}
+	
+	private Textlabel lblInputValue;
+	private Textlabel lblOutputValue;
 	
 	@Override
 	public SequenceEditor makeControls(ControlFrame cf, String name) {
@@ -206,9 +242,18 @@ public class ChangeParameterSequence extends Sequence {
 			
 			g.add(lstTarget);		
 		//seq.setHeight(30);
-		g.setBackgroundHeight(g.getBackgroundHeight() + 30);
+		
+		pos_y += lstTarget.getHeight() + margin_x/2;
+		
+
+		lblInputValue = cf.control().addLabel(name + "_input_indicator").setPosition(margin_x, pos_y).moveTo(g);
+		lblOutputValue = cf.control().addLabel(name + "_output_indicator").setPosition(margin_x + lblInputValue.getWidth() + margin_x, pos_y).moveTo(g);
+		
+		g.add(lblInputValue);
+		g.add(lblOutputValue);
 			
 		//sequenceEditor.setBackgroundHeight(sequenceEditor.getBackgroundHeight() + y);
+		g.setBackgroundHeight(g.getBackgroundHeight() + 30);
 
 		
 		return sequenceEditor;

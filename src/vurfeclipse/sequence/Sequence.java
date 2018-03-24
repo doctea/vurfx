@@ -381,19 +381,27 @@ abstract public class Sequence implements Serializable, Mutable {
 		//pc *= (100.0*(Math.sin(pc)-0.5f));	// TODO: timewarping effect, for later explration when i've figured out how to refactor this... probably change setValuesForTime to utilise Streams instead of going off timemillis, and then have that link go through a 'filter'
 		double pc;// = getPCForDelta(((double)delta * scale));
 		
-		pc = PApplet.constrain(
-				current_pc + (float) ((double)(delta * scale) / lengthMillis), //(double)lengthMillis), 
-				0.000000001f, 1.0f //0.999999999f
-		);
+		if (lengthMillis==0) {
+			println ("lengthMillis is 0 in " + this.getClass() + " for " + this + ", so setting pc to 0.5");	// avoiding division by zero and NaN
+			pc = lengthMillis;
+		} else {
+			pc = 
+			//pc = PApplet.constrain(
+				current_pc + (float) ((double)(delta * scale) / lengthMillis)
+				//, //(double)lengthMillis), 
+				//0.000000000f, 1.0f //0.999999999f
+			//)
+			;
+		}
 		
-		if (pc>=1.0f) { 
-			current_pc = 0.01f;
-			pc = 0.01f;
+		if (pc>1.0f) { 
+			current_pc = 0.0f; //0.000001f;
+			pc = current_pc; //0.01f;
 			last = 0;
 			iteration++;	
-		} else if (pc<0.01f) {
-			current_pc = 0.999999f;
-			pc = 0.999999f;
+		} else if (pc<0.000000f) {
+			current_pc = 1.0f; //0.999999f;
+			pc = current_pc; //0.999999f;
 			last = 0;
 			iteration--;
 		}
@@ -415,7 +423,7 @@ abstract public class Sequence implements Serializable, Mutable {
 				__setValuesForNorm(pc, iteration);
 			} catch (Exception e) {
 				println("Caught " + e + " while trying to setValuesForNorm in " + this);
-				if (debug) 
+				//if (debug) 
 					e.printStackTrace(System.err);
 			}
 			this.current_pc = (float) pc;
@@ -589,7 +597,7 @@ abstract public class Sequence implements Serializable, Mutable {
 			
 			SequenceEditor seq = new SequenceEditor(cp5, name);
 			final Sequence self = this;
-			seq.setWidth(cp5.controlWindow.papplet().width);
+			seq.setWidth((2 * cp5.controlWindow.papplet().width/3) - 40); // 40 is fudge factor to stop nested editors overlapping with sequence history 
 
 			cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name)
 				.setPosition(80,10).moveTo(seq);

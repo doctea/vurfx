@@ -17,7 +17,7 @@ import vurfeclipse.ui.SequenceEditor;
 
 public class ChainSequence extends Sequence {
 
-	ArrayList<Sequence> chain = new ArrayList<Sequence>();
+	protected ArrayList<Sequence> chain = new ArrayList<Sequence>();
 	
 	public ChainSequence() { super(); }
 	
@@ -40,7 +40,8 @@ public class ChainSequence extends Sequence {
 	@Override public void start() {
 		super.start();
 		
-		if (!(this.chain.size()>0)) this.initialiseDefaultChain(); 
+		if (!(this.chain.size()>0)) 
+			this.initialiseDefaultChain(); 
 
 		if (this.scene_parameters==null) {		
 			//this.initialiseDefaultChain();
@@ -186,7 +187,7 @@ public class ChainSequence extends Sequence {
 			Group g = conts;
 			//g.add(conts);
 			//g.setBackgroundHeight(conts.getBackgroundHeight());
-			println("got a " + cs.getClass().getSimpleName() + " with height " + g.getBackgroundHeight()); 
+			//println("got a " + cs.getClass().getSimpleName() + " with height " + g.getBackgroundHeight()); 
 			acc.addItem(g);
 			acc.setBackgroundHeight(acc.getBackgroundHeight() + g.getBackgroundHeight());
 			acc.setBarHeight(15);

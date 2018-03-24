@@ -65,14 +65,21 @@ public class ParameterBuffer {
 	}
 
 	int lastLerped;
+	private boolean circular;
+	public void setCircular(boolean circular) {
+		this.circular = circular;
+	}
+
 	//int smoothingThresholdMillis = 100;
 	private Object lerpValue(Object o, Object n) {
-		//smoothingThresholdMillis = 200;
+		//smoothingThresholdMillis = 100;
 		//scalingThresholdMillis = 100;
 		boolean debug = false; //true;
+		
+		//if (true) return n;
 
 		float delta = 0.1f + (float)(APP.getApp().millis() - lastLerped);
-		if (delta>smoothingThresholdMillis) {
+		if (delta > smoothingThresholdMillis) {
 			lastLerped = APP.getApp().millis();
 			return n;
 		}
@@ -88,40 +95,54 @@ public class ParameterBuffer {
 						0.01f + Math.abs (1.1f - delta), // * 10.0f;
 						0.0f, 1.0f
 						);*/
-				APP.getApp().map(delta, (float)1f, (float)scalingThresholdMillis, 0.01f, 1.0f);
+				APP.getApp().map(delta, (float)1f, (float)scalingThresholdMillis, 0.01f, 1.0f); //1.0f);
 				///200.0f;
 				//	;
-		if (debug) println("scale is " + scale);
+		if (debug) 
+			println("scale is " + scale);
+		
+		float distanceModifier = 10.0f; // 10.0f;
+		float distanceDivisor = 2.0f;
 
+		float diff = 0.0f;
 		Object output = null;
 		if (o instanceof Integer) {		
 			//if(true) return n;
-			int diff = (int) (((Integer)n - (((Integer)o)))/2);
+			diff = (int) (((Integer)n - (((Integer)o)))/distanceDivisor);
 			if (debug) println("diff is " + diff);
 			
-			if (Math.abs(diff) > Math.abs((Integer)o)/2) scale *= 10.0;
+			if (this.isCircular())
+				if (Math.abs(diff) > Math.abs((Integer)o)/distanceDivisor) scale = APP.getApp().constrain(scale * distanceModifier,0.1f,1.0f);
 			//output = new Integer((Integer)o + diff); //(Integer)o + (((Integer)o - (((Integer)n))/2));
 			output = new Integer((Integer)o + (int)(scale * diff)); //(((Integer)n - (Integer)o))/2);
-		} else if (o instanceof BigDecimal && (n instanceof Float || n instanceof Double)) {		if(true) return n;
-			float diff = (Float)n - ((BigDecimal)o).floatValue();
-			if (Math.abs(diff) > Math.abs((Float)o)/2) scale *= 10.0;
+		} else if (o instanceof BigDecimal && (n instanceof Float || n instanceof Double)) {		
+			//if(true) return n;
+			diff = (Float)n - ((BigDecimal)o).floatValue();
+			if (this.isCircular()) 
+				if (Math.abs(diff) > Math.abs((Float)o)/distanceDivisor) scale = APP.getApp().constrain(scale * distanceModifier,0.1f,1.0f);
 			output = new BigDecimal(((BigDecimal)o).floatValue() + scale * diff);
 		} else if (o instanceof BigDecimal && n instanceof BigDecimal) {
 			float 	fo = ((BigDecimal)o).floatValue(), 
 					fn = ((BigDecimal)n).floatValue();
 			//BigDecimal diff = ((BigDecimal)n).subtract(((BigDecimal)o));
-			float diff = fn - fo;
-			if (Math.abs(diff) > Math.abs((Float)o)/2) scale *= 10.0;
+			diff = fn - fo;
+			if (this.isCircular()) 
+				if (Math.abs(diff) > Math.abs((Float)fo)/distanceDivisor) scale = APP.getApp().constrain(scale * distanceModifier,0.1f,1.0f);
 			output = new BigDecimal(fo + scale * diff); //((BigDecimal)o).add(diff.multiply(new BigDecimal((float)scale)));//.floatValue() + scale * diff);
 		} else if (o instanceof Float) {
 			//return point1 + alpha * (point2 - point1);
 			if (((Float) o).isInfinite() || (((Float)o).isNaN())) return n;
-			float diff = ((Float)n - (Float)o);
-			if (Math.abs(diff) > Math.abs((Float)o)/2) scale *= 10.0;
+			diff = ((Float)n - (Float)o);
+			if (this.isCircular())
+				if (Math.abs(diff) > Math.abs((Float)o)/distanceDivisor) scale = APP.getApp().constrain(scale * distanceModifier,0.1f,1.0f);
 			output = (Float)o + scale * diff;//+ (((Float)o) - ((((Float)n))/2.0f));//);
 			//output = n;
 		} else {
 			System.out.println("lerpValue() in " + this + ": unhandled object type " + o.getClass());
+		}
+		if (debug) {
+			println("scale modified by distance to " + scale + ", diff is " + diff);
+			println("got output value " + output + " from "+ o);
 		}
 		if (output!=null) {
 			if (debug) println("lerp: " + o + " via " + output + " to " + n);
@@ -133,6 +154,10 @@ public class ParameterBuffer {
 			return n;
 		}
 	}
+	private boolean isCircular() {
+		return circular;
+	}
+
 	private void println(String string) {
 		System.out.println(this + string);
 	}

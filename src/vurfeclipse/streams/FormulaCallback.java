@@ -13,6 +13,7 @@ import controlP5.CallbackListener;
 import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Textfield;
+import controlP5.Textlabel;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.filters.Filter;
@@ -65,12 +66,18 @@ public class FormulaCallback extends ParameterCallback {
 	}
 
 	int count = 0;
+
+	private Textlabel lblInputValue;
+	private Textlabel lblOutputValue;
+	
 	@Override
 	public void call(Object value) {
 		//if (latching_value==null) latching_value = new BigDecimal(0);
 		count++;
 		//System.out.println ("FormuaCallback called with " + value);
 		
+		this.updateGuiInputValue(value.toString());
+				
 		if (value instanceof Float || value instanceof Double) {
 			if (((Float)value).isNaN()) {
 				System.out.println("caught the goblin");
@@ -86,18 +93,46 @@ public class FormulaCallback extends ParameterCallback {
 			System.err.println("Caught a null target for path " + targetPath + " in " + this + "!");
 		}
 		
+		Float floatValue = e.eval().floatValue();
+		//lblOutputValue.setValueLabel(floatValue.toString());
+		this.updateGuiOutputValue(value.toString());
+		
 		if (value instanceof Float || value instanceof Double ||
 			value instanceof Integer || value instanceof Long
 				) {
-			target.target(targetPath, e.eval().floatValue());
+			target.target(targetPath, floatValue);
 			//System.out.println(this.getStreamSource() + " processing Float|Double " + value + ": setting " + targetPath + " to " + e.eval().floatValue());
 		}
 		/*} else if (value instanceof Integer || value instanceof Long) {
 			target.target(targetPath, e.eval().intValue());
 			System.out.println(this.getStreamSource() + " processing Integer|Long " + value + ": setting targetPath to " + e.eval().intValue());
 		}*/ else if (value instanceof Boolean) {
-			target.target(targetPath, e.eval().floatValue()==1.0f);
+			target.target(targetPath, floatValue==1.0f);
+		} else {
+			System.out.println(this + " call for unhandled datatype " + value.getClass() + " for " + this.targetPath);
 		}
+	}
+	
+
+
+	private void updateGuiOutputValue(final String value) {
+		APP.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {
+				if (lblOutputValue!=null)
+					lblOutputValue.setValueLabel(value);
+			}
+		});		
+	}
+
+	private void updateGuiInputValue(final String value) {
+		APP.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {
+				if (lblInputValue!=null)
+					lblInputValue.setValueLabel(value);
+			}
+		});		
 	}
 	
 	@Override
@@ -167,6 +202,10 @@ public class FormulaCallback extends ParameterCallback {
 
 		g.add(lstTarget);
 		g.setBarHeight(0).setLabel("").hideBar().hideArrow();
+		
+		
+		lblInputValue = cf.control().addLabel(name + "_input_indicator").setPosition(margin_x + lstTarget.getPosition()[0] + lstTarget.getWidth() + margin_x, pos_y).moveTo(g);
+		lblOutputValue = cf.control().addLabel(name + "_output_indicator").setPosition(margin_x + lblInputValue.getPosition()[0] + lblInputValue.getWidth() + margin_x, pos_y).moveTo(g);
 		
 		// done, return group
 
