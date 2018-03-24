@@ -12,11 +12,13 @@ import controlP5.ScrollableList;
 import controlP5.Textfield;
 import controlP5.Textlabel;
 import vurfeclipse.APP;
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.parameters.ParameterBuffer;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.streams.FormulaCallback;
 import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
 
@@ -207,6 +209,8 @@ public class ChangeParameterSequence extends Sequence {
 			};
 			txtExpression.addListenerFor(txtExpression.ACTION_BROADCAST,setExpression);
 			
+
+			
 			g.add(txtExpression);
 			
 			//final FormulaCallback fc = (FormulaCallback) c; 
@@ -240,6 +244,19 @@ public class ChangeParameterSequence extends Sequence {
 				}				
 			});
 			
+
+			CallbackListener pasteTargetListener = new CallbackListener () {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+		
+					if (cf.control().papplet.mouseButton==(VurfEclipse.MOUSE_RIGHT)) {
+						((ChangeParameterSequence) sequence).setParameterPath((String) APP.getApp().pr.getSequencer().getSelectedTargetPath());
+						lstTarget.setLabel(APP.getApp().pr.getSequencer().getSelectedTargetPath());
+					}
+				}
+			};
+			txtExpression.addListenerFor(ScrollableList.ACTION_RELEASE, pasteTargetListener);
+			
 			g.add(lstTarget);		
 		//seq.setHeight(30);
 		
@@ -259,8 +276,14 @@ public class ChangeParameterSequence extends Sequence {
 		return sequenceEditor;
 	}
 
-	private String getParameterPath() {
+	public String getParameterPath() {
 		return this.filterPath + "/pa/" + this.parameterName;
+	}
+	
+	public void setParameterPath(String path) {
+		Parameter p = (Parameter) host.host.getObjectForPath(path);
+		parameterName = p.getName();
+		filterPath = p.getFilterPath();
 	}
 	
 	@Override

@@ -294,6 +294,9 @@ public class Parameter implements Serializable, Targetable {
 				//if (theEvent instanceof mouse)
 				
 				println("right mouse button: " + (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT ? " yes " : " no "));
+				if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
+					APP.getApp().pr.getSequencer().setSelectedTargetPath(self.filter.getParameter(paramName).getPath());
+				}
 				
 				self.filter.changeValueFor(currentValue,paramName,theEvent);
 				if (theEvent.getController() instanceof Textfield) { // && !currentValue.equals(((Textfield)ev.getController()).getText())) {

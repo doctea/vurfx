@@ -689,6 +689,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 				//muteController.setValue(muteController.getValue());
 				println("it is, should be toggling state to " + muteController.getValue());
 				this.setMuted(muteController.getState());
+				
+				if (ev.getController().getControlWindow().papplet().mouseButton==VurfEclipse.MOUSE_RIGHT) {
+					APP.getApp().pr.getSequencer().setSelectedTargetPath(this.getPath()+"/mute");
+				}
+				
 			}/*
       else if (ev.getController()==this.saveButton) {
         println("save preset " + getSceneName());
@@ -944,6 +949,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			} else*/
 			if (payload instanceof Boolean) {
 				this.setMuted((Boolean)payload);
+			} else if (payload instanceof Float) {
+				this.setMuted(1.0f==(Float)payload);
 			} else {
 				this.toggleMute();
 			}

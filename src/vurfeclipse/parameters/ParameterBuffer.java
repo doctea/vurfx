@@ -31,7 +31,7 @@ public class ParameterBuffer {
 		if (latching) {
 			if (value instanceof Float || value instanceof Double) {
 				//latching_value = latching_value.add(BigDecimal.valueOf((Float)value)); //Parameter.classvalue));
-				if (latching_value==null) latching_value = new Float(0);
+				if (latching_value==null || !(latching_value instanceof Float)) latching_value = new Float(0);
 				value = (Float)latching_value + (Float)value;
 			} else if (value instanceof Integer || value instanceof Long) {
 				//latching_value = latching_value.add(BigDecimal.valueOf((Integer)value)); //Parameter.classvalue));

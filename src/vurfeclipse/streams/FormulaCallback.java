@@ -16,6 +16,7 @@ import controlP5.Textfield;
 import controlP5.Textlabel;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.ui.ControlFrame;
 
@@ -116,7 +117,7 @@ public class FormulaCallback extends ParameterCallback {
 
 
 	private void updateGuiOutputValue(final String value) {
-		APP.getApp().getCF().queueUpdate(new Runnable() {
+		if (lblOutputValue!=null) APP.getApp().getCF().queueUpdate(new Runnable() {
 			@Override
 			public void run() {
 				if (lblOutputValue!=null)
@@ -126,7 +127,7 @@ public class FormulaCallback extends ParameterCallback {
 	}
 
 	private void updateGuiInputValue(final String value) {
-		APP.getApp().getCF().queueUpdate(new Runnable() {
+		if (lblInputValue!=null) APP.getApp().getCF().queueUpdate(new Runnable() {
 			@Override
 			public void run() {
 				if (lblInputValue!=null)
@@ -193,13 +194,25 @@ public class FormulaCallback extends ParameterCallback {
 		CallbackListener setTargetListener = new CallbackListener () {
 			@Override
 			public void controlEvent(CallbackEvent theEvent) {
-				Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget.getValue());
-				//s.entrySet();
-				((FormulaCallback) fc).setTargetPath((String) s.get("text"));
+					Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget.getValue());
+					//s.entrySet();
+					((FormulaCallback) fc).setTargetPath((String) s.get("text"));
 			}				
 		};
 		lstTarget.addListenerFor(ScrollableList.ACTION_BROADCAST, setTargetListener);
-
+		
+		CallbackListener pasteTargetListener = new CallbackListener () {
+			@Override
+			public void controlEvent(CallbackEvent theEvent) {
+	
+				if (cf.control().papplet.mouseButton==(VurfEclipse.MOUSE_RIGHT)) {
+					((FormulaCallback) fc).setTargetPath((String) APP.getApp().pr.getSequencer().getSelectedTargetPath());
+					lstTarget.setLabel(APP.getApp().pr.getSequencer().getSelectedTargetPath());
+				}
+			}
+		};
+		expression.addListenerFor(ScrollableList.ACTION_RELEASE, pasteTargetListener);
+		
 		g.add(lstTarget);
 		g.setBarHeight(0).setLabel("").hideBar().hideArrow();
 		
