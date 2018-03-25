@@ -124,7 +124,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/spout/library"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/EvalEx-1.18.jar"/>
+	<classpathentry kind="lib" path="lib/user/EvalEx-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/user/oscP5/library/oscP5.jar" sourcepath="lib/user/oscP5/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
