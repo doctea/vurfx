@@ -752,7 +752,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 							/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
 							//ev.getAction()==ControlP5.ACTION_PRESS) {
 							println("Setting mute state on " + this + " to " + muteController.getState());
-							self.setMuted(muteController.getState());							
+							self.setMuted(muteController.getState());		
+							
+							if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
+								APP.getApp().pr.getSequencer().setSelectedTargetPath(self.getPath()+"/mute");
+							}
 						}
 					});
 
@@ -768,6 +772,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
 							self.nextMode();
+
+							if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
+								APP.getApp().pr.getSequencer().setSelectedTargetPath(self.getPath()+"/nextMode");
+								println("rmb");
+							}							
 						}						
 					})
 					;
@@ -1106,7 +1115,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	synchronized public Object target(String path, Object payload) {
 		if (debug) println("#target('"+path+"', '"+payload+"'");
 		if ("/mute".equals(path.substring(path.length()-5, path.length()))) {
-			this.toggleMute();
+			if (payload instanceof Boolean) {
+				this.setMuted((Boolean)payload);
+			} else if (payload instanceof Float) {
+				this.setMuted(((Float)payload)==1.0f);
+			} else {
+				this.toggleMute();
+			}
 			return this.isMuted()?"Muted":"Unmuted";
 		} else if ("/nextMode".equals(path.substring(path.length()-9, path.length()))) {
 			this.nextMode();
