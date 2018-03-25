@@ -58,6 +58,8 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 
 	public ControlFrame cf;
 
+	private String selectedTargetPath;
+
 	
 	public void addStream(String streamName, Stream st) {
 		//this.streams.put(streamName, st);
@@ -310,6 +312,13 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		if (relevant) APP.getApp().getCF().updateGuiStreamEditor(); //this.updateGuiStreamEditor();
 		
 		return relevant;
+	}
+	public String getSelectedTargetPath() {
+		return selectedTargetPath;
+	}
+	public void setSelectedTargetPath(String path) {
+		println("Setting selectedTargetPath to '" + path + "'");
+		this.selectedTargetPath = path;		
 	}
 
 }

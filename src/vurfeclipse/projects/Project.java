@@ -727,7 +727,7 @@ public abstract class Project implements Serializable {
 	public void updateControl (String filterPath, String name, Object value) {
 		Filter f = (Filter)getObjectForPath(filterPath);
 		//println("Project#updateControl("+filterPath+","+name+","+value + ") for filterPath "+ filterPath + " and param " + name + " got " + f);
-		if (null!=f)
+		if (null!=f && value!=null)
 			f.updateControl(name, value);
 		//else
 		//println(">>>Project#updateControl("+filterPath+","+name+","+value + ") couldn't find a filter!");
@@ -735,6 +735,7 @@ public abstract class Project implements Serializable {
 
 
 	public transient RestConnector rsConn = new RestConnector(this);
+	public boolean controlsReady = false;
 	public void setupRest() {
 		//rsConn = new RestConnector(this);
 		rsConn.start();
@@ -846,6 +847,7 @@ public abstract class Project implements Serializable {
 		//cp5canvas.moveTo(monitorTab);
 		//}
 
+		this.controlsReady = true;
 
 		//this.initialised = true;
 		println("Project#setupControls()----------------------------------------------------------------------------------<END");
@@ -952,7 +954,7 @@ public abstract class Project implements Serializable {
 
 	public boolean isInitialised() {
 		// TODO Auto-generated method stub
-		return this.initialised;
+		return this.initialised && this.controlsReady;
 	}
 	public void target(String key, Object value) {
 		//println("#target("+key+","+value+")");

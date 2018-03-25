@@ -12,7 +12,9 @@ import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.Group;
+import controlP5.Numberbox;
 import controlP5.ScrollableList;
+import controlP5.Toggle;
 
 import java.util.Map.Entry;
 
@@ -42,6 +44,8 @@ abstract public class Sequence implements Serializable, Mutable {
 	transient protected ArrayList<Mutable> mutables;// = new ArrayList<Mutable>();
 	protected HashMap<String, HashMap<String,Object>> scene_parameters;
 	private ArrayList<String> mutableListToLoad;
+
+	protected HashMap<String, Object> lastLoadedParams;
 
 	public Object clone () {
 		Sequence newSequence = Sequence.makeSequence(this.getClass().getName(), this.host);
@@ -130,6 +134,9 @@ abstract public class Sequence implements Serializable, Mutable {
 		if (params.containsKey("enabled")) {
 			this.setEnabled((Boolean) params.get("enabled"));
 		}
+		
+		//this.lastLoadedParams = (HashMap<String, Object>) params.clone();
+		//this.lastLoadedParams.remove("scene_parameters");
 	}
 
 	protected Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
@@ -278,6 +285,10 @@ abstract public class Sequence implements Serializable, Mutable {
 	// sets parameters to initial position but doesn't reset timer
 	public void restart() {
 		this.rng.setSeed(seed);
+		if (this.lastLoadedParams!=null) {
+			this.loadParameters(lastLoadedParams);
+		} 
+		
 		if (this.scene_parameters!=null) {
 			for (Entry<String,HashMap<String,Object>> e : scene_parameters.entrySet()) {
 				Scene s = (Scene) this.host.host.getObjectForPath(e.getKey());
@@ -381,19 +392,27 @@ abstract public class Sequence implements Serializable, Mutable {
 		//pc *= (100.0*(Math.sin(pc)-0.5f));	// TODO: timewarping effect, for later explration when i've figured out how to refactor this... probably change setValuesForTime to utilise Streams instead of going off timemillis, and then have that link go through a 'filter'
 		double pc;// = getPCForDelta(((double)delta * scale));
 		
-		pc = PApplet.constrain(
-				current_pc + (float) ((double)(delta * scale) / lengthMillis), //(double)lengthMillis), 
-				0.000000001f, 1.0f //0.999999999f
-		);
+		if (lengthMillis==0) {
+			println ("lengthMillis is 0 in " + this.getClass() + " for " + this + ", so setting pc to 0.5");	// avoiding division by zero and NaN
+			pc = lengthMillis;
+		} else {
+			pc = 
+			//pc = PApplet.constrain(
+				current_pc + (float) ((double)(delta * scale) / lengthMillis)
+				//, //(double)lengthMillis), 
+				//0.000000000f, 1.0f //0.999999999f
+			//)
+			;
+		}
 		
-		if (pc>=1.0f) { 
-			current_pc = 0.01f;
-			pc = 0.01f;
+		if (pc>1.0f) { 
+			current_pc = 0.0f; //0.000001f;
+			pc = current_pc; //0.01f;
 			last = 0;
 			iteration++;	
-		} else if (pc<0.01f) {
-			current_pc = 0.999999f;
-			pc = 0.999999f;
+		} else if (pc<0.000000f) {
+			current_pc = 1.0f; //0.999999f;
+			pc = current_pc; //0.999999f;
 			last = 0;
 			iteration--;
 		}
@@ -409,10 +428,14 @@ abstract public class Sequence implements Serializable, Mutable {
 	public void setValuesForNorm(double pc, int iteration) {
 		if (enabled) {
 			try {
+				/*if (this.host.getPath().equals("/sc/BlobScene")) {
+					println("badger");
+				}*/
 				__setValuesForNorm(pc, iteration);
 			} catch (Exception e) {
 				println("Caught " + e + " while trying to setValuesForNorm in " + this);
-				if (debug) e.printStackTrace(System.err);
+				//if (debug) 
+					e.printStackTrace(System.err);
 			}
 			this.current_pc = (float) pc;
 		}
@@ -585,17 +608,46 @@ abstract public class Sequence implements Serializable, Mutable {
 			
 			SequenceEditor seq = new SequenceEditor(cp5, name);
 			final Sequence self = this;
-			seq.setWidth(cp5.controlWindow.papplet().width);
+			seq.setWidth((2 * cp5.controlWindow.papplet().width/3) - 40); // 40 is fudge factor to stop nested editors overlapping with sequence history 
 
-			cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name)
-				.setPosition(80,10).moveTo(seq);
+			int pos_x = 0, pos_y = 0;
+			int margin_x = 30, margin_y = 15;
 			
-			cp5.addToggle(name + "_enabled").changeValue(this.isEnabled()?1.0f:0.0f)/*.setLabel("enabled")*/.setPosition(0,30).moveTo(seq).addListenerFor(cp5.ACTION_BROADCAST,  new CallbackListener() {
+			/*cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name)
+				.setPosition(80,10).moveTo(seq);*/
+			
+			Toggle tglEnabled = cp5.addToggle(name + "_enabled")
+				.changeValue(this.isEnabled()?1.0f:0.0f)/*.setLabel("enabled")*/
+				.setLabel("On")
+				.setPosition(pos_x, pos_y)
+				.moveTo(seq)
+				.addListenerFor(cp5.ACTION_BROADCAST,  new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						self.setEnabled(theEvent.getController().getValue()==1.0f); //!self.isEnabled());
+					}
+				})
+			;
+			pos_x += tglEnabled.getWidth() + margin_x;
+			
+
+			Numberbox nmbLength = cp5.addNumberbox(name + "_length", "length")
+				.setLabel("length")
+				.setRange(0.1f, 300.0f)
+				.setDecimalPrecision(4)
+				.setScrollSensitivity(0.1f)
+				.setSensitivity(0.1f)
+				.setValue((float)getLengthMillis()/1000.0f)
+				.setPosition(pos_x, pos_y)
+				.moveTo(seq)
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
-					self.setEnabled(theEvent.getController().getValue()==1.0f); //!self.isEnabled());
+					self.setLengthMillis((int) (theEvent.getController().getValue()*1000.0f));					
 				}
 			});
+			pos_x += nmbLength.getWidth() + margin_x;
 
 			if (host!=null) { 
 				//cp5.addLabel(name + "_host").setValue(host.getPath()).setPosition(80,30).moveTo(seq);
@@ -604,36 +656,22 @@ abstract public class Sequence implements Serializable, Mutable {
 						//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 						.setLabel(this.host.getPath()) //((FormulaCallback)c).targetPath)
 						.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
-						.setPosition(80, 30)
+						.setPosition(pos_x, pos_y)
 						.setWidth((cp5.papplet.width/6))
-						.setBarHeight(15)
+						.setBarHeight(20)
 						.setItemHeight(15)
 						.moveTo(seq)
 						.onLeave(cf.close)
 						.onEnter(cf.toFront)
 						.close();
 
+				pos_x += lstTarget.getWidth() + margin_x;
 			}
 			
-			cp5.addNumberbox(name + "_length", "length")
-				.setRange(0.1f, 300.0f)
-				.setDecimalPrecision(4)
-				.setScrollSensitivity(0.1f)
-				.setSensitivity(0.1f)
-				.setValue((float)getLengthMillis()/1000.0f)
-				.setPosition(0,10)
-				.moveTo(seq)
-				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-
-				@Override
-				public void controlEvent(CallbackEvent theEvent) {
-					self.setLengthMillis((int) (theEvent.getController().getValue()*1000.0f));					
-				}
-				
-			});
+			pos_x += (cp5.papplet.width/6) + margin_x;
 			
 			//seq.setHeight(30);
-			seq.setBackgroundHeight(50);
+			seq.setBackgroundHeight(pos_y + margin_y); // + margin_y); //50);
 			
 			return seq;			
 		}
@@ -652,4 +690,8 @@ abstract public class Sequence implements Serializable, Mutable {
 			return false;
 		}*/
 
+		public void preserveCurrentParameters() {
+			//this.lastLoadedParams = this.collectParameters();
+			//this.lastLoadedParams.remove("scene_parameters");
+		}
 }

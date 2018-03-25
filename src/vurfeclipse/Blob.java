@@ -167,51 +167,51 @@ public class Blob implements Serializable {
         blobs[b].setRadius((int)hue(pix)/8+((int)random(r)));//(int)random(r));
       }*/
 
-				//System.out.println("draw shape radius " + R + " shape " + shape);
-				int oldShape = getShape();
-				//if (oldShape==SH_RANDOM) setShape((int)((VurfEclipse)APP.getApp()).random(SH_RANDOM-3));
-				if (getShape()==SH_CIRCLE) {
-					//out.ellipse(x,y,r,r);
-					out.ellipse(0,0,R,R);
-				} else if (getShape()==SH_RECT) {
-					//out.rect(x-r,y-r,r/2,r/2);
-					out.rectMode(PApplet.RADIUS);
-					//out.rect(-R,-R,R,R);
-					out.rect(0,0,R/2.0f,R/2.0f);
-					//out.rect(0,0,R,R);
-					//polygon(out, /*doPolyRand?(int)random(3,8):*/4, 0, 0, R, R, 0);
-				} else if (getShape()==SH_POLY) {
-					//System.out.println("doing poly?");
-					polygon(out, /*doPolyRand?(int)random(3,8):*/numSides, 0, 0, R, R, 0);
-				} else if (getShape()==SH_FLOWER) {
-					this.polygonFlower(out, 0, 0, R);
-				} else if (getShape()==SH_TEXTURE) {
-					float units_w = 1.0f, units_h = 0.75f;
-					float new_w = units_w * R/2.0f;///*sc.w * (sc.w/*/units_w*R;///4;//);  
-					float new_h = units_h * R/2.0f;///*sc.h * (sc.h/*/units_h*R;///4;//);
+		//System.out.println("draw shape radius " + R + " shape " + shape);
+		int oldShape = getShape();
+		//if (oldShape==SH_RANDOM) setShape((int)((VurfEclipse)APP.getApp()).random(SH_RANDOM-3));
+		if (getShape()==SH_CIRCLE) {
+			//out.ellipse(x,y,r,r);
+			out.ellipse(0,0,R,R);
+		} else if (getShape()==SH_RECT) {
+			//out.rect(x-r,y-r,r/2,r/2);
+			out.rectMode(PApplet.RADIUS);
+			//out.rect(-R,-R,R,R);
+			out.rect(0,0,R/2.0f,R/2.0f);
+			//out.rect(0,0,R,R);
+			//polygon(out, /*doPolyRand?(int)random(3,8):*/4, 0, 0, R, R, 0);
+		} else if (getShape()==SH_POLY) {
+			//System.out.println("doing poly?");
+			polygon(out, /*doPolyRand?(int)random(3,8):*/numSides, 0, 0, R, R, 0);
+		} else if (getShape()==SH_FLOWER) {
+			this.polygonFlower(out, 0, 0, R);
+		} else if (getShape()==SH_TEXTURE) {
+			float units_w = 1.0f, units_h = 0.75f;
+			float new_w = units_w * R/2.0f;///*sc.w * (sc.w/*/units_w*R;///4;//);  
+			float new_h = units_h * R/2.0f;///*sc.h * (sc.h/*/units_h*R;///4;//);
 
-					out.pushMatrix();
-					out.translate(-new_w/2.0f,-new_h/2.0f);
-					out.image(src,0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
-					//;;if ((int)((VurfEclipse)APP.getApp()).random(100)==0) System.out.println("BLOB>>>drawing texture " + this.src);
-					//out.image(src.getTexture(),0,0,new_w,new_h);
-					out.popMatrix();
-					//out.rect(0,0,R/2,R/2);
+			out.pushMatrix();
+			out.translate(-new_w/2.0f,-new_h/2.0f);
+			out.image(src,0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
+			//;;if ((int)((VurfEclipse)APP.getApp()).random(100)==0) System.out.println("BLOB>>>drawing texture " + this.src);
+			//out.image(src.getTexture(),0,0,new_w,new_h);
+			out.popMatrix();
+			//out.rect(0,0,R/2,R/2);
 
-				} else if (getShape()==SH_COMPOUND) {
-					drawCompoundBlob(out, x, y, R, R, 0);
-				} else if (getShape()==SH_SVG && svg!=null) {
-					System.out.println("SVG Draw!");
-					drawSVG(out, x, y, R, R, 0);
-				} else if (getShape()==SH_IMAGE && imageName!=null && !imageName.equals("")) {
-					drawImage(out, x, y, R, R, 0);
-				}
-				setShape(oldShape);
+		} else if (getShape()==SH_COMPOUND) {
+			drawCompoundBlob(out, x, y, R, R, 0);
+		} else if (getShape()==SH_SVG && svg!=null) {
+			System.out.println("SVG Draw!");
+			drawSVG(out, x, y, R, R, 0);
+		} else if (getShape()==SH_IMAGE && imageName!=null && !imageName.equals("")) {
+			drawImage(out, x, y, R, R, 0);
+		}
+		setShape(oldShape);
 
 
-				out.popMatrix();
+		out.popMatrix();
 
-				out.popStyle();
+		out.popStyle();
 
 	}
 

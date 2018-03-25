@@ -14,9 +14,14 @@ import ddf.minim.*;
 
 import java.awt.Color;
 import java.io.PrintStream;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+
+import com.udojava.evalex.AbstractFunction;
+import com.udojava.evalex.Expression;
+import com.udojava.evalex.Expression.ExpressionException;
 
 //import javax.media.opengl.*;
 import processing.opengl.*;
@@ -183,6 +188,10 @@ public class VurfEclipse extends PApplet {
 	private static final PVector RES_4_3 	= new PVector( 4 ,  3 );
 	private static final PVector RES_16_9 	= new PVector( 16,  9 );
 	private static final PVector RES_16_10 	= new PVector( 16, 10 );
+
+	public static final int MOUSE_LEFT = 37;
+	public static final int MOUSE_RIGHT = 39;
+	public static final int MOUSE_MIDDLE = 3;
 
 	boolean screenGrab = false;
 
@@ -838,5 +847,75 @@ public class VurfEclipse extends PApplet {
 		}
 
 	}
+
+	public Expression makeEvaluator(String expression) {
+			com.udojava.evalex.Expression e = new com.udojava.evalex.Expression(expression);
+			e.addFunction(eval_function_rgb);
+			
+			e.addFunction(eval_function_rgbi);
+		return e;
+	}
+	
+	static AbstractFunction eval_function_rgb = new AbstractFunction("rgb", -1) {
+		@Override
+		public BigDecimal eval(List<BigDecimal> parameters) {
+			if (parameters.size() <= 0) {
+				throw new ExpressionException("rgb requires at least 1 parameter (ideally 4)");
+			}
+			float r = 0.0f, g = 0.0f, b = 0.0f, a = 1.0f;
+			r = parameters.get(0).floatValue();
+			
+			if (parameters.size()>3) {
+				a = parameters.get(3).floatValue();
+			} else {
+				a = r;
+			}
+			if (parameters.size()>2) {
+				b = parameters.get(2).floatValue();
+			} else {
+				b = r;
+			}
+			if (parameters.size()>1) {
+				g = parameters.get(1).floatValue();
+			} else {
+				g = r;
+			}
+			
+			//println("called rgb with "  + r + ","+g+","+b + "a, returning " + APP.getApp().color(r*255, g*255, b*255, a*255));
+			
+			return new BigDecimal( APP.getApp().color(r*255, g*255, b*255, a*255));
+		}
+	};
+	
+	static AbstractFunction eval_function_rgbi = new AbstractFunction("rgbi", -1) {
+		@Override
+		public BigDecimal eval(List<BigDecimal> parameters) {
+			if (parameters.size() <= 0) {
+				throw new ExpressionException("rgb requires at least 1 parameter (ideally 4)");
+			}
+			float r = 0.0f, g = 0.0f, b = 0.0f, a = 1.0f;
+			r = parameters.get(0).floatValue();
+			
+			if (parameters.size()>3) {
+				a = parameters.get(3).floatValue();
+			} else {
+				a = r;
+			}
+			if (parameters.size()>2) {
+				b = parameters.get(2).floatValue();
+			} else {
+				b = r;
+			}
+			if (parameters.size()>1) {
+				g = parameters.get(1).floatValue();
+			} else {
+				g = r;
+			}
+			
+			//println("called rgbi with "  + r + ","+g+","+b + "a, returning " + new Color (APP.getApp().color(r, g, b, a)).getRGB()); //APP.getApp().color(r, g, b, a));
+			
+			return new BigDecimal(new Color (APP.getApp().color(r, g, b, a)).getRGB());
+		}
+	};
 	
 }

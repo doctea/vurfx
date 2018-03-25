@@ -203,13 +203,47 @@ void sendTimeSin() {
 void sendVolumes(float left, float right) {
   count++;
   String target = "/volumes"; //layer"+ layerNr + "/clip" + clipNr + "/connect";
-  float v = left;
+  
+  // just sending the straight value here and fiddling with it in processing gives the non-linear response expected?
+  //float v = left;
+  
+  //float v = (float)(Math.log(2.0d)/Math.log((double)left)); //left; //(float)Math.pow((double)left*10, 3.0d)/100;
+  println("left is " +left);
+  
+  /*float v = left * 10;
+    v = pow(v, 4);
+    v = abs(log(v));
+    v = map(v, 0.0f, 6f, 0.0f, 1.0f);
+    v = 6.0f - v;*/
+    
+  // convert to linear... sort of not what we need though really?
+  float v = //20 *
+    4.0f + 
+    (float)Math.log10(left); 
+  v = v / 4.0f;
+  
   println(count + " sending '" + v + "' to target " + target);
   OscMessage myMessage = new OscMessage(target);
   myMessage.add(v); //count); //1);
   oscP5.send(myMessage, ResolumeLocation);
 }
 
+  /*v = (float)Math.pow((double)v,3);
+    
+  //v = //6.0 * 
+    //(float)Math.log(left); //) * 2.0f;
+  println("logged v is " + v);
+  
+  v = abs(v);
+  
+  //v /= 10.0;
+  v = 6.0f - v;
+  
+  //v = abs (1.0/ (100.0 / v) - 1.0f);
+  
+  v = (float)Math.log((float)v);
+  
+  //v *= 10.0;*/
 
 /* incoming osc message are forwarded to the oscEvent method. */
 void oscEvent(OscMessage theOscMessage) {

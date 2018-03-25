@@ -13,8 +13,10 @@ import controlP5.CallbackListener;
 import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Textfield;
+import controlP5.Textlabel;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.ui.ControlFrame;
 
@@ -28,13 +30,13 @@ public class FormulaCallback extends ParameterCallback {
 	com.udojava.evalex.Expression e;
 
 	public FormulaCallback() {
-		e = new com.udojava.evalex.Expression(expression);
+		e = APP.getApp().makeEvaluator(expression);
 	}
 	
 	public FormulaCallback setExpression(String expression) {
 		System.out.println(this + " setting expression to '" + expression + "'");
 		this.expression = expression;
-		e = new com.udojava.evalex.Expression(expression);
+		e = APP.getApp().makeEvaluator(expression);
 		
 		//e.setVariable("MAX", (BigDecimal) ((Parameter)APP.getApp().pr.getObjectForPath(this.targetPath)).getMax());	// doesn't work, may need to cast all the different datatypes?
 		//e.setVariable("MIN", (BigDecimal) ((Parameter)APP.getApp().pr.getObjectForPath(this.targetPath)).getMin());
@@ -65,12 +67,21 @@ public class FormulaCallback extends ParameterCallback {
 	}
 
 	int count = 0;
+
+	private Textlabel lblInputValue;
+	private Textlabel lblOutputValue;
+	
 	@Override
 	public void call(Object value) {
+		
+		//e = APP.getApp().makeEvaluator(expression);
+		
 		//if (latching_value==null) latching_value = new BigDecimal(0);
 		count++;
 		//System.out.println ("FormuaCallback called with " + value);
 		
+		this.updateGuiInputValue(value.toString());
+				
 		if (value instanceof Float || value instanceof Double) {
 			if (((Float)value).isNaN()) {
 				System.out.println("caught the goblin");
@@ -86,18 +97,46 @@ public class FormulaCallback extends ParameterCallback {
 			System.err.println("Caught a null target for path " + targetPath + " in " + this + "!");
 		}
 		
+		Float floatValue = e.eval().floatValue();
+		//lblOutputValue.setValueLabel(floatValue.toString());
+		this.updateGuiOutputValue(floatValue.toString());
+		
 		if (value instanceof Float || value instanceof Double ||
 			value instanceof Integer || value instanceof Long
 				) {
-			target.target(targetPath, e.eval().floatValue());
+			target.target(targetPath, floatValue);
 			//System.out.println(this.getStreamSource() + " processing Float|Double " + value + ": setting " + targetPath + " to " + e.eval().floatValue());
 		}
 		/*} else if (value instanceof Integer || value instanceof Long) {
 			target.target(targetPath, e.eval().intValue());
 			System.out.println(this.getStreamSource() + " processing Integer|Long " + value + ": setting targetPath to " + e.eval().intValue());
 		}*/ else if (value instanceof Boolean) {
-			target.target(targetPath, e.eval().floatValue()==1.0f);
+			target.target(targetPath, floatValue==1.0f);
+		} else {
+			System.out.println(this + " call for unhandled datatype " + value.getClass() + " for " + this.targetPath);
 		}
+	}
+	
+
+
+	private void updateGuiOutputValue(final String value) {
+		if (lblOutputValue!=null) APP.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {
+				if (lblOutputValue!=null)
+					lblOutputValue.setValueLabel(value);
+			}
+		});		
+	}
+
+	private void updateGuiInputValue(final String value) {
+		if (lblInputValue!=null) APP.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {
+				if (lblInputValue!=null)
+					lblInputValue.setValueLabel(value);
+			}
+		});		
 	}
 	
 	@Override
@@ -107,22 +146,45 @@ public class FormulaCallback extends ParameterCallback {
 
 	@Override
 	public Group makeControls(ControlFrame cf, String name) {
-		
 		//Group 
 		g = super.makeControls(cf, name);
 		
-		int margin_x = 5, pos_y = 0;
+		int margin_x = 15, margin_y = 15, pos_y = 0, pos_x = 0;
 
 		final ParameterCallback self = this;
 
+		final ParameterCallback fc = (ParameterCallback) self; 
+		
+		// set up the Target dropdown
+		SortedSet<String> keys = new TreeSet<String>(APP.getApp().pr.getTargetURLs().keySet());
+		String[] targetUrls = keys.toArray(new String[0]);
+		
+		final ScrollableList lstTarget = cf.control().addScrollableList(name + self.getStreamSource() + "_" /* n +*/ + "_Target URL")
+				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+				.setLabel(((FormulaCallback)self).targetPath)
+				.addItems(targetUrls)
+				.moveTo(g)
+				//.setPosition(margin_x * 10, pos_y)
+				.setPosition(pos_x, pos_y)
+				.setWidth((cf.sketchWidth()/3))
+				.onLeave(cf.close).onEnter(cf.toFront)
+				.setBarHeight(20).setItemHeight(20)
+				.close();
+		
+		pos_x += lstTarget.getWidth() + margin_x;
+
+		g.add(lstTarget);
+		
 		// set up the Expression textfield
 		
 		Textfield expression = cf.control().addTextfield(name + self.getStreamSource() + "_" /*+ n */+ "_Expression_" + self.toString())
 				.setText(((FormulaCallback)self).getExpression())
 				.moveTo(g)
-				.setPosition((int) margin_x, pos_y)
+				.setPosition(pos_x, pos_y)
 				.setLabel("Expression")
 				.setAutoClear(false); 
+		
+		pos_x += expression.getWidth() + margin_x;
 		
 		CallbackListener setExpression = new CallbackListener() {
 			public void controlEvent(CallbackEvent theEvent) {
@@ -136,37 +198,31 @@ public class FormulaCallback extends ParameterCallback {
 
 		g.add(expression);
 
-		final ParameterCallback fc = (ParameterCallback) self; 
-
-		
-		// set up the Target dropdown
-		SortedSet<String> keys = new TreeSet<String>(APP.getApp().pr.getTargetURLs().keySet());
-		String[] targetUrls = keys.toArray(new String[0]);
-		
-		final ScrollableList lstTarget = cf.control().addScrollableList(name + self.getStreamSource() + "_" /* n +*/ + "_Target URL")
-				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-				.setLabel(((FormulaCallback)self).targetPath)
-				.addItems(targetUrls)
-				.moveTo(g)
-				//.setPosition(margin_x * 10, pos_y)
-				.setPosition(margin_x + expression.getWidth() + margin_x, pos_y)
-				.setWidth((cf.sketchWidth()/3))
-				.onLeave(cf.close).onEnter(cf.toFront)
-				.setBarHeight(expression.getHeight()).setItemHeight(expression.getHeight())
-				.close();
-
 		CallbackListener setTargetListener = new CallbackListener () {
 			@Override
 			public void controlEvent(CallbackEvent theEvent) {
-				Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget.getValue());
-				//s.entrySet();
-				((FormulaCallback) fc).setTargetPath((String) s.get("text"));
+					Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget.getValue());
+					//s.entrySet();
+					((FormulaCallback) fc).setTargetPath((String) s.get("text"));
 			}				
 		};
 		lstTarget.addListenerFor(ScrollableList.ACTION_BROADCAST, setTargetListener);
-
-		g.add(lstTarget);
+		
+		CallbackListener pasteTargetListener = new CallbackListener () {
+			@Override
+			public void controlEvent(CallbackEvent theEvent) {
+				if (cf.control().papplet.mouseButton==(VurfEclipse.MOUSE_RIGHT)) {		// 'paste' copied target path to this item
+					((FormulaCallback) fc).setTargetPath((String) APP.getApp().pr.getSequencer().getSelectedTargetPath());
+					lstTarget.setLabel(APP.getApp().pr.getSequencer().getSelectedTargetPath());
+				}
+			}
+		};
+		expression.addListenerFor(ScrollableList.ACTION_RELEASE, pasteTargetListener);
+		
 		g.setBarHeight(0).setLabel("").hideBar().hideArrow();
+		
+		lblInputValue = cf.control().addLabel(name + "_input_indicator").setPosition(expression.getPosition()[0] + margin_x + expression.getWidth(), pos_y-5).moveTo(g);
+		lblOutputValue = cf.control().addLabel(name + "_output_indicator").setPosition(expression.getPosition()[0] + margin_x + lblInputValue.getWidth(), pos_y+5).moveTo(g);
 		
 		// done, return group
 

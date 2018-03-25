@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.util.HashMap;
+
+import controlP5.Bang;
 import controlP5.Group;
 import vurfeclipse.APP;
 import vurfeclipse.filters.Filter;
@@ -122,8 +124,13 @@ public abstract class ParameterCallback implements Serializable {
 	Group g;
 	protected boolean latching = false;
 	protected BigDecimal latching_value = new BigDecimal(0);
+	private Bang bngInputRcvd;
 	public Group makeControls(ControlFrame cf, String name) {
 		g = new Group(cf.control(), name + "_group");
+		
+		/*bngInputRcvd = cf.control().addBang(name + "_bang").moveTo(g).setPosition(0,0).setWidth(3).setColorActive(APP.getApp().color(0, 255, 0, 255));
+		bngInputRcvd.setValue(0.0);
+		g.add(bngInputRcvd);*/
 		
 		return g;
 	}

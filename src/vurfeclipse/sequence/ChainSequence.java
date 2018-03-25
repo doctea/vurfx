@@ -17,7 +17,7 @@ import vurfeclipse.ui.SequenceEditor;
 
 public class ChainSequence extends Sequence {
 
-	ArrayList<Sequence> chain = new ArrayList<Sequence>();
+	protected ArrayList<Sequence> chain = new ArrayList<Sequence>();
 	
 	public ChainSequence() { super(); }
 	
@@ -39,12 +39,24 @@ public class ChainSequence extends Sequence {
 	
 	@Override public void start() {
 		super.start();
-		if (this.scene_parameters==null) {
+		
+		if (!(this.chain.size()>0)) 
+			this.initialiseDefaultChain(); 
+
+		if (this.scene_parameters==null) {		
+			//this.initialiseDefaultChain();
 			for (Sequence seq : chain) {
 				seq.start();
 			}
 		}
 	}
+	
+	protected void initialiseDefaultChain() {
+		for (Sequence seq : chain) 
+			if (seq instanceof ChainSequence) 
+				((ChainSequence)seq).initialiseDefaultChain();
+	}
+
 	@Override public void stop() {
 		super.stop();
 		for (Sequence seq : chain) {
@@ -124,21 +136,36 @@ public class ChainSequence extends Sequence {
 	}
 	
 	@Override
+	public void restart() {
+		super.restart();
+		for (Sequence seq : chain) {
+			//seq.clearSceneParameters(); // clear scene parameters because parent is dealing with them
+			seq.setSceneParameters(new HashMap<String, HashMap<String, Object>> ());	// set to empty scene_parameters instead of null, because otherwise onStart() gets triggered and overwrites values
+			seq.restart();
+		}
+	}
+
+	
+	@Override
 	synchronized public void loadParameters(HashMap<String,Object> params) {
 		super.loadParameters(params);
-		ArrayList<HashMap<String,Object>> chains = (ArrayList<HashMap<String,Object>>) params.get("chain");
-		for (HashMap<String,Object> cs : chains) {
-			// cs contains info to build a new ChainSequence and attach it
-			//ChainSequence n = new ChainSequence(this.host, (Integer) cs.get("lengthMillis"));
-			if (cs==null) {
-				println("skipping null chain sequence from broken save file :(");
-				continue;
-			}
-			if (cs.containsKey("scene_parameters")) cs.remove("scene_parameters");	// don't load scene_parameters for chained sequences, since if there are any they are there from an old version of save format
-			Sequence n = Sequence.makeSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
-			n.loadParameters(cs);
-			this.addSequence(n);
-		}		
+		if (params.containsKey("chain")) {
+			ArrayList<HashMap<String,Object>> chains = (ArrayList<HashMap<String,Object>>) params.get("chain");
+			for (HashMap<String,Object> cs : chains) {
+				// cs contains info to build a new ChainSequence and attach it
+				//ChainSequence n = new ChainSequence(this.host, (Integer) cs.get("lengthMillis"));
+				if (cs==null) {
+					println("skipping null chain sequence from broken save file :(");
+					continue;
+				}
+				if (cs.containsKey("scene_parameters")) cs.remove("scene_parameters");	// don't load scene_parameters for chained sequences, since if there are any they are there from an old version of save format
+				Sequence n = Sequence.makeSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
+				n.loadParameters(cs);
+				this.addSequence(n);
+			}		
+		} else {
+			this.initialiseDefaultChain();
+		}
 	}
 	
 	
@@ -155,7 +182,7 @@ public class ChainSequence extends Sequence {
 				.moveTo(sequenceEditor)
 				.setWidth(sequenceEditor.getWidth()-10)
 				//.setBackgroundHeight(cp5.papplet.sketchHeight()/5)
-				.setPosition(10,sequenceEditor.getBackgroundHeight())
+				.setPosition(10,40) //sequenceEditor.getBackgroundHeight())
 				.setBackgroundHeight(10)
 				.setBarHeight(15)
 				.setCollapseMode(Accordion.MULTI);
@@ -171,14 +198,15 @@ public class ChainSequence extends Sequence {
 			Group g = conts;
 			//g.add(conts);
 			//g.setBackgroundHeight(conts.getBackgroundHeight());
-			println("got a " + cs.getClass().getSimpleName() + " with height " + g.getBackgroundHeight()); 
+			//println("got a " + cs.getClass().getSimpleName() + " with height " + g.getBackgroundHeight()); 
 			acc.addItem(g);
 			acc.setBackgroundHeight(acc.getBackgroundHeight() + g.getBackgroundHeight());
 			acc.setBarHeight(15);
 			n++;
 		}
 		
-		acc.open();
+		if (n>0)
+			acc.open();
 		
 		//sequenceEditor.add(acc.moveTo(sequenceEditor));
 		//sequenceEditor.setBackgroundHeight(n * 30);
@@ -220,5 +248,15 @@ public class ChainSequence extends Sequence {
 		}
 		return relevant;
 	}	
+	
+	@Override
+	public void preserveCurrentParameters() {
+		super.preserveCurrentParameters();
+		//this.lastLoadedParams = this.collectParameters();
+		for (Sequence seq : chain) {
+			seq.preserveCurrentParameters();
+		}
+	}
+
 	
 }

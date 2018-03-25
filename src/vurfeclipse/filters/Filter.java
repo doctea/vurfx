@@ -346,6 +346,14 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		//if (this.parameters.size()==0) setParameterDefaults();
 		//println("looking for " + paramName);
 		//if (this.parameters.containsKey(paramName))
+		if (!this.parameters.containsKey(paramName)) {
+			println ("Caught attempt to access unknown paramName " + paramName + "?!");
+		} else if (this.parameters.get(paramName)==null) {
+			println ("Returning null value for 'paramName' in " + this + "?!");
+		} else {
+			//println ("fuck knose?");
+			//println ("returning " + this.parameters.get(paramName).value);
+		}
 		return this.parameters.get(paramName).value;
 		//else
 		//  return "unknown";
@@ -359,9 +367,10 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		//if (parameters.containsKey(paramName)) {
 		//parameters.get(paramName).value = value;
 		if (parameters.containsKey(paramName))
-			parameters.get(paramName).setValue(value);
+			if (value!=null)
+				parameters.get(paramName).setValue(value);
 		else
-			println("no parameter for " + paramName + "(tried to set value " + value + ")");
+			println("no parameter for " + paramName + " (tried to set value " + value + ")");
 		/*} else {
      parameters.put(paramName, new Parameter(paramName, value));
      }*/
@@ -396,7 +405,6 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		return this;
 	}
 	synchronized public void toggleParameterValue(String paramName) {
-		// TODO Auto-generated method stub
 		if (getParameterValue(paramName) instanceof Boolean) {
 			changeParameterValue(paramName, !(Boolean)getParameterValue(paramName));
 		}
@@ -736,13 +744,19 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 					.setValue(this.isMuted())
 					.setState(this.isMuted())
 					.moveTo(grp)
+					.setColorActive(VurfEclipse.makeColour(255, 0, 0))
+					.setColorBackground(VurfEclipse.makeColour(0, 255, 0))
 					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
 							/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
 							//ev.getAction()==ControlP5.ACTION_PRESS) {
 							println("Setting mute state on " + this + " to " + muteController.getState());
-							self.setMuted(muteController.getState());							
+							self.setMuted(muteController.getState());		
+							
+							if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
+								APP.getApp().pr.getSequencer().setSelectedTargetPath(self.getPath()+"/mute");
+							}
 						}
 					});
 
@@ -758,6 +772,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
 							self.nextMode();
+
+							if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
+								APP.getApp().pr.getSequencer().setSelectedTargetPath(self.getPath()+"/nextMode");
+								println("rmb");
+							}							
 						}						
 					})
 					;
@@ -1086,7 +1105,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			else if (value instanceof String) 
 				c.setStringValue((String) value);
 			else 
-				System.err.println("Caught updating control with unhandled type " + value.getClass() + " in " + this);
+				System.err.println("Caught updating control " + name + " with unhandled type " + (value!=null?value.getClass():"null") + " in " + this);
 			c.setBroadcast(true);
 		}
 
@@ -1096,7 +1115,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	synchronized public Object target(String path, Object payload) {
 		if (debug) println("#target('"+path+"', '"+payload+"'");
 		if ("/mute".equals(path.substring(path.length()-5, path.length()))) {
-			this.toggleMute();
+			if (payload instanceof Boolean) {
+				this.setMuted((Boolean)payload);
+			} else if (payload instanceof Float) {
+				this.setMuted(((Float)payload)==1.0f);
+			} else {
+				this.toggleMute();
+			}
 			return this.isMuted()?"Muted":"Unmuted";
 		} else if ("/nextMode".equals(path.substring(path.length()-9, path.length()))) {
 			this.nextMode();

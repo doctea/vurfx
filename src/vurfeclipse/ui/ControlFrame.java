@@ -43,6 +43,9 @@ public class ControlFrame extends PApplet {
 		cp5.setFont(createFont("Arial",10));
 		frameRate(60);
 
+		//cp5.getPointer().enable(); // experimental .. 
+
+		
 		/*    
     cp5.addToggle("auto")
        //.plugTo(parent, "auto")
@@ -107,10 +110,12 @@ public class ControlFrame extends PApplet {
 	List<Runnable> updateQueue = Collections.synchronizedList(new ArrayList<Runnable>());
 
 	synchronized private void processUpdateQueue() {
-		for (Runnable q : updateQueue) {
-			q.run();
+		synchronized (updateQueue) {
+			for (Runnable q : updateQueue) {
+				q.run();
+			}
+			this.clearQueue();
 		}
-		this.clearQueue();	
 	}
 
 	synchronized private void clearQueue() {
@@ -118,9 +123,9 @@ public class ControlFrame extends PApplet {
 	}
 
 	public void queueUpdate(Runnable runnable) {
-		synchronized(this) {
+		//synchronized(this) {
 			this.updateQueue.add(runnable);
-		}
+		//}
 	}
 
 	@Override

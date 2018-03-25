@@ -3,33 +3,52 @@ package vurfeclipse.sequence;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.udojava.evalex.Expression.Function;
 
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.ScrollableList;
 import controlP5.Textfield;
+import controlP5.Textlabel;
 import vurfeclipse.APP;
+import vurfeclipse.Targetable;
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.parameters.ParameterBuffer;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.streams.FormulaCallback;
 import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
+
+import com.udojava.evalex.AbstractFunction;
+import com.udojava.evalex.Expression.*;
 
 public class ChangeParameterSequence extends Sequence {
 	
 	com.udojava.evalex.Expression e;
 	
-	String filterPath, parameterName;
+	//String filterPath, parameterName;
 	String expression = "input";
+	String targetPath;
+
+	public String getTargetPath() {
+		return targetPath;
+	}
+
+	public void setTargetPath(String targetPath) {
+		this.targetPath = targetPath;
+	}
 
 	Object value;
 	
 	ParameterBuffer paramBuffer;
-	
+
 	
 	public String getExpression() {
 		return expression;
@@ -37,22 +56,24 @@ public class ChangeParameterSequence extends Sequence {
 
 	public void setExpression(String expression) {
 		this.expression = expression;
-		e = new com.udojava.evalex.Expression(expression);
+		//e = new com.udojava.evalex.Expression(expression);
 	}
 
 	public ChangeParameterSequence() { 
 		super(); 
+		this.paramBuffer = new ParameterBuffer(10,50);
 	}
 	
-	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object value, String expression, int length) {
+	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object startValue, String expression, int length) {
 		//super(host,length);
 		super(host,length);
-		this.filterPath = filterPath;
-		this.parameterName = parameterName;
+		//this.filterPath = filterPath;
+		//this.parameterName = parameterName;
+		this.targetPath = filterPath + "/pa/" + parameterName;
 		this.value = value;
 		this.setExpression(expression);
 		
-		this.paramBuffer = new ParameterBuffer();
+		this.paramBuffer = new ParameterBuffer(10,50);
 		
 	}
 	public ChangeParameterSequence(Scene host, String filterPath, String parameterName, Object value, int length) {	// compatibility constructor
@@ -63,8 +84,9 @@ public class ChangeParameterSequence extends Sequence {
 	@Override
 	public HashMap<String,Object> collectParameters() {
 		HashMap<String,Object> params = super.collectParameters();
-		params.put("filterPath",  filterPath);
-		params.put("parameterName", parameterName);
+		//params.put("filterPath",  filterPath);
+		//params.put("parameterName", parameterName);
+		params.put("targetPath", getTargetPath());
 		params.put("value", this.value);
 		params.put("expression", this.expression);
 		return params;
@@ -73,8 +95,13 @@ public class ChangeParameterSequence extends Sequence {
 	@Override
 	public void loadParameters(HashMap<String,Object> params) {
 		super.loadParameters(params);
-		if (params.containsKey("filterPath"))	this.filterPath = (String) params.get("filterPath");
-		if (params.containsKey("parameterName")) this.parameterName = (String) params.get("parameterName");
+		
+		//compatibility
+		if (params.containsKey("filterPath"))	{
+			this.targetPath = (String) params.get("filterPath") + "/pa/" + (String) params.get("parameterName");
+		} else if (params.containsKey("targetPath")) {
+			this.targetPath = (String) params.get("targetPath");
+		}
 		if (params.containsKey("value")) 		this.value = params.get("value");
 		if (params.containsKey("expression")) 	this.setExpression((String) params.get("expression"));
 	}
@@ -94,39 +121,92 @@ public class ChangeParameterSequence extends Sequence {
 	}
 	
 	@Override
+	public void start() {
+		if (host.host.getObjectForPath(targetPath) instanceof Parameter) {
+			this.paramBuffer.setCircular((((Parameter)host.host.getObjectForPath(targetPath)).isCircular()));
+		}
+	}
+	
+	@Override
 	synchronized public void __setValuesForNorm(double pc, int iteration) {
-		
+				
+		if (((Double)pc).isNaN()) {
+			println("Caught NaN in __setValuesForNorm ");
+		}
 		// evaluate value to pass based on expression
-		if (e==null) e = new com.udojava.evalex.Expression(expression);
+		if (e==null) e = APP.getApp().makeEvaluator(expression);
+		
 		e.setVariable("input", BigDecimal.valueOf(pc));
 		e.setVariable("iteration", BigDecimal.valueOf(iteration));
 		BigDecimal value = e.eval();
+		if (value==null)
+			println("caught null returned from eval(input = " + pc + ", iteration = " + iteration + ")");
 		
-		value = (BigDecimal) paramBuffer.getValue(value, false);
+		this.updateGuiInputValue("iter# " + iteration + " | pc: " + (float)(pc)); //Float.parseFloat(pc));
 		
-		((Filter)host.host
+		//println(this + ": got value " + value);
+		
+		if (paramBuffer!=null)
+			value = (BigDecimal) paramBuffer.getValue(value, false);	// lerp
+		
+		this.updateGuiOutputValue(value.toString());
+		
+		/*((Filter)host.host
 				.getObjectForPath(filterPath))
-				.changeParameterValueFromSin(parameterName, (float)Math.sin(value.doubleValue()));		
+				//.changeParameterValueFromSin(parameterName, (float)value.doubleValue());//(float)Math.sin(value.doubleValue()));		
+				.changeParameterValue(parameterName, (float)value.doubleValue());*/
+		
+		Targetable t = (Targetable) host.host.getObjectForPath(targetPath);
+		t.target(targetPath, value.floatValue());
+		
+	}
+
+	private void updateGuiOutputValue(final String value) {
+		/*APP.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {*/
+				if (lblOutputValue!=null)
+					lblOutputValue.setValueLabel(value);
+			/*}
+		});		*/
+	}
+
+	private void updateGuiInputValue(final String value) {
+		/*APP.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {*/
+				if (lblInputValue!=null)
+					lblInputValue.setValueLabel(value);
+			/*}
+		});		*/
 	}
 
 	@Override
 	public void onStart() {
-		((Filter)host.host
+		if (value!=null)
+			((Targetable)host.host.getObjectForPath(targetPath)).target(targetPath, value);
+/*		((Filter)host.host
 			.getObjectForPath(filterPath))
-			.changeParameterValue(parameterName, value);
+			.changeParameterValue(parameterName, value);*/
 	}
 
 	@Override
 	public void onStop() {
 		try {
-			((Filter)host.host
+			if (value!=null)
+				((Targetable)host.host.getObjectForPath(targetPath)).target(targetPath, value);
+
+				/*((Filter)host.host
 					.getObjectForPath(filterPath))
-					.changeParameterValue(parameterName, value);
+					.changeParameterValue(parameterName, value);*/
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	private Textlabel lblInputValue;
+	private Textlabel lblOutputValue;
 	
 	@Override
 	public SequenceEditor makeControls(ControlFrame cf, String name) {
@@ -135,7 +215,7 @@ public class ChangeParameterSequence extends Sequence {
 		
 		final ChangeParameterSequence sequence = this;
 
-		int pos_y = 60, margin_x = 10;
+		int pos_x = 0, pos_y = 40, margin_x = 10, margin_y = 15;
 		SequenceEditor g = sequenceEditor;
 
 		ControlP5 cp5 = cf.control();
@@ -148,9 +228,11 @@ public class ChangeParameterSequence extends Sequence {
 		//if (c instanceof FormulaCallback) {
 			Textfield txtExpression = cp5.addTextfield(name + "_Expression")
 					.setText(this.getExpression())
-					.setPosition((cp5.papplet.width/3) + margin_x * 10, pos_y)
+					.setPosition(pos_x, pos_y)
 					.moveTo(g).setLabel("Expression")
 					.setAutoClear(false);
+			
+			pos_x += txtExpression.getWidth() + margin_x;
 			
 			// TODO: add callback handler to actually set expression
 
@@ -169,15 +251,17 @@ public class ChangeParameterSequence extends Sequence {
 				
 			final ScrollableList lstTarget = cp5.addScrollableList(name + "_Target URL")
 					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-					.setLabel(this.getParameterPath()) //((FormulaCallback)c).targetPath)
+					.setLabel(this.getTargetPath()) //((FormulaCallback)c).targetPath)
 					.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
-					.setPosition(80, pos_y)
+					.setPosition(pos_x, pos_y)
 					.setWidth((cp5.papplet.width/3))
-					.setBarHeight(16).setItemHeight(16)
+					.setBarHeight(20).setItemHeight(16)
 					.moveTo(g)
 					.onLeave(cf.close)
 					.onEnter(cf.toFront)
 					.close();
+			
+			pos_x += lstTarget.getWidth() + margin_x/2;
 			
 			//lstTarget.setValue(targetPath);
 			
@@ -187,41 +271,79 @@ public class ChangeParameterSequence extends Sequence {
 					// TODO Auto-generated method stub
 					Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget.getValue());
 					//s.entrySet();
+					//TODO: might not be a Parameter,could just be a Targetable
 					Parameter p = (Parameter) host.host.getObjectForPath((String)s.get("text"));
 					synchronized(sequence) {
 						sequence.setHost(((Filter)host.host.getObjectForPath(p.getFilterPath())).sc);
-						sequence.filterPath = p.getFilterPath();
-						sequence.parameterName = p.getName();//((String) s.get("text")).substring(((String)s.get("text")).lastIndexOf('/')); //)//t.getsetTargetPath((String) s.get("text"));
+						sequence.setTargetPath(p.getPath());
+						//sequence.filterPath = p.getFilterPath();
+						//sequence.parameterName = p.getName();//((String) s.get("text")).substring(((String)s.get("text")).lastIndexOf('/')); //)//t.getsetTargetPath((String) s.get("text"));
 					}
 				}				
 			});
 			
+
+			CallbackListener pasteTargetListener = new CallbackListener () {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+		
+					if (cf.control().papplet.mouseButton==(VurfEclipse.MOUSE_RIGHT)) {
+						((ChangeParameterSequence) sequence).setTargetPath((String) APP.getApp().pr.getSequencer().getSelectedTargetPath());
+						lstTarget.setLabel(APP.getApp().pr.getSequencer().getSelectedTargetPath());
+					}
+				}
+			};
+			txtExpression.addListenerFor(ScrollableList.ACTION_RELEASE, pasteTargetListener);
+			
 			g.add(lstTarget);		
 		//seq.setHeight(30);
-		g.setBackgroundHeight(g.getBackgroundHeight() + 30);
+		
+		//pos_y += lstTarget.getHeight() + margin_x/2;
+		
+
+		lblInputValue = cf.control().addLabel(name + "_input_indicator").setPosition(pos_x, pos_y - 5).moveTo(g);
+		//pos_x += lblInputValue.getWidth() + margin_x;
+		pos_x += 52;
+		lblOutputValue = cf.control().addLabel(name + "_output_indicator").setPosition(pos_x, pos_y + 5).moveTo(g);
+		
+		g.add(lblInputValue);
+		g.add(lblOutputValue);
 			
 		//sequenceEditor.setBackgroundHeight(sequenceEditor.getBackgroundHeight() + y);
+		g.setBackgroundHeight(g.getBackgroundHeight());// + 20);
 
 		
 		return sequenceEditor;
 	}
 
-	private String getParameterPath() {
+	/*public String getParameterPath() {
 		return this.filterPath + "/pa/" + this.parameterName;
-	}
+	}*/
+	
+	/*public void setParameterPath(String path) {
+		Parameter p = (Parameter) host.host.getObjectForPath(path);
+		parameterName = p.getName();
+		filterPath = p.getFilterPath();
+	}*/
 	
 	@Override
 	public String toString() {
-		return super.toString() + " " + this.getParameterPath();
+		return super.toString() + " " + this.getTargetPath();
 	}
 
 	@Override
 	public boolean notifyRemoval(Filter newf) {
-		if (newf.getPath().equals(this.filterPath)) {
+		if (this.getTargetPath().contains(newf.getPath())) { //.equals(this.filterPath)) {
 			this.setEnabled(false);
 			return true;
 		}
 		return false;
 	}
+	
+
+	public void preserveCurrentParameters() {
+		super.preserveCurrentParameters();
+	}
+
 
 }

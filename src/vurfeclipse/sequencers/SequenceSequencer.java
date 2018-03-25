@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
@@ -945,7 +946,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		} else if(key=='1') {
 			APP.getApp().getCF().control().getWindow().activateTab("Sequencer");
 		} else if (key=='2') {
-			APP.getApp().getCF().control().getWindow().activateTab("Sequencer Editor");
+			APP.getApp().getCF().control().getWindow().activateTab("Stream Editor");
 		} else if (key=='3') {
 			APP.getApp().getCF().control().getWindow().activateTab("Scenes");
 		} else if (key=='4') {
@@ -1097,7 +1098,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setWidth(width/3)
 				.setHeight(margin_y*2)
 				.moveTo(sequencerTab)
-				.setValue(0.0f);
+				.setValue(this.getActiveSequence()!=null ? this.getActiveSequence().getPositionPC() : 0.0f);
 
 		sldTimeScale = new controlP5.Slider(cp5, "timescale")
 				.setPosition(margin_x, margin_y * 5)
@@ -1105,14 +1106,15 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setHeight(margin_y*2)
 				.setRange(-4.0f/*0.000000001f*/, 4.0f)
 				.moveTo(sequencerTab)
-				.setValue(0.0f);
+				.setValue((float) this.getTimeScale());
 
 		tglLocked = new controlP5.Toggle(cp5, "locked")
+				.setColorActive(VurfEclipse.makeColour(255, 0, 0))
 				.setPosition(2*margin_x + (width/3), margin_y)
 				.moveTo(sequencerTab)
-				.setValue(0.0f);
+				.setValue(this.isLocked()?1.0f:0.0f);
 
-		tglEnabled = new controlP5.Toggle(cp5, "update")
+		tglEnabled = new controlP5.Toggle(cp5, "seq")
 				//.setPosition(tglLocked.getWidth() + (margin_x*2) + (width/3), margin_y)
 				.setPosition(tglLocked.getPosition()[0] + tglLocked.getWidth() + margin_x, margin_y)
 				.changeValue(this.isSequencerEnabled()?1.0f:0.0f)
@@ -1142,25 +1144,26 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.setAutoClear(false)
 				;
 
+
+		Tab streamEditorTab = cp5.addTab("Stream Editor");
+		
 		//Accordion accordion 
 		this.grpStreamEditor = (StreamEditor) new StreamEditor(cp5, "stream editor")//this.makeStreamEditor(cf)
-				.setPosition(0, margin_y * 10)
-				.moveTo(sequencerTab);
+				.setPosition(0,40)
+				.moveTo(streamEditorTab);
 		this.grpStreamEditor.setupStreamEditor(cf, this.getStreams());
 
 		super.updateGuiStatus();
 
 		//lstHistory.addItems(this.historySequenceNames);
 
-		Tab sequencerEditorTab = cp5.addTab(tabName + " Editor");
-
 		this.grpSequenceEditor = (SequenceEditor) new SequenceEditor (cp5, "sequence editor")
 				.setSequence(this.getCurrentSequenceName(), getActiveSequence())
-				.setWidth(cp5.papplet.displayWidth/2)
+				.setWidth(cp5.papplet.displayWidth/4)
 				.setHeight(cp5.papplet.displayHeight/5)
-				.setBarHeight(10)
-				.setPosition(0,40)
-				.moveTo(sequencerEditorTab)
+				.setBarHeight(10)				
+				.setPosition(0, margin_y * 8)
+				.moveTo(sequencerTab)
 				;
 
 		//this.saveHistoryButton = cf.control().addBang("SAVE sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
@@ -1446,6 +1449,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	public void preserveCurrentSceneParameters() {
 		this.getActiveSequence().setSceneParameters(this.host.collectSceneParameters());
+		this.getActiveSequence().preserveCurrentParameters();
 	}
 
 }

@@ -88,7 +88,7 @@ public class SpiralDrawer extends Filter {
     //if (src!=out)
 	  
     PGraphics out = out();
-	out.background(0,0,0,0);
+    out.background(0,0,0,0);
     //out.background(128,0,0,0);
     //out.setDefaultBlend();
     //out.background(src.getTexture());

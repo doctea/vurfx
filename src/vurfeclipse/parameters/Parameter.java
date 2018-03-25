@@ -12,6 +12,7 @@ import controlP5.Knob;
 import controlP5.Slider;
 import controlP5.Textfield;
 import processing.core.PVector;
+import processing.event.MouseEvent;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
@@ -149,6 +150,12 @@ public class Parameter implements Serializable, Targetable {
 		//System.out.println("setValue, value is already " + this.value + ", new value is " + value);
 
 		this.value = value;
+		
+		if (value==null) {
+			println("caught null value in setValue!");
+			return;
+		}
+		
 		//System.out.println("setting value to " + value);
 		if (filterPath!=null)
 			((VurfEclipse)APP.getApp()).pr.updateControl(filterPath, name, value);
@@ -240,8 +247,16 @@ public class Parameter implements Serializable, Targetable {
 	           cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :*/
 		} else if (value instanceof String) {
 			o = cp5.addTextfield(tabName).setSize(size*5, size).setText((String) value).setLabel(getName()).setAutoClear(false);
+		} else if (value instanceof PVector) {
+			println ("Known but unhandled object type PVector in Parameter#makeController() for " + getName());
+			o = null;
+			return null;
+		} else if (value == null) {
+			System.err.println("Unhandled null value for Parameter#makeController() for " + getName());
+			o = null;
+			return null;
 		} else {
-			System.err.println("Unhandled object type " + value.getClass() + " in Parameter#makeController() for " + getName());
+			System.err.println("Unhandled object type " + (value!=null?value.getClass():"null") + " in Parameter#makeController() for " + getName());
 			o = null;
 			
 			return null;
@@ -266,8 +281,6 @@ public class Parameter implements Serializable, Targetable {
 			
 		}
 		
-		
-		
 		o.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 
 			@Override
@@ -277,6 +290,13 @@ public class Parameter implements Serializable, Targetable {
 				Object currentValue = getParameterValue(paramName);*/
 				String paramName = self.getName();
 				Object currentValue = self.filter.getParameterValue(self.getName());
+				
+				//if (theEvent instanceof mouse)
+				
+				println("right mouse button: " + (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT ? " yes " : " no "));
+				if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
+					APP.getApp().pr.getSequencer().setSelectedTargetPath(self.filter.getParameter(paramName).getPath());
+				}
 				
 				self.filter.changeValueFor(currentValue,paramName,theEvent);
 				if (theEvent.getController() instanceof Textfield) { // && !currentValue.equals(((Textfield)ev.getController()).getText())) {
@@ -288,6 +308,11 @@ public class Parameter implements Serializable, Targetable {
 		});
 
 		return o;
+	}
+	public boolean isCircular() {
+		return (getName().toLowerCase().contains("rotat")); 
+		//if ((int)this.getMax()==360)
+		//return false;
 	}
 
 }
