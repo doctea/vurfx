@@ -136,6 +136,15 @@ public class ChainSequence extends Sequence {
 	}
 	
 	@Override
+	public void restart() {
+		super.restart();
+		for (Sequence seq : chain) {
+			seq.restart();
+		}
+	}
+
+	
+	@Override
 	synchronized public void loadParameters(HashMap<String,Object> params) {
 		super.loadParameters(params);
 		if (params.containsKey("chain")) {
@@ -237,5 +246,15 @@ public class ChainSequence extends Sequence {
 		}
 		return relevant;
 	}	
+	
+	@Override
+	public void preserveCurrentParameters() {
+		super.preserveCurrentParameters();
+		//this.lastLoadedParams = this.collectParameters();
+		for (Sequence seq : chain) {
+			seq.preserveCurrentParameters();
+		}
+	}
+
 	
 }
