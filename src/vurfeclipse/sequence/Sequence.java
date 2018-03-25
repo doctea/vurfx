@@ -45,6 +45,8 @@ abstract public class Sequence implements Serializable, Mutable {
 	protected HashMap<String, HashMap<String,Object>> scene_parameters;
 	private ArrayList<String> mutableListToLoad;
 
+	protected HashMap<String, Object> lastLoadedParams;
+
 	public Object clone () {
 		Sequence newSequence = Sequence.makeSequence(this.getClass().getName(), this.host);
 		
@@ -132,6 +134,9 @@ abstract public class Sequence implements Serializable, Mutable {
 		if (params.containsKey("enabled")) {
 			this.setEnabled((Boolean) params.get("enabled"));
 		}
+		
+		//this.lastLoadedParams = (HashMap<String, Object>) params.clone();
+		//this.lastLoadedParams.remove("scene_parameters");
 	}
 
 	protected Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
@@ -280,6 +285,10 @@ abstract public class Sequence implements Serializable, Mutable {
 	// sets parameters to initial position but doesn't reset timer
 	public void restart() {
 		this.rng.setSeed(seed);
+		if (this.lastLoadedParams!=null) {
+			this.loadParameters(lastLoadedParams);
+		} 
+		
 		if (this.scene_parameters!=null) {
 			for (Entry<String,HashMap<String,Object>> e : scene_parameters.entrySet()) {
 				Scene s = (Scene) this.host.host.getObjectForPath(e.getKey());
@@ -681,4 +690,8 @@ abstract public class Sequence implements Serializable, Mutable {
 			return false;
 		}*/
 
+		public void preserveCurrentParameters() {
+			//this.lastLoadedParams = this.collectParameters();
+			//this.lastLoadedParams.remove("scene_parameters");
+		}
 }
