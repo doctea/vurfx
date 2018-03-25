@@ -1449,6 +1449,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	public void preserveCurrentSceneParameters() {
 		this.getActiveSequence().setSceneParameters(this.host.collectSceneParameters());
+		this.getActiveSequence().preserveCurrentParameters();
 	}
 
 }

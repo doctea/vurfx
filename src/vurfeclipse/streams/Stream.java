@@ -298,7 +298,6 @@ abstract public class Stream implements Serializable {
 
 		int pos_y = 10;
 
-
 		final Stream self = this;
 
 		g.add(cf.control().addButton(this.toString() + "_add").setLabel("ADD")
@@ -340,13 +339,25 @@ abstract public class Stream implements Serializable {
 
 			println ("adding gui for " + callback);
 			
-			g.add(this.makeEmitterSelector(cf, callback, callback.getStreamSource() + callback.toString() + "_" + n)
-				.moveTo(g)
-				.setPosition(pos_x, pos_y)
-			);			
+			// add '[x]' button to remove mapping
+			g.add(new Button(cf.control(), this.toString() + "_" + callback + "_del_"+n)
+					.setColorBackground(VurfEclipse.makeColour(255, 0,0)).setLabel("[x]")
+					.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							synchronized(self) {
+								listeners.remove(callback);
+								
+								cf.updateGuiStreamEditor(); // this causes crash for some reason ?
+							}
+						}					
+					})
+					.moveTo(g).setPosition(pos_x, pos_y).setWidth(margin_x));
+					
+			//.setColorForeground(VurfEclipse.makeColour(0, 64, 0));
 			
-			pos_x += margin_x * 6;
-			
+			pos_x += margin_x * 1.5f;
+
 			// add 'on' button to enable.disable
 			g.add(new Toggle(cf.control(), this.toString() + "_" + callback + "_enabled_"+n).setValue(callback.isEnabled()).setLabel("on")
 					.setColorActive(VurfEclipse.makeColour(0, 255, 0))
@@ -368,24 +379,14 @@ abstract public class Stream implements Serializable {
 			
 			pos_x += margin_x * 1.5;
 			
-			// add '[x]' button to remove mapping
-			g.add(new Button(cf.control(), this.toString() + "_" + callback + "_del_"+n)
-					.setColorBackground(VurfEclipse.makeColour(255, 0,0)).setLabel("[x]")
-					.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
-						@Override
-						public void controlEvent(CallbackEvent theEvent) {
-							synchronized(self) {
-								listeners.remove(callback);
-								
-								cf.updateGuiStreamEditor(); // this causes crash for some reason ?
-							}
-						}					
-					})
-					.moveTo(g).setPosition(pos_x, pos_y).setWidth(margin_x));
-					
-			//.setColorForeground(VurfEclipse.makeColour(0, 64, 0));
 			
-			pos_x += margin_x * 1.5f;
+			g.add(this.makeEmitterSelector(cf, callback, callback.getStreamSource() + callback.toString() + "_" + n)
+				.moveTo(g)
+				.setPosition(pos_x, pos_y)
+			);			
+			
+			pos_x += margin_x * 6;
+			
 
 
 			g.add(new Toggle(cf.control(), this.toString() + "_" + callback + "_latching_"+n).setValue(callback.isLatching()).setLabel("L")

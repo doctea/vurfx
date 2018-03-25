@@ -136,6 +136,15 @@ public class ChainSequence extends Sequence {
 	}
 	
 	@Override
+	public void restart() {
+		super.restart();
+		for (Sequence seq : chain) {
+			seq.restart();
+		}
+	}
+
+	
+	@Override
 	synchronized public void loadParameters(HashMap<String,Object> params) {
 		super.loadParameters(params);
 		if (params.containsKey("chain")) {
@@ -171,7 +180,7 @@ public class ChainSequence extends Sequence {
 				.moveTo(sequenceEditor)
 				.setWidth(sequenceEditor.getWidth()-10)
 				//.setBackgroundHeight(cp5.papplet.sketchHeight()/5)
-				.setPosition(10,sequenceEditor.getBackgroundHeight())
+				.setPosition(10,40) //sequenceEditor.getBackgroundHeight())
 				.setBackgroundHeight(10)
 				.setBarHeight(15)
 				.setCollapseMode(Accordion.MULTI);
@@ -237,5 +246,15 @@ public class ChainSequence extends Sequence {
 		}
 		return relevant;
 	}	
+	
+	@Override
+	public void preserveCurrentParameters() {
+		super.preserveCurrentParameters();
+		//this.lastLoadedParams = this.collectParameters();
+		for (Sequence seq : chain) {
+			seq.preserveCurrentParameters();
+		}
+	}
+
 	
 }
