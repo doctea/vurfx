@@ -418,6 +418,11 @@ public class BlobFX1 extends SimpleScene {
 					(int)APP.getApp().blue(col1)
 					//255
 			);
+			/*.changeParameterValue("colour", APP.getApp().color(					255,
+					(int)APP.getApp().red(col1),
+					(int)APP.getApp().green(col1),
+					(int)APP.getApp().blue(col1))
+					);*/
 	
 			((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
 					255,
