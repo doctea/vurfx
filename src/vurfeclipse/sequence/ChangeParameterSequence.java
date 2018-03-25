@@ -116,7 +116,7 @@ public class ChangeParameterSequence extends Sequence {
 		if (value==null)
 			println("caught null returned from eval(input = " + pc + ", iteration = " + iteration + ")");
 		
-		this.updateGuiInputValue("iteration " + iteration + " | pc: " + pc);
+		this.updateGuiInputValue("iter# " + iteration + " | pc: " + (float)(pc)); //Float.parseFloat(pc));
 		
 		//println(this + ": got value " + value);
 		
@@ -181,7 +181,7 @@ public class ChangeParameterSequence extends Sequence {
 		
 		final ChangeParameterSequence sequence = this;
 
-		int pos_y = 60, margin_x = 10;
+		int pos_x = 0, pos_y = 40, margin_x = 10, margin_y = 15;
 		SequenceEditor g = sequenceEditor;
 
 		ControlP5 cp5 = cf.control();
@@ -194,9 +194,11 @@ public class ChangeParameterSequence extends Sequence {
 		//if (c instanceof FormulaCallback) {
 			Textfield txtExpression = cp5.addTextfield(name + "_Expression")
 					.setText(this.getExpression())
-					.setPosition((cp5.papplet.width/3) + margin_x * 10, pos_y)
+					.setPosition(pos_x, pos_y)
 					.moveTo(g).setLabel("Expression")
 					.setAutoClear(false);
+			
+			pos_x += txtExpression.getWidth() + margin_x;
 			
 			// TODO: add callback handler to actually set expression
 
@@ -209,8 +211,6 @@ public class ChangeParameterSequence extends Sequence {
 			};
 			txtExpression.addListenerFor(txtExpression.ACTION_BROADCAST,setExpression);
 			
-
-			
 			g.add(txtExpression);
 			
 			//final FormulaCallback fc = (FormulaCallback) c; 
@@ -219,13 +219,15 @@ public class ChangeParameterSequence extends Sequence {
 					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 					.setLabel(this.getParameterPath()) //((FormulaCallback)c).targetPath)
 					.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
-					.setPosition(80, pos_y)
+					.setPosition(pos_x, pos_y)
 					.setWidth((cp5.papplet.width/3))
-					.setBarHeight(16).setItemHeight(16)
+					.setBarHeight(20).setItemHeight(16)
 					.moveTo(g)
 					.onLeave(cf.close)
 					.onEnter(cf.toFront)
 					.close();
+			
+			pos_x += lstTarget.getWidth() + margin_x/2;
 			
 			//lstTarget.setValue(targetPath);
 			
@@ -260,17 +262,19 @@ public class ChangeParameterSequence extends Sequence {
 			g.add(lstTarget);		
 		//seq.setHeight(30);
 		
-		pos_y += lstTarget.getHeight() + margin_x/2;
+		//pos_y += lstTarget.getHeight() + margin_x/2;
 		
 
-		lblInputValue = cf.control().addLabel(name + "_input_indicator").setPosition(margin_x, pos_y).moveTo(g);
-		lblOutputValue = cf.control().addLabel(name + "_output_indicator").setPosition(margin_x + lblInputValue.getWidth() + margin_x, pos_y).moveTo(g);
+		lblInputValue = cf.control().addLabel(name + "_input_indicator").setPosition(pos_x, pos_y - 5).moveTo(g);
+		//pos_x += lblInputValue.getWidth() + margin_x;
+		pos_x += 52;
+		lblOutputValue = cf.control().addLabel(name + "_output_indicator").setPosition(pos_x, pos_y + 5).moveTo(g);
 		
 		g.add(lblInputValue);
 		g.add(lblOutputValue);
 			
 		//sequenceEditor.setBackgroundHeight(sequenceEditor.getBackgroundHeight() + y);
-		g.setBackgroundHeight(g.getBackgroundHeight() + 30);
+		g.setBackgroundHeight(g.getBackgroundHeight());// + 20);
 
 		
 		return sequenceEditor;

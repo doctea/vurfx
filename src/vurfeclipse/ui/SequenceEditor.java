@@ -41,7 +41,7 @@ public class SequenceEditor extends Group {
 		this.controllers.get().clear();
 		//this.remove();
 		if (sequence!=null) 
-			sequence.makeControls(APP.getApp().getCF(), sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,50);
+			sequence.makeControls(APP.getApp().getCF(), sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,10);
 	
 		return this;
 	}

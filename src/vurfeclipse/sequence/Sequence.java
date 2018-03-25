@@ -12,7 +12,9 @@ import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.Group;
+import controlP5.Numberbox;
 import controlP5.ScrollableList;
+import controlP5.Toggle;
 
 import java.util.Map.Entry;
 
@@ -599,15 +601,44 @@ abstract public class Sequence implements Serializable, Mutable {
 			final Sequence self = this;
 			seq.setWidth((2 * cp5.controlWindow.papplet().width/3) - 40); // 40 is fudge factor to stop nested editors overlapping with sequence history 
 
-			cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name)
-				.setPosition(80,10).moveTo(seq);
+			int pos_x = 0, pos_y = 0;
+			int margin_x = 30, margin_y = 15;
 			
-			cp5.addToggle(name + "_enabled").changeValue(this.isEnabled()?1.0f:0.0f)/*.setLabel("enabled")*/.setPosition(0,30).moveTo(seq).addListenerFor(cp5.ACTION_BROADCAST,  new CallbackListener() {
+			/*cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name)
+				.setPosition(80,10).moveTo(seq);*/
+			
+			Toggle tglEnabled = cp5.addToggle(name + "_enabled")
+				.changeValue(this.isEnabled()?1.0f:0.0f)/*.setLabel("enabled")*/
+				.setLabel("On")
+				.setPosition(pos_x, pos_y)
+				.moveTo(seq)
+				.addListenerFor(cp5.ACTION_BROADCAST,  new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						self.setEnabled(theEvent.getController().getValue()==1.0f); //!self.isEnabled());
+					}
+				})
+			;
+			pos_x += tglEnabled.getWidth() + margin_x;
+			
+
+			Numberbox nmbLength = cp5.addNumberbox(name + "_length", "length")
+				.setLabel("length")
+				.setRange(0.1f, 300.0f)
+				.setDecimalPrecision(4)
+				.setScrollSensitivity(0.1f)
+				.setSensitivity(0.1f)
+				.setValue((float)getLengthMillis()/1000.0f)
+				.setPosition(pos_x, pos_y)
+				.moveTo(seq)
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
-					self.setEnabled(theEvent.getController().getValue()==1.0f); //!self.isEnabled());
+					self.setLengthMillis((int) (theEvent.getController().getValue()*1000.0f));					
 				}
 			});
+			pos_x += nmbLength.getWidth() + margin_x;
 
 			if (host!=null) { 
 				//cp5.addLabel(name + "_host").setValue(host.getPath()).setPosition(80,30).moveTo(seq);
@@ -616,36 +647,22 @@ abstract public class Sequence implements Serializable, Mutable {
 						//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 						.setLabel(this.host.getPath()) //((FormulaCallback)c).targetPath)
 						.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
-						.setPosition(80, 30)
+						.setPosition(pos_x, pos_y)
 						.setWidth((cp5.papplet.width/6))
-						.setBarHeight(15)
+						.setBarHeight(20)
 						.setItemHeight(15)
 						.moveTo(seq)
 						.onLeave(cf.close)
 						.onEnter(cf.toFront)
 						.close();
 
+				pos_x += lstTarget.getWidth() + margin_x;
 			}
 			
-			cp5.addNumberbox(name + "_length", "length")
-				.setRange(0.1f, 300.0f)
-				.setDecimalPrecision(4)
-				.setScrollSensitivity(0.1f)
-				.setSensitivity(0.1f)
-				.setValue((float)getLengthMillis()/1000.0f)
-				.setPosition(0,10)
-				.moveTo(seq)
-				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-
-				@Override
-				public void controlEvent(CallbackEvent theEvent) {
-					self.setLengthMillis((int) (theEvent.getController().getValue()*1000.0f));					
-				}
-				
-			});
+			pos_x += (cp5.papplet.width/6) + margin_x;
 			
 			//seq.setHeight(30);
-			seq.setBackgroundHeight(50);
+			seq.setBackgroundHeight(pos_y + margin_y); // + margin_y); //50);
 			
 			return seq;			
 		}

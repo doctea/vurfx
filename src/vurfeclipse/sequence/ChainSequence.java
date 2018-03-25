@@ -171,7 +171,7 @@ public class ChainSequence extends Sequence {
 				.moveTo(sequenceEditor)
 				.setWidth(sequenceEditor.getWidth()-10)
 				//.setBackgroundHeight(cp5.papplet.sketchHeight()/5)
-				.setPosition(10,sequenceEditor.getBackgroundHeight())
+				.setPosition(10,40) //sequenceEditor.getBackgroundHeight())
 				.setBackgroundHeight(10)
 				.setBarHeight(15)
 				.setCollapseMode(Accordion.MULTI);
