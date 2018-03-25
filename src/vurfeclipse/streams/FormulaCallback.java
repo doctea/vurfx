@@ -30,13 +30,13 @@ public class FormulaCallback extends ParameterCallback {
 	com.udojava.evalex.Expression e;
 
 	public FormulaCallback() {
-		e = new com.udojava.evalex.Expression(expression);
+		e = APP.getApp().makeEvaluator(expression);
 	}
 	
 	public FormulaCallback setExpression(String expression) {
 		System.out.println(this + " setting expression to '" + expression + "'");
 		this.expression = expression;
-		e = new com.udojava.evalex.Expression(expression);
+		e = APP.getApp().makeEvaluator(expression);
 		
 		//e.setVariable("MAX", (BigDecimal) ((Parameter)APP.getApp().pr.getObjectForPath(this.targetPath)).getMax());	// doesn't work, may need to cast all the different datatypes?
 		//e.setVariable("MIN", (BigDecimal) ((Parameter)APP.getApp().pr.getObjectForPath(this.targetPath)).getMin());
@@ -73,6 +73,9 @@ public class FormulaCallback extends ParameterCallback {
 	
 	@Override
 	public void call(Object value) {
+		
+		//e = APP.getApp().makeEvaluator(expression);
+		
 		//if (latching_value==null) latching_value = new BigDecimal(0);
 		count++;
 		//System.out.println ("FormuaCallback called with " + value);
