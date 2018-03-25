@@ -139,6 +139,8 @@ public class ChainSequence extends Sequence {
 	public void restart() {
 		super.restart();
 		for (Sequence seq : chain) {
+			//seq.clearSceneParameters(); // clear scene parameters because parent is dealing with them
+			seq.setSceneParameters(new HashMap<String, HashMap<String, Object>> ());	// set to empty scene_parameters instead of null, because otherwise onStart() gets triggered and overwrites values
 			seq.restart();
 		}
 	}
