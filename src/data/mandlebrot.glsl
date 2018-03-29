@@ -6,6 +6,10 @@ uniform float y;
 
 uniform float rotate;
 
+uniform float aspect;
+uniform float alpha_cutoff;
+uniform float alpha_cutoff_infinity;
+
 #define tex src_tex_unit0
 
 
@@ -22,6 +26,7 @@ void main() {
     vec2 TexCoord = vertTexCoord.st;
 
     c.x = //1.3333 *
+    		aspect *
     		(TexCoord.x - 0.5) * scale - x; //center.x;
     c.y = (TexCoord.y - 0.5) * scale - y; //center.y;
 
@@ -45,7 +50,16 @@ void main() {
     //gl_FragColor = texture1D(tex, (i == iter ? 0.0 : float(i)) / 100.0);
     //float v = (i == iter ? 0.0 : iter/float(i)) / 100.0;
     //gl_FragColor = vec4(0.7 + sin(v), 0.3 + sin(v), 1.0/v, 1.0);
-    gl_FragColor = texture2D(tex, vec2((i == iter ? 0.0 : float(i)) / 10.0, (i == iter ? 0.0 : float(i)) / 10.0));
+    //gl_FragColor = texture2D(tex, vec2(i == iter ? 0.0 : float(i) / iter), (i == iter ? 0.0 : float(i) / iter));
+    gl_FragColor = vec4(
+    	i>= iter ? 1.0 - alpha_cutoff_infinity : 1.0 - alpha_cutoff, //(alpha_cutoff * (float(i)/float(iter))), //((1-(i/iter)*alpha_cutoff)),
+		texture2D(tex,
+			vec2(
+				(i == iter ? 0.0 : float(i)/iter),
+				(i == iter ? 0.0 : float(i)/iter)
+			)
+		).rgb
+    );
 
 }
 

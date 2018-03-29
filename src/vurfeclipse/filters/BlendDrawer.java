@@ -198,6 +198,7 @@ public class BlendDrawer extends ShaderFilter {
 
     //if ((Float)getParameterValue("Zoom")!=1.0f) {
     	out().scale((Float)getParameterValue("Scale"));
+    	//println("scale is " + (Float)getParameterValue("Scale"));
     //}
     /*x = (int) PApplet.map(((Float)getParameterValue("X")),-2.0f,2.0f,-2*w,2*w);
     y = (int) PApplet.map(((Float)getParameterValue("Y")),-2.0f,2.0f,-2.0f*h,2.0f*h);*/

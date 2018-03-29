@@ -96,6 +96,11 @@ public class PlasmaScene extends Scene {
 			addParameter("scale", new Float(1.0f), -1.0f, 1.0f); //Integer(h/16), 0, h*2);
 			addParameter("rotate", new Float(0.0f), 0.0f, 360.0f); //Integer(h/16), 0, h*2);
 			addParameter("iter", new Integer(100), 0, 5000); //Integer(h/16), 0, h*2);
+			addParameter("aspect", new Float(host.getApp().getAspectX()));
+			addParameter("alpha_cutoff", new Float(0.25f), 0.0f, 1.0f);
+			addParameter("alpha_cutoff_infinity", new Float(1.0f), 0.0f, 1.0f);
+			//println("got aspectx " + host.getApp().getAspectX());
+			
 			//addParameter("u_time_2", new Integer(10), 0, 1000000);
 		}
 		/*@Override

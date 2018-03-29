@@ -400,6 +400,11 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		return this;
 	}
 	synchronized public Filter changeParameterValue(String paramName, Object value) {
+		if (value instanceof Float) {
+			value = APP.getApp().constrain((float)value, (float)this.getParameter(paramName).getMin(), (float)this.getParameter(paramName).getMax());
+		} else if (value instanceof Integer) {
+			value = APP.getApp().constrain((int)value, (int)this.getParameter(paramName).getMin(), (int)this.getParameter(paramName).getMax()); 
+		}
 		setParameterValue(paramName, value);
 		updateParameterValue(paramName, value);
 		return this;

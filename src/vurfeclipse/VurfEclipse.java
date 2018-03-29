@@ -389,6 +389,10 @@ public class VurfEclipse extends PApplet {
 		return p;
 	}
 	
+	public float getAspectX() {
+		return this.config_aspect.x / this.config_aspect.y;
+	}
+	
 
 
 	private void delaySetup() {
