@@ -7,6 +7,7 @@ import ch.bildspur.postfx.PostFXSupervisor;
 import ch.bildspur.postfx.Supervisor;
 import ch.bildspur.postfx.pass.Pass;
 import ch.bildspur.postfx.pass.SobelPass;
+import controlP5.CallbackEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import vurfeclipse.APP;
