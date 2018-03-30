@@ -35,6 +35,9 @@ public class Parameter implements Serializable, Targetable {
 
 	private Object min;
 	private Object max;
+	public static final int OUT_SIN = 2;
+	public static final int OUT_NORMAL = 1;
+	public static final int OUT_ABSOLUTE = 0;
 
 	Parameter () {
 		//this.controller = cp5.getController(this.controllerName);
@@ -46,6 +49,10 @@ public class Parameter implements Serializable, Targetable {
 		this.value = value;
 		this.setDefaultValue(value);
 		this.datatype = value.getClass();
+		if (this.name.toLowerCase().endsWith("colour") || this.name.toLowerCase().endsWith("colour1") || this.name.toLowerCase().endsWith("colour2") ) {
+			this.setMax(Integer.MAX_VALUE);
+			this.setMin(Integer.MIN_VALUE);
+		}
 	}
 	public Parameter (Filter filter, String name, Object value, Object min, Object max) {
 		this(filter, name, value);
@@ -114,7 +121,7 @@ public class Parameter implements Serializable, Targetable {
 
 	@Override
 	public Object target(String path, Object payload) {
-		//filter.println("Parameter " + getName() + " targeted with " + " path " + " and " + payload);
+		//filter.println("Parameter " + getName() + " targeted with " + path + " path " + " and " + payload);
 		//this.value = this.datatype.cast(payload);
 
 		//System.out.println("payload is " + payload + ", max is " + getMax() + ", cast payload is " + this.cast(payload));
@@ -130,7 +137,13 @@ public class Parameter implements Serializable, Targetable {
 				this.cast(payload)
 		);
 		
-		filter.changeParameterValue(name, this.cast(payload));	// was previously updateParameterValue..?!
+		if (path.contains("/pa/")) {
+			filter.changeParameterValue(name, this.cast(payload));	// was previously updateParameterValue..?!
+		} else if (path.contains("/pn/")) {
+			filter.changeParameterValueFromNormal(name, Float.parseFloat(this.cast(payload).toString()));
+		} else if (path.contains("/ps/")) {
+			filter.changeParameterValueFromSin(name, Float.parseFloat(this.cast(payload).toString()));
+		}
 
 		return this.value.toString();
 	}
@@ -177,6 +190,18 @@ public class Parameter implements Serializable, Targetable {
 	public void setValueFromSin(float f) {
 		if (value instanceof Float) {
 			float range = (Float)this.getMax() - (Float)this.getMin();
+			f = 0.5f + f/2.0f;
+			this.setValue ((Float)(range*(Float)f) + (Float)this.getMin());      
+		} else if (value instanceof Integer) {
+			int range = (Integer)this.getMax() - (Integer)this.getMin();
+			f = 0.5f + f/2.0f;
+			int v = (int)((int)range * f);
+			this.setValue (v + (Integer)this.getMin());
+		}
+	}
+	public void setValueFromNormal(Float f) {
+		if (value instanceof Float) {
+			float range = (Float)this.getMax() - (Float)this.getMin();
 			this.setValue ((Float)(range*(Float)f) + (Float)this.getMin());      
 		} else if (value instanceof Integer) {
 			int range = (Integer)this.getMax() - (Integer)this.getMin();
@@ -184,6 +209,7 @@ public class Parameter implements Serializable, Targetable {
 			this.setValue (v + (Integer)this.getMin());
 		}
 	}
+	
 	public Class getDataType() {
 		return this.datatype;
 	}
@@ -314,5 +340,6 @@ public class Parameter implements Serializable, Targetable {
 		//if ((int)this.getMax()==360)
 		//return false;
 	}
+
 
 }

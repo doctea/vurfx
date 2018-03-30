@@ -49,7 +49,17 @@ public class ChangeParameterSequence extends Sequence {
 	
 	ParameterBuffer paramBuffer;
 
+	private int outputMode;
+
 	
+	public int getOutputMode() {
+		return outputMode;
+	}
+
+	public void setOutputMode(int outputMode) {
+		this.outputMode = outputMode;
+	}
+
 	public String getExpression() {
 		return expression;
 	}
@@ -90,6 +100,7 @@ public class ChangeParameterSequence extends Sequence {
 		params.put("targetPath", getTargetPath());
 		params.put("value", this.value);
 		params.put("expression", this.expression);
+		params.put("outputMode", this.getOutputMode());
 		return params;
 	}
 	
@@ -98,13 +109,14 @@ public class ChangeParameterSequence extends Sequence {
 		super.loadParameters(params);
 		
 		//compatibility
-		if (params.containsKey("filterPath"))	{
+		if (params.containsKey("filterPath"))	{	// for old projects
 			this.targetPath = (String) params.get("filterPath") + "/pa/" + (String) params.get("parameterName");
 		} else if (params.containsKey("targetPath")) {
 			this.targetPath = (String) params.get("targetPath");
 		}
 		if (params.containsKey("value")) 		this.value = params.get("value");
 		if (params.containsKey("expression")) 	this.setExpression((String) params.get("expression"));
+		if (params.containsKey("outputMode")) 	this.setOutputMode((Integer) params.get("outputMode"));
 	}
 
 	@Override public ArrayList<Mutable> getMutables () {
@@ -156,9 +168,14 @@ public class ChangeParameterSequence extends Sequence {
 				.getObjectForPath(filterPath))
 				//.changeParameterValueFromSin(parameterName, (float)value.doubleValue());//(float)Math.sin(value.doubleValue()));		
 				.changeParameterValue(parameterName, (float)value.doubleValue());*/
-		
 		Targetable t = (Targetable) host.host.getObjectForPath(targetPath);
-		t.target(targetPath, value.floatValue());
+		if (this.getOutputMode()==Parameter.OUT_ABSOLUTE) {
+			t.target(targetPath, value.floatValue());
+		} else if (this.getOutputMode()==Parameter.OUT_NORMAL) {
+			t.target(targetPath.replace("/pa/", "/pn/"), value.floatValue());			
+		} else if (this.getOutputMode()==Parameter.OUT_SIN) {
+			t.target(targetPath.replace("/pa/", "/ps/"), value.floatValue());			
+		}
 		
 	}
 
@@ -208,6 +225,7 @@ public class ChangeParameterSequence extends Sequence {
 	
 	private Textlabel lblInputValue;
 	private Textlabel lblOutputValue;
+	private ScrollableList lstOutputMode;
 	
 	@Override
 	public SequenceEditor makeControls(ControlFrame cf, String name) {
@@ -249,6 +267,27 @@ public class ChangeParameterSequence extends Sequence {
 			
 			g.add(txtExpression);
 			
+			
+			//tglOutputMode = cp5.addToggle(name + "_outputmode_toggle").setPosition(pos_x, pos_y).setWidth(margin_x).moveTo(g).setValue(this.getOutputMode())
+			lstOutputMode = cp5.addScrollableList(name + "_output mode")
+					.setLabel(this.getOutputModeName(this.getOutputMode()))
+					.addItems(new String[] { "abs", "0-1", "sin" })
+					.setPosition(pos_x, pos_y)
+					.setWidth(margin_x * 3)
+					.setBarHeight(20)
+					.moveTo(g)
+					.onLeave(cf.close)
+					.onEnter(cf.toFront)
+					.close();		
+			pos_x += lstOutputMode.getWidth() + margin_x/2;
+			
+			lstOutputMode.addListenerFor(ScrollableList.ACTION_BROADCAST, new CallbackListener() {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					setOutputMode((int)((ScrollableList)theEvent.getController()).getValue());	// assumes that abs, 0-1, sin enumerated to 0, 1, 2
+				}
+			});
+			
 			//final FormulaCallback fc = (FormulaCallback) c; 
 				
 			final ScrollableList lstTarget = cp5.addScrollableList(name + "_Target URL")
@@ -264,6 +303,7 @@ public class ChangeParameterSequence extends Sequence {
 					.close();
 			
 			pos_x += lstTarget.getWidth() + margin_x/2;
+			
 			
 			//lstTarget.setValue(targetPath);
 			
@@ -328,6 +368,17 @@ public class ChangeParameterSequence extends Sequence {
 		filterPath = p.getFilterPath();
 	}*/
 	
+	private String getOutputModeName(int outputMode2) {
+		if (outputMode2==Parameter.OUT_ABSOLUTE) {
+			return "abs";
+		} else if (outputMode2==Parameter.OUT_NORMAL) {
+			return "0-1";
+		} else if (outputMode2==Parameter.OUT_SIN) {
+			return "sin";
+		}
+		return "???";
+	}
+
 	@Override
 	public String toString() {
 		return super.toString() + " " + this.getTargetPath();

@@ -387,16 +387,27 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		}
 		return this;
 	}
+	synchronized private Filter setParameterValueFromNormal(String paramName, Object v) {
+		if (this.parameters==null) this.setParameterDefaults();
+		try {
+			parameters.get(paramName).setValueFromNormal((Float)v);
+		} catch (NullPointerException e) {
+			println("Error - caught null pointer exception trying to set '" + paramName + "' to " + v + " in " + this);
+		} catch (ClassCastException e) {
+			println("Error - caught trying to set " + paramName + " to a " + v.getClass());
+		}
+		return this;
+	}
 
 	// public void setParameterValue
-
-	synchronized public Filter changeParameterValueFromSin(String paramName, float s) {
-		setParameterValueFromSin(paramName, s);
+	synchronized public Filter changeParameterValueFromNormal(String paramName, float v) {
+		setParameterValueFromNormal(paramName, v);
 		updateParameterValue(paramName, getParameterValue(paramName));
 		return this;
 	}
-	synchronized public Filter changeParameterValue(String paramName) {
-		changeParameterValue(paramName, parameters.get(paramName).value);
+	synchronized public Filter changeParameterValueFromSin(String paramName, float s) {
+		setParameterValueFromSin(paramName, s);
+		updateParameterValue(paramName, getParameterValue(paramName));
 		return this;
 	}
 	synchronized public Filter changeParameterValue(String paramName, Object value) {
@@ -407,6 +418,10 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		}
 		setParameterValue(paramName, value);
 		updateParameterValue(paramName, value);
+		return this;
+	}
+	synchronized public Filter changeParameterValue(String paramName) {
+		changeParameterValue(paramName, parameters.get(paramName).value);
 		return this;
 	}
 	synchronized public void toggleParameterValue(String paramName) {
@@ -1197,7 +1212,6 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		}
 		return null;
 	}
-	
 	
 	/*	public void changeCanvas(String oldCanvasPath, String canvasPath) {
 		if (this.lstInputCanvas!=null) 	this.lstInputCanvas.setItems(sc.getCanvasMappings().keySet().toArray(new String[0]));
