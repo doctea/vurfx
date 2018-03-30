@@ -18,6 +18,7 @@ import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.Filter;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.ui.ControlFrame;
 
 public class FormulaCallback extends ParameterCallback {
@@ -31,6 +32,18 @@ public class FormulaCallback extends ParameterCallback {
 
 	public FormulaCallback() {
 		e = APP.getApp().makeEvaluator(expression);
+	}
+	
+
+	private int outputMode;
+
+	
+	public int getOutputMode() {
+		return outputMode;
+	}
+
+	public void setOutputMode(int outputMode) {
+		this.outputMode = outputMode;
 	}
 	
 	public FormulaCallback setExpression(String expression) {
@@ -57,6 +70,7 @@ public class FormulaCallback extends ParameterCallback {
 		HashMap<String,Object> params = super.collectParameters();
 		params.put("expression", this.expression);
 		params.put("targetPath", this.targetPath);
+		params.put("outputMode",  this.getOutputMode());
 		return params;
 	}
 	
@@ -64,12 +78,15 @@ public class FormulaCallback extends ParameterCallback {
 		super.readParameters(input);
 		this.setTargetPath((String) input.get("targetPath"));
 		this.setExpression((String) input.get("expression"));
+		if (input.containsKey("outputMode")) this.setOutputMode((int) input.get("outputMode"));
 	}
 
 	int count = 0;
 
 	private Textlabel lblInputValue;
 	private Textlabel lblOutputValue;
+
+	private ScrollableList lstOutputMode;
 	
 	@Override
 	public void call(Object value) {
@@ -104,8 +121,15 @@ public class FormulaCallback extends ParameterCallback {
 		if (value instanceof Float || value instanceof Double ||
 			value instanceof Integer || value instanceof Long
 				) {
-			target.target(targetPath, floatValue);
+			//target.target(targetPath, floatValue);
 			//System.out.println(this.getStreamSource() + " processing Float|Double " + value + ": setting " + targetPath + " to " + e.eval().floatValue());
+			if (this.getOutputMode()==Parameter.OUT_ABSOLUTE) {
+				target.target(targetPath, floatValue);
+			} else if (this.getOutputMode()==Parameter.OUT_NORMAL) {
+				target.target(targetPath.replace("/pa/", "/pn/"), floatValue);			
+			} else if (this.getOutputMode()==Parameter.OUT_SIN) {
+				target.target(targetPath.replace("/pa/", "/ps/"), floatValue);			
+			}
 		}
 		/*} else if (value instanceof Integer || value instanceof Long) {
 			target.target(targetPath, e.eval().intValue());
@@ -221,8 +245,30 @@ public class FormulaCallback extends ParameterCallback {
 		
 		g.setBarHeight(0).setLabel("").hideBar().hideArrow();
 		
-		lblInputValue = cf.control().addLabel(name + "_input_indicator").setPosition(expression.getPosition()[0] + margin_x + expression.getWidth(), pos_y-5).moveTo(g);
-		lblOutputValue = cf.control().addLabel(name + "_output_indicator").setPosition(expression.getPosition()[0] + margin_x + lblInputValue.getWidth(), pos_y+5).moveTo(g);
+		lstOutputMode = cf.control().addScrollableList(name + "_output mode")
+				.setLabel(Parameter.getOutputModeName(this.getOutputMode()))
+				.addItems(new String[] { "abs", "0-1", "sin" })
+				.setPosition(pos_x, pos_y)
+				.setWidth(margin_x * 3)
+				.setBarHeight(20)
+				.moveTo(g)
+				.onLeave(cf.close)
+				.onEnter(cf.toFront)
+				.close();		
+		
+		pos_x += lstOutputMode.getWidth() + margin_x/2;
+		
+		lstOutputMode.addListenerFor(ScrollableList.ACTION_BROADCAST, new CallbackListener() {
+			@Override
+			public void controlEvent(CallbackEvent theEvent) {
+				setOutputMode((int)((ScrollableList)theEvent.getController()).getValue());	// assumes that abs, 0-1, sin enumerated to 0, 1, 2
+			}
+		});
+		
+		
+		
+		lblInputValue = cf.control().addLabel(name + "_input_indicator").setPosition(lstOutputMode.getPosition()[0] + margin_x + lstOutputMode.getWidth(), pos_y-5).moveTo(g);
+		lblOutputValue = cf.control().addLabel(name + "_output_indicator").setPosition(lblInputValue.getPosition()[0], pos_y+5).moveTo(g);
 		
 		// done, return group
 

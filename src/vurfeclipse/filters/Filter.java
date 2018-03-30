@@ -411,13 +411,9 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		return this;
 	}
 	synchronized public Filter changeParameterValue(String paramName, Object value) {
-		if (value instanceof Float) {
-			value = APP.getApp().constrain((float)value, (float)this.getParameter(paramName).getMin(), (float)this.getParameter(paramName).getMax());
-		} else if (value instanceof Integer) {
-			value = APP.getApp().constrain((int)value, (int)this.getParameter(paramName).getMin(), (int)this.getParameter(paramName).getMax()); 
-		}
+		Parameter p = this.getParameter(paramName);
 		setParameterValue(paramName, value);
-		updateParameterValue(paramName, value);
+		updateParameterValue(paramName, getParameterValue(paramName));
 		return this;
 	}
 	synchronized public Filter changeParameterValue(String paramName) {
@@ -442,10 +438,12 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		return addParameter(new Parameter(this, paramName, value, min, max), paramName, value);
 	}
 	synchronized public Filter addParameter(String paramName, Object value) {
-		if (value instanceof Float) {
+		/*if (value instanceof Float) {
 			return addParameter(paramName, value, -50.0f, 50.0f);
-		} 
-		return addParameter(paramName, value, -100, 100);
+		} */
+		//return addParameter(paramName, value); //, -100, 100);
+		println(this + "#addParameter(" + paramName + ", " + value + ": " + this.getFilterLabel());
+		return addParameter(new Parameter(this, paramName, value), paramName, value);
 	}
 
 	synchronized public void updateAllParameterValues() {
@@ -1175,7 +1173,10 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 
 		for (Entry<String, Object> p : ((Map<String, Object>) input.get("parameter_defaults")).entrySet()) {
 			Map<String,Object> para = (Map<String, Object>) p.getValue();
-			this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
+			//if (!(((String) para.get("name")).toLowerCase().endsWith("colour") || ((String) para.get("name")).toLowerCase().endsWith("colour1") || ((String) para.get("name")).toLowerCase().endsWith("colour2") )) {
+			//if (!((String)para.get("name")).toLowerCase().contains("scale"))
+				this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
+			//}
 		}		
 		
 		return this;

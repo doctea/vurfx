@@ -159,8 +159,7 @@ public class ChangeParameterSequence extends Sequence {
 		
 		//println(this + ": got value " + value);
 		
-		if (paramBuffer!=null)
-			value = (BigDecimal) paramBuffer.getValue(value, false);	// lerp
+		if (paramBuffer!=null) value = (BigDecimal) paramBuffer.getValue(value, false);	// lerp
 		
 		this.updateGuiOutputValue(value.toString());
 		
@@ -270,7 +269,7 @@ public class ChangeParameterSequence extends Sequence {
 			
 			//tglOutputMode = cp5.addToggle(name + "_outputmode_toggle").setPosition(pos_x, pos_y).setWidth(margin_x).moveTo(g).setValue(this.getOutputMode())
 			lstOutputMode = cp5.addScrollableList(name + "_output mode")
-					.setLabel(this.getOutputModeName(this.getOutputMode()))
+					.setLabel(Parameter.getOutputModeName(this.getOutputMode()))
 					.addItems(new String[] { "abs", "0-1", "sin" })
 					.setPosition(pos_x, pos_y)
 					.setWidth(margin_x * 3)
@@ -368,16 +367,6 @@ public class ChangeParameterSequence extends Sequence {
 		filterPath = p.getFilterPath();
 	}*/
 	
-	private String getOutputModeName(int outputMode2) {
-		if (outputMode2==Parameter.OUT_ABSOLUTE) {
-			return "abs";
-		} else if (outputMode2==Parameter.OUT_NORMAL) {
-			return "0-1";
-		} else if (outputMode2==Parameter.OUT_SIN) {
-			return "sin";
-		}
-		return "???";
-	}
 
 	@Override
 	public String toString() {

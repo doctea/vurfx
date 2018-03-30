@@ -715,6 +715,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		// params for scene here?
 		params.put(this.getPath()+"/mute", new Boolean(this.isMuted()));
+		
+		//params.put(this.getPath()+"/canvases", this.getCanvasMappings());	//TODO: reimplement this when GUI can be changed to reflect it (makeControlsCanvasAliases...)
 
 		for(Filter f : this.getFilters()) {
 			//add params for each filter here
@@ -737,6 +739,13 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 					((Mutable) host.getObjectForPath(e.getKey())).setMuted((Boolean)e.getValue());
 				continue;
 			}
+			
+			//TODO: reimplement this when GUI can be changed to reflect it (makeControlsCanvasAliases...)
+			/*if (e.getKey().endsWith("/canvases")) {
+				if (host.getObjectForPath(e.getKey())!=null)
+					this.setCanvasMappings((HashMap<String, String>) e.getValue());
+			}*/
+			
 			if (e.getValue() instanceof Parameter) {
 				host.target(e.getKey(), ((Parameter)e.getValue()));
 			} else {
@@ -846,37 +855,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			}
 		};*/
 		
-		final Scene self = this;
+		makeControlsCanvasAliases(cf, tab, cp5, margin);
 		
-		int start_x = (int) this.muteController.getWidth() + margin * 8; //(this.lblSceneMapping.getPosition()[0] + margin + this.lblSceneMapping.getWidth());
-		int margin_w = 200;
-		for (final Entry<String, String> map : this.getCanvasMappings().entrySet()) {
-			cp5.addLabel(tabName + map.getKey() +  "_canvaspath_label").setText(map.getKey()+":-").setPosition(start_x, margin-12).setWidth(30).setLabel(map.getKey()).moveTo(tab);
-			ScrollableList lstTarget = new ScrollableList(cp5,tabName + map.getKey() +  "_canvaspath")
-					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-					.setLabel(map.getValue()) //((FormulaCallback)c).targetPath)
-					//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
-					.addItems(host.getCanvasPaths())
-					.setPosition(start_x, margin)
-					.setWidth(margin_w)
-					.setBarHeight(15)
-					.setItemHeight(15)
-					.setHeight(5 * 15)
-					.moveTo(tab)
-					.onLeave(cf.close)
-					.onEnter(cf.toFront)
-					.close()
-					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-						@Override
-						public void controlEvent(CallbackEvent theEvent) {
-							int index = (int) theEvent.getController().getValue();
-							self.setCanvas(map.getKey(), (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
-						}
-					});
-			 start_x += (margin + (margin_w)) + margin/2;
-		}
-		
-	
 
 		currentY += size + margin;
 
@@ -936,6 +916,39 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		
 		//this.tab.add(controlGroup.moveTo(tab).setWidth(tab.getWidth()).setBackgroundHeight(tab.getHeight()).setPosition(0,0));
 		//tab.setSize(50, currentY);//.setHeight( currentY);
+	}
+	
+	//TODO: make this able to redraw the aliases when they change 
+	private void makeControlsCanvasAliases(ControlFrame cf, ControllerGroup tab, ControlP5 cp5, int margin) {
+		final Scene self = this;
+		
+		int start_x = (int) this.muteController.getWidth() + margin * 8; //(this.lblSceneMapping.getPosition()[0] + margin + this.lblSceneMapping.getWidth());
+		int margin_w = 200;
+		for (final Entry<String, String> map : this.getCanvasMappings().entrySet()) {
+			cp5.addLabel(tabName + map.getKey() +  "_canvaspath_label").setText(map.getKey()+":-").setPosition(start_x, margin-12).setWidth(30).setLabel(map.getKey()).moveTo(tab);
+			ScrollableList lstCanvasAlias = new ScrollableList(cp5,tabName + map.getKey() +  "_canvaspath")
+					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+					.setLabel(map.getValue()) //((FormulaCallback)c).targetPath)
+					//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+					.addItems(host.getCanvasPaths())
+					.setPosition(start_x, margin)
+					.setWidth(margin_w)
+					.setBarHeight(15)
+					.setItemHeight(15)
+					.setHeight(5 * 15)
+					.moveTo(tab)
+					.onLeave(cf.close)
+					.onEnter(cf.toFront)
+					.close()
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							int index = (int) theEvent.getController().getValue();
+							self.setCanvas(map.getKey(), (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
+						}
+					});
+			 start_x += (margin + (margin_w)) + margin/2;
+		}
 	}
 
 	@Override
@@ -1052,7 +1065,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 	
 	private void setCanvasMappings(HashMap<String,String> value) {
-		this.buffermap = value;		
+		this.buffermap = value;
 	}
 	public static Scene createScene(String classname, Project host, int width, int height) {
 		Class<?> clazz;

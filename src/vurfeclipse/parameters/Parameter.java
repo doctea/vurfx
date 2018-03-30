@@ -39,6 +39,17 @@ public class Parameter implements Serializable, Targetable {
 	public static final int OUT_NORMAL = 1;
 	public static final int OUT_ABSOLUTE = 0;
 
+	static public String getOutputModeName(int outputMode2) {
+		if (outputMode2==Parameter.OUT_ABSOLUTE) {
+			return "abs";
+		} else if (outputMode2==Parameter.OUT_NORMAL) {
+			return "0-1";
+		} else if (outputMode2==Parameter.OUT_SIN) {
+			return "sin";
+		}
+		return "???";
+	}
+	
 	Parameter () {
 		//this.controller = cp5.getController(this.controllerName);
 	}
@@ -49,9 +60,17 @@ public class Parameter implements Serializable, Targetable {
 		this.value = value;
 		this.setDefaultValue(value);
 		this.datatype = value.getClass();
-		if (this.name.toLowerCase().endsWith("colour") || this.name.toLowerCase().endsWith("colour1") || this.name.toLowerCase().endsWith("colour2") ) {
-			this.setMax(Integer.MAX_VALUE);
-			this.setMin(Integer.MIN_VALUE);
+		if (value instanceof Integer) {
+			if (this.name.toLowerCase().endsWith("colour") || this.name.toLowerCase().endsWith("colour1") || this.name.toLowerCase().endsWith("colour2") ) {
+				this.setMax(Integer.MAX_VALUE);
+				this.setMin(Integer.MIN_VALUE);
+			} else {
+				this.setMax(100);
+				this.setMin(100);
+			}
+		} else if (value instanceof Float) {
+			this.setMax(50.0f);
+			this.setMin(-50.0f);
 		}
 	}
 	public Parameter (Filter filter, String name, Object value, Object min, Object max) {
@@ -125,24 +144,34 @@ public class Parameter implements Serializable, Targetable {
 		//this.value = this.datatype.cast(payload);
 
 		//System.out.println("payload is " + payload + ", max is " + getMax() + ", cast payload is " + this.cast(payload));
-		if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
-			if ((Integer)this.cast(payload)>(Integer)this.getMax()) {
-				//System.out.println ("payload is " + (int)this.cast(payload) + " and max is " + getMax() + " - mod should be " + (new Integer(((int)this.cast(payload)) % (int)this.getMax())));
-				payload = new Integer((Integer)this.cast(payload) % (Integer)this.getMax());
-				//System.out.println("wrapped payload is " + payload);
-			}
-		}
-		
-		setValue(
-				this.cast(payload)
-		);
+
+
 		
 		if (path.contains("/pa/")) {
+			if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
+				if ((Integer)this.cast(payload)>(Integer)this.getMax()) {
+					//System.out.println ("payload is " + (int)this.cast(payload) + " and max is " + getMax() + " - mod should be " + (new Integer(((int)this.cast(payload)) % (int)this.getMax())));
+					payload = new Integer((Integer)this.cast(payload) % (Integer)this.getMax());
+					//System.out.println("wrapped payload is " + payload);
+				}
+			} else if (this.datatype == Float.class && (Float)this.getMax()>0.0) {
+				if ((Float)this.cast(payload)>(Float)this.getMax()) {
+					//System.out.println ("payload is " + (int)this.cast(payload) + " and max is " + getMax() + " - mod should be " + (new Integer(((int)this.cast(payload)) % (int)this.getMax())));
+					payload = new Float((Float)this.cast(payload) % (Float)this.getMax());
+					//System.out.println("wrapped payload is " + payload);
+				}
+			}
 			filter.changeParameterValue(name, this.cast(payload));	// was previously updateParameterValue..?!
+			
+			setValue(
+					this.cast(payload)
+			);
 		} else if (path.contains("/pn/")) {
 			filter.changeParameterValueFromNormal(name, Float.parseFloat(this.cast(payload).toString()));
+			setValueFromNormal(Float.parseFloat(this.cast(payload).toString()));
 		} else if (path.contains("/ps/")) {
 			filter.changeParameterValueFromSin(name, Float.parseFloat(this.cast(payload).toString()));
+			setValueFromSin(Float.parseFloat(this.cast(payload).toString()));
 		}
 
 		return this.value.toString();
@@ -161,7 +190,13 @@ public class Parameter implements Serializable, Targetable {
 	public void setValue(Object value) {
 		// lerp between new value and last value
 		//System.out.println("setValue, value is already " + this.value + ", new value is " + value);
-
+		if (!this.isCircular()) {
+			if (value instanceof Float) {
+				value = APP.getApp().constrain((float)value, (float)getMin(), (float)getMax());
+			} else if (value instanceof Integer) {
+				value = APP.getApp().constrain((int)value, (int)getMin(), (int)getMax()); 
+			}
+		}
 		this.value = value;
 		
 		if (value==null) {
@@ -322,6 +357,9 @@ public class Parameter implements Serializable, Targetable {
 				println("right mouse button: " + (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT ? " yes " : " no "));
 				if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
 					APP.getApp().pr.getSequencer().setSelectedTargetPath(self.filter.getParameter(paramName).getPath());
+					
+					println("max is " + getMax() + ", min is " + getMin());
+					
 				}
 				
 				self.filter.changeValueFor(currentValue,paramName,theEvent);
