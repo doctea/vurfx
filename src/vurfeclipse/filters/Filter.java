@@ -36,7 +36,7 @@ import vurfeclipse.ui.ControlFrame;
 //import java.util.Map;
 
 
-public abstract class Filter implements CallbackListener, Pathable, Serializable, Mutable, Targetable {
+public abstract class Filter implements Pathable, Serializable, Mutable, Targetable {
 	boolean muted = false;
 	boolean started = false;
 
@@ -596,75 +596,16 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 	transient controlP5.Toggle muteController;
 	transient controlP5.Button nextModeButton;
 
-
-	@Override
-	@Deprecated
-	public void controlEvent (CallbackEvent ev) {
-		//println(this + " got event " + ev + " : " + ev.getController() + ev.getController().getValue());
-		if (!ev.getController().isUserInteraction()) return;
-		//println(this + " got event " + ev + " : " + ev.getController() + ev.getController().getValue());
-		/*		if (ev.getController()==this.muteController &&
-				//ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || 
-				ev.getAction()==ControlP5.ACTION_PRESS) {
-			println("Setting mute state on " + this + " to " + muteController.getState());
-			this.setMuted(muteController.getState());
-		} else if (ev.getController()==this.nextModeButton && ev.getAction()==ControlP5.ACTION_BROADCAST) {
-			this.nextMode();
-			
-		} else */
-			/*if (controllers.containsKey(ev.getController()) &&
-				(ev.getController().isUserInteraction() && (ev.getAction()==ControlP5.ACTION_BROADCAST)) //
-					//|| ev.getAction()==ControlP5.ACTION_DRAG || ev.getAction()==ControlP5.ACTION_RELEASE || ev.getAction()==ControlP5.ACTION_RELEASE_OUTSIDE || ev.getAction()==ControlP5.ACTION_PRESS)) //|| ev.getAction()==ControlP5.ACTION_BROADCAST)
-				) {
-			String paramName = (String)controllers.get(ev.getController());
-			//println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
-			Object currentValue = getParameterValue(paramName);
-			changeValueFor(currentValue,paramName,ev);
-			if (ev.getController() instanceof Textfield) { // && !currentValue.equals(((Textfield)ev.getController()).getText())) {
-				//sc.host.disableKeys = false;	// horrible hack to disable keyboard input when a textfield is selected..
-				((Textfield)ev.getController()).setFocus(true);
-			}
-		} else*/ /*if (controllers.containsKey(ev.getController()) && ev.getController().isUserInteraction()) {
-			if (ev.getController() instanceof Textfield) {
-				if (ev.getAction()==ControlP5.ACTION_ENTER || ev.getAction()==ControlP5.ACTION_CLICK) {
-					((Textfield)ev.getController()).setFocus(true);
-					sc.host.setDisableKeys(true);	// horrible hack to disable keyboard input when a textfield is selected..
-				} else if (ev.getAction()==ControlP5.ACTION_LEAVE) {
-					((Textfield)ev.getController()).setFocus(false);
-					sc.host.setDisableKeys(false);	// horrible hack to disable keyboard input when a textfield is selected..    			
-				}
-			}
-		} else {*/		
-		/*f (controllers!=null) {
-			String paramName = (String)controllers.get(ev.getController());
-		}*/
-			//println("UNHANDLED CONTROL EVENT in " + this + "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue() + " action is " + ev.getAction());
-		//}
-		/*else if (ev.getAction()==ControlP5.ACTION_PRESSED) {
-      if (controllers.containsKey(ev.getController())) {
-        println("getcontroller is " + ev.getController());
-        if (ev.getController() instanceof Slider) {
-          println("is slider");
-          String paramName = (String)controllers.get(ev.getController());
-          Object currentValue = getParameterValue(paramName) ;
-          changeValueFor(currentValue,paramName,ev);
-        }
-      }
-    }*/
-	}
 	public void changeValueFor(Object currentValue, String paramName, CallbackEvent ev) {
 		if (currentValue instanceof Boolean) {
 			this.changeParameterValue(paramName, ev.getController().getValue()==1.0f);
-		}
-		else if (currentValue instanceof Float) {
+		} else if (currentValue instanceof Float) {
 			this.changeParameterValue(paramName, (Float)ev.getController().getValue());
-		}
-		else if (currentValue instanceof Integer) {
+		} else if (currentValue instanceof Integer) {
 			this.changeParameterValue(paramName, (int)ev.getController().getValue());
 		} else if (currentValue instanceof String) {
 			this.changeParameterValue(paramName, ((Textfield)ev.getController()).getText());
-		}
-		else {
+		} else {
 			this.changeParameterValue(paramName, ev.getController().getValue());
 		}
 	}
@@ -706,92 +647,92 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		/*int row = 0,*/float col = 0;
 		int row_h = 50, col_w = 100;
 
-			
-			final Filter self = this;
-			
-			if (row!=0) {
-				this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + getFilterName())
-						.setLabel("^")
-						.setSize(size, size)
-						.setPosition(margin_w + (col*col_w),margin_h + (row*row_h)-3)
-						.setHeight(12)
-						.moveTo(grp)
-						.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-							@Override
-							public void controlEvent(CallbackEvent theEvent) {
-								self.sc.moveFilter(self, -1);
-								self.sc.refreshControls();
-							}					
-						})
-						;
-			}
 
-			this.moveDownButton = cp5.addButton("movedown_" + tab.getName() + getFilterName())
+		final Filter self = this;
+
+		if (row!=0) {
+			this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + getFilterName())
 					.setLabel("^")
 					.setSize(size, size)
-					.setPosition(margin_w + (col*col_w),margin_h + (row*row_h)+13)
+					.setPosition(margin_w + (col*col_w),margin_h + (row*row_h)-3)
 					.setHeight(12)
 					.moveTo(grp)
 					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
-							self.sc.moveFilter(self, 1);
+							self.sc.moveFilter(self, -1);
 							self.sc.refreshControls();
 						}					
 					})
 					;
+		}
 
-		
-			this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
-					.setPosition(this.moveDownButton.getWidth()+this.moveDownButton.getPosition()[0]+margin_w/*(margin_w*4) + (col*(col_w+margin_w)) + size + 5*/,margin_h + (row*row_h))
-					.setLabel("Mute " + this.getFilterLabel())
-					.setSize(size*2, size)
-					.setValue(this.isMuted())
-					.setState(this.isMuted())
-					.moveTo(grp)
-					.setColorActive(VurfEclipse.makeColour(255, 0, 0))
-					.setColorBackground(VurfEclipse.makeColour(0, 255, 0))
-					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-						@Override
-						public void controlEvent(CallbackEvent theEvent) {
-							/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
-							//ev.getAction()==ControlP5.ACTION_PRESS) {
-							println("Setting mute state on " + this + " to " + muteController.getState());
-							self.setMuted(muteController.getState());		
-							
-							if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
-								APP.getApp().pr.getSequencer().setSelectedTargetPath(self.getPath()+"/mute");
-							}
+		this.moveDownButton = cp5.addButton("movedown_" + tab.getName() + getFilterName())
+				.setLabel("^")
+				.setSize(size, size)
+				.setPosition(margin_w + (col*col_w),margin_h + (row*row_h)+13)
+				.setHeight(12)
+				.moveTo(grp)
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						self.sc.moveFilter(self, 1);
+						self.sc.refreshControls();
+					}					
+				})
+				;
+
+
+		this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
+				.setPosition(this.moveDownButton.getWidth()+this.moveDownButton.getPosition()[0]+margin_w/*(margin_w*4) + (col*(col_w+margin_w)) + size + 5*/,margin_h + (row*row_h))
+				.setLabel("Mute " + this.getFilterLabel())
+				.setSize(size*2, size)
+				.setValue(this.isMuted())
+				.setState(this.isMuted())
+				.moveTo(grp)
+				.setColorActive(VurfEclipse.makeColour(255, 0, 0))
+				.setColorBackground(VurfEclipse.makeColour(0, 255, 0))
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
+						//ev.getAction()==ControlP5.ACTION_PRESS) {
+						println("Setting mute state on " + this + " to " + muteController.getState());
+						self.setMuted(muteController.getState());		
+
+						if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
+							APP.getApp().pr.getSequencer().setSelectedTargetPath(self.getPath()+"/mute");
 						}
-					});
+					}
+				});
 
-			this.muteController.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingY(2*cp5.getFont().getHeight());
-			this.muteController.getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setPaddingY(2*cp5.getFont().getHeight());//.setPaddingY(cp5.getFont().getHeight());
+		this.muteController.getValueLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingY(2*cp5.getFont().getHeight());
+		this.muteController.getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setPaddingY(2*cp5.getFont().getHeight());//.setPaddingY(cp5.getFont().getHeight());
 
-			this.nextModeButton = cp5.addButton("nextmode_" + tab.getName() + getFilterName() + " " + getPath())
-					.setLabel(">|")
-					.setSize(size, size)
-					.setPosition(this.muteController.getWidth()+this.muteController.getPosition()[0]+margin_w/*(margin_w*2) + (col*(col_w+margin_w)) + size + 5*/,margin_h + (row*row_h))
-					.moveTo(grp)
-					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-						@Override
-						public void controlEvent(CallbackEvent theEvent) {
-							self.nextMode();
+		this.nextModeButton = cp5.addButton("nextmode_" + tab.getName() + getFilterName() + " " + getPath())
+				.setLabel(">|")
+				.setSize(size, size)
+				.setPosition(this.muteController.getWidth()+this.muteController.getPosition()[0]+margin_w/*(margin_w*2) + (col*(col_w+margin_w)) + size + 5*/,margin_h + (row*row_h))
+				.moveTo(grp)
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						self.nextMode();
 
-							if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
-								APP.getApp().pr.getSequencer().setSelectedTargetPath(self.getPath()+"/nextMode");
-								println("rmb");
-							}							
-						}						
-					})
-					;
-			
-			
+						if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
+							APP.getApp().pr.getSequencer().setSelectedTargetPath(self.getPath()+"/nextMode");
+							println("rmb");
+						}							
+					}						
+				})
+				;
+
+
 		/*cp5.addLabel("canvases_" + tab.getName() + getFilterName())
 			.setValueLabel("in => " + this.canvas_in + "\nout => " + this.canvas_out)
 			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h))
 			.moveTo(grp);*/
-			/*CallbackListener toFront = new CallbackListener() {
+		/*CallbackListener toFront = new CallbackListener() {
 				public void controlEvent(CallbackEvent theEvent) {
 					theEvent.getController().bringToFront();
 					((ScrollableList)theEvent.getController()).open();
@@ -803,8 +744,8 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 					((ScrollableList)theEvent.getController()).close();
 				}
 			};*/
-			
-			
+
+
 		String[] canvases = sc.getCanvasMappings().keySet().toArray(new String[0]);
 
 		/*new ScrollableList(cp5,"test_" + tab.getName())
@@ -821,66 +762,66 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		; */
 
 		lstInputCanvas = new ScrollableList(cp5,"canvas_input_" + tab.getName() + getFilterName())
-			.setLabel(this.getAlias_in()) //sc.getMappingForCanvas(this.canvas_in))
-			.addItems(canvases)
-			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)-3)
-			//.setHeight(10)	// this breaks the dropdown!
-			.setWidth(size*2)
-			.setBarHeight(10)
-			.setHeight(10 * 4)
-			.setItemHeight(10)
-			.moveTo(grp)
-			.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-				@Override
-				public void controlEvent(CallbackEvent theEvent) {
-					int index = (int) ((ScrollableList)theEvent.getController()).getValue();
-					Map<String,Object> selected = ((ScrollableList)theEvent.getController()).getItem(index);
-					String mapName = (String) selected.get("name");
-					//String canvas_name = sc.getCanvasMapping(mapName); 
-					//self.setInputCanvas(canvas_name);
-					self.setAlias_in(mapName);
-				}				
-			})
-			.onLeave(cf.close)
-			.onEnter(cf.toFront)
-			.close()
-			;
+				.setLabel(this.getAlias_in()) //sc.getMappingForCanvas(this.canvas_in))
+				.addItems(canvases)
+				.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)-3)
+				//.setHeight(10)	// this breaks the dropdown!
+				.setWidth(size*2)
+				.setBarHeight(10)
+				.setHeight(10 * 4)
+				.setItemHeight(10)
+				.moveTo(grp)
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						int index = (int) ((ScrollableList)theEvent.getController()).getValue();
+						Map<String,Object> selected = ((ScrollableList)theEvent.getController()).getItem(index);
+						String mapName = (String) selected.get("name");
+						//String canvas_name = sc.getCanvasMapping(mapName); 
+						//self.setInputCanvas(canvas_name);
+						self.setAlias_in(mapName);
+					}				
+				})
+				.onLeave(cf.close)
+				.onEnter(cf.toFront)
+				.close()
+				;
 		//grp.add(lstInputCanvas);
-		
+
 		/*
 		Color c = APP.getApp().createDefaultColorFromName(this.filterName);
 		grp.setColor(new CColor(c.getRed(),c.getGreen(),c.getBlue(),c.getAlpha(), col_w)); //
-		*/
-		
+		 */
+
 
 		lstOutputCanvas = new ScrollableList(cp5,"canvas_out_" + tab.getName() + getFilterName())
-			.setLabel(this.getAlias_out()) //sc.getMappingForCanvas(this.canvas_out))
-			//.addItems(canvases)
-			.addItems(canvases)
-			//.setHeight(10)
-			.setBarHeight(10)
-			.setWidth(size*2)
-			.setHeight(10 * 4)
-			.setItemHeight(10)
-			.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)+13)
-			.moveTo(grp)
-			.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-				@Override
-				public void controlEvent(CallbackEvent theEvent) {
-					int index = (int) ((ScrollableList)theEvent.getController()).getValue();
-					Map<String,Object> selected = ((ScrollableList)theEvent.getController()).getItem(index);
-					String mapName = (String) selected.get("name");
-					//String canvas_name = sc.getCanvasMapping(mapName); 
-					//self.setOutputCanvas(canvas_name);
-					self.setAlias_out(mapName);
-				}				
-			})
-			.onLeave(cf.close)
-			.onEnter(cf.toFront)
-			.close()
-			;
+				.setLabel(this.getAlias_out()) //sc.getMappingForCanvas(this.canvas_out))
+				//.addItems(canvases)
+				.addItems(canvases)
+				//.setHeight(10)
+				.setBarHeight(10)
+				.setWidth(size*2)
+				.setHeight(10 * 4)
+				.setItemHeight(10)
+				.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)+13)
+				.moveTo(grp)
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						int index = (int) ((ScrollableList)theEvent.getController()).getValue();
+						Map<String,Object> selected = ((ScrollableList)theEvent.getController()).getItem(index);
+						String mapName = (String) selected.get("name");
+						//String canvas_name = sc.getCanvasMapping(mapName); 
+						//self.setOutputCanvas(canvas_name);
+						self.setAlias_out(mapName);
+					}				
+				})
+				.onLeave(cf.close)
+				.onEnter(cf.toFront)
+				.close()
+				;
 
-		
+
 		boolean enableClone = true;
 		if (enableClone ) {	// 2018-03-02, delete button doesn't work so remove them for now
 			cloneButton = cp5.addButton("clone_"+ tab.getName() + getFilterName())
@@ -894,17 +835,17 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 						public void controlEvent(CallbackEvent theEvent) {
 							//self.sc.moveFilter(self, -1);
 							//self.sc.refreshControls();
-	
+
 							final HashMap<String,Object> setup = self.collectFilterSetup();
 							final Filter newf = Filter.createFilter(self.getClass().getName(), self.sc);
 							final String newName = "copy of " + self.getFilterName();
-							
+
 							sc.queueUpdate(new Runnable() {
 								@Override
 								public void run() {								
 									println("CLONING!  new name is " + newName);
 									newf.setFilterName(newName).readSnapshot(setup).setFilterName(newName);
-									
+
 									//synchronized(self) {
 									sc.addFilter(newf);
 									newf.initialise();
@@ -914,7 +855,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 							//}
 						}					
 					});
-			
+
 			deleteButton = cp5.addButton("delete_"+ tab.getName() + getFilterName())
 					.setLabel("delete")
 					.setSize(size, size)
@@ -938,19 +879,19 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 									/*APP.getApp().getCF().queueUpdate(new Runnable() {
 										@Override
 										public void run() {*/
-											self.removeControls(cp5);
-											sc.refreshControls();											
-										/*}
+									self.removeControls(cp5);
+									sc.refreshControls();											
+									/*}
 									});*/
 								}});
 							//}
 						}					
 					});
 		}
-		
-		
+
+
 		int param_start_w = margin_w*15;
-		
+
 		//cp5.addTextlabel("path_" + tab.getName() + getFilterName(), "Path: " + this.getPath()).setSize(size, size).moveTo(grp);//.linebreak();
 
 		col = 1;
@@ -968,30 +909,30 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			controlP5.Controller o = param.makeController(cp5, tab.getName() + this + me.getKey(), tab, size);
 
 			/*controlP5.Controller o =
-        value instanceof Float ?
-          cp5.addSlider(tab.getName() + this + me.getKey()).setValue(
-        		  (Float)(Float)value).setLabel(me.getKey().toString())
-          			.setSliderMode(Slider.FLEXIBLE)
-        		  .setRange(
-        				  new Float((Float)param.getMin()),
-        				  new Float((Float)param.getMax())
-        			)
-        			.setSize(size*5, size) : //.addCallback(this) :
-        value instanceof Integer ? (
-        		(Integer)param.getMax()==360 ?
-        				cp5.addKnob(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.getMin(), (Integer)param.getMax()).setSize(size, size)
-        				:
-        				cp5.addSlider(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.getMin(), (Integer)param.getMax()).setSize(size*5, size)  //addCallback(this) :
-        ) :
-        value instanceof Boolean ?
-          cp5.addToggle(tab.getName() + this + me.getKey()).setState((Boolean)value).setLabel(me.getKey().toString()).setSize(size, size) : //.addCallback(this) :
-          //          value instanceof PVector ?
-           //cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :
-        value instanceof String ?
-        		cp5.addTextfield(tab.getName() + this + me.getKey()).setSize(size*5, size).setText((String) value).setLabel(me.getKey().toString()) :
-          null
-          //
-      ;*/
+	        value instanceof Float ?
+	          cp5.addSlider(tab.getName() + this + me.getKey()).setValue(
+	        		  (Float)(Float)value).setLabel(me.getKey().toString())
+	          			.setSliderMode(Slider.FLEXIBLE)
+	        		  .setRange(
+	        				  new Float((Float)param.getMin()),
+	        				  new Float((Float)param.getMax())
+	        			)
+	        			.setSize(size*5, size) : //.addCallback(this) :
+	        value instanceof Integer ? (
+	        		(Integer)param.getMax()==360 ?
+	        				cp5.addKnob(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.getMin(), (Integer)param.getMax()).setSize(size, size)
+	        				:
+	        				cp5.addSlider(tab.getName() + this + me.getKey()).setValue((Integer)value).setLabel(me.getKey().toString()).setRange((Integer)param.getMin(), (Integer)param.getMax()).setSize(size*5, size)  //addCallback(this) :
+	        ) :
+	        value instanceof Boolean ?
+	          cp5.addToggle(tab.getName() + this + me.getKey()).setState((Boolean)value).setLabel(me.getKey().toString()).setSize(size, size) : //.addCallback(this) :
+	          //          value instanceof PVector ?
+	           //cp5.addSlider(tabName + this + me.getKey()).setValue(((PVector)value).x).moveTo(tabName) :
+	        value instanceof String ?
+	        		cp5.addTextfield(tab.getName() + this + me.getKey()).setSize(size*5, size).setText((String) value).setLabel(me.getKey().toString()) :
+	          null
+	          //
+	      ;*/
 
 			param.setFilterPath(this.getPath());
 			if (debug) println("Filter: adding control object for filter with path " + this.getPath());
@@ -1023,13 +964,13 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 				/*if (o.getAbsolutePosition()[0]+(o.getWidth()*2) >= cf.width) {// fuzzy linebreak if gonna go off the edge of the window
         	println ("linebreaking because controller width " + o.getAbsolutePosition()[0]+(o.getWidth()*2) + " is more than frame width" + cf.width + "?");
         	//o.linebreak();
-        }*/
-				//if (!i.hasNext()) { o.linebreak();}// add a linebreak if its the last one
-
-				//o.linebreak();	// removed 2017-09-22 to make layout loads better !!!
-				/*controllers.put(
-          o, (String)me.getKey()
-        );*/
+	        }*/
+					//if (!i.hasNext()) { o.linebreak();}// add a linebreak if its the last one
+	
+					//o.linebreak();	// removed 2017-09-22 to make layout loads better !!!
+					/*controllers.put(
+	          o, (String)me.getKey()
+	        );*/
 				if (debug) println(this + ": set up Control for " + me.getKey() + " " + o.getClass()); // + " (which shouldnt differ from " + param.getName() + " if i've understood my own code .. )");
 			}
 			// }
@@ -1040,7 +981,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		tab.setColorBackground((int) random(255));
 		tab.setSize((int) (margin_w + (col++*col_w)),margin_h + (row * row_h));
 		//cp5.linebreak();
-		
+
 		tab.bringToFront();
 
 		return row;
@@ -1127,7 +1068,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 			} else {
 				this.toggleMute();
 			}
-			return this.isMuted()?"Muted":"Unmuted";
+			return this.isMuted();//?"Muted":"Unmuted";
 		} else if ("/nextMode".equals(path.substring(path.length()-9, path.length()))) {
 			this.nextMode();
 			return "nextMode on " + this;
@@ -1149,9 +1090,7 @@ public abstract class Filter implements CallbackListener, Pathable, Serializable
 		urls.put(f.getPath() + "/nextMode", f);
 		if (debug) println("added Filter's url '" + f.getPath() + "/mute' mapped to " + f);
 
-		Iterator<Parameter> pit = f.getParameters().iterator();
-		while (pit.hasNext()) {
-			Parameter p = pit.next();
+		for (Parameter p : f.getParameters()) {
 			if (debug) println("added Parameter's url '" + p.getPath() + "' mapped to " + p);
 			urls.put(p.getPath(), p);
 			/*if (p.getName().equals("text")) {
