@@ -31,7 +31,7 @@ import com.udojava.evalex.Expression.*;
 
 public class ChangeParameterSequence extends Sequence {
 	
-	com.udojava.evalex.Expression e;
+	com.udojava.evalex.Expression evaluator;
 	
 	//String filterPath, parameterName;
 	String expression = "input";
@@ -56,6 +56,7 @@ public class ChangeParameterSequence extends Sequence {
 
 	public void setExpression(String expression) {
 		this.expression = expression;
+		if (this.evaluator!=null) this.evaluator = APP.getApp().makeEvaluator(expression);
 		//e = new com.udojava.evalex.Expression(expression);
 	}
 
@@ -134,11 +135,11 @@ public class ChangeParameterSequence extends Sequence {
 			println("Caught NaN in __setValuesForNorm ");
 		}
 		// evaluate value to pass based on expression
-		if (e==null) e = APP.getApp().makeEvaluator(expression);
+		if (evaluator==null) evaluator = APP.getApp().makeEvaluator(expression);
 		
-		e.setVariable("input", BigDecimal.valueOf(pc));
-		e.setVariable("iteration", BigDecimal.valueOf(iteration));
-		BigDecimal value = e.eval();
+		evaluator.setVariable("input", BigDecimal.valueOf(pc));
+		evaluator.setVariable("iteration", BigDecimal.valueOf(iteration));
+		BigDecimal value = evaluator.eval();
 		if (value==null)
 			println("caught null returned from eval(input = " + pc + ", iteration = " + iteration + ")");
 		
@@ -239,6 +240,7 @@ public class ChangeParameterSequence extends Sequence {
 			CallbackListener setExpression = new CallbackListener() {
 				public void controlEvent(CallbackEvent theEvent) {
 					//((ScrollableList)theEvent.getController()).close();
+					println("Setting new expression: " + ((Textfield)theEvent.getController()).getText());
 					setExpression(((Textfield)theEvent.getController()).getText());
 					((Textfield)theEvent.getController()).setValueLabel(sequence.getExpression());
 				}
