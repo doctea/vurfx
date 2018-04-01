@@ -716,7 +716,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		// params for scene here?
 		params.put(this.getPath()+"/mute", new Boolean(this.isMuted()));
 		
-		//params.put(this.getPath()+"/canvases", this.getCanvasMappings());	//TODO: reimplement this when GUI can be changed to reflect it (makeControlsCanvasAliases...)
+		params.put(this.getPath()+"/canvases", this.getCanvasMappings().clone());	//TODO: reimplement this when GUI can be changed to reflect it (makeControlsCanvasAliases...)
 
 		for(Filter f : this.getFilters()) {
 			//add params for each filter here
@@ -733,7 +733,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 	public void loadParameters(HashMap<String,Object> params) {
 		for (Entry<String,Object> e : params.entrySet()) {
-			if (debug) println("loadParameters() got " + e.getKey() + " with " + e.getValue().getClass().getName());
+			//if (debug) 
+				println("loadParameters() got " + e.getKey() + " with " + e.getValue().getClass().getName());
 			if (e.getKey().endsWith("/mute")) {
 				if (host.getObjectForPath(e.getKey())!=null)
 					((Mutable) host.getObjectForPath(e.getKey())).setMuted((Boolean)e.getValue());
@@ -741,10 +742,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			}
 			
 			//TODO: reimplement this when GUI can be changed to reflect it (makeControlsCanvasAliases...)
-			/*if (e.getKey().endsWith("/canvases")) {
+			if (e.getKey().endsWith("/canvases")) {
 				if (host.getObjectForPath(e.getKey())!=null)
 					this.setCanvasMappings((HashMap<String, String>) e.getValue());
-			}*/
+			}
 			
 			if (e.getValue() instanceof Parameter) {
 				host.target(e.getKey(), ((Parameter)e.getValue()));
@@ -855,8 +856,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			}
 		};*/
 		
-		makeControlsCanvasAliases(cf, tab, cp5, margin);
-		
+		makeControlsCanvasAliases(margin);
 
 		currentY += size + margin;
 
@@ -919,11 +919,25 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 	
 	//TODO: make this able to redraw the aliases when they change 
-	private void makeControlsCanvasAliases(ControlFrame cf, ControllerGroup tab, ControlP5 cp5, int margin) {
+	private void makeControlsCanvasAliases(int margin) {
+		if (this.muteController==null) return;
 		final Scene self = this;
+		ControlFrame cf = APP.getApp().getCF();
+		ControlP5 cp5 = cf.control(); 
 		
 		int start_x = (int) this.muteController.getWidth() + margin * 8; //(this.lblSceneMapping.getPosition()[0] + margin + this.lblSceneMapping.getWidth());
 		int margin_w = 200;
+		
+		cp5.addButton(tabName + "_add_canvas").setLabel("[+]").setPosition(start_x, margin).setWidth(margin*2).moveTo(tab).addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+			@Override
+			public void controlEvent(CallbackEvent theEvent) {
+				self.setCanvas("new"+self.getCanvasMappings().size(), "/canvases/new"+self.getCanvasMappings().size());
+				self.refreshControls();
+			}
+		});
+		
+		start_x += margin*4;
+		
 		for (final Entry<String, String> map : this.getCanvasMappings().entrySet()) {
 			cp5.addLabel(tabName + map.getKey() +  "_canvaspath_label").setText(map.getKey()+":-").setPosition(start_x, margin-12).setWidth(30).setLabel(map.getKey()).moveTo(tab);
 			ScrollableList lstCanvasAlias = new ScrollableList(cp5,tabName + map.getKey() +  "_canvaspath")
@@ -1066,6 +1080,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	
 	private void setCanvasMappings(HashMap<String,String> value) {
 		this.buffermap = value;
+		//		this.makeControlsCanvasAliases(8);
+		if (this.muteController!=null) refreshControls();
 	}
 	public static Scene createScene(String classname, Project host, int width, int height) {
 		Class<?> clazz;
@@ -1125,6 +1141,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	synchronized public void refreshControls() {
 		final Scene self = this;
 		
+		if (!host.getApp().isReady()) return;
 		host.getApp().getCF().queueUpdate(new Runnable() {
 			@Override
 			public void run() {
