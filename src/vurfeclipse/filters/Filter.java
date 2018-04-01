@@ -15,6 +15,7 @@ import controlP5.Textfield;
 import java.awt.Color;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -667,7 +668,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + getFilterName())
 					.setLabel("^")
 					.setSize(size, size)
-					.setPosition(margin_w + (col*col_w),margin_h + (row*row_h)-3)
+					.setPosition(margin_w + (col*col_w), margin_h + (row*row_h)-3)
 					.setHeight(12)
 					.moveTo(grp)
 					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
@@ -852,11 +853,12 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 							final HashMap<String,Object> setup = self.collectFilterSetup();
 							final Filter newf = Filter.createFilter(self.getClass().getName(), self.sc);
 							final String newName = "copy of " + self.getFilterName();
+							println("CLONING!  new name is " + newName);
 
 							sc.queueUpdate(new Runnable() {
 								@Override
 								public void run() {								
-									println("CLONING!  new name is " + newName);
+									
 									newf.setFilterName(newName).readSnapshot(setup).setFilterName(newName);
 
 									//synchronized(self) {
@@ -1180,6 +1182,20 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		}		
 		
 		return this;
+	}
+	
+	public static Filter createFilter(Class clazz, Scene host) {
+		Constructor<?> ctor;
+		try {
+			ctor = clazz.getConstructor(Scene.class);
+			Filter filt = (Filter) ctor.newInstance(host); //(Scene)null, (int)0);
+			filt.sc = host;
+			return filt;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	public static Filter createFilter(String classname, Scene host) {

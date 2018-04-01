@@ -56,8 +56,9 @@ public class ChangeParameterSequence extends Sequence {
 		return outputMode;
 	}
 
-	public void setOutputMode(int outputMode) {
+	public ChangeParameterSequence setOutputMode(int outputMode) {
 		this.outputMode = outputMode;
+		return this;
 	}
 
 	public String getExpression() {

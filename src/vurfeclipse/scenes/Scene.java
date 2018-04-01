@@ -17,6 +17,7 @@ import vurfeclipse.streams.*;
 import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.sequence.*;
 import controlP5.Accordion;
+import controlP5.Button;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
@@ -856,7 +857,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 			}
 		};*/
 		
-		makeControlsCanvasAliases(margin);
+		int row = 0;
+		row += makeControlsCanvasAliases(margin);
 
 		currentY += size + margin;
 
@@ -892,7 +894,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		//cp5.addSlider("test " + this.toString()).setPosition(5,20).moveTo(tabName);
 		//   for (int i = 0 ; i < filterCount ; i ++) {
 		//println("in " + this + " filters length is " + this.filters.length);
-		int row = 0;
+		//int row = 0; // was 0 - now try and calculate based on returned value from canvas alias control block
+		
+		int prior_row = row;
+		
 		for (Filter f : filters) {
 				if (debug) println(">>>>>>>>>>>>>>>>>About to setupControls for " + f);
 				//cp5.addToggle("mute_" + tabName + "["+i+"]: " + filters[i])
@@ -912,6 +917,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 			}
 		
+		//row -= prior_row;
+		
 		//tab.update(); //.setHeight(currentY);
 		
 		//this.tab.add(controlGroup.moveTo(tab).setWidth(tab.getWidth()).setBackgroundHeight(tab.getHeight()).setPosition(0,0));
@@ -919,14 +926,88 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 	}
 	
 	//TODO: make this able to redraw the aliases when they change 
-	private void makeControlsCanvasAliases(int margin) {
-		if (this.muteController==null) return;
+	private int makeControlsCanvasAliases(int margin) {
+		if (this.muteController==null) return 0;
 		final Scene self = this;
 		ControlFrame cf = APP.getApp().getCF();
 		ControlP5 cp5 = cf.control(); 
 		
+		int row = 0;
+		
 		int start_x = (int) this.muteController.getWidth() + margin * 8; //(this.lblSceneMapping.getPosition()[0] + margin + this.lblSceneMapping.getWidth());
 		int margin_w = 200;
+		int margin_y = 30;
+		
+
+		Class[] filters_a = host.getAvailableFilters();
+		final LinkedHashMap filters = new LinkedHashMap<String,Class> ();
+		//String[] filter_names = new String[filters.length];
+		for (Class f : filters_a) {
+			filters.put(f.getSimpleName(), f);
+		}
+		
+		ScrollableList lstAddFilterSelector = new ScrollableList(cp5,tabName + "_add_filter_selector")
+				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+				.setLabel("[add filter]") //((FormulaCallback)c).targetPath)
+				.moveTo(tab)
+				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+				.addItems((String[]) filters.keySet().toArray(new String[filters.size()]))
+				.setPosition(start_x, margin)
+				.setWidth(margin * 10)
+				.setBarHeight(15)
+				.setItemHeight(15)
+				.setHeight(5 * 15)
+				.onLeave(cf.close)
+				.onEnter(cf.toFront)
+				.close();
+		
+		println("row is " + row);
+		
+		Button btnAddFilter = new Button(cp5, tabName + "_add_filter_button")
+				.setLabel("add")
+				.moveTo(tab)
+				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+				.setPosition(lstAddFilterSelector.getWidth() + margin + lstAddFilterSelector.getPosition()[0], margin)
+				.setWidth(margin * 4).setHeight(15)			
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						int index = (int) lstAddFilterSelector.getValue();
+						final String selected = (String)(
+								//(ScrollableList)theEvent.getController())
+								lstAddFilterSelector
+								.getItem(index).get("text")
+								);
+						//final String selected = lstAddFilterSelector.getStringValue();
+						final String classname = ((Class<Filter>)filters.get(selected)).getName();
+						//self.addFilter(Filter.createFilter(classname, self));
+						
+						self.queueUpdate(new Runnable() {
+							@Override
+							public void run() {								
+								
+								try {
+									Filter newf = Filter.createFilter(classname, self);
+									newf.setFilterName(selected + filters.size());//.readSnapshot(setup).setFilterName(newName);
+
+									//synchronized(self) {
+									self.addFilter(newf);
+									newf.initialise();
+									newf.start();
+									self.refreshControls();
+								} catch (Exception e) {
+									println("Caught exception trying to add a new filter " + e);
+									e.printStackTrace();
+								} 
+							}});
+						
+						//self.setCanvas(map.getKey(), (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
+					}
+				})
+				;
+		
+		start_x += margin*18;
+		
 		
 		cp5.addButton(tabName + "_add_canvas").setLabel("[+]").setPosition(start_x, margin).setWidth(margin*2).moveTo(tab).addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 			@Override
@@ -937,20 +1018,26 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		});
 		
 		start_x += margin*4;
+		int canvases_start_x = start_x;
 		
 		for (final Entry<String, String> map : this.getCanvasMappings().entrySet()) {
-			cp5.addLabel(tabName + map.getKey() +  "_canvaspath_label").setText(map.getKey()+":-").setPosition(start_x, margin-12).setWidth(30).setLabel(map.getKey()).moveTo(tab);
+			 if (start_x + margin_w >= cf.width) { //sketchWidth) {
+				 row ++;
+				 start_x = canvases_start_x;
+			 }
+			
+			cp5.addLabel(tabName + map.getKey() +  "_canvaspath_label").setText(map.getKey()+":-").setPosition(start_x, (row*margin_y) + margin-14).setWidth(30).setLabel(map.getKey()).moveTo(tab);
 			ScrollableList lstCanvasAlias = new ScrollableList(cp5,tabName + map.getKey() +  "_canvaspath")
 					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 					.setLabel(map.getValue()) //((FormulaCallback)c).targetPath)
+					.moveTo(tab)
 					//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
 					.addItems(host.getCanvasPaths())
-					.setPosition(start_x, margin)
+					.setPosition(start_x, margin + (row * margin_y ))
 					.setWidth(margin_w)
 					.setBarHeight(15)
 					.setItemHeight(15)
 					.setHeight(5 * 15)
-					.moveTo(tab)
 					.onLeave(cf.close)
 					.onEnter(cf.toFront)
 					.close()
@@ -962,7 +1049,11 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 						}
 					});
 			 start_x += (margin + (margin_w)) + margin/2;
+			 
+
 		}
+		
+		return row;
 	}
 
 	@Override
