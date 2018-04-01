@@ -431,36 +431,37 @@ abstract public class Stream implements Serializable {
 	}
 	
 	protected Group makeEmitterSelector(ControlFrame cf, final ParameterCallback callback, String name) {
-		
 		Group g = new Group(cf.control(), name + "_select_group").hideBar();
-		
-		ScrollableList lstParam = cf.control().addScrollableList(name)
-				//.setPosition(0, pos_y)
-				//.setWidth(margin_x * 2)
-				.setBarHeight(16).setItemHeight(16)
-				.onLeave(cf.close)
-				.onEnter(cf.toFront)
-				;
-		lstParam
-			//.moveTo(g)
-			.close().setLabel(callback.getStreamSource()); //"source");
-		lstParam.addItems(this.getEmitterNames());//addItem(i.getKey(), i.getKey())
-		
-		//g.add(lstParam);
-		
-		lstParam.addListenerFor(lstParam.ACTION_BROADCAST, new CallbackListener() {
-			@Override
-			public void controlEvent(CallbackEvent theEvent) {
-				// should set new stream source on the callback
-				// also tell the Sequencer to regenerate UI
-				Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)theEvent.getController().getValue());
-				callback.setStreamSource((String) s.get("text"));
-				//s.entrySet();
-				//((FormulaCallback) fc).setTargetPath((String) s.get("text"));
-			}				
-		});
-		
-		g.add(lstParam.moveTo(g));
+
+		synchronized(this) {			
+			ScrollableList lstParam = cf.control().addScrollableList(name)
+					//.setPosition(0, pos_y)
+					//.setWidth(margin_x * 2)
+					.setBarHeight(16).setItemHeight(16)
+					.onLeave(cf.close)
+					.onEnter(cf.toFront)
+					;
+			lstParam
+				//.moveTo(g)
+				.close().setLabel(callback.getStreamSource()); //"source");
+			lstParam.addItems(this.getEmitterNames());//addItem(i.getKey(), i.getKey())
+			
+			//g.add(lstParam);
+			
+			lstParam.addListenerFor(lstParam.ACTION_BROADCAST, new CallbackListener() {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					// should set new stream source on the callback
+					// also tell the Sequencer to regenerate UI
+					Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)theEvent.getController().getValue());
+					callback.setStreamSource((String) s.get("text"));
+					//s.entrySet();
+					//((FormulaCallback) fc).setTargetPath((String) s.get("text"));
+				}				
+			});
+			
+			g.add(lstParam.moveTo(g));
+		}
 		return g;
 
 		//return lstParam;
