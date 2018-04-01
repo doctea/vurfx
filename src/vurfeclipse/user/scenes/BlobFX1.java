@@ -8,6 +8,7 @@ import vurfeclipse.Blob;
 import vurfeclipse.filters.BlendDrawer;
 import vurfeclipse.filters.BlobDrawer;
 import vurfeclipse.filters.Filter;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
 import vurfeclipse.sequence.ChainSequence;
@@ -108,8 +109,10 @@ public class BlobFX1 extends SimpleScene {
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "input*180", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "1 + (3.5 * sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "1 + (16 *sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));		
+			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "1 + (3.5 * sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
+			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "1 + (16 *sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));		
 		}
 		
 				
@@ -204,7 +207,7 @@ public class BlobFX1 extends SimpleScene {
 	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "-input*360", this.getLengthMillis()));
 	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
 	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*180", this.getLengthMillis()));
-	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(1), "1 + (3.5 * sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
+	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(1), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));
 	  			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "if(iteration%2==0,input,1-input)*20", this.getLengthMillis()));		
 	  		}
 	    	
@@ -291,8 +294,8 @@ public class BlobFX1 extends SimpleScene {
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "-input*360", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "1 + (3.5 * sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));	//sin
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "1 + (16 * sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));	//sin		
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));	//sin
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));	//sin		
 		}
 		
 		public void __setValuesForNorm(double norm, int iteration) {
@@ -381,7 +384,8 @@ public class BlobFX1 extends SimpleScene {
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
 			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*180", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "1 + (3.5 * sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
+			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "1 + (3.5 * sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));
 			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "if(iteration%2==0,input,1-input)*20", this.getLengthMillis()));		
 		}
 		public void __setValuesForNorm(double norm, int iteration) {
