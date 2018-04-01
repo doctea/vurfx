@@ -92,10 +92,10 @@ public class WebcamFilter extends Filter {
 		System.out.println("webcam initialise?");		
 	}
 	synchronized public void updateParameterValue(String paramname, Object value) {
+		super.updateParameterValue(paramname, value);
 		if (paramname.equals("camera_number")) {
 			if (this.cameraNumber!=(int)value) {
 				this.cameraNumber = (int)value;
-				webcamStream = null;
 				this.initialiseWebcam();
 			}
 		}
