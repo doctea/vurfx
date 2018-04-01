@@ -123,9 +123,9 @@ public class ControlFrame extends PApplet {
 	}
 
 	public void queueUpdate(Runnable runnable) {
-		//synchronized(this) {
+		synchronized(updateQueue) {
 			this.updateQueue.add(runnable);
-		//}
+		}
 	}
 
 	@Override
