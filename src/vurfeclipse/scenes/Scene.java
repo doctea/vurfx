@@ -26,7 +26,7 @@ import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Textlabel;
 
-public abstract class Scene implements CallbackListener, Serializable, Mutable, Targetable {
+public abstract class Scene implements Serializable, Mutable, Targetable {
 	
 	boolean outputDebug = true;
 	private boolean debug;
@@ -679,34 +679,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 
 
 
-	public synchronized void controlEvent (CallbackEvent ev) {
-		if (!ev.getController().isUserInteraction()) return;
-		if (ev.getAction()==ControlP5.ACTION_PRESS) {
-			//println("controlevent in " + this); 
 
-			//println (ev.getController() + " check if same as " + this.muteController);
-			if (ev.getController()==this.muteController) {
-				//muteController.setState(!muteController.getState());
-				//muteController.setValue(muteController.getValue());
-				println("it is, should be toggling state to " + muteController.getValue());
-				this.setMuted(muteController.getState());
-				
-				if (ev.getController().getControlWindow().papplet().mouseButton==VurfEclipse.MOUSE_RIGHT) {
-					APP.getApp().pr.getSequencer().setSelectedTargetPath(this.getPath()+"/mute");
-				}
-				
-			}/*
-      else if (ev.getController()==this.saveButton) {
-        println("save preset " + getSceneName());
-        //this.savePreset(saveFilenameController.getText(), getSerializedMap());
-        this.savePreset(getSceneName());
-      }
-      else if (ev.getController()==this.loadButton) {
-        println("load preset");
-        this.loadPreset2(getSceneName()); //saveFilenameController.getText());
-      }*/
-		}
-	}
 
 	public void savePreset(String filename) {
 		((VurfEclipse)APP.getApp()).io.serialize(filename, this.collectParameters());
@@ -824,6 +797,20 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 				.setColorBackground(VurfEclipse.makeColour(0, 255, 0))
 				;
 		this.muteController.getCaptionLabel().alignY(ControlP5.CENTER);
+		this.muteController.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+			@Override
+			public void controlEvent(CallbackEvent ev) {
+				//muteController.setState(!muteController.getState());
+				//muteController.setValue(muteController.getValue());
+				if (!ev.getController().isUserInteraction()) return;
+				println("should be toggling state to " + muteController.getValue());
+				setMuted(muteController.getState());
+				
+				if (ev.getController().getControlWindow().papplet().mouseButton==VurfEclipse.MOUSE_RIGHT) {
+					APP.getApp().pr.getSequencer().setSelectedTargetPath(getPath()+"/mute");
+				}								
+			}			
+		});
 
 		/*this.lblSceneMapping = cp5.addLabel(tabName+"_scenemappings")
 				.setPosition(this.muteController.getWidth() + margin * 10, margin)
@@ -887,7 +874,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		//cp5.register(this, 0, loadButton);
 
 		//cp5.addCallback(this, new controlP5.Controller[] { saveButton, loadButton });
-		cp5.addCallback(this);
+		//cp5.addCallback(this);
 
 		//saveFilenameController = cp5.addTextfield("filename for saving " + tabName + this).setSize(size*10,size*5).setValue("value from ").moveTo(tabName).setLabel("error!").setPosition(size*20,currentY);
 
@@ -940,10 +927,10 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 		
 
 		Class[] filters_a = host.getAvailableFilters();
-		final LinkedHashMap filters = new LinkedHashMap<String,Class> ();
+		final LinkedHashMap available_filters = new LinkedHashMap<String,Class> ();
 		//String[] filter_names = new String[filters.length];
 		for (Class f : filters_a) {
-			filters.put(f.getSimpleName(), f);
+			available_filters.put(f.getSimpleName(), f);
 		}
 		
 		ScrollableList lstAddFilterSelector = new ScrollableList(cp5,tabName + "_add_filter_selector")
@@ -951,7 +938,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 				.setLabel("[add filter]") //((FormulaCallback)c).targetPath)
 				.moveTo(tab)
 				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
-				.addItems((String[]) filters.keySet().toArray(new String[filters.size()]))
+				.addItems((String[]) available_filters.keySet().toArray(new String[available_filters.size()]))
 				.setPosition(start_x, margin)
 				.setWidth(margin * 10)
 				.setBarHeight(15)
@@ -979,7 +966,7 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 								.getItem(index).get("text")
 								);
 						//final String selected = lstAddFilterSelector.getStringValue();
-						final String classname = ((Class<Filter>)filters.get(selected)).getName();
+						final String classname = ((Class<Filter>)available_filters.get(selected)).getName();
 						//self.addFilter(Filter.createFilter(classname, self));
 						
 						self.queueUpdate(new Runnable() {
@@ -988,7 +975,8 @@ public abstract class Scene implements CallbackListener, Serializable, Mutable, 
 								
 								try {
 									Filter newf = Filter.createFilter(classname, self);
-									newf.setFilterName(selected + filters.size());//.readSnapshot(setup).setFilterName(newName);
+									newf.setFilterName(selected + self.filters.size());//.readSnapshot(setup).setFilterName(newName);
+									println("size of filters is " + self.filters.size());
 
 									//synchronized(self) {
 									self.addFilter(newf);

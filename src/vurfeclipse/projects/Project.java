@@ -334,7 +334,7 @@ public abstract class Project implements Serializable {
 	}
 
 	public void replaceScene(ControlP5 cp5, Scene old, Scene nouveau) {
-		cp5.addCallback(nouveau);
+		//cp5.addCallback(nouveau);
 		this.scenes.set(scenes.indexOf(old), nouveau);
 		//old.destroy();
 	}

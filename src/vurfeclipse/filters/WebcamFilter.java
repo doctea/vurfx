@@ -45,12 +45,14 @@ public class WebcamFilter extends Filter {
 
 	int capW = 640, capH = 480;
 	
-	  public void setParameterDefaults () {
+	public void setParameterDefaults () {
 		    super.setParameterDefaults();
 		    //println("setting defaults");
 		    //this.changeParameterValue("Opacity", 1.0);
 		    //this.changeParameterValue("BlendMode", 4);
 		    addParameter("camera_number", new Integer(0), 0, Capture.list().length);
+		    addParameter("svga", new Boolean(false));
+		    addParameter("native", new Boolean(false));
 	  }
 
 	public boolean initialise() {
@@ -68,7 +70,7 @@ public class WebcamFilter extends Filter {
 		if (cameraNumber>maxModes) cameraNumber = 0;
 		if (cameraNumber!=orig) {
 			this.changeParameterValue("camera_number", cameraNumber);
-			//this.initialiseWebcam();
+			this.initialiseWebcam();
 		}
 		return this;
 	}
@@ -80,16 +82,33 @@ public class WebcamFilter extends Filter {
 		if (this.cameraNumber>=Capture.list().length) 
 			return;		
 
-		webcamStream = new Capture(APP.getApp(), capW, capH, Capture.list()[this.cameraNumber]); //, this.cameraNumber); //, cameraName); //, global_fps);
-		//webcamStream = new GSCapture(APP, 640, 480, cameraName); //, global_fps);      
-		//webcamStream = new GSCapture(APP, capW, capH, global_fps);
+		println("Spawning thread to initialise webcam " + cameraNumber);
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+				if ((Boolean)getParameterValue("svga")==true) {
+					capW = 1280;
+					capH = 1024;
+				} else if ((Boolean)getParameterValue("native")==true) {
+					capW = sc.w;
+					capH = sc.h;
+				} else {
+					capW = 640;
+					capH = 480;
+				}
+				webcamStream = new Capture(APP.getApp(), capW, capH, Capture.list()[cameraNumber]); //, this.cameraNumber); //, cameraName); //, global_fps);
+				//webcamStream = new GSCapture(APP, 640, 480, cameraName); //, global_fps);      
+				//webcamStream = new GSCapture(APP, capW, capH, global_fps);
 
-		System.out.println("WebcamFilter initialised for cameraNumber: " + this.cameraNumber);
-		System.out.println("WebcamFilter OUT is " + out());
+				System.out.println("WebcamFilter initialised Capture object for cameraNumber: " + cameraNumber);
+				//System.out.println("WebcamFilter OUT is " + out());
 
-		webcamStream.start(); //TODO: why doesn't this compile on macosx..?
-		//webcamStream.run();
-		System.out.println("webcam initialise?");		
+				webcamStream.start(); //TODO: why doesn't this compile on macosx..?
+				//webcamStream.run();
+				System.out.println("WebCam " + cameraNumber + " initialised and started!");						
+			}
+		};
+		t.start();
 	}
 	synchronized public void updateParameterValue(String paramname, Object value) {
 		super.updateParameterValue(paramname, value);
@@ -110,11 +129,11 @@ public class WebcamFilter extends Filter {
 			}
 				out().beginDraw();
 				//out.scale(1.0f); //-1,-1);
-				out().pushMatrix();
+				//out().pushMatrix();
 				//out.scale(-1.0f, 1.0f);
 				//out().image(webcamStream,0,0,sc.w,sc.h);
 				out().set(0, 0,  webcamStream);
-				out().popMatrix();
+				//out().popMatrix();
 				out().endDraw();
 			
 			return true;
