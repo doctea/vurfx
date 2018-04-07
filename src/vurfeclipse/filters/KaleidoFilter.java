@@ -30,6 +30,7 @@ public class KaleidoFilter extends ShaderFilter {
 	    addParameter("half_y", new Boolean(false));
   }
 
+  @Override
   public Filter nextMode() {
     if (flipHorizontal&&flipVertical) {
       flipVertical = false;

@@ -977,6 +977,8 @@ public abstract class Project implements Serializable {
 				t.target(key, value);
 			} else if (t instanceof Parameter) {
 				t.target(key, value);
+			} else if (t instanceof Scene) {
+				t.target(key,  value);
 			} else {
 				println("#target('"+key+"','"+value+"'):  Unhandled Targetable type '"+t.getClass().getName()+"'");
 			}

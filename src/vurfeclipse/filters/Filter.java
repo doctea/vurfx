@@ -58,9 +58,11 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 
 
 	public String getAlias_in() {
+		if (alias_in==null) alias_in = "src";
 		return alias_in;
 	}
 	public String getAlias_out() {
+		if (alias_out==null) alias_in = "out";
 		return alias_out;
 	}
 	public Filter setAlias_in(String alias_in) {
@@ -81,13 +83,13 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		/*Canvas canvas = sc.getCanvas(alias_out);
 		//println("out() got canvas " + sc.getCanvasMapping(alias_out) + " from '" + alias_out + "'; surface is " + canvas.getSurf());
 		return canvas.getSurf();*/
-		return sc.getCanvas(alias_out).getSurf();
+		return sc.getCanvas(getAlias_out()).getSurf();
 	}
 	public PGraphics in() {
 		/*Canvas canvas = sc.getCanvas(alias_in);
 		//println("in() got canvas " + sc.getCanvasMapping(alias_in) + " from '" + alias_in + "'; surface is " + canvas.getSurf());
 		return canvas.getSurf();*/
-		return sc.getCanvas(alias_in).getSurf();
+		return sc.getCanvas(getAlias_in()).getSurf();
 	}
 
 
@@ -1142,7 +1144,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		//output.put("canvas_out", this.getOutputCanvas());
 		//output.put("canvas_src", this.getSourceCanvas());
 		output.put("alias_out", this.getAlias_out());
-		output.put("alias_in", this.getAlias_in());
+		output.put("alias_in", 	this.getAlias_in());
 
 		output.put("parameter_defaults", this.collectParameterSetup());
 

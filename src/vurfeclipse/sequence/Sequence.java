@@ -238,6 +238,10 @@ abstract public class Sequence implements Serializable, Mutable {
 	}
 	@Override
 	public void setMuted(boolean muted) {
+		if (getMutables()==null) {
+			println("null mutables for " + this);
+			return;
+		}
 		Iterator<Mutable> it = getMutables().iterator(); //this.mutables.iterator();
 		while(it.hasNext()) {
 			Mutable n = it.next();

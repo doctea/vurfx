@@ -194,7 +194,8 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			mapTo = getPath()+"/"+canvasName;
 			println ("Scene["+getSceneName()+"]#getCanvasMapping('"+canvasName+"'): Creating canvas at path '" + mapTo + "' for '" + canvasName + "' in " + this);
 			((VurfEclipse)APP.getApp()).pr.createCanvas(mapTo, canvasName);
-			buffermap.put(canvasName, mapTo); //pr.createCanvas(getPath()+"/"+canvasName, canvasName));//makeCanvas(w,h,gfx_mode,canvasName)));
+			//buffermap.put(canvasName, mapTo); //pr.createCanvas(getPath()+"/"+canvasName, canvasName));//makeCanvas(w,h,gfx_mode,canvasName)));
+			setCanvas(canvasName, mapTo);
 		}
 		return mapTo;
 	}
@@ -221,6 +222,12 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	}
 	//public Canvas setCanvas(String canvasName, String canvasPath) {
 	public Scene setCanvas(String canvasName, String canvasPath) {
+		if (canvasPath==null) {
+			println("passed null canvasPath?");
+		}
+		if (canvasName==null) {
+			println("passed null canvasName?");
+		}
 		println("setCanvas() setting canvasName '" + canvasName + "' to canvasPath '" + canvasPath + "'");
 
 		buffermap.put(canvasName, canvasPath);

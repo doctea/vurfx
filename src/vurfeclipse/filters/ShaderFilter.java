@@ -244,6 +244,11 @@ public class ShaderFilter extends Filter {
 		//c.getSurf().image(src,0,0);
 
 		//c.getSurf().rect(400, 20, 20, 400);
+		
+		if (customPass==null || customPass.shader==null) {
+			println("null pass/shader in applyMeatToBuffers!");
+			return false;
+		}
 
 		//t.filter(glFilter,out);//.getTexture());	// TODO POSTFX
 		//println("About to apply " + this.shaderFragName);

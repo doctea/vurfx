@@ -35,6 +35,7 @@ public class Parameter implements Serializable, Targetable {
 
 	private Object min;
 	private Object max;
+	private String[] options;
 	public static final int OUT_SIN = 2;
 	public static final int OUT_NORMAL = 1;
 	public static final int OUT_ABSOLUTE = 0;
@@ -277,6 +278,12 @@ public class Parameter implements Serializable, Targetable {
 
 		final Parameter self = this;
 		
+		println("parameter makecontroller debug tabname " + tabName);
+		
+		if (this.options!=null) {
+			println("what?");
+		}
+		
 		if (value instanceof Float) {
 			if (getName().toLowerCase().contains("rotat") ) { //(Float)getMax()==360.0f) {
 				o = cp5.addKnob(tabName).setConstrained(false).setValue((Float)value).setLabel(getName()).setRange((Float)getMin(), (Float)getMax()).setSize(size*2, size*2).setDragDirection(Knob.VERTICAL);
@@ -290,7 +297,9 @@ public class Parameter implements Serializable, Targetable {
 						.setSize(size*5, size) ;
 			}
 		} else if (value instanceof Integer) {
-			if (getName().toLowerCase().contains("rotat") ) { //(Integer)getMax()==360) {
+			if (this.options!=null) {
+				o = cp5.addScrollableList(tabName).setItems(options).setBarHeight(20).close().onEnter(APP.getApp().getCF().toFront).onLeave(APP.getApp().getCF().close);
+			} else if (getName().toLowerCase().contains("rotat") ) { //(Integer)getMax()==360) {
 				o = cp5.addKnob(tabName).setConstrained(false).setValue((Integer)value).setLabel(getName()).setRange((Integer)getMin(), (Integer)getMax()).setSize(size*2, size*2).setDragDirection(Knob.VERTICAL);
 			} else if (getName().toLowerCase().endsWith("colour") || getName().toLowerCase().endsWith("colour1") || getName().toLowerCase().endsWith("colour2") ) {
 				cp5.setAutoSpacing(size*2, size*2);
@@ -358,8 +367,7 @@ public class Parameter implements Serializable, Targetable {
 				if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
 					APP.getApp().pr.getSequencer().setSelectedTargetPath(self.filter.getParameter(paramName).getPath());
 					
-					println("max is " + getMax() + ", min is " + getMin());
-					
+					println("current value is " + currentValue + ", default value is " + getDefaultValue() + ", max is " + getMax() + ", min is " + getMin());					
 				}
 				
 				self.filter.changeValueFor(currentValue,paramName,theEvent);
@@ -377,6 +385,10 @@ public class Parameter implements Serializable, Targetable {
 		return (getName().toLowerCase().contains("rotat")); 
 		//if ((int)this.getMax()==360)
 		//return false;
+	}
+
+	public void setOptions(String[] list) {
+		this.options = list;
 	}
 
 
