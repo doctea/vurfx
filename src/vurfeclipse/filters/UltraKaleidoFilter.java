@@ -18,7 +18,7 @@ public class UltraKaleidoFilter extends ShaderFilter {
 		    super.setParameterDefaults();
 
 		    addParameter("iTime", new Float(0.0f), 0f, 10000000f);
-		    addParameter("scale", new Float(7.2f), 0f, 10f);
+		    addParameter("scale", new Float(7.2f), 0.5f, 10f);
 
 		    addParameter("iterations", new Integer(32), 1, 64);
 		    addParameter("centre_x", new Float(0.5f), 0f, 1f);
@@ -26,7 +26,7 @@ public class UltraKaleidoFilter extends ShaderFilter {
 		    
 		    addParameter("adjustor", new Float(0.25f), 0.01f, 3.0f);
 		    
-		    addParameter("colourPhase", new Float(0.25f), 0f, 1.0f);
+		    addParameter("colPhase", new Float(0.25f), 0f, 1.0f);
 		    
 		    addParameter("r", new Float(1.0f), 0.01f, 2.0f);
 	  }

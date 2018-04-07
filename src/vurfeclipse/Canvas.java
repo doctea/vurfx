@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
+import processing.opengl.PGraphicsOpenGL;
+import processing.opengl.Texture;
 
 public class Canvas implements Serializable /*implements Pathable*/ {
 	
@@ -14,7 +16,9 @@ public class Canvas implements Serializable /*implements Pathable*/ {
 	  //GLGraphicsOffScreen s = new GLGraphicsOffScreen(APP.getApp(), width, height);//, true, 4);
 	  //PGraphics s = new PGraphics();
 	  if (true || ((VurfEclipse)APP.getApp()).isReady()) {
-		  PGraphics s = APP.getApp().createGraphics(width,height,APP.getApp().P3D);
+		  PGraphicsOpenGL s = (PGraphicsOpenGL) APP.getApp().createGraphics(width,height,APP.getApp().P3D);
+		  //s.textureSampling(5); // Texture.TRILINEAR
+		  s.textureWrap(s.REPEAT);
 		  //s.setDepthMask(true);
 		  s.setSize(width, height);
 		  //s.pixelDensity = 2;
