@@ -15,6 +15,8 @@ uniform float centre_x; // = .5;
 uniform float centre_y; // = .5;
 uniform float adjustor; // = .25;
 
+uniform float colourPhase; // = .25;
+
 uniform float r;
 
 //#define iResolution dest_tex_size
