@@ -25,6 +25,7 @@ public class ImageRepository {
   }
 
   public PImage addToCache(String fn, PImage p) {
+	APP.getApp().getGraphics().image(p, 0, 0);
 	try {
       images.put(fn, p);
 	} catch (Exception e) {
@@ -67,6 +68,7 @@ public class ImageRepository {
     if (!images.containsKey(fn)) {
       //if (images.size()>50) images.remove(random(0,images.size()));
       if (debug) System.out.println("ImageRepository#cacheImage('" + fn + "', already " + images.size());
+      System.out.print(".");
       PImage p = ((VurfEclipse)APP.getApp()).loadImage("data/image-sources/" + fn);
       //PImage p = getReversePImage(((VurfEclipse)APP.getApp()).loadImage("data/image-sources/" + fn));
       if (p!=null) {

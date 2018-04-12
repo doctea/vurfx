@@ -146,9 +146,8 @@ public class Parameter implements Serializable, Targetable {
 
 		//System.out.println("payload is " + payload + ", max is " + getMax() + ", cast payload is " + this.cast(payload));
 
-
-		
 		if (path.contains("/pa/")) {
+			// check ranges
 			if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
 				if ((Integer)this.cast(payload)>(Integer)this.getMax()) {
 					//System.out.println ("payload is " + (int)this.cast(payload) + " and max is " + getMax() + " - mod should be " + (new Integer(((int)this.cast(payload)) % (int)this.getMax())));
@@ -261,12 +260,19 @@ public class Parameter implements Serializable, Targetable {
 		return output;		
 	}
 	public Object getMax() {
+		if (getName().toLowerCase().endsWith("colour") || getName().toLowerCase().endsWith("colour1") || getName().toLowerCase().endsWith("colour2") ) {
+			return Integer.MAX_VALUE;
+		}
+
 		return max;
 	}
 	public void setMax(Object max) {
 		this.max = max;
 	}
 	public Object getMin() {
+		if (getName().toLowerCase().endsWith("colour") || getName().toLowerCase().endsWith("colour1") || getName().toLowerCase().endsWith("colour2") ) {
+			return Integer.MIN_VALUE;
+		}
 		return min;
 	}
 	public void setMin(Object min) {

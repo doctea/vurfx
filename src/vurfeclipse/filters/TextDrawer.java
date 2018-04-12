@@ -50,8 +50,9 @@ public class TextDrawer extends Filter {
   @Override
   public void setParameterDefaults() {
     super.setParameterDefaults();
-    addParameter("text", ":)");    
-    addParameter("colour", 255, 0, 255);
+    addParameter("text", "\\VurFX//");    
+    //addParameter("colour", 255, 0, 255);
+    this.addParameter("colour", VurfEclipse.makeColour(255, 128, 64, 255));
     addParameter("rotation", 0, 0, 360);
     addParameter("zrotation", 0, 0, 360);
     addParameter("scale", new Float(1.0f), 0.01f, 4.0f);

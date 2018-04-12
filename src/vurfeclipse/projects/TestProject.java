@@ -1,234 +1,79 @@
 package vurfeclipse.projects;
+
 import vurfeclipse.APP;
 import vurfeclipse.Canvas;
-import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.*;
+import vurfeclipse.projects.Project;
 import vurfeclipse.scenes.*;
-import processing.core.PApplet;
-import vurfeclipse.filters.BlendDrawer;
-import vurfeclipse.filters.BlobDrawer;
-import vurfeclipse.filters.GLColourFilter;
-import vurfeclipse.filters.SpiralDrawer;
-import vurfeclipse.scenes.DebugScene;
-import vurfeclipse.scenes.Demo2Scene;
-import vurfeclipse.scenes.DemoScene;
-import vurfeclipse.scenes.SimpleScene;
-import vurfeclipse.scenes.SpiralScene;
-import vurfeclipse.scenes.TextFlashScene;
-import vurfeclipse.scenes.WebcamScene;
-import vurfeclipse.streams.BeatStream;
-import vurfeclipse.streams.NumberStream;
-import vurfeclipse.streams.ParameterCallback;
-import vurfeclipse.streams.Stream;
 
-public class TestProject extends Project {
-  
-  //AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
-  
-  public TestProject(int w, int h) {
-    super(w,h);
-  }
-  
-  public boolean initialiseBuffers() {
-    addCanvas("/out", Canvas.makeCanvas(w,h,gfx_mode,"output"));
-    addCanvas("/inp0",Canvas.makeCanvas(w,h,gfx_mode,"input0"));
-    addCanvas("/inp1", Canvas.makeCanvas(w,h,gfx_mode,"input1"));
-    addCanvas("/inp2", Canvas.makeCanvas(w,h,gfx_mode,"input2"));
-    addCanvas("/temp1", Canvas.makeCanvas(w,h,gfx_mode,"temp1"));
-    addCanvas("/temp2", Canvas.makeCanvas(w,h,gfx_mode,"temp2"));
-    
-    return true;
-  }
-  
-  public boolean setupStreams () {
-    //Stream stream = new Stream("Test Stream");
-    BeatStream beatStream = new BeatStream("Beat Stream", 130.0, ((VurfEclipse)APP.getApp()).millis());
-    //this.getSequencer().addStream("test", stream);
-    this.getSequencer().addStream("beat", beatStream);
-    
-    NumberStream numberStream = new NumberStream("Number Stream", 130.0f, 69, ((VurfEclipse)APP.getApp()).millis());
-    this.getSequencer().addStream("number", numberStream);
-    
-    return true;
-  }
-  
-  public boolean setupScenes () {  
+import java.io.Serializable;
+import vurfeclipse.sequence.ChainSequence;
+import vurfeclipse.sequence.Sequence;
+import vurfeclipse.sequencers.SequenceSequencer;
+import vurfeclipse.streams.*;
+import vurfeclipse.user.scenes.BlenderFX1;
+import vurfeclipse.user.scenes.BlobFX1;
+import vurfeclipse.user.scenes.OutputFX1;
+import vurfeclipse.user.scenes.OutputFX2;
+import vurfeclipse.user.scenes.OutputFX3;
+import vurfeclipse.user.scenes.TunnelScene;
+
+public class TestProject extends Project implements Serializable {
+
+	//AudioPlayer in = minim.loadFile("data/audio/funky probe 7_35.mp3");
+
+	float tempo = 150.0f; //10.0f; //150.0f;
+	boolean enableSequencer = true;
+
+	public TestProject(int w, int h) {
+		super(w,h);
+	}
+
+	public boolean initialiseBuffers() {
+		addCanvas("/out",   Canvas.makeCanvas(w,h,gfx_mode,"output"));
+		addCanvas("/pix0",  Canvas.makeCanvas(w,h,gfx_mode,"input1"));
+		addCanvas("/pix1",  Canvas.makeCanvas(w,h,gfx_mode,"input2"));
+		addCanvas("/temp1", Canvas.makeCanvas(w,h,gfx_mode,"temp1"));
+		addCanvas("/temp2", Canvas.makeCanvas(w,h,gfx_mode,"temp2"));
+		addCanvas("/temp3", Canvas.makeCanvas(w,h,gfx_mode,"temp3"));
+
+		//addCanvas("/blendresult", Canvas.makeCanvas(w,h,gfx_mode,"temp2"));
+
+		return false;
+	}
+
+	@Override
+	public boolean setupStreams () {
+		BeatStream beatStream = new BeatStream("Beat Stream", tempo, APP.getApp().millis());
+		this.getSequencer().addStream("beat", beatStream);
+
+		return true;
+	}
+	
+	@Override
+	public boolean setupSequencer() {
+		//this.sequencer = new SceneSequencer(this,w,h);
+		this.sequencer = new SequenceSequencer((Project)this,w,h);
+		return true;
+	}
+	
+	public boolean setupScenes () {  
     // need a way to specify which scenes are running (selected only at first?)
     // need a way to blend between scenes ...
     // need a way for scenes to write to a shared buffer .. 
       // set output buffer on Webcam Scene to a Project buffer 
       // set input buffer on following Scenes to that buffer
     
-    //this.addScene(new WebcamScene(this,w,h,0));
-
-    /*this.addSceneOutputCanvas(
-      new WebcamScene(this,w,h,0),
-      //buffers[BUF_INP0]
-      "/inp0"
-    );
-    this.addSceneOutputCanvas(
-      new WebcamScene(this,w,h,1),
-      "/inp1"
-      //buffers[BUF_INP1]
-    );*/
-    this.addSceneOutputCanvas(
-      new VideoScene(this,w,h,"video/129-Probe 7 - Over and Out(1)-05.mkv"),
-      //buffers[BUF_INP0]
-      "/inp0"
-    );
-    
-    /*this.addSceneInputOutput(
-      new PlainScene(this,w,h),
-      buffers[BUF_INP0],
-      buffers[BUF_OUT]
-    );*/
-    
-    
-    //final DemoScene ds = new DemoScene(this,w,h);
-    final Demo2Scene ds2 = new Demo2Scene(this,w,h);
-    //ds2.setBuffer(ds2.BUF_SRC2, buffers[BUF_INP0]);
-    //ds2.setBuffer(ds2.BUF_SRC3, buffers[BUF_INP1]); // INP1
-    ds2.setCanvas("src2", "/inp0");
-    ds2.setCanvas("src3", "/inp1");
-    this.addSceneInputOutputCanvas(
-      ds2,
-      "/inp0",
-      "/temp1"
-      /*buffers[BUF_INP0],
-      //buffers[BUF_TEMP1]
-      buffers[BUF_OUT]*/
-    );
-    
-    
-    final DemoScene ds = new DemoScene(this,w,h);
-    //ds.setBuffer(ds.BUF_SRC2, buffers[BUF_INP0]);
-    //ds.setBuffer(ds.BUF_SRC3, buffers[BUF_INP1]); // INP1
-    ds2.setCanvas("src2", "/inp0");
-    ds2.setCanvas("src3", "/inp1");
-    this.addSceneInputOutputCanvas(
-      ds,
-      "/inp1",
-      "/out"
-      //"out
-      //buffers[BUF_INP1], // INP1
-      //buffers[BUF_OUT]
-      //buffers[BUF_TEMP1]
-      //buffers[BUF_TEMP2]
-    );
-    
-    
-        /*filters[++i] = new VideoPlayer(this, "tworld84.dv.ff.avi");
-    //filters[++i] = new VideoPlayer(this, "station.mov");
-    filters[i].setBuffers(buffers[BUF_SRC], buffers[BUF_TEMP]);
-    filters[i].initialise();*/
-
-    /*SimpleScene vid = new SimpleScene(this,w,h);
-    vid.initialise();
-    vid.addFilter(new VideoPlayer(vid, "tworld84.dv.ff.avi").setOutputBuffer(vid.buffers[vid.BUF_TEMP]));
-    vid.addFilter(new MirrorFilter(vid).setInputBuffer(vid.buffers[vid.BUF_TEMP]).setOutputBuffer(vid.buffers[vid.BUF_TEMP])); //setBuffers(vid.buffers[vid.BUF_OUT], vid.buffers[vid.BUF_TEMP]));
-    vid.addFilter(new KaleidoFilter(vid).setInputBuffer(vid.buffers[vid.BUF_TEMP]));
-    this.addSceneOutput(vid, buffers[BUF_INP2]);*/
-
+	this.addScene(new BlankerScene(this, w, h));
 
     SimpleScene s = new SimpleScene(this,w,h);
+    this.addScene(s);
     s.initialise();
-    final SpiralDrawer sd = (SpiralDrawer) new SpiralDrawer(s)
-      //.setBuffers(s.buffers[s.BUF_TEMP],buffers[BUF_INP2]) //OUT]) //TEMP1])
-      //.setCanvases(s.getCanvasMapping("temp"), "/inp2")
-    	  .setAliases("temp", "src")
-      //.registerCallbackPreset("beat", "beat_16", "spin"))
-      ;        
-    s.addFilter(sd);
-    //s.addFilter(new BlendDrawer(s).setBuffers(s.buffers[s.BUF_TEMP],s.buffers[s.BUF_TEMP]));
-    final BlobDrawer bd = (BlobDrawer) new BlobDrawer(s)
-      //.setBuffers(s.buffers[s.BUF_TEMP2],s.buffers[s.BUF_TEMP1])
-      .setAlias_out("temp2")
-      .setAlias_in("src")
-      //.setOutputBuffer(s.buffers[s.BUF_TEMP2])
-      //.setInputBuffer(buffers[BUF_INP1])
-      .changeParameterValue("xRadianMod", -1.0)
-      ;
-    final BlobDrawer bd2 = (BlobDrawer) new BlobDrawer(s)
-      //.setBuffers(s.buffers[s.BUF_TEMP2],s.buffers[s.BUF_TEMP1])
-      //.setOutputBuffer(s.buffers[s.BUF_TEMP3])
-      //.setInputBuffer(buffers[BUF_INP1])
-      .setAlias_out("temp3")
-      .setAlias_in("src")
-      //.setInputBuffer(s.buffers[s.BUF_TEMP2])
-      .changeParameterValue("yRadianMod", -1.0)
-      .changeParameterValue("shape", 5)
-      ;
-    getSequencer().getStream("beat").registerEventListener("beat_16",new ParameterCallback() {
-          public void call(Object value) {
-            int i = (Integer)value;
-            //bd.setParameterValue("xRadianMod",map(i%64,0,64,-1.0,1.0));
-            bd.changeParameterValue("xRadianMod",PApplet.sin(PApplet.radians(i))); //map(i%64,0,64,-1.0,1.0));
-            bd.changeParameterValue("yRadianMod",PApplet.cos(PApplet.radians(i))); //map(i%64,0,64,-1.0,1.0));
+    
+    SimpleScene s2 = new SimpleScene(this,w,h);
+    s2.initialise();
+    this.addScene(s2);
 
-            //bd2.changeParameterValue("yRadianMod",cos(radians(i/4)));//*(abs(sin(radians(i))))))); //map(i%64,0,64,-1.0,1.0));
-            
-            //bd2.changeParameterValue("xRadianMod",1-cos(radians(i)));
-            //bd2.changeParameterValue("yRadianMod",1-sin(radians(i)));
-            
-            bd.changeParameterValue("radius",PApplet.sin(PApplet.radians(i/2)));
-            
-            bd.changeParameterValue("tint",(int)(255*(PApplet.abs(PApplet.sin(PApplet.radians(i))))));
-            bd2.changeParameterValue("tint",(int)(255-(255*(PApplet.abs(PApplet.sin(PApplet.radians(i*3)))))));
-            
-            bd.changeParameterValue("rotation",PApplet.radians(i*10));
-            bd2.changeParameterValue("rotation",PApplet.radians(i*100));
-
-            
-            bd.changeParameterValue("totalRotate",PApplet.radians(i));
-            bd2.changeParameterValue("totalRotate",PApplet.radians(i-90));
-            //sd.changeParameterValue("xRadianMod",-sin(radians(i)));
-            //bd.setParameterValue("yRadianMod",map(i%16,0,8,-1.0,1.0));
-          }
-      });
-    getSequencer().getStream("beat").registerEventListener("beat_16",new ParameterCallback() {
-          public void call(Object value) {
-            int i = (Integer)value;
-            sd.changeParameterValue("totalRotate",PApplet.radians(i*10));
-            
-          }
-    });
-    s.addFilter(bd);
-    s.addFilter(bd2);
-    s.addFilter(new GLColourFilter(s).setAliases("temp3","temp3")); //setBuffers(s.buffers[s.BUF_TEMP3],s.buffers[s.BUF_TEMP3]));
-    s.addFilter(((BlendDrawer)new BlendDrawer(s).setAlias_in("temp3"))); //.setInputBuffer(s.buffers[s.BUF_TEMP3]))); //.setParameterValue("BlendMode",4));//BlendMode(6));
-    s.addFilter(new BlendDrawer(s).setAlias_in("temp2").changeParameterValue("Opacity", 0.5f));
-      //setInputBuffer(s.buffers[s.BUF_TEMP2]).changeParameterValue("Opacity", 0.5));//.setParameterValue("BlendMode",9));
-    s.addFilter(new BlendDrawer(s).setAlias_in("temp")); //Buffer(s.buffers[s.BUF_TEMP]));//.setParameterValue("BlendMode",4));
-    //this.addSceneOutput(s, buffers[BUF_OUT]);
-    this.addSceneOutputCanvas(s, "/out");
-    
-    this.addSceneOutputCanvas(
-      new SpiralScene(this,w,h,"/out") //buffers[BUF_OUT])
-        .registerCallbackPreset("beat", "beat_16", "spin_back")
-        .registerCallbackPreset("beat", "beat_16", "unwind"), 
-      //buffers[BUF_OUT]
-      "/out"
-    ).setMuted(true);
-
-    
-    this.addSceneInputOutputCanvas(
-      new TextFlashScene(this,w,h)
-        .registerCallbackPreset("beat", "beat_2", "random")
-        .registerCallbackPreset("beat", "beat_4", "toggle")
-        .registerCallbackPreset("beat", "beat_8", "swivel")
-         ,
-      //buffers[BUF_INP0],
-      //buffers[BUF_OUT]
-      "/inp0",
-      "/out"
-    ).setMuted(true);
-    
-    
-    /*this.addSceneInputOutput(
-      new KaleidoScene(this,w,h),
-      buffers[BUF_OUT],
-      buffers[BUF_OUT]
-    );*/
     
     this.addSceneInputOutputCanvas(
       new DebugScene(this,w,h),
@@ -247,11 +92,11 @@ public class TestProject extends Project {
     return true;
   }
 
-@Override
-public void initialiseStreams() {
-	// TODO Auto-generated method stub
-	
-}
+	@Override
+	public void initialiseStreams() {
+		// TODO Auto-generated method stub
+		
+	}
   
   
 }

@@ -44,9 +44,9 @@ void main()
 
     gl_FragColor = .5+.5*sin(
     	colPhase>0.5 ?
-    			int(iTime) + vec4(13,17,23,1) * texture( src_tex_unit0, uv*vec2(1,-1)+centre_x, -1.0 )
+    			(int(iTime/100) + vec4(13,17,23,1) * texture( src_tex_unit0, uv*vec2(1,-1)+centre_x, -1.0 )).rgba
 				:
-				texture( src_tex_unit0, uv*vec2(1,-1)+centre_x, -1.0 )
+				(texture( src_tex_unit0, uv*vec2(1,-1)+vec2(centre_x,centre_y), -1.0 )).rgba
 	);
 }
 
