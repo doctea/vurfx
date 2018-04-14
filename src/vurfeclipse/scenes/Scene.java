@@ -982,8 +982,16 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 								
 								try {
 									Filter newf = Filter.createFilter(classname, self);
-									newf.setFilterName(selected + self.filters.size());//.readSnapshot(setup).setFilterName(newName);
-									println("size of filters is " + self.filters.size());
+									
+									int i = 0;
+									String n = selected;
+									while (self.getFilter(n)!=null) {
+										i++;
+										n = selected + i;
+									}
+									
+									newf.setFilterName(selected);//.readSnapshot(setup).setFilterName(newName);
+									//println("size of filters is " + self.filters.size());
 
 									//synchronized(self) {
 									self.addFilter(newf);

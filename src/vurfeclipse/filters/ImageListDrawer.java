@@ -168,7 +168,7 @@ public class ImageListDrawer extends Filter {
   
   public PImage getCurrentImage (ImageRepository IR) {
     if (debug) println(this + "#getCurrentImage for current_image_index: [" + current_image_index + "/" + filenames.size() + "]");
-    current_image_index = Integer.parseInt(this.getParameterValue("current_image_index").toString());	// do parseInt in case anyone sends us a Float etc
+    current_image_index = (Integer)getParameter("current_image_index").intValue();//.cast(payload)Integer.parseInt(this.getParameterValue("current_image_index").toString());	// do parseInt in case anyone sends us a Float etc
     //PImage p = getImageForFilename(filenames.get(current_image_index));
     //if (!images.containsKey(filenames.get(current_image_index))) {
     /*if(!IR.hasCached(filenames.get(current_image_index), sc.w, sc.h)) {

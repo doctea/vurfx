@@ -109,7 +109,7 @@ public class ShaderFilter extends Filter {
 			Parameter p = this.getParameter(paramName);
 			if (p.getDataType()==Integer.class) {
 				if (value instanceof Float || value instanceof Double) {
-					glFilter.set(paramName, ((Double)value).intValue()); //(int)(Float.parseFloat(value.toString())));
+					glFilter.set(paramName, ((Float)value).intValue()); //(int)(Float.parseFloat(value.toString())));
 				} else if (value instanceof Integer || value instanceof Long){
 					glFilter.set(paramName, (Integer)value); //(int)Integer.(value.toString()));
 				}

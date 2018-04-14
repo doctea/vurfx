@@ -357,7 +357,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			//println ("fuck knose?");
 			//println ("returning " + this.parameters.get(paramName).value);
 		}
-		return this.parameters.get(paramName).value;
+		return this.parameters.get(paramName).cast(); //.typeValue();
 		//else
 		//  return "unknown";
 	}
@@ -381,6 +381,9 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 	}
 	synchronized private Filter setParameterValueFromSin(String paramName, Object f) {
 		if (this.parameters==null) this.setParameterDefaults();
+		//if ((float)f>0.0f) {
+			//println("param " + paramName + " f is " + f);
+		//}
 		try {
 			parameters.get(paramName).setValueFromSin((Float)f);
 		} catch (NullPointerException e) {
@@ -409,12 +412,13 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		return this;
 	}
 	synchronized public Filter changeParameterValueFromSin(String paramName, float s) {
+		//println("s is " +s);
 		setParameterValueFromSin(paramName, s);
 		updateParameterValue(paramName, getParameterValue(paramName));
 		return this;
 	}
 	synchronized public Filter changeParameterValue(String paramName, Object value) {
-		Parameter p = this.getParameter(paramName);
+		//Parameter p = this.getParameter(paramName);
 		setParameterValue(paramName, value);
 		updateParameterValue(paramName, getParameterValue(paramName));
 		return this;
@@ -667,7 +671,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		final Filter self = this;
 
 		if (row!=0) {
-			this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + getFilterName())
+			this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + getFilterName() + row)
 					.setLabel("^")
 					.setSize(size, size)
 					.setPosition(margin_w + (col*col_w), margin_h + (row*row_h)-3)
@@ -683,7 +687,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 					;
 		}
 
-		this.moveDownButton = cp5.addButton("movedown_" + tab.getName() + getFilterName())
+		this.moveDownButton = cp5.addButton("movedown_" + tab.getName() + getFilterName() + row)
 				.setLabel("^")
 				.setSize(size, size)
 				.setPosition(margin_w + (col*col_w),margin_h + (row*row_h)+13)
@@ -699,7 +703,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 				;
 
 
-		this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName())
+		this.muteController = cp5.addToggle("mute_" + tab.getName() + getFilterName() + row)
 				.setPosition(this.moveDownButton.getWidth()+this.moveDownButton.getPosition()[0]+margin_w/*(margin_w*4) + (col*(col_w+margin_w)) + size + 5*/,margin_h + (row*row_h))
 				.setLabel("Mute " + this.getFilterLabel())
 				.setSize(size*2, size)
@@ -777,7 +781,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			//.setItemHeight(10)	
 		; */
 
-		lstInputCanvas = new ScrollableList(cp5,"canvas_input_" + tab.getName() + getFilterName())
+		lstInputCanvas = new ScrollableList(cp5,"canvas_input_" + tab.getName() + getFilterName() + row)
 				.setLabel(this.getAlias_in()) //sc.getMappingForCanvas(this.canvas_in))
 				.addItems(canvases)
 				.setPosition(this.nextModeButton.getWidth()+this.nextModeButton.getPosition()[0]+margin_w,margin_h + (row*row_h)-3)
@@ -810,7 +814,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		 */
 
 
-		lstOutputCanvas = new ScrollableList(cp5,"canvas_out_" + tab.getName() + getFilterName())
+		lstOutputCanvas = new ScrollableList(cp5,"canvas_out_" + tab.getName() + getFilterName() + row)
 				.setLabel(this.getAlias_out()) //sc.getMappingForCanvas(this.canvas_out))
 				//.addItems(canvases)
 				.addItems(canvases)
@@ -840,7 +844,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 
 		boolean enableClone = true;
 		if (enableClone ) {	// 2018-03-02, delete button doesn't work so remove them for now
-			cloneButton = cp5.addButton("clone_"+ tab.getName() + getFilterName())
+			cloneButton = cp5.addButton("clone_"+ tab.getName() + getFilterName() + row)
 					.setLabel("clone")
 					.setSize(size, size)
 					.setPosition(lstOutputCanvas.getPosition()[0] + (size*2.5f) + (col*col_w),margin_h + (row*row_h)-5)
@@ -873,7 +877,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 						}					
 					});
 
-			deleteButton = cp5.addButton("delete_"+ tab.getName() + getFilterName())
+			deleteButton = cp5.addButton("delete_"+ tab.getName() + getFilterName() + row)
 					.setLabel("delete")
 					.setSize(size, size)
 					.setPosition(lstOutputCanvas.getPosition()[0] + (size*2.5f) + (col*col_w),margin_h + (row*row_h)+15)
@@ -923,7 +927,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			if (debug) println("Filter#setupControls() in " + toString() + " doing control for " + param.getName());
 			//Object value = param.value;
 
-			controlP5.Controller o = param.makeController(cp5, tab.getName() + this + me.getKey(), tab, size);
+			controlP5.Controller o = param.makeController(cp5, tab.getName() + this + me.getKey() + row, tab, size);
 
 			/*controlP5.Controller o =
 	        value instanceof Float ?

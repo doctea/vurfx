@@ -60,11 +60,11 @@ public class PlainDrawer extends Filter {
 	
     out.pushMatrix();
     //out.imageMode(PApplet.CENTER);
-    out.tint(255,(Integer)getParameterValue("tint"));    
-    if (((Integer)getParameterValue("rotation")!=0)) {
+    out.tint(255,getParameter("tint").intValue());    
+    if (((Integer)getParameter("rotation").intValue()!=0)) {
       out.translate(x+(w/2),y+(h/2));
       out.imageMode(PApplet.CENTER);
-      out.rotate(PApplet.radians((Integer)getParameterValue("rotation")));
+      out.rotate(PApplet.radians((Integer)getParameter("rotation").intValue()));
       //out.rect(x,y,20,20);
       out.image(src,x,y,w,h);//,w,h);      
       out.imageMode(PApplet.CORNERS);

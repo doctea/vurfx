@@ -23,7 +23,6 @@ public class TextDrawer extends Filter {
   
   int colour = 255;
   int rotation = 0;
-  int zrotation = 0;
   
   int fontSize = 128;
   
@@ -71,13 +70,11 @@ public class TextDrawer extends Filter {
     } else if (paramName.equals("colour")) {
       //this.colour = (Integer)value;
       this.setColour((Integer)value);
-    } else if (paramName.equals("rotation")) {
+    /*} else if (paramName.equals("rotation")) {
       //this.rotation = (Float)value;
-      this.setRotation((Integer)value);
+      this.setRotation((Integer)value);*/
     } else if (paramName.equals("continuousDraw")) {
       this.setContinuousDraw((Boolean)value);
-    } else if (paramName.equals("zrotation")) {
-      this.setZRotation((Integer)value);
     } else if (paramName.equals("motionBlur")) {
     	  this.motionBlur = ((Boolean)value); 
     } else {
@@ -119,10 +116,6 @@ public class TextDrawer extends Filter {
   public void setRotation(int r) {
     this.rotation = r;
   }
-  public void setZRotation(int r) {
-    this.zrotation = r;
-  }
-  
   public TextDrawer setContinuousDraw() {
     return this.setContinuousDraw(true);
   }
@@ -134,7 +127,7 @@ public class TextDrawer extends Filter {
   public String currentCache = "";
   public void drawText() {
     if (t==null) return;
-    String currentTag = this.t + ":" + getFont() + ":" + t.length() + ":" + this.rotation + ":" + this.zrotation + ":" + this.motionBlur;
+    String currentTag = this.t + ":" + getFont() + ":" + t.length() + ":" + getParameterValue("zrotation") ;//+ ":" + this.getParameterValue("rotation") + ":" + this.motionBlur;
     if (continuousDraw || !currentTag.equals(currentCache)) {
       //System.out.println("currentTag drawing " + currentTag + "(cached is " + currentCache + ")");
       int fontHeight = 
@@ -174,14 +167,14 @@ public class TextDrawer extends Filter {
         out.rotate(PApplet.radians(rotation));
       }
       out.translate(0, fontHeight/2);
-      if (zrotation!=0) {
-        out.rotateY(PApplet.radians(zrotation));
-      }
+      //if ((Float)getParameter("zrotation").cast()!=0) {
+        out.rotateY(PApplet.radians((float)getParameter("zrotation").floatValue()));
+      //}
       out.translate(
-    		  w*(Float)this.getParameterValue("translate_x"), 
-    		  h*(Float)this.getParameterValue("translate_y")
+    		  w*(Float)this.getParameter("translate_x").cast(), 
+    		  h*(Float)this.getParameter("translate_y").cast()
       ); 
-      out.scale((Float) this.getParameterValue("scale"));
+      out.scale((Float) this.getParameter("scale").cast());
       out.text(getText(), 0, 0);
       out.popMatrix();
       out.endDraw();

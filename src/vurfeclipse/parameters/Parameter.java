@@ -112,11 +112,14 @@ public class Parameter implements Serializable, Targetable {
 		return this.name;
 	}
 
+	public Object cast() {
+		return cast(this.value);
+	}
 	public Object cast(Object payload) {
 		try {
 			if (this.datatype == Integer.class) {
 				if (payload instanceof Float) {
-					return ((Float) payload).intValue();
+					return ((Float) payload);//.intValue();
 				}
 				return Integer.parseInt(payload.toString());
 			} else if (this.datatype == Float.class || this.datatype == Double.class) {
@@ -148,7 +151,7 @@ public class Parameter implements Serializable, Targetable {
 
 		if (path.contains("/pa/")) {
 			// check ranges
-			if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
+			/*if (this.datatype == Integer.class && (Integer)this.getMax()>0) {
 				if ((Integer)this.cast(payload)>(Integer)this.getMax()) {
 					//System.out.println ("payload is " + (int)this.cast(payload) + " and max is " + getMax() + " - mod should be " + (new Integer(((int)this.cast(payload)) % (int)this.getMax())));
 					payload = new Integer((Integer)this.cast(payload) % (Integer)this.getMax());
@@ -160,7 +163,7 @@ public class Parameter implements Serializable, Targetable {
 					payload = new Float((Float)this.cast(payload) % (Float)this.getMax());
 					//System.out.println("wrapped payload is " + payload);
 				}
-			}
+			}*/
 			filter.changeParameterValue(name, this.cast(payload));	// was previously updateParameterValue..?!
 			
 			setValue(
@@ -171,7 +174,8 @@ public class Parameter implements Serializable, Targetable {
 			setValueFromNormal(Float.parseFloat(this.cast(payload).toString()));
 		} else if (path.contains("/ps/")) {
 			filter.changeParameterValueFromSin(name, Float.parseFloat(this.cast(payload).toString()));
-			setValueFromSin(Float.parseFloat(this.cast(payload).toString()));
+			Float f = Float.parseFloat(this.cast(payload).toString());
+			setValueFromSin(f);
 		}
 
 		return this.value.toString();
@@ -192,7 +196,7 @@ public class Parameter implements Serializable, Targetable {
 		//System.out.println("setValue, value is already " + this.value + ", new value is " + value);
 		if (!this.isCircular()) {
 			if (value instanceof Float) {
-				value = APP.getApp().constrain((float)value, (float)getMin(), (float)getMax());
+				value = APP.getApp().constrain((float)value, Float.parseFloat(getMin().toString()), Float.parseFloat(getMax().toString()));
 			} else if (value instanceof Integer) {
 				value = APP.getApp().constrain((int)value, (int)getMin(), (int)getMax()); 
 			}
@@ -395,6 +399,29 @@ public class Parameter implements Serializable, Targetable {
 
 	public void setOptions(String[] list) {
 		this.options = list;
+	}
+
+	public Integer intValue() {
+		if (this.value instanceof Integer) {
+			return (Integer) this.value;
+		} else if (this.value instanceof Float) {
+			return ((Float) this.value).intValue();
+		} else if (this.value instanceof Double) {
+			return ((Double) this.value).intValue();
+		} else {
+			return (Integer)this.value;
+		}
+	}
+
+	public Object typeValue() {
+		return cast(this.value);
+	}
+
+	public float floatValue() {
+		// TODO Auto-generated method stub
+		if (this.value instanceof Float) return (Float)this.value;
+		if (this.value instanceof Integer) return new Float((Integer) this.value);
+		return Float.parseFloat(this.value.toString());
 	}
 
 

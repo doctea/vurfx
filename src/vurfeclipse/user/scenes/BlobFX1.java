@@ -137,10 +137,10 @@ public class BlobFX1 extends SimpleScene {
 			*/
 			// set colours
 			// TODO: move these start/end values parameters of the sequence instead of parameters of the blobdrawer
-			colour1 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour1");
-			colour2 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour2");
-			colour3 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour1");
-			colour4 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+			colour1 = (Integer) host.getFilter("BlobDrawer").getParameter("colour1").intValue();
+			colour2 = (Integer) host.getFilter("BlobDrawer").getParameter("colour2").intValue();
+			colour3 = (Integer) host.getFilter("BlobDrawer2").getParameter("colour1").intValue();
+			colour4 = (Integer) host.getFilter("BlobDrawer2").getParameter("colour2").intValue();
 			
 			int col1 = lerpcolour(colour1, colour2, norm); //0.5); //inv_norm);
 			int col2 = lerpcolour(colour3, colour4, norm); //0.5); //norm);
@@ -318,10 +318,10 @@ public class BlobFX1 extends SimpleScene {
 			host.getFilter("BlobDrawer2").changeParameterValueFromSin("numofCircles", (float)inv_norm); //0.2f+APP.getApp().sin(iteration_warp/2));
 			*/
 	
-			colour1 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour1");
-			colour2 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour2");
-			colour3 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour1");
-			colour4 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+			colour1 = (Integer) host.getFilter("BlobDrawer").getParameter("colour1").intValue();
+			colour2 = (Integer) host.getFilter("BlobDrawer").getParameter("colour2").intValue();
+			colour3 = (Integer) host.getFilter("BlobDrawer2").getParameter("colour1").intValue();
+			colour4 = (Integer) host.getFilter("BlobDrawer2").getParameter("colour2").intValue();
 			
 			int col1 = lerpcolour(colour1, colour2, inv_norm);
 			int col2 = lerpcolour(colour3, colour4, norm);
