@@ -228,7 +228,7 @@ public class ChangeParameterSequence extends Sequence {
 	private ScrollableList lstOutputMode;
 	
 	@Override
-	public SequenceEditor makeControls(ControlFrame cf, String name) {
+	public SequenceEditor makeControls(final ControlFrame cf, String name) {
 		// add an accordion to hold the sub-sequences and recurse
 		SequenceEditor sequenceEditor = super.makeControls(cf, name);
 		

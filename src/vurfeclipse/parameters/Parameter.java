@@ -118,8 +118,9 @@ public class Parameter implements Serializable, Targetable {
 	public Object cast(Object payload) {
 		try {
 			if (this.datatype == Integer.class) {
-				if (payload instanceof Float) {
-					return ((Float) payload);//.intValue();
+				if (payload instanceof Float || payload instanceof Double) {
+					//return ((Float) payload);//.intValue();
+					return ((Float) payload).intValue();
 				}
 				return Integer.parseInt(payload.toString());
 			} else if (this.datatype == Float.class || this.datatype == Double.class) {
@@ -129,9 +130,12 @@ public class Parameter implements Serializable, Targetable {
 			} else if (this.datatype == String.class) {
 				return payload.toString();
 			} else if (this.datatype == PVector.class) {
+				if (!(payload instanceof PVector)) {
+					println("not a PVector, is " + payload + " when trying to cast in " + this + " for " + this.getName());
+				}
 				return (PVector)payload;
 			} else {
-				System.err.println("Don't know how to cast " + payload.getClass() + " '" + payload + "'");
+				System.err.println("Don't know how to cast " + payload.getClass() + " '" + payload + "' to " + this.datatype.getName());
 			}
 		} catch (NumberFormatException e) {
 			System.err.println("got payload type " + payload.getClass() + " but expected " + this.datatype);
@@ -196,9 +200,9 @@ public class Parameter implements Serializable, Targetable {
 		//System.out.println("setValue, value is already " + this.value + ", new value is " + value);
 		if (!this.isCircular()) {
 			if (value instanceof Float) {
-				value = APP.getApp().constrain((float)value, Float.parseFloat(getMin().toString()), Float.parseFloat(getMax().toString()));
+				value = APP.getApp().constrain((Float)value, Float.parseFloat(getMin().toString()), Float.parseFloat(getMax().toString()));
 			} else if (value instanceof Integer) {
-				value = APP.getApp().constrain((int)value, (int)getMin(), (int)getMax()); 
+				value = APP.getApp().constrain((Integer)value, (Integer)getMin(), (Integer)getMax()); 
 			}
 		}
 		this.value = value;
@@ -267,8 +271,11 @@ public class Parameter implements Serializable, Targetable {
 		if (getName().toLowerCase().endsWith("colour") || getName().toLowerCase().endsWith("colour1") || getName().toLowerCase().endsWith("colour2") ) {
 			return Integer.MAX_VALUE;
 		}
+		if (this.datatype==PVector.class) { 
+			return new PVector(1.0f,1.0f);
+		}
 
-		return max;
+		return cast(max);
 	}
 	public void setMax(Object max) {
 		this.max = max;
@@ -277,13 +284,17 @@ public class Parameter implements Serializable, Targetable {
 		if (getName().toLowerCase().endsWith("colour") || getName().toLowerCase().endsWith("colour1") || getName().toLowerCase().endsWith("colour2") ) {
 			return Integer.MIN_VALUE;
 		}
-		return min;
+		if (this.datatype==PVector.class) { 
+			return new PVector(-1.0f,-1.0f);
+		}
+
+		return cast(min);
 	}
 	public void setMin(Object min) {
 		this.min = min;
 	}
 
-	synchronized public Controller makeController(ControlP5 cp5, String tabName, ControllerGroup tab, int size) {
+	synchronized public Controller makeController(final ControlP5 cp5, String tabName, ControllerGroup tab, int size) {
 		controlP5.Controller o;
 
 		final Parameter self = this;
@@ -301,8 +312,8 @@ public class Parameter implements Serializable, Targetable {
 				o = cp5.addSlider(tabName).setValue((Float)(Float)value).setLabel(getName())
 						.setSliderMode(Slider.FLEXIBLE)
 						.setRange(
-								new Float((Float)getMin()),
-								new Float((Float)getMax())
+								new Float((Float) cast(getMin())),
+								new Float((Float) cast(getMax()))
 								)
 						.setSize(size*5, size) ;
 			}

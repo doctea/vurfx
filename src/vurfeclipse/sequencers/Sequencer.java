@@ -63,13 +63,19 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	
 	public void addStream(String streamName, Stream st) {
 		//this.streams.put(streamName, st);
-		this.streams.put(streamName, st);
+		synchronized (streams) {
+			this.streams.put(streamName, st);
+		}
 	}
 	public Stream getStream(String streamName) {
-		return (Stream) this.streams.get(streamName);
+		synchronized (streams) {
+			return (Stream) this.streams.get(streamName);
+		}
 	}
 	public HashMap<String, Stream> getStreams() {
-		return streams;
+		synchronized (streams) {
+			return streams;
+		}
 	}
 
 	public void toggleStreams() {

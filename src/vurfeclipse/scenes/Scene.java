@@ -119,7 +119,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	public Object getObjectForPath(String path) {
 		//println("Scene#getObjectForPath(" + path + ")");
 		try {
-			if (!path.contains("/") || path.equals("") || path.equals(this.getSceneName()) || path.equals("mute")) 
+			if (!path.contains("/") || path.equals("") || path.equals(this.getSceneName()) || path.equals("mute") || path.endsWith("nextMode")) 
 				return this;
 			String spl[] = path.split("/",2);
 
@@ -940,7 +940,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			available_filters.put(f.getSimpleName(), f);
 		}
 		
-		ScrollableList lstAddFilterSelector = new ScrollableList(cp5,tabName + "_add_filter_selector")
+		final ScrollableList lstAddFilterSelector = new ScrollableList(cp5,tabName + "_add_filter_selector")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 				.setLabel("[add filter]") //((FormulaCallback)c).targetPath)
 				.moveTo(tab)

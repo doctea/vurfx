@@ -5,9 +5,6 @@ import vurfeclipse.scenes.Scene;
 
 public class BlankFilter extends Filter {
   
-  int bgcolour = 0;
-  int alpha = 255;
-  
   public BlankFilter(Scene sc) {
     super(sc);
   }
@@ -31,8 +28,8 @@ public class BlankFilter extends Filter {
     //out.image(src,0,0);
     //out.pixels = src.pixels;
     //out.background(bgcolour, alpha);
-	out().fill(bgcolour,alpha);
-	out().rect(0,0,sc.w,sc.h);
+  	out().fill(getParameter("bgcolour").intValue(),getParameter("alpha").intValue());
+  	out().rect(0,0,sc.w,sc.h);
     return true;
   }
   
@@ -49,10 +46,7 @@ public class BlankFilter extends Filter {
   
   @Override
   synchronized public void updateParameterValue(String paramName, Object value) {
-	if(paramName.equals("alpha"))
-        alpha = (Integer)value;//b.setEdge((Boolean)value); 
-    else if(paramName.equals("bgcolour"))
-        bgcolour = (Integer)value;
+
   }  
   
 }

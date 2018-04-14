@@ -18,19 +18,15 @@ public class TextDrawer extends Filter {
   
   String fontName = "LCDSolid-128.vlw";
   
-  int x = 0, y = 0;
+  //int x = 0, y = 0;
   int w, h;
   
-  int colour = 255;
-  int rotation = 0;
+  //int colour = 255;
+  //int rotation = 0;
   
   int fontSize = 128;
   
-  
-  boolean motionBlur = false;
-  boolean continuousDraw = false;
-  
-  public TextDrawer(Scene sc) {
+    public TextDrawer(Scene sc) {
     super(sc);
     this.w = sc.w;
     this.h = sc.h;
@@ -39,13 +35,7 @@ public class TextDrawer extends Filter {
     this(sc);
     this.t = t;
   }
-  public TextDrawer(Scene sc, int x, int y, int w, int h) {
-    this(sc);
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-  }
+
   @Override
   public void setParameterDefaults() {
     super.setParameterDefaults();
@@ -67,16 +57,6 @@ public class TextDrawer extends Filter {
       //this.t = (String)value;
       this.setText((String)value);
       println("Changed text to " + value);
-    } else if (paramName.equals("colour")) {
-      //this.colour = (Integer)value;
-      this.setColour((Integer)value);
-    /*} else if (paramName.equals("rotation")) {
-      //this.rotation = (Float)value;
-      this.setRotation((Integer)value);*/
-    } else if (paramName.equals("continuousDraw")) {
-      this.setContinuousDraw((Boolean)value);
-    } else if (paramName.equals("motionBlur")) {
-    	  this.motionBlur = ((Boolean)value); 
     } else {
       super.updateParameterValue(paramName,value);
     }
@@ -107,28 +87,16 @@ public class TextDrawer extends Filter {
     
     return true;
   }
-  public void setColour(int c) {
-    this.colour = c;
-  }
+
   public void setText(String t) {
     this.t = t;
   }  
-  public void setRotation(int r) {
-    this.rotation = r;
-  }
-  public TextDrawer setContinuousDraw() {
-    return this.setContinuousDraw(true);
-  }
-  public TextDrawer setContinuousDraw(boolean t) {
-    this.continuousDraw = t;
-    return this;
-  }
-  
+ 
   public String currentCache = "";
   public void drawText() {
     if (t==null) return;
     String currentTag = this.t + ":" + getFont() + ":" + t.length() + ":" + getParameterValue("zrotation") ;//+ ":" + this.getParameterValue("rotation") + ":" + this.motionBlur;
-    if (continuousDraw || !currentTag.equals(currentCache)) {
+    if ((Boolean)getParameterValue("continuousDraw")|| !currentTag.equals(currentCache)) {
       //System.out.println("currentTag drawing " + currentTag + "(cached is " + currentCache + ")");
       int fontHeight = 
     		t.length()==1 ?
@@ -156,15 +124,15 @@ public class TextDrawer extends Filter {
       //out.clear(0);
       out.pushMatrix();
       out.background(0,0,0,0);
-      out.fill(colour);
+      out.fill(getParameter("colour").intValue());
       out.textFont(getFont(), fontHeight); //256);
       //out.textSize(256);
       out.textAlign(PApplet.CENTER);
       //out.text(t, w/2, (h/2)+128);
       //out.translate(w/2,(h/2)+(fontHeight/2));///2);
       out.translate(w/2,h/2);
-      if (rotation!=0) {
-        out.rotate(PApplet.radians(rotation));
+      if (getParameter("rotation").intValue()!=0) {
+        out.rotate(PApplet.radians(getParameter("rotation").floatValue()));
       }
       out.translate(0, fontHeight/2);
       //if ((Float)getParameter("zrotation").cast()!=0) {

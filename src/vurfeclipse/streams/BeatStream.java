@@ -246,46 +246,48 @@ public class BeatStream extends Stream implements Serializable {
 
 	@Override
 	synchronized public void setupControls(final ControlFrame cf, Group g) {
-		super.setupControls(cf, g);
-		int margin_y = 20, gap_y = 5, margin_x = 80;
-
-		int pos_y = 10;
-
-		final BeatStream self = this;
-
-		this.txtBPM = cf.control().addTextfield(this.toString() + "_tempo").setLabel("BPM").setText(""+this.bpm).setWidth(margin_x/2)
-				.setPosition(margin_x * 3, pos_y)
-				.moveTo(g)
-				.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
-					@Override
-					public void controlEvent(CallbackEvent theEvent) {
-						self.setBPM(Float.parseFloat(((Textfield)theEvent.getController()).getText()));
-
-						// and refresh gui
-						cf.updateGuiStreamEditor();
-					}
-				});
-		g.add(this.txtBPM);
-
-		g.add(cf.control().addButton(this.toString() + "_resetstart").setLabel("Reset Start")
-				.setPosition(margin_x * 5, pos_y)
-				.moveTo(g)
-				.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
-					@Override
-					public void controlEvent(CallbackEvent theEvent) {
-						synchronized (self) {
-							self.startTime = APP.getApp().timeMillis;
-							beat = 0;
-							self.setBPM(self.bpm);
-							//lastDealtStepTime = new int[stepDivisions.length];
-							//Arrays.fill(lastDealtStepTime, startTime);
-
+		synchronized (cf) {
+			super.setupControls(cf, g);
+			int margin_y = 20, gap_y = 5, margin_x = 80;
+	
+			int pos_y = 10;
+	
+			final BeatStream self = this;
+	
+			this.txtBPM = cf.control().addTextfield(this.toString() + "_tempo").setLabel("BPM").setText(""+this.bpm).setWidth(margin_x/2)
+					.setPosition(margin_x * 3, pos_y)
+					.moveTo(g)
+					.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							self.setBPM(Float.parseFloat(((Textfield)theEvent.getController()).getText()));
+	
 							// and refresh gui
-							//cf.updateGuiStreamEditor();
+							cf.updateGuiStreamEditor();
 						}
-					}
-				})
-				);
+					});
+			g.add(this.txtBPM);
+	
+			g.add(cf.control().addButton(this.toString() + "_resetstart").setLabel("Reset Start")
+					.setPosition(margin_x * 5, pos_y)
+					.moveTo(g)
+					.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							synchronized (self) {
+								self.startTime = APP.getApp().timeMillis;
+								beat = 0;
+								self.setBPM(self.bpm);
+								//lastDealtStepTime = new int[stepDivisions.length];
+								//Arrays.fill(lastDealtStepTime, startTime);
+	
+								// and refresh gui
+								//cf.updateGuiStreamEditor();
+							}
+						}
+					})
+					);
+		}
 	}
 
 	int bpm_numsamples = 16;

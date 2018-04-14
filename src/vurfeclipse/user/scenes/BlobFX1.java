@@ -65,10 +65,10 @@ public class BlobFX1 extends SimpleScene {
 		@Override public void loadParameters(HashMap<String,Object> params) {
 			super.loadParameters(params);
 			
-			if (params.containsKey("colour1")) this.colour1 = (int) params.get("colour1");
-			if (params.containsKey("colour2")) this.colour2 = (int) params.get("colour2");
-			if (params.containsKey("colour3")) this.colour3 = (int) params.get("colour3");
-			if (params.containsKey("colour4")) this.colour4 = (int) params.get("colour4");
+			if (params.containsKey("colour1")) this.colour1 = (Integer) params.get("colour1");
+			if (params.containsKey("colour2")) this.colour2 = (Integer) params.get("colour2");
+			if (params.containsKey("colour3")) this.colour3 = (Integer) params.get("colour3");
+			if (params.containsKey("colour4")) this.colour4 = (Integer) params.get("colour4");
 			
 			if (colour1==0) colour1 = randomColorMinimum(196);
 			if (colour2==0) colour2 = randomColorMinimum(196);

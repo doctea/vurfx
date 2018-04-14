@@ -72,7 +72,7 @@ public class ParameterBuffer {
 
 	//int smoothingThresholdMillis = 100;
 	private Object lerpValue(Object o, Object n) {
-		//smoothingThresholdMillis = 100;
+		smoothingThresholdMillis = 150;
 		//scalingThresholdMillis = 100;
 		boolean debug = false; //true;
 		

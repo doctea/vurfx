@@ -78,7 +78,7 @@ public class FormulaCallback extends ParameterCallback {
 		super.readParameters(input);
 		this.setTargetPath((String) input.get("targetPath"));
 		this.setExpression((String) input.get("expression"));
-		if (input.containsKey("outputMode")) this.setOutputMode((int) input.get("outputMode"));
+		if (input.containsKey("outputMode")) this.setOutputMode((Integer) input.get("outputMode"));
 	}
 
 	int count = 0;
@@ -111,7 +111,9 @@ public class FormulaCallback extends ParameterCallback {
 		//Targetable source = (Targetable) APP.getApp().pr.getObjectForPath(sourcePath);
 		
 		if (target==null) {
+			
 			System.err.println("Caught a null target for path " + targetPath + " in " + this + "!");
+			//target = (Targetable) APP.getApp().pr.getObjectForPath(targetPath);
 		}
 		
 		Float floatValue = e.eval().floatValue();
@@ -169,7 +171,7 @@ public class FormulaCallback extends ParameterCallback {
 	}
 
 	@Override
-	public Group makeControls(ControlFrame cf, String name) {
+	public Group makeControls(final ControlFrame cf, String name) {
 		//Group 
 		g = super.makeControls(cf, name);
 		

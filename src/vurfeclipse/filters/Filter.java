@@ -169,10 +169,13 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 	}
 
 	public Object getObjectForPath(String path) {
-		if (debug) println("getObjectForPath " + path);
+		if (true || debug) 
+			println("getObjectForPath " + path);
 		//System.exit(1);
 		String[] spl = path.split("/",2);
 		if (spl[0].equals("mute")) return this;
+		if (spl[0].equals("nextMode")) 
+			return this;
 		if (this.parameters.containsKey(spl[0])) {
 			return this.getParameter(spl[0]);
 		}
@@ -1092,7 +1095,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			return this.isMuted();//?"Muted":"Unmuted";
 		} else if ("/nextMode".equals(path.substring(path.length()-9, path.length()))) {
 			this.nextMode();
-			return "nextMode on " + this;
+			return this;
 		} else {
 			println("got path that i dunno what to do with '"+path+"'");
 		}

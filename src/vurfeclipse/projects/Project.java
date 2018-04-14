@@ -267,7 +267,7 @@ public abstract class Project implements Serializable {
 
 	public Object getObjectForPath(String path) {
 		// loop over the scenes and check for one with the same name as the first part of path; then pass the rest to getObjectForPath() for the second part..
-		if (path=="/") return this;
+		if (path.equals("/")) return this;
 		if (path==null) {
 			System.err.println("Caught getObjectForPath() passed a null path in " + this);
 		}
