@@ -990,7 +990,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 										n = selected + i;
 									}
 									
-									newf.setFilterName(selected);//.readSnapshot(setup).setFilterName(newName);
+									newf.setFilterName(n);//.readSnapshot(setup).setFilterName(newName);
 									//println("size of filters is " + self.filters.size());
 
 									//synchronized(self) {
