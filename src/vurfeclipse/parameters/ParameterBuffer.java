@@ -2,6 +2,7 @@ package vurfeclipse.parameters;
 
 import java.math.BigDecimal;
 
+import processing.core.PApplet;
 import vurfeclipse.APP;
 
 // for buffering values between Streams / Sequences and Parameters
@@ -72,11 +73,14 @@ public class ParameterBuffer {
 
 	//int smoothingThresholdMillis = 100;
 	private Object lerpValue(Object o, Object n) {
-		smoothingThresholdMillis = 150;
-		//scalingThresholdMillis = 100;
+		//smoothingThresholdMillis = 150;
+		//scalingThresholdMillis = 50; //1; //100;
 		boolean debug = false; //true;
 		
 		//if (true) return n;
+		if (n==last_value) {	// if setting same value as last time, set it absolutely without lerping
+			return n;
+		}
 
 		float delta = 0.1f + (float)(APP.getApp().millis() - lastLerped);
 		if (delta > smoothingThresholdMillis) {
@@ -85,6 +89,7 @@ public class ParameterBuffer {
 		}
 		//println("delta is " + ((float)(APP.getApp().millis() - lastLerped)/100));
 		if (debug) println("delta is " + delta);
+		//APP.getApp();
 		//delta *= 10.0f;
 		//delta = delta/delta;
 		//delta = smoothingThresholdMillis * delta;
@@ -95,7 +100,7 @@ public class ParameterBuffer {
 						0.01f + Math.abs (1.1f - delta), // * 10.0f;
 						0.0f, 1.0f
 						);*/
-				APP.getApp().map(delta, (float)1f, (float)scalingThresholdMillis, 0.01f, 1.0f); //1.0f);
+				PApplet.map(delta, (float)1f, (float)scalingThresholdMillis, 0.5f, 1.0f); //1.0f);
 				///200.0f;
 				//	;
 		if (debug) 
