@@ -89,7 +89,7 @@ void setup()
   
   //OSC
   oscP5 = new OscP5(this, 12005);
-    ResolumeLocation = new NetAddress("255.255.255.255" /*127.0.0.1"*/, 12000);//7000);
+  ResolumeLocation = new NetAddress("255.255.255.255" /*127.0.0.1"*/, 12000);//7000);
 
 }
 

@@ -714,7 +714,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 
 	public void loadParameters(HashMap<String,Object> params) {
 		for (Entry<String,Object> e : params.entrySet()) {
-			//if (debug) 
+			if (debug) 
 				println("loadParameters() got " + e.getKey() + " with " + e.getValue().getClass().getName());
 			if (e.getKey().endsWith("/mute")) {
 				if (host.getObjectForPath(e.getKey())!=null)
@@ -920,7 +920,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	}
 	
 	//TODO: make this able to redraw the aliases when they change 
-	private int makeControlsCanvasAliases(int margin) {
+	synchronized private int makeControlsCanvasAliases(int margin) {
 		if (this.muteController==null) return 0;
 		final Scene self = this;
 		ControlFrame cf = APP.getApp().getCF();
@@ -1028,11 +1028,17 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 				 row ++;
 				 start_x = canvases_start_x;
 			 }
+			 
+			 String label,value;
+			 //synchronized (map) {
+				 label = map.getKey();
+				 value = map.getValue();
+			 //}
 			
-			cp5.addLabel(tabName + map.getKey() +  "_canvaspath_label").setText(map.getKey()+":-").setPosition(start_x, (row*margin_y) + margin-14).setWidth(30).setLabel(map.getKey()).moveTo(tab);
-			ScrollableList lstCanvasAlias = new ScrollableList(cp5,tabName + map.getKey() +  "_canvaspath")
+			cp5.addLabel(tabName + label +  "_canvaspath_label").setText(label+":-").setPosition(start_x, (row*margin_y) + margin-14).setWidth(30).setLabel(label).moveTo(tab);
+			ScrollableList lstCanvasAlias = new ScrollableList(cp5,tabName + label +  "_canvaspath")
 					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-					.setLabel(map.getValue()) //((FormulaCallback)c).targetPath)
+					.setLabel(value) //((FormulaCallback)c).targetPath)
 					.moveTo(tab)
 					//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
 					.addItems(host.getCanvasPaths())
@@ -1048,7 +1054,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
 							int index = (int) theEvent.getController().getValue();
-							self.setCanvas(map.getKey(), (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
+							self.setCanvas(label, (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
 						}
 					});
 			 start_x += (margin + (margin_w)) + margin/2;
