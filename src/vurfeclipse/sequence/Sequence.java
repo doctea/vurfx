@@ -296,7 +296,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		if (this.scene_parameters!=null) {
 			for (Entry<String,HashMap<String,Object>> e : scene_parameters.entrySet()) {
 				Scene s = (Scene) this.host.host.getObjectForPath(e.getKey());
-				println(this + " about to set scene_parameters on " + s + "!");
+				if (debug) println(this + " about to set scene_parameters on " + s + "!");
 				if(s==null) {
 					System.err.println ("Couldn't find a targetable for key '"+e.getKey()+"'!!!");
 				} else {
@@ -608,76 +608,82 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 
 		synchronized public SequenceEditor makeControls(ControlFrame cf, String name) {
-			ControlP5 cp5 = cf.control();
-			
-			SequenceEditor seq = new SequenceEditor(cp5, name);
-			final Sequence self = this;
-			seq.setWidth((2 * cp5.controlWindow.papplet().width/3) - 40); // 40 is fudge factor to stop nested editors overlapping with sequence history 
-
-			int pos_x = 0, pos_y = 0;
-			int margin_x = 30, margin_y = 15;
-			
-			/*cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name)
-				.setPosition(80,10).moveTo(seq);*/
-			
-			Toggle tglEnabled = cp5.addToggle(name + "_enabled")
-				.changeValue(this.isEnabled()?1.0f:0.0f)/*.setLabel("enabled")*/
-				.setLabel("On")
-				.setPosition(pos_x, pos_y)
-				.moveTo(seq)
-				.addListenerFor(cp5.ACTION_BROADCAST,  new CallbackListener() {
+			try {
+				ControlP5 cp5 = cf.control();
+				
+				SequenceEditor seq = new SequenceEditor(cp5, name);
+				final Sequence self = this;
+				seq.setWidth((2 * cp5.controlWindow.papplet().width/3) - 40); // 40 is fudge factor to stop nested editors overlapping with sequence history 
+	
+				int pos_x = 0, pos_y = 0;
+				int margin_x = 30, margin_y = 15;
+				
+				/*cp5.addLabel(name + "_label").setValue(this.getClass().getSimpleName() + ": " + name)
+					.setPosition(80,10).moveTo(seq);*/
+				
+				Toggle tglEnabled = cp5.addToggle(name + "_enabled")
+					.changeValue(this.isEnabled()?1.0f:0.0f)/*.setLabel("enabled")*/
+					.setLabel("On")
+					.setPosition(pos_x, pos_y)
+					.moveTo(seq)
+					.addListenerFor(cp5.ACTION_BROADCAST,  new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							self.setEnabled(theEvent.getController().getValue()==1.0f); //!self.isEnabled());
+						}
+					})
+				;
+				pos_x += tglEnabled.getWidth() + margin_x;
+				
+	
+				Numberbox nmbLength = cp5.addNumberbox(name + "_length", "length")
+					.setLabel("length")
+					.setRange(0.1f, 300.0f)
+					.setDecimalPrecision(4)
+					.setScrollSensitivity(0.1f)
+					.setSensitivity(0.1f)
+					.setValue((float)getLengthMillis()/1000.0f)
+					.setPosition(pos_x, pos_y)
+					.moveTo(seq)
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+	
 					@Override
 					public void controlEvent(CallbackEvent theEvent) {
-						self.setEnabled(theEvent.getController().getValue()==1.0f); //!self.isEnabled());
+						self.setLengthMillis((int) (theEvent.getController().getValue()*1000.0f));					
 					}
-				})
-			;
-			pos_x += tglEnabled.getWidth() + margin_x;
-			
-
-			Numberbox nmbLength = cp5.addNumberbox(name + "_length", "length")
-				.setLabel("length")
-				.setRange(0.1f, 300.0f)
-				.setDecimalPrecision(4)
-				.setScrollSensitivity(0.1f)
-				.setSensitivity(0.1f)
-				.setValue((float)getLengthMillis()/1000.0f)
-				.setPosition(pos_x, pos_y)
-				.moveTo(seq)
-				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-
-				@Override
-				public void controlEvent(CallbackEvent theEvent) {
-					self.setLengthMillis((int) (theEvent.getController().getValue()*1000.0f));					
+				});
+				pos_x += nmbLength.getWidth() + margin_x;
+	
+				if (host!=null) { 
+					//cp5.addLabel(name + "_host").setValue(host.getPath()).setPosition(80,30).moveTo(seq);
+	
+					ScrollableList lstTarget = cp5.addScrollableList(name + "_hostpath")
+							//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+							.setLabel(this.host.getPath()) //((FormulaCallback)c).targetPath)
+							.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+							.setPosition(pos_x, pos_y)
+							.setWidth((cp5.papplet.width/6))
+							.setBarHeight(20)
+							.setItemHeight(15)
+							.moveTo(seq)
+							.onLeave(cf.close)
+							.onEnter(cf.toFront)
+							.close();
+	
+					pos_x += lstTarget.getWidth() + margin_x;
 				}
-			});
-			pos_x += nmbLength.getWidth() + margin_x;
-
-			if (host!=null) { 
-				//cp5.addLabel(name + "_host").setValue(host.getPath()).setPosition(80,30).moveTo(seq);
-
-				ScrollableList lstTarget = cp5.addScrollableList(name + "_hostpath")
-						//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-						.setLabel(this.host.getPath()) //((FormulaCallback)c).targetPath)
-						.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
-						.setPosition(pos_x, pos_y)
-						.setWidth((cp5.papplet.width/6))
-						.setBarHeight(20)
-						.setItemHeight(15)
-						.moveTo(seq)
-						.onLeave(cf.close)
-						.onEnter(cf.toFront)
-						.close();
-
-				pos_x += lstTarget.getWidth() + margin_x;
+				
+				pos_x += (cp5.papplet.width/6) + margin_x;
+				
+				//seq.setHeight(30);
+				seq.setBackgroundHeight(pos_y + margin_y); // + margin_y); //50);
+				
+				return seq;		
+			} catch (Exception e) {
+				System.err.println("Caught exception " + e + " during " + this.getClass() + "makeControls!");
+				e.printStackTrace(System.err);
 			}
-			
-			pos_x += (cp5.papplet.width/6) + margin_x;
-			
-			//seq.setHeight(30);
-			seq.setBackgroundHeight(pos_y + margin_y); // + margin_y); //50);
-			
-			return seq;			
+			return null;
 		}
 
 		
