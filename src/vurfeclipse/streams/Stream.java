@@ -21,7 +21,15 @@ import vurfeclipse.ui.ControlFrame;
 abstract public class Stream implements Serializable {
 	boolean debug = false;
 	String streamName = "Unnamed";
+	
+	boolean enabled = true;
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 	Stream () {
 
 	}
@@ -92,7 +100,8 @@ abstract public class Stream implements Serializable {
 
 	public void processEvents (int time) {
 		// get new parameter values... add them to the list and then call their dispatcher
-		processEventMeat(time);
+		if (this.isEnabled())
+			processEventMeat(time);
 	}
 
 	abstract public void processEventMeat(int time);
@@ -108,6 +117,7 @@ abstract public class Stream implements Serializable {
 		boolean debug = this.debug = false;
 		//if (this instanceof OscStream) debug = true;
 		//LinkedList<ParameterCallback> emitters = (LinkedList<ParameterCallback>) listeners.iterator(); //iterator();
+		if (!this.isEnabled()) return;
 
 		if (debug) System.out.println("--------------- deliverEvents() in " + this + "------------------------");
 		if (debug) System.out.println("there are " + listeners.size() + " feeds .. ");
@@ -223,6 +233,8 @@ abstract public class Stream implements Serializable {
 		params.put("name", this.streamName);
 
 		params.put("callbacks", this.collectLinkParameters());
+		
+		params.put("enabled", this.isEnabled());
 
 		return params;
 	}
@@ -260,6 +272,9 @@ abstract public class Stream implements Serializable {
 			// new List style
 			for (HashMap<String, Object> params : (LinkedList<HashMap<String,Object>>)input.get("callbacks")) {
 				this.registerEventListener((String)params.get("streamSource"), ParameterCallback.makeParameterCallback(params));
+			}
+			if (input.containsKey("enabled")) {
+				this.setEnabled((Boolean) input.get("enabled"));
 			}
 		}
 
@@ -300,8 +315,24 @@ abstract public class Stream implements Serializable {
 
 		final Stream self = this;
 
+		// add 'on' button to enable/disable whole Stream
+		g.add(new Toggle(cf.control(), this.toString() + "_enabled_"+n).setValue(this.isEnabled()).setLabel("on")
+				.setColorActive(VurfEclipse.makeColour(0, 255, 0))
+				.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						synchronized(self) {
+							//listeners.remove(callback);
+							self.setEnabled(((Toggle)theEvent.getController()).getBooleanValue());
+							
+							//cf.updateGuiStreamEditor(); // this causes crash for some reason ?
+						}
+					}					
+				})					
+				.moveTo(g).setPosition(0, pos_y).setWidth(margin_x));
+		
 		g.add(cf.control().addButton(this.toString() + "_add").setLabel("ADD")
-			.setPosition(margin_x, pos_y)
+			.setPosition(margin_x*3, pos_y)
 			.moveTo(g)
 			.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
 				@Override
@@ -371,8 +402,7 @@ abstract public class Stream implements Serializable {
 								//cf.updateGuiStreamEditor(); // this causes crash for some reason ?
 							}
 						}					
-					})
-					
+					})					
 					.moveTo(g).setPosition(pos_x, pos_y).setWidth(margin_x));
 					
 			
