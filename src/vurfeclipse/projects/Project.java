@@ -228,7 +228,7 @@ public abstract class Project implements Serializable {
 
 
 	/////////////// Scene stuff
-	ArrayList<Scene> scenes = new ArrayList<Scene>();
+	List<Scene> scenes = Collections.synchronizedList(new ArrayList<Scene>());
 	Scene selectedScene;
 	int selectedSceneIndex = 0;
 
@@ -299,7 +299,7 @@ public abstract class Project implements Serializable {
 		return null;
 	}
 
-	public ArrayList<Scene> getScenes () {
+	public List<Scene> getScenes () {
 		return this.scenes;
 	}
 
@@ -779,6 +779,91 @@ public abstract class Project implements Serializable {
 		
 		Tab sceneTab = cp5.addTab("Scenes");
 
+		int start_x = 0; //(int) this.muteController.getWidth() + margin * 8; //(this.lblSceneMapping.getPosition()[0] + margin + this.lblSceneMapping.getWidth());
+		int margin_w = 200;
+		int margin_y = 30;
+		int margin = 15;		
+
+		Class[] filters_a = getAvailableScenes();
+		final TreeMap available_scenes = new TreeMap<String,Class> ();
+		//String[] filter_names = new String[filters.length];
+		for (Class f : filters_a) {
+			available_scenes.put(f.getSimpleName(), f);
+		}
+		//available_filters = new TreeMap(availableFilters);
+		
+		Project self = this;
+		
+		final ScrollableList lstAddFilterSelector = new ScrollableList(cp5, sceneTab.getName() + "_add_filter_selector")
+				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+				.setLabel("[add filter]") //((FormulaCallback)c).targetPath)
+				.moveTo(sceneTab)
+				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+				.addItems((String[]) available_scenes.keySet().toArray(new String[available_scenes.size()]))
+				.setPosition(start_x, margin)
+				.setWidth(margin * 10)
+				.setBarHeight(15)
+				.setItemHeight(15)
+				.setHeight(5 * 15)
+				.onLeave(cf.close)
+				.onEnter(cf.toFront)
+				.close();
+		
+		Button btnAddFilter = new Button(cp5, sceneTab.getName() + "_add_filter_button")
+				.setLabel("add")
+				.moveTo(sceneTab)
+				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+				.setPosition(lstAddFilterSelector.getWidth() + margin + lstAddFilterSelector.getPosition()[0], margin)
+				.setWidth(margin * 4).setHeight(15)			
+				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						int index = (int) lstAddFilterSelector.getValue();
+						final String selected = (String)(
+								//(ScrollableList)theEvent.getController())
+								lstAddFilterSelector
+								.getItem(index).get("text")
+								);
+						//final String selected = lstAddFilterSelector.getStringValue();
+						final String classname = ((Class<Filter>)available_scenes.get(selected)).getName();
+						//self.addFilter(Filter.createFilter(classname, self));
+						
+						getApp().getCF().queueUpdate(new Runnable() {
+							@Override
+							public void run() {								
+								
+								try {
+									Scene newf = Scene.createScene(classname, self, self.w, self.h);
+									
+									String n = classname;
+									/*int i = 0;
+									String n = selected;
+									while (self.getScene(n)!=null) {
+										i++;
+										n = selected + i;
+									}*/
+									
+									newf.setSceneName(n);//.readSnapshot(setup).setFilterName(newName);
+									//println("size of filters is " + self.filters.size());
+
+									//synchronized(self) {
+									self.addScene(newf);
+									newf.initialise();
+									//newf.start();
+									//self.refreshControls();
+									self.setupControls(getApp().getCF());
+								} catch (Exception e) {
+									println("Caught exception trying to add a new filter " + e);
+									e.printStackTrace();
+								} 
+							}});
+						
+						//self.setCanvas(map.getKey(), (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
+					}
+				})
+				;
+		
+		
 		//Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth).setBarHeight(20);
 		Accordion accordion = new MyAccordion(cp5, "acc").setWidth(cf.displayWidth).setBarHeight(20);
 
@@ -806,7 +891,7 @@ public abstract class Project implements Serializable {
 			c++;
 			//((Scene)i).setupControls(cp5);
 		}
-		accordion.setPosition(0, 20);
+		accordion.setPosition(0, 40);
 		//accordion.open();
 		accordion.setCollapseMode(Accordion.MULTI);
 
@@ -857,6 +942,17 @@ public abstract class Project implements Serializable {
 	}
 
 
+
+	private Class[] getAvailableScenes() {
+		try {
+			return getClasses(new String[] { "vurfeclipse.scenes", "vurfeclipse.user.scenes" }, Scene.class);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			println("caught " + e + " while trying to getAvailableFilters in Project");
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	private void setupMonitor(ControlP5 cp5) {
 		// TODO Auto-generated method stub
@@ -1039,7 +1135,7 @@ public abstract class Project implements Serializable {
 
 	public Class[] getAvailableFilters() {
 		try {
-			return getClasses("vurfeclipse.filters");
+			return getClasses(new String[] { "vurfeclipse.filters", "vurfeclipse.scenes", "vurfeclipse.user.scenes" }, Filter.class);
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			println("caught " + e + " while trying to getAvailableFilters in Project");
@@ -1047,41 +1143,81 @@ public abstract class Project implements Serializable {
 		}
 		return null;
 	}
-	
-	// cribbed from https://stackoverflow.com/questions/1156552/java-package-introspection
-		private static Class[] getClasses(String packageName)
-				throws ClassNotFoundException, IOException {
-				    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-				    assert classLoader != null;
-				    String path = packageName.replace('.', '/');
-				    Enumeration<URL> resources = classLoader.getResources(path);
-				    List<File> dirs = new ArrayList<File>();
-				    while (resources.hasMoreElements()) {
-				        URL resource = resources.nextElement();
-				        dirs.add(new File(resource.getFile()));
-				    }
-				    ArrayList<Class> classes = new ArrayList<Class>();
-				    for (File directory : dirs) {
-				        classes.addAll(findClasses(directory, packageName));
-				    }
-				    return classes.toArray(new Class[classes.size()]);
-				}
 
-		private static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException {
-		    List<Class> classes = new ArrayList<Class>();
-		    if (!directory.exists()) {
-		        return classes;
-		    }
-		    File[] files = directory.listFiles();
-		    Arrays.sort(files);	// added to sort?
-		    for (File file : files) {
-		        if (file.isDirectory()) {
-		            assert !file.getName().contains(".");
-		            classes.addAll(findClasses(file, packageName + "." + file.getName()));
-		        } else if (file.getName().endsWith(".class")) {
-		            classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
-		        }
-		    }
-		    return classes;
+	// cribbed from https://stackoverflow.com/questions/1156552/java-package-introspection
+	private static Class[] getClasses(String[] packageNames, Class match_class)
+			throws ClassNotFoundException, IOException {
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		assert classLoader != null;
+		ArrayList<Class> classes = new ArrayList<Class>();
+		for (String packageName : packageNames) {
+			String path = packageName.replace('.', '/');
+			Enumeration<URL> resources = classLoader.getResources(path);
+			List<File> dirs = new ArrayList<File>();
+			while (resources.hasMoreElements()) {
+				URL resource = resources.nextElement();
+				dirs.add(new File(resource.getFile()));
+			}
+			for (File directory : dirs) {
+				classes.addAll(findClasses(directory, packageName, match_class));
+			}
 		}
+		return classes.toArray(new Class[classes.size()]);
+	}
+
+	private static Class[] getClasses(String packageName, Class match_class)
+			throws ClassNotFoundException, IOException {
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		assert classLoader != null;
+		String path = packageName.replace('.', '/');
+		Enumeration<URL> resources = classLoader.getResources(path);
+		List<File> dirs = new ArrayList<File>();
+		while (resources.hasMoreElements()) {
+			URL resource = resources.nextElement();
+			dirs.add(new File(resource.getFile()));
+		}
+		ArrayList<Class> classes = new ArrayList<Class>();
+		for (File directory : dirs) {
+			classes.addAll(findClasses(directory, packageName, match_class));
+		}
+		return classes.toArray(new Class[classes.size()]);
+	}
+
+	private static List<Class> findClasses(File directory, String packageName, Class match_class) throws ClassNotFoundException {
+		List<Class> classes = new ArrayList<Class>();
+		if (!directory.exists()) {
+			return classes;
+		}
+		File[] files = directory.listFiles();
+		Arrays.sort(files);	// added to sort?
+		for (File file : files) {
+			if (file.isDirectory()) {
+				assert !file.getName().contains(".");
+				classes.addAll(findClasses(file, packageName + "." + file.getName(), match_class));
+			} else if (file.getName().endsWith(".class")) {
+				Class c = Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6));
+				//if (file.getName().equals(match_class.getSimpleName()))
+				if (isTypeOf (c, match_class))
+					//if (c.isInstance(match_class))
+					classes.add(c);
+			}
+		}
+		return classes;
+	}
+
+	// from https://stackoverflow.com/questions/4584541/check-if-a-class-is-subclass-of-another-class-in-java
+	protected static boolean isTypeOf(Class clazz/*String myClass*/, Class<?> superClass) {
+		boolean isSubclassOf = false;
+			//Class<?> clazz = Class.forName(myClass);
+			if (!clazz.equals(superClass)) {
+				clazz = clazz.getSuperclass();
+				//Works nice, but you might have to add a null check after clazz = clazz.getSuperclass() in case you hit java.lang.Object who does not have a super class. – Jonas Pedersen Jun 10 '16 at 8:40
+				if (clazz == null) return false;
+				isSubclassOf = isTypeOf(clazz, superClass);
+			} else {
+				isSubclassOf = true;
+			}
+			return isSubclassOf;
+	}
+	
 }

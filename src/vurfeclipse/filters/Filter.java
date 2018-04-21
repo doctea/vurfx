@@ -1209,7 +1209,15 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 
 	public static Filter createFilter(String classname, Scene host) {
 		try {
-			Class clazz = Class.forName(classname);
+			Class clazz;
+			try {
+				clazz = Class.forName(classname);
+			} catch (ClassNotFoundException e) {
+				String[] spl = classname.split("\\$");
+				classname = "vurfeclipse.filters." + spl[1];
+				System.out.println("couldn't find a class for " + classname + ", trying with " + classname);
+				clazz = Class.forName(classname);
+			}
 			//System.out.println (clazz.getConstructors());
 			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
 			System.out.println("Filter#createFilter(): about to try and get constructor for classname '" + classname + "'");

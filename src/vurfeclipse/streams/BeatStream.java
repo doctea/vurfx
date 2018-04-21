@@ -246,7 +246,7 @@ public class BeatStream extends Stream implements Serializable {
 
 	@Override
 	synchronized public void setupControls(final ControlFrame cf, Group g) {
-		synchronized (cf) {
+		//synchronized (cf) {
 			super.setupControls(cf, g);
 			int margin_y = 20, gap_y = 5, margin_x = 80;
 	
@@ -287,7 +287,7 @@ public class BeatStream extends Stream implements Serializable {
 						}
 					})
 					);
-		}
+		//}
 	}
 
 	int bpm_numsamples = 16;
