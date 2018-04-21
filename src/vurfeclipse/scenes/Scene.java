@@ -934,11 +934,13 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		
 
 		Class[] filters_a = host.getAvailableFilters();
-		final LinkedHashMap available_filters = new LinkedHashMap<String,Class> ();
+		final TreeMap available_filters = new TreeMap<String,Class> ();
 		//String[] filter_names = new String[filters.length];
 		for (Class f : filters_a) {
 			available_filters.put(f.getSimpleName(), f);
 		}
+		//available_filters = new TreeMap(availableFilters);
+		
 		
 		final ScrollableList lstAddFilterSelector = new ScrollableList(cp5, tabName + "_add_filter_selector")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)

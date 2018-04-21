@@ -1039,10 +1039,7 @@ public abstract class Project implements Serializable {
 
 	public Class[] getAvailableFilters() {
 		try {
-			Class[] af = getClasses("vurfeclipse.filters");
-			Arrays.sort(af);
-			return af;
-			//return getClasses("vurfeclipse.filters");
+			return getClasses("vurfeclipse.filters");
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			println("caught " + e + " while trying to getAvailableFilters in Project");
