@@ -1,6 +1,6 @@
-#define TWO_PI 6.28318531
-
 #define PROCESSING_TEXTURE_SHADER
+
+#define TWO_PI 6.28318531
 
 uniform sampler2D src_tex_unit0;
 uniform sampler2D ppixels;

@@ -274,7 +274,7 @@ public class Parameter implements Serializable, Targetable {
 		if (this.datatype==PVector.class) { 
 			return new PVector(1.0f,1.0f);
 		}
-
+		if (max==null) return null;
 		return cast(max);
 	}
 	public void setMax(Object max) {
@@ -288,6 +288,7 @@ public class Parameter implements Serializable, Targetable {
 			return new PVector(-1.0f,-1.0f);
 		}
 
+		if (min==null) return null;
 		return cast(min);
 	}
 	public void setMin(Object min) {

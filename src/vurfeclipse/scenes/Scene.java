@@ -940,7 +940,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			available_filters.put(f.getSimpleName(), f);
 		}
 		
-		final ScrollableList lstAddFilterSelector = new ScrollableList(cp5,tabName + "_add_filter_selector")
+		final ScrollableList lstAddFilterSelector = new ScrollableList(cp5, tabName + "_add_filter_selector")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 				.setLabel("[add filter]") //((FormulaCallback)c).targetPath)
 				.moveTo(tab)
@@ -1023,6 +1023,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		start_x += margin*4;
 		int canvases_start_x = start_x;
 		
+		int i = 0;
 		for (final Entry<String, String> map : this.getCanvasMappings().entrySet()) {
 			 if (start_x + margin_w >= cf.width) { //sketchWidth) {
 				 row ++;
@@ -1035,7 +1036,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 				 value = map.getValue();
 			 //}
 			
-			cp5.addLabel(tabName + label +  "_canvaspath_label").setText(label+":-").setPosition(start_x, (row*margin_y) + margin-14).setWidth(30).setLabel(label).moveTo(tab);
+			cp5.addLabel(tabName + label +  "_canvaspath_label" + i).setText(label+":-").setPosition(start_x, (row*margin_y) + margin-14).setWidth(30).setLabel(label).moveTo(tab);
 			ScrollableList lstCanvasAlias = new ScrollableList(cp5,tabName + label +  "_canvaspath")
 					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 					.setLabel(value) //((FormulaCallback)c).targetPath)
@@ -1058,7 +1059,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 						}
 					});
 			 start_x += (margin + (margin_w)) + margin/2;
-			 
+			 i++;
 
 		}
 		
