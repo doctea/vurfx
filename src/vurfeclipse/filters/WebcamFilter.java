@@ -86,6 +86,10 @@ public class WebcamFilter extends Filter {
 			println("not ready, returning");
 			return;
 		}
+		if (camNum>=Capture.list().length) {
+			println("Not enough cameras to initialise " + camNum + " - max is " + Capture.list().length);
+			return;
+		}
 		println("Spawning thread to initialise webcam " + cameraNumber + " aka " + Capture.list()[camNum]);
 		t = new Thread() {
 			@Override
