@@ -792,7 +792,7 @@ public abstract class Project implements Serializable {
 		}
 		//available_filters = new TreeMap(availableFilters);
 		
-		Project self = this;
+		final Project self = this;
 		
 		final ScrollableList lstAddFilterSelector = new ScrollableList(cp5, sceneTab.getName() + "_add_filter_selector")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
@@ -1211,7 +1211,7 @@ public abstract class Project implements Serializable {
 			//Class<?> clazz = Class.forName(myClass);
 			if (!clazz.equals(superClass)) {
 				clazz = clazz.getSuperclass();
-				//Works nice, but you might have to add a null check after clazz = clazz.getSuperclass() in case you hit java.lang.Object who does not have a super class. – Jonas Pedersen Jun 10 '16 at 8:40
+				//Works nice, but you might have to add a null check after clazz = clazz.getSuperclass() in case you hit java.lang.Object who does not have a super class. ï¿½ Jonas Pedersen Jun 10 '16 at 8:40
 				if (clazz == null) return false;
 				isSubclassOf = isTypeOf(clazz, superClass);
 			} else {

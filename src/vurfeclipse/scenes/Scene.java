@@ -1032,7 +1032,8 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 				 start_x = canvases_start_x;
 			 }
 			 
-			 String label,value;
+			 final String label;
+			String value;
 			 //synchronized (map) {
 				 label = map.getKey();
 				 value = map.getValue();
