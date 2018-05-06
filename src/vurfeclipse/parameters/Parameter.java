@@ -116,36 +116,40 @@ public class Parameter implements Serializable, Targetable {
 		return cast(this.value);
 	}
 	public Object cast(Object payload) {
+		return castAs(payload, this.datatype);
+	}
+
+	public static Object castAs(Object payload, Class datatype) {
 		try {
-			if (this.datatype == Integer.class) {
+			if (datatype == Integer.class) {
 				if (payload instanceof Float || payload instanceof Double) {
 					//return ((Float) payload);//.intValue();
 					return ((Float) payload).intValue();
 				}
 				return Integer.parseInt(payload.toString());
-			} else if (this.datatype == Float.class || this.datatype == Double.class) {
+			} else if (datatype == Float.class || datatype == Double.class) {
 				return (Float)Float.parseFloat(payload.toString());
-			} else if (this.datatype == Boolean.class) {
+			} else if (datatype == Boolean.class) {
 				return Boolean.parseBoolean(payload.toString());
-			} else if (this.datatype == String.class) {
+			} else if (datatype == String.class) {
 				return payload.toString();
-			} else if (this.datatype == PVector.class) {
+			} else if (datatype == PVector.class) {
 				if (!(payload instanceof PVector)) {
-					println("not a PVector, is " + payload + " when trying to cast in " + this + " for " + this.getName());
+					System.err.println("not a PVector, is " + payload + " when trying to cast "); //in " + this + " for " + this.getName());
 				}
 				return (PVector)payload;
 			} else {
-				System.err.println("Don't know how to cast " + payload.getClass() + " '" + payload + "' to " + this.datatype.getName());
+				System.err.println("Don't know how to cast " + payload.getClass() + " '" + payload + "' to " + datatype.getName());
 			}
 		} catch (NumberFormatException e) {
-			System.err.println("got payload type " + payload.getClass() + " but expected " + this.datatype);
-			System.err.println(this + this.getName() + " caught " + e.toString() + " trying to decode " + " alleged " + this.datatype + " of '" + payload + "'");
+			System.err.println("got payload type " + payload.getClass() + " but expected " + datatype);
+			System.err.println("caught " + e.toString() + " trying to decode " + " alleged " + datatype + " of '" + payload + "'");
 			e.printStackTrace();
 		}
 
 		return null;
 	}
-
+	
 	@Override
 	public Object target(String path, Object payload) {
 		//filter.println("Parameter " + getName() + " targeted with " + path + " path " + " and " + payload);

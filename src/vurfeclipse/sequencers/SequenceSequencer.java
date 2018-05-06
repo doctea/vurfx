@@ -20,6 +20,7 @@ import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.filters.Filter;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.projects.SavedProject;
 import vurfeclipse.scenes.Scene;
@@ -40,9 +41,7 @@ import controlP5.Numberbox;
 import controlP5.Slider;
 import controlP5.Tab;
 import controlP5.Textfield;
-
-
-
+import controlP5.Toggle;
 
 public class SequenceSequencer extends Sequencer implements Targetable {
 	String activeSequenceName = "";
@@ -163,12 +162,31 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		  return super.readyToChange(max_iterations);
 	  }*/
 
-
+	/*@Override
+	synchronized public boolean runSequences(int time) {
+		
+		return runSequences(this.ticks);
+	}*/
+	
 	@Override
-	synchronized public boolean runSequences() {
-		if (debug) println("ticks is " + ticks);
-		if (!APP.getApp().isReady()) return false;
+	synchronized public boolean runSequences(int time) {
 		if (!this.isSequencerEnabled()) return false;
+		
+		if (last==0) last = time; //APP.getApp().timeMillis;
+		
+		this.ticks += /*APP.getApp().timeMillis*/ time - last;
+		
+		last = time; //APP.getApp().timeMillis;
+		
+		return this._runSequences(this.ticks);
+	}
+
+	synchronized public boolean _runSequences(int time) {
+		
+		//if (debug) 
+			println("runSequences time is " + time);
+		if (!APP.getApp().isReady()) return false;
+
 		if (stopSequencesFlag) {
 			for (Sequence seq : sequences.values()) {
 				if (seq!=null) seq.stop();
@@ -178,12 +196,6 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		this.processOneShot();
 
-		if (last==0) last = APP.getApp().timeMillis;
-		
-		ticks += APP.getApp().timeMillis - last;
-		
-		last = APP.getApp().timeMillis;
-		
 		//println(this+"#runSequences");
 		// probably want to move this up to Sequencer and do super.runSequences()
 		if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
@@ -194,7 +206,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		//host.setTimeScale(0.1f);
 
-		if (getActiveSequence()!=null) getActiveSequence().setValuesForTime(this.ticks);
+		if (getActiveSequence()!=null) 
+			getActiveSequence().setValuesForTime(time);
 
 		//gui : update current progress
 		if (getActiveSequence()!=null) this.updateGuiProgress(getActiveSequence());
@@ -203,7 +216,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 	public Sequence getActiveSequence () {
-		return sequences.get(activeSequenceName);
+		Sequence ret = sequences.get(activeSequenceName);
+		return ret;
 	}
 
 
@@ -217,6 +231,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		HashMap<String, Targetable> urls = super.getTargetURLs(); //new HashMap<String,Targetable>();
 		//urls.putAll(super.getTargetURLs());
 
+		urls.put("/seq/globalTime", this);
+		
 		urls.put("/seq/seed", this);
 		urls.put("/seq/changeTo", this);
 		urls.put("/seq/sequence", this);
@@ -236,7 +252,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			// this loop processes each Sequence for the current Sequence; dont think we need to add a URL for each of em!
 			//Iterator<Sequence> sit = e.getValue().iterator();
 				//   while (sit.hasNext()) {
-					//Sequence seq = sit.next();
+					//Sequence seq = sit.next();f
 					//urls.put("/seq/" + e.getKey() + "/" + count, seq);
 				//}
 		}*/
@@ -258,6 +274,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			} else if (payload instanceof Integer || payload instanceof Float) {
 				this.startOneShot((String) ((Entry) this.sequences.entrySet().toArray()[(Integer)payload]).getKey());
 			}
+		} else if (spl[2].equals("globalTime")) {
+			if (spl.length>3) 									// if given a named sequence as either the last query portion 
+				payload = spl[3];
+			//this.ticks = (Integer)Parameter.castAs(payload, Integer.class);//.toString());
+			this._runSequences((Integer)Parameter.castAs(payload, Integer.class));
 		} else if (spl[2].equals("changeTo")) {	   
 			if (spl.length>3) 									// if given a named sequence as either the last query portion 
 				payload = spl[3];
@@ -1245,8 +1266,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 					e.printStackTrace();
 				}
 			}
-		} else if (ev.getAction()==ListBox.ACTION_CLICK) { 
-			if (ev.getController()==this.lstHistory) {
+		} else if (ev.getAction()==ListBox.ACTION_CLICK && ev.getController()==this.lstHistory) {
 				//println("My name is: " + this.lstSequences.getValueLabel().getText());
 				String sequenceName = this.lstHistory.getValueLabel().getText();
 
@@ -1257,21 +1277,20 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				println("got list-selected sequenceName " + sequenceName);
 				this.histMoveCursorAbsolute((int)this.lstHistory.getValue(),true); //distance, restart);
 				//this.changeSequence(sequenceName, false, true);
-			} else if (ev.getController()==this.tglLocked) {
-				this.toggleLock(ev.getController().getValue()==1.0f);
-			} else if (ev.getController()==this.tglEnabled) {
-				this.toggleEnabled(ev.getController().getValue()==1.0f);
-			} else if (ev.getController()==this.tglStreams) {
-				this.toggleStreams(ev.getController().getValue()==1.0f);
-			} else if (ev.getController()==this.tglPlaylist) {
-				this.togglePlaylist(ev.getController().getValue()==1.0f);
-			}
 		} else if (ev.getAction()==ControlP5.ACTION_BROADCAST) {
 			if (ev.getController()==this.sldProgress) {
 				this.getActiveSequence().setValuesForNorm(this.sldProgress.getValue()/100.0,this.getActiveSequence().iteration);
 			} else if (ev.getController()==this.sldTimeScale) {
 				//this.getActiveSequence().setValuesForNorm(this.sldTimeScale.getValue(),this.getActiveSequence());
 				this.setTimeScale(sldTimeScale.getValue());
+			} else if (ev.getController()==this.tglLocked) {
+				this.toggleLock(((Toggle)ev.getController()).getBooleanValue()); //ev.getController().getValue()==1.0f);
+			} else if (ev.getController()==this.tglEnabled) {
+				this.toggleEnabled(((Toggle)ev.getController()).getBooleanValue()); //.getValue()==1.0f);
+			} else if (ev.getController()==this.tglStreams) {
+				this.toggleStreams(((Toggle)ev.getController()).getBooleanValue()); //ev.getController().getValue()==1.0f);
+			} else if (ev.getController()==this.tglPlaylist) {
+				this.togglePlaylist(((Toggle)ev.getController()).getBooleanValue()); //ev.getController().getValue()==1.0f);
 			} else if (ev.getController()==this.txtCurrentSequenceName) {
 				//TODO: sequencer rename functionality
 				this.renameSequence(this.getCurrentSequenceName(), txtCurrentSequenceName.getText());

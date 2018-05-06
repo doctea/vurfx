@@ -122,7 +122,7 @@ public class ControlFrame extends PApplet {
 		updateQueue.clear();
 	}
 
-	public void queueUpdate(Runnable runnable) {
+	public void queueUpdate(final Runnable runnable) {
 		synchronized(updateQueue) {
 			this.updateQueue.add(runnable);
 		}

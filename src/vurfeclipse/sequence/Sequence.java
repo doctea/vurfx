@@ -372,7 +372,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 	int last = 0;
 	public void setValuesForTime(int ticks) {
-		if (!this.isEnabled()) return;
+		//if (!this.isEnabled()) return;
 		
 		//if (lengthMillis==0) return;	// skip if this Sequence doesn't last any time //TODO: reconsider how to avoid this /zero error as some subclasses might like to set values even if the length is
 		int now = ticks; //APP.getApp().millis();

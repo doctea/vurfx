@@ -10,7 +10,7 @@ import controlP5.*;
 import vurfeclipse.projects.*;
 import vurfeclipse.ui.ControlFrame;
 //import codeanticode.glgraphics.*;
-import ddf.minim.*;
+//import ddf.minim.*;
 
 import java.awt.Color;
 import java.io.PrintStream;
@@ -135,7 +135,7 @@ public class VurfEclipse extends PApplet {
 
 
 	/////// Minim
-	Minim minim;
+	//Minim minim;
 
 	String dateStamp = dateStamp();
 	public String dateStamp () {

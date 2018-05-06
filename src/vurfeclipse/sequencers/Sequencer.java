@@ -149,7 +149,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		this.forward = true;
 	}
 
-	abstract public boolean runSequences();
+	abstract public boolean runSequences(int time);
 
 	public HashMap<String, Targetable> getTargetURLs() {
 		HashMap<String, Targetable> urls = new HashMap<String, Targetable>();

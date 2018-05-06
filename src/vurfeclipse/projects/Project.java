@@ -218,7 +218,7 @@ public abstract class Project implements Serializable {
 	protected Sequencer sequencer;
 
 	synchronized public boolean processSequencer(int time) {
-		return this.sequencer.runSequences(); //time);// TODO: maybe this is where time should flow in..?
+		return this.sequencer.runSequences(time);//); //time);// TODO: maybe this is where time should flow in..?
 	}
 
 	synchronized public boolean processStreams(int time) {

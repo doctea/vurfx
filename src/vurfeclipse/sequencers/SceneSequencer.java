@@ -49,7 +49,7 @@ public class SceneSequencer extends Sequencer implements Targetable {
 	  
 
 	  @Override
-	  public boolean runSequences() {
+	  public boolean runSequences(int time) {
 		  //println(this+"#runSequences");
 		  if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
 			  println(this+"#runSequences(): is readyToChange, calling randomScene()");
@@ -57,7 +57,8 @@ public class SceneSequencer extends Sequencer implements Targetable {
 			  ticks = 0;
 		  }
 		  
-		  ticks++;
+		  //ticks++;
+		  ticks = time;
 		  
 		  ArrayList<Sequence> seqs = switched_sequences.get(activeSceneName);
 		  if (seqs!=null) {
