@@ -109,7 +109,7 @@ public class SavedProject extends Project {
 		  		super.nextSequence();
 		  	}
 		  	@Override
-		  	public boolean runSequences() {
+		  	public boolean runSequences(int time) {
 		  		if (!APP.getApp().isReady()) return false;
 		  		seq_count++;
 		  		/*if (this.getCurrentSequenceName().contains("_next_")) {
@@ -117,7 +117,7 @@ public class SavedProject extends Project {
 		  			super.runSequences();
 		  			this.nextSequence();
 		  		}*/
-		  		return super.runSequences();
+		  		return super.runSequences(time);
 		  	}
 		  };
 		  ((SequenceSequencer)this.sequencer).setBindToRandom(true);
