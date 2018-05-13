@@ -18,12 +18,15 @@ import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.sequence.*;
 import controlP5.Accordion;
 import controlP5.Button;
+import controlP5.CColor;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.Controller;
 import controlP5.ControllerGroup;
 import controlP5.Group;
 import controlP5.ScrollableList;
+import controlP5.Tab;
 import controlP5.Textlabel;
 
 public abstract class Scene implements Serializable, Mutable, Targetable {
@@ -773,6 +776,9 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 
 	private ControllerGroup tab;
 	private Group controlGroup;
+	private Button moveUpButton;
+	private Button moveDownButton;
+	private Button removeSceneButton;
 	public void setupControls(ControlFrame cf, ControllerGroup tab) {
 
 		ControlP5 cp5 = cf.control();
@@ -794,6 +800,66 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		this.controlGroup = cp5.addGroup(this.getSceneName() + "_controlGroup_");
 
 		tab = controlGroup;*/
+		Scene self = this;
+		
+			this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + "/" + getSceneName()) // + row)
+					.setLabel("^")
+					.setSize(size, size)
+					.setPosition(cf.width - margin*2, margin + margin-10)
+					.setHeight(12)
+					.moveTo(tab)
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							self.host.moveScene(self, -1);
+							self.host.refreshControls();
+							//final String tabName = self.tabName; 
+							self.guiOpenTab(cf); //, tabName);
+
+							//self.guiOpenTab(cf, tabName);
+							/*Group g = (Group) cp5.get(tabName);//.getParent();
+							g.open();
+							Accordion a = ((Accordion)g.getParent());
+							a.updateItems();*/
+						}					
+					})
+					;
+
+			this.moveDownButton = cp5.addButton("movedown_" + tab.getName() + "/" + getSceneName()) // + row)
+					.setLabel("v")
+					.setSize(size, size)
+					.setPosition(cf.width - margin*2, margin + margin+3)
+					.setHeight(12)
+					.moveTo(tab)
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							self.host.moveScene(self, 1);
+							self.host.refreshControls();
+							final String tabName = self.tabName; 
+							self.guiOpenTab(cf); //, tabName);
+							/*Group g = (Group) cp5.get(tabName);//.getParent();
+							g.open();
+							Accordion a = ((Accordion)g.getParent());
+							a.updateItems();*/
+						}					
+					})
+					;
+			
+			this.removeSceneButton = cp5.addButton("removescene/" + getSceneName()) // + row)
+					.setColorForeground(VurfEclipse.makeColour(255, 0,0)).setLabel("[x]")
+					.setSize(size, size)
+					.setPosition(cf.width - margin*5, margin)
+					.setHeight(size)
+					.moveTo(tab)
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							self.host.deleteScene(self); //.moveScene(self, 1);
+							self.host.refreshControls();
+						}					
+					})
+					;
 
 		this.muteController = cp5.addToggle("mute_"+tabName)
 				.setPosition(margin, margin)
@@ -923,6 +989,17 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		//tab.setSize(50, currentY);//.setHeight( currentY);
 	}
 	
+	protected void guiOpenTab(ControlFrame cf) {
+		cf.queueUpdate(new Runnable() {
+			@Override
+			public void run() {
+				Group g = (Group) cp5.get(tabName);//.getParent();
+				g.open();
+				Accordion a = ((Accordion)g.getParent());
+				a.updateItems();
+			}								
+		});		
+	}
 	//TODO: make this able to redraw the aliases when they change 
 	synchronized private int makeControlsCanvasAliases(int margin) {
 		if (this.muteController==null) return 0;

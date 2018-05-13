@@ -8,6 +8,7 @@ import java.util.HashMap;
 import controlP5.Bang;
 import controlP5.Group;
 import vurfeclipse.APP;
+import vurfeclipse.Targetable;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.parameters.ParameterBuffer;
@@ -135,7 +136,7 @@ public abstract class ParameterCallback implements Serializable {
 		return g;
 	}
 
-	public boolean notifyRemoval(Filter newf) {
+	public boolean notifyRemoval(Targetable newf) {
 		return false;
 	}
 

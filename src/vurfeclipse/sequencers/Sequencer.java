@@ -15,6 +15,7 @@ import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.Project;
+import vurfeclipse.scenes.Scene;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.streams.Stream;
 import vurfeclipse.ui.ControlFrame;
@@ -311,7 +312,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		this.updateGuiStatus();
 	}
 	
-	public boolean notifyRemoval(Filter newf) {
+	public boolean notifyRemoval(Targetable newf) {
 		boolean relevant = false;
 		for (Entry<String, Stream> s : getStreams().entrySet()) {
 			boolean t = s.getValue().notifyRemoval(newf);

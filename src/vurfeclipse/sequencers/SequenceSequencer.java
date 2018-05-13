@@ -181,6 +181,26 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return this._runSequences(this.ticks);
 	}
 
+
+
+
+	private void _runSequences(Float castAs) {
+		if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
+			println(this+"#runSequences(): is readyToChange from " + this.activeSequenceName + ", calling randomSequence()");
+			nextSequence();
+		}
+		
+		if (getActiveSequence()==null) nextSequence();
+		
+		if (getActiveSequence()!=null) 
+			getActiveSequence().setValuesForNorm(castAs);
+
+		//gui : update current progress
+		if (getActiveSequence()!=null) this.updateGuiProgress(getActiveSequence());
+		
+		//this.getActiveSequence().setValuesForNorm(castAs);		
+	}
+	
 	synchronized public boolean _runSequences(int time) {
 		
 		if (debug) 
@@ -232,6 +252,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		//urls.putAll(super.getTargetURLs());
 
 		urls.put("/seq/globalTime", this);
+		urls.put("/seq/seqTime", this);
+		
+		urls.put("/seq/next", this);
 		
 		urls.put("/seq/seed", this);
 		urls.put("/seq/changeTo", this);
@@ -279,6 +302,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				payload = spl[3];
 			//this.ticks = (Integer)Parameter.castAs(payload, Integer.class);//.toString());
 			this._runSequences((Integer)Parameter.castAs(payload, Integer.class));
+		} else if (spl[2].equals("seqTime")) {
+			this._runSequences((Float)Parameter.castAs(payload,  Double.class));
 		} else if (spl[2].equals("changeTo")) {	   
 			if (spl.length>3) 									// if given a named sequence as either the last query portion 
 				payload = spl[3];
@@ -294,6 +319,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				changeSequence(seqName);
 			}
 			return "Sequencer active Sequence is currently " + activeSequenceName;
+		} else if (spl[2].equals("next")) {
+			if (payload!=null) {
+				if ((Float)Parameter.castAs(payload, Float.class)>=1.0f) {
+					this.nextSequence();
+				}
+			}
 		} else if (spl[2].equals("bank")) {	//  /bank/sequences
 			//println ("loading bank for " + spl[3]);
 			if ((spl[3].equals("sequences") || spl[3].equals("history") ) && (payload instanceof HashMap<?,?> || (payload instanceof LinkedHashMap<?,?>))) {		
@@ -333,7 +364,6 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 		return payload;
 	}
-
 
 
 

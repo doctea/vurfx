@@ -440,5 +440,12 @@ public class Parameter implements Serializable, Targetable {
 		return Float.parseFloat(this.value.toString());
 	}
 
+	@Override
+	public HashMap<String, Targetable> getTargetURLs() {
+		//todo: untested cast ?
+		//todo: should add /pn/ /ps/ too ... (/pa/ is getPath ?)
+		return (HashMap<String, Targetable>) new HashMap<String, Targetable> ().put(this.getPath(), this);
+	}
+
 
 }

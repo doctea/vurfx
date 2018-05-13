@@ -14,6 +14,7 @@ import controlP5.CallbackListener;
 import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Toggle;
+import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.ui.ControlFrame;
@@ -506,7 +507,7 @@ abstract public class Stream implements Serializable {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	public boolean notifyRemoval(Filter newf) {
+	public boolean notifyRemoval(Targetable newf) {
 		boolean relevant = false;
 		for (ParameterCallback c : this.listeners) {
 			boolean t = c.notifyRemoval(newf);

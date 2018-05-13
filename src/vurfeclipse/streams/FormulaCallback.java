@@ -277,8 +277,8 @@ public class FormulaCallback extends ParameterCallback {
 	}
 	
 	@Override
-	public boolean notifyRemoval(Filter newf) {
-		//boolean relevant = super.notifyRemoval(newf);
+	public boolean notifyRemoval(Targetable newf) {
+		boolean relevant = super.notifyRemoval(newf);
 		if (newf.getTargetURLs().containsKey(this.targetPath)) {
 			this.setEnabled(false);
 			return true;

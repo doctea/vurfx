@@ -142,8 +142,8 @@ public class ControlFrame extends PApplet {
 
 	public void queueUpdate(final Runnable runnable) {
 		//synchronized(updateQueue) {
-			if (processing) 
-				println("queueing a " + runnable + " while processing!!");
+			/*if (debug && processing) 
+				println("queueing a " + runnable + " while processing!!");*/
 			synchronized (updateQueue) {
 				this.updateQueue.add(runnable);
 			}

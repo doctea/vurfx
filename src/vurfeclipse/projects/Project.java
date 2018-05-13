@@ -1223,5 +1223,42 @@ public abstract class Project implements Serializable {
 			}
 			return isSubclassOf;
 	}
+
+	
+	public synchronized void moveScene(Scene f, int direction) {
+		synchronized (this.scenes) { 
+			for (int i = 0 ; i < this.scenes.size() ; i++) {
+				if (i+direction<0 || i+direction>this.scenes.size()-1) continue;
+				if (this.scenes.get(i)==f) {
+					Scene t;
+					t = scenes.get(i+direction);
+					scenes.set(i+direction,f);
+					scenes.set(i,t);
+					break;
+				}
+			}
+		}
+	}
+
+	public void refreshControls() {
+		getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {
+				setupControls(getApp().getCF());
+			}
+		});
+		
+	}
+
+	public void deleteScene(Scene self) {
+		synchronized(scenes) {
+			this.sequencer.notifyRemoval(self);
+			for (Filter f : self.getFilters()) {
+				this.sequencer.notifyRemoval(f);
+			}
+			scenes.remove(self);
+		}
+		
+	}
 	
 }
