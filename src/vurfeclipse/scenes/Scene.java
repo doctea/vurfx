@@ -186,6 +186,10 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		return c;
 	}
 
+	public boolean hasCanvasMapping(String canvasName) {
+		return this.buffermap.containsKey(canvasName);
+	}
+	
 	public String getCanvasMapping(String canvasName) {
 		String mapTo = (String)buffermap.get(canvasName);
 		if (mapTo==null) {
@@ -1017,7 +1021,12 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		cp5.addButton(tabName + "_add_canvas").setLabel("[+]").setPosition(start_x, margin).setWidth(margin*2).moveTo(tab).addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 			@Override
 			public void controlEvent(CallbackEvent theEvent) {
-				self.setCanvas("new"+self.getCanvasMappings().size(), "/canvases/new"+self.getCanvasMappings().size());
+				//self.setCanvas("new"+self.getCanvasMappings().size(), "/canvases/new"+self.getCanvasMappings().size());
+				int n = 0;
+				while (self.hasCanvasMapping("new"+n)) {
+					n++;
+				}
+				self.setCanvas("new"+n, "/canvases/" + self.getSceneName() + "/new"+n);
 				self.refreshControls();
 			}
 		});
@@ -1271,10 +1280,14 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	List<Runnable> updateQueue = Collections.synchronizedList(new ArrayList<Runnable>());
 
 	public synchronized void processUpdateQueue() {
-		for (Runnable q : updateQueue) {
+		Iterator<Runnable> it = updateQueue.iterator();
+		//for (Runnable q : updateQueue) {
+		while (it.hasNext()) {
+			Runnable q = it.next();
 			q.run();
+			it.remove();
 		}
-		this.clearQueue();	
+		//this.clearQueue();	
 	}
 
 	synchronized private void clearQueue() {

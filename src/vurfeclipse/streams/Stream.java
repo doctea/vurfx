@@ -305,9 +305,9 @@ abstract public class Stream implements Serializable {
 
 		return null;
 	}
-	synchronized public void setupControls(final ControlFrame cf, Group g) {
+	public void setupControls(final ControlFrame cf, Group g) {
 		//cf.control().addScrollableList(this.streamName);
-		synchronized (g) {
+		synchronized (cf /*g*/) {
 		int n = 0;
 		int margin_y = 20, gap_y = 5, margin_x = 20;
 

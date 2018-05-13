@@ -1,6 +1,7 @@
 package vurfeclipse.ui;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import controlP5.Accordion;
@@ -22,8 +23,8 @@ public class StreamEditor extends Group {
 		
 	}
 
-	synchronized public ControllerGroup setupStreamEditor(final ControlFrame cf, HashMap<String,Stream> streams) {
-		synchronized (streams) {
+	synchronized public ControllerGroup setupStreamEditor(final ControlFrame cf, Map<String, Stream> map) {
+		synchronized (map) {
 			if (editor!=null) editor.remove();
 			Group outer = new Group(cf.cp5, "streams_editor_outer").moveTo(this).hideBar();
 			int pos_y = 0, margin_x = 20;
@@ -45,7 +46,7 @@ public class StreamEditor extends Group {
 			editor = cf.control().addAccordion("streams_editor").setWidth(2 * (cf.sketchWidth()/3)).moveTo(outer).setBarHeight(20).setPosition(2,pos_y);
 	
 			//Scene n;
-			for (Entry<String, Stream> i : streams.entrySet()) {
+			for (Entry<String, Stream> i : map.entrySet()) {
 				//String tabName = "["+c+"] " + n.getSceneName(); //getClass();
 				//ControlP5 cp5 = ((VurfEclipse)APP.getApp()).getCP5();
 				//Tab tab = cp5.addTab(tabName);

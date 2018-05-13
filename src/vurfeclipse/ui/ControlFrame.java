@@ -6,7 +6,9 @@ import controlP5.ScrollableList;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import processing.core.PApplet;
 import vurfeclipse.VurfEclipse;
@@ -102,20 +104,36 @@ public class ControlFrame extends PApplet {
 		return this.cp5;
 	}
 
+	boolean processing = false;
 	public void draw() {
 		background(190);
-		this.processUpdateQueue();
+		if (!processing) {
+			processing = true;
+			this.processUpdateQueue();
+			processing = false;
+		}
 	}
 	
 	List<Runnable> updateQueue = Collections.synchronizedList(new ArrayList<Runnable>());
 
 	synchronized private void processUpdateQueue() {
-		synchronized (updateQueue) {
-			for (Runnable q : updateQueue) {
-				q.run();
-			}
-			this.clearQueue();
+		//if (processing) return;
+		ArrayList<Runnable> runQueue = new ArrayList<Runnable>();
+		synchronized(updateQueue) {
+			runQueue.addAll(updateQueue);
 		}
+			ListIterator<Runnable> li = runQueue.listIterator();
+			//println("starting queue loop...");
+			while (li.hasNext()) {
+				Runnable q = li.next();
+				q.run();
+				synchronized(updateQueue) {
+					updateQueue.remove(q);
+				}
+			}
+			//println("...out of queue loop and removed spent");
+			//this.clearQueue();
+		//}
 	}
 
 	synchronized private void clearQueue() {
@@ -123,9 +141,13 @@ public class ControlFrame extends PApplet {
 	}
 
 	public void queueUpdate(final Runnable runnable) {
-		synchronized(updateQueue) {
-			this.updateQueue.add(runnable);
-		}
+		//synchronized(updateQueue) {
+			if (processing) 
+				println("queueing a " + runnable + " while processing!!");
+			synchronized (updateQueue) {
+				this.updateQueue.add(runnable);
+			}
+		//}
 	}
 
 	@Override
@@ -139,7 +161,6 @@ public class ControlFrame extends PApplet {
 			@Override
 			public void run() {
 				((SequenceSequencer)VurfEclipse.pr.getSequencer()).updateGuiStreamEditor(self); //.streamEditor.setupControl(this, VurfEclipse.pr.getSequencer().getStreams());
-	
 			}
 		});
 	}

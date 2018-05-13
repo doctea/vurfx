@@ -1,130 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="lib" path="lib/user/gson-2.3.jar"/>
-	<classpathentry kind="lib" path="lib/base/minim/jl1.0.jar">
+	<classpathentry excluding="vurfeclipse/filters/DiskWriterFilter.java|vurfeclipse/filters/dlibKinectFilter.java|vurfeclipse/filters/GLColourDropper.java|vurfeclipse/filters/ImageDrawer.java|vurfeclipse/filters/OpenNIFilter.java|vurfeclipse/scenes/FeedbackScene.java|vurfeclipse/scenes/WebcamScene.java|vurfeclipse/scenes/VideoScene.java|vurfeclipse/scenes/Demo2Scene.java|vurfeclipse/scenes/DemoScene.java|vurfeclipse/streams/MidiStream.java|vurfeclipse/projects/KinectTestProject.java|vurfeclipse/projects/SimpleProject.java|vurfeclipse/user/projects/AboveBoardsProject.java|vurfeclipse/user/projects/NewJourneyProject.java|vurfeclipse/user/projects/NozstockProject.java|vurfeclipse/user/projects/ParadoxProject.java|vurfeclipse/user/projects/PharmacyProject.java|vurfeclipse/user/projects/PostProject.java|vurfeclipse/user/projects/PsychNightProject.java|vurfeclipse/user/projects/SocioSukiProject.java|vurfeclipse/user/projects/SocioSukiVideo2Project.java|vurfeclipse/user/projects/TempSocioSukiVideoProject.java|vurfeclipse/user/projects/TestProject.java|vurfeclipse/user/projects/MagicDustProject.java|vurfeclipse/user/projects/MinimalProject.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/base/core-336/core.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/core-336"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/minim/jsminim.jar">
+	<classpathentry kind="lib" path="lib/base/core-336/gluegen-rt.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/core-336"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/minim/minim-spi.jar">
+	<classpathentry kind="lib" path="lib/base/core-336/jogl-all.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/minim/minim.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/minim/mp3spi1.9.4.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/minim/tritonus_aos.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/minim/tritonus_share.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/minim"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/candy/candy.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/candy"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/colorutils/colorutils.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/colorutils"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/controlP5/library/controlP5.jar" sourcepath="lib/user/controlP5/src">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/code/vurf-eclipse/lib/user/controlP5/reference/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/datautils/datautils.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/datautils"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/dLibs_freenect/dLibs_freenect.jar" sourcepath="c:/code/processing/sketches/libraries/dLibs_freenect/src">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/c:/code/processing/sketches/libraries/dLibs_freenect/reference/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/dLibs_freenect"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/eyetracking/eyetracking.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/eyetracking"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/eyetracking/text20.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/eyetracking"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/flob/flob.jar" sourcepath="c:/code/processing/sketches/libraries/flob/src">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/c:/code/processing/sketches/libraries/flob/reference/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/flob"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/kinect/kinect.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/kinect"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/proxml/proxml.jar" sourcepath="c:/code/processing/sketches/libraries/proxml/src">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/proxml"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/rwmidi/rwmidi.jar" sourcepath="c:/code/processing/sketches/libraries/rwmidi/src">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/rwmidi"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/themidibus/themidibus.jar" sourcepath="c:/code/processing/sketches/libraries/themidibus/src">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/code/processing/sketches/libraries/themidibus/reference/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/themidibus"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/core-336"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/video/library/video.jar"/>
-	<classpathentry kind="lib" path="lib/user/video/library/gstreamer-java.jar"/>
-	<classpathentry kind="lib" path="lib/user/video/library/jna.jar"/>
-	<classpathentry excluding="vurfeclipse/filters/dlibKinectFilter.java|vurfeclipse/filters/GLColourDropper.java|vurfeclipse/filters/ImageDrawer.java|vurfeclipse/filters/PointDrawer.java|vurfeclipse/user/projects/AboveBoardsProject.java|vurfeclipse/user/projects/NozstockProject.java|vurfeclipse/scenes/Demo2Scene.java|vurfeclipse/scenes/DemoScene.java|vurfeclipse/user/projects/MagicDustProject.java|vurfeclipse/user/projects/ParadoxProject.java|vurfeclipse/projects/TestProject.java|vurfeclipse/scenes/FeedbackScene.java|vurfeclipse/scenes/VideoScene.java|vurfeclipse/scenes/WebcamScene.java|vurfeclipse/user/projects/NewJourneyProject.java|vurfeclipse/user/projects/PharmacyProject.java|vurfeclipse/user/projects/PostProject.java|vurfeclipse/user/projects/PsychNightProject.java|vurfeclipse/user/projects/SocioSukiProject.java|vurfeclipse/user/projects/SocioSukiVideo2Project.java|vurfeclipse/user/projects/TempSocioSukiVideoProject.java|vurfeclipse/projects/SimpleProject.java|vurfeclipse/filters/DiskWriterFilter.java|vurfeclipse/test/SimpleOpenNI_User_eclipse.java" kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
-	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
-	<classpathentry kind="lib" path="lib/user/GSVideo/library/gstreamer-java.jar"/>
-	<classpathentry kind="lib" path="lib/user/GSVideo/library/GSVideo.jar"/>
-	<classpathentry kind="lib" path="lib/user/GSVideo/library/jna.jar"/>
-	<classpathentry kind="lib" path="lib/user/fullscreen/library/fullscreen.jar"/>
-	<classpathentry kind="lib" path="lib/user/PostFX/library/PostFX.jar" sourcepath="lib/user/PostFX/src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/processing 336"/>
-	<classpathentry kind="lib" path="lib/user/openkinect_processing/library/openkinect_processing.jar" sourcepath="lib/user/openkinect_processing/src">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/openkinect_processing/library/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar"/>
-	<classpathentry kind="lib" path="lib/user/spout/library/spout.jar" sourcepath="lib/user/spout/src">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/spout/library"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/user/controlP5/library/controlP5.jar"/>
+	<classpathentry kind="lib" path="lib/user/openkinect_processing/library/openkinect_processing.jar"/>
 	<classpathentry kind="lib" path="lib/user/EvalEx-2.0.jar"/>
-	<classpathentry kind="lib" path="lib/user/oscP5/library/oscP5.jar" sourcepath="lib/user/oscP5/src"/>
+	<classpathentry kind="lib" path="lib/user/gstreamer-java-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
+	<classpathentry kind="lib" path="lib/user/gson-2.3.jar"/>
+	<classpathentry kind="lib" path="lib/user/oscP5/library/oscP5.jar"/>
+	<classpathentry kind="lib" path="lib/user/proxml/proxml.jar"/>
+	<classpathentry kind="lib" path="lib/user/PostFX/library/PostFX.jar"/>
+	<classpathentry kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
+	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/SimpleOpenNI/library"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/user/video/library/jna.jar"/>
+	<classpathentry kind="lib" path="lib/user/video/library/gstreamer-java.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

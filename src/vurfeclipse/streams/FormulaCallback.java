@@ -110,8 +110,7 @@ public class FormulaCallback extends ParameterCallback {
 		Targetable target = (Targetable) APP.getApp().pr.getObjectForPath(targetPath);
 		//Targetable source = (Targetable) APP.getApp().pr.getObjectForPath(sourcePath);
 		
-		if (target==null) {
-			
+		if (target==null) {			
 			System.err.println("Caught a null target for path " + targetPath + " in " + this + "!");
 			//target = (Targetable) APP.getApp().pr.getObjectForPath(targetPath);
 		}

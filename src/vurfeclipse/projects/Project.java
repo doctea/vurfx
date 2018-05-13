@@ -460,18 +460,23 @@ public abstract class Project implements Serializable {
 		//offscreen.background(APP.getApp().random(255));
 
 		//offscreen.endDraw();
-		for (Scene sc : scenes) {
-			//println("Applying to " + sc.toString() + " to " + sc.getSceneName());
-			//sc.applyGL(gfx);
-			
-			// run anything waiting to be run in this thread
-			sc.processUpdateQueue();
-			
-			if (shouldDrawScene(sc)) {
-				//println("Should draw " + sc + " to " + out.getSurf());
-				sc.applyGLtoCanvas(out); //getCanvas(getPath()+"out"));
-				//sc.applyGL(buffers[BUF_OUT]);
-				//sc.applyGL(off);
+		synchronized (this.getScenes()) {
+			for (Scene sc : this.getScenes()) {
+			//Iterator<Scene> it = this.getScenes().listIterator();
+			//while (it.hasNext()) {
+				//Scene sc = it.next();
+				//println("Applying to " + sc.toString() + " to " + sc.getSceneName());
+				//sc.applyGL(gfx);
+				
+				// run anything waiting to be run in this thread
+				sc.processUpdateQueue();
+				
+				if (shouldDrawScene(sc)) {
+					//println("Should draw " + sc + " to " + out.getSurf());
+					sc.applyGLtoCanvas(out); //getCanvas(getPath()+"out"));
+					//sc.applyGL(buffers[BUF_OUT]);
+					//sc.applyGL(off);
+				}
 			}
 		}
 		////gfx.image(buffers[BUF_OUT].getTexture(),0,0,w,h);
@@ -794,9 +799,9 @@ public abstract class Project implements Serializable {
 		
 		final Project self = this;
 		
-		final ScrollableList lstAddFilterSelector = new ScrollableList(cp5, sceneTab.getName() + "_add_filter_selector")
+		final ScrollableList lstAddSceneSelector = new ScrollableList(cp5, sceneTab.getName() + "_add_scene_selector")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-				.setLabel("[add filter]") //((FormulaCallback)c).targetPath)
+				.setLabel("[add Scene]") //((FormulaCallback)c).targetPath)
 				.moveTo(sceneTab)
 				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
 				.addItems((String[]) available_scenes.keySet().toArray(new String[available_scenes.size()]))
@@ -809,19 +814,19 @@ public abstract class Project implements Serializable {
 				.onEnter(cf.toFront)
 				.close();
 		
-		Button btnAddFilter = new Button(cp5, sceneTab.getName() + "_add_filter_button")
+		Button btnAddScene = new Button(cp5, sceneTab.getName() + "_add_scene_button")
 				.setLabel("add")
 				.moveTo(sceneTab)
 				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
-				.setPosition(lstAddFilterSelector.getWidth() + margin + lstAddFilterSelector.getPosition()[0], margin)
+				.setPosition(lstAddSceneSelector.getWidth() + margin + lstAddSceneSelector.getPosition()[0], margin)
 				.setWidth(margin * 4).setHeight(15)			
 				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 					@Override
 					public void controlEvent(CallbackEvent theEvent) {
-						int index = (int) lstAddFilterSelector.getValue();
+						int index = (int) lstAddSceneSelector.getValue();
 						final String selected = (String)(
 								//(ScrollableList)theEvent.getController())
-								lstAddFilterSelector
+								lstAddSceneSelector
 								.getItem(index).get("text")
 								);
 						//final String selected = lstAddFilterSelector.getStringValue();
@@ -835,13 +840,12 @@ public abstract class Project implements Serializable {
 								try {
 									Scene newf = Scene.createScene(classname, self, self.w, self.h);
 									
-									String n = classname;
-									/*int i = 0;
 									String n = selected;
-									while (self.getScene(n)!=null) {
+									int i = 0;
+									while (self.getSceneForPath("/sc/"+n)!=null) {
+										n = selected + "_" + i;
 										i++;
-										n = selected + i;
-									}*/
+									}
 									
 									newf.setSceneName(n);//.readSnapshot(setup).setFilterName(newName);
 									//println("size of filters is " + self.filters.size());

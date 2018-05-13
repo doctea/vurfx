@@ -1,6 +1,8 @@
 package vurfeclipse.sequencers;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -54,7 +56,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	int ticks = 0; //for tracking sequencer position when paused
 	int last = 0;
 	
-	private HashMap<String,Stream> streams = new HashMap<String,Stream>();
+	private Map<String, Stream> streams = Collections.synchronizedMap(new HashMap<String,Stream>());
 
 	public ControlFrame cf;
 
@@ -72,7 +74,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 			return (Stream) this.streams.get(streamName);
 		}
 	}
-	public HashMap<String, Stream> getStreams() {
+	public Map<String, Stream> getStreams() {
 		synchronized (streams) {
 			return streams;
 		}

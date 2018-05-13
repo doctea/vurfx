@@ -785,6 +785,9 @@ public class VurfEclipse extends PApplet {
 			if (key == ' ') {
 				screenGrab = true;
 			} else if (key == '*') {		// debug -- try to restart the control panel if its fucked up!
+				this.controlFrame.stop();
+				this.controlFrame.control().papplet.exit();
+				this.controlFrame.exit();
 				this.controlFrame = null;
 				this.setupControls();
 			}

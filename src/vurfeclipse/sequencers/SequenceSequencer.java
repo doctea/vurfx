@@ -183,7 +183,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	synchronized public boolean _runSequences(int time) {
 		
-		//if (debug) 
+		if (debug) 
 			println("runSequences time is " + time);
 		if (!APP.getApp().isReady()) return false;
 
