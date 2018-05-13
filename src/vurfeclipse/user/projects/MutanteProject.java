@@ -75,7 +75,7 @@ public class MutanteProject extends Project implements Serializable {
 				super.nextSequence();
 			}
 			@Override
-			synchronized public boolean runSequences() {
+			synchronized public boolean runSequences(int time) {
 				if (!APP.getApp().isReady()) return false;
 				seq_count++;
 				/*if (this.getCurrentSequenceName().contains("_next_")) {
@@ -83,7 +83,7 @@ public class MutanteProject extends Project implements Serializable {
 	  			super.runSequences();
 	  			this.nextSequence();
 	  		}*/
-				return super.runSequences();
+				return super.runSequences(time);
 			}
 		};
 

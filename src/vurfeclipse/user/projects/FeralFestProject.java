@@ -77,14 +77,14 @@ public class FeralFestProject extends Project {
 				super.nextSequence();
 			}
 			@Override
-			public boolean runSequences() {
+			public boolean runSequences(int time) {
 				seq_count++;
 				if (this.getCurrentSequenceName().contains("_next_")) {
 					println("Fastforwarding sequence " + this.getCurrentSequenceName() + " because it contains '_next_'..");
-					super.runSequences();
+					super.runSequences(time);
 					this.nextSequence();
 				}
-				return super.runSequences();
+				return super.runSequences(time);
 			}
 		};
 
