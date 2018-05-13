@@ -185,6 +185,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 
 	private void _runSequences(Float castAs) {
+		if (this.isLocked()) return;
+
 		if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
 			println(this+"#runSequences(): is readyToChange from " + this.activeSequenceName + ", calling randomSequence()");
 			nextSequence();
@@ -198,6 +200,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		//gui : update current progress
 		if (getActiveSequence()!=null) this.updateGuiProgress(getActiveSequence());
 		
+		last = APP.getApp().timeMillis;
 		//this.getActiveSequence().setValuesForNorm(castAs);		
 	}
 	
@@ -1296,7 +1299,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 					e.printStackTrace();
 				}
 			}
-		} else if (ev.getAction()==ListBox.ACTION_CLICK && ev.getController()==this.lstHistory) {
+		} else if (ev.getAction()==ListBox.ACTION_BROADCAST && ev.getController()==this.lstHistory) {
 				//println("My name is: " + this.lstSequences.getValueLabel().getText());
 				String sequenceName = this.lstHistory.getValueLabel().getText();
 
