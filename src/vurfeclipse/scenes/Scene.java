@@ -1014,86 +1014,92 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		int margin_y = 30;
 		
 
-		Class[] filters_a = host.getAvailableFilters();
-		final TreeMap available_filters = new TreeMap<String,Class> ();
-		//String[] filter_names = new String[filters.length];
-		for (Class f : filters_a) {
-			available_filters.put(f.getSimpleName(), f);
-		}
-		//available_filters = new TreeMap(availableFilters);
 		
-		
-		final ScrollableList lstAddFilterSelector = new ScrollableList(cp5, tabName + "_add_filter_selector")
-				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-				.setLabel("[add filter]") //((FormulaCallback)c).targetPath)
-				.moveTo(tab)
-				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
-				.addItems((String[]) available_filters.keySet().toArray(new String[available_filters.size()]))
-				.setPosition(start_x, margin)
-				.setWidth(margin * 10)
-				.setBarHeight(15)
-				.setItemHeight(15)
-				.setHeight(5 * 15)
-				.onLeave(cf.close)
-				.onEnter(cf.toFront)
-				.close();
-		
-		println("row is " + row);
-		
-		Button btnAddFilter = new Button(cp5, tabName + "_add_filter_button")
-				.setLabel("add")
-				.moveTo(tab)
-				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
-				.setPosition(lstAddFilterSelector.getWidth() + margin + lstAddFilterSelector.getPosition()[0], margin)
-				.setWidth(margin * 4).setHeight(15)			
-				.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
-					@Override
-					public void controlEvent(CallbackEvent theEvent) {
-						int index = (int) lstAddFilterSelector.getValue();
-						final String selected = (String)(
-								//(ScrollableList)theEvent.getController())
-								lstAddFilterSelector
-								.getItem(index).get("text")
-								);
-						//final String selected = lstAddFilterSelector.getStringValue();
-						final String classname = ((Class<Filter>)available_filters.get(selected)).getName();
-						//self.addFilter(Filter.createFilter(classname, self));
-						
-						self.queueUpdate(new Runnable() {
-							@Override
-							public void run() {								
-								
-								try {
-									Filter newf = Filter.createFilter(classname, self);
-									
-									int i = 0;
-									String n = selected;
-									while (self.getFilter(n)!=null) {
-										i++;
-										n = selected + i;
-									}
-									
-									newf.setFilterName(n);//.readSnapshot(setup).setFilterName(newName);
-									//println("size of filters is " + self.filters.size());
+			if (null==cp5.get(tabName + "_add_filter_selector")) {
+				
 
-									//synchronized(self) {
-									self.addFilter(newf);
-									newf.initialise();
-									newf.start();
-									self.refreshControls();
-								} catch (Exception e) {
-									println("Caught exception trying to add a new filter " + e);
-									e.printStackTrace();
-								} 
-							}});
-						
-						//self.setCanvas(map.getKey(), (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
-					}
-				})
-				;
-		
-		start_x += margin*18;
-		
+				Class[] filters_a = host.getAvailableFilters();
+				final TreeMap available_filters = new TreeMap<String,Class> ();
+				//String[] filter_names = new String[filters.length];
+				for (Class f : filters_a) {
+					available_filters.put(f.getSimpleName(), f);
+				}
+				//available_filters = new TreeMap(availableFilters);
+				
+				
+			final ScrollableList lstAddFilterSelector = new ScrollableList(cp5, tabName + "_add_filter_selector")
+					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+					.setLabel("[add filter]") //((FormulaCallback)c).targetPath)
+					.moveTo(tab)
+					//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+					.addItems((String[]) available_filters.keySet().toArray(new String[available_filters.size()]))
+					.setPosition(start_x, margin)
+					.setWidth(margin * 10)
+					.setBarHeight(15)
+					.setItemHeight(15)
+					.setHeight(5 * 15)
+					.onLeave(cf.close)
+					.onEnter(cf.toFront)
+					.close();
+			
+			println("row is " + row);
+			
+			Button btnAddFilter = new Button(cp5, tabName + "_add_filter_button")
+					.setLabel("add")
+					.moveTo(tab)
+					//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+					.setPosition(lstAddFilterSelector.getWidth() + margin + lstAddFilterSelector.getPosition()[0], margin)
+					.setWidth(margin * 4).setHeight(15)			
+					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							int index = (int) lstAddFilterSelector.getValue();
+							final String selected = (String)(
+									//(ScrollableList)theEvent.getController())
+									lstAddFilterSelector
+									.getItem(index).get("text")
+									);
+							//final String selected = lstAddFilterSelector.getStringValue();
+							final String classname = ((Class<Filter>)available_filters.get(selected)).getName();
+							//self.addFilter(Filter.createFilter(classname, self));
+							
+							self.queueUpdate(new Runnable() {
+								@Override
+								public void run() {								
+									
+									try {
+										Filter newf = Filter.createFilter(classname, self);
+										
+										int i = 0;
+										String n = selected;
+										while (self.getFilter(n)!=null) {
+											i++;
+											n = selected + i;
+										}
+										
+										newf.setFilterName(n);//.readSnapshot(setup).setFilterName(newName);
+										//println("size of filters is " + self.filters.size());
+	
+										//synchronized(self) {
+										self.addFilter(newf);
+										newf.initialise();
+										newf.start();
+										self.refreshControls();
+									} catch (Exception e) {
+										println("Caught exception trying to add a new filter " + e);
+										e.printStackTrace();
+									} 
+								}});
+							
+							//self.setCanvas(map.getKey(), (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
+						}
+					})
+					;
+			
+			start_x += margin*18;
+		} else {
+			start_x += margin*18; 
+		}
 		
 		cp5.addButton(tabName + "_add_canvas").setLabel("[+]").setPosition(start_x, margin).setWidth(margin*2).moveTo(tab).addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 			@Override
@@ -1271,7 +1277,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	private void setCanvasMappings(HashMap<String,String> value) {
 		this.buffermap = value;
 		//		this.makeControlsCanvasAliases(8);
-		if (this.muteController!=null) refreshControls();
+		if (this.muteController!=null) refreshCanvasControls();
 	}
 	public static Scene createScene(String classname, Project host, int width, int height) {
 		Class<?> clazz;
@@ -1328,6 +1334,26 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		//   and disable/remove them so that errors aren't thrown
 		return APP.getApp().pr.getSequencer().notifyRemoval(newf);
 	}
+	
+	private void refreshCanvasControls() {
+		//TODO: make this actually only update the canvas controls rather than the entire scene control panel!
+		final Scene self = this;
+
+		if (!host.getApp().isReady()) return;
+		host.getApp().getCF().queueUpdate(new Runnable() {
+			@Override
+			public void run() {
+				//tab.remove();
+				//tab.update();
+				//self.makeControlsCanvasAliases(10);	//TODO: make this actually only update the canvas controls rather than the entire scene control panel! 
+				self.setupControls(host.getApp().getCF(), tab);
+				tab.setWidth(host.getApp().getCF().sketchWidth());
+				((Accordion)tab.getParent()).updateItems();		// automatically readjust tab heights to fit new controls*
+			}
+		});
+
+	}
+
 	synchronized public void refreshControls() {
 		final Scene self = this;
 		

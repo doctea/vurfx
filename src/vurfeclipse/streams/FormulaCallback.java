@@ -183,6 +183,9 @@ public class FormulaCallback extends ParameterCallback {
 		// set up the Target dropdown
 		SortedSet<String> keys = new TreeSet<String>(APP.getApp().pr.getTargetURLs().keySet());
 		String[] targetUrls = keys.toArray(new String[0]);
+		keys.clear();
+		keys = null;
+		//String[] targetUrls = new String[] {};
 		
 		final ScrollableList lstTarget = cf.control().addScrollableList(name + self.getStreamSource() + "_" /* n +*/ + "_Target URL")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)

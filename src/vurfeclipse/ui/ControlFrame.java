@@ -115,12 +115,18 @@ public class ControlFrame extends PApplet {
 	}
 	
 	List<Runnable> updateQueue = Collections.synchronizedList(new ArrayList<Runnable>());
+	private boolean debug = false;
 
 	synchronized private void processUpdateQueue() {
 		//if (processing) return;
 		ArrayList<Runnable> runQueue = new ArrayList<Runnable>();
 		synchronized(updateQueue) {
-			runQueue.addAll(updateQueue);
+			if (updateQueue.size()>0) {
+				runQueue.addAll(updateQueue);
+				if (debug) println("updateQueue has " + updateQueue.size() + " waiting");
+			} else {
+				return;
+			}
 		}
 			ListIterator<Runnable> li = runQueue.listIterator();
 			//println("starting queue loop...");

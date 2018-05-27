@@ -1,6 +1,7 @@
 package vurfeclipse.streams;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import controlP5.Group;
 import controlP5.Textfield;
 import processing.core.PApplet;
 import vurfeclipse.APP;
+import vurfeclipse.sequencers.SequenceSequencer;
 import vurfeclipse.ui.ControlFrame;
 
 public class BeatStream extends Stream implements Serializable { 
@@ -101,6 +103,7 @@ public class BeatStream extends Stream implements Serializable {
 				stepCounter = new int[stepDivisions.length];
 
 				this.addEvent("set_bpm", this.bpm);
+				
 				processEventMeat(0);
 			}
 		}
@@ -297,6 +300,13 @@ public class BeatStream extends Stream implements Serializable {
 
 	DecimalFormat df = new DecimalFormat("#.##");
 
+	@Override
+	protected void preCall(ParameterCallback c) {
+		if (c instanceof FormulaCallback) {
+			((FormulaCallback)c).e.setVariable("length", new BigDecimal(((SequenceSequencer)APP.getApp().pr.getSequencer()).getActiveSequence().getLengthMillis()));
+		}
+	}
+	
 	@Override
 	public boolean sendKeyPressed(char key) {
 		if (key=='\n') {

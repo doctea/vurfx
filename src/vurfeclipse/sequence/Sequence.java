@@ -37,7 +37,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	//int startTimeMillis;
 	private int lengthMillis = 2000;
 
-	public int iteration;
+	private int iteration;
 	
 	public boolean enabled = true;
 
@@ -278,7 +278,7 @@ abstract public class Sequence implements Serializable, Mutable {
 
 	public void start() {
 		setMuted(false);
-		iteration = 0;
+		setIteration(0);
 		//startTimeMillis = APP.getApp().millis();
 		current_pc = 0.01f;
 		last = 0;
@@ -311,12 +311,12 @@ abstract public class Sequence implements Serializable, Mutable {
 	public void stop() {
 		this.setMuted(true);
 		this.onStop();
-		this.iteration = 0;
+		this.setIteration(0);
 	}
 
 
 	public boolean readyToChange(int max_i) {
-		return Math.abs(iteration)>=max_i;
+		return Math.abs(getIteration())>=max_i;
 	}
 
 	/*public double getPCForElapsed(double elapsed) {
@@ -410,7 +410,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 		
 		if (pc>1.0f) { 
-			current_pc = 0.0f; //0.000001f;
+			current_pc = 0.0f; //0.000001f;b
 			pc = current_pc; //0.01f;
 			last = 0;
 			iteration++;	
@@ -423,11 +423,11 @@ abstract public class Sequence implements Serializable, Mutable {
 		
 		if (debug) println("so got pc " + pc);
 		
-		setValuesForNorm(pc, iteration);
+		setValuesForNorm(pc, getIteration());
 	}
 
 	public void setValuesForNorm(double pc) {
-		setValuesForNorm(pc,0);
+		setValuesForNorm(pc, getIteration());
 	}
 	public void setValuesForNorm(double pc, int iteration) {
 		if (enabled) {
@@ -435,7 +435,23 @@ abstract public class Sequence implements Serializable, Mutable {
 				/*if (this.host.getPath().equals("/sc/BlobScene")) {
 					println("badger");
 				}*/
+				if (pc>1.0f) { 
+					current_pc = 0.0f; //0.000001f;
+					pc = current_pc; //0.01f;
+					last = 0;
+					setIteration(getIteration()+1); //iteration++;
+					if (debug) println("set iteration + to " + iteration);
+				} else if (pc<0.000000f) {
+					current_pc = 1.0f; //0.999999f;
+					pc = current_pc; //0.999999f;
+					last = 0;
+					//iteration--;
+					setIteration(getIteration()-1);
+					if (debug) println("set iteration - to " + iteration);
+				}			
+				if (debug) println(pc + " setting with iteration " + iteration);
 				__setValuesForNorm(pc, iteration);
+				
 			} catch (Exception e) {
 				println("Caught " + e + " while trying to setValuesForNorm in " + this);
 				//if (debug) 
@@ -588,7 +604,7 @@ abstract public class Sequence implements Serializable, Mutable {
 
 		public int getPositionIteration() {
 			// TODO Auto-generated method stub
-			return iteration;
+			return getIteration();
 		}
 
 		public void saveSequencePreset(String filename) {
@@ -706,5 +722,14 @@ abstract public class Sequence implements Serializable, Mutable {
 		public void preserveCurrentParameters() {
 			//this.lastLoadedParams = this.collectParameters();
 			//this.lastLoadedParams.remove("scene_parameters");
+		}
+
+		public int getIteration() {
+			return iteration;
+		}
+
+		public void setIteration(int iteration) {
+			println("setting iteration to " + iteration);
+			this.iteration = iteration;
 		}
 }

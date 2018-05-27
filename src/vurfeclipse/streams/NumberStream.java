@@ -63,4 +63,10 @@ public class NumberStream extends Stream implements Serializable {
      currentValue += step+1;
   }
 
+@Override
+protected void preCall(ParameterCallback c) {
+	// TODO Auto-generated method stub
+	
+}
+
 }

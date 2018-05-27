@@ -165,6 +165,7 @@ abstract public class Stream implements Serializable {
 			
 			if (debug)
 				println("got " + mess.size() + " messages for " + tagName);
+			
 
 			if (mess!=null) {
 				Iterator<Object> m = mess.iterator();
@@ -187,6 +188,7 @@ abstract public class Stream implements Serializable {
 							//toDeleteList.add(callbacks);
 						} else {*/
 					try {
+						this.preCall(callback);
 						callback.__call(v);
 					} catch (Exception e) {
 						System.out.println("Stream " + this + " caught " + e.toString() + " while attempting to process callback for " + v + " on " + callback + "!");
@@ -221,6 +223,8 @@ abstract public class Stream implements Serializable {
 		this.messages.clear();
 	}
 
+	abstract protected void preCall(ParameterCallback c);	// TODO Auto-generated method stub
+	
 	protected String getMessageNameForStreamSource(String streamSource) {
 		//println("!!! streamSource is " + streamSource);
 		if (streamSource.split("/").length>1)

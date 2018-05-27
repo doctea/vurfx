@@ -5,6 +5,7 @@ import controlP5.ControllerGroup;
 import controlP5.Group;
 import vurfeclipse.APP;
 import vurfeclipse.sequence.Sequence;
+import vurfeclipse.sequencers.SequenceSequencer;
 
 public class SequenceEditor extends Group {
 	
@@ -38,6 +39,11 @@ public class SequenceEditor extends Group {
 		/*for (ControllerInterface<?> c : Collections.synchronizedList((List) this.controllers)) {
 			this.remove(c);
 		}*/
+		//if (true) return this;
+		if (((SequenceSequencer) APP.getApp().pr.getSequencer()).getActiveSequence()!=sequence) {
+			sequence.println("skipping setup of controls for non-active sequence!");
+			return this;
+		}
 		this.controllers.get().clear();
 		//this.remove();
 		if (sequence!=null) 

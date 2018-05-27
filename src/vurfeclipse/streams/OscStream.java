@@ -138,5 +138,11 @@ public class OscStream extends Stream implements OscEventListener {
 			println("unhandled typetag " + theOscMessage.get(0).toString());
 		}
 	}
+
+	@Override
+	protected void preCall(ParameterCallback c) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

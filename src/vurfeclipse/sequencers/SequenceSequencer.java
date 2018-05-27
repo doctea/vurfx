@@ -185,9 +185,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 
 	private void _runSequences(Float castAs) {
-		if (this.isLocked()) return;
+		//if (this.isLocked()) return;
 
-		if (readyToChange(2)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
+		if (!this.isLocked() && readyToChange(max_iterations)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
 			println(this+"#runSequences(): is readyToChange from " + this.activeSequenceName + ", calling randomSequence()");
 			nextSequence();
 		}
@@ -574,7 +574,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			println("Got NULL for " + this.activeSequenceName + "!");
 			return;
 		} else {
-			this.getActiveSequence().iteration = 0;
+			this.getActiveSequence().setIteration(0);
 		}
 
 		int oldCursor = historyCursor;
@@ -931,7 +931,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	public void restartSequence() {
 		println("restarting" + activeSequenceName);
-		this.getActiveSequence().iteration = 0;
+		this.getActiveSequence().setIteration(0);
 		this.getActiveSequence().start();
 	}
 
@@ -1312,7 +1312,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				//this.changeSequence(sequenceName, false, true);
 		} else if (ev.getAction()==ControlP5.ACTION_BROADCAST) {
 			if (ev.getController()==this.sldProgress) {
-				this.getActiveSequence().setValuesForNorm(this.sldProgress.getValue()/100.0,this.getActiveSequence().iteration);
+				this.getActiveSequence().setValuesForNorm(this.sldProgress.getValue()/100.0,this.getActiveSequence().getIteration());
 			} else if (ev.getController()==this.sldTimeScale) {
 				//this.getActiveSequence().setValuesForNorm(this.sldTimeScale.getValue(),this.getActiveSequence());
 				this.setTimeScale(sldTimeScale.getValue());

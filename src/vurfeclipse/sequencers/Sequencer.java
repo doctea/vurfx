@@ -36,7 +36,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 
 	int w, h;
 
-	public int max_iterations;
+	public int max_iterations = 2;
 
 	protected double timeScale = 1.0d;
 

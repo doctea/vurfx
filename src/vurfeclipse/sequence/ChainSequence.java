@@ -91,6 +91,8 @@ public class ChainSequence extends Sequence {
 	
 	@Override
 	synchronized public void __setValuesForNorm(double pc, int iteration) {
+		/*if (debug && iteration>0) 
+			println ("setvaluesfornorm with non-zero iteration " + iteration);*/
 		for (Sequence seq : chain) { 
 			seq.setValuesForNorm(pc,iteration);
 		}
