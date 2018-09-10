@@ -184,5 +184,6 @@ public class ControlFrame extends PApplet {
 			((ScrollableList)theEvent.getController()).close();
 		}
 	};
+	public SequenceEditor sequenceEditor;
 
 }

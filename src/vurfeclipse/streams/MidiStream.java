@@ -91,6 +91,11 @@ public class MidiStream extends Stream implements Serializable {
       addEvent("value", currentValue); //"BEAT AT " + time);
     }*/
   }
+	@Override
+	protected void preCall(ParameterCallback c) {
+		// TODO Auto-generated method stub
+		
+	}
   
   /*public void updateValue(int time, int step) {
      //System.out.println("updateValue with startTime:" + startTime + ", time:" + time + " step:" + step + " --- currentValue is " + currentValue);

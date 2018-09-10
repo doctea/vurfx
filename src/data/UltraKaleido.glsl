@@ -1,6 +1,6 @@
-// with thanks https://www.shadertoy.com/view/4lsGWj
-
 #define PROCESSING_TEXTURE_SHADER
+
+// with thanks https://www.shadertoy.com/view/4lsGWj
 
 uniform sampler2D src_tex_unit0;
 

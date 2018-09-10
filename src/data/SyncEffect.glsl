@@ -50,6 +50,7 @@ void main(void)
 	new_coord.x = abs(tex_coord.x * step_x);
 	new_coord.y = abs(tex_coord.y * step_y);
 
+	// tile correctly (invert image alternately)
 	m = int(tex_coord.x / (1.0/step_x)); //1.0/step_x));
 	//if ((m%2==1 && tex_coord.x<0.5) || m%2==0)// &&tex_coord.x>0.0)
 	if (abs(m)%2==1)

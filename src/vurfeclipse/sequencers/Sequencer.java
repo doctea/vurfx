@@ -54,7 +54,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	boolean locked = false;
 
 
-	int ticks = 0; //for tracking sequencer position when paused
+	protected int ticks = 0; //for tracking sequencer position when paused
 	int last = 0;
 	
 	private Map<String, Stream> streams = Collections.synchronizedMap(new HashMap<String,Stream>());
@@ -163,6 +163,8 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		urls.put("/seq/changeTo", this);
 
 		urls.put("/seq/timeScale", this);
+		
+		urls.put("/seq/time", this);
 
 		return urls;
 	}
@@ -171,6 +173,11 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		if (path.equals("/seq/timeScale")) {
 			this.setTimeScale(Double.parseDouble(payload.toString()));
 			return payload;
+		}
+		
+		if (path.equals("/seq/time")) {
+			this.ticks = (int) Float.parseFloat(payload.toString()); //runSequences((Float)payload);
+			runSequences(this.ticks);
 		}
 		
 		String[] spl = path.split("/",4); // TODO: much better URL and parameter checking.
@@ -190,7 +197,6 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		}
 		return null;
 	}
-
 	abstract public String getCurrentSequenceName();
 
 	public boolean isLocked() {
