@@ -662,7 +662,7 @@ abstract public class Sequence implements Serializable, Mutable {
 							@Override
 							public void controlEvent(CallbackEvent theEvent) {
 								//TODO: remove the sequence from the chain here!
-								System.out.printerr("TODO: implement remove sequence functionality!");
+								System.out.println("TODO: implement remove sequence functionality!");
 							}
 				});
 				
