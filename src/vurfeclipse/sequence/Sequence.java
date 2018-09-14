@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
+import controlP5.Button;
+import controlP5.CColor;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
@@ -650,6 +652,19 @@ abstract public class Sequence implements Serializable, Mutable {
 					})
 				;
 				pos_x += tglEnabled.getWidth() + margin_x;
+				
+				Button btnRemove = cp5.addButton(name + "_remove")
+						.setLabel("[x]")
+						.setPosition((cp5.controlWindow.papplet().width/3) - 20, pos_y)
+						.moveTo(seq)
+						.setColor(new CColor(255,0,0,0,0))
+						.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+							@Override
+							public void controlEvent(CallbackEvent theEvent) {
+								//TODO: remove the sequence from the chain here!
+								System.out.printerr("TODO: implement remove sequence functionality!");
+							}
+				});
 				
 	
 				Numberbox nmbLength = cp5.addNumberbox(name + "_length", "length")
