@@ -1037,8 +1037,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 
 	private HashMap<String, Object> readSequenceFile(String filename) {
-		// TODO Auto-generated method stub
 		try {
+			println("readSequence("+filename+") trying to load XML file");
 			return (HashMap<String, Object>) XMLSerializer.read(filename);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -1471,7 +1471,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	
+	public void loadBankSequences () {
+		// load project's sequences directory contents and create a Sequence for each xml file found
+		// open directory listing
+		// for (each entry in directory listing) {
+			// extract sequence_name from filename
+			this.bindSequence(sequence_name, this.loadSequence(file)); //load xml file contents 
+		}
+	}
 
 	public void saveBankSequences (String filename) {
 		for (Entry<String, Sequence> s : this.sequences.entrySet()) {
