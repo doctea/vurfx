@@ -62,8 +62,7 @@ public class SavedProject extends Project {
 		}
 		
 		this.sequencer.target("/seq/bank/sequences", this.inputAll.get("/seq").get("/seq/bank/sequences"));
-		
-		this.sequencer.target("/seq/bank/history", this.inputAll.get("/seq").get("/seq/bank/history"));
+		this.sequencer.target("/seq/bank/history", 	this.inputAll.get("/seq").get("/seq/bank/history"));
 		
 		// add the sequence from the saved load file
 		this.sequencer.target("/seq/changeTo", this.inputAll.get("/seq").get("/seq/sequence"));
