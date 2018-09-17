@@ -48,8 +48,11 @@ public class SequenceEditor extends Group {
 		}
 		//this.controllers.get().clear();
 		this.removeControllers();
+		/*if (APP.getApp().getCF().sequenceEditor!=null)
+			APP.getApp().getCF().control().remove(APP.getApp().getCF().sequenceEditor);
+		APP.getApp().getCF().sequenceEditor = null;*/
 		//this.remove();
-		boolean disable_controls = false; //true;
+		boolean disable_controls = true;//false; //
 		if (sequence!=null && !disable_controls) 
 			sequence.makeControls(APP.getApp().getCF(), sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,10);
 	

@@ -138,7 +138,7 @@ public class ControlFrame extends PApplet {
 				}
 			}
 			//println("...out of queue loop and removed spent");
-			//this.clearQueue();
+			//this.clearQueue();			
 		//}
 	}
 
@@ -184,6 +184,6 @@ public class ControlFrame extends PApplet {
 			((ScrollableList)theEvent.getController()).close();
 		}
 	};
-	public SequenceEditor sequenceEditor;
+	//public SequenceEditor sequenceEditor;
 
 }

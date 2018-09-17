@@ -122,7 +122,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	public Object getObjectForPath(String path) {
 		//println("Scene#getObjectForPath(" + path + ")");
 		try {
-			if (!path.contains("/") || path.equals("") || path.equals(this.getSceneName()) || path.equals("mute") || path.endsWith("nextMode")) 
+			if (!path.contains("/") || path.equals("") || path.equals(this.getSceneName()) || path.equals("mute")) // || !path.endsWith("nextMode")) 
 				return this;
 			String spl[] = path.split("/",2);
 
@@ -132,6 +132,8 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			if (spl2.length==1) {
 				return getFilter(filterName);
 			} else if (spl2[1].equals("mute")) {
+				return getFilter(filterName);
+			} else if (spl2[1].equals("nextMode")) {
 				return getFilter(filterName);
 			} else if (spl2[1].equals("pa")) {	// is a Parameter
 				if (getFilter(filterName)!=null)

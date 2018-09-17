@@ -303,7 +303,8 @@ public class BeatStream extends Stream implements Serializable {
 	@Override
 	protected void preCall(ParameterCallback c) {
 		if (c instanceof FormulaCallback) {
-			((FormulaCallback)c).e.setVariable("length", new BigDecimal(((SequenceSequencer)APP.getApp().pr.getSequencer()).getActiveSequence().getLengthMillis()));
+			if (((SequenceSequencer) APP.getApp().pr.getSequencer()).getActiveSequence()!=null)
+				((FormulaCallback)c).e.setVariable("length", new BigDecimal(((SequenceSequencer)APP.getApp().pr.getSequencer()).getActiveSequence().getLengthMillis()));
 		}
 	}
 	

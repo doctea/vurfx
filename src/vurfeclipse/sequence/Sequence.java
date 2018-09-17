@@ -628,11 +628,12 @@ abstract public class Sequence implements Serializable, Mutable {
 				ControlP5 cp5 = cf.control();
 				
 				SequenceEditor seq;
-				if (cf.sequenceEditor==null) {
-					seq = new SequenceEditor(cp5, name);
-				} else {
+				//if (cf.sequenceEditor==null) {
+					//cf.sequenceEditor = 
+							seq = new SequenceEditor(cp5, name);
+				/*} else {
 					seq = cf.sequenceEditor;
-				}
+				}*/
 				//SequenceEditor seq = APP.getApp().pr.getSequencer().seq
 								
 				final Sequence self = this;

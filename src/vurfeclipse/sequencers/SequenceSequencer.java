@@ -265,6 +265,10 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		urls.put("/seq/bank/sequences", this);
 		urls.put("/seq/bank/history", this);
+		
+		urls.put("/seq/streams_enabled", this);
+		urls.put("/seq/sequencer_enabled",this);
+		urls.put("/seq/toggleLock",this);
 
 		Iterator<Entry<String, Sequence>> it = sequences.entrySet().iterator();
 		/*while (it.hasNext()) {
@@ -983,6 +987,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			cutSequence();
 		} else if (key=='B') { // dump entire current sequencer bank to separate .xml files
 			this.saveBankSequences(this.host.getClass().getSimpleName());
+		} else if (key=='X') {
+			this.removeActiveSequence();
 		} else if (key=='p') {
 			this.togglePlaylist(!this.isHistoryMode());
 		} else if (key=='d') {
@@ -990,7 +996,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		} else if (key=='v') {
 			//this.preserveCurrentSceneParameters();
 			HashMap<String, HashMap<String, Object>> current_parameters = this.host.collectSceneParameters();
-			Sequence seq = this.cloneSequence(this.activeSequenceName, "Copy of " + this.activeSequenceName);
+			Sequence seq;
+			if (this.getActiveSequence()!=null)
+				seq = this.cloneSequence(this.activeSequenceName, "Copy of " + this.activeSequenceName);
+			else
+				seq = Sequence.makeSequence("vurfeclipse.sequence.ChainSequence", host.getScenes().get(0));
 			seq.setSceneParameters(current_parameters);
 			seq.start();
 		} else if (key=='U') {
@@ -1019,6 +1029,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     	//loadSequence(host.getApp().select.selectInput("Load a sequence", activeSequenceName));
     	loadSequence("test.xml");*/
 
+	}
+
+	private void removeActiveSequence() {
+		this.sequences.remove(this.getActiveSequence());
+		this.historySequenceNames.remove(this.getActiveSequence());
+		
 	}
 
 	@Deprecated
@@ -1211,7 +1227,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		//lstHistory.addItems(this.historySequenceNames);
 
-		this.grpSequenceEditor = (SequenceEditor) new SequenceEditor (cp5, "sequence editor")
+		//cf.sequenceEditor = 
+				this.grpSequenceEditor = (SequenceEditor) new SequenceEditor (cp5, "sequence editor")
 				.setSequence(this.getCurrentSequenceName(), getActiveSequence())
 				.setWidth(cp5.papplet.displayWidth/4)
 				.setHeight(cp5.papplet.displayHeight/5)
@@ -1426,6 +1443,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		params.put("/seq/current_sequence_name", this.getCurrentSequenceName());	// just save the name, used when re-loading from xml or hashmap
 
+		
+		params.put("/seq/streams_enabled", new Boolean(this.isStreamsEnabled()));
+		params.put("/seq/sequencer_enabled", new Boolean(this.isSequencerEnabled()));
+		params.put("/seq/sequencer_locked", new Boolean(this.isLocked()));
+		
 		if (APP.getApp().pr instanceof SavedProject) {		// TODO: FIX THIS SOMEHOW if this is a loaded Project then save the entire bank 'cos its probably quite reasonable and small
 			println("Saved project, so saving Bank Sequences!");
 			params.put("/seq/bank/sequences", this.collectBankSequences());

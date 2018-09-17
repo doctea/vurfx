@@ -275,9 +275,10 @@ abstract public class Stream implements Serializable {
 			}
 		} else {
 			// new List style
-			for (HashMap<String, Object> params : (LinkedList<HashMap<String,Object>>)input.get("callbacks")) {
-				this.registerEventListener((String)params.get("streamSource"), ParameterCallback.makeParameterCallback(params));
-			}
+			if (input.containsKey("callbacks")) 
+				for (HashMap<String, Object> params : (LinkedList<HashMap<String,Object>>)input.get("callbacks")) {
+					this.registerEventListener((String)params.get("streamSource"), ParameterCallback.makeParameterCallback(params));
+				}
 			if (input.containsKey("enabled")) {
 				this.setEnabled((Boolean) input.get("enabled"));
 			}
