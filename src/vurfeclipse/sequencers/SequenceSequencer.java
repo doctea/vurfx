@@ -20,6 +20,7 @@ import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.filters.Filter;
+import vurfeclipse.filters.ImageListDrawer;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.projects.SavedProject;
@@ -329,7 +330,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				}
 			}
 		} else if (spl[2].equals("bank")) {	//  /bank/sequences
-			//println ("loading bank for " + spl[3]);
+			println ("loading bank for " + spl[3]);
 			if ((spl[3].equals("sequences") || spl[3].equals("history") ) && (payload instanceof HashMap<?,?> || (payload instanceof LinkedHashMap<?,?>))) {		
 				for (Entry<String,Object> s : ((HashMap<String,Object>) payload).entrySet()) {
 					HashMap<String,Object> c = (HashMap<String,Object>)s.getValue();
@@ -881,10 +882,12 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	public void bindSavedSequences(String prefix, int sequenceLength, int weight) {
 		List<String> textFiles = new ArrayList<String>();
 		String directory = System.getProperty("user.dir") + "/saves"; //APP.getApp().sketchPath("");
+		println("opening saves in " + directory);
 		File dir = new File(directory);
 
 		HashMap<String, Sequence> sequences = new HashMap<String, Sequence>();
 
+		int loaded = 0;
 		for (File file : dir.listFiles()) {
 			if (file.getName().startsWith(host.getClass().getSimpleName()) && file.getName().endsWith((".xml"))) {
 				println("bindSavedSequences() got " + file.getName());
@@ -892,6 +895,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				HashMap<String, Object> input = this.host.readSnapshotFile("saves/"+file.getName()).get("/seq");//.get("/seq/sequence");
 				HashMap<String,Object> sequence_settings = (HashMap<String,Object>)(input.containsKey("/seq/sequence") ? input.get("/seq/sequence") : input.get("/seq/changeTo"));
 				Sequence newSeq = this.createSequence(sequence_settings);
+				loaded ++;
 
 				((HashMap<String, Sequence>) sequences).put("_saved " + file.getName(), newSeq);
 			}
@@ -900,7 +904,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		//for (String filename : textFiles) {
 		//for (int i = 0 ; i < weight ; i++) {
-		this.bindAll(sequences, weight / dir.list().length); 	// weight the weight by how many presets we loaded
+		if (loaded>0)
+			this.bindAll(sequences, weight / loaded); 	// weight the weight by how many presets we loaded
 		//}
 		//}
 	}
@@ -1471,18 +1476,46 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	public void loadBankSequences () {
+	public void loadBankSequences (String path) {
 		// load project's sequences directory contents and create a Sequence for each xml file found
 		// open directory listing
 		// for (each entry in directory listing) {
 			// extract sequence_name from filename
-			this.bindSequence(sequence_name, this.loadSequence(file)); //load xml file contents 
-		}
+			//this.bindSequence(sequence_name, this.loadSequence(file)); //load xml file contents 
+		//}
+			  //String path = APP.getApp().sketchPath("bin/data/image-sources/" + directory);	// ffs need this on Windows..
+			  //String path = APP.getApp().sketchPath("../bin/data/image-sources/" + directory);
+			  path = APP.getApp().sketchOutputPath("output/" + path);//).dataPath("image-sources/" + directory);		// ffs but seem to need this on tohers
+			  println("got path " + path + " to load bank sequences from");
+			  //String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
+			  //String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
+			  File folder = new File(path);
+			  println("#loadDirectory() got path " + path);
+			  int count = 0;
+			  int maxSequences = 1000;
+			  if (!folder.exists()) {
+				println("no folder found for " + folder + "  ||||  " + path);  
+				  return;// this;
+			  }
+			  for (final File fileEntry : folder.listFiles()) {
+				  if (fileEntry.isDirectory()) {
+					  // skip; maybe recurse tho in future
+				  } else {
+					  if (fileEntry.getName().endsWith(".xml")) {
+						  String sequence_name = fileEntry.getName().replace(".xml", "");
+						  this.bindSequence(sequence_name, this.loadSequence(fileEntry.getPath())); //load xml file contents 
+						  if (count>=maxSequences) break;
+					  }
+				  }
+			  }
+			  return;
 	}
 
 	public void saveBankSequences (String filename) {
 		for (Entry<String, Sequence> s : this.sequences.entrySet()) {
-			s.getValue().saveSequencePreset("bank_" + filename + "_" + s.getKey() + ".xml");
+			String actual = APP.getApp().sketchOutputPath("saves/" + filename + "/bank_" + s.getKey() + ".xml");
+			println("saving sequence to file " + actual);
+			s.getValue().saveSequencePreset(actual);
 		}
 	}
 

@@ -110,7 +110,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		//params.put("current_sequence_name", APP.getApp().dateStamp());
 		
 		ArrayList<String> mutableUrls = new ArrayList<String> ();
-		for (Mutable m : getMutables()) {
+		if (getMutables()!=null) for (Mutable m : getMutables()) {
 			if (m instanceof Scene) {
 				mutableUrls.add(((Scene) m).getPath());
 			} else if (m instanceof Filter) {

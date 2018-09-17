@@ -924,5 +924,9 @@ public class VurfEclipse extends PApplet {
 			return new BigDecimal(new Color (APP.getApp().color(r, g, b, a)).getRGB());
 		}
 	};
+
+	public String sketchOutputPath(String path) {
+		return sketchOutputPath()+"/"+path;
+	}
 	
 }

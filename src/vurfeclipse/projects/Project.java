@@ -555,9 +555,10 @@ public abstract class Project implements Serializable {
 		return this;
 	}
 
+	@SuppressWarnings("unchecked")
 	public HashMap<String, HashMap<String, Object>> readSnapshotFile(String filename) {
 		try {
-			//input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
+			//input ((VurfEclipse)APP.getApp(B)).io.deserialize(filename, HashMap.class);
 			return (HashMap<String, HashMap<String, Object>>) XMLSerializer.read(filename);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
