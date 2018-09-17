@@ -61,9 +61,9 @@ public class SavedProject extends Project {
 			this.addScene(new_sc);
 		}
 		
-		this.sequencer.target("/seq/bank/sequences", this.inputAll.get("/seq").get("/seq/bank/sequences"));
-		
-		this.sequencer.target("/seq/bank/history", this.inputAll.get("/seq").get("/seq/bank/history"));
+		//this.sequencer.target("/seq/bank/sequences", this.inputAll.get("/seq").get("/seq/bank/sequences"));
+		//this.sequencer.target("/seq/bank/history", 	this.inputAll.get("/seq").get("/seq/bank/history"));
+		if (this.sequencer instanceof SequenceSequencer) ((SequenceSequencer) this.sequencer).bindSavedSequences("Saved Sequence ", 500, 1); //switcher.getSequenceCount());	// do this after everything has been created!
 		
 		// add the sequence from the saved load file
 		this.sequencer.target("/seq/changeTo", this.inputAll.get("/seq").get("/seq/sequence"));

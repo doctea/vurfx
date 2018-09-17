@@ -112,7 +112,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		//params.put("current_sequence_name", APP.getApp().dateStamp());
 		
 		ArrayList<String> mutableUrls = new ArrayList<String> ();
-		for (Mutable m : getMutables()) {
+		if (getMutables()!=null) for (Mutable m : getMutables()) {
 			if (m instanceof Scene) {
 				mutableUrls.add(((Scene) m).getPath());
 			} else if (m instanceof Filter) {
@@ -629,7 +629,15 @@ abstract public class Sequence implements Serializable, Mutable {
 			try {
 				ControlP5 cp5 = cf.control();
 				
-				SequenceEditor seq = new SequenceEditor(cp5, name);
+				SequenceEditor seq;
+				//if (cf.sequenceEditor==null) {
+					//cf.sequenceEditor = 
+							seq = new SequenceEditor(cp5, name);
+				/*} else {
+					seq = cf.sequenceEditor;
+				}*/
+				//SequenceEditor seq = APP.getApp().pr.getSequencer().seq
+								
 				final Sequence self = this;
 				seq.setWidth((2 * cp5.controlWindow.papplet().width/3) - 40); // 40 is fudge factor to stop nested editors overlapping with sequence history 
 	

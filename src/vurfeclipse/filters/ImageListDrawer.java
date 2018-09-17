@@ -198,7 +198,7 @@ public class ImageListDrawer extends Filter {
     current_image_index = (Integer)getParameterValue("current_image_index");
     current_image_index++;
     //IR.precache(filenames.get(current_image_index), sc.w, sc.h);
-    if (current_image_index >= filenames.size())
+    if (current_image_index >= filenames.size()-1)
       current_image_index = 0;
     else if (!ImageRepository.IR.hasCached(filenames.get(current_image_index), sc.w, sc.h)) {
       println(this + "#nextImage: haven't got cached " + filenames.get(current_image_index));

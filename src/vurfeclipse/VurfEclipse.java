@@ -109,7 +109,7 @@ public class VurfEclipse extends PApplet {
 		if (controlFrame==null && enablecp5) {
 			System.out.println("VurfEclipse#getCP5 creating new ControlP5..");
 			//cp5 = new ControlP5(this);
-			controlFrame = new ControlFrame(this, 1280, 800, "Vurfx Controls");
+			controlFrame = new ControlFrame(this, 1280, 1024, "Vurfx Controls");
 			//controlFrame.setup();
 			//surface.setLocation(20, 20);
 		}
@@ -166,8 +166,8 @@ public class VurfEclipse extends PApplet {
 		output_height = (hdRes ? 1080 : mdRes ? 900 :  projRes ? 720  : ultrahiRes ? 1024 : medHiRes ?  720 : hiRes ? 768  : medRes ? 600 : 480) 
 						+ (fullscreen?0:title_adjust);*/
 
-	private int config_width = 1280; //1920
-	private PVector config_aspect = RES_16_9;	// RES_16_9 
+	private int config_width = 1024; //1280; //1920
+	private PVector config_aspect = RES_4_3; //RES_16_9;	// RES_16_9 
 
 	int output_width = (int)this.getOutputResolution().x;
 	int output_height= (int)this.getOutputResolution().y;
@@ -284,6 +284,13 @@ public class VurfEclipse extends PApplet {
 			if (args.contains("-width")) {
 				config_width = Integer.parseInt(args.get(args.indexOf("-width")+1));
 				println("got resolution width " + config_width);
+			}
+			if (args.contains("-aspect43")) {
+				config_aspect = RES_4_3;
+			} else if (args.contains("-aspect169")) {
+				config_aspect = RES_16_9;
+			} else if (args.contains("-aspect")) {
+				config_aspect = RES_16_10;
 			}
 			if (args.contains("-nodraw")) {
 				this.enableRendering = false;
@@ -924,5 +931,9 @@ public class VurfEclipse extends PApplet {
 			return new BigDecimal(new Color (APP.getApp().color(r, g, b, a)).getRGB());
 		}
 	};
+
+	public String sketchOutputPath(String path) {
+		return (sketchOutputPath()+"/").replace("null/","")+path;
+	}
 	
 }

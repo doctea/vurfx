@@ -2,7 +2,9 @@ package vurfeclipse.ui;
 
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
+import controlP5.ControllerList;
 import controlP5.Group;
+import controlP5.Tab;
 import vurfeclipse.APP;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequencers.SequenceSequencer;
@@ -11,7 +13,7 @@ public class SequenceEditor extends Group {
 	
 	Sequence sequence;
 	String sequenceName;
-
+	
 	public Sequence getSequence() {
 		return sequence;
 	}
@@ -44,9 +46,14 @@ public class SequenceEditor extends Group {
 			sequence.println("skipping setup of controls for non-active sequence!");
 			return this;
 		}
-		this.controllers.get().clear();
+		//this.controllers.get().clear();
+		this.removeControllers();
+		/*if (APP.getApp().getCF().sequenceEditor!=null)
+			APP.getApp().getCF().control().remove(APP.getApp().getCF().sequenceEditor);
+		APP.getApp().getCF().sequenceEditor = null;*/
 		//this.remove();
-		if (sequence!=null) 
+		boolean disable_controls = true;//false; //
+		if (sequence!=null && !disable_controls) 
 			sequence.makeControls(APP.getApp().getCF(), sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,10);
 	
 		return this;

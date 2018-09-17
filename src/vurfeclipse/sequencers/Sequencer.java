@@ -54,7 +54,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	boolean locked = false;
 
 
-	int ticks = 0; //for tracking sequencer position when paused
+	protected int ticks = 0; //for tracking sequencer position when paused
 	int last = 0;
 	
 	private Map<String, Stream> streams = Collections.synchronizedMap(new HashMap<String,Stream>());
@@ -163,6 +163,8 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		urls.put("/seq/changeTo", this);
 
 		urls.put("/seq/timeScale", this);
+		
+		urls.put("/seq/time", this);
 
 		return urls;
 	}
@@ -173,15 +175,24 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 			return payload;
 		}
 		
+		if (path.equals("/seq/time")) {
+			this.ticks = (int) Float.parseFloat(payload.toString()); //runSequences((Float)payload);
+			runSequences(this.ticks);
+		}
+		
 		String[] spl = path.split("/",4); // TODO: much better URL and parameter checking.
+		if (spl.length>3) payload = spl[3];
 		if (spl[2].equals("toggleLock")) {				// just gets status of lock...
-			if (spl.length>3) payload = spl[3];
 			if (payload instanceof Boolean) {
 				this.toggleLock((Boolean) payload);
 			} else if (payload instanceof String) {
 				this.toggleLock((Boolean)payload.equals("true"));
 			}
 			return "Lock is " + this.toggleLock();
+		} else if (spl[2].equals("sequencer_enabled")) {
+			this.toggleEnabled((Boolean)payload);
+		} else if (spl[2].equals("streams_enabled")) {
+			this.toggleStreams((Boolean)payload);
 		} else if (spl[2].equals("stream_setup")) {
 			//this.streams = (HashMap<String, Stream>) payload;
 			for (Entry<String,Object> i : ((HashMap<String,Object>)payload).entrySet()) {
@@ -190,7 +201,6 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 		}
 		return null;
 	}
-
 	abstract public String getCurrentSequenceName();
 
 	public boolean isLocked() {

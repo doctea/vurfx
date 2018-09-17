@@ -99,6 +99,7 @@ public class DebugDrawer extends Filter {
   }
 
   public boolean applyMeatToBuffers() {
+  	if (true) return true;	// DISABLE DEBUG FOR LIVE 
 	  PGraphics out = out();
     out.pushStyle();
     lineCount = 0;

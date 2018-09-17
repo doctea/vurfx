@@ -1,8 +1,8 @@
 package vurfeclipse.filters;
 
+import processing.core.PImage;
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
-import codeanticode.glgraphics.GLTexture;
 
 class ImageDrawer extends Filter {
   
@@ -10,7 +10,7 @@ class ImageDrawer extends Filter {
   
   int offsetx=0,offsety=0;
   
-  GLTexture image_src;
+  PImage image_src;
   String fileName = "output/image48173.40247.jpg";
   
   boolean fileChanged = true;
@@ -26,7 +26,7 @@ class ImageDrawer extends Filter {
   
   public boolean initialise() {
     // set up inital variables or whatevs 
-    image_src = new GLTexture(APP.getApp(),sc.w,sc.h);
+    image_src = new PImage(sc.w,sc.h);
     //PImage im = loadImage(fileName); //"image48173.40247.jpg");
     //image_src.putImage(im);
     image_src.loadTexture(fileName);

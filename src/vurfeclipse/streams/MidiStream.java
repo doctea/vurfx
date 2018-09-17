@@ -1,7 +1,13 @@
 package vurfeclipse.streams;
 
 import java.io.Serializable;
+
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
+import controlP5.Group;
+import controlP5.Textfield;
 import themidibus.*;
+import vurfeclipse.ui.ControlFrame;
 
 public class MidiStream extends Stream implements Serializable { 
   
@@ -36,15 +42,19 @@ public class MidiStream extends Stream implements Serializable {
   
   int generatedMessages = 0;
   
-  int device = 1;
+  static int device = 0;
 
-  MidiStream(String streamName) {
+  public MidiStream() {
+  	this("midi stream", device, true);
+  }
+  
+  public MidiStream(String streamName) {
     this(streamName, false);
-
     //output = RWMidi.getOutputDevices()[0].createOutput();    
   }
-  MidiStream(String streamName, boolean directMode) {
-    this(streamName, 1, directMode);
+
+  public MidiStream(String streamName, boolean directMode) {
+    this(streamName, device, directMode);
   }
   public MidiStream(String streamName, int device, boolean directMode) {
     this.device = device;
@@ -68,9 +78,22 @@ public class MidiStream extends Stream implements Serializable {
   synchronized public void noteOn(int channel, int pit, int vel) {
     System.out.println("note on " + channel + " " + pit + " " + vel);
     addEvent("note", pit);    
-    addEvent("note_"+channel, pit);
+    addEvent("note_"+pit, pit);
     addEvent("interval", pit%12);
-    addEvent("interval_"+channel, pit%12);    
+    addEvent("interval_"+pit, pit%12);    
+    
+    addEvent("octave_"+((int)(pit/12)), pit%12);
+    
+    if (directMode) {
+      deliverEvents();
+    }
+  }
+  
+  synchronized public void controllerChange(int channel, int number, int value) {
+  	println("got MIDI CC on channel " + channel + ", number " + number + ": " + value);
+  	if (value>0)
+  		addEvent("cc_"+number, value);
+  	
     if (directMode) {
       deliverEvents();
     }
@@ -91,10 +114,79 @@ public class MidiStream extends Stream implements Serializable {
       addEvent("value", currentValue); //"BEAT AT " + time);
     }*/
   }
+	@Override
+	protected void preCall(ParameterCallback c) {
+		// TODO Auto-generated method stub
+		
+	}
   
   /*public void updateValue(int time, int step) {
      //System.out.println("updateValue with startTime:" + startTime + ", time:" + time + " step:" + step + " --- currentValue is " + currentValue);
      currentValue += step+1;
   }*/
 
+	@Override
+	protected Group makeEmitterSelector(ControlFrame cf, final ParameterCallback callback, String name) {
+		Group g = new Group(cf.control(), name + "_select_group").hideBar();
+		
+		int margin_x = 10;
+		
+		Textfield txtParam = cf.control().addTextfield(name).setLabel("addr").setText(callback.getStreamSource()).setAutoClear(false).setWidth(margin_x * 10);
+				
+		txtParam.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
+			@Override
+			public void controlEvent(CallbackEvent theEvent) {
+				callback.setStreamSource(theEvent.getController().getStringValue());
+			}
+		});
+				
+		g.add(txtParam.moveTo(g));
+		return g;
+	}
+	
+
+	@Override
+	synchronized public void setupControls(final ControlFrame cf, Group g) {
+		super.setupControls(cf, g);
+		int margin_y = 20, gap_y = 5, margin_x = 80;
+
+		int pos_y = 10;
+
+		final MidiStream self = this;
+
+		/*this.txtBPM = cf.control().addTextfield(this.toString() + "_tempo").setLabel("BPM").setText(""+this.bpm).setWidth(margin_x/2)
+				.setPosition(margin_x * 3, pos_y)
+				.moveTo(g)
+				.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						self.setBPM(Float.parseFloat(((Textfield)theEvent.getController()).getText()));
+
+						// and refresh gui
+						cf.updateGuiStreamEditor();
+					}
+				});
+		g.add(this.txtBPM);*/
+
+		/*g.add(cf.control().addButton(this.toString() + "_resetstart").setLabel("Reset Start")
+				.setPosition(margin_x * 5, pos_y)
+				.moveTo(g)
+				.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						synchronized (self) {
+							self.startTime = APP.getApp().timeMillis;
+							beat = 0;
+							self.setBPM(self.bpm);
+							//lastDealtStepTime = new int[stepDivisions.length];
+							//Arrays.fill(lastDealtStepTime, startTime);
+
+							// and refresh gui
+							//cf.updateGuiStreamEditor();
+						}
+					}
+				})
+				);*/
+	}
+	
 }

@@ -88,10 +88,10 @@ public class TestProject extends Project implements Serializable {
 				seq_count++;
 				if (this.getCurrentSequenceName().contains("_next_")) {
 					println("Fastforwarding sequence " + this.getCurrentSequenceName() + " because it contains '_next_'..");
-					super.runSequences();
+					super.runSequences(ticks);
 					this.nextSequence();
 				}
-				return super.runSequences();
+				return super.runSequences(ticks);
 			}
 		};
 

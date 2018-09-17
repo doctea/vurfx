@@ -4,8 +4,6 @@ package vurfeclipse.filters;
 import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.scenes.Scene;
-import codeanticode.gsvideo.GSMovieMaker;
-
 
 public class DiskWriterFilter extends Filter {
 

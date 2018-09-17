@@ -122,7 +122,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	public Object getObjectForPath(String path) {
 		//println("Scene#getObjectForPath(" + path + ")");
 		try {
-			if (!path.contains("/") || path.equals("") || path.equals(this.getSceneName()) || path.equals("mute") || path.endsWith("nextMode")) 
+			if (!path.contains("/") || path.equals("") || path.equals(this.getSceneName()) || path.equals("mute")) // || !path.endsWith("nextMode")) 
 				return this;
 			String spl[] = path.split("/",2);
 
@@ -132,6 +132,8 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			if (spl2.length==1) {
 				return getFilter(filterName);
 			} else if (spl2[1].equals("mute")) {
+				return getFilter(filterName);
+			} else if (spl2[1].equals("nextMode")) {
 				return getFilter(filterName);
 			} else if (spl2[1].equals("pa")) {	// is a Parameter
 				if (getFilter(filterName)!=null)
@@ -779,7 +781,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	private Button moveUpButton;
 	private Button moveDownButton;
 	private Button removeSceneButton;
-	public void setupControls(ControlFrame cf, ControllerGroup tab) {
+	public void setupControls(final ControlFrame cf, ControllerGroup tab) {
 
 		ControlP5 cp5 = cf.control();
 		if (debug) println("Scene#setupControls() in " + this);
@@ -800,7 +802,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		this.controlGroup = cp5.addGroup(this.getSceneName() + "_controlGroup_");
 
 		tab = controlGroup;*/
-		Scene self = this;
+		final Scene self = this;
 		
 			this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + "/" + getSceneName()) // + row)
 					.setLabel("^")
