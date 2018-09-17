@@ -885,7 +885,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	public void bindSavedSequences(String prefix, int sequenceLength, int weight) {
 		List<String> textFiles = new ArrayList<String>();
-		String directory = System.getProperty("user.dir") + "/saves"; //APP.getApp().sketchPath("");
+		//String directory = System.getProperty("user.dir") + "/saves"; //APP.getApp().sketchPath("");
+		String filename = this.host.getProjectFilename().replace(".xml", "");
+		String directory = APP.getApp().sketchOutputPath(filename);
 		println("opening saves in " + directory);
 		File dir = new File(directory);
 
@@ -893,23 +895,31 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 		int loaded = 0;
 		for (File file : dir.listFiles()) {
-			if (file.getName().startsWith(host.getClass().getSimpleName()) && file.getName().endsWith((".xml"))) {
+			if (/*file.getName().startsWith(host.getClass().getSimpleName()) && */file.getName().endsWith((".xml"))) {
 				println("bindSavedSequences() got " + file.getName());
 				//textFiles.add(file.getName());
-				HashMap<String, Object> input = this.host.readSnapshotFile("saves/"+file.getName()).get("/seq");//.get("/seq/sequence");
-				HashMap<String,Object> sequence_settings = (HashMap<String,Object>)(input.containsKey("/seq/sequence") ? input.get("/seq/sequence") : input.get("/seq/changeTo"));
-				Sequence newSeq = this.createSequence(sequence_settings);
+				String actual = directory+"/"+file.getName();
+				HashMap<String, Object> input = this.readSequenceFile(actual);//.get("/seq");//.get("/seq/sequence");
+				HashMap<String,Object> sequence_settings = (HashMap<String,Object>)(
+						input.containsKey("/seq/sequence") ? 
+								input.get("/seq/sequence") : 
+								input.get("/seq/changeTo"));
+				Sequence newSeq = this.createSequence(input); //sequence_settings);
 				loaded ++;
 
-				((HashMap<String, Sequence>) sequences).put("_saved " + file.getName(), newSeq);
+				String seq_name = actual.replace("bank_", "").replace(file.getParent(),"").replace("/","").replace(".xml","");
+				((HashMap<String, Sequence>) sequences).put(seq_name, newSeq);
+				this.addHistorySequenceName(seq_name);
 			}
 		}
 		//return textFiles;
 
 		//for (String filename : textFiles) {
 		//for (int i = 0 ; i < weight ; i++) {
-		if (loaded>0)
-			this.bindAll(sequences, weight / loaded); 	// weight the weight by how many presets we loaded
+		if (loaded>0) {
+			this.setBindToRandom(true);
+			this.bindAll(sequences, weight); // / loaded); 	// weight the weight by how many presets we loaded
+		}
 		//}
 		//}
 	}
@@ -991,7 +1001,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		} else if (key=='o') { // HISTORY 'cut' between cursor/next (or do random if at end?)
 			cutSequence();
 		} else if (key=='B') { // dump entire current sequencer bank to separate .xml files
-			this.saveBankSequences(this.host.getClass().getSimpleName());
+			this.saveBankSequences(this.host.getProjectFilename().replace(".xml", "")); //this.host.getClass().getSimpleName());
 		} else if (key=='X') {
 			this.removeActiveSequence();
 		} else if (key=='p') {
@@ -1535,7 +1545,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	public void saveBankSequences (String filename) {
 		for (Entry<String, Sequence> s : this.sequences.entrySet()) {
-			String actual = APP.getApp().sketchOutputPath("saves/" + filename + "/bank_" + s.getKey() + ".xml");
+			String actual = APP.getApp().sketchOutputPath(filename + "/bank_" + s.getKey() + ".xml");
 			println("saving sequence to file " + actual);
 			s.getValue().saveSequencePreset(actual);
 		}
