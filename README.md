@@ -105,6 +105,7 @@ sequence playlist history / backwards buttons (j/k to go back/fore, J/K to go ba
 Needed for Rainbow Hill Dance Club gig with Mutante:-
 
   * Mutante set - 1 hour of effects
+    * based around their lovely images
   * Disco set - 2 hour(?) of dancefloor dancing effects
     * maybe get video playback support working better, and get some videos of dancer silhouettes to use as layers?
   * General
