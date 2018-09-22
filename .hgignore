@@ -9,6 +9,8 @@ lib/*/*/*/
 lib/*/*/
 lib/*/
 
+saves/*
+
 bin/$
 src/data/image-sources$
 bin/data/image-sources$
