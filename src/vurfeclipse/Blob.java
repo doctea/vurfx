@@ -134,6 +134,9 @@ public class Blob implements Serializable {
 		draw(out);
 	}
 	public void draw(PGraphics out) {
+		
+		//if (true) return;
+		
 		out.pushStyle();
 		if (tint!=255) {
 			out.fill(c, tint);
@@ -161,6 +164,9 @@ public class Blob implements Serializable {
 			out.rotate(rot%60);
 		}
 
+		//if (true) return;
+
+		
 		float R = isScaleRelative() ? 
 				(float)((VurfEclipse)APP.getApp()).brightness(c)/8 : r;
 				/*          if (doRelative) {
@@ -170,6 +176,9 @@ public class Blob implements Serializable {
 		//System.out.println("draw shape radius " + R + " shape " + shape);
 		int oldShape = getShape();
 		//if (oldShape==SH_RANDOM) setShape((int)((VurfEclipse)APP.getApp()).random(SH_RANDOM-3));
+		if (false) {
+			
+		} else 
 		if (getShape()==SH_CIRCLE) {
 			//out.ellipse(x,y,r,r);
 			out.ellipse(0,0,R,R);
@@ -191,7 +200,8 @@ public class Blob implements Serializable {
 			float new_h = units_h * R/2.0f;///*sc.h * (sc.h/*/units_h*R;///4;//);
 
 			out.pushMatrix();
-			out.translate(-new_w/2.0f,-new_h/2.0f);
+			//out.translate(-new_w/2.0f,-new_h/2.0f);
+			out.imageMode(APP.getApp().CENTER);
 			out.image(src,0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
 			//;;if ((int)((VurfEclipse)APP.getApp()).random(100)==0) System.out.println("BLOB>>>drawing texture " + this.src);
 			//out.image(src.getTexture(),0,0,new_w,new_h);
@@ -217,7 +227,7 @@ public class Blob implements Serializable {
 
 
 	private void polygonFlower(PGraphics out, int cx, int cy, float R) {
-		boolean newMode = false;
+		boolean newMode = false;//true;//false;
 		if (!newMode) {
 			polygon(out, /*doPolyRand?(int)random(3,8):*/numSides, 0, 0, R, R, 0);
 			for (int i = 0; i < 360; i+=20) {
@@ -229,7 +239,7 @@ public class Blob implements Serializable {
 			}
 		} else {
 			PShape flower = 
-				this.getShapePolygon(6); 
+				getShapePolygon(6); 
 				//this.getShapeFlower();
 			
 			//flower.setFill(out.fillColor);
@@ -290,15 +300,15 @@ public class Blob implements Serializable {
 		polygon(out, n, cx, cy, r * 2.0f, r * 2.0f, 0.0f);
 	}
 
-	float TWO_PI = PApplet.TWO_PI;
-	float[] twopi_lookup = new float[] { 3, TWO_PI/1, TWO_PI/2, TWO_PI/3, TWO_PI/4, TWO_PI/5, TWO_PI/6, TWO_PI/7, TWO_PI/8, TWO_PI/9, TWO_PI/10, TWO_PI/11, TWO_PI/12, TWO_PI/13, TWO_PI/14, TWO_PI/15, TWO_PI/16 };
+	static float TWO_PI = PApplet.TWO_PI;
+	static float[] twopi_lookup = new float[] { 3, TWO_PI/1, TWO_PI/2, TWO_PI/3, TWO_PI/4, TWO_PI/5, TWO_PI/6, TWO_PI/7, TWO_PI/8, TWO_PI/9, TWO_PI/10, TWO_PI/11, TWO_PI/12, TWO_PI/13, TWO_PI/14, TWO_PI/15, TWO_PI/16 };
 
 	static PShape[] polygons = new PShape[20];
 	
 
 
-	private PShape getShapePolygon(int n) {
-		if (false||polygons[n]==null) {
+	public PShape getShapePolygon(int n) {
+		if (true||polygons[n]==null) {
 			System.out.println("Blob: generating polygon with " + n + " sides");
 	
 			PShape newshape = APP.getApp().createShape();
@@ -310,6 +320,9 @@ public class Blob implements Serializable {
 			for (int i = 0; i < n; i++)
 			{
 				float calc = angle * i ; //startAngle + angle * (float)i;
+				//newshape.fill(this.c); //(int) (Math.random()*255));
+				//newshape.setStrokeWeight(this.strokeSize);
+				//newshape.setStroke(edge);
 				newshape.vertex(
 						//cx + w *  
 						//1.0f * 
@@ -320,10 +333,12 @@ public class Blob implements Serializable {
 						);
 			}
 			newshape.endShape(PApplet.CLOSE);
-			newshape.setTint(255);
+
 			//newshape.setFill(255);
-			newshape.setStrokeWeight(strokeSize);
-			polygons[n] = newshape;
+			//newshape.setStrokeWeight(strokeSize);
+			//polygons[n] = newshape;
+			//newshape.scale((float) (r/100.0));
+			return newshape;
 		}
 		
 		return polygons[n];
@@ -334,28 +349,28 @@ public class Blob implements Serializable {
 	{
 		if (n > 2)
 		{
-			boolean newMode = false;
-			if (newMode) {
-				// this is attempt to use PShapes to draw the polygons instead of drawing vertexes in direct mode -- doesn't work (blank output, although did get output at some points during debug i think when messing wtih setfill etc?) but actually seems slower..?
+			boolean newMode = false; //false;
+			if (newMode) {	// slower fps (really shit), but doesn't thrash the memory (https://forum.processing.org/two/discussion/367/drawing-many-object-is-really-slow)
+				// this is attempt to use PShapes to draw the polygons instead of drawing vertexes in direct mode -- works, but actually seems slower..?
 				PShape s = this.getShapePolygon(6); //polygons[n];
 				
 				out.pushMatrix();
 				out.rotate(startAngle);
 				out.translate(cx, cy);
 				out.scale(w/2.0f,h/2.0f);
-				s.setFill(out.fillColor);
+				//s.setFill(out.fillColor);
 				//s.setTint(255);
 				//s.setFill(64);
 
-				out.shape(s);//, 0, cy, w, h);
+				//out.shape(s);//, 0, cy, w, h);
 				//out.shape(s, cx, cy, w/2.0f, h/2.0f);
 				//out.shape(s, cx + w,cy + h, w/2.0f,h/2.0f);
-				//out.shape(s, 0, 0,300,300);
+				out.shape(s, 0, 0,300,300);
 				//out.scale(w, h);
 				//out.text("test", 0,0,0);
 				out.popMatrix();
 
-			} else {
+			} else {	// faster fps, but does thrash the memory :/	
 				//float angle = TWO_PI/n;
 				float angle = twopi_lookup[n];
 
@@ -364,14 +379,30 @@ public class Blob implements Serializable {
 				w = w / 2.0f;
 				h = h / 2.0f;
 
-				out.beginShape();
-				for (int i = 0; i < n; i++)
-				{
-					float calc = startAngle + angle * (float)i;
-					out.vertex(cx + w * ((VurfEclipse)APP.getApp()).cos(calc),
-							cy + h * ((VurfEclipse)APP.getApp()).sin(calc));
+				boolean newmode2 = true;
+				if (!newmode2) {	// thrashes memory but is fastest? 
+					out.beginShape();
+					for (int i = 0; i < n; i++)
+					{
+						float calc = startAngle + angle * (float)i;
+						out.vertex(cx + w * ((VurfEclipse)APP.getApp()).cos(calc),
+								cy + h * ((VurfEclipse)APP.getApp()).sin(calc));
+					}
+					out.endShape(PApplet.CLOSE);
+				} else { // speed not great but better than 'newmode', only thrashes memory half as bad as fastest !'newmode2'
+					PShape s = this.getShapePolygon(n);
+					out.pushMatrix();
+					out.rotate(startAngle);
+					out.scale(w,h);
+					s.setFill(out.fillColor);
+					//s.setStroke(this.strokeSize);
+					//s.setStroke(!edge);
+					s.setStrokeCap(10);//this.strokeSize);
+					//s.setstr
+					
+					out.shape(s);
+					out.popMatrix();
 				}
-				out.endShape(PApplet.CLOSE);
 			}
 		}
 	}
@@ -474,6 +505,123 @@ public class Blob implements Serializable {
 
 		public int getShape() {
 			return shape;
+		}
+
+
+		public PShape collectShape(PGraphics in) {
+			
+			float R = isScaleRelative() ? 
+					(float)((VurfEclipse)APP.getApp()).brightness(c)/8 : r;
+			
+			int oldShape = getShape();
+			//if (oldShape==SH_RANDOM) setShape((int)((VurfEclipse)APP.getApp()).random(SH_RANDOM-3));
+			
+			PShape s = null;// = new PShape();			
+			if (false) {
+				
+			} else 
+			if (getShape()==SH_CIRCLE) {
+				//out.ellipse(x,y,r,r);
+				//out.ellipse(0,0,R,R);
+				s = APP.getApp().createShape(APP.getApp().ELLIPSE,0,0,1,1);
+				s.scale(R/2);
+			} else if (getShape()==SH_RECT) {
+				//out.rectMode(PApplet.RADIUS);
+				//out.rect(0,0,R/2.0f,R/2.0f);
+				//polygon(out, /*doPolyRand?(int)random(3,8):*/4, 0, 0, R, R, 0);
+				//s = APP.getApp().createShape(APP.getApp().RECT);
+				s = getShapePolygon(4);
+				s.scale(R/4);
+			} else if (getShape()==SH_POLY) {
+				//System.out.println("doing poly?");
+				//polygon(out, /*doPolyRand?(int)random(3,8):*/numSides, 0, 0, R, R, 0);
+				//s = APP.getApp().
+				s = getShapePolygon(numSides);
+				s.scale(R/4);
+			} else if (getShape()==SH_FLOWER) {
+				//this.polygonFlower(out, 0, 0, R);
+				s = this.getShapeFlower();
+				s.scale(R/4);
+			} else if (getShape()==SH_TEXTURE) {
+				float units_w = 1.0f, units_h = 0.75f;
+				float new_w = units_w * R/2.0f;///*sc.w * (sc.w/*/units_w*R;///4;//);  
+				float new_h = units_h * R/2.0f;///*sc.h * (sc.h/*/units_h*R;///4;//);
+
+				/*out.pushMatrix();
+				out.translate(-new_w/2.0f,-new_h/2.0f);
+				out.image(src,0,0,new_w,new_h);//sc.w/100*theta,sc.h/100*theta);
+				//;;if ((int)((VurfEclipse)APP.getApp()).random(100)==0) System.out.println("BLOB>>>drawing texture " + this.src);
+				//out.image(src.getTexture(),0,0,new_w,new_h);
+				out.popMatrix();
+				//out.rect(0,0,R/2,R/2);*/
+				
+				s = getShapePolygon(4);
+				s.setTexture(src);
+				//s.scale(new_w, new_h);
+				
+				//s = new PGraphics(src);
+
+			} else if (getShape()==SH_COMPOUND) {
+				//drawCompoundBlob(out, x, y, R, R, 0);
+				///// collect co
+				System.out.println("TODO: COMPOUND BLOB COLLECTION FOR SINGLE-PASS RENDERING OF SHAPES IN BLOBDRAWER ETC");
+			} else if (getShape()==SH_SVG && svg!=null) {
+				System.out.println("SVG Draw!");
+				//drawSVG(out, x, y, R, R, 0);
+			} else if (getShape()==SH_IMAGE && imageName!=null && !imageName.equals("")) {
+				//drawImage(out, x, y, R, R, 0);
+			}
+			
+			if (s==null) {
+				System.out.println("NULL SHAPE CAUGHT !");
+				return s;
+			}
+
+			setShape(oldShape);
+			
+			s.setFill(this.c); //(int) (Math.random()*255));
+			s.setStroke(this.strokeSize>0);
+			s.setStrokeCap(this.strokeSize);
+			//s.scale(this.r);
+
+			
+			//out.pushStyle();
+			/*if (tint==255) {
+				s.fill(c, tint/255);
+			} else {
+				//s.noTint();
+				s.fill(c,tint/255);
+			}
+			//System.out.println("blob drawing with colour " + c);
+			if (!edge) {
+				s.noStroke();
+			} else {
+				s.stroke(0);
+				s.strokeWeight(this.getStrokeSize());
+			}*/
+			//out.noTint();
+			//out.ellipse(x-r,y-r,r/2,r/2); 
+
+			//s.pushMatrix();
+			
+			
+			//s.translate(x,y); //<---this might be needed ! 
+
+			if (getShape()!=0 && rot>0) {
+				//out.rotate(c<<24);
+				//out.rotate(random(rot));
+				//out.rotate(rot%(((VurfEclipse)APP.getApp()).millis()/1000)%60);
+				s.rotate(rot%60);
+			}
+			return s;
+
+			//if (true) return;
+
+					/*          if (doRelative) {
+	        blobs[b].setRadius((int)hue(pix)/8+((int)random(r)));//(int)random(r));
+	      }*/
+
+
 		}
 
 

@@ -3,6 +3,7 @@ package vurfeclipse.filters;
 import java.util.HashMap;
 
 import processing.core.PGraphics;
+import processing.core.PShape;
 import vurfeclipse.*;
 import vurfeclipse.scenes.Scene;
 
@@ -42,11 +43,8 @@ public class BlobDrawer extends SpiralDrawer {
 		//this.setParameterValue("rotation", 0.0);
 		super.setParameterDefaults();
 		this.addParameter("edged", new Boolean(true));
-		this.addParameter("tint",  new Integer(255), 0, 255);//new Integer(128));
 		this.addParameter("shape", new Integer(0), 0, b.shapesCount);
 		//this.addParameter("colour",new Integer(255), new Integer(0), new Integer(2^32)); //APP.color(APP.random(255),APP.random(255),APP.random(255),128)));
-		this.addParameter("colour", VurfEclipse.makeColour(255, 128, 64, 255));
-		
 		this.addParameter("colour1", VurfEclipse.makeColour(255, 128, 64, 255));
 		this.addParameter("colour2", VurfEclipse.makeColour(255, 128, 64, 255));
 		//this.addParameter("colour3", VurfEclipse.makeColour(255, 128, 64));
@@ -58,6 +56,15 @@ public class BlobDrawer extends SpiralDrawer {
 		//this.addParameter("startRadius")
 
 		//this.addParameter("radius", 0.5, 0.01, 20.0);
+	}
+	
+	@Override
+	public boolean applyMeatToBuffers() {
+		if ((int)this.getParameterValue("shape")==b.SH_TEXTURE) {
+			return this.old____applyMeatToBuffers();
+		} else {
+			return super.applyMeatToBuffers();
+		}
 	}
 
 	@Override
@@ -98,34 +105,23 @@ public class BlobDrawer extends SpiralDrawer {
 	int colourSwitchCount = 0;
 	int colourSwitchEvery = 50; // frames
 
-	synchronized public void drawActualObject(PGraphics out, float currRadius, float currentRadian) {
-
-		//if (true) return;
-
-		/*colourSwitchCount++;
-		if (colourSwitchEvery<=colourSwitchCount) {*/
-		//b.setColour((int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255));
-		/*	colourSwitchEvery = (int) ((VurfEclipse)APP.getApp()).frameRate;
-				colourSwitchCount = 0;
-		}*/
-
+	@Override
+	synchronized public PShape collectActualObject(float currRadius, float currentRadian) {
 		b.setShape((Integer)getParameterValue("shape"));
-		//b.setTint(255);
-		//if ((int)((VurfEclipse)APP.getApp()).random(100)==0) println("BlobDrawer is setting blob texture to " + src.getTexture());
-		//b.setInput(sc.host.getCanvas("/out").getSurf().getTexture()); //src.getTexture());
 		b.setInput(sc.getCanvas("src").getSurf());//.getTexture()); // was "temp3" ..
-		//b.setColour(255); //new Integer((int)APP.random(255) << (int)APP.random(255) << (int)APP.random(255) << 255));
-		//b.setColour((int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255), (int)((VurfEclipse)APP.getApp()).random(255));
-		//b.setColour((Integer)this.getParameterValue("colour"));
-		//b.setColour(0);
 		b.setRadius(currRadius);// * (int)random(5));
 		b.setRotation((int)Math.toRadians((currentRadian)));
-		//System.out.println("currentRadian is " + currentRadian);
-		//b.setTint(128);
-		b.draw(out,in());
-		//out.tint(128);
-		//out.ellipse(0,0,currRadius/8,currRadius/8);
+		return b.collectShape(in());
+	}
 
+	
+	@Deprecated //sort of, is only way to do the old method of texturing blobs 
+	synchronized public void drawActualObject(PGraphics out, float currRadius, float currentRadian) {
+		b.setShape((Integer)getParameterValue("shape"));
+		b.setInput(sc.getCanvas("src").getSurf());//.getTexture()); // was "temp3" ..
+		b.setRadius(currRadius);// * (int)random(5));
+		b.setRotation((int)Math.toRadians((currentRadian)));
+		b.draw(out,in());
 	}
 
 
