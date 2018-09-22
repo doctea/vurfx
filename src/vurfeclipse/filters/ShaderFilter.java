@@ -98,6 +98,7 @@ public class ShaderFilter extends Filter {
 	@Override
 	synchronized public void updateParameterValue(String paramName, Object value) {
 		//if (!this.parameters.containsKey(paramName)) this.addParameter(paramName, value);
+		
 		super.updateParameterValue(paramName, value);
 		if (glFilter!=null) {
 			//println("glFilter hasParameter("+paramName+") returns " + glFilter.hasParameter(paramName));
@@ -114,11 +115,30 @@ public class ShaderFilter extends Filter {
 					glFilter.set(paramName, (Integer)value); //(int)Integer.(value.toString()));
 				}
 			} else if (p.getDataType()==Float.class || p.getDataType()==Double.class) {
-				if (value instanceof Float) {
-					glFilter.set(paramName, ((Float)value).floatValue());
-				} else if (value instanceof Double) {
+				if (value instanceof Double) {
 					glFilter.set(paramName, ((Double)value).floatValue());
-				}
+				} else if (value instanceof Float) {
+					/* non-working test of scaling zooms better to allow finer control 
+					if (paramName.equals("offset_x")) { 
+						println("offset_x" + value);
+					}
+					//value = Math.pow(10.0, (float)value / 1000.0);
+					value = ((Double)Math.log10(Math.abs((float)value)*1000.0f)).floatValue()/1000.0f;///1000.0);
+					if (paramName.equals("offset_x")) { 
+						println("offset_x" + value + "\n---\n");
+					}
+					*/
+					if (paramName.equals("offset_x")) {	// cheeky sync zoom hack .. 
+					    // bizarrely this works to smooth it out quite a bit, but still isn't quite right... 
+						println("offset_x" + value);
+						value = ((Double)Math.pow(10.0,  ((float)value/4.0d))).floatValue();
+						//value = ((Double)Math.log10((float)value)).floatValue();
+						println("offset_x" + value);
+					}
+
+
+					glFilter.set(paramName, ((Float)value).floatValue());
+				} 
 			} else if (p.getDataType()==Boolean.class) {
 				glFilter.set(paramName, (Boolean) value);
 			} else {

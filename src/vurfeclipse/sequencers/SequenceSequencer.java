@@ -680,7 +680,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 					txtCurrentSequenceName.setValue(getCurrentSequenceName());
 
 				if (!getCurrentSequenceName().equals("")) {
-					/*this.grpSequenceEditor.remove();
+						/*this.grpSequenceEditor.remove();
 					this.grpSequenceEditor = (SequenceEditor) 
 					this.getActiveSequence()
 						.makeControls(APP.getApp().getCF().control(), getCurrentSequenceName())
@@ -883,7 +883,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		bindAll(toAdd);
 	}
 
-	public void bindSavedSequences(String prefix, int sequenceLength, int weight) {
+	public int bindSavedSequences(String prefix, int sequenceLength, int weight) {
 		List<String> textFiles = new ArrayList<String>();
 		//String directory = System.getProperty("user.dir") + "/saves"; //APP.getApp().sketchPath("");
 		String filename = this.host.getProjectFilename().replace(".xml", "");
@@ -907,7 +907,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				Sequence newSeq = this.createSequence(input); //sequence_settings);
 				loaded ++;
 
-				String seq_name = actual.replace("bank_", "").replace(file.getParent(),"").replace("/","").replace(".xml","");
+				String seq_name = actual.replace("bank_", "")	// C:\code\vurf-eclipse/output/doctea-incremental/bank_album blend cyriakish.xml
+						.replace(directory+"/","")
+						.replace(file.getParent(),"")
+						.replace("/","")
+						.replace(".xml","");
 				((HashMap<String, Sequence>) sequences).put(seq_name, newSeq);
 				this.addHistorySequenceName(seq_name);
 			}
@@ -922,6 +926,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		}
 		//}
 		//}
+		return loaded;
 	}
 
 
@@ -1052,7 +1057,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		
 	}
 
-	@Deprecated
+	//@Deprecated //no longer deprecated! - 2018-09-21
 	private Sequence loadSequence(String filename) {
 		HashMap<String, Object> input;
 
@@ -1508,7 +1513,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	public void loadBankSequences (String path) {
+	/*public void loadBankSequences (String path) {
 		// load project's sequences directory contents and create a Sequence for each xml file found
 		// open directory listing
 		// for (each entry in directory listing) {
@@ -1534,14 +1539,15 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 					  // skip; maybe recurse tho in future
 				  } else {
 					  if (fileEntry.getName().endsWith(".xml")) {
-						  String sequence_name = fileEntry.getName().replace(".xml", "");
-						  this.bindSequence(sequence_name, this.loadSequence(fileEntry.getPath())); //load xml file contents 
+						  String sequence_name = fileEntry.getName().replace(path+"\\","").replace(".xml", "");
+						  Sequence seq = this.loadSequence(fileEntry.getPath());
+						  this.bindSequence(seq.getName(), seq); //load xml file contents 
 						  if (count>=maxSequences) break;
 					  }
 				  }
 			  }
 			  return;
-	}
+	}*/
 
 	public void saveBankSequences (String filename) {
 		for (Entry<String, Sequence> s : this.sequences.entrySet()) {

@@ -60,7 +60,8 @@ public class BlobDrawer extends SpiralDrawer {
 	
 	@Override
 	public boolean applyMeatToBuffers() {
-		if ((int)this.getParameterValue("shape")==b.SH_TEXTURE) {
+		//if (true) return true;
+		if ((int)this.getParameterValue("shape")==b.SH_TEXTURE) { //|| (int)this.getParameterValue("shape")==b.SH_FLOWER) {
 			return this.old____applyMeatToBuffers();
 		} else {
 			return super.applyMeatToBuffers();
@@ -105,13 +106,16 @@ public class BlobDrawer extends SpiralDrawer {
 	int colourSwitchCount = 0;
 	int colourSwitchEvery = 50; // frames
 
+	PShape shapeCache;
 	@Override
 	synchronized public PShape collectActualObject(float currRadius, float currentRadian) {
-		b.setShape((Integer)getParameterValue("shape"));
-		b.setInput(sc.getCanvas("src").getSurf());//.getTexture()); // was "temp3" ..
-		b.setRadius(currRadius);// * (int)random(5));
-		b.setRotation((int)Math.toRadians((currentRadian)));
-		return b.collectShape(in());
+			b.setShape((Integer)getParameterValue("shape"));
+			b.setInput(sc.getCanvas("src").getSurf());//.getTexture()); // was "temp3" ..
+			b.setRadius(currRadius);// * (int)random(5));
+			b.setRotation((int)Math.toRadians((currentRadian)));
+			return b.collectShape(in());
+		//return shapeCache;
+		//return b.collectShape(in());
 	}
 
 	

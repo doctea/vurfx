@@ -243,9 +243,10 @@ public class Blob implements Serializable {
 				//this.getShapeFlower();
 			
 			//flower.setFill(out.fillColor);
-			flower.setFill(out.fillColor);
-			flower.setTint(tint);
+			//flower.setFill(out.fillColor);
+			//flower.setTint(tint);
 			flower.setStrokeWeight(strokeSize);
+			flower.setFill(APP.getApp().color(this.c, tint)); 
 			//flower.setFill(true);
 			//flower.draw(out);
 			out.resetMatrix();
@@ -257,10 +258,10 @@ public class Blob implements Serializable {
 
 	PShape flowerShape;
 	private PShape getShapeFlower() {
-		if (false || flowerShape==null) {
+		if (true|| flowerShape==null) {
 			flowerShape = APP.getApp().createShape(PShape.GROUP);
 					
-			PShape body = this.getShapePolygon(6);
+			PShape body = this.getShapePolygon(3);
 			body.resetMatrix();
 			//body.scale(4);
 			//out.rotate(rot*2);
@@ -271,13 +272,16 @@ public class Blob implements Serializable {
 				//PShape ring = APP.getApp().createShape(PShape.RECT); //, 6);
 				//PShape ring = APP.getApp().createShape(RE)
 				
-				float x = PApplet.sin(PApplet.radians(i)) * 2.0f;// * R/2.0f;
-				float y = PApplet.cos(PApplet.radians(i)) * 2.0f;// * R/2.0f;
+				float x = PApplet.sin(PApplet.radians(i)) * 0.4f;// * R/2.0f;
+				float y = PApplet.cos(PApplet.radians(i)) * 0.4f;// * R/2.0f;
 				
 				ring.translate(x, y);
-				//ring.setFill(255);
 				
-				body.addChild(ring);
+				ring.setFill(APP.getApp().color(this.c, tint));
+				ring.setStroke(true);//APP.getApp().color(this.c, tint));
+				
+				//body.addChild(ring);
+				ring.setStroke(true);
 				//out.pushMatrix();
 				//out.translate(x,y);
 				//out.rotate(rot*4.0f);
@@ -285,8 +289,10 @@ public class Blob implements Serializable {
 				//out.popMatrix();
 				//polygon(out, numSides, x, y, R/4, R/4, 0);
 			}
-			//flowerShape.setFill(255);
+			flowerShape.setFill(APP.getApp().color(this.c, tint)); 
 			flowerShape.addChild(body);
+			body.setStroke(true);//APP.getApp().color(this.c, tint));
+
 			//flowerShape.endShape();
 		}
 		return flowerShape;
@@ -308,8 +314,8 @@ public class Blob implements Serializable {
 
 
 	public PShape getShapePolygon(int n) {
-		if (true||polygons[n]==null) {
-			System.out.println("Blob: generating polygon with " + n + " sides");
+		if (false||polygons[n]==null) {
+			//System.out.println("Blob: generating polygon with " + n + " sides");
 	
 			PShape newshape = APP.getApp().createShape();
 			
@@ -336,9 +342,9 @@ public class Blob implements Serializable {
 
 			//newshape.setFill(255);
 			//newshape.setStrokeWeight(strokeSize);
-			//polygons[n] = newshape;
+			polygons[n] = newshape;
 			//newshape.scale((float) (r/100.0));
-			return newshape;
+			//return newshape;
 		}
 		
 		return polygons[n];
@@ -579,9 +585,11 @@ public class Blob implements Serializable {
 
 			setShape(oldShape);
 			
-			s.setFill(this.c); //(int) (Math.random()*255));
+			s.setFill(APP.getApp().color(this.c, tint)); //(int) (Math.random()*255));
 			s.setStroke(this.strokeSize>0);
+			s.setStrokeWeight(0.0001f);
 			s.setStrokeCap(this.strokeSize);
+			//s.setTint(this.tint);
 			//s.scale(this.r);
 
 			

@@ -20,6 +20,9 @@ public class SpiralDrawer extends Filter {
   boolean continuousDraw = false;
   int w, h;
 
+
+private PShape shapeCache;
+
   public SpiralDrawer(Scene sc) {
     super(sc);
     this.w = sc.w;
@@ -67,7 +70,7 @@ public class SpiralDrawer extends Filter {
     addParameter("outline", new Boolean(false));
     
 	this.addParameter("colour", VurfEclipse.makeColour(255, 128, 64, 255));
-	this.addParameter("tint",  new Integer(255), 0, 255);//new Integer(128));
+	this.addParameter("tint",  new Integer(100), 0, 100);//new Integer(128));
 
     addParameter("mode", new Integer(0), 0, 1);
   }
@@ -274,31 +277,41 @@ public class SpiralDrawer extends Filter {
 	  // collect objects to draw
 	  // add them to an object group
 	  // draw them in one go
+
+	  PShape g;
+	  if (false||null==shapeCache) {
+		  ArrayList<PShape> list = this.collectShapes();
+		  g = APP.getApp().createShape(APP.getApp().GROUP);
+		  //println("got " + list.size() + " shapes to draw");
+		  for (PShape l : list)
+			g.addChild(l);
+	  } else {
+		  g = this.shapeCache;
+	  }
+
 	  
-	  ArrayList<PShape> list = this.collectShapes();
+	  g.setTint((int)this.getParameterValue("tint"));
+	  //g.setTint(tint);
+	  //g.setFill((int) (Math.random()*255));
+	  //g.setFill((int)this.getParameterValue("colour"));
+	  g.setFill(APP.getApp().color((int)this.getParameterValue("colour"), (int)this.getParameterValue("tint"))); 
+	  g.setStroke((boolean)this.getParameterValue("edged"));
+	  g.setStrokeWeight(0.001f);
+	  //g.setStrokeCap(-10);
+	  //g.setTexture(in());
+	  //g.setFill();
+	  
 	  PGraphics out = out();
 	  out.background(0,0,0,0);
 	  
 	  out.pushMatrix();
-	  
-	  PShape g = APP.getApp().createShape(APP.getApp().GROUP);
-	  println("got " + list.size() + " shapes to draw");
-	  for (PShape l : list)
-		g.addChild(l);
-	  
-	  //g.setTint((int)this.getParameterValue("tint"));
-	  //g.setFill((int) (Math.random()*255));
-	  g.setFill((int)this.getParameterValue("colour"));
-	  g.setStroke(true);//(boolean)this.getParameterValue("edged"));
-	  g.setStrokeWeight(0.0001f);
-	  //g.setTexture(in());
-	  //g.setFill();
 	  
 	  out.translate(w/2, h/2);
 	  
 	  out.rotate((float) Math.toRadians((float)this.getParameterValue("totalRotate")));
 	  
 	  out.shape(g);
+	  
 	  
 	  out.popMatrix();
 	  
