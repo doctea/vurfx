@@ -2,6 +2,8 @@ package vurfeclipse.filters;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -95,6 +97,8 @@ private PShape shapeCache;
   float startRadius = 300;
   float endRadius = 5;
   int numSections = 60;*/
+  
+  ArrayList<PShape> list = new ArrayList<PShape> ();
 
   public ArrayList<PShape> collectShapes() {
     PVector pSpiralCenter = (PVector)getParameterValue("spiralCenter");
@@ -141,12 +145,14 @@ private PShape shapeCache;
     //spiralCenter = new PVector(sc.w/2,sc.h/2);
 
     PVector spiralCenter = new PVector(pSpiralCenter.x * sc.w, pSpiralCenter.y * sc.h);
-
-    ArrayList<PShape> list = new ArrayList<PShape> ();
+    
     
     //curveVertex(x + spiralCenter.x, y + spiralCenter.y);
     //while (currentRadian < endRadian) {
-    if ((Integer)getParameterValue("mode")==0) {
+    if ((Integer)getParameterValue("mode")==1) {	// original method, thrashes the fuck out of memory by creating new objects every time
+      int i = 0;
+      ArrayList<PShape> list = new ArrayList<PShape> ();
+
       while (currentRadian >= startRadian) {
         //currentRadian += deltaAngle;
         currentRadian -= (double)deltaAngle + 0.0001d;
@@ -154,11 +160,12 @@ private PShape shapeCache;
         x = (float) ((double)xRadianMod*(double)PApplet.cos(currentRadian) * ((double)currRadius / (double)radius));// / radius);
         y = (float) ((double)yRadianMod*(double)PApplet.sin(currentRadian) * (double)((double)currRadius / (double)radius));// / radius);
 
-        //this.drawObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
         list.add(collectObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle));
+        i++;
       }
-    } else {
-      int n = 0;
+      return list;
+    } else {		// new method, more repectable memory usage (i think?) due to re-using pshapes
+      /*int n = 0;
       while (n <= numofCircles*10) {
         //this.drawObject(PApplet.abs(PApplet.sin(n)*this.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
     	list.add(this.collectObject(PApplet.abs(PApplet.sin(n)*this.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle));
@@ -167,7 +174,52 @@ private PShape shapeCache;
       }
       n--;
       //this.drawObject(PApplet.abs(PApplet.sin(n)*this.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
-      list.add(this.collectObject(PApplet.abs(PApplet.sin(n)*this.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle));
+      list.add(this.collectObject(PApplet.abs(PApplet.sin(n)*this.w), 0, spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle));*/
+        int i = 0;
+        while (currentRadian >= startRadian) {
+          //currentRadian += deltaAngle;
+          currentRadian -= (double)deltaAngle + 0.0001d;
+          currRadius = PApplet.map(currentRadian, startRadian, endRadian, startRadius, endRadius) * radius;
+          x = (float) ((double)xRadianMod*(double)PApplet.cos(currentRadian) * ((double)currRadius / (double)radius));// / radius);
+          y = (float) ((double)yRadianMod*(double)PApplet.sin(currentRadian) * (double)((double)currRadius / (double)radius));// / radius);
+
+          //list.clear();
+          if (list.size()<=i) {
+          	//this.drawObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
+          	list.add(collectObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle));
+          	println("collecting new element " +i);
+          } else {
+        	//println("re-using element " + i);
+        	PShape s = (PShape) list.toArray()[i];
+        	if (s==null) {
+        		println("wtf, got null shape in arraylist for " + i +"?");
+        		i++;
+        		continue;
+        	}
+        	s.resetMatrix();
+
+            float units_w = 1.0f/4, units_h = 0.75f/4;
+            float new_w = /*sc.w * (sc.w/*/units_w*currRadius;///4;//);
+            float new_h = /*sc.h * (sc.h/*/units_h*currRadius;///4;//);
+           
+            s.scale(currRadius/4); //new_w,new_h);
+            //s.rotate(PApplet.radians(currentRadian));
+      	  	s.rotate(PApplet.radians(rotation));
+            //s.rotate(rotation);
+            
+      	  	s.setStroke((boolean)this.getParameterValue("edged"));
+      	  	s.setStrokeWeight(0.0001f);
+            
+            //s.rotate(PApplet.radians(totalRotate));  // rotate around the spiral point by the total rotation amount
+          	s.translate(x, y);
+          	s.rotate(0.0f,0.0f,PApplet.radians(zRotate),0);
+          }
+          i++;
+        }
+        while (list.size()>i) {
+        	list.remove(i);
+        	i++;
+        }
     }
 
     return list;
@@ -271,7 +323,7 @@ private PShape shapeCache;
       out.ellipse(0,0,20,20);*/
   }
 
-
+  boolean clearList = false;
   public boolean applyMeatToBuffers() {
 	  // new version for single-pass drawing
 	  // collect objects to draw
@@ -279,12 +331,17 @@ private PShape shapeCache;
 	  // draw them in one go
 
 	  PShape g;
-	  if (false||null==shapeCache) {
+	  if (false||null==shapeCache||clearList) {
+		  if (clearList) {
+			  this.list.clear();
+			  clearList = false;
+		  }
 		  ArrayList<PShape> list = this.collectShapes();
-		  g = APP.getApp().createShape(APP.getApp().GROUP);
+		  g = APP.getApp().createShape(APP.getApp().GROUP);                                     
 		  //println("got " + list.size() + " shapes to draw");
-		  for (PShape l : list)
-			g.addChild(l);
+		  ListIterator<PShape> li = list.listIterator();
+		  while(li.hasNext())
+			g.addChild(li.next());
 	  } else {
 		  g = this.shapeCache;
 	  }
@@ -296,8 +353,8 @@ private PShape shapeCache;
 	  //g.setFill((int)this.getParameterValue("colour"));
 	  g.setFill(APP.getApp().color((int)this.getParameterValue("colour"), (int)this.getParameterValue("tint"))); 
 	  g.setStroke((boolean)this.getParameterValue("edged"));
-	  g.setStrokeWeight(0.001f);
-	  //g.setStrokeCap(-10);
+	  g.setStrokeWeight(0.0001f);
+	  //g.setStrokeCap(10);
 	  //g.setTexture(in());
 	  //g.setFill();
 	  
@@ -312,8 +369,9 @@ private PShape shapeCache;
 	  
 	  out.shape(g);
 	  
-	  
 	  out.popMatrix();
+	  
+	  //if (APP.getApp().frameCount%50==0) 	  System.gc();
 	  
 	  return true;
   }

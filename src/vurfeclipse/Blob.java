@@ -1,6 +1,7 @@
 package vurfeclipse;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -314,10 +315,11 @@ public class Blob implements Serializable {
 
 
 	public PShape getShapePolygon(int n) {
-		if (false||polygons[n]==null) {
+		if (true||polygons[n]==null) {
 			//System.out.println("Blob: generating polygon with " + n + " sides");
 	
 			PShape newshape = APP.getApp().createShape();
+			//PShape newshape = Blob.makeShape();
 			
 			newshape.beginShape();//.beginShape();
 	
@@ -346,10 +348,12 @@ public class Blob implements Serializable {
 			//newshape.scale((float) (r/100.0));
 			//return newshape;
 		}
-		
+		polygons[n].resetMatrix();
 		return polygons[n];
 	}
 	
+
+
 	//void polygon(PGraphics out, int n, float cx, float cy, float w, float h, float startAngle)
 	void polygon(PGraphics out, int n, float cx, float cy, float w, float h, float startAngle)
 	{
@@ -530,6 +534,7 @@ public class Blob implements Serializable {
 				//out.ellipse(x,y,r,r);
 				//out.ellipse(0,0,R,R);
 				s = APP.getApp().createShape(APP.getApp().ELLIPSE,0,0,1,1);
+				//s = getShapePolygon(0);
 				s.scale(R/2);
 			} else if (getShape()==SH_RECT) {
 				//out.rectMode(PApplet.RADIUS);
@@ -537,7 +542,7 @@ public class Blob implements Serializable {
 				//polygon(out, /*doPolyRand?(int)random(3,8):*/4, 0, 0, R, R, 0);
 				//s = APP.getApp().createShape(APP.getApp().RECT);
 				s = getShapePolygon(4);
-				s.scale(R/4);
+				s.scale(R/2);
 			} else if (getShape()==SH_POLY) {
 				//System.out.println("doing poly?");
 				//polygon(out, /*doPolyRand?(int)random(3,8):*/numSides, 0, 0, R, R, 0);
@@ -586,9 +591,9 @@ public class Blob implements Serializable {
 			setShape(oldShape);
 			
 			s.setFill(APP.getApp().color(this.c, tint)); //(int) (Math.random()*255));
-			s.setStroke(this.strokeSize>0);
-			s.setStrokeWeight(0.0001f);
-			s.setStrokeCap(this.strokeSize);
+			//s.setStroke(false); //this.strokeSize>0);
+			//s.setStrokeWeight(0.0001f);
+			//s.setStrokeCap(this.strokeSize/10);
 			//s.setTint(this.tint);
 			//s.scale(this.r);
 

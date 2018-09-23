@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import processing.core.PApplet;
+import vurfeclipse.APP;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.sequencers.SequenceSequencer;
 
@@ -106,6 +107,14 @@ public class ControlFrame extends PApplet {
 
 	boolean processing = false;
 	public void draw() {
+		/*if (APP.getApp().frameCount%300==0) {
+			this.queueUpdate(new Runnable() {
+				@Override
+				public void run() {
+					System.gc();
+				}
+			});
+		}*/
 		background(190);
 		if (!processing) {
 			processing = true;

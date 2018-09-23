@@ -84,6 +84,7 @@ public class BlobDrawer extends SpiralDrawer {
 	    	if (in()==null) setAlias_in("pix0"); //src = sc.getCanvas("pix0").getSurf();
 	    	if (in()!=null) b.setInput(in());
 	    	b.setShape((Integer)value);
+	    	this.clearList = true;//list.clear();
 	    } else if(paramName.equals("colour")) {
 	    	//println("got colour change to" + value);
 	    	b.setColour((Integer)value);
@@ -109,11 +110,20 @@ public class BlobDrawer extends SpiralDrawer {
 	PShape shapeCache;
 	@Override
 	synchronized public PShape collectActualObject(float currRadius, float currentRadian) {
-			b.setShape((Integer)getParameterValue("shape"));
-			b.setInput(sc.getCanvas("src").getSurf());//.getTexture()); // was "temp3" ..
-			b.setRadius(currRadius);// * (int)random(5));
-			b.setRotation((int)Math.toRadians((currentRadian)));
-			return b.collectShape(in());
+	      //b = new Blob();
+	      //b.setTint(tint);
+	      //b.setColour(c);
+	      
+	      /*PShape p = b.getShapePolygon(4);
+	      p.scale(new_w,new_h);
+	      p.rotate(currentRadian);*/
+	      
+		b.setShape((Integer)getParameterValue("shape"));
+		b.setInput(sc.getCanvas("src").getSurf());//.getTexture()); // was "temp3" ..
+		b.setRadius(currRadius);// * (int)random(5));
+		b.setRotation((int)Math.toRadians((currentRadian)));
+		
+		return b.collectShape(in());
 		//return shapeCache;
 		//return b.collectShape(in());
 	}

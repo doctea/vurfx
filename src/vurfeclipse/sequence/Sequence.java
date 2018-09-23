@@ -611,8 +611,12 @@ abstract public class Sequence implements Serializable, Mutable {
 
 		public void saveSequencePreset(String filename) {
 			if (!filename.endsWith(".xml")) filename += ".xml";
-			filename = filename.replace(':', '_');
+			//filename = filename.replace(':', '_');
 
+			String actual = APP.getApp().sketchOutputPath(filename); //+ ".xml");
+			actual = actual.replace(":\\", "{DRIVE}").replace(":","_").replace("{DRIVE}",":\\");
+			println("saving sequence to file " + actual);
+			
 			Sequence toSave = this;//.getActiveSequence();
 			HashMap<String,Object> output; //= new HashMap<String,Object>();
 			output = toSave.collectParameters();

@@ -48,6 +48,7 @@ public class SequenceEditor extends Group {
 		}
 		//this.controllers.get().clear();
 		this.removeControllers();
+		System.gc();
 		// this.removeListeners();
 		/*if (APP.getApp().getCF().sequenceEditor!=null)
 			APP.getApp().getCF().control().remove(APP.getApp().getCF().sequenceEditor);

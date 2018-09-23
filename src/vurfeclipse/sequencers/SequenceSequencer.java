@@ -1005,6 +1005,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			restartSequence();
 		} else if (key=='o') { // HISTORY 'cut' between cursor/next (or do random if at end?)
 			cutSequence();
+		} else if (key=='b') { // save current sequence to separate .xml file
+			this.getActiveSequence().saveSequencePreset(this.host.getProjectFilename().replace(".xml", "") + "/bank_" + this.getCurrentSequenceName());
 		} else if (key=='B') { // dump entire current sequencer bank to separate .xml files
 			this.saveBankSequences(this.host.getProjectFilename().replace(".xml", "")); //this.host.getClass().getSimpleName());
 		} else if (key=='X') {
@@ -1110,13 +1112,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	@Deprecated
 	private void saveSequence(String filename) {
 		if (!filename.endsWith(".xml")) filename += ".xml";
-		filename = filename.replace(':', '_');
+		filename = filename.replace(":\\", "{DRIVE}").replace(":","_").replace("{DRIVE}",":\\");
 
 		Sequence toSave = this.getActiveSequence();
 		HashMap<String,Object> output; //= new HashMap<String,Object>();
 		output = toSave.collectParameters();
 		try {
 			XMLSerializer.write(output, filename);
+			println("saving to " + filename);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.err.println("Caught " + e.toString() + " trying to save sequence of class " + toSave.getClass().getSimpleName() + " to '" + filename + "'");
@@ -1425,6 +1428,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		SequenceSequencer self = this;
 
 		this.sequences.put(text, this.getActiveSequence());
+		this.activeSequenceName = text;
 
 		int place = this.historySequenceNames.indexOf(currentSequenceName);
 		while (place>=0) {
@@ -1549,11 +1553,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			  return;
 	}*/
 
-	public void saveBankSequences (String filename) {
+	public void saveBankSequences (String projectFolder) {
 		for (Entry<String, Sequence> s : this.sequences.entrySet()) {
-			String actual = APP.getApp().sketchOutputPath(filename + "/bank_" + s.getKey() + ".xml");
-			println("saving sequence to file " + actual);
-			s.getValue().saveSequencePreset(actual);
+			s.getValue().saveSequencePreset(projectFolder.replace(".xml", "") + "/" + s.getKey());
 		}
 	}
 

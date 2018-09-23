@@ -46,11 +46,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/colorutils"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/controlP5/library/controlP5.jar" sourcepath="lib/user/controlP5/src">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/code/vurf-eclipse/lib/user/controlP5/reference/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/datautils/datautils.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/datautils"/>
@@ -112,7 +107,11 @@
 	<classpathentry kind="lib" path="lib/user/GSVideo/library/jna.jar"/>
 	<classpathentry kind="lib" path="lib/user/fullscreen/library/fullscreen.jar"/>
 	<classpathentry kind="lib" path="lib/user/PostFX/library/PostFX.jar" sourcepath="lib/user/PostFX/src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/processing 336"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/processing">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/base/core-336"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/openkinect_processing/library/openkinect_processing.jar" sourcepath="lib/user/openkinect_processing/src">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/openkinect_processing/library/"/>
@@ -124,7 +123,8 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/spout/library"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/EvalEx-1.18.jar"/>
+	<classpathentry kind="lib" path="lib/user/EvalEx-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/user/oscP5/library/oscP5.jar" sourcepath="lib/user/oscP5/src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/controlP5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
