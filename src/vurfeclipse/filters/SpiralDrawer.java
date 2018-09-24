@@ -98,9 +98,10 @@ private PShape shapeCache;
   float endRadius = 5;
   int numSections = 60;*/
   
-  ArrayList<PShape> list = new ArrayList<PShape> ();
+  //ArrayList<PShape> list = new ArrayList<PShape> ();
+  PShape list = APP.getApp().createShape(APP.getApp().GROUP);
 
-  public ArrayList<PShape> collectShapes() {
+  public PShape collectShapes() {
     PVector pSpiralCenter = (PVector)getParameterValue("spiralCenter");
     if (pSpiralCenter!=null) pSpiralCenter = new PVector(0.0f,0.0f);
     if (pSpiralCenter.x>10.0f) {
@@ -151,7 +152,7 @@ private PShape shapeCache;
     //while (currentRadian < endRadian) {
     if ((Integer)getParameterValue("mode")==1) {	// original method, thrashes the fuck out of memory by creating new objects every time
       int i = 0;
-      ArrayList<PShape> list = new ArrayList<PShape> ();
+      PShape list = new PShape ();
 
       while (currentRadian >= startRadian) {
         //currentRadian += deltaAngle;
@@ -160,7 +161,7 @@ private PShape shapeCache;
         x = (float) ((double)xRadianMod*(double)PApplet.cos(currentRadian) * ((double)currRadius / (double)radius));// / radius);
         y = (float) ((double)yRadianMod*(double)PApplet.sin(currentRadian) * (double)((double)currRadius / (double)radius));// / radius);
 
-        list.add(collectObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle));
+        list.addChild(collectObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle));
         i++;
       }
       return list;
@@ -183,29 +184,31 @@ private PShape shapeCache;
           x = (float) ((double)xRadianMod*(double)PApplet.cos(currentRadian) * ((double)currRadius / (double)radius));// / radius);
           y = (float) ((double)yRadianMod*(double)PApplet.sin(currentRadian) * (double)((double)currRadius / (double)radius));// / radius);
 
+          float units_w = 1.0f/4, units_h = 0.75f/4;
+          float new_w = /*sc.w * (sc.w/*/units_w*currRadius;///4;//);
+          float new_h = /*sc.h * (sc.h/*/units_h*currRadius;///4;//);
+          
           //list.clear();
-          if (list.size()<=i) {
+          //if (list.getChildCount()<=i) {
+          if (i>=list.getChildCount()) {
           	//this.drawObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
-          	list.add(collectObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle));
+          	list.addChild(collectObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle));
           	println("collecting new element " +i);
           } else {
         	//println("re-using element " + i);
-        	PShape s = (PShape) list.toArray()[i];
+        	//PShape s = (PShape) list.toArray()[i];
+        	PShape s = list.getChild(i);
         	if (s==null) {
         		println("wtf, got null shape in arraylist for " + i +"?");
         		i++;
         		continue;
         	}
+        	
+        	///////// set object location start
         	s.resetMatrix();
-
-            float units_w = 1.0f/4, units_h = 0.75f/4;
-            float new_w = /*sc.w * (sc.w/*/units_w*currRadius;///4;//);
-            float new_h = /*sc.h * (sc.h/*/units_h*currRadius;///4;//);
            
-            s.scale(currRadius/4); //new_w,new_h);
-            //s.rotate(PApplet.radians(currentRadian));
+            s.scale(currRadius/4.0f); //new_w,new_h);
       	  	s.rotate(PApplet.radians(rotation));
-            //s.rotate(rotation);
             
       	  	s.setStroke((boolean)this.getParameterValue("edged"));
       	  	s.setStrokeWeight(0.0001f);
@@ -213,11 +216,13 @@ private PShape shapeCache;
             //s.rotate(PApplet.radians(totalRotate));  // rotate around the spiral point by the total rotation amount
           	s.translate(x, y);
           	s.rotate(0.0f,0.0f,PApplet.radians(zRotate),0);
+        	///////// set object location end
+
           }
           i++;
         }
-        while (list.size()>i) {
-        	list.remove(i);
+        while (list.getChildCount()>i) {
+        	list.removeChild(i);
         	i++;
         }
     }
@@ -236,17 +241,27 @@ private PShape shapeCache;
 		  return null;
 	  }
 	  
+	  /*
       //out.translate(spiralCenter.x, spiralCenter.y);    // move to the spiral center
-
       out.rotate(PApplet.radians(totalRotate));  // rotate around the spiral point by the total rotation amount
 
       out.translate(x, y);  // move to the plot point
-
-      //float new_w = /*sc.w/*/(sc.w/(currRadius)); //theta*thetaspeed);//theta; ///  radius. width.
-      //float new_h = /*sc.h/*/(sc.h/(currRadius)); //theta*thetaspeed);//theta;
-      //out.rotate(PApplet.radians(rotation)+currentRadian);//+135);  // rotate around the plot point
-
-      out.rotate(0.0f,0.0f,PApplet.radians(zRotate),0);
+      out.rotate(0.0f,0.0f,PApplet.radians(zRotate),0);*/
+  	///////// set object location start
+  		out.resetMatrix();
+     
+  		out.scale(currRadius/4); //new_w,new_h);
+      //s.rotate(PApplet.radians(currentRadian));
+  		out.rotate(PApplet.radians(totalRotate));
+      //s.rotate(rotation);
+      
+  		out.setStroke((boolean)this.getParameterValue("edged"));
+  		out.setStrokeWeight(0.0001f);
+      
+      //s.rotate(PApplet.radians(totalRotate));  // rotate around the spiral point by the total rotation amount
+  		out.translate(x, y);
+  		out.rotate(0.0f,0.0f,PApplet.radians(zRotate),0);
+  	///////// set object location end
 
       return out;
       //drawActualObject(out, currRadius, radians(rotation)+currentRadian);
@@ -267,7 +282,7 @@ private PShape shapeCache;
       //b.setColour(c);
       
       PShape p = b.getShapePolygon(4);
-      p.scale(new_w,new_h);
+      p.scale(currRadius/4); //new_w,new_h);
       p.rotate(currentRadian);
       
       return p;
@@ -323,30 +338,45 @@ private PShape shapeCache;
       out.ellipse(0,0,20,20);*/
   }
 
+  PShape g = APP.getApp().createShape(APP.getApp().GROUP);   
+
   boolean clearList = false;
   public boolean applyMeatToBuffers() {
 	  // new version for single-pass drawing
 	  // collect objects to draw
 	  // add them to an object group
 	  // draw them in one go
+	  
+	  //if (true)return true;
 
-	  PShape g;
-	  if (false||null==shapeCache||clearList) {
+	  //PShape g;
+	  //if (false||null==shapeCache||clearList) {
 		  if (clearList) {
-			  this.list.clear();
+			  //this.list.clear();
+			  list = APP.getApp().createShape(APP.getApp().GROUP);   
 			  clearList = false;
 		  }
-		  ArrayList<PShape> list = this.collectShapes();
-		  g = APP.getApp().createShape(APP.getApp().GROUP);                                     
+		  PShape list = this.collectShapes();
+		  //g = APP.getApp().createShape(APP.getApp().GROUP);
+		  
 		  //println("got " + list.size() + " shapes to draw");
-		  ListIterator<PShape> li = list.listIterator();
+		  /*ListIterator<PShape> li = list.listIterator();
+		  //if (true) return false;
 		  while(li.hasNext())
-			g.addChild(li.next());
-	  } else {
+			g.addChild(li.next());*/
+		  //println("got group pshape with " + g.getChildCount() + " children");
+		  shapeCache = list;
+	  //} else {
 		  g = this.shapeCache;
-	  }
+		  
+		  /*if (list.size()>g.getChildCount()) {
+			  for (int i = g.getChildCount() ; i < list.size(); i++) {
+				  g.addChild(list.get(i));
+			  }
+		  }*/
+	  //}
 
-	  
+	  //if (true) return true;
 	  g.setTint((int)this.getParameterValue("tint"));
 	  //g.setTint(tint);
 	  //g.setFill((int) (Math.random()*255));

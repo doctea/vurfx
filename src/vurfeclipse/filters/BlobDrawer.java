@@ -81,10 +81,12 @@ public class BlobDrawer extends SpiralDrawer {
 		} else if(paramName.equals("tint")) {
 	    	b.setTint((Integer)value);
 		} else if(paramName.equals("shape")) {   // there goes my hero <3
-	    	if (in()==null) setAlias_in("pix0"); //src = sc.getCanvas("pix0").getSurf();
-	    	if (in()!=null) b.setInput(in());
-	    	b.setShape((Integer)value);
-	    	this.clearList = true;//list.clear();
+	    	if ((int)value!=b.getShape()) {
+	    		if (in()==null) setAlias_in("pix0"); //src = sc.getCanvas("pix0").getSurf();
+	    		if (in()!=null) b.setInput(in());
+	    		b.setShape((Integer)value);
+	    		this.clearList = true;//list.clear();
+			}
 	    } else if(paramName.equals("colour")) {
 	    	//println("got colour change to" + value);
 	    	b.setColour((Integer)value);
