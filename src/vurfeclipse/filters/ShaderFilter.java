@@ -130,10 +130,10 @@ public class ShaderFilter extends Filter {
 					*/
 					if (paramName.equals("offset_x")) {	// cheeky sync zoom hack .. 
 					    // bizarrely this works to smooth it out quite a bit, but still isn't quite right... 
-						println("offset_x" + value);
+						//println("offset_x" + value);
 						value = ((Double)Math.pow(10.0,  ((float)value/4.0d))).floatValue();
 						//value = ((Double)Math.log10((float)value)).floatValue();
-						println("offset_x" + value);
+						//println("offset_x" + value);
 					}
 
 
