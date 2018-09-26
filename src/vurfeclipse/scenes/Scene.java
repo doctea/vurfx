@@ -1002,6 +1002,21 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			}								
 		});		
 	}
+	
+	TreeMap available_filters; 
+	synchronized private TreeMap getAvailableFilters() {	
+		if (available_filters==null) {
+			Class[] filters_a = host.getAvailableFilters();
+			available_filters = new TreeMap<String,Class> ();
+			//String[] filter_names = new String[filters.length];
+			for (Class f : filters_a) {
+				available_filters.put(f.getSimpleName(), f);
+			}
+			//available_filters = new TreeMap(availableFilters);
+		}
+		return available_filters;
+	}
+	
 	//TODO: make this able to redraw the aliases when they change 
 	synchronized private int makeControlsCanvasAliases(int margin) {
 		if (this.muteController==null) return 0;
@@ -1014,27 +1029,15 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		int start_x = (int) this.muteController.getWidth() + margin * 8; //(this.lblSceneMapping.getPosition()[0] + margin + this.lblSceneMapping.getWidth());
 		int margin_w = 200;
 		int margin_y = 30;
-		
+				
+		if (null==cp5.get(tabName + "_add_filter_selector")) {
 
-		
-			if (null==cp5.get(tabName + "_add_filter_selector")) {
-				
-
-				Class[] filters_a = host.getAvailableFilters();
-				final TreeMap available_filters = new TreeMap<String,Class> ();
-				//String[] filter_names = new String[filters.length];
-				for (Class f : filters_a) {
-					available_filters.put(f.getSimpleName(), f);
-				}
-				//available_filters = new TreeMap(availableFilters);
-				
-				
-			final ScrollableList lstAddFilterSelector = new ScrollableList(cp5, tabName + "_add_filter_selector")
+			ScrollableList lstAddFilterSelector = new ScrollableList(cp5, tabName + "_add_filter_selector")
 					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 					.setLabel("[add filter]") //((FormulaCallback)c).targetPath)
 					.moveTo(tab)
 					//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
-					.addItems((String[]) available_filters.keySet().toArray(new String[available_filters.size()]))
+					.addItems((String[]) getAvailableFilters().keySet().toArray(new String[getAvailableFilters().size()]))
 					.setPosition(start_x, margin)
 					.setWidth(margin * 10)
 					.setBarHeight(15)
@@ -1062,7 +1065,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 									.getItem(index).get("text")
 									);
 							//final String selected = lstAddFilterSelector.getStringValue();
-							final String classname = ((Class<Filter>)available_filters.get(selected)).getName();
+							final String classname = ((Class<Filter>)getAvailableFilters().get(selected)).getName();
 							//self.addFilter(Filter.createFilter(classname, self));
 							
 							self.queueUpdate(new Runnable() {
@@ -1120,13 +1123,14 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		int canvases_start_x = start_x;
 		
 		int i = 0;
-		for (final Entry<String, String> map : this.getCanvasMappings().entrySet()) {
+		for (Entry<String, String> map : this.getCanvasMappings().entrySet()) {
 			 if (start_x + margin_w >= cf.width) { //sketchWidth) {
 				 row ++;
 				 start_x = canvases_start_x;
 			 }
 			 
-			 final String label;
+			
+			 String label;
 			String value;
 			 //synchronized (map) {
 				 label = map.getKey();
