@@ -51,6 +51,10 @@ public class VideoPlayer extends Filter {
 
 	  return this;
   }
+  
+  public VideoPlayer(Scene sc) {
+	  this(sc, APP.getApp().dataPath("/video-sources/balloon.ogg"));
+  }
 
   public VideoPlayer(Scene sc, String filename) {
     super(sc);
@@ -61,9 +65,9 @@ public class VideoPlayer extends Filter {
   public void setMuted(boolean on) {
     super.setMuted(on);
     if (!on) {
-      stream.play();
+      if (this.started) stream.play();
     } else {
-      stream.pause();
+      if (this.started) stream.pause();
     }
   }
 
@@ -100,13 +104,13 @@ public class VideoPlayer extends Filter {
         println("Loaded new.." + filename);
         //GSMovie newStream;
         if (newStream!=null) { newStream.stop(); newStream.dispose(); }
-        newStream = new Movie(APP.getApp(),filename);
+        newStream = new Movie(APP.getApp().getCF(),filename);
         //newTex = new GLTexture(APP, sc.w, sc.h);
         //newStream.setPixelDest(tex, true);
         //newStream.volume(volume);		//TODO: why doesn't this compile on MacOSX?
         println("Set volume and pixeldest..");
         //if (!((VurfEclipse)APP.getApp()).exportMode)
-          newStream.play();
+          newStream.loop();
         //println("about to do ")
         while (!newStream.available())
           try { sleep(50); } catch (Exception e) {}
@@ -242,9 +246,9 @@ public class VideoPlayer extends Filter {
       this.setFilterLabel("VideoPlayer - " + filename);
     }*/
     if (stream!=null ) {
-      if (
+      if (true||
     		  //!stream.isSeeking() && 
-    		  stream.available()) {
+        stream.available()) {
         //stream.volume(volume);
 
         stream.read();
@@ -260,11 +264,15 @@ public class VideoPlayer extends Filter {
 
         //out.getTexture().putPixelsIntoTexture();
         //tex.updatePixels(); //.loadPixels();
-        if (stream.isModified()) {
-        //if (tex.putPixelsIntoTexture()) {
+        //if (stream.isModified()) {
+        if (true) {
           out().beginDraw();
           //if ((int)((VurfEclipse)APP.getApp()).random(100)<20)  println("VideoPlayer>>>video writing to " + out);
-          out().image(tex,0,0,sc.w,sc.h);
+          //out().image(tex,0,0,sc.w,sc.h);
+          out().pushMatrix();
+          out().imageMode(APP.getApp().CORNERS);
+          out().image(stream.get(),0,0,sc.w,sc.h);
+          out().popMatrix();
           out().endDraw();
           return true;
         }
@@ -275,7 +283,12 @@ public class VideoPlayer extends Filter {
         out.pixels = webcamStream.pixels;
         out.updatePixels();*/
         return false;
-      } /*else if (!stream.isSeeking()) {  // available
+      } else {	// not available
+    	//println("not available - starting?");
+    	//stream.read();
+    	  //stream.play();
+      }
+      /*else if (!stream.isSeeking()) {  // available
     	out.beginDraw();
         out.image(tex,0,0,sc.w,sc.h);
         out.endDraw();
