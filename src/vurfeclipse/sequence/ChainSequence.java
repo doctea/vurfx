@@ -43,7 +43,7 @@ public class ChainSequence extends Sequence {
 		if (!(this.chain.size()>0)) 
 			this.initialiseDefaultChain(); 
 
-		if (this.scene_parameters==null) {		
+		if (this.scene_parameters!=null && this.scene_parameters.size()>0) {		
 			//this.initialiseDefaultChain();
 			for (Sequence seq : chain) {
 				seq.start();
@@ -142,7 +142,7 @@ public class ChainSequence extends Sequence {
 		super.restart();
 		for (Sequence seq : chain) {
 			//seq.clearSceneParameters(); // clear scene parameters because parent is dealing with them
-			seq.setSceneParameters(new HashMap<String, HashMap<String, Object>> ());	// set to empty scene_parameters instead of null, because otherwise onStart() gets triggered and overwrites values
+			seq.setSceneParameters(null);//new HashMap<String, HashMap<String, Object>> ());	// set to empty scene_parameters instead of null, because otherwise onStart() gets triggered and overwrites values
 			seq.restart();
 		}
 	}
