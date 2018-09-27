@@ -587,7 +587,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	public void setupCallbackPresets () {
 		this.callbacks = new HashMap<String,ParameterCallback> ();
 		println("setupCallbackPresets in " + this);
-		final Scene self = this;
+		Scene self = this;
 
 		this.callbacks.put("toggle", new ParameterCallback() {
 			public void call(Object value) {
@@ -802,7 +802,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		this.controlGroup = cp5.addGroup(this.getSceneName() + "_controlGroup_");
 
 		tab = controlGroup;*/
-		final Scene self = this;
+		Scene self = this;
 		
 			this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + "/" + getSceneName()) // + row)
 					.setLabel("^")
@@ -838,7 +838,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 						public void controlEvent(CallbackEvent theEvent) {
 							self.host.moveScene(self, 1);
 							self.host.refreshControls();
-							final String tabName = self.tabName; 
+							String tabName = self.tabName; 
 							self.guiOpenTab(cf); //, tabName);
 							/*Group g = (Group) cp5.get(tabName);//.getParent();
 							g.open();
@@ -1020,7 +1020,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	//TODO: make this able to redraw the aliases when they change 
 	synchronized private int makeControlsCanvasAliases(int margin) {
 		if (this.muteController==null) return 0;
-		final Scene self = this;
+		Scene self = this;
 		ControlFrame cf = APP.getApp().getCF();
 		ControlP5 cp5 = cf.control(); 
 		
@@ -1059,13 +1059,13 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
 							int index = (int) lstAddFilterSelector.getValue();
-							final String selected = (String)(
+							String selected = (String)(
 									//(ScrollableList)theEvent.getController())
 									lstAddFilterSelector
 									.getItem(index).get("text")
 									);
 							//final String selected = lstAddFilterSelector.getStringValue();
-							final String classname = ((Class<Filter>)getAvailableFilters().get(selected)).getName();
+							String classname = ((Class<Filter>)getAvailableFilters().get(selected)).getName();
 							//self.addFilter(Filter.createFilter(classname, self));
 							
 							self.queueUpdate(new Runnable() {
@@ -1111,11 +1111,11 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			public void controlEvent(CallbackEvent theEvent) {
 				//self.setCanvas("new"+self.getCanvasMappings().size(), "/canvases/new"+self.getCanvasMappings().size());
 				int n = 0;
-				while (self.hasCanvasMapping("new"+n)) {
+				while (hasCanvasMapping("new"+n)) {
 					n++;
 				}
-				self.setCanvas("new"+n, "/canvases/" + self.getSceneName() + "/new"+n);
-				self.refreshControls();
+				setCanvas("new"+n, "/canvases/" + self.getSceneName() + "/new"+n);
+				refreshControls();
 			}
 		});
 		
@@ -1343,7 +1343,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	
 	private void refreshCanvasControls() {
 		//TODO: make this actually only update the canvas controls rather than the entire scene control panel!
-		final Scene self = this;
+		//Scene self = this;
 
 		if (!host.getApp().isReady()) return;
 		host.getApp().getCF().queueUpdate(new Runnable() {
@@ -1352,7 +1352,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 				//tab.remove();
 				//tab.update();
 				//self.makeControlsCanvasAliases(10);	//TODO: make this actually only update the canvas controls rather than the entire scene control panel! 
-				self.setupControls(host.getApp().getCF(), tab);
+				setupControls(host.getApp().getCF(), tab);
 				tab.setWidth(host.getApp().getCF().sketchWidth());
 				((Accordion)tab.getParent()).updateItems();		// automatically readjust tab heights to fit new controls*
 			}
@@ -1361,7 +1361,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	}
 
 	synchronized public void refreshControls() {
-		final Scene self = this;
+		Scene self = this;
 		
 		if (!host.getApp().isReady()) return;
 		host.getApp().getCF().queueUpdate(new Runnable() {
