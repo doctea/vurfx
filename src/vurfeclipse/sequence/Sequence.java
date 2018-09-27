@@ -44,7 +44,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	public boolean enabled = true;
 
 	transient protected ArrayList<Mutable> mutables;// = new ArrayList<Mutable>();
-	protected HashMap<String, HashMap<String,Object>> scene_parameters;
+	protected HashMap<String, HashMap<String,Object>> scene_parameters = new HashMap<String, HashMap<String,Object>>();
 	private ArrayList<String> mutableListToLoad;
 
 	protected HashMap<String, Object> lastLoadedParams;
@@ -642,7 +642,7 @@ abstract public class Sequence implements Serializable, Mutable {
 				}*/
 				//SequenceEditor seq = APP.getApp().pr.getSequencer().seq
 								
-				final Sequence self = this;
+				Sequence self = this;
 				seq.setWidth((2 * cp5.controlWindow.papplet().width/3) - 40); // 40 is fudge factor to stop nested editors overlapping with sequence history 
 	
 				int pos_x = 0, pos_y = 0;

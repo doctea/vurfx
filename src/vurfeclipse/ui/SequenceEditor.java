@@ -13,6 +13,7 @@ public class SequenceEditor extends Group {
 	
 	Sequence sequence;
 	String sequenceName;
+	private Group controller;
 	
 	public Sequence getSequence() {
 		return sequence;
@@ -55,8 +56,15 @@ public class SequenceEditor extends Group {
 		APP.getApp().getCF().sequenceEditor = null;*/
 		//this.remove();
 		boolean disable_controls = false; //true;//false;//false; //
-		if (sequence!=null && !disable_controls) 
-			sequence.makeControls(APP.getApp().getCF(), sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,10);
+		if (sequence!=null && !disable_controls) {
+			if (this.controller!=null) {
+				this.controller.removeListeners();
+				this.controller.removeControllers();
+				this.removeControllers();
+				this.controller = null;
+			}
+			this.controller = sequence.makeControls(APP.getApp().getCF(), sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,10);
+		}
 	
 		return this;
 	}

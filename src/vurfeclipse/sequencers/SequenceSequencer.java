@@ -604,7 +604,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	private void updateGuiAddHistory(final String oldSequenceName, final String newSequenceName) {
+	private void updateGuiAddHistory(String oldSequenceName, String newSequenceName) {
 		SequenceSequencer self = this;
 
 		this.updateGuiHistory();
@@ -656,7 +656,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		
 	}
 
-	private void updateGuiSequenceChanged(final int oldCursor, final int newCursor) {
+	private void updateGuiSequenceChanged(int oldCursor, int newCursor) {
 		//if (!APP.getApp().isReady()) return;
 		if (null==lstHistory) return;
 		if (lstHistory.getItems()==null) return;
@@ -694,7 +694,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		});
 	}
 
-	private void updateGuiProgress(final Sequence activeSequence) {
+	private void updateGuiProgress(Sequence activeSequence) {
 		if (!APP.getApp().isReady()) return;
 		if (null==activeSequence) return;
 		if (null==this.sldProgress) return;
@@ -1150,7 +1150,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		this.tabName = tabName;
 
 		println("Project#setupControls about to grab cp5 before scene loop..");
-		final ControlP5 cp5 = cf.control();
+		ControlP5 cp5 = cf.control();
 
 		//this.setupMonitor(cp5);
 

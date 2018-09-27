@@ -279,6 +279,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			if (out()!=null) out().endDraw();
 		} catch (NullPointerException e) {
 			println("in Filter endDraw(): caught exception " + e);
+			e.printStackTrace();
 		}
 		//out.updatePixels();
 		//println("} endDraw in " + this);
@@ -675,7 +676,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		int row_h = 50, col_w = 100;
 
 
-		final Filter self = this;
+		Filter self = this;
 
 		if (row!=0) {
 			this.moveUpButton = cp5.addButton("moveup_" + tab.getName() + "/" + getFilterName()) // + row)
@@ -687,8 +688,8 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
-							self.sc.moveFilter(self, -1);
-							self.sc.refreshControls();
+							sc.moveFilter(self, -1);
+							sc.refreshControls();
 						}					
 					})
 					;
@@ -773,7 +774,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			};*/
 
 
-		String[] canvases = sc.getCanvasMappings().keySet().toArray(new String[0]);
+		String[] canvases = sc.getCanvasMappings().keySet().toArray(new String[0]);	// TODO: cache this !
 
 		/*new ScrollableList(cp5,"test_" + tab.getName())
 			.moveTo(grp)

@@ -553,7 +553,7 @@ public class Blob implements Serializable {
 				//this.polygonFlower(out, 0, 0, R);
 				s = this.getShapeFlower();
 				s.scale(R/4);
-			} else if (getShape()==SH_TEXTURE) {
+			} else if (getShape()==SH_TEXTURE) {	// THIS SECTION ISN'T CALLED RIGHT NOW - USES OLD METHOD INSTEAD SINCE TEXTURES DONT THRASH MEMORY -2018-09-27
 				float units_w = 1.0f, units_h = 0.75f;
 				float new_w = units_w * R/2.0f;///*sc.w * (sc.w/*/units_w*R;///4;//);  
 				float new_h = units_h * R/2.0f;///*sc.h * (sc.h/*/units_h*R;///4;//);
@@ -573,7 +573,8 @@ public class Blob implements Serializable {
 				//s = new PGraphics(src);
 
 			} else if (getShape()==SH_COMPOUND) {
-				//drawCompoundBlob(out, x, y, R, R, 0);
+				s = collectCompoundBlob(x, y, R, R, 0);
+				s.scale(R/4);
 				///// collect co
 				System.out.println("TODO: COMPOUND BLOB COLLECTION FOR SINGLE-PASS RENDERING OF SHAPES IN BLOBDRAWER ETC");
 			} else if (getShape()==SH_SVG && svg!=null) {
@@ -635,6 +636,56 @@ public class Blob implements Serializable {
 	      }*/
 
 
+		}
+
+
+		private PShape collectCompoundBlob(float cx, float cy, float w, float h, float startAngle) {
+
+			float step = (float)h/8;
+			//this.compoundBlob[0].x = x; this.compoundBlob.y = y;
+			if(this.compoundBlob==null) {
+				this.compoundBlob = new Blob[] {
+						new Blob(SH_RECT,x,y,(float)startAngle),
+						new Blob(SH_POLY,x,y+(float)step,(float)startAngle),
+						new Blob(SH_RECT,x,y+(float)step+10f,(float)startAngle),
+						new Blob(SH_POLY,x,y+(float)step*2f,(float)startAngle),
+						new Blob(SH_POLY,x,y+(float)step*3f,(float)startAngle),
+						//new Blob(SH_TEXTURE,x,y+(int)step*4,(int)startAngle),
+						new Blob(SH_POLY,x-15,y+(float)step*5f,(float)startAngle),
+						new Blob(SH_POLY,x+15,y+(float)step*5f,(float)startAngle)
+				};
+			}
+
+				compoundBlob[0].x = x; 	compoundBlob[0].y = y; 				compoundBlob[0].rot = startAngle;
+				compoundBlob[1].x = x; 	compoundBlob[1].y = y+step; 		compoundBlob[1].rot = startAngle;
+				compoundBlob[2].x = x; 	compoundBlob[2].y = y+step+10f; 	compoundBlob[2].rot = startAngle;
+				compoundBlob[3].x = x; 	compoundBlob[3].y = y+step*2f; 		compoundBlob[3].rot = startAngle;
+				compoundBlob[4].x = x; 	compoundBlob[4].y = y+step*3f; 		compoundBlob[4].rot = startAngle; 
+				compoundBlob[5].x = x-15; compoundBlob[5].y = y+step*5f; 	compoundBlob[5].rot = startAngle; 
+				compoundBlob[6].x = x+15; compoundBlob[6].y = y+step*5f; 	compoundBlob[6].rot = startAngle;
+				//};
+				PShape g = APP.getApp().createShape(APP.getApp().GROUP);
+
+				int numSpokes = 3;
+				for (int r = 0 ; r < 360 ; r+=(360/numSpokes)) {
+					//out.pushMatrix();
+					//out.rotate(PApplet.radians(r));
+					for (int i = 0 ; i < compoundBlob.length ; i++) {
+						compoundBlob[i].setEdge(edge);
+						//compoundBlob[i].setColour(color(random((i/numSpokes)*255.0),random(255.0),random(255.0),255));
+						compoundBlob[i].setColour(this.c); ///1 * color(random(255.0),random(255.0),random(255.0),255));
+						//System.out.println("in drawcompoundblob setting colour to " + c);
+						compoundBlob[i].setTint(255);
+						compoundBlob[i].setRadius(((float)i*(float)w/12.0f));
+						compoundBlob[i].setSides(((VurfEclipse)APP.getApp()).constrain(8+i/3,3,12));
+						compoundBlob[i].setInput(src);//out.getTexture());//src
+						if (compoundBlob[i].getShape() == SH_COMPOUND) compoundBlob[i].setShape(SH_POLY);
+						//compoundBlob[i].setShape(i%shapesCount-2);
+						//compoundBlob[i].draw(out);
+						g.addChild(compoundBlob[i].getShapePolygon(6));
+					}
+				}
+				return g; 
 		}
 
 

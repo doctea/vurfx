@@ -304,7 +304,7 @@ public class Parameter implements Serializable, Targetable {
 
 		final Parameter self = this;
 		
-		println("parameter makecontroller debug tabname " + tabName);
+		println("parameter makecontroller debug with tabname '" + tabName + "'");
 		
 		if (this.options!=null) {
 			println("what?");

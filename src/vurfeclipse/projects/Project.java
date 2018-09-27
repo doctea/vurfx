@@ -153,6 +153,7 @@ public abstract class Project implements Serializable {
 
 	HashMap<String,Canvas> canvases = new HashMap<String,Canvas>();
 	synchronized public void addCanvas(String name, Canvas canvas) {
+		this.canvas_paths_cache = null;
 		canvases.put(name,canvas);
 		if (debug) 
 			println("Project#addCanvas added " + name);
@@ -825,7 +826,7 @@ public abstract class Project implements Serializable {
 					@Override
 					public void controlEvent(CallbackEvent theEvent) {
 						int index = (int) lstAddSceneSelector.getValue();
-						final String selected = (String)(
+						String selected = (String)(
 								//(ScrollableList)theEvent.getController())
 								lstAddSceneSelector
 								.getItem(index).get("text")
@@ -1051,6 +1052,7 @@ public abstract class Project implements Serializable {
 	private HashMap<String,Integer> guids = new HashMap<String,Integer>();
 	public boolean disableKeys = false;
 	protected String filename;
+	private String[] canvas_paths_cache;
 
 	public void println(String text) {		// debugPrint, printDebug -- you get the idea
 		if (outputDebug) System.out.println("P " + (text.contains((this.toString()))? text : this+": "+text));
@@ -1132,9 +1134,12 @@ public abstract class Project implements Serializable {
 	}
 
 	public String[] getCanvasPaths() {
-		String[] paths = this.canvases.keySet().toArray(new String[0]);
-		Arrays.sort(paths);
-		return paths;
+		if (null==this.canvas_paths_cache) {
+			String[] paths = this.canvases.keySet().toArray(new String[0]);
+			Arrays.sort(paths);
+			this.canvas_paths_cache = paths;
+		}
+		return canvas_paths_cache;
 		//return null;
 	}
 
