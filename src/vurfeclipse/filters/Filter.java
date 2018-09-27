@@ -275,7 +275,11 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 	}
 	public void endDraw () {
 		//println("endDraw in " + this + "{");
-		out().endDraw();
+		try {
+			if (out()!=null) out().endDraw();
+		} catch (NullPointerException e) {
+			println("in Filter endDraw(): caught exception " + e);
+		}
 		//out.updatePixels();
 		//println("} endDraw in " + this);
 		//out.updatePixels();
