@@ -1059,6 +1059,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 	public synchronized void updateControl (String name, Object value) {
 		//(((controlP5.Controller)controllerMapping.get(name))).setValue(value);
 		if (controllerMapping==null) controllerMapping = new HashMap<String,controlP5.Controller> ();
+		//println("controllermapping is " + controllerMapping.size() + " big in updateControl!");
 		controlP5.Controller c = (controlP5.Controller)controllerMapping.get(name);
 
 		if (c!=null) {

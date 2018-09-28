@@ -302,7 +302,7 @@ public class Parameter implements Serializable, Targetable {
 	synchronized public Controller makeController(final ControlP5 cp5, String tabName, ControllerGroup tab, int size) {
 		controlP5.Controller o;
 
-		final Parameter self = this;
+		Parameter self = this;
 		
 		println("parameter makecontroller debug with tabname '" + tabName + "'");
 		

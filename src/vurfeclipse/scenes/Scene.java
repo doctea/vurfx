@@ -785,7 +785,10 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 
 		ControlP5 cp5 = cf.control();
 		if (debug) println("Scene#setupControls() in " + this);
-		//if (doneControls) return;
+		if (doneControls) {
+			println("already doneControls!");	// TODO: update the controls instead of recreating them, dumbass!!
+			//return;
+		}
 		doneControls = true;
 		this.cp5 = cp5;
 		this.tab = tab;
@@ -924,7 +927,12 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		};*/
 		
 		int row = 0;
-		row += makeControlsCanvasAliases(margin);
+		try {
+			row += makeControlsCanvasAliases(margin);
+		} catch (Exception e) {
+			println("caught exception adding canvas alias rows " +e );
+			e.printStackTrace();
+		}
 
 		currentY += size + margin;
 
@@ -1029,6 +1037,8 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		int start_x = (int) this.muteController.getWidth() + margin * 8; //(this.lblSceneMapping.getPosition()[0] + margin + this.lblSceneMapping.getWidth());
 		int margin_w = 200;
 		int margin_y = 30;
+		
+		tab.removeControllers();
 				
 		if (null==cp5.get(tabName + "_add_filter_selector")) {
 
