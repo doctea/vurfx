@@ -43,7 +43,8 @@ public class ControlFrame extends PApplet {
 		setupCount++;
 		System.out.println("ControlFrame setup count " + setupCount);
 		this.cp5 = new ControlP5(this);
-		cp5.setFont(createFont("Arial",10));
+		//cp5.setFont(createFont("Arial",10));
+		cp5.setFont(createFont("",10));
 		frameRate(60);
 
 		//cp5.getPointer().enable(); // experimental .. 
@@ -146,8 +147,9 @@ public class ControlFrame extends PApplet {
 					updateQueue.remove(q);
 				}
 			}
+			
 			//println("...out of queue loop and removed spent");
-			//this.clearQueue();			
+			this.clearQueue();			
 		//}
 	}
 

@@ -60,12 +60,17 @@ public class SequenceEditor extends Group {
 			if (this.controller!=null) {
 				this.controller.removeListeners();
 				this.controller.removeControllers();
+				//this.removeSubEditors();
+				// remove listeners from filters that correspond to any controller owned by this.controller..?
 				this.removeControllers();
 				this.controller = null;
+				this.removeControllers();
+				this.removeListeners();
+				//((SequenceSequencer)APP.getApp().pr.getSequencer()).getActiveSequence().seq = null;
 			}
 			this.controller = sequence.makeControls(APP.getApp().getCF(), sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,10);
 		}
 	
 		return this;
-	}
+	}	
 }

@@ -144,7 +144,7 @@ public class FormulaCallback extends ParameterCallback {
 	
 
 
-	private void updateGuiOutputValue(final String value) {
+	private void updateGuiOutputValue(String value) {
 		if (lblOutputValue!=null) APP.getApp().getCF().queueUpdate(new Runnable() {
 			@Override
 			public void run() {

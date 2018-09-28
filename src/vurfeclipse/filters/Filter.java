@@ -8,12 +8,14 @@ import controlP5.ControlGroup;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.ControllerGroup;
+import controlP5.ControllerInterface;
 import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Textfield;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -479,9 +481,10 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 	}
 
 	synchronized public void resetParameters() {
-		Iterator<Parameter> it = parameters.values().iterator();
-		while (it.hasNext()) {
-			Parameter p = it.next();//
+		if (this.parameters==null) {
+			this.setParameterDefaults();
+		}
+		for (Parameter p : parameters.values()) {
 			p.reset();
 		}
 		this.updateAllParameterValues();
@@ -657,6 +660,24 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
       println("Exiting because setupControls count is " + count + " in " + this);
       System.exit(0);
     }*/
+		//for (ControllerInterface<?> c : new (ListIterator (tab.controllers.get())) {
+			for (Map.Entry<String,Parameter> me : parameters.entrySet()) {
+				//this.updateParameterValue((String)me.getKey(), me.getValue());
+				//Object value = me.getValue();
+				Parameter param = (Parameter)me.getValue();
+				if (debug) println("Filter#setupControls() in " + toString() + " doing control for " + param.getName());
+				//Object value = param.value;
+
+				//controlP5.Controller o = param.makeController(cp5, tab.getName() + this + me.getKey() /*+ row*/, tab, size);
+				println("controllers size is first " + this.controllers.size());
+				this.controllers.remove(cp5.get(tab.getName() + this + me.getKey()), param.getName());
+				this.controllerMapping.remove(param.getName(), cp5.get(tab.getName() + this + me.getKey()));
+				//this.controllers.remove(c, param.getName());
+				//this.controllerMapping.remove(param.getName(), c);
+				println("controllers size is after " + this.controllers.size());
+				//c.remove();
+			}
+		//}
 
 		int size = 20;
 		//cp5.addCallback(this);	// don't need this anymore as callbacks are handled by individual controllers
@@ -774,7 +795,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			};*/
 
 
-		String[] canvases = sc.getCanvasMappings().keySet().toArray(new String[0]);	// TODO: cache this !
+		String[] canvases = sc.getCanvasMappingsArray();	
 
 		/*new ScrollableList(cp5,"test_" + tab.getName())
 			.moveTo(grp)
@@ -1060,6 +1081,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		//(((controlP5.Controller)controllerMapping.get(name))).setValue(value);
 		if (controllerMapping==null) controllerMapping = new HashMap<String,controlP5.Controller> ();
 		//println("controllermapping is " + controllerMapping.size() + " big in updateControl!");
+		//println("controllers is " + controllers.size() + " big in updateControl!");
 		controlP5.Controller c = (controlP5.Controller)controllerMapping.get(name);
 
 		if (c!=null) {

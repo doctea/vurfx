@@ -355,8 +355,8 @@ public class BlobFX1 extends SimpleScene {
 		
 			//this.setLengthMillis(250 * (int)(APP.getApp().random(1,5)));
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).setParameterDefaults();
-			((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterDefaults();
+			((BlobDrawer)host.getFilter("BlobDrawer")).resetParameters(); //.setParameterDefaults();
+			((BlobDrawer)host.getFilter("BlobDrawer2")).resetParameters(); //.setParameterDefaults();
 			
 			((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_COMPOUND, Blob.SH_CIRCLE, Blob.SH_FLOWER , Blob.SH_TEXTURE} ));
 			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_TEXTURE, Blob.SH_RECT, Blob.SH_POLY } ));
@@ -446,8 +446,8 @@ public class BlobFX1 extends SimpleScene {
 			
 			//this.setLengthMillis(250 * (int)(APP.getApp().random(1,5)));
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).setParameterDefaults();
-			((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterDefaults();
+			((BlobDrawer)host.getFilter("BlobDrawer")).resetParameters();//.setParameterDefaults();
+			((BlobDrawer)host.getFilter("BlobDrawer2")).resetParameters();//.setParameterDefaults();
 			
 			((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",random(1)>=0.5f);
 			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",random(1)>=0.5f);

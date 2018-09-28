@@ -11,6 +11,7 @@ import controlP5.ControllerGroup;
 import controlP5.Knob;
 import controlP5.Slider;
 import controlP5.Textfield;
+import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 import vurfeclipse.APP;
@@ -204,9 +205,18 @@ public class Parameter implements Serializable, Targetable {
 		//System.out.println("setValue, value is already " + this.value + ", new value is " + value);
 		if (!this.isCircular()) {
 			if (value instanceof Float) {
-				value = APP.getApp().constrain((Float)value, Float.parseFloat(getMin().toString()), Float.parseFloat(getMax().toString()));
+				//value = APP.getApp().constrain((Float)value, Float.parseFloat(getMin().toString()), Float.parseFloat(getMax().toString()));
+				Object min = getMin();
+				Object max = getMax();
+				if (min instanceof Float) min = (Float)min;
+				if (max instanceof Float) max = (Float)max;
+				value = PApplet.constrain(
+						(Float)value, 
+						(Float)min, 
+						(Float)max
+				);
 			} else if (value instanceof Integer) {
-				value = APP.getApp().constrain((Integer)value, (Integer)getMin(), (Integer)getMax()); 
+				value = PApplet.constrain((Integer)value, (Integer)getMin(), (Integer)getMax()); 
 			}
 		}
 		this.value = value;
@@ -299,11 +309,12 @@ public class Parameter implements Serializable, Targetable {
 		this.min = min;
 	}
 
-	synchronized public Controller makeController(final ControlP5 cp5, String tabName, ControllerGroup tab, int size) {
-		controlP5.Controller o;
-
-		Parameter self = this;
-		
+	controlP5.Controller o;
+	synchronized public Controller makeController(ControlP5 cp5, String tabName, ControllerGroup tab, int size) {
+		if (null!=o) {
+			return o; 
+		}
+		//Parameter self = this;	
 		println("parameter makecontroller debug with tabname '" + tabName + "'");
 		
 		if (this.options!=null) {
@@ -363,7 +374,7 @@ public class Parameter implements Serializable, Targetable {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
 					((Textfield)theEvent.getController()).setFocus(true);
-					self.filter.sc.host.setDisableKeys(true);	// horrible hack to disable keyboard input when a textfield is selected..				
+					filter.sc.host.setDisableKeys(true);	// horrible hack to disable keyboard input when a textfield is selected..				
 			}	
 			});
 			
@@ -384,19 +395,19 @@ public class Parameter implements Serializable, Targetable {
 				/*String paramName = (String)controllers.get(ev.getController());
 				//println(this+ "#controlEvent(" + ev.getController() + "): paramName is " + paramName + " for " + ev.getController() + " value is " + ev.getController().getValue());
 				Object currentValue = getParameterValue(paramName);*/
-				String paramName = self.getName();
-				Object currentValue = self.filter.getParameterValue(self.getName());
+				String paramName = getName();
+				Object currentValue = filter.getParameterValue(getName());
 				
 				//if (theEvent instanceof mouse)
 				
 				println("right mouse button: " + (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT ? " yes " : " no "));
 				if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
-					APP.getApp().pr.getSequencer().setSelectedTargetPath(self.filter.getParameter(paramName).getPath());
+					APP.getApp().pr.getSequencer().setSelectedTargetPath(filter.getParameter(paramName).getPath());
 					
 					println("current value is " + currentValue + ", default value is " + getDefaultValue() + ", max is " + getMax() + ", min is " + getMin());					
 				}
 				
-				self.filter.changeValueFor(currentValue,paramName,theEvent);
+				filter.changeValueFor(currentValue,paramName,theEvent);
 				if (theEvent.getController() instanceof Textfield) { // && !currentValue.equals(((Textfield)ev.getController()).getText())) {
 					//sc.host.disableKeys = false;	// horrible hack to disable keyboard input when a textfield is selected..
 					((Textfield)theEvent.getController()).setFocus(true);

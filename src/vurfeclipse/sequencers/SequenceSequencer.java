@@ -569,7 +569,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	synchronized public void changeSequence(String sequenceName, boolean remember, boolean restart) {
 		if (this.getActiveSequence()!=null) {		// mute the current sequence 
 			if (restart) this.getActiveSequence().stop();//setMuted(true);
-			// check if this is already the top of the sequence history, if so don't add it again 
+			// check if this is already the top of the sequence history, if so don't add it again
+			// remove listeners from filters that correspond to any controller owned by active sequenceeditor..?
 		}
 
 		String oldSequenceName = this.activeSequenceName;
@@ -650,7 +651,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			@Override
 			public void run() {
 				//self.setupControls(cf, tabName);
-				grpSequenceEditor.setSequence(getCurrentSequenceName(), getActiveSequence());	// in case above doesn't set things up properly
+				println("DISABLED: updateGuiSequence about to call setSequence");
+				//grpSequenceEditor.setSequence(getCurrentSequenceName(), getActiveSequence());	// in case above doesn't set things up properly
 			}
 		});
 		

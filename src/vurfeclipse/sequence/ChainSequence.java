@@ -179,6 +179,7 @@ public class ChainSequence extends Sequence {
 		ControlP5 cp5 = cf.control();
 		//if (true) return sequenceEditor;
 		
+		
 		//cp5.addLabel("Sequence Editor: " + name).setValue("Sequence Editor: " + name).moveTo(sequenceEditor).setPosition(100,100);
 		Accordion acc = cp5.addAccordion(name + "_acc")
 				.moveTo(sequenceEditor)

@@ -402,7 +402,6 @@ public class ChangeParameterSequence extends Sequence {
 		CallbackListener pasteTargetListener = new CallbackListener () {
 			@Override
 			public void controlEvent(CallbackEvent theEvent) {
-
 				if (cf.control().papplet.mouseButton==(VurfEclipse.MOUSE_RIGHT)) {
 					((ChangeParameterSequence) sequence).setTargetPath((String) APP.getApp().pr.getSequencer().getSelectedTargetPath());
 					lstTarget.setLabel(APP.getApp().pr.getSequencer().getSelectedTargetPath());

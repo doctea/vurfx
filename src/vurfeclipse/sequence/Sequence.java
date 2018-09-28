@@ -629,14 +629,22 @@ abstract public class Sequence implements Serializable, Mutable {
 			}
 		}
 
+		public SequenceEditor seq;
+
 		synchronized public SequenceEditor makeControls(ControlFrame cf, String name) {
 			try {
 				ControlP5 cp5 = cf.control();
 				
-				SequenceEditor seq;
+				//SequenceEditor seq;
 				//if (cf.sequenceEditor==null) {
-					//cf.sequenceEditor = 
-							seq = new SequenceEditor(cp5, name);
+					//cf.sequenceEditor =
+				if (seq!=null) {
+					//if (true) return seq;
+					seq.removeControllers();
+					seq.removeListeners();
+					seq.remove();
+				} else				
+					seq = new SequenceEditor(cp5, name);
 				/*} else {
 					seq = cf.sequenceEditor;
 				}*/

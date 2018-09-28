@@ -208,6 +208,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		}
 		return mapTo;
 	}
+	
 	public HashMap<String,String> getCanvasMappings() {
 		return this.buffermap;
 	}
@@ -240,6 +241,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		println("setCanvas() setting canvasName '" + canvasName + "' to canvasPath '" + canvasPath + "'");
 
 		buffermap.put(canvasName, canvasPath);
+		this.canvas_map_cache = null;
 		
 		/*if (buffermap.containsKey(canvasName)) {
 			// notify all filters that canvas has changed
@@ -789,6 +791,10 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			println("already doneControls!");	// TODO: update the controls instead of recreating them, dumbass!!
 			//return;
 		}
+		if (tab!=null) {
+			tab.removeControllers();
+		}
+		
 		doneControls = true;
 		this.cp5 = cp5;
 		this.tab = tab;
@@ -816,10 +822,10 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
-							self.host.moveScene(self, -1);
-							self.host.refreshControls();
+							host.moveScene(self, -1);
+							host.refreshControls();
 							//final String tabName = self.tabName; 
-							self.guiOpenTab(cf); //, tabName);
+							guiOpenTab(cf); //, tabName);
 
 							//self.guiOpenTab(cf, tabName);
 							/*Group g = (Group) cp5.get(tabName);//.getParent();
@@ -839,10 +845,10 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
-							self.host.moveScene(self, 1);
-							self.host.refreshControls();
+							host.moveScene(self, 1);
+							host.refreshControls();
 							String tabName = self.tabName; 
-							self.guiOpenTab(cf); //, tabName);
+							guiOpenTab(cf); //, tabName);
 							/*Group g = (Group) cp5.get(tabName);//.getParent();
 							g.open();
 							Accordion a = ((Accordion)g.getParent());
@@ -860,8 +866,8 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 					.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
-							self.host.deleteScene(self); //.moveScene(self, 1);
-							self.host.refreshControls();
+							host.deleteScene(self); //.moveScene(self, 1);
+							host.refreshControls();
 						}					
 					})
 					;
@@ -1038,7 +1044,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		int margin_w = 200;
 		int margin_y = 30;
 		
-		tab.removeControllers();
+		//tab.removeControllers();
 				
 		if (null==cp5.get(tabName + "_add_filter_selector")) {
 
@@ -1078,7 +1084,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 							String classname = ((Class<Filter>)getAvailableFilters().get(selected)).getName();
 							//self.addFilter(Filter.createFilter(classname, self));
 							
-							self.queueUpdate(new Runnable() {
+							queueUpdate(new Runnable() {
 								@Override
 								public void run() {								
 									
@@ -1087,7 +1093,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 										
 										int i = 0;
 										String n = selected;
-										while (self.getFilter(n)!=null) {
+										while (getFilter(n)!=null) {
 											i++;
 											n = selected + i;
 										}
@@ -1096,10 +1102,10 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 										//println("size of filters is " + self.filters.size());
 	
 										//synchronized(self) {
-										self.addFilter(newf);
+										addFilter(newf);
 										newf.initialise();
 										newf.start();
-										self.refreshControls();
+										refreshControls();
 									} catch (Exception e) {
 										println("Caught exception trying to add a new filter " + e);
 										e.printStackTrace();
@@ -1124,7 +1130,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 				while (hasCanvasMapping("new"+n)) {
 					n++;
 				}
-				setCanvas("new"+n, "/canvases/" + self.getSceneName() + "/new"+n);
+				setCanvas("new"+n, "/canvases/" + getSceneName() + "/new"+n);
 				refreshControls();
 			}
 		});
@@ -1166,7 +1172,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
 							int index = (int) theEvent.getController().getValue();
-							self.setCanvas(label, (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
+							setCanvas(label, (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
 						}
 					});
 			 start_x += (margin + (margin_w)) + margin/2;
@@ -1292,6 +1298,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	
 	private void setCanvasMappings(HashMap<String,String> value) {
 		this.buffermap = value;
+		this.canvas_map_cache = null;
 		//		this.makeControlsCanvasAliases(8);
 		if (this.muteController!=null) refreshCanvasControls();
 	}
@@ -1379,7 +1386,10 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			public void run() {
 				//tab.remove();
 				//tab.update();
-				self.setupControls(host.getApp().getCF(), tab);
+				if (tab!=null) {
+					tab.removeControllers();
+				}
+				setupControls(host.getApp().getCF(), tab);
 				tab.setWidth(host.getApp().getCF().sketchWidth());
 				((Accordion)tab.getParent()).updateItems();		// automatically readjust tab heights to fit new controls*
 			}
@@ -1417,6 +1427,15 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		synchronized(this) {
 			this.updateQueue.add(runnable);
 		}
+	}
+	
+	String[] canvas_map_cache;
+	public String[] getCanvasMappingsArray() {
+		if (null==this.canvas_map_cache) {
+			canvas_map_cache = getCanvasMappings().keySet().toArray(new String[0]);
+		}
+
+		return canvas_map_cache; //getCanvasMappings().keySet().toArray(new String[0]);
 	}
 
 }
