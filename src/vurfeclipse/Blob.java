@@ -275,6 +275,7 @@ public class Blob implements Serializable {
 				
 				float x = PApplet.sin(PApplet.radians(i)) * 0.4f;// * R/2.0f;
 				float y = PApplet.cos(PApplet.radians(i)) * 0.4f;// * R/2.0f;
+				ring.resetMatrix();
 				
 				ring.translate(x, y);
 				
@@ -289,6 +290,7 @@ public class Blob implements Serializable {
 				//polygon(out, numSides, 0, 0, R/4.0f, R/4.0f, 0);
 				//out.popMatrix();
 				//polygon(out, numSides, x, y, R/4, R/4, 0);
+				ring = null;
 			}
 			flowerShape.setFill(APP.getApp().color(this.c, tint)); 
 			flowerShape.addChild(body);

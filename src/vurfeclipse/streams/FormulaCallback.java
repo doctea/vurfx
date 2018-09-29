@@ -97,7 +97,7 @@ public class FormulaCallback extends ParameterCallback {
 		count++;
 		//System.out.println ("FormuaCallback called with " + value);
 		
-		this.updateGuiInputValue(value.toString());
+		if (count%20==0) this.updateGuiInputValue(value.toString());
 				
 		if (value instanceof Float || value instanceof Double) {
 			if (((Float)value).isNaN()) {
@@ -117,7 +117,7 @@ public class FormulaCallback extends ParameterCallback {
 		
 		Float floatValue = e.eval().floatValue();
 		//lblOutputValue.setValueLabel(floatValue.toString());
-		this.updateGuiOutputValue(floatValue.toString());
+		if (count%20==0) this.updateGuiOutputValue(floatValue.toString());
 		
 		if (value instanceof Float || value instanceof Double ||
 			value instanceof Integer || value instanceof Long
@@ -154,7 +154,7 @@ public class FormulaCallback extends ParameterCallback {
 		});		
 	}
 
-	private void updateGuiInputValue(final String value) {
+	private void updateGuiInputValue(String value) {
 		if (lblInputValue!=null) APP.getApp().getCF().queueUpdate(new Runnable() {
 			@Override
 			public void run() {
@@ -170,15 +170,15 @@ public class FormulaCallback extends ParameterCallback {
 	}
 
 	@Override
-	public Group makeControls(final ControlFrame cf, String name) {
+	public Group makeControls(ControlFrame cf, String name) {
 		//Group 
 		g = super.makeControls(cf, name);
 		
 		int margin_x = 15, margin_y = 15, pos_y = 0, pos_x = 0;
 
-		final ParameterCallback self = this;
+		ParameterCallback self = this;
 
-		final ParameterCallback fc = (ParameterCallback) self; 
+		ParameterCallback fc = (ParameterCallback) self; 
 		
 		// set up the Target dropdown
 		SortedSet<String> keys = new TreeSet<String>(APP.getApp().pr.getTargetURLs().keySet());
@@ -187,7 +187,7 @@ public class FormulaCallback extends ParameterCallback {
 		keys = null;
 		//String[] targetUrls = new String[] {};
 		
-		final ScrollableList lstTarget = cf.control().addScrollableList(name + self.getStreamSource() + "_" /* n +*/ + "_Target URL")
+		ScrollableList lstTarget = cf.control().addScrollableList(name + self.getStreamSource() + "_" /* n +*/ + "_Target URL")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
 				.setLabel(((FormulaCallback)self).targetPath)
 				.addItems(targetUrls)
@@ -217,7 +217,7 @@ public class FormulaCallback extends ParameterCallback {
 		CallbackListener setExpression = new CallbackListener() {
 			public void controlEvent(CallbackEvent theEvent) {
 				//((ScrollableList)theEvent.getController()).close();
-				((FormulaCallback) self).setExpression(((Textfield)theEvent.getController()).getText());
+				setExpression(((Textfield)theEvent.getController()).getText());
 				((Textfield)theEvent.getController()).setValueLabel(((FormulaCallback) self).getExpression());
 			}
 		};		

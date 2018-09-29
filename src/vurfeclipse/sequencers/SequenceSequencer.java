@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -702,14 +703,16 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		if (null==activeSequence) return;
 		if (null==this.sldProgress) return;
 
-		SequenceSequencer self = this;
+		//SequenceSequencer self = this;
+		
+		WeakReference r = new WeakReference<Slider>(sldProgress);
 		
 		synchronized(this) {
 			if (APP.getApp().isReady()) APP.getApp().getCF().queueUpdate(new Runnable () {
 				@Override
 				public void run() {
-					sldProgress.changeValue(activeSequence.getPositionPC()*100);
-					sldProgress.setLabel("Progress iteration ["+(activeSequence.getPositionIteration()+1)+"/"+max_iterations+"]");
+					((Slider)r.get()).changeValue(activeSequence.getPositionPC()*100);
+					((Slider)r.get()).setLabel("Progress iteration ["+(activeSequence.getPositionIteration()+1)+"/"+max_iterations+"]");
 				}
 			});
 		}
@@ -719,7 +722,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		if (!APP.getApp().isReady()) return;
 		if (null==this.sldTimeScale) return;
 
-		SequenceSequencer self = this;
+		//SequenceSequencer self = this;
 
 		if (APP.getApp().isReady()) APP.getApp().getCF().queueUpdate(new Runnable () {
 			@Override
