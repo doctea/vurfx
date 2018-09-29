@@ -1,11 +1,15 @@
 package vurfeclipse.ui;
 
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.ControllerGroup;
 import controlP5.ControllerList;
 import controlP5.Group;
 import controlP5.Tab;
+import controlP5.Toggle;
 import vurfeclipse.APP;
+import vurfeclipse.VurfEclipse;
 import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequencers.SequenceSequencer;
 
@@ -37,6 +41,7 @@ public class SequenceEditor extends Group {
 		//this.setBarHeight(20);
 	}
 
+	boolean disable_controls = true;
 	synchronized public SequenceEditor setupControls() {
 
 		/*for (ControllerInterface<?> c : Collections.synchronizedList((List) this.controllers)) {
@@ -55,8 +60,10 @@ public class SequenceEditor extends Group {
 			APP.getApp().getCF().control().remove(APP.getApp().getCF().sequenceEditor);
 		APP.getApp().getCF().sequenceEditor = null;*/
 		//this.remove();
-		boolean disable_controls = false; //true;//false;//false; //
-		if (sequence!=null && !disable_controls) {
+		
+		
+		//boolean disable_controls = false; //true;//false;//false; //
+		if (sequence!=null && true) { //isEnableControls()) {
 			if (this.controller!=null) {
 				this.controller.removeListeners();
 				this.controller.removeControllers();
@@ -69,8 +76,19 @@ public class SequenceEditor extends Group {
 				//((SequenceSequencer)APP.getApp().pr.getSequencer()).getActiveSequence().seq = null;
 			}
 			this.controller = sequence.makeControls(APP.getApp().getCF(), sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,10);
+		} else {
+			System.out.println("SequenceEditor controls disabled, not creating!");
 		}
 	
 		return this;
+	}
+	
+	boolean enableControls = false;
+	public boolean isEnableControls() {
+		return enableControls;
+	}
+
+	public void setDisableControls(boolean booleanValue) {
+		this.enableControls = booleanValue;		
 	}	
 }
