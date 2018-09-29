@@ -105,8 +105,11 @@ abstract public class Sequence implements Serializable, Mutable {
 		// actually, what we want to do here is only collect scene parameters from the host.host if this is the currently active sequence, otherwise it means nothing
 		// instead, need to save the local scene_parameters if they exist
 		// if it is active sequence then update the scene_parameters with the host.host's collectSceneParameters, though
-		params.put("scene_parameters", this.getSceneParameters());
-		
+		// 2018-09-29 - disable saving scene's canvas information in the sequence
+		HashMap<String, HashMap<String, Object>> a = this.getSceneParameters();
+		if (a!=null) a.remove(this.host.getPath() + "/canvases");
+		params.put("scene_parameters", a);
+				
 		params.put("enabled", this.isEnabled());
 		
 		//params.put("current_sequence_name", APP.getApp().dateStamp());
