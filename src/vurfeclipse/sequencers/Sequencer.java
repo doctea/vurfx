@@ -44,6 +44,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	protected Toggle tglEnabled;
 	protected Toggle tglStreams;
 	protected Toggle tglPlaylist;
+	protected Toggle tglEnableSequenceControls;
 
 
 	/////////// Event stuff
