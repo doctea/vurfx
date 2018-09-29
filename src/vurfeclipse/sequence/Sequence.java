@@ -621,7 +621,7 @@ abstract public class Sequence implements Serializable, Mutable {
 			HashMap<String,Object> output; //= new HashMap<String,Object>();
 			output = toSave.collectParameters();
 			try {
-				XMLSerializer.write(output, filename);
+				XMLSerializer.write(output, actual);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				System.err.println("Caught " + e.toString() + " trying to save sequence of class " + toSave.getClass().getSimpleName() + " to '" + filename + "'");
