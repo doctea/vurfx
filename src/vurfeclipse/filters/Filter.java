@@ -661,6 +661,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
       System.exit(0);
     }*/
 		//for (ControllerInterface<?> c : new (ListIterator (tab.controllers.get())) {
+		if (parameters!=null)
 			for (Map.Entry<String,Parameter> me : parameters.entrySet()) {
 				//this.updateParameterValue((String)me.getKey(), me.getValue());
 				//Object value = me.getValue();
@@ -669,12 +670,12 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 				//Object value = param.value;
 
 				//controlP5.Controller o = param.makeController(cp5, tab.getName() + this + me.getKey() /*+ row*/, tab, size);
-				println("controllers size is first " + this.controllers.size());
+				//println("controllers size is first " + this.controllers.size());
 				this.controllers.remove(cp5.get(tab.getName() + this + me.getKey()), param.getName());
 				this.controllerMapping.remove(param.getName(), cp5.get(tab.getName() + this + me.getKey()));
 				//this.controllers.remove(c, param.getName());
 				//this.controllerMapping.remove(param.getName(), c);
-				println("controllers size is after " + this.controllers.size());
+				//println("controllers size is after " + this.controllers.size());
 				//c.remove();
 			}
 		//}

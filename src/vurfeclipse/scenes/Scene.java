@@ -16,6 +16,7 @@ import vurfeclipse.projects.Project;
 import vurfeclipse.streams.*;
 import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.sequence.*;
+import vurfeclipse.sequencers.SequenceSequencer;
 import controlP5.Accordion;
 import controlP5.Button;
 import controlP5.CColor;
@@ -1389,9 +1390,11 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 				if (tab!=null) {
 					tab.removeControllers();
 				}
-				//setupControls(host.getApp().getCF(), tab);
-				tab.setWidth(host.getApp().getCF().sketchWidth());
-				((Accordion)tab.getParent()).updateItems();		// automatically readjust tab heights to fit new controls*
+				if (((SequenceSequencer)host.getSequencer()).getGrpSequenceEditor().isEnableControls()) {
+					setupControls(host.getApp().getCF(), tab);	// DISABLE FOR LIVE BECAUSE IT LEAKS MEMORY -- BUT NEED TO DO THIS WHILE CONFIGURING PROJECTS N SHIT
+					tab.setWidth(host.getApp().getCF().sketchWidth());
+					((Accordion)tab.getParent()).updateItems();		// automatically readjust tab heights to fit new controls*
+				}
 			}
 		});
 

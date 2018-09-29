@@ -237,6 +237,11 @@ public class VurfEclipse extends PApplet {
 	int refCount = 0;
 	private boolean finishedSetup;
 
+	private int config_x=-1;
+	private int config_y=-1;
+
+	private int config_control_x;
+
 	@Override
 	public String sketchPath() {
 		return System.getProperty("user.dir") + "/output/";		
@@ -292,6 +297,16 @@ public class VurfEclipse extends PApplet {
 			} else if (args.contains("-aspect")) {
 				config_aspect = RES_16_10;
 			}
+			if (args.contains("-x")) {
+				config_x = Integer.parseInt(args.get(args.indexOf("-x")+1));
+			}
+			if (args.contains("-y")) {
+				config_y = Integer.parseInt(args.get(args.indexOf("-y")+1));
+			}
+			if (args.contains("-control_x")) {
+				config_control_x = Integer.parseInt(args.get(args.indexOf("-control_x")+1));
+			}
+			
 			if (args.contains("-nodraw")) {
 				this.enableRendering = false;
 			}
@@ -492,8 +507,6 @@ public class VurfEclipse extends PApplet {
 
 		pr.initialiseStreams();
 
-		///frame.setLocation(500, 0);
-
 		//System.out.println("about to call setupControls on " + pr.toString());
 		//pr.setupControls(getCF());
 
@@ -562,10 +575,27 @@ public class VurfEclipse extends PApplet {
 	 ********/
 	public int timeMillis;
 
+	private boolean moved = false;
+	
 	private boolean enableRendering = true;
 	//GLTextureWindow texWin;
 	@Override
 	public void draw () {
+		
+		/*if (!moved && config_x>=0) {
+			println("set location!");
+			
+			APP.getApp().controlFrame.queueUpdate(new Runnable() {
+
+				@Override
+				public void run() {
+					frame.setLocation(config_x, config_y);
+					
+				}
+			});
+			moved = true;
+		}*/
+		
 		//System.out.println("Draw!");
 		if (!isReady()) {
 			//println("Not yet isReady!()");

@@ -697,7 +697,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 							.moveTo(this.grpSequenceEditor)
 							.setPosition(0,20)
 					;*/
-					grpSequenceEditor.setSequence(getCurrentSequenceName(), getActiveSequence());
+					getGrpSequenceEditor().setSequence(getCurrentSequenceName(), getActiveSequence());
 				}
 			}
 		});
@@ -1253,8 +1253,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				public void controlEvent(CallbackEvent theEvent) {
 					/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
 					//ev.getAction()==ControlP5.ACTION_PRESS) {
-					grpSequenceEditor.setDisableControls (((Toggle)theEvent.getController()).getBooleanValue());
-					System.out.println("Toggle disable controls state on " + this + " to " + grpSequenceEditor.isEnableControls());
+					getGrpSequenceEditor().setDisableControls (((Toggle)theEvent.getController()).getBooleanValue());
+					System.out.println("Toggle disable controls state on " + this + " to " + getGrpSequenceEditor().isEnableControls());
 					/*self.setMuted(muteController.getState());		
 
 					if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
@@ -1285,13 +1285,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		//lstHistory.addItems(this.historySequenceNames);
 
 		//cf.sequenceEditor = 
-				this.grpSequenceEditor = (SequenceEditor) new SequenceEditor (cp5, "sequence editor")
+				this.setGrpSequenceEditor((SequenceEditor) new SequenceEditor (cp5, "sequence editor")
 				.setSequence(this.getCurrentSequenceName(), getActiveSequence())
 				.setWidth(cp5.papplet.displayWidth/4)
 				.setHeight(cp5.papplet.displayHeight/5)
 				.setBarHeight(10)				
 				.setPosition(0, margin_y * 8)
-				.moveTo(sequencerTab)
+				.moveTo(sequencerTab))
 				;
 
 		//this.saveHistoryButton = cf.control().addBang("SAVE sequencer history").moveTo(tabName);		//.moveTo(((VurfEclipse)APP.getApp()).getCW()/*.getCurrentTab()*/).linebreak();
@@ -1616,6 +1616,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	public void preserveCurrentSceneParameters() {
 		this.getActiveSequence().setSceneParameters(this.host.collectSceneParameters());
 		this.getActiveSequence().preserveCurrentParameters();
+	}
+
+	public SequenceEditor getGrpSequenceEditor() {
+		return grpSequenceEditor;
+	}
+
+	public void setGrpSequenceEditor(SequenceEditor grpSequenceEditor) {
+		this.grpSequenceEditor = grpSequenceEditor;
 	}
 
 }
