@@ -193,7 +193,7 @@ private PShape shapeCache;
           if (i>=list.getChildCount()) {
           	//this.drawObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
           	list.addChild(collectObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle));
-          	println("collecting new element " +i);
+          	//println("collecting new element " +i);
           } else {
         	//println("re-using element " + i);
         	//PShape s = (PShape) list.toArray()[i];

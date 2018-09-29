@@ -53,7 +53,8 @@ public class VideoPlayer extends Filter {
   }
   
   public VideoPlayer(Scene sc) {
-	  this(sc, APP.getApp().dataPath("/video-sources/balloon.ogg"));
+  	//super(sc);
+	  this(sc,APP.getApp().dataPath("/video-sources/rainbow/cragulon/Chain Reaction.ogv")); //balloon.ogg"));
   }
 
   public VideoPlayer(Scene sc, String filename) {
@@ -296,7 +297,7 @@ public class VideoPlayer extends Filter {
         return true;
       } */
     } else {
-      println("Stream is null!");
+      //println("Stream is null!");
     }
     return false; // no new frame available to draw
   }

@@ -112,27 +112,27 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar"/>
-	<classpathentry kind="lib" path="lib/base/core-337/core.jar">
+	<classpathentry kind="lib" path="lib/base/core-34/core.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-337"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-34"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/EvalEx-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/user/oscP5/library/oscP5.jar" sourcepath="lib/user/oscP5/src"/>
-	<classpathentry kind="lib" path="lib/base/core-337/gluegen-rt-natives-linux-amd64.jar">
+	<classpathentry kind="lib" path="lib/base/core-34/gluegen-rt-natives-linux-amd64.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-337"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-34"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/core-337/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="lib/base/core-337/jogl-all-natives-linux-amd64.jar">
+	<classpathentry kind="lib" path="lib/base/core-34/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="lib/base/core-34/jogl-all-natives-linux-amd64.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-337"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-34"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/core-337/jogl-all.jar">
+	<classpathentry kind="lib" path="lib/base/core-34/jogl-all.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-337"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-34"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/controlP5"/>

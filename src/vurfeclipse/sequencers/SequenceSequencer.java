@@ -623,8 +623,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				//lstHistory.clear();
 				//lstHistory.addItems(historySequenceNames);
 
-				if (lstHistory.getItems().contains(oldSequenceName)) lstHistory.getItem(oldSequenceName).put("state", false);
-				lstHistory.getItem(newSequenceName).put("state", true);
+				try {
+					if (lstHistory.getItems().contains(oldSequenceName)) lstHistory.getItem(oldSequenceName).put("state", false);
+					lstHistory.getItem(newSequenceName).put("state", true);
+				} catch (Exception e) {
+					println("Caught exception " + e + " trying to add a history item!");
+					e.printStackTrace();
+				}
 			}
 		});
 	}
