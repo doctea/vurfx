@@ -97,7 +97,7 @@ public class FormulaCallback extends ParameterCallback {
 		count++;
 		//System.out.println ("FormuaCallback called with " + value);
 		
-		if (count%20==0) this.updateGuiInputValue(value.toString());
+		if (count%10==0) this.updateGuiInputValue(value.toString());
 				
 		if (value instanceof Float || value instanceof Double) {
 			if (((Float)value).isNaN()) {
@@ -117,7 +117,7 @@ public class FormulaCallback extends ParameterCallback {
 		
 		Float floatValue = e.eval().floatValue();
 		//lblOutputValue.setValueLabel(floatValue.toString());
-		if (count%20==0) this.updateGuiOutputValue(floatValue.toString());
+		if (count%10==0) this.updateGuiOutputValue(floatValue.toString());
 		
 		if (value instanceof Float || value instanceof Double ||
 			value instanceof Integer || value instanceof Long
