@@ -33,6 +33,7 @@ import vurfeclipse.ui.StreamEditor;
 import controlP5.Accordion;
 import controlP5.Bang;
 import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.ControlP5Base;
 import controlP5.Controller;
@@ -1230,6 +1231,29 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				.moveTo(sequencerTab)
 				;
 
+
+
+		this.tglEnableSequenceControls = cp5.addToggle("enable_sequencer_controls")//_" + tab.getName() + getFilterName()) // + row)
+			.setPosition(tglPlaylist.getPosition()[0] + tglLocked.getWidth() + (margin_x*5), margin_y)
+			.setLabel("Enable sequencer controls")
+			.setSize(20,10)
+			//.setValue(!this.grpSequenceEditor.isEnableControls())
+			//.setState(!this.grpSequenceEditor.isEnableControls())
+			.moveTo(sequencerTab)
+			.addListenerFor(cp5.ACTION_BROADCAST, new CallbackListener() {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
+					//ev.getAction()==ControlP5.ACTION_PRESS) {
+					grpSequenceEditor.setDisableControls (((Toggle)theEvent.getController()).getBooleanValue());
+					System.out.println("Toggle disable controls state on " + this + " to " + grpSequenceEditor.isEnableControls());
+					/*self.setMuted(muteController.getState());		
+
+					if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
+						APP.getApp().pr.getSequencer().setSelectedTargetPath(self.getPath()+"/mute");
+					}*/
+				}
+			});
 
 		txtProjectName = new controlP5.Textfield(cp5, "project_name")
 				.setText(APP.getApp().pr.getProjectFilename())
