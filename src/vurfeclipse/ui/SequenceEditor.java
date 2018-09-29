@@ -63,7 +63,7 @@ public class SequenceEditor extends Group {
 		
 		
 		//boolean disable_controls = false; //true;//false;//false; //
-		if (sequence!=null && true) { //isEnableControls()) {
+		if (sequence!=null && isEnableControls()) {
 			if (this.controller!=null) {
 				this.controller.removeListeners();
 				this.controller.removeControllers();
