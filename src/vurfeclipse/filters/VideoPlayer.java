@@ -65,7 +65,7 @@ public class VideoPlayer extends Filter {
   public void setMuted(boolean on) {
     super.setMuted(on);
     if (!on) {
-      if (this.started) stream.play();
+      if (this.started) stream.loop();
     } else {
       if (this.started) stream.pause();
     }
@@ -103,6 +103,7 @@ public class VideoPlayer extends Filter {
 
         println("Loaded new.." + filename);
         //GSMovie newStream;
+        oldStream = stream;
         if (newStream!=null) { newStream.stop(); newStream.dispose(); }
         newStream = new Movie(APP.getApp().getCF(),filename);
         //newTex = new GLTexture(APP, sc.w, sc.h);
@@ -212,7 +213,7 @@ public class VideoPlayer extends Filter {
     	  Thread.sleep(startDelay);
 
       //if (!((VurfEclipse)APP.getApp()).exportMode)
-        stream.play();
+        stream.loop();
     } catch (Exception e) {
       println("got error " + e + " loading " + filename);
     }      //webcamStream = new Capture(APP, sc.w, sc.h, 30);

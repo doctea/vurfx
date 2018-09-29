@@ -170,6 +170,10 @@ public class ControlFrame extends PApplet {
 	@Override
 	public void keyPressed () {
 		((VurfEclipse)parent).handleKey(key);
+		if (key=='G') {
+			System.out.println("Running system GC");
+			System.gc();
+		}
 	}
 
 	public void updateGuiStreamEditor() {
