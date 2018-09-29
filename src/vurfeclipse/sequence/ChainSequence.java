@@ -170,11 +170,17 @@ public class ChainSequence extends Sequence {
 		}
 	}
 	
-	
+	SequenceEditor sequenceEditor;
 	@Override
 	synchronized public SequenceEditor makeControls(ControlFrame cf, String name) {
 		// add an accordion to hold the sub-sequences and recurse
-		SequenceEditor sequenceEditor = super.makeControls(cf, name);
+		if (null!=sequenceEditor) {
+			//return sequenceEditor;
+			sequenceEditor.removeControllers();
+			sequenceEditor.removeListeners();
+			sequenceEditor.remove();
+		}
+		sequenceEditor = super.makeControls(cf, name);
 		
 		ControlP5 cp5 = cf.control();
 		//if (true) return sequenceEditor;
