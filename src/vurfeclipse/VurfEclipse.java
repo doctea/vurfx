@@ -451,17 +451,15 @@ public class VurfEclipse extends PApplet {
 		}*/
 
 		// https://stackoverflow.com/questions/20551224/how-to-enable-vsync-synchronization-in-processing-2-x
+		frameRate(1000);
 		PJOGL pgl = (PJOGL)beginPGL();
-		//pgl.gl.getGLProfile().
 		pgl.gl.setSwapInterval(1);
-		//pgl.presentX = 1920;
-		//pgl.presentY = 1080;
-		//pgl..hei
 		endPGL();
 
 		hint(DISABLE_DEPTH_TEST);
 
-		frameRate(60);
+		//frameRate(60);
+		
 
 		//println("initialiseGraphics() setting up PostFX");
 		//setFxs(new PostFXSupervisor(this, output_width, output_height));
