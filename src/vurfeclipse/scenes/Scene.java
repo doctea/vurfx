@@ -1389,7 +1389,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 				if (tab!=null) {
 					tab.removeControllers();
 				}
-				setupControls(host.getApp().getCF(), tab);
+				//setupControls(host.getApp().getCF(), tab);
 				tab.setWidth(host.getApp().getCF().sketchWidth());
 				((Accordion)tab.getParent()).updateItems();		// automatically readjust tab heights to fit new controls*
 			}

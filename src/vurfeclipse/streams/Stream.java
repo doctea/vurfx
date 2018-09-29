@@ -220,7 +220,7 @@ abstract public class Stream implements Serializable {
 			}
 		}
 
-		this.messages.clear();
+		//this.messages.clear();
 	}
 
 	abstract protected void preCall(ParameterCallback c);	// TODO Auto-generated method stub
