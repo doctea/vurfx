@@ -200,7 +200,7 @@ abstract public class Stream implements Serializable {
 					//((List)messages.get(tagName)).remove(v);
 				}
 				if (debug) System.out.println("Removing delivered messages?");
-				//mess.remove(v);
+				mess.clear();
 				
 
 				//System.out.println("--got " + e_b.getKey() + " : " + e_b.getValue());

@@ -474,7 +474,12 @@ public abstract class Project implements Serializable {
 				
 				if (shouldDrawScene(sc)) {
 					//println("Should draw " + sc + " to " + out.getSurf());
-					sc.applyGLtoCanvas(out); //getCanvas(getPath()+"out"));
+					try {
+						sc.applyGLtoCanvas(out); //getCanvas(getPath()+"out"));
+					} catch (Exception e) {
+						println("Caught exception " + e + " trying to applyGLtoCanvas() for scene " + sc + " onto canvas " + out);
+						e.printStackTrace();
+					}
 					//sc.applyGL(buffers[BUF_OUT]);
 					//sc.applyGL(off);
 				}

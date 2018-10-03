@@ -1370,7 +1370,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 				//tab.remove();
 				//tab.update();
 				//self.makeControlsCanvasAliases(10);	//TODO: make this actually only update the canvas controls rather than the entire scene control panel! 
-				setupControls(host.getApp().getCF(), tab);
+				//setupControls(host.getApp().getCF(), tab);	// disabled 2018-10-03 ! 
 				tab.setWidth(host.getApp().getCF().sketchWidth());
 				((Accordion)tab.getParent()).updateItems();		// automatically readjust tab heights to fit new controls*
 			}

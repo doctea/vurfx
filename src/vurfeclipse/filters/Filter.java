@@ -304,12 +304,12 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		//this.muted = !this.muted;
 	}
 	@Override public void setMuted(boolean v) {
-		if (v==true && this.isMuted()!=v) {
+		/*if (v==true && this.isMuted()!=v) {
 			this.stop();
 		}
 		else if (v==false && this.isMuted()!=v) {
 			this.start();
-		}
+		}*/
 
 		if (this.muteController!=null) {
 			muteController.setBroadcast(false);

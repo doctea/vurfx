@@ -123,7 +123,7 @@ public class VideoPlayer extends Filter {
 				//if (!((VurfEclipse)APP.getApp()).exportMode)
 
 				newStream.jump(0.0f);
-				newStream.speed(1.0f);
+				newStream.speed((Float)getParameterValue("speed"));
 
 				newStream.loop();
 				//println("about to do ")
@@ -329,12 +329,12 @@ public class VideoPlayer extends Filter {
 		} else {
 			stream.play();
 		}
-		/*if ((Boolean)this.getParameterValue("loop")) {
+		if ((Boolean)this.getParameterValue("loop")) {
 			stream.loop();
 		} else {
 			stream.noLoop();
 		}
-		stream.speed((Float)this.getParameterValue("speed"));*/	
+	  stream.speed(Math.abs((Float)this.getParameterValue("speed")));	
 	}
 
 	public void beginDraw () {

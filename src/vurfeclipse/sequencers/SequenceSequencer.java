@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -905,7 +906,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		HashMap<String, Sequence> sequences = new HashMap<String, Sequence>();
 
 		int loaded = 0;
-		for (File file : dir.listFiles()) {
+		File[] sorted = dir.listFiles();
+		Arrays.sort(sorted);
+		for (File file : sorted) { //.listFiles()) {
 			if (/*file.getName().startsWith(host.getClass().getSimpleName()) && */file.getName().endsWith((".xml"))) {
 				println("bindSavedSequences() got " + file.getName());
 				//textFiles.add(file.getName());
