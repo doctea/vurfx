@@ -400,11 +400,16 @@ public class Parameter implements Serializable, Targetable {
 				
 				//if (theEvent instanceof mouse)
 				
-				println("right mouse button: " + (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT ? " yes " : " no "));
+				//println("right mouse button: " + (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT ? " yes " : " no "));
 				if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
 					APP.getApp().pr.getSequencer().setSelectedTargetPath(filter.getParameter(paramName).getPath());
 					
 					println("current value is " + currentValue + ", default value is " + getDefaultValue() + ", max is " + getMax() + ", min is " + getMin());					
+				}
+				
+				if (cp5.papplet.keyCode==cp5.papplet.CONTROL) { //isControlDown()) {
+					println("control is down, resetting!");
+					filter.getParameter(paramName).reset();
 				}
 				
 				filter.changeValueFor(currentValue,paramName,theEvent);
