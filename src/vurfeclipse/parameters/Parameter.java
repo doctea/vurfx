@@ -407,7 +407,7 @@ public class Parameter implements Serializable, Targetable {
 					println("current value is " + currentValue + ", default value is " + getDefaultValue() + ", max is " + getMax() + ", min is " + getMin());					
 				}
 				
-				if (cp5.papplet.keyCode==cp5.papplet.CONTROL) { //isControlDown()) {
+				if (cp5.papplet.keyPressed && cp5.papplet.key==cp5.papplet.CODED && cp5.papplet.keyCode==cp5.papplet.CONTROL) { //isControlDown()) {
 					println("control is down, resetting!");
 					filter.getParameter(paramName).reset();
 				}
