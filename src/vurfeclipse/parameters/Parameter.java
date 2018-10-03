@@ -401,22 +401,23 @@ public class Parameter implements Serializable, Targetable {
 				//if (theEvent instanceof mouse)
 				
 				//println("right mouse button: " + (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT ? " yes " : " no "));
-				if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
-					APP.getApp().pr.getSequencer().setSelectedTargetPath(filter.getParameter(paramName).getPath());
-					
-					println("current value is " + currentValue + ", default value is " + getDefaultValue() + ", max is " + getMax() + ", min is " + getMin());					
-				}
-				
 				if (cp5.papplet.keyPressed && cp5.papplet.key==cp5.papplet.CODED && cp5.papplet.keyCode==cp5.papplet.CONTROL) { //isControlDown()) {
 					println("control is down, resetting!");
 					filter.getParameter(paramName).reset();
 				}
+
 				
-				filter.changeValueFor(currentValue,paramName,theEvent);
-				if (theEvent.getController() instanceof Textfield) { // && !currentValue.equals(((Textfield)ev.getController()).getText())) {
-					//sc.host.disableKeys = false;	// horrible hack to disable keyboard input when a textfield is selected..
-					((Textfield)theEvent.getController()).setFocus(true);
-				}				
+				if (cp5.papplet.mouseButton == APP.getApp().MOUSE_RIGHT) {
+					APP.getApp().pr.getSequencer().setSelectedTargetPath(filter.getParameter(paramName).getPath());
+					
+					println("current value is " + currentValue + ", default value is " + getDefaultValue() + ", max is " + getMax() + ", min is " + getMin());					
+				} else {							
+					filter.changeValueFor(currentValue,paramName,theEvent);
+					if (theEvent.getController() instanceof Textfield) { // && !currentValue.equals(((Textfield)ev.getController()).getText())) {
+						//sc.host.disableKeys = false;	// horrible hack to disable keyboard input when a textfield is selected..
+						((Textfield)theEvent.getController()).setFocus(true);
+					}
+				}
 			}
 			
 		});
