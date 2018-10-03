@@ -113,7 +113,8 @@ public class VideoPlayer extends Filter {
 	        //oldTex.delete();
         }*/
 				if (newStream!=null) { 
-					newStream.stop(); newStream.dispose(); 
+					newStream.stop(); 
+					newStream.dispose(); 
 				}
 				newStream = new Movie(APP.getApp().getCF(),filename);
 				//newTex = new GLTexture(APP, sc.w, sc.h);
@@ -146,7 +147,7 @@ public class VideoPlayer extends Filter {
 					oldStream.speed(1.0f);
 					oldStream.pause();
 					oldStream.stop();
-					//oldStream.dispose();
+					oldStream.dispose();
 					oldStream = null;
 					//oldTex.delete();
 				}
