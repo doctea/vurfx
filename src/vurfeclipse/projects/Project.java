@@ -761,6 +761,8 @@ public abstract class Project implements Serializable {
 	public void setupExposed() {
 
 	}
+	
+	public Accordion accordion;
 
 	public void setupControls(ControlFrame cf) {
 		if (!((VurfEclipse)APP.getApp()).enablecp5) return;
@@ -876,7 +878,7 @@ public abstract class Project implements Serializable {
 		
 		
 		//Accordion accordion = cp5.addAccordion("acc").setWidth(cf.displayWidth).setBarHeight(20);
-		Accordion accordion = new MyAccordion(cp5, "acc").setWidth(cf.displayWidth).setBarHeight(20);
+		accordion = new MyAccordion(cp5, "acc").setWidth(cf.displayWidth).setBarHeight(20);
 
 		for (Scene n : scenes) {
 			println(c + ": Project#setupControls() got scene " + n.getSceneName());

@@ -227,7 +227,7 @@ public class ImageListDrawer extends Filter {
     
     this.addParameter("scale", new Float(1.0f), 1.0f, 5.0f);
     
-    this.addParameter("current_image_index", new Integer(0), 0, this.filenames.size());
+    this.addParameter("current_image_index", new Integer(0), 0, this.filenames.size()>0?this.filenames.size()-1:0);	
     /*this.addParameter("tint", new Integer(128), 0, 255);//new Integer(128));
      this.addParameter("shape", new Integer(0), 0, b.shapesCount);
      this.addParameter("colour", color(random(255),random(255),random(255),128));*/

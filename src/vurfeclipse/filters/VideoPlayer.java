@@ -3,6 +3,8 @@ package vurfeclipse.filters;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import vurfeclipse.APP;
 import vurfeclipse.scenes.Scene;
@@ -14,10 +16,10 @@ public class VideoPlayer extends Filter {
 	String filename;
 
 	transient PGraphics tex;
-
 	transient PGraphics newTex;
 
 	int mode = 0;
+  int current_video_index;
 
 	int volume = 255;
 
@@ -46,15 +48,20 @@ public class VideoPlayer extends Filter {
     };*/
 
 		//changeVideo(videos[(int)random(0,videos.length)]);
-		changeVideo(videos.get((int) random(0,videos.size())));
-		println("Changing video!");
+		//changeVideo(videos.get((int) random(0,videos.size())));
+		println("Changing video to " + videos.get((int) this.getParameterValue("current_video_index")%videos.size()));
+		if ((Boolean)this.getParameterValue("next")==true) {
+			this.changeParameterValue("current_video_index", (int) this.getParameterValue("current_video_index")+1);
+		} else {
+			changeVideo(videos.get((int) this.getParameterValue("current_video_index")%videos.size()));
+		}
 
 		return this;
 	}
 
 	public VideoPlayer(Scene sc) {
-		//super(sc);
-		this(sc,APP.getApp().dataPath("/video-sources/rainbow/cragulon/Chain Reaction.ogv")); //balloon.ogg"));
+		super(sc);
+		//this(sc,APP.getApp().dataPath("/video-sources/rainbow/cragulon/Chain Reaction.ogv")); //balloon.ogg"));
 	}
 
 	public VideoPlayer(Scene sc, String filename) {
@@ -66,9 +73,52 @@ public class VideoPlayer extends Filter {
 	public void setMuted(boolean on) {
 		super.setMuted(on);
 		if (!on) {
-			if (this.started) stream.loop();
+			if (!this.started) {
+				if (stream!=null && stream.available()) {
+					println("starting again");
+					if (true==(boolean)this.getParameterValue("loop") )
+						this.loop(stream);
+					else if (true!=(boolean)this.getParameterValue("pause") ) 
+						this.play(stream);  
+					println("started");
+				}
+		}
 		} else {
-			if (this.started) stream.pause();
+			if (this.started) {
+				if (stream!=null && stream.available()) {
+					println("pausing");
+					this.pause(stream);
+					println("paused");
+				}
+			}
+		}
+	}
+
+	synchronized void pause(Movie stream) {
+		if (this.started) {
+			if (stream!=null) {
+				println("setting pause");
+				stream.pause();
+				this.started = false;
+			}
+		}		
+	}
+
+	synchronized private void play(Movie stream) {
+		if (!this.started) {
+			if (stream!=null) {
+				println("setting play");
+				this.started = true;
+				stream.play();
+			}
+		}		
+	}
+
+	synchronized void loop(Movie stream) {
+		if (stream!=null) {
+			//println("setting loop");
+			stream.loop();
+			//this.play(stream);
 		}
 	}
 
@@ -76,22 +126,39 @@ public class VideoPlayer extends Filter {
 
 	transient Movie oldStream;
 	transient Movie newStream;
-	boolean changing = false;
+	Boolean changing = false;
 	Thread changerThread;
 	private int startDelay;
+	private String directory;
+	private Float last_speed;
+	protected HashMap<String,Movie> movie_cache = new HashMap<String,Movie>();
 	public synchronized void changeVideo(String fn) {
 
 		//if (true) return; // dirty hack 2016-12-1? to only play once?!?!?
 
-		if (changing) return;
+		//if (changing) return;
 		final String filename = fn;
 		if (filename.equals("")) return;
 		this.filename = filename;
-		changing = true;
+		//changing = true;
 		final VideoPlayer self = this;
 
 		println("got changeVideo('"+fn+"'");
 
+  	if (changerThread!=null && !changerThread.isAlive()) {
+			changing = new Boolean(false);
+			if (newStream!=null) {
+				println("about to stop+dispose of newstream that already exists even though changerthread is dead?");
+				newStream.stop();
+				newStream.dispose();
+			}
+		};
+		
+		if (changing && changerThread!=null && changerThread.isAlive()) {
+			println("changing is set and changerthread is alive - returning");
+			return;
+		}
+		
 		this.changerThread = new Thread () {
 			boolean alreadyRun = false;
 
@@ -99,8 +166,12 @@ public class VideoPlayer extends Filter {
 				super.start();
 			}
 			public synchronized void run () {
+				//changing = new Boolean(false);
+				//synchronized(changing) {
+				if (changing) return;
 				if (alreadyRun) return;
 				alreadyRun = true;
+				changing = true;
 
 				println("Loaded new.." + filename);
 				//GSMovie newStream;
@@ -116,17 +187,22 @@ public class VideoPlayer extends Filter {
 					newStream.stop(); 
 					newStream.dispose(); 
 				}
-				newStream = new Movie(APP.getApp().getCF(),filename);
+				if (movie_cache.get(filename)==null) {
+					newStream = new Movie(APP.getApp().getCF(),filename);
+					movie_cache.put(filename, newStream);
+				} else {
+					newStream = movie_cache.get(filename);
+				}
 				//newTex = new GLTexture(APP, sc.w, sc.h);
 				//newStream.setPixelDest(tex, true);
 				//newStream.volume(volume);		//TODO: why doesn't this compile on MacOSX?
 				println("Set volume and pixeldest..");
 				//if (!((VurfEclipse)APP.getApp()).exportMode)
 
-				newStream.jump(0.0f);
-				newStream.speed((Float)getParameterValue("speed"));
+				//newStream.jump(0.0f);
+				//newStream.speed(Math.abs((Float)getParameterValue("speed")));
 
-				newStream.loop();
+				//newStream.loop();
 				//println("about to do ")
 				//while (!newStream.available())
 				//try { sleep(50); } catch (Exception e) {}
@@ -143,17 +219,29 @@ public class VideoPlayer extends Filter {
 				self.setFilterLabel(getFilterName() + filename);
 				//tex = newTex;
 				if (oldStream!=null) {
-					oldStream.jump(0.0f);
-					oldStream.speed(1.0f);
-					oldStream.pause();
-					oldStream.stop();
-					oldStream.dispose();
+					//oldStream.jump(0.0f);
+					//oldStream.speed(1.0f);
+					//if (started)
+					  //oldStream.pause();
+					if (started) {
+						println("stopping oldstream..");
+						oldStream.stop();
+						println("stopped.");
+					}
+					println("disposing of oldstream..");
+					//oldStream.dispose();
+					println("disposed of oldstream.");
 					oldStream = null;
 					//oldTex.delete();
 				}
+				if ((Boolean)getParameterValue("loop")==true) {
+					loop(stream);
+				}
+				play(stream);
 				self.newStream = null;
 				//newTex = null;
 				self.changing = false;
+				started = true;
 
 				/*GSMovie tempStream = stream;
         stream = newStream;
@@ -162,19 +250,20 @@ public class VideoPlayer extends Filter {
         stream = null;*/
 				//changing = false;
 				return;
-			}
+				}
+			//}
 		};
 		this.changerThread.start();
 		//this.changerThread.run();
 	}
 
 	public void loadDirectory() {
-		loadDirectory("");
+		loadDirectory(this.directory);
 	}
 	public void loadDirectory(String directory) {
 		//String directory = ""; // dummy
 		//String path = APP.getApp().sketchPath("bin/data/" + directory);	// ffs need this on Windows..
-		String path = APP.getApp().dataPath(/*"bin/data/" + */directory);		// ffs but seem to need this on tohers
+		String path = APP.getApp().dataPath(/*"bin/data/" + */ "video-sources/"+directory);		// ffs but seem to need this on tohers
 		//String path = Paths.get("bin/").toAbsolutePath().toString() + "/data/image-sources/" + directory;
 		//String path = Paths.get("").toAbsolutePath().toString() + "/data/image-sources/" + directory; // applet mode doesnt need bin
 		File folder = new File(path);
@@ -188,7 +277,7 @@ public class VideoPlayer extends Filter {
 				if (fn.contains(".ogg") || fn.contains(".ogv") 
 						//|| fn.contains(".mov") || fn.contains(".mp4")
 						) {
-					videos.add(path + fileEntry.getName());
+					videos.add(path + "/" + fileEntry.getName());
 					this.println("adding .ogg video " + fileEntry.getName());
 				} else {
 					this.println("skipping file " + fileEntry.getName());
@@ -196,10 +285,16 @@ public class VideoPlayer extends Filter {
 				//if (count>=numBlobs) break;
 			}
 		}
+		this.getParameter("current_video_index").setMax(new Integer(videos.size()));
 	}
 
 	synchronized public void updateParameterValue(String paramname, Object value) {
 		super.updateParameterValue(paramname, value);
+
+	  if (paramname.equals("current_video_index")) {
+	  	if (stream!=null && !stream.filename.equals(videos.get((int)this.getParameterValue("current_video_index")%videos.size())))
+	  		this.changeVideo(videos.get((int)this.getParameterValue("current_video_index")%videos.size()));
+	  }
 	}	
 
 	public void setParameterDefaults () {
@@ -215,6 +310,10 @@ public class VideoPlayer extends Filter {
 		addParameter("pause", new Boolean(false)); //new Float(0.0f), new Float(0.0f), new Float(1.0f));
 		addParameter("loop", new Boolean(false)); //new Float(0.0f), new Float(0.0f), new Float(1.0f));
 		addParameter("next",  new Boolean(false));
+		
+    this.addParameter("current_video_index", new Integer(0), 0, this.videos.size()>0?this.videos.size()-1:0);
+
+		
 	}
 
 	public boolean initialise() {
@@ -234,13 +333,14 @@ public class VideoPlayer extends Filter {
 		loadDirectory();
 		if (videos.size()==0) return true;
 
-		filename = videos.get(0);
+		filename = videos.get((int) this.getParameterValue("current_video_index"));
 
 		this.setFilterLabel("VideoPlayer - " + filename);
 
 		println("Loading video " + filename);
 		try {
 			stream = new Movie(APP.getApp(),filename);
+			movie_cache.put(filename, stream);
 			//stream = new GSMovie(APP,"U:\\videos\\Tomorrows World - sinclair c5\\tworld84.dv.ff.avi");
 			//stream.setPixelDest(out.getTexture());
 			//stream.setPixelDest(tex, true);
@@ -324,18 +424,22 @@ public class VideoPlayer extends Filter {
 	}
 
 
-	private void setStreamSettings(Movie stream2) {
-		if ((Boolean)this.getParameterValue("pause")) {
-			stream.pause();
-		} else {
-			stream.play();
-		}
+	private synchronized void setStreamSettings(Movie stream2) {
 		if ((Boolean)this.getParameterValue("loop")) {
-			stream.loop();
+			this.loop(stream2);
 		} else {
-			stream.noLoop();
+			stream2.noLoop();
 		}
-	  stream.speed(Math.abs((Float)this.getParameterValue("speed")));	
+		if ((Boolean)this.getParameterValue("pause")) {
+			this.pause(stream2);
+		} else {
+			if (stream2.time()>0.0f && stream2.time()<stream2.duration())
+				this.play(stream2);
+		}
+		/*if ((Float)this.getParameterValue("speed")!=last_speed) {
+	  	stream.speed(Math.abs((Float)this.getParameterValue("speed")));
+	  	last_speed = (Float)this.getParameterValue("speed");
+		}*/
 	}
 
 	public void beginDraw () {
@@ -357,4 +461,32 @@ public class VideoPlayer extends Filter {
 	public void setStartDelay(int i) {
 		this.startDelay = i;
 	}
+	
+	@Override
+	public HashMap<String, Object> collectFilterSetup() {
+		HashMap<String, Object> params = super.collectFilterSetup();
+		
+		params.put("directory", this.directory);
+		params.put("filename", this.filename);
+		return params;
+	}
+	
+	@Override
+	public VideoPlayer readSnapshot(Map<String, Object> input) {
+		super.readSnapshot(input);	// TODO: a conundum; if we don't do this on first load then a bunch of stuff doesn't get set up properly; if we do do this then ImageListDrawer doesn't appear to output to the correct canvas..?
+		if (input.containsKey("directory")) {
+			this.directory = (String) input.get("directory");
+			this.filename = (String) input.get("directory");
+			this.loadDirectory();
+		}
+		
+		return this;
+	}
+
+  public VideoPlayer setCurrentIndex (int index) {
+    this.current_video_index = index;
+    this.changeParameterValue("current_video_index", index);
+    return this;
+  }
+    
 }
