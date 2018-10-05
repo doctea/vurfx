@@ -1027,6 +1027,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			this.removeActiveSequence();
 		} else if (key=='p') {
 			this.togglePlaylist(!this.isHistoryMode());
+		} else if (key=='h') {
+			//this.host.accordion.show();
+			this.host.accordion.close();
 		} else if (key=='d') {
 			this.preserveCurrentSceneParameters();
 		} else if (key=='v') {
