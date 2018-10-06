@@ -744,10 +744,14 @@ abstract public class Sequence implements Serializable, Mutable {
 
 		@Override
 		public String toString() {
-			return super.toString() + " " + 
-					this.host!=null?
-							this.host.getPath()
-							:"[no host]";
+			try {
+				return super.toString() + " " + 
+						this.host!=null?
+								this.host.getPath()
+								:"[no host]";
+			} catch (Exception e) {
+				return ("exception getting name!");
+			}
 		}
 
 		abstract

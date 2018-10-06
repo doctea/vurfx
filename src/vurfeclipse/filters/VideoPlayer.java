@@ -148,9 +148,10 @@ public class VideoPlayer extends Filter {
   	if (changerThread!=null && !changerThread.isAlive()) {
 			changing = new Boolean(false);
 			if (newStream!=null) {
-				println("about to stop+dispose of newstream that already exists even though changerthread is dead?");
-				newStream.stop();
+				println("about to dispose of newstream that already exists even though changerthread is dead?");
+				//newStream.stop();
 				newStream.dispose();
+				println("disposed");
 			}
 		};
 		

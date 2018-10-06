@@ -160,10 +160,14 @@ public class ChainSequence extends Sequence {
 					println("skipping null chain sequence from broken save file :(");
 					continue;
 				}
-				if (cs.containsKey("scene_parameters")) cs.remove("scene_parameters");	// don't load scene_parameters for chained sequences, since if there are any they are there from an old version of save format
-				Sequence n = Sequence.makeSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
-				n.loadParameters(cs);
-				this.addSequence(n);
+				try {
+					if (cs.containsKey("scene_parameters")) cs.remove("scene_parameters");	// don't load scene_parameters for chained sequences, since if there are any they are there from an old version of save format
+					Sequence n = Sequence.makeSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
+					n.loadParameters(cs);
+					this.addSequence(n);
+				} catch (Exception e) {
+					println("caught " + e + " trying to loadparameters for " + this);
+				}
 			}		
 		} else {
 			this.initialiseDefaultChain();

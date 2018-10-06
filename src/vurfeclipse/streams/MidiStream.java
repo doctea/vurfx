@@ -79,6 +79,7 @@ public class MidiStream extends Stream implements Serializable {
     System.out.println("note on " + channel + " " + pit + " " + vel);
     addEvent("note", pit);    
     addEvent("note_"+pit, pit);
+    addEvent("note_"+channel+"_"+pit, pit);
     addEvent("interval", pit%12);
     addEvent("interval_"+pit, pit%12);    
     
@@ -91,8 +92,10 @@ public class MidiStream extends Stream implements Serializable {
   
   synchronized public void controllerChange(int channel, int number, int value) {
   	println("got MIDI CC on channel " + channel + ", number " + number + ": " + value);
-  	if (value>0)
+  	//if (value>0) {
   		addEvent("cc_"+number, value);
+  	  addEvent("cc_"+channel+"_"+number, value);
+  	//}
   	
     if (directMode) {
       deliverEvents();

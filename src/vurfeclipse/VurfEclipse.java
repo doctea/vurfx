@@ -812,9 +812,11 @@ public class VurfEclipse extends PApplet {
 	}
 
 	public void handleKey(char key) {
-		if (this.pr.isDisableKeys()) {
+		if (this.pr.isDisableKeys() && key!='!') {
 			println("keys are disabled, ignoring '" + key + "'");
 			return;
+		} else if (key=='!') {
+			this.pr.disableKeys = false;
 		}
 		try {
 			if (key == ' ') {
