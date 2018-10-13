@@ -1,11 +1,15 @@
 package vurfeclipse.streams;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.Group;
+import controlP5.ScrollableList;
 import controlP5.Textfield;
+import controlP5.Textlabel;
+import controlP5.Toggle;
 import themidibus.*;
 import vurfeclipse.ui.ControlFrame;
 
@@ -42,10 +46,18 @@ public class MidiStream extends Stream implements Serializable {
   
   int generatedMessages = 0;
   
-  static int device = 0;
+  static int default_device = 0;
+  
+  int device = default_device;
+
+  private ScrollableList lstMidiDevice;
+  private Toggle tglShowMidi;
+  private Textlabel txtLastNote;
+
+private boolean log_midi;
 
   public MidiStream() {
-  	this("midi stream", device, true);
+  	this("midi stream", default_device, true);
   }
   
   public MidiStream(String streamName) {
@@ -54,7 +66,7 @@ public class MidiStream extends Stream implements Serializable {
   }
 
   public MidiStream(String streamName, boolean directMode) {
-    this(streamName, device, directMode);
+    this(streamName, default_device, directMode);
   }
   public MidiStream(String streamName, int device, boolean directMode) {
     this.device = device;
@@ -62,44 +74,84 @@ public class MidiStream extends Stream implements Serializable {
     this.streamName = streamName;
 
     //input = RWMidi.getInputDevices()[this.device].createInput(this);
-    try {
-    	myBus = new MidiBus (this,this.device,0);
-    } catch (Exception e) {
-    	System.out.println("!!!!! got exception " + e + " while instantiating MidiBus object?!");
-    }
-
+    this.listDevices();
+    //newDevice(device);
   }  
 
+  public void setDevice(int device) {
+	  //if (device!=this.device || this.myBus==null) {
+		  // set up new device
+		  device = this.newDevice(device);
+	  //}
+	  this.device = device;
+  }
+
+  private int newDevice(int device) {
+    try {
+    	println("Opening MIDI device " + device);
+    	if (myBus!=null) myBus.close();//.clearInputs();
+    	myBus = null;
+    	if (device>= MidiBus.availableInputs().length) {
+    		println("device number " + device + " is too high, opening device 0 instead");
+    		device = 0;
+    	}
+    	if (device<MidiBus.availableInputs().length)
+    		myBus = new MidiBus (this,device,0);
+    	else {
+    		throw new IndexOutOfBoundsException("requested device number " + device + " is too high for number of available midi inputs (" + MidiBus.availableInputs()+ "!");
+    	}
+    } catch (Exception e) {
+    	println("!!!!! got exception " + e + " while instantiating MidiBus object?!");
+    	e.printStackTrace();
+    }	
+    return device;
+  }
+  
+  public void listDevices() {
+	  for (String i : MidiBus.availableInputs()) {
+ 		  println("got input " + i);
+	  }
+  }
 
   public void setDirectMode(boolean on) {
     this.directMode = on;
   }
   
   synchronized public void noteOn(int channel, int pit, int vel) {
-    System.out.println("note on " + channel + " " + pit + " " + vel);
-    addEvent("note", pit);    
-    addEvent("note_"+pit, pit);
-    addEvent("note_"+channel+"_"+pit, pit);
-    addEvent("interval", pit%12);
-    addEvent("interval_"+pit, pit%12);    
-    
-    addEvent("octave_"+((int)(pit/12)), pit%12);
-    
-    if (directMode) {
-      deliverEvents();
-    }
+	if (isEnabled()) {
+	    if (log_midi)  
+	    	println("note\ton\tchannel " + channel + "\t pitch " + pit + " [%=" + pit%12+"]\t velocity " + vel);
+	    txtLastNote.setValue("note_"+channel+"_"+pit);
+	    
+	    addEvent("note", pit);    
+	    addEvent("note_"+pit, pit);
+	    addEvent("note_"+channel+"_"+pit, pit);
+	    addEvent("interval", pit%12);
+	    addEvent("interval_"+pit, pit%12);    
+	    
+	    addEvent("octave_"+((int)(pit/12)), pit%12);
+		    
+	    
+	    if (directMode) {
+	      deliverEvents();
+	    }
+	}
   }
   
   synchronized public void controllerChange(int channel, int number, int value) {
-  	println("got MIDI CC on channel " + channel + ", number " + number + ": " + value);
-  	//if (value>0) {
-  		addEvent("cc_"+number, value);
-  	  addEvent("cc_"+channel+"_"+number, value);
-  	//}
-  	
-    if (directMode) {
-      deliverEvents();
-    }
+	if (isEnabled()) {
+		if (log_midi) 
+			println("CC\tchannel " + channel + "\t number " + number + "\tvalue " + value);
+	    txtLastNote.setValue("cc_"+channel+"_"+number);
+	  	//if (value>0) {
+	  		addEvent("cc_"+number, value);
+	  	  addEvent("cc_"+channel+"_"+number, value);
+	  	//}
+	  	
+	    if (directMode) {
+	      deliverEvents();
+	    }
+	}
   }
   
   /*void sysexReceived(rwmidi.SysexMessage msg) {
@@ -147,6 +199,17 @@ public class MidiStream extends Stream implements Serializable {
 		return g;
 	}
 	
+	@Override public String toString() {
+		return this.streamName + " [" + device + "]: " + this.getNameForDevice(device);
+	}
+
+	private String getNameForDevice(int device) {
+		if (device<MidiBus.availableInputs().length) {
+			return MidiBus.availableInputs()[device];
+		} else {
+			return "device number " + device + " out of bounds, no MIDI device";
+		}
+	}
 
 	@Override
 	synchronized public void setupControls(final ControlFrame cf, Group g) {
@@ -157,19 +220,56 @@ public class MidiStream extends Stream implements Serializable {
 
 		final MidiStream self = this;
 
-		/*this.txtBPM = cf.control().addTextfield(this.toString() + "_tempo").setLabel("BPM").setText(""+this.bpm).setWidth(margin_x/2)
+		this.lstMidiDevice = cf.control().addScrollableList(this.toString() + "_device").setLabel("MIDI device").setWidth(margin_x*4)
 				.setPosition(margin_x * 3, pos_y)
+				.addItems(MidiBus.availableInputs())
+				.setHeight(10 * 4)
+				.setItemHeight(10)
+				.setBarHeight(10)
 				.moveTo(g)
+				.setValue((int)this.device)
 				.addListenerFor(g.ACTION_BROADCAST, new CallbackListener() {
 					@Override
 					public void controlEvent(CallbackEvent theEvent) {
-						self.setBPM(Float.parseFloat(((Textfield)theEvent.getController()).getText()));
+						//self.setDevice(getDeviceForName(((ScrollableList)theEvent.getController()).getStringValue()));
+						int index = (int) ((ScrollableList)theEvent.getController()).getValue();
+
+						self.setDevice(index);//(int) ((ScrollableList)theEvent.getController()).get.getValue());
 
 						// and refresh gui
-						cf.updateGuiStreamEditor();
+						//cf.updateGuiStreamEditor();
+						lstMidiDevice.close();
 					}
-				});
-		g.add(this.txtBPM);*/
+				})
+				.onLeave(cf.close)
+				.onEnter(cf.toFront)
+				.close();
+		g.add(this.lstMidiDevice);
+		this.lstMidiDevice.bringToFront();
+		
+		this.tglShowMidi = cf.control().addToggle(this.toString()+"_showmidi").setLabel("Show in console").setWidth(margin_x/2)
+				.setPosition(margin_x * 8, pos_y)
+				.setValue(false).setState(false)
+				.moveTo(g)
+				.addListenerFor(cf.control().ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						/*ev.getAction()==ControlP5.ACTION_RELEASED || ev.getAction()==ControlP5.ACTION_RELEASEDOUTSIDE || */
+						//ev.getAction()==ControlP5.ACTION_PRESS) {
+						println("Setting log_midi state on " + this + " to " + ((Toggle)theEvent.getController()).getState());
+						log_midi = ((Toggle)theEvent.getController()).getState();	
+					}
+				}
+				)
+		;
+		g.add(tglShowMidi);
+		
+		this.txtLastNote = cf.control().addLabel((this.toString()+"_lastnote")).setWidth(margin_x*10)
+				.setPosition(margin_x * 10, pos_y)
+				.setValue("")
+				.moveTo(g);
+		;
+		g.add(txtLastNote);
 
 		/*g.add(cf.control().addButton(this.toString() + "_resetstart").setLabel("Reset Start")
 				.setPosition(margin_x * 5, pos_y)
@@ -191,5 +291,45 @@ public class MidiStream extends Stream implements Serializable {
 				})
 				);*/
 	}
+	
+
+	protected int getDeviceForName(String stringValue) {
+		int i = 0;
+		for (String s : MidiBus.availableInputs()) {
+			if (stringValue.equals(s)) {
+				return i;
+			}
+			i++;
+		}
+		return 0;
+	}
+
+	@Override 
+	public HashMap<String,Object> collectParameters() {
+		HashMap<String,Object> params = super.collectParameters();
+		params.put("device_name", this.getNameForDevice(device));
+		params.put("device", this.device);
+		return params;
+	}
+
+	@Override
+	public void readParameters(HashMap<String, Object> input) {
+		super.readParameters(input);
+		if (input.containsKey("device_name")) 
+			this.setDevice(this.getDeviceForName((String)input.get("device_name")));
+		else if (input.containsKey("device")) 
+			this.setDevice((int) input.get("device"));
+		else
+			this.setDevice(default_device);
+
+		/*HashMap<String, HashMap<String,Object>> callbacks = (HashMap<String, HashMap<String,Object>>) input.get("callbacks");
+		for (Entry<String, HashMap<String, Object>> i : callbacks.entrySet()) {
+			this.registerEventListener(paramName, ParameterCallback.createParameterCallback(i.getValue().get("class")));
+		}*/
+		//callbacks = input.
+	}
+	
+	
+	
 	
 }
