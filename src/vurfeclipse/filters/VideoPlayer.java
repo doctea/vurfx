@@ -19,7 +19,7 @@ public class VideoPlayer extends Filter {
 	transient PGraphics newTex;
 
 	int mode = 0;
-  int current_video_index;
+	int current_video_index;
 
 	int volume = 255;
 
@@ -270,21 +270,26 @@ public class VideoPlayer extends Filter {
 		File folder = new File(path);
 		println(this + "#loadDirectory() got path " + path);
 		int count = 0;
-		for (final File fileEntry : folder.listFiles()) {
-			if (fileEntry.isDirectory()) {
-				// skip; maybe recurse tho in future
-			} else {
-				String fn = fileEntry.getName();
-				if (fn.contains(".ogg") || fn.contains(".ogv") 
-						//|| fn.contains(".mov") || fn.contains(".mp4")
-						) {
-					videos.add(path + "/" + fileEntry.getName());
-					this.println("adding .ogg video " + fileEntry.getName());
+		try {
+			for (final File fileEntry : folder.listFiles()) {
+				if (fileEntry.isDirectory()) {
+					// skip; maybe recurse tho in future
 				} else {
-					this.println("skipping file " + fileEntry.getName());
+					String fn = fileEntry.getName();
+					if (fn.contains(".ogg") || fn.contains(".ogv") 
+							//|| fn.contains(".mov") || fn.contains(".mp4")
+							) {
+						videos.add(path + "/" + fileEntry.getName());
+						this.println("adding .ogg video " + fileEntry.getName());
+					} else {
+						this.println("skipping file " + fileEntry.getName());
+					}
+					//if (count>=numBlobs) break;
 				}
-				//if (count>=numBlobs) break;
 			}
+		} catch (Exception e) {
+			println("Caught " + e + " trying to read " + path);
+			e.printStackTrace();
 		}
 		this.getParameter("current_video_index").setMax(new Integer(videos.size()));
 	}

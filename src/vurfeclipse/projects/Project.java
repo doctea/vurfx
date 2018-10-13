@@ -910,43 +910,8 @@ public abstract class Project implements Serializable {
 
 		accordion.moveTo(sceneTab);
 
-		Tab monitorTab = cp5.addTab("Monitor");
+		//this.setupMonitor(cp5);
 
-		//for (String canvas_name : this.canvases.keySet()) {
-		final Project pr = this; //.getCanvas("out");
-		controlP5.Canvas cp5canvas = new controlP5.Canvas() {
-			@Override
-			public synchronized void draw(PGraphics pg) {
-				// renders a square with randomly changing colors
-				// make changes here.
-				//pg.fill(100);
-				//pg.rect(APP.getApp().random(255)-20, APP.getApp().random(255)-20, 240, 30);
-				//pg.fill(255);
-				//pg.beginDraw();
-
-				//cp5.setGraphics(pr.getCanvas(getPath()+"out").getSurf(), 0, 0);
-
-				if (pr.isInitialised()) {
-					//pg.beginDraw();
-
-					pg.text("This text is drawn by MyCanvas !!", 0/*APP.getApp().random(255)*/,APP.getApp().random(255));
-					/*pg.beginDraw();
-					//pg.image((PImage) pr.getCanvas("/out").getSurf().getCache(pr.getCanvas("/out").getSurf()),0 ,0);
-					APP.getApp().spout.receiveTexture(pg); //,0,0);
-					pg.endDraw();*/
-
-					/*pr.getCanvas(getPath()+"out").getSurf().loadPixels();
-        			    PImage i = pr.getCanvas(getPath()+"out").getSurf().get(); 
-    			    	pg.image(i,0,150,w/8,h/8);
-    			    	pg.endDraw();*/
-				}
-				//pg.endDraw();
-				//
-			}
-		};
-		monitorTab.addCanvas(cp5canvas);
-		//cp5canvas.moveTo(monitorTab);
-		//}
 
 		this.controlsReady = true;
 
@@ -970,7 +935,7 @@ public abstract class Project implements Serializable {
 	private void setupMonitor(ControlP5 cp5) {
 		// TODO Auto-generated method stub
 		//controlWindow = cp5.addControlWindow("controlP5window",100,100,width/2,height/2,30);
-		final Project p = this;
+		//final Project p = this;
 		//cp5.getWindow().setUpdateMode(ControlWindow.NORMAL);
 		//((VurfEclipse)APP.getApp()).getCW()
 		//ControlWindowCanvas monitor = ((VurfEclipse)APP.getApp()).getCW().control().addCanvas(new ControlWindowCanvas() {
@@ -989,6 +954,44 @@ public abstract class Project implements Serializable {
 		//		}
 		// }); //.moveTo(((VurfEclipse)APP.getApp()).getCW().getCurrentTab());
 
+		Tab monitorTab = cp5.addTab("Monitor");
+
+		//for (String canvas_name : this.canvases.keySet()) {
+		//final Project pr = this; //.getCanvas("out");
+		controlP5.Canvas cp5canvas = new controlP5.Canvas() {
+			@Override
+			public synchronized void draw(PGraphics pg) {
+				// renders a square with randomly changing colors
+				// make changes here.
+				//pg.fill(100);
+				//pg.rect(APP.getApp().random(255)-20, APP.getApp().random(255)-20, 240, 30);
+				//pg.fill(255);
+				//pg.beginDraw();
+
+				//cp5.setGraphics(pr.getCanvas(getPath()+"out").getSurf(), 0, 0);
+
+				if (isInitialised()) {
+					//pg.beginDraw();
+
+					pg.text("This text is drawn by MyCanvas !!", 0/*APP.getApp().random(255)*/,APP.getApp().random(255));
+					/*pg.beginDraw();
+					//pg.image((PImage) pr.getCanvas("/out").getSurf().getCache(pr.getCanvas("/out").getSurf()),0 ,0);
+					APP.getApp().spout.receiveTexture(pg); //,0,0);
+					pg.endDraw();*/
+
+					/*pr.getCanvas(getPath()+"out").getSurf().loadPixels();
+        			    PImage i = pr.getCanvas(getPath()+"out").getSurf().get(); 
+    			    	pg.image(i,0,150,w/8,h/8);
+    			    	pg.endDraw();*/
+				}
+				//pg.endDraw();
+				//
+			}
+		};
+		//monitorTab.addCanvas(cp5canvas);
+		//cp5canvas.moveTo(monitorTab);
+		//}
+		
 	}
 
 	int guid = 10000;

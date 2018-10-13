@@ -302,7 +302,7 @@ abstract public class Stream implements Serializable {
 			return stream;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.err.println("Caught " + e + ": Didn't manage to instantiate " + classname + " might be missing constructor?");
+			System.err.println("Caught " + e + ": Didn't manage to instantiate " + classname + " might be missing constructor or didn't check for existence of key during readParameters?");
 			e.printStackTrace();
 		}
 

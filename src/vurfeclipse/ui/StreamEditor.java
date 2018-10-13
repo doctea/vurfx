@@ -12,6 +12,7 @@ import controlP5.ControlP5;
 import controlP5.ControllerGroup;
 import controlP5.Group;
 import vurfeclipse.APP;
+import vurfeclipse.streams.MidiStream;
 import vurfeclipse.streams.OscStream;
 import vurfeclipse.streams.Stream;
 
@@ -36,7 +37,30 @@ public class StreamEditor extends Group {
 						public void controlEvent(CallbackEvent theEvent) {
 							// and refresh gui
 							//cf.stream
-							APP.getApp().pr.getSequencer().addStream("OSC", new OscStream("Osc Stream"));
+							String name = "OSC";
+							int i = 1;
+							while (APP.getApp().pr.getSequencer().getStream(name)!=null) {
+								name = "OSC [" + i + "]";
+							}
+							APP.getApp().pr.getSequencer().addStream(name, new OscStream(name));
+							cf.updateGuiStreamEditor();
+						}
+					})
+				);
+			outer.add(new Button(cf.control(),this.toString() + "_add midi").setLabel("ADD MIDI")
+					.setPosition(margin_x * 6, pos_y)
+					.moveTo(outer)
+					.addListenerFor(outer.ACTION_BROADCAST, new CallbackListener() {
+						@Override
+						public void controlEvent(CallbackEvent theEvent) {
+							// and refresh gui
+							//cf.stream
+							String name = "MIDI";
+							int i = 1;
+							while (APP.getApp().pr.getSequencer().getStream(name)!=null) {
+								name = "MIDI [" + i + "]";
+							}
+							APP.getApp().pr.getSequencer().addStream(name, new MidiStream("MIDI Stream: " + name));
 							cf.updateGuiStreamEditor();
 						}
 					})
