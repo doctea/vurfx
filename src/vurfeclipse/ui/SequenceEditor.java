@@ -90,5 +90,9 @@ public class SequenceEditor extends Group {
 
 	public void setDisableControls(boolean booleanValue) {
 		this.enableControls = booleanValue;		
+	}
+
+	public void removeSequence(Sequence self) {
+		this.getSequence().removeSequence(self);		
 	}	
 }

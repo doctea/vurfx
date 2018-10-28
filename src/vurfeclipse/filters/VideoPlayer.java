@@ -327,17 +327,20 @@ public class VideoPlayer extends Filter {
 
 		/*try {
       quicktime.QTSession.open();
-    } catch (quicktime.QTException qte) {
-      qte.printStackTrace();
-    }*/
-
-		/*GLTextureParameters params = new GLTextureParameters();
-    params.wrappingU = GLTextureParameters.REPEAT;
-    params.wrappingV = GLTextureParameters.REPEAT;*/
+	    } catch (quicktime.QTException qte) {
+	      qte.printStackTrace();
+	    }*/
+	
+			/*GLTextureParameters params = new GLTextureParameters();
+	    params.wrappingU = GLTextureParameters.REPEAT;
+	    params.wrappingV = GLTextureParameters.REPEAT;*/
 		tex = this.sc.host.createCanvas(this.getPath()+"/ca/", this.getFilterLabel()).getSurf(); //new GLTexture(APP.getApp(),sc.w,sc.h, params);
 
 		loadDirectory();
-		if (videos.size()==0) return true;
+		if (videos.size()==0) {
+			println("No videos to initialise, returning early!");
+			return false;
+		}
 
 		filename = videos.get((int) this.getParameterValue("current_video_index"));
 

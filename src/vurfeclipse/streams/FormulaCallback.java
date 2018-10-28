@@ -90,7 +90,7 @@ public class FormulaCallback extends ParameterCallback {
 	
 	@Override
 	public void call(Object value) {
-		
+		//System.out.println("in value " + value);
 		//e = APP.getApp().makeEvaluator(expression);
 		
 		//if (latching_value==null) latching_value = new BigDecimal(0);
@@ -140,6 +140,7 @@ public class FormulaCallback extends ParameterCallback {
 		} else {
 			System.out.println(this + " call for unhandled datatype " + value.getClass() + " for " + this.targetPath);
 		}
+		//System.out.println("set " + value);
 	}
 	
 

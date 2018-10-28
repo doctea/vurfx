@@ -69,10 +69,14 @@ public class ChainSequence extends Sequence {
 		//return iteration>=max_i;
 		// assume ready, unless one of the chained items isnt
 		if (super.readyToChange(max_i)) return true;
-		for (Sequence seq : chain) {
-			if (!seq.readyToChange(max_i)) return false;
+		if (chain.size()>0) {
+			for (Sequence seq : chain) {
+				if (!seq.readyToChange(max_i)) return false;
+			}
+			return true;
+		} else {
+			return false;
 		}
-		return true;
 	}	
 	
 	
@@ -268,6 +272,23 @@ public class ChainSequence extends Sequence {
 		//this.lastLoadedParams = this.collectParameters();
 		for (Sequence seq : chain) {
 			seq.preserveCurrentParameters();
+		}
+	}
+
+	@Override
+	synchronized public void removeSequence(Sequence to_remove) {
+		if (to_remove==this) {
+			println("Told to remove self -- must be at top of chain, or parent has ignored request to remove me - not removing!");
+			return;
+		}
+		synchronized(this.chain) {
+			if (!this.chain.remove(to_remove)) {
+				for (Sequence s : this.chain) {
+					s.removeSequence(to_remove);
+				}
+			} else {
+				println("removed " + to_remove + " from  "+ this + "!");
+			}
 		}
 	}
 

@@ -45,7 +45,7 @@ public class ControlFrame extends PApplet {
 		this.cp5 = new ControlP5(this);
 		//cp5.setFont(createFont("Arial",10));
 		cp5.setFont(createFont("",10));
-		frameRate(60);
+		//frameRate(60);
 
 		//cp5.getPointer().enable(); // experimental .. 
 

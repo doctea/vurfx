@@ -28,7 +28,6 @@ public class ParameterBuffer {
 		if (isEnabled()) {
 			if (isLatching()) {*/
 	public Object getValue(Object value, boolean latching) {
-
 		if (latching) {
 			if (value instanceof Float || value instanceof Double) {
 				//latching_value = latching_value.add(BigDecimal.valueOf((Float)value)); //Parameter.classvalue));
@@ -54,11 +53,12 @@ public class ParameterBuffer {
 		//value = latching_value.doubleValue(); //((Parameter)getObjectForPath(targetPath)).cast(value);
 		//System.out.println ("got latched value " + value);
 		
-		if (this.last_value!=null) {
+		// disabled lerping 2018-10-14 cos of interference with MIDI controls
+		/*if (this.last_value!=null) {
 			//if (!value.equals(value))
 			value = lerpValue(this.last_value, value);		
 			latching_value = value;
-		}
+		}*/
 		
 		last_value = value;
 

@@ -26,6 +26,8 @@ public class SavedProject extends Project {
 		if (this.input==null) {
 			inputAll = this.readSnapshotFile(filename);
 			input = inputAll.get("/project_setup");
+			inputAll.get("/seq").remove("/seq/bank/sequences");
+			inputAll.get("/seq").remove("/seq/bank/history");
 		}
 		return this.input;
 	}
@@ -92,7 +94,7 @@ public class SavedProject extends Project {
 		  		if (!APP.getApp().isReady()) return;
 		  		count++;
 		  		//if (count%8==0) this.setRandomMode(!this.randtrue);//count%8==0);
-		  		if (count%16==0) {
+		  		/*if (count%16==0) {
 		  			super.nextRandomSequence();
 		  			return;
 		  		}
@@ -105,7 +107,7 @@ public class SavedProject extends Project {
 		  		else
 		  			this.setTimeScale(1.0f);
 		  		if (count>1000) count = 0;
-		  		//this.host.setTimeScale(0.01f);
+		  		//this.host.setTimeScale(0.01f);*/
 		  		super.nextSequence();
 		  	}
 		  	@Override

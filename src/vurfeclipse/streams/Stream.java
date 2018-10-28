@@ -14,6 +14,7 @@ import controlP5.CallbackListener;
 import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Toggle;
+import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.Filter;
@@ -85,6 +86,8 @@ abstract public class Stream implements Serializable {
 	}
 
 	synchronized public void addEvent(String paramName, Object value) {
+		if (!APP.getApp().isReady())
+			return;
 		if (debug) 
 			System.out.println("add event to " + paramName + "'" + value + "'");
 		
@@ -180,7 +183,7 @@ abstract public class Stream implements Serializable {
 					//ParameterCallback callback = (ParameterCallback) callbacks.next();
 					//if (debug) System.out.println("got callback " + callback);
 
-					if (debug) 
+					if (/*this instanceof MidiStream || */debug) 
 						System.out.println("Delivering " + v + " to " + callback + "...");
 					/*if (callback.shouldDie) {
 							callbacks.remove();

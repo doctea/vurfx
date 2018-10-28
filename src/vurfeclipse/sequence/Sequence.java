@@ -25,6 +25,7 @@ import vurfeclipse.APP;
 import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.sequencers.SequenceSequencer;
 import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
 import vurfeclipse.filters.Filter;
@@ -685,7 +686,13 @@ abstract public class Sequence implements Serializable, Mutable {
 							@Override
 							public void controlEvent(CallbackEvent theEvent) {
 								//TODO: remove the sequence from the chain here!
-								System.out.println("TODO: implement remove sequence functionality!");
+								cf.queueUpdate(new Runnable() {
+									@Override
+									public void run() {
+										//System.out.println("TODO: implement remove sequence functionality!");
+										((SequenceSequencer) APP.getApp().pr.getSequencer()).getGrpSequenceEditor().removeSequence(self);										
+									}
+								});
 							}
 				});
 				
@@ -774,4 +781,6 @@ abstract public class Sequence implements Serializable, Mutable {
 			println("setting iteration to " + iteration);
 			this.iteration = iteration;
 		}
+
+		public abstract void removeSequence(Sequence self);
 }

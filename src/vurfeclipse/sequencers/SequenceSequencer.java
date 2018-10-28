@@ -190,6 +190,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	private void _runSequences(Float castAs) {
 		//if (this.isLocked()) return;
+		if (!APP.getApp().isReady())
+			return;
 
 		if (!this.isLocked() && readyToChange(max_iterations)) {		/////////// THIS MIGHT BE WHAT YOu'RE LOOKING FOR -- number of loop iterations per sequence
 			println(this+"#runSequences(): is readyToChange from " + this.activeSequenceName + ", calling randomSequence()");
@@ -1512,14 +1514,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		params.put("/seq/sequencer_enabled", new Boolean(this.isSequencerEnabled()));
 		params.put("/seq/sequencer_locked", new Boolean(this.isLocked()));
 		
-		if (APP.getApp().pr instanceof SavedProject) {		// TODO: FIX THIS SOMEHOW if this is a loaded Project then save the entire bank 'cos its probably quite reasonable and small
+		/*if (APP.getApp().pr instanceof SavedProject) {		// TODO: FIX THIS SOMEHOW if this is a loaded Project then save the entire bank 'cos its probably quite reasonable and small
 			println("Saved project, so saving Bank Sequences!");
 			params.put("/seq/bank/sequences", this.collectBankSequences());
 		} else {											// if this is a Project loaded from a class then there is probably tens of thousands of Sequences in the bank, so only save the history instead
 			println("Not a SavedProject, so saving the History as the Bank!");
 			params.put("/seq/bank/sequences", this.collectBankHistory());
-		}
-		params.put("/seq/bank/history",  this.collectBankHistory());
+		}*/
+		//params.put("/seq/bank/history",  this.collectBankHistory());
 
 		return params;
 	}
