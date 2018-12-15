@@ -212,6 +212,8 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 	int count = 0;
 	
 	synchronized public void rawMidi(byte[] data) { // You can also use rawMidi(byte[] data, String bus_name)
+		if (!isEnabled()) return;
+		
 	  if (first==0) {
 	    first = APP.getApp().millis();
 	    //count = 1;
@@ -227,7 +229,7 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 		  else if (((int)data[0] & 0xFF)==250)
 		    count = 0;
 		  else {
-			  println("discarding Status Byte/MIDI Command:"+(int)(data[0] & 0xFF));
+			  if (log_midi) println("discarding Status Byte/MIDI Command:"+(int)(data[0] & 0xFF));
 			return;
 		  }
 	  
@@ -237,7 +239,7 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 	  //println(count + ": Raw Midi Data:");
 	  //println("--------");
 
-	  for (int i = 1;i < data.length;i++) {
+	  if (log_midi) for (int i = 1;i < data.length;i++) {
 	    println("Param "+(i+1)+": "+(int)(data[i] & 0xFF));
 	  }
 	  //if (millis()-first>0)
@@ -250,19 +252,19 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 	  // midi timing comes in 24 signals per quarter-note..?
 	  if (count % 96==0) {
 		addEvent("bar_1", count/96);
-	    //println("BEAT!" + count/96);
+	    if (log_midi) println("BAR_1!\t" + count/96);
 	    //saw.freq(500.0f+(float)1.0f/count);
 	    //saw.play();
 	  } 
 	  if (count % 48==0) {
 		addEvent("beat_2nd", count/48);
-	    println("BEAT!" + count/48);
+		if (log_midi) println("BEAT 2nd!\t" + count/48);
 	    //saw.freq(500.0f+(float)1.0f/count);
 	    //saw.play();
 	  } 
 	  if (count % 24==0) {
 		addEvent("beat_1", count/24);
-	    //println("BEAT!\t" + count/24);
+		if (log_midi) println("BEAT!\t" + count/24);
 	    //saw.freq(500.0f+(float)1.0f/count);
 	    //saw.play();
 	  } 
@@ -289,9 +291,15 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 			addEvent("beat_16", (2*count)/6);
 		    //saw.amp(0.2f+(float)1.0f/count);
 		    //saw.stop();
+		  }
+	  if ((count*4) % 12==0) {
+		    //println("sixteenth BEAT!\t" + (2*count)/6);
+			addEvent("beat_32", (4*count)/12);
+		    //saw.amp(0.2f+(float)1.0f/count);
+		    //saw.stop();
 		  }  
 	    
-	  if (count>=(24*16)) { 
+	  if (count>=(24*64)) { 
 	    count = 0;
 	    first = 0;
 	  }
