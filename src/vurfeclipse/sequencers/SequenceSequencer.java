@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import vurfeclipse.APP;
@@ -916,7 +917,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				//textFiles.add(file.getName());
 				String actual = directory+"/"+file.getName();
 				HashMap<String, Object> input = this.readSequenceFile(actual);//.get("/seq");//.get("/seq/sequence");
-				HashMap<String,Object> sequence_settings = (HashMap<String,Object>)(
+				Map<String, Object> sequence_settings = (Map<String,Object>)(
 						input.containsKey("/seq/sequence") ? 
 								input.get("/seq/sequence") : 
 								input.get("/seq/changeTo"));
@@ -928,7 +929,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 						.replace(file.getParent(),"")
 						.replace("/","")
 						.replace(".xml","");
-				((HashMap<String, Sequence>) sequences).put(seq_name, newSeq);
+				((Map<String, Sequence>) sequences).put(seq_name, newSeq);
 				this.addHistorySequenceName(seq_name);
 			}
 		}
@@ -1036,7 +1037,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			this.preserveCurrentSceneParameters();
 		} else if (key=='v') {
 			//this.preserveCurrentSceneParameters();
-			HashMap<String, HashMap<String, Object>> current_parameters = this.host.collectSceneParameters();
+			Map<String, Map<String, Object>> current_parameters = this.host.collectSceneParameters();
 			Sequence seq;
 			if (this.getActiveSequence()!=null)
 				seq = this.cloneSequence(this.activeSequenceName, "Copy of " + this.activeSequenceName);

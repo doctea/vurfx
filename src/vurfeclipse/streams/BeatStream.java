@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
@@ -225,9 +226,9 @@ public class BeatStream extends Stream implements Serializable {
 	}
 
 	@Override
-	public void readParameters(HashMap<String, Object> input) {
+	public void readParameters(Map<String, Object> input) {
 		super.readParameters(input);
-		this.setBPM((Float) input.get("tempo"));
+		this.setBPM(Float.parseFloat(input.get("tempo").toString()));
 
 		/*HashMap<String, HashMap<String,Object>> callbacks = (HashMap<String, HashMap<String,Object>>) input.get("callbacks");
 		for (Entry<String, HashMap<String, Object>> i : callbacks.entrySet()) {

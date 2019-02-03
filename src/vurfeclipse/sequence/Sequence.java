@@ -6,6 +6,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 import controlP5.Button;
@@ -45,7 +46,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	public boolean enabled = true;
 
 	transient protected ArrayList<Mutable> mutables;// = new ArrayList<Mutable>();
-	protected HashMap<String, HashMap<String,Object>> scene_parameters = new HashMap<String, HashMap<String,Object>>();
+	protected Map<String, Map<String, Object>> scene_parameters = new HashMap<String, Map<String,Object>>();
 	private ArrayList<String> mutableListToLoad;
 
 	protected HashMap<String, Object> lastLoadedParams;
@@ -107,7 +108,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		// instead, need to save the local scene_parameters if they exist
 		// if it is active sequence then update the scene_parameters with the host.host's collectSceneParameters, though
 		// 2018-09-29 - disable saving scene's canvas information in the sequence
-		HashMap<String, HashMap<String, Object>> a = this.getSceneParameters();
+		Map<String, Map<String, Object>> a = this.getSceneParameters();
 		if (a!=null) a.remove(this.host.getPath() + "/canvases");
 		params.put("scene_parameters", a);
 				
@@ -133,7 +134,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	public void loadParameters(HashMap<String,Object> params) {
 		if (params.containsKey("seed")) this.seed = (Long) params.get("seed"); //Long.parseLong((String)params.get("seed"));
 		if (params.containsKey("lengthMillis")) this.setLengthMillis((Integer) params.get("lengthMillis")); //Integer.parseInt((String)params.get("lengthMillis"));
-		if (params.containsKey("scene_parameters")) this.scene_parameters = (HashMap<String, HashMap<String, Object>>) params.get("scene_parameters");
+		if (params.containsKey("scene_parameters")) this.scene_parameters = (Map<String, Map<String, Object>>) params.get("scene_parameters");
 		if (params.containsKey("mutableUrls")) {
 			this.mutableListToLoad = (ArrayList<String>)params.get("mutableUrls");
 		}
@@ -300,7 +301,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		} 
 		
 		if (this.scene_parameters!=null) {
-			for (Entry<String,HashMap<String,Object>> e : scene_parameters.entrySet()) {
+			for (Entry<String, Map<String, Object>> e : scene_parameters.entrySet()) {
 				Scene s = (Scene) this.host.host.getObjectForPath(e.getKey());
 				if (debug) println(this + " about to set scene_parameters on " + s + "!");
 				if(s==null) {
@@ -593,11 +594,11 @@ abstract public class Sequence implements Serializable, Mutable {
 			this.seed = seed;
 		}
 
-		public HashMap<String, HashMap<String, Object>> getSceneParameters() {
+		public Map<String, Map<String, Object>> getSceneParameters() {
 			return this.scene_parameters;
 		}
-		public void setSceneParameters(HashMap<String, HashMap<String, Object>> scene_parameters) {
-			this.scene_parameters = scene_parameters;
+		public void setSceneParameters(Map<String, Map<String, Object>> map) {
+			this.scene_parameters = map;
 		}
 
 		public void clearSceneParameters() {

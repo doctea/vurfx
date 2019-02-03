@@ -63,7 +63,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	//Canvas[] canvases = new Canvas[BUF_MAX];
 
 	// localname, projectpath
-	HashMap<String,String> buffermap = new HashMap<String,String>();
+	Map<String, String> buffermap = new HashMap<String,String>();
 
 	//Canvas[] canvases = new Canvas[BUF_MAX];
 
@@ -211,7 +211,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	}
 	
 	public HashMap<String,String> getCanvasMappings() {
-		return this.buffermap;
+		return (HashMap<String, String>) this.buffermap;
 	}
 
 	public PVector getCanvasMappingSize(String canvasMappingName) {
@@ -724,8 +724,8 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		return params;
 	}
 
-	public void loadParameters(HashMap<String,Object> params) {
-		for (Entry<String,Object> e : params.entrySet()) {
+	public void loadParameters(Map<String, Object> map) {
+		for (Entry<String,Object> e : map.entrySet()) {
 			if (debug) 
 				println("loadParameters() got " + e.getKey() + " with " + e.getValue().getClass().getName());
 			if (e.getKey().endsWith("/mute")) {
@@ -737,7 +737,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			//TODO: reimplement this when GUI can be changed to reflect it (makeControlsCanvasAliases...)
 			if (e.getKey().endsWith("/canvases")) {
 				if (host.getObjectForPath(e.getKey())!=null)
-					this.setCanvasMappings((HashMap<String, String>) e.getValue());
+					this.setCanvasMappings((Map<String, String>) e.getValue());
 			}
 			
 			if (e.getValue() instanceof Parameter) {
@@ -1278,7 +1278,7 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			this.setSceneName((String) input.get("name"));	// can also get "name" and "path" here
 			
 		if (input.containsKey(this.getPath()+"/canvas_setup")) {
-			this.setCanvasMappings((HashMap<String, String>) input.get(this.getPath()+"/canvas_setup")); //e.getValue());
+			this.setCanvasMappings((Map<String, String>) input.get(this.getPath()+"/canvas_setup")); //e.getValue());
 		}
 		
 		if (input.containsKey(this.getPath()+"/filter_setup")) {
@@ -1297,8 +1297,13 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 		//}
 	}
 	
-	private void setCanvasMappings(HashMap<String,String> value) {
-		this.buffermap = value;
+	private void setCanvasMappings(Map<String, String> map) {
+		if (!(map instanceof HashMap)) {
+			HashMap hmap = new HashMap();
+			hmap.putAll(map);
+			map = hmap;
+		}
+		this.buffermap = map;
 		this.canvas_map_cache = null;
 		//		this.makeControlsCanvasAliases(8);
 		if (this.muteController!=null) refreshCanvasControls();

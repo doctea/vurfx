@@ -7,6 +7,7 @@ import controlP5.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import vurfeclipse.APP;
 import vurfeclipse.filters.Filter;
@@ -125,7 +126,7 @@ public class ChainSequence extends Sequence {
 		HashMap<String,Object> params = super.collectParameters();
 		ArrayList<HashMap<String,Object>> chains = new ArrayList<HashMap<String,Object>>();
 		for (Sequence cs : chain) {
-			HashMap<String,HashMap<String, Object>> temp = cs.getSceneParameters();
+			Map<String, Map<String, Object>> temp = cs.getSceneParameters();
 			cs.clearSceneParameters();	// remove any scene parameters that are set on the object before saving, since we save our own copy with the chain
 			HashMap<String, Object> full_params = cs.collectParameters();
 			if (full_params==null) {

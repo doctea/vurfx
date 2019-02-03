@@ -1,6 +1,7 @@
 package vurfeclipse.projects;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import vurfeclipse.APP;
@@ -11,7 +12,7 @@ public class SavedProject extends Project {
 
 	//private String filename;
 	private HashMap<String, Object> input;
-	private HashMap<String, HashMap<String, Object>> inputAll;
+	private Map<String, HashMap<String, Object>> inputAll;
 
 	public SavedProject(int w, int h) {
 		super(w, h);
@@ -35,7 +36,7 @@ public class SavedProject extends Project {
 	@Override
 	public boolean setupStreams() {
 		getInput();
-		HashMap<String, HashMap<String, Object>> stream_input = (HashMap<String, HashMap<String,Object>>) 
+		Map<String, HashMap<String, Object>> stream_input = (Map<String, HashMap<String,Object>>) 
 				inputAll
 				.get("/seq")
 				.get("/seq/stream_setup");
@@ -51,7 +52,7 @@ public class SavedProject extends Project {
 		for (Entry<String, Object> i : getInput().entrySet()) {
 			if (i.getKey().endsWith("/project_setup/mappings")) continue;
 				
-			HashMap<String, Object> sc_in = (HashMap<String, Object>) i.getValue();
+			Map<String, Object> sc_in = (Map<String, Object>) i.getValue();
 			// need some basic info to create the Scene - ie, classname
 			String clazz 	= (String) sc_in.get("class"); //getInput("class");
 			String path 	= (String) i.getKey(); //getInput("path");

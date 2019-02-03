@@ -10,12 +10,23 @@ import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.scenes.*;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.Writer;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 import vurfeclipse.filters.Filter;
 import vurfeclipse.parameters.Parameter;
@@ -26,6 +37,8 @@ import vurfeclipse.sequencers.Sequencer;
 import vurfeclipse.ui.ControlFrame;
 import controlP5.*;
 import processing.core.PGraphics;
+import processing.data.JSONArray;
+import processing.data.JSONObject;
 
 
 public abstract class Project implements Serializable {
@@ -517,7 +530,7 @@ public abstract class Project implements Serializable {
 		return loadSnapshot(readSnapshotFile(filename));
 	}
 	@Deprecated
-	public Project loadSnapshot(HashMap<String, HashMap<String, Object>> input) {
+	public Project loadSnapshot(Map<String, HashMap<String, Object>> input) {
 
 		HashMap<String,Object> target_seq = input.get("/seq");
 
@@ -561,11 +574,28 @@ public abstract class Project implements Serializable {
 		return this;
 	}
 
+
+	private static final Type REVIEW_TYPE = new TypeToken<HashMap<String, HashMap<String, Object>>>() {	}.getType();
 	@SuppressWarnings("unchecked")
-	public HashMap<String, HashMap<String, Object>> readSnapshotFile(String filename) {
+	public Map<String, HashMap<String, Object>> readSnapshotFile(String filename) {
 		try {
-			//input ((VurfEclipse)APP.getApp(B)).io.deserialize(filename, HashMap.class);
-			return (HashMap<String, HashMap<String, Object>>) XMLSerializer.read(filename);
+			if (filename.endsWith(".xml")) {
+				//input ((VurfEclipse)APP.getApp(B)).io.deserialize(filename, HashMap.class);
+				println("=====>Loading XML version!");
+				return (HashMap<String, HashMap<String, Object>>) XMLSerializer.read(filename);
+			} else {
+				println("=====>Loading JSON version!");
+								
+				GsonBuilder builder = new GsonBuilder();
+				builder.registerTypeAdapter(Class.class, new ClassJsonConverter());
+				
+				JsonReader reader = new JsonReader(new FileReader(filename));
+	
+				//Gson gson = new Gson().fromJson(reader, REVIEW_TYPE);
+				Map<String, HashMap<String, Object>> data = new Gson().fromJson(reader, REVIEW_TYPE);//gson.fromJson(reader, REVIEW_TYPE); // contains the whole reviews list
+				
+				return data;
+			}						
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			System.err.println("Caught " + e1 + " trying to load '" + filename + "'");
@@ -573,6 +603,17 @@ public abstract class Project implements Serializable {
 			return null;
 		}
 	}
+//	private JSONObject getJsonFromMap(Map<String, Map> map) throws Exception {
+//	    JSONObject jsonData = new JSONObject();
+//	    for (String key : map.keySet()) {
+//	        Object value = map.get(key);
+//	        if (value instanceof Map<?, ?>) {
+//	            value = getJsonFromMap((Map<String, Map>) value);
+//	        }
+//	        jsonData.put(key, value);
+//	    }
+//	    return jsonData;
+//	}
 
 	public void saveSnapshot() {
 		saveSnapshot(
@@ -585,12 +626,37 @@ public abstract class Project implements Serializable {
 		filename = filename.replaceFirst("output/", "");
 		println("SAVING SNAPSHOT TO '" + APP.getApp().sketchPath() + filename + "'");
 
+		filename = filename.replace(".xml", ".json");
+		
 		//saveIndividualParts(filename);
 		//((VurfEclipse)APP.getApp()).io.serialize(filename + ".vj", this); //getSelectedScene().getFilter(2)); //getCanvas("/out"));
 		//io.serialize("test-serialisation-2", new testsave()); //getCanvas("/out"));
 		try {
-			XMLSerializer.write(collectSnapshot(filename), APP.getApp().sketchPath() + filename);
+			//XMLSerializer.write(collectSnapshot(filename), APP.getApp().sketchPath() + filename);
+			//JSONObject jso = getJsonFromMap(collectSnapshot(filename));
+			
+			//jso.save(APP.getApp().sketchPath() + filename);
+			//APP.getApp().saveJSONObject(jso, filename);
+			//jso.save(new File(filename), "indent=4");
+			
+			//println(jso.toString());
+			
+			try (Writer writer = new FileWriter(filename)) {
+			    GsonBuilder builder = new GsonBuilder(); //.create()
+			    builder.registerTypeAdapter(Class.class, new ClassJsonConverter());
+			    
+			    Gson gson = builder.create();
+			    gson.toJson(collectSnapshot(filename), writer);
+			    writer.close();
+			}
+			
+			
+			// jackson version todo to try and preserve order of saving scenes https://stackoverflow.com/questions/6365851/how-to-keep-fields-sequence-in-gson-serialization
+			/*ObjectMapper om = new ObjectMapper();
+			om.writeValue(new File(filename), collectSnapshot(filename));*/
+			
 			println("SAVED!");
+			
 		} catch (Exception e) {
 			println("CAUGHT ERROR SAVING!");
 			System.err.println("Caught " + e.toString() + " trying to save to '" + filename + "'");
@@ -630,8 +696,8 @@ public abstract class Project implements Serializable {
 		
 		return output;
 	}
-	public HashMap<String,HashMap<String,Object>> collectSceneParameters() {
-		HashMap<String,HashMap<String,Object>> output = new HashMap<String,HashMap<String,Object>>();
+	public Map<String, Map<String, Object>> collectSceneParameters() {
+		Map<String, Map<String, Object>> output = new HashMap<String,Map<String,Object>>();
 		for (Scene s : this.getScenes()) {
 			output.put(s.getPath(), s.collectParameters());
 		}

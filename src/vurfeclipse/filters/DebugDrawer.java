@@ -144,7 +144,8 @@ public class DebugDrawer extends Filter {
 	public Filter readSnapshot(Map<String, Object> input) {
 		super.readSnapshot(input);
 		
-		if (input.containsKey("mode")) this.mode = (Integer) input.get("mode");
+		if (input.containsKey("mode")) 
+			this.mode = (int) Float.parseFloat((String) input.get("mode").toString());
 		
 		return this;
 	}

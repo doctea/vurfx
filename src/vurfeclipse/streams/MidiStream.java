@@ -2,6 +2,7 @@ package vurfeclipse.streams;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.sound.midi.MidiMessage;
 
@@ -474,7 +475,7 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 	}
 
 	@Override
-	public void readParameters(HashMap<String, Object> input) {
+	public void readParameters(Map<String, Object> input) {
 		super.readParameters(input);
 		/*
 		 * if (input.containsKey("device_name"))
@@ -482,7 +483,7 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 		 */
 		// else
 		if (input.containsKey("device"))
-			this.setDevice((int) input.get("device"));
+			this.setDevice((int)Float.parseFloat(input.get("device").toString()));
 		else
 			this.setDevice(default_device);
 
