@@ -471,7 +471,8 @@ public class VurfEclipse extends PApplet {
 		pgl.gl.setSwapInterval(1);
 		endPGL();
 
-		hint(DISABLE_DEPTH_TEST);
+		//hint(DISABLE_DEPTH_TEST);
+		hint(ENABLE_DEPTH_SORT);
 
 		//frameRate(60);
 		

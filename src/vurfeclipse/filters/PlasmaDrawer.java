@@ -20,8 +20,8 @@ public class PlasmaDrawer extends ShaderFilter {
 		super.setParameterDefaults();
 		addParameter("colourMode", new Integer(0), 0, this.colourModeCount);
 
-		addParameter("width", new Integer(this.sc.w/16), 0, this.sc.w*2);
-		addParameter("height", new Integer(this.sc.h/16), 0, this.sc.h*2);
+		addParameter("width", new Integer(this.sc.w/16), 0, 100); //this.sc.w*2);
+		addParameter("height", new Integer(this.sc.h/16), 0, 100); //this.sc.h*2);
 		addParameter("u_time_2", new Integer(10), 0, 1000000);
 	}
 	@Override
@@ -30,6 +30,7 @@ public class PlasmaDrawer extends ShaderFilter {
 		if ((Integer)getParameterValue("colourMode")>this.colourModeCount) {
 			changeParameterValue("colourMode", new Integer(0));
 		}
+		
 		return this;
 	}
 }

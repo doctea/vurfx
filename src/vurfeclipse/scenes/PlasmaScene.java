@@ -121,6 +121,11 @@ public class PlasmaScene extends Scene {
 			}
 			return false;
 		}
+		@Override
+		public void removeSequence(Sequence self) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	public class RGBFilterSequence2 extends RGBFilterSequence1 {

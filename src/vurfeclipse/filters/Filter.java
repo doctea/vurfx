@@ -1208,8 +1208,8 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			this.setAlias_in(sc.getMappingForCanvas((String)input.get("canvas_src")));
 		}
 		
-		if (input.containsKey("alias_out")) this.setAlias_out((String)input.get("alias_out"));
-		if (input.containsKey("alias_in")) this.setAlias_in((String)input.get("alias_in"));
+		if (input.containsKey("alias_out")) this.setAlias_out ((String)input.get("alias_out"));
+		if (input.containsKey("alias_in")) 	this.setAlias_in  ((String)input.get("alias_in"));
 
 		for (Entry<String, Object> p : ((Map<String, Object>) input.get("parameter_defaults")).entrySet()) {
 			Map<String,Object> para = (Map<String, Object>) p.getValue();
