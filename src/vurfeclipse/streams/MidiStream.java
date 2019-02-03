@@ -250,21 +250,40 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 	        //saw.freq(500.0f+(float)1.0f/count);
 	
 	  // midi timing comes in 24 signals per quarter-note..?
-	  if (count % 96==0) {
+	  if ((count % (32*768)) ==0) {
+		addEvent("bar_8", count/(32*768));
+	    if (log_midi) println("BAR_8!\t" + count/96);
+	    //saw.freq(500.0f+(float)1.0f/count);
+	    //saw.play();
+	  } 
+	  // midi timing comes in 24 signals per quarter-note..?
+	  if ((count % (16*384)) ==0) {
+		addEvent("bar_4", count/(16*384));
+	    if (log_midi) println("BAR_4!\t" + count/96);
+	    //saw.freq(500.0f+(float)1.0f/count);
+	    //saw.play();
+	  } 
+	  if (count % 768==0) {
+		addEvent("bar_2", count/192);
+	    if (log_midi) println("BAR_2!\t" + count/96);
+	    //saw.freq(500.0f+(float)1.0f/count);
+	    //saw.play();
+	  } 
+	  if (count % 384==0) {
 		addEvent("bar_1", count/96);
-	    if (log_midi) println("BAR_1!\t" + count/96);
+	    //if (log_midi) println("BAR_1!\t" + count/96);
 	    //saw.freq(500.0f+(float)1.0f/count);
 	    //saw.play();
 	  } 
 	  if (count % 48==0) {
 		addEvent("beat_2nd", count/48);
-		if (log_midi) println("BEAT 2nd!\t" + count/48);
+		//if (log_midi) println("BEAT 2nd!\t" + count/48);
 	    //saw.freq(500.0f+(float)1.0f/count);
 	    //saw.play();
 	  } 
 	  if (count % 24==0) {
 		addEvent("beat_1", count/24);
-		if (log_midi) println("BEAT!\t" + count/24);
+		//if (log_midi) println("BEAT!\t" + count/24);
 	    //saw.freq(500.0f+(float)1.0f/count);
 	    //saw.play();
 	  } 
