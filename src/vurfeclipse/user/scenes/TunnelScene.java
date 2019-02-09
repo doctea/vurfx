@@ -91,6 +91,12 @@ public class TunnelScene extends SimpleScene {
 			}
 			return relevant;
 		}
+
+		@Override
+		public void removeSequence(Sequence self) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 	

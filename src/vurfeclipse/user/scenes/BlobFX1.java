@@ -54,8 +54,8 @@ public class BlobFX1 extends SimpleScene {
 			
 		}
 		
-		@Override public HashMap<String,Object> collectParameters() {
-			HashMap<String,Object> params = super.collectParameters();
+		@Override public Map<String,Object> collectParameters() {
+			Map<String, Object> params = (Map<String, Object>) super.collectParameters();
 			params.put("colour1", new Integer(colour1));
 			params.put("colour2", new Integer(colour2));
 			params.put("colour3", new Integer(colour3));

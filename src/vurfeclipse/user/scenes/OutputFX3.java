@@ -226,8 +226,8 @@ public class OutputFX3 extends SimpleScene {
 			}
 			
 			@Override
-			public HashMap<String,Object> collectParameters() {
-				HashMap<String,Object> params = super.collectParameters();
+			public Map<String, Object> collectParameters() {
+				Map<String, Object> params = super.collectParameters();
 				params.put("grid", this.grid);
 				return params;
 			}

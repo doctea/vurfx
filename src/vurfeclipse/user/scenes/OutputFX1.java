@@ -107,6 +107,11 @@ public class OutputFX1 extends SimpleScene {
 			}
 			return false;
 		}
+		@Override
+		public void removeSequence(Sequence self) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 }
 

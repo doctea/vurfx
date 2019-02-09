@@ -48,6 +48,11 @@ public class BlenderFX1 extends SimpleScene {
 				host.host.getSceneForPath("/ImageListScene2").getFilter("ImageListDrawer2").nextMode();*/
 		}
 		@Override public void onStop() {	return; }
+		@Override
+		public void removeSequence(Sequence self) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 		/*@Override public ArrayList<Mutable> getMutables() {
 			return this.mutables; //new ArrayList<Mutable>;
@@ -70,6 +75,11 @@ public class BlenderFX1 extends SimpleScene {
 		}
 		@Override
 		public void onStop() {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void removeSequence(Sequence self) {
 			// TODO Auto-generated method stub
 			
 		}	
