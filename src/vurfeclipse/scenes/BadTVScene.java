@@ -115,6 +115,11 @@ public class BadTVScene extends Scene {
 			}
 			return false;
 		}
+		@Override
+		public void removeSequence(Sequence self) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 }

@@ -37,7 +37,7 @@ public class BlankFilter extends Filter {
   synchronized public void setParameterDefaults () {
     super.setParameterDefaults();
     
-    this.addParameter("bgcolour", VurfEclipse.makeColour(255, 128, 64, 255));
+    this.addParameter("bgcolour", Integer.class, VurfEclipse.makeColour(255, 128, 64, 255));
     
     this.addParameter("alpha", new Integer(255), 0, 255);
     //this.addParameter("bgcolour", new Integer(0), 0, 255);//new Integer(128));

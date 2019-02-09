@@ -74,11 +74,12 @@ public class FormulaCallback extends ParameterCallback {
 		return params;
 	}
 	
-	public void readParameters(HashMap<String, Object> input) {
+	@Override
+	public void readParameters(Map<String, Object> input) {
 		super.readParameters(input);
 		this.setTargetPath((String) input.get("targetPath"));
 		this.setExpression((String) input.get("expression"));
-		if (input.containsKey("outputMode")) this.setOutputMode((Integer) input.get("outputMode"));
+		if (input.containsKey("outputMode")) this.setOutputMode((int)Float.parseFloat(input.get("outputMode").toString()));
 	}
 
 	int count = 0;

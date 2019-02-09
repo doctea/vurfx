@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import vurfeclipse.*;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
 
 
@@ -303,10 +304,11 @@ public class ImageListDrawer extends Filter {
       
       //out.scale(-1,0);
       //out.translate((Integer)getParameterValue("translate_x"), (Integer)getParameterValue("translate_y"));
-      if ((Integer)getParameterValue("translate_x")<0) {
+      
+      if ((Float)Parameter.castAs(getParameterValue("translate_x"), Float.class) < 0.0f) {
         out.image(getSlide(), sc.w, 0, sc.w, sc.h);
       }
-      else if ((Integer)getParameterValue("translate_x")>0) {
+      else if ((Float)Parameter.castAs(getParameterValue("translate_x"), Float.class) >= 0.0f) {
         out.image(getSlide(), 0-sc.w, 0, sc.w, sc.h);
       }
       out.popMatrix();

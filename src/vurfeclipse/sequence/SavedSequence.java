@@ -1,6 +1,7 @@
 package vurfeclipse.sequence;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import vurfeclipse.APP;
 import vurfeclipse.filters.Filter;
@@ -16,14 +17,14 @@ public class SavedSequence extends Sequence {
 	
 
 	@Override
-	public HashMap<String,Object> collectParameters() {
-		HashMap<String,Object> params = super.collectParameters();
+	public Map<String,Object> collectParameters() {
+		Map<String, Object> params = super.collectParameters();
 		params.put("filename", filename);
 		return params;
 	}
 
 	@Override
-	public void loadParameters(HashMap<String,Object> params) {
+	public void loadParameters(Map<String,Object> params) {
 		this.filename = (String) params.get("filename");
 	}
 
@@ -50,6 +51,13 @@ public class SavedSequence extends Sequence {
 	public boolean notifyRemoval(Filter newf) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public void removeSequence(Sequence self) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

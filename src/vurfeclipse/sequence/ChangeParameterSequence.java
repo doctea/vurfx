@@ -105,8 +105,8 @@ public class ChangeParameterSequence extends Sequence {
 	}
 
 	@Override
-	public HashMap<String,Object> collectParameters() {
-		HashMap<String,Object> params = super.collectParameters();
+	public Map<String,Object> collectParameters() {
+		Map<String, Object> params = super.collectParameters();
 		//params.put("filterPath",  filterPath);
 		//params.put("parameterName", parameterName);
 		params.put("targetPath", getTargetPath());
@@ -119,7 +119,7 @@ public class ChangeParameterSequence extends Sequence {
 	}
 
 	@Override
-	public void loadParameters(HashMap<String,Object> params) {
+	public void loadParameters(Map<String,Object> params) {
 		super.loadParameters(params);
 
 		//compatibility
@@ -463,6 +463,12 @@ public class ChangeParameterSequence extends Sequence {
 
 	public void preserveCurrentParameters() {
 		super.preserveCurrentParameters();
+	}
+
+	@Override
+	public void removeSequence(Sequence self) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

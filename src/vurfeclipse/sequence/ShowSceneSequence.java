@@ -2,6 +2,7 @@ package vurfeclipse.sequence;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Mutable;
@@ -24,7 +25,7 @@ public class ShowSceneSequence extends Sequence {
 	}
 
 	@Override
-	public void loadParameters(HashMap<String,Object> params) {
+	public void loadParameters(Map<String,Object> params) {
 		this.filterPath = (String) params.get("filterPath");
 	}
 
@@ -70,6 +71,13 @@ public class ShowSceneSequence extends Sequence {
 			return true;
 		}
 		return false;
+	}
+
+
+	@Override
+	public void removeSequence(Sequence self) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

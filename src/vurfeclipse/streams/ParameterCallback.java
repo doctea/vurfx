@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 
 import controlP5.Bang;
 import controlP5.Group;
@@ -87,19 +88,18 @@ public abstract class ParameterCallback implements Serializable {
 		return params;
 	}
 
-	public static ParameterCallback makeParameterCallback(HashMap<String, Object> input) {
-		// TODO Auto-generated method stub		
-		System.out.println ("makeParameterCallback() " + input);
+	public static ParameterCallback makeParameterCallback(Map<String, Object> params) {
+		System.out.println ("makeParameterCallback() " + params);
 		//HashMap<String,Object> input = (HashMap<String,Object>)payload;
 
-		String classname = (String) input.get("class");
+		String classname = (String) params.get("class");
 		try {
 			Class<?> clazz = Class.forName(classname);
 			//System.out.println (clazz.getConstructors());
 			//Constructor<?> ctor = clazz.getConstructors()[0]; //[0]; //Scene.class, Integer.class);
-			Constructor<?> ctor = clazz.getConstructor(); //Scene.class,Integer.TYPE);
+			Constructor<ParameterCallback> ctor = (Constructor<ParameterCallback>) clazz.getConstructor(); //Scene.class,Integer.TYPE);
 			ParameterCallback callback = (ParameterCallback) ctor.newInstance(); //(Scene)null, 0);
-			callback.readParameters(input);
+			callback.readParameters(params);
 			return callback;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -113,11 +113,11 @@ public abstract class ParameterCallback implements Serializable {
 		return null;
 	}
 
-	public void readParameters(HashMap<String, Object> input) {
-		if (input.containsKey("streamSource")) 	this.streamSource 	= (String) input.get("streamSource");
-		if (input.containsKey("enabled")) 		this.setEnabled((Boolean)input.get("enabled"));
-		if (input.containsKey("latching")) 		{
-			this.setLatching((Boolean)input.get("latching"));
+	public void readParameters(Map<String, Object> params) {
+		if (params.containsKey("streamSource")) 	this.streamSource 	= (String) params.get("streamSource");
+		if (params.containsKey("enabled")) 		this.setEnabled((Boolean)params.get("enabled"));
+		if (params.containsKey("latching")) 		{
+			this.setLatching((Boolean)params.get("latching"));
 		}
 		return;
 	}

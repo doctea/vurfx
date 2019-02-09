@@ -5,6 +5,7 @@ import ch.bildspur.postfx.pass.Pass;
 import processing.core.PApplet;
 import processing.opengl.PShader;
 import vurfeclipse.APP;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
 
 public class BlendDrawer extends ShaderFilter {
@@ -76,9 +77,9 @@ public class BlendDrawer extends ShaderFilter {
     //println("setting defaults");
     //this.changeParameterValue("Opacity", 1.0);
     //this.changeParameterValue("BlendMode", 4);
-    addParameter("Rotate", new Integer(0), 0, 360);
+    addParameter("Rotate", new Integer(0), new Integer(0), new Integer(360));
 
-    addParameter("X", new Float(0.0f), -1.0f, 1.0f);
+    addParameter("X", new Float(0.0f), new Float(-1.0f), new Float(1.0f));
     addParameter("Y", new Float(0.0f), -1.0f, 1.0f);
     addParameter("Scale", new Float(1.0f), 0.0f, 4.0f);
 
@@ -90,7 +91,7 @@ public class BlendDrawer extends ShaderFilter {
 
   public void updateParameterValue(String paramName, Object value) {
     if (paramName.equals("BlendMode"))
-      this.setBlendMode((Integer)value);
+      this.setBlendMode((Integer)Parameter.castAs(value, Integer.class)); //(int) Float.parseFloat(value.toString()));
     else {
       glFilter = getFilterNumber(this.currentBlendMode);
       super.updateParameterValue(paramName, value);
@@ -203,7 +204,8 @@ public class BlendDrawer extends ShaderFilter {
     /*x = (int) PApplet.map(((Float)getParameterValue("X")),-2.0f,2.0f,-2*w,2*w);
     y = (int) PApplet.map(((Float)getParameterValue("Y")),-2.0f,2.0f,-2.0f*h,2.0f*h);*/
 
-    rotation = (Integer) getParameterValue("Rotate");
+    //rotation = ((Float) getParameterValue("Rotate")).intValue();
+    rotation = (int) Parameter.castAs(getParameterValue("Rotate"), Integer.class);
     if (rotation!=0) {
         out().rotate(PApplet.radians(rotation));
     }

@@ -266,33 +266,33 @@ abstract public class Stream implements Serializable {
 		return callbacks;
 	}
 
-	public void readParameters(HashMap<String, Object> input) {
+	public void readParameters(Map<String, Object> input) {
 		this.streamName = (String) input.get("name");
-		if (input.get("callbacks") instanceof HashMap) {
-			HashMap<String, HashMap<String,Object>> callbacks = (HashMap<String, HashMap<String,Object>>) input.get("callbacks");
-			for (Entry<String, HashMap<String, Object>> i : callbacks.entrySet()) {
+		/*if (input.get("callbacks") instanceof HashMap) {
+			Map<String, Map<String, Object>> callbacks = (Map<String, Map<String,Object>>) input.get("callbacks");
+			for (Entry<String, Map<String, Object>> i : callbacks.entrySet()) {
 				//this.registerEventListener(paramName, ParameterCallback.createParameterCallback(i.getValue().get("class")));
-				for (Entry<String, Object> p : ((HashMap<String,Object>)i.getValue()).entrySet()) {
+				for (Entry<String, Object> p : ((Map<String,Object>)i.getValue()).entrySet()) {
 					this.registerEventListener(this.streamName + "/" + i.getKey(), ParameterCallback.makeParameterCallback((HashMap<String, Object>) p.getValue()));
 				}
 			}
-		} else {
+		} else {*/
 			// new List style
 			if (input.containsKey("callbacks")) 
-				for (HashMap<String, Object> params : (LinkedList<HashMap<String,Object>>)input.get("callbacks")) {
+				for (Map<String, Object> params : (List<Map<String,Object>>)input.get("callbacks")) {
 					this.registerEventListener((String)params.get("streamSource"), ParameterCallback.makeParameterCallback(params));
 				}
 			if (input.containsKey("enabled")) {
 				this.setEnabled((Boolean) input.get("enabled"));
 			}
-		}
+		//}
 
 		//callbacks = input.
 	}
 	public static Stream makeStream(Object payload) {
 		// TODO Auto-generated method stub		
 		System.out.println ("makeStream() " + payload);
-		HashMap<String,Object> input = (HashMap<String,Object>)payload;
+		Map<String, Object> input = (Map<String,Object>)payload;
 
 		String classname = (String) input.get("class");
 		try {

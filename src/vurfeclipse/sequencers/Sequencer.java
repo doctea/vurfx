@@ -196,7 +196,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 			this.toggleStreams((Boolean)payload);
 		} else if (spl[2].equals("stream_setup")) {
 			//this.streams = (HashMap<String, Stream>) payload;
-			for (Entry<String,Object> i : ((HashMap<String,Object>)payload).entrySet()) {
+			for (Entry<String,Object> i : ((Map<String,Object>)payload).entrySet()) {
 				this.addStream(i.getKey(), Stream.makeStream(i.getValue()));
 			}
 		}

@@ -3,10 +3,12 @@ package vurfeclipse.sequencers;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,7 +17,13 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
@@ -24,6 +32,7 @@ import vurfeclipse.connectors.XMLSerializer;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.ImageListDrawer;
 import vurfeclipse.parameters.Parameter;
+import vurfeclipse.projects.ClassJsonConverter;
 import vurfeclipse.projects.Project;
 import vurfeclipse.projects.SavedProject;
 import vurfeclipse.scenes.Scene;
@@ -900,7 +909,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	public int bindSavedSequences(String prefix, int sequenceLength, int weight) {
 		List<String> textFiles = new ArrayList<String>();
 		//String directory = System.getProperty("user.dir") + "/saves"; //APP.getApp().sketchPath("");
-		String filename = this.host.getProjectFilename().replace(".xml", "");
+		String filename = this.host.getProjectFilename().replace(".xml", "").replace(".json","");
 		String directory = APP.getApp().sketchOutputPath(filename);
 		println("opening saves in " + directory);
 		File dir = new File(directory);
@@ -911,12 +920,15 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		File[] sorted = dir.listFiles();
 		Arrays.sort(sorted);
 		for (File file : sorted) { //.listFiles()) {
-			if (/*file.getName().startsWith(host.getClass().getSimpleName()) && */file.getName().endsWith((".xml"))) {
+			if (/*file.getName().startsWith(host.getClass().getSimpleName()) && */
+					file.getName().endsWith((".xml")) ||
+					file.getName().endsWith((".json"))					
+				) {
 				println("bindSavedSequences() got " + file.getName());
 				//textFiles.add(file.getName());
 				String actual = directory+"/"+file.getName();
-				HashMap<String, Object> input = this.readSequenceFile(actual);//.get("/seq");//.get("/seq/sequence");
-				HashMap<String,Object> sequence_settings = (HashMap<String,Object>)(
+				Map<String, Object> input = this.readSequenceFile(actual);//.get("/seq");//.get("/seq/sequence");
+				Map<String, Object> sequence_settings = (Map<String,Object>)(
 						input.containsKey("/seq/sequence") ? 
 								input.get("/seq/sequence") : 
 								input.get("/seq/changeTo"));
@@ -928,7 +940,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 						.replace(file.getParent(),"")
 						.replace("/","")
 						.replace(".xml","");
-				((HashMap<String, Sequence>) sequences).put(seq_name, newSeq);
+				((Map<String, Sequence>) sequences).put(seq_name, newSeq);
 				this.addHistorySequenceName(seq_name);
 			}
 		}
@@ -1036,7 +1048,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			this.preserveCurrentSceneParameters();
 		} else if (key=='v') {
 			//this.preserveCurrentSceneParameters();
-			HashMap<String, HashMap<String, Object>> current_parameters = this.host.collectSceneParameters();
+			Map<String, Map<String, Object>> current_parameters = this.host.collectSceneParameters();
 			Sequence seq;
 			if (this.getActiveSequence()!=null)
 				seq = this.cloneSequence(this.activeSequenceName, "Copy of " + this.activeSequenceName);
@@ -1080,7 +1092,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	//@Deprecated //no longer deprecated! - 2018-09-21
 	private Sequence loadSequence(String filename) {
-		HashMap<String, Object> input;
+		Map<String, Object> input;
 
 		//input ((VurfEclipse)APP.getApp()).io.deserialize(filename, HashMap.class);
 		input = this.readSequenceFile(filename);
@@ -1092,11 +1104,26 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return newSeq;
 	}
 
-
-	private HashMap<String, Object> readSequenceFile(String filename) {
+	public static final Type REVIEW_TYPE = new TypeToken<HashMap<String,Object>>() {	}.getType();
+	private Map<String, Object> readSequenceFile(String filename) {
 		try {
-			println("readSequence("+filename+") trying to load XML file");
-			return (HashMap<String, Object>) XMLSerializer.read(filename);
+			if (filename.endsWith(".xml")) {
+				println("readSequence("+filename+") trying to load XML file");
+				return (Map<String, Object>) XMLSerializer.read(filename);
+			} else {
+				println("readSequence("+filename+") trying to load json file");
+				
+				GsonBuilder builder = new GsonBuilder();
+				builder.registerTypeAdapter(Class.class, new ClassJsonConverter());
+				
+				JsonReader reader = new JsonReader(new FileReader(filename));
+	
+				//Gson gson = new Gson().fromJson(reader, REVIEW_TYPE);
+				
+				Map<String,Object> data = new Gson().fromJson(reader, REVIEW_TYPE);//gson.fromJson(reader, REVIEW_TYPE); // contains the whole reviews list
+				
+				return data;
+			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			System.err.println("Caught " + e1 + " trying to load sequence '" + filename + "'");
@@ -1107,17 +1134,17 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
-	public Sequence createSequence(HashMap<String, Object> hashMap) {
+	public Sequence createSequence(Map<String,Object> input) {
 		try {
 			/*if (hashMap.containsKey("/seq")) { // have been passed the whole Snapshot 
   				hashMap = (HashMap<String,Object>) hashMap.get("/seq"); // so just grab the /seq part for processing here
   			}*/
-			Scene host = this.host.getSceneForPath((String) hashMap.get("hostPath"));
+			Scene host = this.host.getSceneForPath((String) input.get("hostPath"));
 			if (host==null) {
-				System.err.println("Caught null host in createSequence() looking for " + hashMap.get("hostPath") + "!");
+				System.err.println("Caught null host in createSequence() looking for " + input.get("hostPath") + "!");
 			}
-			Sequence newSeq = Sequence.makeSequence((String) hashMap.get("class"), host);
-			newSeq.loadParameters(hashMap);
+			Sequence newSeq = Sequence.makeSequence((String) input.get("class"), host);
+			newSeq.loadParameters(input);
 
 			return newSeq;
 		} catch (Exception e) {
@@ -1134,7 +1161,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		filename = filename.replace(":\\", "{DRIVE}").replace(":","_").replace("{DRIVE}",":\\");
 
 		Sequence toSave = this.getActiveSequence();
-		HashMap<String,Object> output; //= new HashMap<String,Object>();
+		Map<String, Object> output; //= new HashMap<String,Object>();
 		output = toSave.collectParameters();
 		try {
 			XMLSerializer.write(output, filename);
@@ -1531,7 +1558,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		//for (Entry<String, Sequence> s : this.histor.entrySet()) {
 		for (String e : this.historySequenceNames) {
 			Sequence s = this.getSequence(e);
-			HashMap<String,Object> t = s.collectParameters();
+			Map<String, Object> t = s.collectParameters();
 			t.put("current_sequence_name", e);			
 
 			params.put(e, t);
@@ -1597,7 +1624,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	public void saveBankSequences (String projectFolder) {
 		for (Entry<String, Sequence> s : this.sequences.entrySet()) {
-			s.getValue().saveSequencePreset(projectFolder.replace(".xml", "") + "/" + s.getKey());
+			s.getValue().saveSequencePreset(projectFolder.replace(".json", "").replace(".xml", "") + "/" + s.getKey());
 		}
 	}
 

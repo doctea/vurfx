@@ -5,6 +5,7 @@ import java.util.HashMap;
 import processing.core.PGraphics;
 import processing.core.PShape;
 import vurfeclipse.*;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
 
 public class BlobDrawer extends SpiralDrawer {
@@ -61,7 +62,7 @@ public class BlobDrawer extends SpiralDrawer {
 	@Override
 	public boolean applyMeatToBuffers() {
 		//if (true) return true;
-		if ((int)this.getParameterValue("shape")==b.SH_TEXTURE) { //|| (int)this.getParameterValue("shape")==b.SH_FLOWER) {
+		if ((int)Parameter.castAs(this.getParameterValue("shape"),Integer.class)==b.SH_TEXTURE) { //|| (int)this.getParameterValue("shape")==b.SH_FLOWER) {
 			return this.old____applyMeatToBuffers();
 		} else {
 			return super.applyMeatToBuffers();
@@ -76,11 +77,15 @@ public class BlobDrawer extends SpiralDrawer {
 	    else if(paramName.equals("rotation"))
 	        b.setRotation((Integer)value);
 	    else*/ 
+		
 		if (paramName.equals("edged")) {
+			value = Boolean.parseBoolean(value.toString());
 	    	b.setEdge((Boolean)value);
 		} else if(paramName.equals("tint")) {
+			value = (int)Float.parseFloat(value.toString());
 	    	b.setTint((Integer)value);
 		} else if(paramName.equals("shape")) {   // there goes my hero <3
+			value = (int)Float.parseFloat(value.toString());
 	    	if ((int)value!=b.getShape()) {
 	    		if (in()==null) setAlias_in("pix0"); //src = sc.getCanvas("pix0").getSurf();
 	    		if (in()!=null) b.setInput(in());
@@ -88,6 +93,7 @@ public class BlobDrawer extends SpiralDrawer {
 	    		this.clearList = true;//list.clear();
 			}
 	    } else if(paramName.equals("colour")) {
+	    	value = (int)Float.parseFloat(value.toString());
 	    	//println("got colour change to" + value);
 	    	b.setColour((Integer)value);
 	    } else {

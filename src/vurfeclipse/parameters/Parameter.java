@@ -3,6 +3,11 @@ package vurfeclipse.parameters;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
+
+import java.util.Map;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
@@ -62,7 +67,7 @@ public class Parameter implements Serializable, Targetable {
 		this.value = value;
 		this.setDefaultValue(value);
 		this.datatype = value.getClass();
-		if (value instanceof Integer) {
+		if (Integer.class.equals(this.datatype)) {
 			if (this.name.toLowerCase().endsWith("colour") || this.name.toLowerCase().endsWith("colour1") || this.name.toLowerCase().endsWith("colour2") ) {
 				this.setMax(Integer.MAX_VALUE);
 				this.setMin(Integer.MIN_VALUE);
@@ -122,25 +127,38 @@ public class Parameter implements Serializable, Targetable {
 
 	public static Object castAs(Object payload, Class datatype) {
 		try {
-			if (datatype == Integer.class) {
-				if (payload instanceof Float || payload instanceof Double) {
+			if (datatype.equals(Integer.class)) {
+				if (payload instanceof Float) {
 					//return ((Float) payload);//.intValue();
 					return ((Float) payload).intValue();
-				}
+				} else if (payload instanceof Double) {
+					return ((Double) payload).intValue();
+				}			
 				return Integer.parseInt(payload.toString());
-			} else if (datatype == Float.class || datatype == Double.class) {
+			} else if (datatype.equals(Float.class) || datatype.equals(Double.class)) {
 				return (Float)Float.parseFloat(payload.toString());
 			} else if (datatype == Boolean.class) {
 				return Boolean.parseBoolean(payload.toString());
 			} else if (datatype == String.class) {
 				return payload.toString();
-			} else if (datatype == PVector.class) {
+			} else if (datatype == PVector.class || datatype == com.google.gson.internal.LinkedTreeMap.class) {
+				PVector pv = null;
 				if (!(payload instanceof PVector)) {
-					System.err.println("not a PVector, is " + payload + " when trying to cast "); //in " + this + " for " + this.getName());
+					//System.err.println("not a PVector, is " + payload + " when trying to cast "); //in " + this + " for " + this.getName());
+					LinkedTreeMap m = (LinkedTreeMap) payload;
+					pv = new PVector().set(Float.parseFloat(m.get("x").toString()),Float.parseFloat(m.get("y").toString()),Float.parseFloat(m.get("z").toString()));
+				} else {
+					//java.util.Map m = (java.util.Map) new GsonBuilder().create().fromJson(payload.toString(), LinkedTreeMap.class); 
+					//pv = new PVector().set(Float.parseFloat(m.get("x").toString()),Float.parseFloat(m.get("y").toString()),Float.parseFloat(m.get("z").toString()));
+					pv = (PVector) payload;
 				}
+				return pv; //(PVector)payload;
+			} /*else if (datatype == com.google.gson.internal.LinkedTreeMap.class) {
+				LinkedTreeMap m = (LinkedTreeMap) payload;
+				PVector pv = new PVector().set(Float.parseFloat(m.get("x").toString()),Float.parseFloat(m.get("y").toString()),Float.parseFloat(m.get("z").toString()));
 				return (PVector)payload;
-			} else {
-				System.err.println("Don't know how to cast " + payload.getClass() + " '" + payload + "' to " + datatype.getName());
+			} */else {
+				System.err.println("Parameter#castAs(): Don't know how to cast " + payload.getClass() + " '" + payload + "' to a " + datatype.getName());
 			}
 		} catch (NumberFormatException e) {
 			System.err.println("got payload type " + payload.getClass() + " but expected " + datatype);
@@ -203,23 +221,28 @@ public class Parameter implements Serializable, Targetable {
 	public void setValue(Object value) {
 		// lerp between new value and last value
 		//System.out.println("setValue, value is already " + this.value + ", new value is " + value);
-		if (!this.isCircular()) {
-			if (value instanceof Float) {
-				//value = APP.getApp().constrain((Float)value, Float.parseFloat(getMin().toString()), Float.parseFloat(getMax().toString()));
-				Object min = getMin();
-				Object max = getMax();
-				if (min instanceof Float) min = (Float)min;
-				if (max instanceof Float) max = (Float)max;
-				value = PApplet.constrain(
-						(Float)value, 
-						(Float)min, 
-						(Float)max
-				);
-			} else if (value instanceof Integer) {
-				value = PApplet.constrain((Integer)value, (Integer)getMin(), (Integer)getMax()); 
+		try {
+			if (!this.isCircular()) {
+				if (value instanceof Float) {
+					//value = APP.getApp().constrain((Float)value, Float.parseFloat(getMin().toString()), Float.parseFloat(getMax().toString()));
+					Object min = getMin();
+					Object max = getMax();
+					if (min instanceof Integer) min = ((Integer)min).floatValue(); //Integer.(Float)min;
+					if (max instanceof Integer) max = ((Integer)max).floatValue(); //(Float)max;
+					value = PApplet.constrain(
+							(Float)value, 
+							(Float)min, 
+							(Float)max
+					);
+				} else if (value instanceof Integer) {
+					value = PApplet.constrain((Integer)value, (Integer)getMin(), (Integer)getMax()); 
+				}
 			}
+			this.value = value;
+		} catch (ClassCastException e) {
+			System.err.println("Caught ClassCastException in Parameter " + this.getName() + "#setValue: " + e.toString());
+			e.printStackTrace();
 		}
-		this.value = value;
 		
 		if (value==null) {
 			println("caught null value in setValue!");
@@ -292,6 +315,8 @@ public class Parameter implements Serializable, Targetable {
 		return cast(max);
 	}
 	public void setMax(Object max) {
+		if (max instanceof Double)
+			max = ((Double) max).floatValue();
 		this.max = max;
 	}
 	public Object getMin() {
@@ -302,10 +327,13 @@ public class Parameter implements Serializable, Targetable {
 			return new PVector(-1.0f,-1.0f);
 		}
 
-		if (min==null) return null;
+		if (min==null) 
+			return null;
 		return cast(min);
 	}
 	public void setMin(Object min) {
+		if (min instanceof Double)
+			min = ((Double) min).floatValue();
 		this.min = min;
 	}
 
@@ -321,7 +349,10 @@ public class Parameter implements Serializable, Targetable {
 			println("what?");
 		}
 		
-		if (value instanceof Float) {
+		//if (getDataType()==value.class)
+		if (getDataType()==Float.class || getDataType()==Double.class) {
+			if (value instanceof Double)
+				value = new Float(((Double) value).floatValue());
 			if (getName().toLowerCase().contains("rotat") ) { //(Float)getMax()==360.0f) {
 				o = cp5.addKnob(tabName).setConstrained(false).setValue((Float)value).setLabel(getName()).setRange((Float)getMin(), (Float)getMax()).setSize(size*2, size*2).setDragDirection(Knob.VERTICAL);
 			} else {
@@ -333,7 +364,7 @@ public class Parameter implements Serializable, Targetable {
 								)
 						.setSize(size*5, size) ;
 			}
-		} else if (value instanceof Integer) {
+		} else if (getDataType()==Integer.class) {
 			if (this.options!=null) {
 				o = cp5.addScrollableList(tabName).setItems(options).setBarHeight(20).close().onEnter(APP.getApp().getCF().toFront).onLeave(APP.getApp().getCF().close);
 			} else if (getName().toLowerCase().contains("rotat") ) { //(Integer)getMax()==360) {
@@ -364,6 +395,7 @@ public class Parameter implements Serializable, Targetable {
 			return null;
 		} else {
 			System.err.println("Unhandled object type " + (value!=null?value.getClass():"null") + " in Parameter#makeController() for " + getName());
+			System.err.println(value);
 			o = null;
 			
 			return null;

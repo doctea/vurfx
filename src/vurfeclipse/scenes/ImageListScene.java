@@ -236,6 +236,11 @@ public class ImageListScene extends SimpleScene {
 		public boolean notifyRemoval(Filter newf) {
 			return false;
 		}
+		@Override
+		public void removeSequence(Sequence self) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	@Override
