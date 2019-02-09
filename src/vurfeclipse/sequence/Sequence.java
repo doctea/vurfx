@@ -1,7 +1,9 @@
 package vurfeclipse.sequence;
 
 import java.awt.Color;
+import java.io.FileWriter;
 import java.io.Serializable;
+import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +23,9 @@ import controlP5.Toggle;
 
 import java.util.Map.Entry;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import processing.core.PApplet;
 import vurfeclipse.APP;
 import vurfeclipse.connectors.XMLSerializer;
@@ -30,6 +35,7 @@ import vurfeclipse.sequencers.SequenceSequencer;
 import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
 import vurfeclipse.filters.Filter;
+import vurfeclipse.projects.ClassJsonConverter;
 
 abstract public class Sequence implements Serializable, Mutable {
 	//Scene sc;
@@ -131,15 +137,15 @@ abstract public class Sequence implements Serializable, Mutable {
 		return params;
 	}
 	
-	public void loadParameters(HashMap<String,Object> params) {
-		if (params.containsKey("seed")) this.seed = (Long) params.get("seed"); //Long.parseLong((String)params.get("seed"));
-		if (params.containsKey("lengthMillis")) this.setLengthMillis((Integer) params.get("lengthMillis")); //Integer.parseInt((String)params.get("lengthMillis"));
-		if (params.containsKey("scene_parameters")) this.scene_parameters = (Map<String, Map<String, Object>>) params.get("scene_parameters");
-		if (params.containsKey("mutableUrls")) {
-			this.mutableListToLoad = (ArrayList<String>)params.get("mutableUrls");
+	public void loadParameters(Map<String, Object> input) {
+		if (input.containsKey("seed")) this.seed = (Long) input.get("seed"); //Long.parseLong((String)params.get("seed"));
+		if (input.containsKey("lengthMillis")) this.setLengthMillis((Integer) input.get("lengthMillis")); //Integer.parseInt((String)params.get("lengthMillis"));
+		if (input.containsKey("scene_parameters")) this.scene_parameters = (Map<String, Map<String, Object>>) input.get("scene_parameters");
+		if (input.containsKey("mutableUrls")) {
+			this.mutableListToLoad = (ArrayList<String>)input.get("mutableUrls");
 		}
-		if (params.containsKey("enabled")) {
-			this.setEnabled((Boolean) params.get("enabled"));
+		if (input.containsKey("enabled")) {
+			this.setEnabled((Boolean) input.get("enabled"));
 		}
 		
 		//this.lastLoadedParams = (HashMap<String, Object>) params.clone();
@@ -618,22 +624,38 @@ abstract public class Sequence implements Serializable, Mutable {
 			if (!filename.endsWith(".xml")) filename += ".xml";
 			//filename = filename.replace(':', '_');
 
-			String actual = APP.getApp().sketchOutputPath(filename); //+ ".xml");
-			actual = actual.replace(":\\", "{DRIVE}").replace(":","_").replace("{DRIVE}",":\\");
-			println("saving sequence to file " + actual);
+			filename = APP.getApp().sketchOutputPath(filename); //+ ".xml");
+			filename = filename.replace(".xml", ".json");
+			filename = filename.replace(":\\", "{DRIVE}").replace(":","_").replace("{DRIVE}",":\\");
+			//filename.replaceFirst("/output", "");
+			println("saving sequence to file " + filename);
 			
 			Sequence toSave = this;//.getActiveSequence();
 			HashMap<String,Object> output; //= new HashMap<String,Object>();
 			output = toSave.collectParameters();
+			/*
+			 * try { XMLSerializer.write(output, actual); } catch (Exception e) { // TODO
+			 * Auto-generated catch block System.err.println("Caught " + e.toString() +
+			 * " trying to save sequence of class " + toSave.getClass().getSimpleName() +
+			 * " to '" + filename + "'"); e.printStackTrace(); }
+			 */
+	
 			try {
-				XMLSerializer.write(output, actual);
+				try (Writer writer = new FileWriter(filename)) {
+					GsonBuilder builder = new GsonBuilder().setPrettyPrinting(); // .create()
+					builder.registerTypeAdapter(Class.class, new ClassJsonConverter());
+	
+					Gson gson = builder.create();
+					gson.toJson(output, writer);
+					writer.close();
+				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				System.err.println("Caught " + e.toString() + " trying to save sequence of class " + toSave.getClass().getSimpleName() + " to '" + filename + "'");
+				println("CAUGHT ERROR SAVING!");
+				System.err.println("Caught " + e.toString() + " trying to save to '" + filename + "'");
 				e.printStackTrace();
 			}
 		}
-
+		
 		public SequenceEditor seq;
 
 		synchronized public SequenceEditor makeControls(ControlFrame cf, String name) {

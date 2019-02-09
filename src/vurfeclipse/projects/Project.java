@@ -579,7 +579,7 @@ public abstract class Project implements Serializable {
 	}
 
 
-	private static final Type REVIEW_TYPE = new TypeToken<HashMap<String, HashMap<String, Object>>>() {	}.getType();
+	public static final Type REVIEW_TYPE = new TypeToken<HashMap<String, HashMap<String, Object>>>() {	}.getType();
 	@SuppressWarnings("unchecked")
 	public Map<String, HashMap<String, Object>> readSnapshotFile(String filename) {
 		try {

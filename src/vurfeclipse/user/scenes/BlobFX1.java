@@ -1,6 +1,7 @@
 package vurfeclipse.user.scenes;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import processing.core.PApplet;
 import vurfeclipse.APP;
@@ -62,7 +63,7 @@ public class BlobFX1 extends SimpleScene {
 			return params;
 		}
 		
-		@Override public void loadParameters(HashMap<String,Object> params) {
+		@Override public void loadParameters(Map<String,Object> params) {
 			super.loadParameters(params);
 			
 			if (params.containsKey("colour1")) this.colour1 = (Integer) params.get("colour1");

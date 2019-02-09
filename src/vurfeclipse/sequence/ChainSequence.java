@@ -154,7 +154,7 @@ public class ChainSequence extends Sequence {
 
 	
 	@Override
-	synchronized public void loadParameters(HashMap<String,Object> params) {
+	synchronized public void loadParameters(Map<String,Object> params) {
 		super.loadParameters(params);
 		if (params.containsKey("chain")) {
 			ArrayList<HashMap<String,Object>> chains = (ArrayList<HashMap<String,Object>>) params.get("chain");

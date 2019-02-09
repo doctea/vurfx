@@ -1,6 +1,7 @@
 package vurfeclipse.user.scenes;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import vurfeclipse.filters.Filter;
 import vurfeclipse.filters.ShaderFilter;
@@ -112,6 +113,11 @@ public class OutputFX3 extends SimpleScene {
 					return true;
 				}
 				return false;
+			}
+			@Override
+			public void removeSequence(Sequence self) {
+				// TODO Auto-generated method stub
+				
 			}
 		}
 
@@ -226,7 +232,7 @@ public class OutputFX3 extends SimpleScene {
 				return params;
 			}
 			@Override
-			public void loadParameters(HashMap<String,Object> params) {
+			public void loadParameters(Map<String,Object> params) {
 				super.loadParameters(params);
 				if (params.containsKey("grid")) {
 					this.grid = (Integer) params.get("grid");
@@ -263,6 +269,11 @@ public class OutputFX3 extends SimpleScene {
 					return true;
 				}
 				return false;
+			}
+			@Override
+			public void removeSequence(Sequence self) {
+				// TODO Auto-generated method stub
+				
 			}
 		}
 		

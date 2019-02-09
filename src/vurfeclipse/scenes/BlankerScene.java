@@ -70,6 +70,11 @@ public class BlankerScene extends SimpleScene {
 			getFilter("BlankFilter").changeParameterValue("alpha", 255);
 		}
 		@Override public void onStop() {	}
+		@Override
+		public void removeSequence(Sequence self) {
+			// TODO Auto-generated method stub
+			
+		}
 
 	}
 	
@@ -93,6 +98,11 @@ public class BlankerScene extends SimpleScene {
 			// TODO Auto-generated method stub
 			
 		}
+		@Override
+		public void removeSequence(Sequence self) {
+			// TODO Auto-generated method stub
+			
+		}
 	}	
 	
 	public class Fade extends BlankSequence {
@@ -113,6 +123,11 @@ public class BlankerScene extends SimpleScene {
 		}
 		@Override public void onStop() {	
 			getFilter("BlankFilter").changeParameterValue("alpha", 255);			
+		}
+		@Override
+		public void removeSequence(Sequence self) {
+			// TODO Auto-generated method stub
+			
 		}
 	}		
 }
