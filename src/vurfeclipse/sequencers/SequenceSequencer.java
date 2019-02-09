@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 import vurfeclipse.APP;
@@ -1102,7 +1104,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		return newSeq;
 	}
 
-
+	public static final Type REVIEW_TYPE = new TypeToken<HashMap<String,Object>>() {	}.getType();
 	private Map<String, Object> readSequenceFile(String filename) {
 		try {
 			if (filename.endsWith(".xml")) {
@@ -1117,7 +1119,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				JsonReader reader = new JsonReader(new FileReader(filename));
 	
 				//Gson gson = new Gson().fromJson(reader, REVIEW_TYPE);
-				Map<String,Object> data = new Gson().fromJson(reader, Project.REVIEW_TYPE);//gson.fromJson(reader, REVIEW_TYPE); // contains the whole reviews list
+				
+				Map<String,Object> data = new Gson().fromJson(reader, REVIEW_TYPE);//gson.fromJson(reader, REVIEW_TYPE); // contains the whole reviews list
 				
 				return data;
 			}
@@ -1158,7 +1161,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		filename = filename.replace(":\\", "{DRIVE}").replace(":","_").replace("{DRIVE}",":\\");
 
 		Sequence toSave = this.getActiveSequence();
-		HashMap<String,Object> output; //= new HashMap<String,Object>();
+		Map<String, Object> output; //= new HashMap<String,Object>();
 		output = toSave.collectParameters();
 		try {
 			XMLSerializer.write(output, filename);
@@ -1555,7 +1558,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		//for (Entry<String, Sequence> s : this.histor.entrySet()) {
 		for (String e : this.historySequenceNames) {
 			Sequence s = this.getSequence(e);
-			HashMap<String,Object> t = s.collectParameters();
+			Map<String, Object> t = s.collectParameters();
 			t.put("current_sequence_name", e);			
 
 			params.put(e, t);

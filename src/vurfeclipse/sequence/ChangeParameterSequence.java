@@ -105,8 +105,8 @@ public class ChangeParameterSequence extends Sequence {
 	}
 
 	@Override
-	public HashMap<String,Object> collectParameters() {
-		HashMap<String,Object> params = super.collectParameters();
+	public Map<String,Object> collectParameters() {
+		Map<String, Object> params = super.collectParameters();
 		//params.put("filterPath",  filterPath);
 		//params.put("parameterName", parameterName);
 		params.put("targetPath", getTargetPath());

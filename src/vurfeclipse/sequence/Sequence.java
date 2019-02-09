@@ -103,7 +103,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		return null;
 	}
 	
-	public HashMap<String,Object> collectParameters() {
+	public Map<String, Object> collectParameters() {
 		HashMap<String,Object> params = new HashMap<String,Object> ();
 		params.put("class", this.getClass().getCanonicalName());
 		if (this.host!=null) params.put("hostPath", this.host.getPath());
@@ -138,8 +138,8 @@ abstract public class Sequence implements Serializable, Mutable {
 	}
 	
 	public void loadParameters(Map<String, Object> input) {
-		if (input.containsKey("seed")) this.seed = (Long) input.get("seed"); //Long.parseLong((String)params.get("seed"));
-		if (input.containsKey("lengthMillis")) this.setLengthMillis((Integer) input.get("lengthMillis")); //Integer.parseInt((String)params.get("lengthMillis"));
+		if (input.containsKey("seed")) this.seed = (long) Double.parseDouble((String)input.get("seed").toString());
+		if (input.containsKey("lengthMillis")) this.setLengthMillis((int) Double.parseDouble((input.get("lengthMillis").toString()))); //Integer.parseInt((String)params.get("lengthMillis"));
 		if (input.containsKey("scene_parameters")) this.scene_parameters = (Map<String, Map<String, Object>>) input.get("scene_parameters");
 		if (input.containsKey("mutableUrls")) {
 			this.mutableListToLoad = (ArrayList<String>)input.get("mutableUrls");
@@ -631,7 +631,7 @@ abstract public class Sequence implements Serializable, Mutable {
 			println("saving sequence to file " + filename);
 			
 			Sequence toSave = this;//.getActiveSequence();
-			HashMap<String,Object> output; //= new HashMap<String,Object>();
+			Map<String, Object> output; //= new HashMap<String,Object>();
 			output = toSave.collectParameters();
 			/*
 			 * try { XMLSerializer.write(output, actual); } catch (Exception e) { // TODO

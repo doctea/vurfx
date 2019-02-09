@@ -17,8 +17,8 @@ public class SavedSequence extends Sequence {
 	
 
 	@Override
-	public HashMap<String,Object> collectParameters() {
-		HashMap<String,Object> params = super.collectParameters();
+	public Map<String,Object> collectParameters() {
+		Map<String, Object> params = super.collectParameters();
 		params.put("filename", filename);
 		return params;
 	}

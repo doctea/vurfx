@@ -5,7 +5,7 @@ import controlP5.ControlP5;
 import controlP5.Group;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -122,13 +122,13 @@ public class ChainSequence extends Sequence {
 	}
 
 	@Override
-	synchronized public HashMap<String,Object> collectParameters() {
-		HashMap<String,Object> params = super.collectParameters();
-		ArrayList<HashMap<String,Object>> chains = new ArrayList<HashMap<String,Object>>();
+	synchronized public Map<String,Object> collectParameters() {
+		Map<String,Object> params = super.collectParameters();
+		ArrayList<Map<String,Object>> chains = new ArrayList<Map<String,Object>>();
 		for (Sequence cs : chain) {
 			Map<String, Map<String, Object>> temp = cs.getSceneParameters();
 			cs.clearSceneParameters();	// remove any scene parameters that are set on the object before saving, since we save our own copy with the chain
-			HashMap<String, Object> full_params = cs.collectParameters();
+			Map<String, Object> full_params = cs.collectParameters();
 			if (full_params==null) {
 				println("wtf, saving null full_params..?");
 				cs.collectParameters();
@@ -157,8 +157,8 @@ public class ChainSequence extends Sequence {
 	synchronized public void loadParameters(Map<String,Object> params) {
 		super.loadParameters(params);
 		if (params.containsKey("chain")) {
-			ArrayList<HashMap<String,Object>> chains = (ArrayList<HashMap<String,Object>>) params.get("chain");
-			for (HashMap<String,Object> cs : chains) {
+			ArrayList<Map<String,Object>> chains = (ArrayList<Map<String,Object>>) params.get("chain");
+			for (Map<String,Object> cs : chains) {
 				// cs contains info to build a new ChainSequence and attach it
 				//ChainSequence n = new ChainSequence(this.host, (Integer) cs.get("lengthMillis"));
 				if (cs==null) {
