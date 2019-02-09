@@ -5,6 +5,7 @@ import java.util.HashMap;
 import processing.core.PGraphics;
 import processing.core.PShape;
 import vurfeclipse.*;
+import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
 
 public class BlobDrawer extends SpiralDrawer {
@@ -61,7 +62,7 @@ public class BlobDrawer extends SpiralDrawer {
 	@Override
 	public boolean applyMeatToBuffers() {
 		//if (true) return true;
-		if ((int)this.getParameterValue("shape")==b.SH_TEXTURE) { //|| (int)this.getParameterValue("shape")==b.SH_FLOWER) {
+		if ((int)Parameter.castAs(this.getParameterValue("shape"),Integer.class)==b.SH_TEXTURE) { //|| (int)this.getParameterValue("shape")==b.SH_FLOWER) {
 			return this.old____applyMeatToBuffers();
 		} else {
 			return super.applyMeatToBuffers();

@@ -443,7 +443,7 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		}
 	}
 
-	synchronized public Filter addParameter(Parameter parameter, String paramName, Object value) {
+	synchronized public Filter addParameter(Parameter parameter, Class datatype, String paramName, Object value) {
 		if (this.parameters==null) this.setParameterDefaults();
 		parameters.put(paramName, parameter);
 		updateParameterValue(paramName, value);
@@ -452,7 +452,12 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 
 	synchronized public Filter addParameter(String paramName, Object value, Object min, Object max) {
 		println(this + "#addParameter(" + paramName + ", " + value + ", " + min + ", " + max + "): " + this.getFilterLabel());
-		return addParameter(new Parameter(this, paramName, value, min, max), paramName, value);
+		return addParameter(new Parameter(this, paramName, value, min, max), value.getClass(), paramName, value);
+	}
+	
+	synchronized public Filter addParameter(String paramName, Class datatype, Object value, Object min, Object max) {
+		println(this + "#addParameter(" + paramName + ", " + datatype + ", " + value + ", " + min + ", " + max + "): " + this.getFilterLabel());
+		return addParameter(new Parameter(this, paramName, value, min, max), datatype, paramName, value);
 	}
 	synchronized public Filter addParameter(String paramName, Object value) {
 		/*if (value instanceof Float) {
@@ -460,7 +465,15 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 		} */
 		//return addParameter(paramName, value); //, -100, 100);
 		println(this + "#addParameter(" + paramName + ", " + value + ": " + this.getFilterLabel());
-		return addParameter(new Parameter(this, paramName, value), paramName, value);
+		return addParameter(new Parameter(this, paramName, value), value.getClass(), paramName, value);
+	}
+	synchronized public Filter addParameter(String paramName, Class datatype, Object value) {
+		/*if (value instanceof Float) {
+			return addParameter(paramName, value, -50.0f, 50.0f);
+		} */
+		//return addParameter(paramName, value); //, -100, 100);
+		println(this + "#addParameter(" + paramName + ", " + value + ": " + this.getFilterLabel());
+		return addParameter(new Parameter(this, paramName, value), datatype, paramName, value);
 	}
 
 	synchronized public void updateAllParameterValues() {
@@ -954,7 +967,8 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			//this.updateParameterValue((String)me.getKey(), me.getValue());
 			//Object value = me.getValue();
 			Parameter param = (Parameter)me.getValue();
-			if (debug) println("Filter#setupControls() in " + toString() + " doing control for " + param.getName());
+			//if (debug) 
+				println("Filter#setupControls() in " + toString() + " doing control for " + param.getName());
 			//Object value = param.value;
 
 			controlP5.Controller o = param.makeController(cp5, tab.getName() + this + me.getKey() /*+ row*/, tab, size);
@@ -1215,7 +1229,21 @@ public abstract class Filter implements Pathable, Serializable, Mutable, Targeta
 			Map<String,Object> para = (Map<String, Object>) p.getValue();
 			//if (!(((String) para.get("name")).toLowerCase().endsWith("colour") || ((String) para.get("name")).toLowerCase().endsWith("colour1") || ((String) para.get("name")).toLowerCase().endsWith("colour2") )) {
 			//if (!((String)para.get("name")).toLowerCase().contains("scale"))
-				this.addParameter((String) para.get("name"), para.get("default"), para.get("min"), para.get("max"));
+				try {
+					println("about to addparameter from parameter_defaults for " + (String) para.get("name") + " with " + Class.forName((String) para.get("datatype")));
+					Class datatype = Class.forName((String) para.get("datatype"));
+					this.addParameter(
+							(String) para.get("name"), 
+							datatype, 
+							Parameter.castAs(para.get("default"), datatype), 
+							Parameter.castAs(para.get("min"), datatype), 
+							Parameter.castAs(para.get("max"), datatype)
+					);
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					System.out.println("Filter#readSnapshot: Exception trying to create parameter from parameter_defaults" + e);
+					e.printStackTrace();
+				}
 			//}
 		}		
 		

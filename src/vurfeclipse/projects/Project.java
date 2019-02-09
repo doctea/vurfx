@@ -22,6 +22,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -556,11 +558,13 @@ public abstract class Project implements Serializable {
 				}
 			}
 		}
+		
 
 		// everything that's left in input after being dealt with up above should have a Scene's targetable URL as its key, and a HashMap of targetable URLs of Parameters to apply to that Scene
 		// process Parameter params - loop over every scene and call loadParameters
 		// DEPRECATED THIS -- FROM NOW ON, SHOULD SAVE THESE UNDER THE /seq/scene_parameters KEY!!
 		if (!target_seq.containsKey("scene_parameters")) {
+			println("====> loading scene parameters from the remaining items in the project tree..");
 			for (Entry<String, HashMap<String, Object>> e : input.entrySet()) {
 				Scene s = (Scene) this.getObjectForPath(e.getKey());
 				if(s==null) {
@@ -624,9 +628,9 @@ public abstract class Project implements Serializable {
 	}
 	public void saveSnapshot(String filename) {
 		filename = filename.replaceFirst("output/", "");
-		println("SAVING SNAPSHOT TO '" + APP.getApp().sketchPath() + filename + "'");
-
 		filename = filename.replace(".xml", ".json");
+		
+		println("SAVING SNAPSHOT TO '" + APP.getApp().sketchPath() + filename + "'");
 		
 		//saveIndividualParts(filename);
 		//((VurfEclipse)APP.getApp()).io.serialize(filename + ".vj", this); //getSelectedScene().getFilter(2)); //getCanvas("/out"));
@@ -634,26 +638,22 @@ public abstract class Project implements Serializable {
 		try {
 			//XMLSerializer.write(collectSnapshot(filename), APP.getApp().sketchPath() + filename);
 			//JSONObject jso = getJsonFromMap(collectSnapshot(filename));
-			
-			//jso.save(APP.getApp().sketchPath() + filename);
-			//APP.getApp().saveJSONObject(jso, filename);
-			//jso.save(new File(filename), "indent=4");
-			
-			//println(jso.toString());
-			
-			try (Writer writer = new FileWriter(filename)) {
+						
+			//gson version
+			try (Writer writer = new FileWriter(APP.getApp().sketchPath() + filename)) {
 			    GsonBuilder builder = new GsonBuilder(); //.create()
 			    builder.registerTypeAdapter(Class.class, new ClassJsonConverter());
 			    
 			    Gson gson = builder.create();
-			    gson.toJson(collectSnapshot(filename), writer);
+			    gson.toJson(collectSnapshot(APP.getApp().sketchPath() + filename), writer);
 			    writer.close();
 			}
 			
-			
+			/*
 			// jackson version todo to try and preserve order of saving scenes https://stackoverflow.com/questions/6365851/how-to-keep-fields-sequence-in-gson-serialization
-			/*ObjectMapper om = new ObjectMapper();
-			om.writeValue(new File(filename), collectSnapshot(filename));*/
+			ObjectMapper om = new ObjectMapper();
+			om.writeValue(new File(filename), collectSnapshot(filename));
+			*/
 			
 			println("SAVED!");
 			
@@ -688,11 +688,13 @@ public abstract class Project implements Serializable {
 		// save buffers/canvases
 		output.put(getPath()+"project_setup/mappings", this.getBufferMappings());
 		// save scene configuration
-			// save filter canvas mappings		
-	
+			// save filter canvas mappings
+		
+		List<Map<String,Object>> scenes = new LinkedList<Map<String,Object>>();
 		for (Scene s : this.getScenes()) {
-			output.put(s.getPath(), s.collectSceneSetup());
+			scenes.add(s.collectSceneSetup());
 		}
+		output.put(getPath()+"project_setup/scenes", scenes);
 		
 		return output;
 	}

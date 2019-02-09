@@ -67,7 +67,7 @@ public class Parameter implements Serializable, Targetable {
 		this.value = value;
 		this.setDefaultValue(value);
 		this.datatype = value.getClass();
-		if (value instanceof Integer) {
+		if (Integer.class.equals(this.datatype)) {
 			if (this.name.toLowerCase().endsWith("colour") || this.name.toLowerCase().endsWith("colour1") || this.name.toLowerCase().endsWith("colour2") ) {
 				this.setMax(Integer.MAX_VALUE);
 				this.setMin(Integer.MIN_VALUE);
@@ -127,13 +127,15 @@ public class Parameter implements Serializable, Targetable {
 
 	public static Object castAs(Object payload, Class datatype) {
 		try {
-			if (datatype == Integer.class) {
-				if (payload instanceof Float || payload instanceof Double) {
+			if (datatype.equals(Integer.class)) {
+				if (payload instanceof Float) {
 					//return ((Float) payload);//.intValue();
 					return ((Float) payload).intValue();
-				}
+				} else if (payload instanceof Double) {
+					return ((Double) payload).intValue();
+				}			
 				return Integer.parseInt(payload.toString());
-			} else if (datatype == Float.class || datatype == Double.class) {
+			} else if (datatype.equals(Float.class) || datatype.equals(Double.class)) {
 				return (Float)Float.parseFloat(payload.toString());
 			} else if (datatype == Boolean.class) {
 				return Boolean.parseBoolean(payload.toString());
@@ -347,7 +349,8 @@ public class Parameter implements Serializable, Targetable {
 			println("what?");
 		}
 		
-		if (value instanceof Float || value instanceof Double) {
+		//if (getDataType()==value.class)
+		if (getDataType()==Float.class || getDataType()==Double.class) {
 			if (value instanceof Double)
 				value = new Float(((Double) value).floatValue());
 			if (getName().toLowerCase().contains("rotat") ) { //(Float)getMax()==360.0f) {
@@ -361,7 +364,7 @@ public class Parameter implements Serializable, Targetable {
 								)
 						.setSize(size*5, size) ;
 			}
-		} else if (value instanceof Integer) {
+		} else if (getDataType()==Integer.class) {
 			if (this.options!=null) {
 				o = cp5.addScrollableList(tabName).setItems(options).setBarHeight(20).close().onEnter(APP.getApp().getCF().toFront).onLeave(APP.getApp().getCF().close);
 			} else if (getName().toLowerCase().contains("rotat") ) { //(Integer)getMax()==360) {

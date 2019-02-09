@@ -901,7 +901,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	public int bindSavedSequences(String prefix, int sequenceLength, int weight) {
 		List<String> textFiles = new ArrayList<String>();
 		//String directory = System.getProperty("user.dir") + "/saves"; //APP.getApp().sketchPath("");
-		String filename = this.host.getProjectFilename().replace(".xml", "");
+		String filename = this.host.getProjectFilename().replace(".xml", "").replace(".json","");
 		String directory = APP.getApp().sketchOutputPath(filename);
 		println("opening saves in " + directory);
 		File dir = new File(directory);

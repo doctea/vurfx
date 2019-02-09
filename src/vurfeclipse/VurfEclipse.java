@@ -964,7 +964,7 @@ public class VurfEclipse extends PApplet {
 	};
 
 	public String sketchOutputPath(String path) {
-		return (sketchOutputPath()+"/").replace("null/","")+path;
+		return (sketchOutputPath()+"/").replace("null/","")+path.replace(".json", "");
 	}
 	
 }

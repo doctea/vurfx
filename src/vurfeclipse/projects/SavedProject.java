@@ -1,6 +1,7 @@
 package vurfeclipse.projects;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -48,20 +49,38 @@ public class SavedProject extends Project {
 
 	@Override
 	public boolean setupScenes() {
-		// load the /project_setup/scene_parameters hashmap and process it
-		for (Entry<String, Object> i : getInput().entrySet()) {
-			if (i.getKey().endsWith("/project_setup/mappings")) continue;
+			
+		if (getInput().containsKey("/project_setup/scenes")) {
+			println("====> loading scene setup from /project_setup/scenes list..");
+			List<Map<String,Object>> scene_list = (List)getInput().get("/project_setup/scenes");
+			for (Map<String,Object> sc_in : scene_list) {
+				String path = (String) sc_in.get("path");
 				
-			Map<String, Object> sc_in = (Map<String, Object>) i.getValue();
-			// need some basic info to create the Scene - ie, classname
-			String clazz 	= (String) sc_in.get("class"); //getInput("class");
-			String path 	= (String) i.getKey(); //getInput("path");
-		
-			Scene new_sc = vurfeclipse.scenes.Scene.createScene(clazz, this, this.w, this.h);
-			new_sc.host = this;
-			new_sc.readSnapshot(sc_in);
-			//new_sc.setSceneName((String) getInput("name"));
-			this.addScene(new_sc);
+				// need some basic info to create the Scene - ie, classname
+				String clazz 	= (String) sc_in.get("class"); //getInput("class");
+			
+				Scene new_sc = vurfeclipse.scenes.Scene.createScene(clazz, this, this.w, this.h);
+				new_sc.host = this;
+				new_sc.readSnapshot(sc_in);
+				//new_sc.setSceneName((String) getInput("name"));
+				this.addScene(new_sc);
+			}
+		} else {		
+			// load the /project_setup/scene_parameters hashmap and process it
+			for (Entry<String, Object> i : getInput().entrySet()) {
+				if (i.getKey().endsWith("/project_setup/mappings")) continue;
+					
+				Map<String, Object> sc_in = (Map<String, Object>) i.getValue();
+				// need some basic info to create the Scene - ie, classname
+				String clazz 	= (String) sc_in.get("class"); //getInput("class");
+				String path 	= (String) i.getKey(); //getInput("path");
+			
+				Scene new_sc = vurfeclipse.scenes.Scene.createScene(clazz, this, this.w, this.h);
+				new_sc.host = this;
+				new_sc.readSnapshot(sc_in);
+				//new_sc.setSceneName((String) getInput("name"));
+				this.addScene(new_sc);
+			}
 		}
 		
 		//this.sequencer.target("/seq/bank/sequences", this.inputAll.get("/seq").get("/seq/bank/sequences"));

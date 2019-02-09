@@ -77,9 +77,9 @@ public class BlendDrawer extends ShaderFilter {
     //println("setting defaults");
     //this.changeParameterValue("Opacity", 1.0);
     //this.changeParameterValue("BlendMode", 4);
-    addParameter("Rotate", new Integer(0), 0, 360);
+    addParameter("Rotate", new Integer(0), new Integer(0), new Integer(360));
 
-    addParameter("X", new Float(0.0f), -1.0f, 1.0f);
+    addParameter("X", new Float(0.0f), new Float(-1.0f), new Float(1.0f));
     addParameter("Y", new Float(0.0f), -1.0f, 1.0f);
     addParameter("Scale", new Float(1.0f), 0.0f, 4.0f);
 
