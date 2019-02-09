@@ -641,7 +641,7 @@ public abstract class Project implements Serializable {
 						
 			//gson version
 			try (Writer writer = new FileWriter(APP.getApp().sketchPath() + filename)) {
-			    GsonBuilder builder = new GsonBuilder(); //.create()
+			    GsonBuilder builder = new GsonBuilder().setPrettyPrinting(); //.create()
 			    builder.registerTypeAdapter(Class.class, new ClassJsonConverter());
 			    
 			    Gson gson = builder.create();
