@@ -130,7 +130,7 @@ public class ChangeParameterSequence extends Sequence {
 		}
 		if (params.containsKey("value")) 		this.value = params.get("value");
 		if (params.containsKey("expression")) 	this.setExpression((String) params.get("expression"));
-		if (params.containsKey("outputMode")) 	this.setOutputMode((Integer) params.get("outputMode"));
+		if (params.containsKey("outputMode")) 	this.setOutputMode((int)Double.parseDouble(params.get("outputMode").toString()));
 		if (params.containsKey("converttotime")) 	this.setConvertPCtoTime((Boolean) params.get("converttotime"));
 		if (params.containsKey("latching")) 	this.setLatching((Boolean) params.get("latching"));
 	}
@@ -151,9 +151,10 @@ public class ChangeParameterSequence extends Sequence {
 
 	@Override
 	public void start() {
-		if (host.host.getObjectForPath(targetPath) instanceof Parameter) {
-			this.paramBuffer.setCircular((((Parameter)host.host.getObjectForPath(targetPath)).isCircular()));
-		}
+		if (targetPath!=null)
+			if (host.host.getObjectForPath(targetPath) instanceof Parameter) {
+				this.paramBuffer.setCircular((((Parameter)host.host.getObjectForPath(targetPath)).isCircular()));
+			}
 	}
 
 	@Override
@@ -187,6 +188,10 @@ public class ChangeParameterSequence extends Sequence {
 				.getObjectForPath(filterPath))
 				//.changeParameterValueFromSin(parameterName, (float)value.doubleValue());//(float)Math.sin(value.doubleValue()));		
 				.changeParameterValue(parameterName, (float)value.doubleValue());*/
+		
+		if (targetPath==null) 
+			return;
+		
 		Targetable t = (Targetable) host.host.getObjectForPath(targetPath);
 		if (this.getOutputMode()==Parameter.OUT_ABSOLUTE) {
 			t.target(targetPath, value.floatValue());
@@ -307,7 +312,7 @@ public class ChangeParameterSequence extends Sequence {
 
 		final ScrollableList lstTarget = cp5.addScrollableList(name + "_Target URL")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-				.setLabel(this.getTargetPath()) //((FormulaCallback)c).targetPath)
+				.setLabel(""+this.getTargetPath()) //((FormulaCallback)c).targetPath)
 				.addItems(APP.getApp().pr.getTargetURLs().keySet().toArray(new String[0]))
 				.setPosition(pos_x, pos_y)
 				.setWidth((cp5.papplet.width/3))
@@ -471,5 +476,49 @@ public class ChangeParameterSequence extends Sequence {
 		
 	}
 
+	@Override
+	public void __setValuesAbsolute(double pc, int iteration) {
+			if (((Double)pc).isNaN()) {
+				println("Caught NaN in __setValuesForNorm ");
+			}
+			// evaluate value to pass based on expression
+			if (evaluator==null) evaluator = APP.getApp().makeEvaluator(expression);
+
+			if (this.isConvertPCtoTime()) {
+				pc = Math.floor(pc * this.getLengthMillis()/100.0d);
+			}
+			
+			evaluator.setVariable("input", BigDecimal.valueOf(pc));
+			evaluator.setVariable("iteration", BigDecimal.valueOf(iteration));
+			BigDecimal value = evaluator.eval();
+			if (value==null)
+				println("caught null returned from eval(input = " + pc + ", iteration = " + iteration + ")");
+
+			this.updateGuiInputValue("iter# " + iteration + " | pc: " + (float)(pc)); //Float.parseFloat(pc));
+
+			//println(this + ": got value " + value);
+
+			if (paramBuffer!=null) value = (BigDecimal) paramBuffer.getValue(value, latching);	// lerp
+
+			this.updateGuiOutputValue(value.toString());
+
+			/*((Filter)host.host
+					.getObjectForPath(filterPath))
+					//.changeParameterValueFromSin(parameterName, (float)value.doubleValue());//(float)Math.sin(value.doubleValue()));		
+					.changeParameterValue(parameterName, (float)value.doubleValue());*/
+			
+			if (targetPath==null) 
+				return;
+			
+			Targetable t = (Targetable) host.host.getObjectForPath(targetPath);
+			if (this.getOutputMode()==Parameter.OUT_ABSOLUTE) {
+				t.target(targetPath, value.floatValue());
+			} else if (this.getOutputMode()==Parameter.OUT_NORMAL) {
+				t.target(targetPath.replace("/pa/", "/pn/"), value.floatValue());			
+			} else if (this.getOutputMode()==Parameter.OUT_SIN) {
+				t.target(targetPath.replace("/pa/", "/ps/"), value.floatValue());			
+			}
+
+		}		
 
 }

@@ -40,7 +40,7 @@ abstract public class Stream implements Serializable {
 	}
 	// Message >- [targetId] -< Callback
 
-	List<ParameterCallback> listeners = Collections.synchronizedList(new LinkedList<ParameterCallback>());
+	List<Callback> listeners = Collections.synchronizedList(new LinkedList<Callback>());
 	// targetId -< Callback
 
 	ConcurrentHashMap<String,Collection> messages = new ConcurrentHashMap<String, Collection>();
@@ -51,13 +51,13 @@ abstract public class Stream implements Serializable {
     this.messages = null;//.dispose();
   	}*/
 
-	synchronized public void registerEventListener (String paramName, ParameterCallback callback) {
+	synchronized public void registerEventListener (String paramName, Callback callback) {
 		//List dis = this.getOrAddParameter(paramName);  //this.dispatchers.get(paramName);
 		//TODO - store callbacks with a copy of the object that they belong to so they can be deleted upon request. possibly store them in lists of the hash of the object...
 		//or use a string to group them + mark groups for deletion during message processing
 
 		System.out.println("in " + this + " - registerEventListener(" + paramName + ", " + callback + ")");
-		List<ParameterCallback> dis = this.getListenerList(); //paramName);
+		List<Callback> dis = this.getListenerList(); //paramName);
 		callback.setStreamSource(paramName);
 		dis.add(callback);
 		//dis = this.getListenerList(paramName);
@@ -65,7 +65,7 @@ abstract public class Stream implements Serializable {
 		System.out.println("listener size is " + listeners.size());
 	}
 
-	synchronized public List<ParameterCallback> getListenerList() {
+	synchronized public List<Callback> getListenerList() {
 		/*List<ParameterCallback> l;
 		if (!listeners.containsKey(paramName)) {
 			System.out.println("getListenerList(" + paramName + ") adding new list because isn't set");
@@ -133,7 +133,7 @@ abstract public class Stream implements Serializable {
 		////       call B(C)
 		//while (emitters.hasNext()) {
 		
-		for (ParameterCallback callback : listeners) {
+		for (Callback callback : getListenerList()) { //listeners) {
 			//Map.Entry<String,List<ParameterCallback>> e_l = (Map.Entry<String,List<ParameterCallback>>) callback; //emitters.next();
 			if (debug) { println ("--");
 				println("stream source is '" + callback.getStreamSource() + "'");
@@ -226,7 +226,7 @@ abstract public class Stream implements Serializable {
 		this.messages.clear();
 	}
 
-	abstract protected void preCall(ParameterCallback c);	// TODO Auto-generated method stub
+	abstract protected void preCall(Callback c);	// TODO Auto-generated method stub
 	
 	protected String getMessageNameForStreamSource(String streamSource) {
 		//println("!!! streamSource is " + streamSource);
@@ -259,8 +259,11 @@ abstract public class Stream implements Serializable {
 			callbacks.put(l.getStreamSource(), links);
 		}*/
 
-		for (ParameterCallback l : this.listeners) {
-			callbacks.add(l.collectParameters());
+		for (Callback l : this.listeners) {
+			if (!l.isTemporary()) {
+				ParameterCallback pc = (ParameterCallback) l;
+				callbacks.add((HashMap<String, Object>) pc.collectParameters());
+			}
 		}
 
 		return callbacks;
@@ -374,7 +377,10 @@ abstract public class Stream implements Serializable {
 		
 		
 		//for ( Entry<String, List<ParameterCallback>> i : this.listeners.entrySet()) {
-		for (final ParameterCallback callback : this.listeners) { //i.getValue()) {
+		for (final Callback callback_t : this.listeners) { //i.getValue()) {
+			if (callback_t.isTemporary()) continue;	// dont display 'temporary' callbacks like sequence hooks
+			ParameterCallback callback = (ParameterCallback) callback_t;
+			
 			int pos_x = 5;
 
 			println ("adding gui for " + callback);
@@ -517,12 +523,20 @@ abstract public class Stream implements Serializable {
 	}
 	public boolean notifyRemoval(Targetable newf) {
 		boolean relevant = false;
-		for (ParameterCallback c : this.listeners) {
-			boolean t = c.notifyRemoval(newf);
-			if (t==true) 
-				relevant = true;
+
+		synchronized (this.listeners) {
+			for (Callback c : this.listeners) {
+				boolean t = c.notifyRemoval(newf);
+				if (t==true) 
+					relevant = true;
+			}
 		}
 		return relevant;
+	}
+	public void removeEventListener(Callback eventAdapter) {
+		synchronized(this.listeners) {
+			this.getListenerList().remove(eventAdapter);
+		}
 	}
 
 	/*

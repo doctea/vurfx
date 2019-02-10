@@ -23,10 +23,10 @@ import vurfeclipse.ui.ControlFrame;
 
 public class FormulaCallback extends ParameterCallback {
 
-	String targetPath;
+	String targetPath = "";
 	//String sourcePath;
 	
-	String expression;
+	String expression = "input";
 	
 	com.udojava.evalex.Expression e;
 
@@ -91,6 +91,20 @@ public class FormulaCallback extends ParameterCallback {
 	
 	@Override
 	public void call(Object value) {
+		
+		Targetable target = (Targetable) APP.getApp().pr.getObjectForPath(targetPath);
+		//Targetable source = (Targetable) APP.getApp().pr.getObjectForPath(sourcePath);
+		
+		if (target==null) {			
+			System.err.println("Caught a null target for path " + targetPath + " in " + this + "!");
+			//target = (Targetable) APP.getApp().pr.getObjectForPath(targetPath);
+		}
+		
+		call(value, target);
+	}
+		
+	public void call(Object value, Targetable target) {
+		
 		//System.out.println("in value " + value);
 		//e = APP.getApp().makeEvaluator(expression);
 		
@@ -108,14 +122,7 @@ public class FormulaCallback extends ParameterCallback {
 		} else if (value instanceof Integer || value instanceof Long) {
 			e.setVariable("input", BigDecimal.valueOf(Integer.parseInt(value.toString()))); //.valueOf((Integer)value));
 		} 
-		Targetable target = (Targetable) APP.getApp().pr.getObjectForPath(targetPath);
-		//Targetable source = (Targetable) APP.getApp().pr.getObjectForPath(sourcePath);
-		
-		if (target==null) {			
-			System.err.println("Caught a null target for path " + targetPath + " in " + this + "!");
-			//target = (Targetable) APP.getApp().pr.getObjectForPath(targetPath);
-		}
-		
+
 		Float floatValue = e.eval().floatValue();
 		//lblOutputValue.setValueLabel(floatValue.toString());
 		if (count%10==0) this.updateGuiOutputValue(floatValue.toString());
@@ -180,7 +187,7 @@ public class FormulaCallback extends ParameterCallback {
 
 		ParameterCallback self = this;
 
-		ParameterCallback fc = (ParameterCallback) self; 
+		Callback fc = (Callback) self; 
 		
 		// set up the Target dropdown
 		SortedSet<String> keys = new TreeSet<String>(APP.getApp().pr.getTargetURLs().keySet());
@@ -189,22 +196,24 @@ public class FormulaCallback extends ParameterCallback {
 		keys = null;
 		//String[] targetUrls = new String[] {};
 		
-		ScrollableList lstTarget = cf.control().addScrollableList(name + self.getStreamSource() + "_" /* n +*/ + "_Target URL")
-				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-				.setLabel(((FormulaCallback)self).targetPath)
-				.addItems(targetUrls)
-				.moveTo(g)
-				//.setPosition(margin_x * 10, pos_y)
-				.setPosition(pos_x, pos_y)
-				.setWidth((cf.sketchWidth()/3))
-				.onLeave(cf.close).onEnter(cf.toFront)
-				.setBarHeight(20).setItemHeight(20)
-				.close();
-		
-		pos_x += lstTarget.getWidth() + margin_x;
-
-		g.add(lstTarget);
-		
+		ScrollableList lstTarget = null;
+		if (!isTemporary()) {			
+			lstTarget = cf.control().addScrollableList(name + self.getStreamSource() + "_" /* n +*/ + "_Target URL")
+					//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+					.setLabel(((FormulaCallback)self).targetPath)
+					.addItems(targetUrls)
+					.moveTo(g)
+					//.setPosition(margin_x * 10, pos_y)
+					.setPosition(pos_x, pos_y)
+					.setWidth((cf.sketchWidth()/3))
+					.onLeave(cf.close).onEnter(cf.toFront)
+					.setBarHeight(20).setItemHeight(20)
+					.close();
+			
+			pos_x += lstTarget.getWidth() + margin_x;
+	
+			g.add(lstTarget);		
+		}
 		// set up the Expression textfield
 		
 		Textfield expression = cf.control().addTextfield(name + self.getStreamSource() + "_" /*+ n */+ "_Expression_" + self.toString())
@@ -228,26 +237,30 @@ public class FormulaCallback extends ParameterCallback {
 
 		g.add(expression);
 
-		CallbackListener setTargetListener = new CallbackListener () {
-			@Override
-			public void controlEvent(CallbackEvent theEvent) {
-					Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget.getValue());
-					//s.entrySet();
-					((FormulaCallback) fc).setTargetPath((String) s.get("text"));
-			}				
-		};
-		lstTarget.addListenerFor(ScrollableList.ACTION_BROADCAST, setTargetListener);
+		if (!isTemporary()) {
+			ScrollableList lstTarget2 = lstTarget;
+			CallbackListener setTargetListener = new CallbackListener () {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+						Map<String, Object> s = ((ScrollableList) theEvent.getController()).getItem((int)lstTarget2.getValue());
+						//s.entrySet();
+						((FormulaCallback) fc).setTargetPath((String) s.get("text"));
+				}				
+			};
 		
-		CallbackListener pasteTargetListener = new CallbackListener () {
-			@Override
-			public void controlEvent(CallbackEvent theEvent) {
-				if (cf.control().papplet.mouseButton==(VurfEclipse.MOUSE_RIGHT)) {		// 'paste' copied target path to this item
-					((FormulaCallback) fc).setTargetPath((String) APP.getApp().pr.getSequencer().getSelectedTargetPath());
-					lstTarget.setLabel(APP.getApp().pr.getSequencer().getSelectedTargetPath());
+			lstTarget.addListenerFor(ScrollableList.ACTION_BROADCAST, setTargetListener);
+			
+			CallbackListener pasteTargetListener = new CallbackListener () {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					if (cf.control().papplet.mouseButton==(VurfEclipse.MOUSE_RIGHT)) {		// 'paste' copied target path to this item
+						((FormulaCallback) fc).setTargetPath((String) APP.getApp().pr.getSequencer().getSelectedTargetPath());
+						lstTarget2.setLabel(APP.getApp().pr.getSequencer().getSelectedTargetPath());
+					}
 				}
-			}
-		};
-		expression.addListenerFor(ScrollableList.ACTION_RELEASE, pasteTargetListener);
+			};
+			expression.addListenerFor(ScrollableList.ACTION_RELEASE, pasteTargetListener);
+		}
 		
 		g.setBarHeight(0).setLabel("").hideBar().hideArrow();
 		

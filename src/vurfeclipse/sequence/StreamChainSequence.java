@@ -254,7 +254,7 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 
 	@Override
 	public Object target(String path, Object payload) {
-		println(" targeted at path '" + path + "' with payload '" + payload +"'");
+		//println(" targeted at path '" + path + "' with payload '" + payload +"'");
 		last_value = payload;
 		return this;
 	}

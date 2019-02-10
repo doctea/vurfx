@@ -1,6 +1,9 @@
 package vurfeclipse.streams;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -120,6 +123,39 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 	public void setDirectMode(boolean on) {
 		this.directMode = on;
 	}
+	
+
+	static String[] generate_emitter_names () {
+		ArrayList<String> ems = new ArrayList<String>();
+		
+		ems.add("note");
+		
+		for (int pit = 0 ; pit < 128 ; pit++) {
+			ems.add("note_" 	+ pit);
+			ems.add("interval_" + pit % 12);
+			ems.add("octave_" 	+ ((int) (pit / 12)));
+			
+			for (int ch = 0 ; ch < 16 ; ch++) {
+				ems.add("tgl_note_"	+ ch + "_" + pit);
+				ems.add("cc_" 		+ ch + "_" + pit);
+				ems.add("tgl_cc_"	+ ch + "_" + pit);
+			}
+			
+			ems.add("cc_" + pit);
+			
+		}
+		
+		Collections.sort(ems);
+			
+		return ems.toArray(new String[ems.size()]);		
+	}
+	
+	static String[] emitter_names = generate_emitter_names();
+	@Override
+	public String[] getEmitterNames() {
+		return emitter_names;		
+	}
+
 
 	synchronized public void noteOn(int channel, int pit, int vel) {
 		if (isEnabled()) {
@@ -128,10 +164,15 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 			txtLastNote.setValue("note_" + channel + "_" + pit);
 
 			addEvent("note", pit);
+			addEvent("note_off", pit);
 			addEvent("note_" + pit, pit);
+			addEvent("note_off_" + pit, pit);
 			addEvent("note_" + channel + "_" + pit, pit);
+			addEvent("note_off_" + channel + "_" + pit, pit);
 			addEvent("interval", pit % 12);
+			addEvent("interval_off", pit % 12);
 			addEvent("interval_" + pit, pit % 12);
+			addEvent("interval_off" + pit, pit % 12);
 
 			addEvent("octave_" + ((int) (pit / 12)), pit % 12);
 			
@@ -343,7 +384,7 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 	}
 
 	@Override
-	protected void preCall(ParameterCallback c) {
+	protected void preCall(Callback c) {
 		// TODO Auto-generated method stub
 
 	}
@@ -496,5 +537,5 @@ public class MidiStream extends Stream implements Serializable, MidiListener {
 		 */
 		// callbacks = input.
 	}
-
+	
 }

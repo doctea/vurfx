@@ -19,7 +19,7 @@ import vurfeclipse.ui.ControlFrame;
 /*interface ParameterCallback {
   public void call (Object value);
 }*/
-public abstract class ParameterCallback implements Serializable {
+public abstract class ParameterCallback implements Serializable, Callback {
 	/*public void call(String eventName, int time, Object value) {
     call(value);
   }*/
@@ -48,6 +48,10 @@ public abstract class ParameterCallback implements Serializable {
 		this.enabled = enabled;
 	}
 	
+	/* (non-Javadoc)
+	 * @see vurfeclipse.streams.Callback#reactsTo(java.lang.String)
+	 */
+	@Override
 	public boolean reactsTo(String streamSource) {
 		return (streamSource.equals(this.streamSource));
 	}
@@ -126,6 +130,7 @@ public abstract class ParameterCallback implements Serializable {
 	protected boolean latching = false;
 	protected BigDecimal latching_value = new BigDecimal(0);
 	private Bang bngInputRcvd;
+	private boolean temporary;
 	public Group makeControls(ControlFrame cf, String name) {
 		g = new Group(cf.control(), name + "_group");
 		
@@ -150,6 +155,14 @@ public abstract class ParameterCallback implements Serializable {
 		}
 		this.latching = latching;
 	}
+	
+	public Callback setTemporary(boolean temp) {
+		this.temporary = temp;
+		return this;
+	};
+	public boolean isTemporary() {
+		return this.temporary;
+	};
 
 }
 

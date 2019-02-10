@@ -302,7 +302,7 @@ public class BeatStream extends Stream implements Serializable {
 	DecimalFormat df = new DecimalFormat("#.##");
 
 	@Override
-	protected void preCall(ParameterCallback c) {
+	protected void preCall(Callback c) {
 		if (c instanceof FormulaCallback) {
 			if (((SequenceSequencer) APP.getApp().pr.getSequencer()).getActiveSequence()!=null)
 				((FormulaCallback)c).e.setVariable("length", new BigDecimal(((SequenceSequencer)APP.getApp().pr.getSequencer()).getActiveSequence().getLengthMillis()));

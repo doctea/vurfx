@@ -64,7 +64,7 @@ public class NumberStream extends Stream implements Serializable {
   }
 
 @Override
-protected void preCall(ParameterCallback c) {
+protected void preCall(Callback c) {
 	// TODO Auto-generated method stub
 	
 }

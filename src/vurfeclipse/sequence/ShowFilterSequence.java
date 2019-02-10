@@ -74,5 +74,10 @@ public class ShowFilterSequence extends Sequence {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void __setValuesAbsolute(double pc, int iteration) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -80,4 +80,11 @@ public class ShowSceneSequence extends Sequence {
 		
 	}
 
+
+	@Override
+	public void __setValuesAbsolute(double pc, int iteration) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

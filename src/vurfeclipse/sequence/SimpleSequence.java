@@ -1,6 +1,10 @@
 package vurfeclipse.sequence;
 
 abstract public class SimpleSequence extends Sequence {
+	
+
+	public SimpleSequence() { super(); }
+	
 	@Override
 	public void __setValuesForNorm(double pc, int iteration) {
 		// TODO Auto-generated method stub

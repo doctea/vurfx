@@ -28,7 +28,7 @@ public class OscStream extends Stream implements OscEventListener {
 	}
 	
 	@Override
-	public synchronized void registerEventListener(String paramName, ParameterCallback callback) {
+	public synchronized void registerEventListener(String paramName, Callback callback) {
 		// TODO Auto-generated method stub
 		super.registerEventListener(paramName, callback);
 		//if(callback instanceof ParameterCallback) ((ParameterCallback) callback).latching = true;
@@ -140,7 +140,7 @@ public class OscStream extends Stream implements OscEventListener {
 	}
 
 	@Override
-	protected void preCall(ParameterCallback c) {
+	protected void preCall(Callback c) {
 		// TODO Auto-generated method stub
 		
 	}

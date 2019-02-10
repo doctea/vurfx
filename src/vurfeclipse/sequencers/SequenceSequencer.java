@@ -709,7 +709,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 							.moveTo(this.grpSequenceEditor)
 							.setPosition(0,20)
 					;*/
-					getGrpSequenceEditor().setSequence(getCurrentSequenceName(), getActiveSequence());
+					final Sequence sequence = getActiveSequence();
+					getGrpSequenceEditor().setSequence(getCurrentSequenceName(), sequence);
 				}
 			}
 		});
@@ -939,7 +940,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 						.replace(directory+"/","")
 						.replace(file.getParent(),"")
 						.replace("/","")
-						.replace(".xml","");
+						.replace(".xml","")
+						.replace(".json","")
+						;
 				((Map<String, Sequence>) sequences).put(seq_name, newSeq);
 				this.addHistorySequenceName(seq_name);
 			}
@@ -1034,7 +1037,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		} else if (key=='o') { // HISTORY 'cut' between cursor/next (or do random if at end?)
 			cutSequence();
 		} else if (key=='b') { // save current sequence to separate .xml file
-			this.getActiveSequence().saveSequencePreset(this.host.getProjectFilename().replace(".xml", "") + "/bank_" + this.getCurrentSequenceName());
+			this.getActiveSequence().saveSequencePreset(
+					this.host.getProjectFilename()
+						.replace(".xml", "")
+						.replace(".json","") 
+						+ "/" + 
+						//"bank_" +
+						this.getCurrentSequenceName());
 		} else if (key=='B') { // dump entire current sequencer bank to separate .xml files
 			this.saveBankSequences(this.host.getProjectFilename().replace(".xml", "")); //this.host.getClass().getSimpleName());
 		} else if (key=='X') {

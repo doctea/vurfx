@@ -33,9 +33,11 @@ import com.google.gson.stream.JsonReader;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.sequence.Sequence;
 import vurfeclipse.sequencers.SceneSequencer;
 import vurfeclipse.sequencers.SequenceSequencer;
 import vurfeclipse.sequencers.Sequencer;
+import vurfeclipse.streams.Stream;
 import vurfeclipse.ui.ControlFrame;
 import controlP5.*;
 import processing.core.PGraphics;
@@ -989,6 +991,7 @@ public abstract class Project implements Serializable {
 
 
 
+	
 	private Class[] getAvailableScenes() {
 		try {
 			return getClasses(new String[] { "vurfeclipse.scenes", "vurfeclipse.user.scenes" }, Scene.class);
@@ -1231,6 +1234,25 @@ public abstract class Project implements Serializable {
 		}
 		return null;
 	}
+	
+	public Class[] getAvailableSequenceTypes() {
+		try {
+			return getClasses(new String[] { "vurfeclipse.sequence"}, Sequence.class);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			println("caught " + e + " while trying to getAvailableSequences in Project");
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+
+	public String[] getAvailableStreams() {
+		Map<String,Stream> streams = getSequencer().getStreams();
+		String[] names = streams.keySet().toArray(new String[streams.size()]);
+		return names;
+	}
+	
 
 	// cribbed from https://stackoverflow.com/questions/1156552/java-package-introspection
 	private static Class[] getClasses(String[] packageNames, Class match_class)
@@ -1344,5 +1366,5 @@ public abstract class Project implements Serializable {
 		}
 		
 	}
-	
+
 }
