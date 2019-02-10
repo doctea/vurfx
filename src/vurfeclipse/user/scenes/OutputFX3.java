@@ -119,6 +119,11 @@ public class OutputFX3 extends SimpleScene {
 				// TODO Auto-generated method stub
 				
 			}
+			@Override
+			public void __setValuesAbsolute(double pc, int iteration) {
+				// TODO Auto-generated method stub
+				
+			}
 		}
 
 		class SyncSequence2 extends SyncSequence {
@@ -213,7 +218,7 @@ public class OutputFX3 extends SimpleScene {
 			}
 		}
 		
-		class GridSyncSequence extends Sequence {
+		class GridSyncSequence extends SyncSequence {
 			private int grid;
 
 			public GridSyncSequence() {

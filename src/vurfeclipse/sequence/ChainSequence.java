@@ -1,11 +1,16 @@
 package vurfeclipse.sequence;
 
 import controlP5.Accordion;
+import controlP5.Button;
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.Group;
+import controlP5.ScrollableList;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -13,6 +18,7 @@ import vurfeclipse.APP;
 import vurfeclipse.filters.Filter;
 import vurfeclipse.scenes.Mutable;
 import vurfeclipse.scenes.Scene;
+import vurfeclipse.sequencers.SequenceSequencer;
 import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
 
@@ -102,6 +108,13 @@ public class ChainSequence extends Sequence {
 			seq.setValuesForNorm(pc,iteration);
 		}
 	}
+	
+	@Override
+	synchronized public void __setValuesAbsolute(double pc, int iteration) {
+		for (Sequence seq : chain) { 
+			seq.__setValuesAbsolute(pc,iteration);
+		}
+	}
 
 	@Override
 	public void onStart() {
@@ -110,6 +123,9 @@ public class ChainSequence extends Sequence {
 		while(it.hasNext()) {
 			it.next().onStart();
 		}*/
+		for (Sequence seq : chain) {
+			seq.onStart();
+		}
 	}
 
 	@Override
@@ -119,6 +135,9 @@ public class ChainSequence extends Sequence {
 		while(it.hasNext()) {
 			it.next().onStop();
 		}*/
+		for (Sequence seq : chain) {
+			seq.onStop();
+		}
 	}
 
 	@Override
@@ -135,7 +154,7 @@ public class ChainSequence extends Sequence {
 			}
 			chains.add(full_params);
 		}
-		params.put("chain",  chains);
+		params.put("chain", chains);
 		/*params.put("filterPath", filterPath);
 		params.put("parameterName", parameterName);
 		params.put("value", "value");*/
@@ -166,12 +185,16 @@ public class ChainSequence extends Sequence {
 					continue;
 				}
 				try {
-					if (cs.containsKey("scene_parameters")) cs.remove("scene_parameters");	// don't load scene_parameters for chained sequences, since if there are any they are there from an old version of save format
+					if (cs.containsKey("scene_parameters")) 
+						cs.remove("scene_parameters");	// don't load scene_parameters for chained sequences, since if there are any they are there from an old version of save format
+					println("Making sub-sequence " + (String) cs.get("class") + " with " + APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
 					Sequence n = Sequence.makeSequence((String) cs.get("class"), (Scene) APP.getApp().pr.getObjectForPath((String) cs.get("hostPath")));
 					n.loadParameters(cs);
+					println("Sub-sequence is: " + n);
 					this.addSequence(n);
 				} catch (Exception e) {
 					println("caught " + e + " trying to loadparameters for " + this);
+					e.printStackTrace();
 				}
 			}		
 		} else {
@@ -180,8 +203,10 @@ public class ChainSequence extends Sequence {
 	}
 	
 	SequenceEditor sequenceEditor;
+	protected int position_y;
 	@Override
 	synchronized public SequenceEditor makeControls(ControlFrame cf, String name) {
+		position_y = 0;
 		// add an accordion to hold the sub-sequences and recurse
 		if (null!=sequenceEditor) {
 			//return sequenceEditor;
@@ -194,13 +219,15 @@ public class ChainSequence extends Sequence {
 		ControlP5 cp5 = cf.control();
 		//if (true) return sequenceEditor;
 		
+		makeControls_Add(name,cf,sequenceEditor);
+		//position_y += 25;
 		
 		//cp5.addLabel("Sequence Editor: " + name).setValue("Sequence Editor: " + name).moveTo(sequenceEditor).setPosition(100,100);
 		Accordion acc = cp5.addAccordion(name + "_acc")
 				.moveTo(sequenceEditor)
 				.setWidth(sequenceEditor.getWidth()-10)
 				//.setBackgroundHeight(cp5.papplet.sketchHeight()/5)
-				.setPosition(10,40) //sequenceEditor.getBackgroundHeight())
+				.setPosition(10,60) //sequenceEditor.getBackgroundHeight())
 				.setBackgroundHeight(10)
 				.setBarHeight(15)
 				.setCollapseMode(Accordion.MULTI);
@@ -253,8 +280,90 @@ public class ChainSequence extends Sequence {
 		for (Sequence cs : chain) {
 			if 
 		}*/
-		
+				
 		return sequenceEditor;
+	}
+
+	protected void makeControls_Add(String tabName, ControlFrame cf, SequenceEditor sequenceEditor) {
+		
+		int start_x = 600; 
+		int margin_y = 25, margin=5;
+
+		ScrollableList lstAddSequenceSelector = new ScrollableList(cf.control(), tabName + "_add_sequence_selector")
+				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
+				.setLabel("[add sequence]") //((FormulaCallback)c).targetPath)
+				.moveTo(sequenceEditor)
+				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+				.addItems((String[]) getAvailableSequenceTypes().keySet().toArray(new String[getAvailableSequenceTypes().size()]))
+				.setPosition(start_x, position_y)
+				.setWidth(margin * 20)
+				.setBarHeight(15)
+				.setItemHeight(15)
+				.setHeight(5 * 15)
+				.onLeave(cf.close)
+				.onEnter(cf.toFront)
+				.close();
+		
+		//println("row is " + row);
+		
+		ChainSequence self = this;
+		
+		Button btnAddFilter = new Button(cf.control(), tabName + "_add_sequence_button")
+				.setLabel("add")
+				.moveTo(sequenceEditor)
+				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
+				.setPosition(lstAddSequenceSelector.getWidth() + margin + lstAddSequenceSelector.getPosition()[0], position_y)
+				.setWidth(margin * 4).setHeight(15)			
+				.addListenerFor(cf.control().ACTION_BROADCAST, new CallbackListener() {
+					@Override
+					public void controlEvent(CallbackEvent theEvent) {
+						int index = (int) lstAddSequenceSelector.getValue();
+						String selected = (String)(
+								//(ScrollableList)theEvent.getController())
+								lstAddSequenceSelector
+								.getItem(index).get("text")
+								);
+						//final String selected = lstAddFilterSelector.getStringValue();
+						String classname = ((Class<Sequence>)getAvailableSequenceTypes().get(selected)).getName();
+						self.addSequence(Sequence.makeSequence(classname, host)); //Filter.createFilter(classname, self));
+						
+						cf.queueUpdate(new Runnable() {
+							@Override
+							public void run() {								
+								
+								try {
+									System.err.println("TODO: refresh gui after adding sequence");
+									//sequenceEditor.setupControls();cf.upd
+									((SequenceSequencer) APP.getApp().pr.getSequencer()).getGrpSequenceEditor().refreshControls();//.removeSequence(self);										
+
+								} catch (Exception e) {
+									println("Caught exception trying to add a new filter " + e);
+									e.printStackTrace();
+								} 
+							}});
+						
+						//self.setCanvas(map.getKey(), (String)((ScrollableList)theEvent.getController()).getItem(index).get("text"));
+					}
+				})
+				;
+		
+		seq.setBackgroundHeight(position_y + margin_y); // + margin_y); //50);
+
+		
+	}
+
+	static TreeMap available_sequences; 
+	private TreeMap getAvailableSequenceTypes() {
+		if (ChainSequence.available_sequences==null) {
+			Class[] filters_a = APP.getApp().pr.getAvailableSequenceTypes();;
+			available_sequences = new TreeMap<String,Class> ();
+			//String[] filter_names = new String[filters.length];
+			for (Class f : filters_a) {
+				available_sequences.put(f.getSimpleName(), f);
+			}
+			//available_filters = new TreeMap(availableFilters);
+		}
+		return available_sequences;
 	}
 
 	@Override

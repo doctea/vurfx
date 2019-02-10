@@ -44,6 +44,7 @@ public class SequenceEditor extends Group {
 	boolean disable_controls = true;
 	synchronized public SequenceEditor setupControls() {
 
+		final Sequence sequence = this.sequence; 
 		/*for (ControllerInterface<?> c : Collections.synchronizedList((List) this.controllers)) {
 			this.remove(c);
 		}*/
@@ -94,5 +95,14 @@ public class SequenceEditor extends Group {
 
 	public void removeSequence(Sequence self) {
 		this.getSequence().removeSequence(self);		
+	}
+
+	public void refreshControls() {
+		println("refreshControls() called in " + this);
+		this.setupControls();	
+	}
+
+	private void println(String string) {
+		System.out.println("SEQED " + this + ": " + string);		
 	}	
 }

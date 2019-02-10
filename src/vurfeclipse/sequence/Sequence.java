@@ -712,8 +712,9 @@ abstract public class Sequence implements Serializable, Mutable {
 								cf.queueUpdate(new Runnable() {
 									@Override
 									public void run() {
-										//System.out.println("TODO: implement remove sequence functionality!");
-										((SequenceSequencer) APP.getApp().pr.getSequencer()).getGrpSequenceEditor().removeSequence(self);										
+										System.out.println("Told to remove " + self + "!");
+										((SequenceSequencer) APP.getApp().pr.getSequencer()).getGrpSequenceEditor().removeSequence(self);
+										((SequenceSequencer) APP.getApp().pr.getSequencer()).getGrpSequenceEditor().refreshControls();//.removeSequence(self);										
 									}
 								});
 							}
@@ -743,7 +744,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	
 					ScrollableList lstTarget = cp5.addScrollableList(name + "_hostpath")
 							//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-							.setLabel(this.host.getPath()) //((FormulaCallback)c).targetPath)
+							.setLabel(""+this.host.getPath()) //((FormulaCallback)c).targetPath)
 							.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
 							.setPosition(pos_x, pos_y)
 							.setWidth((cp5.papplet.width/6))
@@ -806,4 +807,10 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 
 		public abstract void removeSequence(Sequence self);
+
+		public void setValuesAbsolute(double value, int iteration) {
+			__setValuesAbsolute(value, iteration);
+		};
+
+		public abstract void __setValuesAbsolute(double pc, int iteration);
 }

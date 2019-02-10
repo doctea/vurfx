@@ -97,6 +97,12 @@ public class TunnelScene extends SimpleScene {
 			// TODO Auto-generated method stub
 			
 		}
+
+		@Override
+		public void __setValuesAbsolute(double pc, int iteration) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 	

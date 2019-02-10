@@ -24,7 +24,11 @@ public class BlenderFX1 extends SimpleScene {
 			}
 			return false;
 		}
-    	
+		@Override
+		public void __setValuesAbsolute(double pc, int iteration) {
+			// TODO Auto-generated method stub
+			
+		}
     	
     }
 
@@ -53,6 +57,7 @@ public class BlenderFX1 extends SimpleScene {
 			// TODO Auto-generated method stub
 			
 		}
+
 		
 		/*@Override public ArrayList<Mutable> getMutables() {
 			return this.mutables; //new ArrayList<Mutable>;
