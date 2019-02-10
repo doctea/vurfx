@@ -55,10 +55,12 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 		super.onStart();
 	}
 	
-	//private ParameterCallback eventListener = new Change;	// TODO: wrapper to connect to stream ? attmepting with interface atm
+	// eventAdapter is registered as an event listener with Stream, so picks up events and passes them to here
+	// call alreayd 
 	FormulaCallback eventAdapter = (FormulaCallback) new FormulaCallback() { 
 			@Override
 			public void call(Object value) {
+				setExpressionVariable("pc", self.getPositionPC());
 				call(value,self);
 			}
 	}.setTemporary(true);
@@ -231,8 +233,13 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 		
 		//position_y += 25;
 			
-		Group gFormulaControl = this.eventAdapter.makeControls(cf, tabName + "_formula").moveTo(cf).setPosition(400, position_y).setBackgroundHeight(30);
-		sequenceEditor.add(gFormulaControl).setBackgroundHeight(sequenceEditor.getBackgroundHeight() + gFormulaControl.getBackgroundHeight());
+		Group gFormulaControl = this.eventAdapter.makeControls(cf, tabName + "_formula");//.moveTo(cf).setPosition(400, position_y);//.setBackgroundHeight(0);
+		//gFormulaControl.moveTo(cf);//.bringToFront();
+		gFormulaControl.setPosition(400, position_y);
+		gFormulaControl.moveTo(sequenceEditor);	// this is the magic dust that makes controls not 'locked out'
+		//sequenceEditor.add(gFormulaControl);
+		//.setBackgroundHeight(sequenceEditor.getBackgroundHeight() + gFormulaControl.getBackgroundHeight());
+		//gFormulaControl.setBackgroundHeight(position_y + margin_y);
 		
 	}
 
@@ -274,11 +281,13 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 	synchronized public void __setValuesForNorm(double pc, int iteration) {
 		//if (debug && iteration>0) 
 			//println ("setvaluesfornorm with non-zero iteration " + iteration);
-		for (Sequence seq : chain) { 
-			float d = (float) Parameter.castAs(last_value, Float.class);
-			//seq.setValuesForNorm(d,iteration);
-			//seq.setValuesForTime((int) d/10);//,iteration);
-			seq.setValuesAbsolute(d,iteration);
+		for (Sequence seq : chain) {
+			if (last_value!=null) {
+				float d = (float) Parameter.castAs(last_value, Double.class);
+				//seq.setValuesForNorm(d,iteration);
+				//seq.setValuesForTime((int) d/10);//,iteration);
+				seq.setValuesAbsolute(d,iteration);
+			}
 		}
 	}
 

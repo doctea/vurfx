@@ -46,6 +46,11 @@ public class FormulaCallback extends ParameterCallback {
 		this.outputMode = outputMode;
 	}
 	
+	public void setExpressionVariable(String variable, Object value) {
+		//e.setVariable(variable, (BigDecimal) Parameter.castAs(value, BigDecimal.class));
+		e.setVariable(variable, BigDecimal.valueOf((float)Parameter.castAs(value, Double.class)));
+	}
+	
 	public FormulaCallback setExpression(String expression) {
 		System.out.println(this + " setting expression to '" + expression + "'");
 		this.expression = expression;
