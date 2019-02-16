@@ -44,7 +44,8 @@ public class ControlFrame extends PApplet {
 		System.out.println("ControlFrame setup count " + setupCount);
 		this.cp5 = new ControlP5(this);
 		//cp5.setFont(createFont("Arial",10));
-		cp5.setFont(createFont("",10));
+		//cp5.setFont(createFont("",12));
+		cp5.setFont(APP.getApp().getFont("LCDSolid-128.vlw",13));
 		//frameRate(60);
 
 		//cp5.getPointer().enable(); // experimental .. 

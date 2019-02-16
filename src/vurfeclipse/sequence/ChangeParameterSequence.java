@@ -17,6 +17,7 @@ import controlP5.ScrollableList;
 import controlP5.Textfield;
 import controlP5.Textlabel;
 import controlP5.Toggle;
+import processing.core.PFont;
 import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
@@ -362,6 +363,8 @@ public class ChangeParameterSequence extends Sequence {
 		});
 
 		Textfield txtExpression = cp5.addTextfield(name + "_Expression")
+				.setFont(APP.getApp().getFont("System", 12))
+				//.setHeight(margin_y+18)
 				.setText(this.getExpression())
 				.setPosition(pos_x, pos_y)
 				.moveTo(g).setLabel("Expression")

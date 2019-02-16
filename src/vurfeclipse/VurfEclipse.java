@@ -966,5 +966,13 @@ public class VurfEclipse extends PApplet {
 	public String sketchOutputPath(String path) {
 		return (sketchOutputPath()+"/").replace("null/","")+path.replace(".json", "");
 	}
+
+	static HashMap<String,PFont> fonts = new HashMap<String,PFont>(); 
+	public PFont getFont(String fontName, int size) {
+		if (!fonts.containsKey(fontName + "_" + size)) {
+			fonts.put(fontName+"_"+size,createFont(fontName, size));
+		}
+		return fonts.get(fontName+"_"+size);
+	}
 	
 }
