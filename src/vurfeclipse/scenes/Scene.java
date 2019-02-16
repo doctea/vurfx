@@ -1303,7 +1303,11 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 			hmap.putAll(map);
 			map = hmap;
 		}
-		this.buffermap = map;
+		if (this.buffermap==null) {
+			buffermap = map;
+		} else {
+			this.buffermap.putAll(map);
+		}
 		this.canvas_map_cache = null;
 		//		this.makeControlsCanvasAliases(8);
 		if (this.muteController!=null) refreshCanvasControls();

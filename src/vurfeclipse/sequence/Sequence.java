@@ -38,6 +38,9 @@ import vurfeclipse.filters.Filter;
 import vurfeclipse.projects.ClassJsonConverter;
 
 abstract public class Sequence implements Serializable, Mutable {
+	
+	static int COLOR = new Color(212,212,212).getRGB();	// gui background colour 
+	
 	//Scene sc;
 	private boolean debug = false;
 	
@@ -58,7 +61,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	protected HashMap<String, Object> lastLoadedParams;
 
 	public Object clone () {
-		Sequence newSequence = Sequence.makeSequence(this.getClass().getName(), this.host);
+		Sequence newSequence = Sequence.makeSequence(this.getClass().getName(), this.getHost());
 		
 		newSequence.loadParameters(this.collectParameters());
 		
@@ -106,7 +109,7 @@ abstract public class Sequence implements Serializable, Mutable {
 	public Map<String, Object> collectParameters() {
 		HashMap<String,Object> params = new HashMap<String,Object> ();
 		params.put("class", this.getClass().getCanonicalName());
-		if (this.host!=null) params.put("hostPath", this.host.getPath());
+		if (this.getHost()!=null) params.put("hostPath", this.getHost().getPath());
 		params.put("seed", this.getSeed());
 		params.put("lengthMillis", this.lengthMillis);
 		
@@ -115,7 +118,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		// if it is active sequence then update the scene_parameters with the host.host's collectSceneParameters, though
 		// 2018-09-29 - disable saving scene's canvas information in the sequence
 		Map<String, Map<String, Object>> a = this.getSceneParameters();
-		if (a!=null) a.remove(this.host.getPath() + "/canvases");
+		if (a!=null) a.remove(this.getHost().getPath() + "/canvases");
 		params.put("scene_parameters", a);
 				
 		params.put("enabled", this.isEnabled());
@@ -152,12 +155,12 @@ abstract public class Sequence implements Serializable, Mutable {
 		//this.lastLoadedParams.remove("scene_parameters");
 	}
 
-	protected Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
+	private Scene host;		// TODO: 2017-08-18: this todo was from a long time ago... this structure definitely needs looking at but not so sure this is a simple problem?  if host points to scene then scenes can operate at different timescales which is good... (old todo follows:---) host should be a Project rather than a Scene - its only a Scene because its first used to getScene() from a SwitcherScene ..
 	private boolean disableHostMute;
 
 	public Sequence (Scene host, int sequenceLengthMillis) {
 		this(sequenceLengthMillis);
-		this.host = host;
+		this.setHost(host);
 		this.setup();
 	}
 	/*public Sequence(Scene sc, int sequenceLengthMillis) {
@@ -238,7 +241,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		}
 		if (this.mutables==null) {
 			ArrayList<Mutable> muts = new ArrayList<Mutable>();
-			if (host!=null && !this.disableHostMute) muts.add((Mutable) host);
+			if (getHost()!=null && !this.disableHostMute) muts.add((Mutable) getHost());
 			this.mutables = muts;
 		} 
 		return this.mutables;
@@ -259,7 +262,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		while(it.hasNext()) {
 			Mutable n = it.next();
 			if (n==null) {
-				println ("caught null Mutable in " + this + " hosted by " + this.host + "!!");
+				println ("caught null Mutable in " + this + " hosted by " + this.getHost() + "!!");
 			} else {
 				n.setMuted(muted);
 			}
@@ -308,7 +311,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		
 		if (this.scene_parameters!=null) {
 			for (Entry<String, Map<String, Object>> e : scene_parameters.entrySet()) {
-				Scene s = (Scene) this.host.host.getObjectForPath(e.getKey());
+				Scene s = (Scene) this.getHost().host.getObjectForPath(e.getKey());
 				if (debug) println(this + " about to set scene_parameters on " + s + "!");
 				if(s==null) {
 					System.err.println ("Couldn't find a targetable for key '"+e.getKey()+"'!!!");
@@ -397,7 +400,7 @@ abstract public class Sequence implements Serializable, Mutable {
 		
 		last = now;
 				
-		double scale = ( (null!=this.host) ? this.host.getTimeScale() : 1.0d );
+		double scale = ( (null!=this.getHost()) ? this.getHost().getTimeScale() : 1.0d );
 		//scale /= 20.0d;
 		//now = (int) (((double)now) * scale);
 		/*
@@ -572,9 +575,9 @@ abstract public class Sequence implements Serializable, Mutable {
 		  */
   		//if (true) return -255 * 65546; //255 * 256 * 256;
 
-	  	if (host.hasPalette()) {
+	  	if (getHost().hasPalette()) {
 	  		//return 255 * 255 * 255;
-	  		return (Integer)this.getRandomArrayElement(host.getPalette());
+	  		return (Integer)this.getRandomArrayElement(getHost().getPalette());
 	  	}	  	
 		  
 	  	//to get rainbow, pastel colors
@@ -739,12 +742,12 @@ abstract public class Sequence implements Serializable, Mutable {
 				});
 				pos_x += nmbLength.getWidth() + margin_x;
 	
-				if (host!=null) { 
+				if (getHost()!=null) { 
 					//cp5.addLabel(name + "_host").setValue(host.getPath()).setPosition(80,30).moveTo(seq);
 	
 					ScrollableList lstTarget = cp5.addScrollableList(name + "_hostpath")
 							//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-							.setLabel(""+this.host.getPath()) //((FormulaCallback)c).targetPath)
+							.setLabel(""+this.getHost().getPath()) //((FormulaCallback)c).targetPath)
 							.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
 							.setPosition(pos_x, pos_y)
 							.setWidth((cp5.papplet.width/6))
@@ -777,8 +780,8 @@ abstract public class Sequence implements Serializable, Mutable {
 		public String toString() {
 			try {
 				return super.toString() + " " + 
-						this.host!=null?
-								this.host.getPath()
+						this.getHost()!=null?
+								this.getHost().getPath()
 								:"[no host]";
 			} catch (Exception e) {
 				return ("exception getting name!");
@@ -813,4 +816,13 @@ abstract public class Sequence implements Serializable, Mutable {
 		};
 
 		public abstract void __setValuesAbsolute(double pc, int iteration);
+
+		public int getGuiColour() {
+			// TODO Auto-generated method stub
+			return new Color(212,212,212).getRGB();
+		}
+
+		public Scene getHost() {
+			return host;
+		}
 }

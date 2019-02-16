@@ -138,6 +138,7 @@ public class Parameter implements Serializable, Targetable {
 			} else if (datatype.equals(Float.class) || datatype.equals(Double.class)) {
 				return (Float)Float.parseFloat(payload.toString());
 			} else if (datatype == Boolean.class) {
+				if (payload==null) return new Boolean(false);
 				return Boolean.parseBoolean(payload.toString());
 			} else if (datatype == String.class) {
 				return payload.toString();

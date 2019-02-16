@@ -62,6 +62,7 @@ private PShape shapeCache;
     addParameter("endRadius", 1.0f, 0.2f, 20.0f); //5 //20
     addParameter("numSections", 60.0f, 1.0f, 120.0f);
     addParameter("totalRotate", 0.0f, 0.0f, 360.0f);
+    addParameter("totalZRotate", 0.0f, 0.0f, 360.0f);
     addParameter("zRotate", 0.0f, 0.0f, 360.0f);
 
     addParameter("yRadianMod", 1.0f, 0.1f, 10.0f);
@@ -203,19 +204,34 @@ private PShape shapeCache;
         		i++;
         		continue;
         	}
+
+          	/*for (PShape c : s.getChildren()) {
+          		c.resetMatrix();
+          		//c.set3D(true);
+          		//c.rotateY(PApplet.radians(zRotate));		// want this to rotate each item individually, but its not working..
+          		//for (PShape c2 : c.getChildren()) {
+          		//	//c2.resetMatrix();
+          		//	//c2.rotateY(PApplet.radians(zRotate));
+          		//}
+          		//break;
+          	}*/
         	
         	///////// set object location start
         	s.resetMatrix();
-           
+
+        	
             s.scale(currRadius/4.0f); //new_w,new_h);
-      	  	s.rotate(PApplet.radians(rotation));
+      	  	s.rotate(PApplet.radians(rotation));		// this works to rotate individual sections in 2d...?
+      	  	s.rotateY(PApplet.radians(zRotate));		// THIS DOES ROTATE INDIVIDUALLY IN DEPTH :d
             
       	  	s.setStroke((boolean)this.getParameterValue("edged"));
       	  	s.setStrokeWeight(0.0001f);
-            
+
+      	  	
             //s.rotate(PApplet.radians(totalRotate));  // rotate around the spiral point by the total rotation amount
           	s.translate(x, y);
-          	s.rotate(0.0f,0.0f,PApplet.radians(zRotate),0);
+          	//s.rotate(0.0f,0.0f,0.0f,PApplet.radians(zRotate));	// doesnt work?
+          	
         	///////// set object location end
 
           }
@@ -260,7 +276,8 @@ private PShape shapeCache;
       
       //s.rotate(PApplet.radians(totalRotate));  // rotate around the spiral point by the total rotation amount
   		out.translate(x, y);
-  		out.rotate(0.0f,0.0f,PApplet.radians(zRotate),0);
+  		//out.rotate(0.0f,0.0f,-PApplet.radians(zRotate),0);
+  		//out.rotateY(PApplet.radians((zRotate)));
   	///////// set object location end
 
       return out;
@@ -307,7 +324,7 @@ private PShape shapeCache;
       //float new_w = /*sc.w/*/(sc.w/(currRadius)); //theta*thetaspeed);//theta; ///  radius. width.
       //float new_h = /*sc.h/*/(sc.h/(currRadius)); //theta*thetaspeed);//theta;
       out.rotate(PApplet.radians(rotation)+currentRadian);//+135);  // rotate around the plot point
-      out.rotate(0.0f,0.0f,PApplet.radians(zRotate),0);
+      //out.rotate(0.0f,0.0f,PApplet.radians(zRotate),0);
 
       //drawActualObject(out, currRadius, radians(rotation)+currentRadian);
       drawActualObject(out, currRadius, currentRadian);
@@ -395,7 +412,10 @@ private PShape shapeCache;
 	  
 	  out.translate(w/2, h/2);
 	  
-	  out.rotate((float) Math.toRadians((float)this.getParameterValue("totalRotate")));
+	  out.rotate((float) Math.toRadians((float)this.getParameterValue("totalRotate")));		// rotate in 2d screen terms
+	  out.rotateY((float) Math.toRadians((float)this.getParameterValue("totalZRotate")));		// rotates whole spiral along depth 
+	  
+	  out.lights();
 	  
 	  out.shape(g);
 	  

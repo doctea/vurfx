@@ -32,6 +32,7 @@ public class Blob implements Serializable {
 	public int SH_RANDOM = shapesCount;
 
 	float rot = 0;
+	float zrot = 0;
 
 	private int strokeSize = 3;
 
@@ -116,6 +117,10 @@ public class Blob implements Serializable {
 	public void setRotation(float rot) {
 		this.rot = rot;
 	}
+	
+	public void setRotationZ(float rot) {
+		this.zrot = rot;
+	}
 
 	public void setEdge (boolean edge) {
 		this.edge = edge;
@@ -163,6 +168,9 @@ public class Blob implements Serializable {
 			//out.rotate(random(rot));
 			//out.rotate(rot%(((VurfEclipse)APP.getApp()).millis()/1000)%60);
 			out.rotate(rot%60);
+		}
+		if (zrot!=0) {
+			out.rotate(zrot%60);
 		}
 
 		//if (true) return;

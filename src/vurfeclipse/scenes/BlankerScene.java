@@ -48,7 +48,7 @@ public class BlankerScene extends SimpleScene {
 		}
 		@Override
 		public boolean notifyRemoval(Filter newf) {
-			if (newf==host.getFilter("BlankFilter")) {
+			if (newf==getHost().getFilter("BlankFilter")) {
 				this.setEnabled(false);
 				return true;
 			}

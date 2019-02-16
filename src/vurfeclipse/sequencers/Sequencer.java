@@ -76,6 +76,14 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 			return (Stream) this.streams.get(streamName);
 		}
 	}
+	public Stream getStreamByTitle(String stream_name) {
+		for (Entry<String,Stream> e : getStreams().entrySet()) {
+			if (e.getValue().streamName.equals(stream_name)) {
+				return getStream(e.getKey());
+			}
+		}
+		return null;
+	}
 	public Map<String, Stream> getStreams() {
 		synchronized (streams) {
 			return streams;
@@ -209,7 +217,7 @@ abstract public class Sequencer implements Serializable, Targetable, CallbackLis
 	}
 
 	public boolean sendKeyPressed(char key) {
-		if (key==';' || key=='f') {		// FORWARDS
+		if (key==';') { // || key=='f') {		// FORWARDS
 			setForward();
 		} else if (key=='l') {
 			println("toggling sequencer lock " + toggleLock());

@@ -18,7 +18,7 @@ public class BlenderFX1 extends SimpleScene {
 
 		@Override
 		public boolean notifyRemoval(Filter newf) {
-			if (host.getFilter("BlendDrawer1")==newf) {
+			if (getHost().getFilter("BlendDrawer1")==newf) {
 				this.setEnabled(false);
 				return true;
 			}
@@ -42,7 +42,7 @@ public class BlenderFX1 extends SimpleScene {
 		public void __setValuesForNorm(double norm, int iteration) {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
-			host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
+			getHost().getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 		}
 		@Override public void onStart() {
 			//this.setLengthMillis((int)random(1,5) * 500);
@@ -71,7 +71,7 @@ public class BlenderFX1 extends SimpleScene {
 			super(blenderFX1,i);
 		}
 		@Override public void onStart() {
-			host.getFilter("BlendDrawer1").nextMode();
+			getHost().getFilter("BlendDrawer1").nextMode();
 		}
 		@Override
 		public void __setValuesForNorm(double pc, int iteration) {

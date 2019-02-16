@@ -34,13 +34,13 @@ public class ShowFilterSequence extends Sequence {
 			this.mutables = new ArrayList<Mutable> ();
 			try {
 				//System.out.println(host.host.getObjectForPath(this.filterPath).toString());
-				this.mutables.add((Mutable)host.host.getObjectForPath(this.filterPath));
+				this.mutables.add((Mutable)getHost().host.getObjectForPath(this.filterPath));
 				//System.out.println(host.host.getObjectForPath(this.filterPath).toString());
 			} catch (Exception e) {
 				System.out.println("caught " + e + " for " + this.filterPath);
 				System.exit(1);
 			}
-			this.mutables.add(host);
+			this.mutables.add(getHost());
 		}
 		return this.mutables;
 	}

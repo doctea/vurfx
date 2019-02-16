@@ -226,10 +226,10 @@ public class ImageListScene extends SimpleScene {
 			 */
 			//((ImageListDrawer)host.getFilter("ImageListDrawer")).chooseImageIndex(this.imageIndex);
 			println(" changing to image index " + this.imageIndex);
-			if (host==null) {
+			if (getHost()==null) {
 				println("eek, caught a null host in an ImageListScene changer..?");
 			}
-			((ImageListScene)host).chooseImageIndex(this.imageIndex);
+			((ImageListScene)getHost()).chooseImageIndex(this.imageIndex);
 		}
 		@Override public void onStop() {	}
 		@Override

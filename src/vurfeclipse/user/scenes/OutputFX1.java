@@ -91,16 +91,16 @@ public class OutputFX1 extends SimpleScene {
 			//host.getFilter("BlendDrawer1").changeParameterValue("Opacity", (float)norm);
 		}
 		@Override public void onStart() {
-			if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
+			if (random(0f,1.0f)>=0.5f) getHost().host.getSceneForPath(getPath()).getFilter("Toon").toggleMute();
 			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("pulsatingEmboss").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
 			//switcher.host.getSceneForPath("/sc/OutputShader").getFilter("CrossHatch").setMute((APP.getApp().random(0f,1.0f)>=0.2f));
-			if (random(0f,1.0f)>=0.5f) host.host.getSceneForPath(getPath()).getFilter("Pixelate").toggleMute();
+			if (random(0f,1.0f)>=0.5f) getHost().host.getSceneForPath(getPath()).getFilter("Pixelate").toggleMute();
 		}
 		@Override public void onStop() {	}
 		@Override
 		public boolean notifyRemoval(Filter newf) {
-			if (	host.host.getSceneForPath(getPath()).getFilter("Toon") == newf || 
-					host.host.getSceneForPath(getPath()).getFilter("Pixelate")==newf
+			if (	getHost().host.getSceneForPath(getPath()).getFilter("Toon") == newf || 
+					getHost().host.getSceneForPath(getPath()).getFilter("Pixelate")==newf
 				) {
 				this.setEnabled(false);
 				return true;

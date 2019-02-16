@@ -36,18 +36,18 @@ public class BlobFX1 extends SimpleScene {
 		@Override public void onStart() {
 			super.onStart();
 	
-			colour1 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour1");
-			colour2 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour2");
-			colour3 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour1");
-			colour4 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+			colour1 = (Integer) getHost().getFilter("BlobDrawer").getParameterValue("colour1");
+			colour2 = (Integer) getHost().getFilter("BlobDrawer").getParameterValue("colour2");
+			colour3 = (Integer) getHost().getFilter("BlobDrawer2").getParameterValue("colour1");
+			colour4 = (Integer) getHost().getFilter("BlobDrawer2").getParameterValue("colour2");
 			
-			host.getFilter("BlobDrawer2").randomiseParameters(this,new String[] {
+			getHost().getFilter("BlobDrawer2").randomiseParameters(this,new String[] {
 					"numofCircles", "yRadianMod", "xRadianMod", //"numSections", 
 					"endRadius"
 			});
 			
 	
-			host.getFilter("BlobDrawer").randomiseParameters(this,new String[] {
+			getHost().getFilter("BlobDrawer").randomiseParameters(this,new String[] {
 					"numofCircles", "yRadianMod", "xRadianMod", //"numSections", 
 					"endRadius"
 			});		
@@ -81,10 +81,10 @@ public class BlobFX1 extends SimpleScene {
 		@Override
 		public boolean notifyRemoval(Filter newf) {
 			if (super.notifyRemoval(newf)) return true;
-			if (	host.getFilter("BlobDrawer")==newf ||
-					host.getFilter("BlobDrawer2")==newf ||
-					host.getFilter("BlendDrawer")==newf ||
-					host.getFilter("BlendDrawer2")==newf
+			if (	getHost().getFilter("BlobDrawer")==newf ||
+					getHost().getFilter("BlobDrawer2")==newf ||
+					getHost().getFilter("BlendDrawer")==newf ||
+					getHost().getFilter("BlendDrawer2")==newf
 				) {
 				this.setEnabled(false);
 				return true;
@@ -107,13 +107,13 @@ public class BlobFX1 extends SimpleScene {
 		protected void initialiseDefaultChain() {
 			this.chain.clear();
 			super.initialiseDefaultChain();
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "input*180", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "input*180", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
 			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "1 + (3.5 * sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
 			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "1 + (16 *sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));		
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));		
 		}
 		
 				
@@ -138,18 +138,18 @@ public class BlobFX1 extends SimpleScene {
 			*/
 			// set colours
 			// TODO: move these start/end values parameters of the sequence instead of parameters of the blobdrawer
-			colour1 = (Integer) host.getFilter("BlobDrawer").getParameter("colour1").intValue();
-			colour2 = (Integer) host.getFilter("BlobDrawer").getParameter("colour2").intValue();
-			colour3 = (Integer) host.getFilter("BlobDrawer2").getParameter("colour1").intValue();
-			colour4 = (Integer) host.getFilter("BlobDrawer2").getParameter("colour2").intValue();
+			colour1 = (Integer) getHost().getFilter("BlobDrawer").getParameter("colour1").intValue();
+			colour2 = (Integer) getHost().getFilter("BlobDrawer").getParameter("colour2").intValue();
+			colour3 = (Integer) getHost().getFilter("BlobDrawer2").getParameter("colour1").intValue();
+			colour4 = (Integer) getHost().getFilter("BlobDrawer2").getParameter("colour2").intValue();
 			
 			int col1 = lerpcolour(colour1, colour2, norm); //0.5); //inv_norm);
 			int col2 = lerpcolour(colour3, colour4, norm); //0.5); //norm);
 			
-			host.getFilter("BlobDrawer").changeParameterValue("colour", col1);
-			host.getFilter("BlobDrawer2").changeParameterValue("colour", col2);
+			getHost().getFilter("BlobDrawer").changeParameterValue("colour", col1);
+			getHost().getFilter("BlobDrawer2").changeParameterValue("colour", col2);
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
+			((BlobDrawer)getHost().getFilter("BlobDrawer")).setColour(
 					255,
 					(int)APP.getApp().red(col1),
 					(int)APP.getApp().green(col1),
@@ -157,7 +157,7 @@ public class BlobFX1 extends SimpleScene {
 					//255
 					);
 	
-			((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).setColour(
 					255,
 					(int)APP.getApp().red(col2),
 					(int)APP.getApp().green(col2),
@@ -173,16 +173,16 @@ public class BlobFX1 extends SimpleScene {
 			colour3 = randomColorMinimum(96); //APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 			colour4 = randomColorMinimum(196); //APP.getApp().color((int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255), (int)APP.getApp().random(32,255)); //255(int) APP.getApp().random(2^32);
 			*/
-			((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, /*4, 5, 6, 7 */} ));
-			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, } )); //Blob.SH_TEXTURE, /*5, 6,*/ 7 } ));
+			((BlobDrawer)getHost().getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, /*4, 5, 6, 7 */} ));
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_CIRCLE, Blob.SH_RECT, Blob.SH_POLY, Blob.SH_FLOWER, } )); //Blob.SH_TEXTURE, /*5, 6,*/ 7 } ));
 			
-			((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { /*2, 4, 8, */4} ));
+			((BlendDrawer)getHost().getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { /*2, 4, 8, */4} ));
 			//((BlendDrawer)switcher.getScene("blob drawer").getFilter("BlendDrawer")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 3, 7, 12, 0, 1 } ));
 			//((BlendDrawer)switcher.getScene("blob drawer").getFilter("BlendDrawer")).nextMode();
-			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValueFromSin("xRadianMod",random(0f,1f));
-			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValueFromSin("yRadianMod",random(0f,1f));
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValueFromSin("xRadianMod",random(0f,1f));
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValueFromSin("yRadianMod",random(0f,1f));
 			
-			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValueFromSin("yRadianMod",random(0f,1f));
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValueFromSin("yRadianMod",random(0f,1f));
 			
 	
 			
@@ -205,10 +205,10 @@ public class BlobFX1 extends SimpleScene {
 
 	  		@Override
 	  		protected void initialiseDefaultChain() {
-	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "-input*360", this.getLengthMillis()));
-	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
-	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*180", this.getLengthMillis()));
-	  			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(1), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));
+	  			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "-input*360", this.getLengthMillis()));
+	  			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
+	  			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*180", this.getLengthMillis()));
+	  			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer2").getPath(), "radius", new Float(1), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));
 	  			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "if(iteration%2==0,input,1-input)*20", this.getLengthMillis()));		
 	  		}
 	    	
@@ -234,16 +234,16 @@ public class BlobFX1 extends SimpleScene {
 				
 				//println(this.getClass() + " - " + this.isEnabled() + " sin("+inv_norm+") returns " + Math.sin(inv_norm));
 	    		
-				colour1 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour1");
-				colour2 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour2");
-				colour3 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour1");
-				colour4 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+				colour1 = (Integer) getHost().getFilter("BlobDrawer").getParameterValue("colour1");
+				colour2 = (Integer) getHost().getFilter("BlobDrawer").getParameterValue("colour2");
+				colour3 = (Integer) getHost().getFilter("BlobDrawer2").getParameterValue("colour1");
+				colour4 = (Integer) getHost().getFilter("BlobDrawer2").getParameterValue("colour2");
 
 	   		
 	    		int col1 = lerpcolour(colour1, colour2, inv_norm);
 	    		int col2 = lerpcolour(colour3, colour4, inv_norm);
 	    		
-	    		((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
+	    		((BlobDrawer)getHost().getFilter("BlobDrawer")).setColour(
 	    				255,
 	    				(int)APP.getApp().red(col1),
 	    				(int)APP.getApp().green(col1),
@@ -251,7 +251,7 @@ public class BlobFX1 extends SimpleScene {
 	    				//255
 	    				);
 	
-	    		((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
+	    		((BlobDrawer)getHost().getFilter("BlobDrawer2")).setColour(
 	    				255,
 	    				(int)APP.getApp().red(col2),
 	    				(int)APP.getApp().green(col2),
@@ -269,11 +269,11 @@ public class BlobFX1 extends SimpleScene {
 	   		
 	    		//this.setLengthMillis(500 * (int)(APP.getApp().random(1,10)));
 	    		
-	    		((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { 0, 1, 2, 3, 4 }));//, Blob.SH_TEXTURE} ));
-	    		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { 0, 1, 4 })); //, Blob.SH_TEXTURE } ));
+	    		((BlobDrawer)getHost().getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { 0, 1, 2, 3, 4 }));//, Blob.SH_TEXTURE} ));
+	    		((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { 0, 1, 4 })); //, Blob.SH_TEXTURE } ));
 	    		
-	    		((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 2,  8, 4} ));
-	    		((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValueFromSin("xRadianMod",random(0f,1f));
+	    		((BlendDrawer)getHost().getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 2,  8, 4} ));
+	    		((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValueFromSin("xRadianMod",random(0f,1f));
 	    		
 	    		//toggleOutputs();
 	    	}    	
@@ -292,11 +292,11 @@ public class BlobFX1 extends SimpleScene {
 		
 		@Override
 		protected void initialiseDefaultChain() {
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "-input*360", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));	//sin
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));	//sin		
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "-input*360", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));	//sin
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));	//sin		
 		}
 		
 		public void __setValuesForNorm(double norm, int iteration) {
@@ -319,15 +319,15 @@ public class BlobFX1 extends SimpleScene {
 			host.getFilter("BlobDrawer2").changeParameterValueFromSin("numofCircles", (float)inv_norm); //0.2f+APP.getApp().sin(iteration_warp/2));
 			*/
 	
-			colour1 = (Integer) host.getFilter("BlobDrawer").getParameter("colour1").intValue();
-			colour2 = (Integer) host.getFilter("BlobDrawer").getParameter("colour2").intValue();
-			colour3 = (Integer) host.getFilter("BlobDrawer2").getParameter("colour1").intValue();
-			colour4 = (Integer) host.getFilter("BlobDrawer2").getParameter("colour2").intValue();
+			colour1 = (Integer) getHost().getFilter("BlobDrawer").getParameter("colour1").intValue();
+			colour2 = (Integer) getHost().getFilter("BlobDrawer").getParameter("colour2").intValue();
+			colour3 = (Integer) getHost().getFilter("BlobDrawer2").getParameter("colour1").intValue();
+			colour4 = (Integer) getHost().getFilter("BlobDrawer2").getParameter("colour2").intValue();
 			
 			int col1 = lerpcolour(colour1, colour2, inv_norm);
 			int col2 = lerpcolour(colour3, colour4, norm);
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
+			((BlobDrawer)getHost().getFilter("BlobDrawer")).setColour(
 					255,
 					(int)APP.getApp().red(col1),
 					(int)APP.getApp().green(col1),
@@ -335,7 +335,7 @@ public class BlobFX1 extends SimpleScene {
 					//,255
 					);
 	
-			((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).setColour(
 					255,
 					(int)APP.getApp().red(col2),
 					(int)APP.getApp().green(col2),
@@ -351,19 +351,19 @@ public class BlobFX1 extends SimpleScene {
 			colour3 = randomColorMinimum(96) * 2;
 			colour4 = randomColorMinimum(196);*/
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",random(1.0f)>=0.5f);
-			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",random(1.0f)>=0.5f);
+			((BlobDrawer)getHost().getFilter("BlobDrawer")).changeParameterValue("edged",random(1.0f)>=0.5f);
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValue("edged",random(1.0f)>=0.5f);
 		
 			//this.setLengthMillis(250 * (int)(APP.getApp().random(1,5)));
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).resetParameters(); //.setParameterDefaults();
-			((BlobDrawer)host.getFilter("BlobDrawer2")).resetParameters(); //.setParameterDefaults();
+			((BlobDrawer)getHost().getFilter("BlobDrawer")).resetParameters(); //.setParameterDefaults();
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).resetParameters(); //.setParameterDefaults();
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_COMPOUND, Blob.SH_CIRCLE, Blob.SH_FLOWER , Blob.SH_TEXTURE} ));
-			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_TEXTURE, Blob.SH_RECT, Blob.SH_POLY } ));
+			((BlobDrawer)getHost().getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_COMPOUND, Blob.SH_CIRCLE, Blob.SH_FLOWER , Blob.SH_TEXTURE} ));
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_TEXTURE, Blob.SH_RECT, Blob.SH_POLY } ));
 			
-			((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 10,  8, 4 } ));
-			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValueFromSin("xRadianMod",random(0f,1f));
+			((BlendDrawer)getHost().getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 10,  8, 4 } ));
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValueFromSin("xRadianMod",random(0f,1f));
 			
 			//toggleOutputs();
 		
@@ -382,11 +382,11 @@ public class BlobFX1 extends SimpleScene {
 		}
 		@Override
 		protected void initialiseDefaultChain() {
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*180", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer").getPath(), "totalRotate", new Float(0), "input*360", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer").getPath(), "rotation", new Float(0), "-input*180", this.getLengthMillis()));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer2").getPath(), "totalRotate", new Float(0), "input*180", this.getLengthMillis()));
 			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "1 + (3.5 * sinh(if(iteration%2==0,input,1-input)))", this.getLengthMillis()));
-			this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));
+			this.addSequence(new ChangeParameterSequence(getHost(), getHost().getFilter("BlobDrawer2").getPath(), "radius", new Float(0), "sin(if(iteration%2==0,input,1-input))", this.getLengthMillis()).setOutputMode(Parameter.OUT_SIN));
 			//this.addSequence(new ChangeParameterSequence(host, host.getFilter("BlobDrawer2").getPath(), "numofCircles", new Integer(0), "if(iteration%2==0,input,1-input)*20", this.getLengthMillis()));		
 		}
 		public void __setValuesForNorm(double norm, int iteration) {
@@ -407,16 +407,16 @@ public class BlobFX1 extends SimpleScene {
 	
 			//float iteration_warp = (float)(1.0f/(float)iteration)*(float)norm;
 	
-			colour1 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour1");
-			colour2 = (Integer) host.getFilter("BlobDrawer").getParameterValue("colour2");
-			colour3 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour1");
-			colour4 = (Integer) host.getFilter("BlobDrawer2").getParameterValue("colour2");
+			colour1 = (Integer) getHost().getFilter("BlobDrawer").getParameterValue("colour1");
+			colour2 = (Integer) getHost().getFilter("BlobDrawer").getParameterValue("colour2");
+			colour3 = (Integer) getHost().getFilter("BlobDrawer2").getParameterValue("colour1");
+			colour4 = (Integer) getHost().getFilter("BlobDrawer2").getParameterValue("colour2");
 
 					
 			int col1 = lerpcolour(colour1, colour2, inv_norm);
 			int col2 = lerpcolour(colour3, colour4, inv_norm);
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).setColour(
+			((BlobDrawer)getHost().getFilter("BlobDrawer")).setColour(
 					255,
 					(int)APP.getApp().red(col1),
 					(int)APP.getApp().green(col1),
@@ -429,7 +429,7 @@ public class BlobFX1 extends SimpleScene {
 					(int)APP.getApp().blue(col1))
 					);*/
 	
-			((BlobDrawer)host.getFilter("BlobDrawer2")).setColour(
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).setColour(
 					255,
 					(int)APP.getApp().red(col2),
 					(int)APP.getApp().green(col2),
@@ -447,16 +447,16 @@ public class BlobFX1 extends SimpleScene {
 			
 			//this.setLengthMillis(250 * (int)(APP.getApp().random(1,5)));
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).resetParameters();//.setParameterDefaults();
-			((BlobDrawer)host.getFilter("BlobDrawer2")).resetParameters();//.setParameterDefaults();
+			((BlobDrawer)getHost().getFilter("BlobDrawer")).resetParameters();//.setParameterDefaults();
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).resetParameters();//.setParameterDefaults();
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("edged",random(1)>=0.5f);
-			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("edged",random(1)>=0.5f);
+			((BlobDrawer)getHost().getFilter("BlobDrawer")).changeParameterValue("edged",random(1)>=0.5f);
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValue("edged",random(1)>=0.5f);
 			
-			((BlobDrawer)host.getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_COMPOUND, Blob.SH_CIRCLE, Blob.SH_FLOWER } ));
-			((BlobDrawer)host.getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_RECT, Blob.SH_RECT, Blob.SH_POLY } ));
+			((BlobDrawer)getHost().getFilter("BlobDrawer")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_COMPOUND, Blob.SH_CIRCLE, Blob.SH_FLOWER } ));
+			((BlobDrawer)getHost().getFilter("BlobDrawer2")).changeParameterValue("shape",getRandomArrayElement(new Integer[] { Blob.SH_RECT, Blob.SH_RECT, Blob.SH_POLY } ));
 			
-			((BlendDrawer)host.getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 2,  8, 4 } ));
+			((BlendDrawer)getHost().getFilter("BlendDrawer2")).changeParameterValue("BlendMode",getRandomArrayElement(new Integer[] { 2,  8, 4 } ));
 			//((BlobDrawer)host.getFilter("BlobDrawer2")).setParameterValueFromSin("xRadianMod",APP.getApp().random(0f,1f));
 			
 			//toggleOutputs();

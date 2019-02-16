@@ -7,7 +7,9 @@ import controlP5.CallbackListener;
 import controlP5.ControlP5;
 import controlP5.Group;
 import controlP5.ScrollableList;
+import sun.security.provider.MD5;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,6 +25,10 @@ import vurfeclipse.ui.ControlFrame;
 import vurfeclipse.ui.SequenceEditor;
 
 public class ChainSequence extends Sequence {
+	
+	public int getGuiColour () {
+		return new Color(64,128,64).getRGB();
+	}
 
 	protected ArrayList<Sequence> chain = new ArrayList<Sequence>();
 	
@@ -36,7 +42,7 @@ public class ChainSequence extends Sequence {
 	}
 	synchronized public ChainSequence addSequence(Sequence seq) {
 		seq.setLengthMillis(this.getLengthMillis());
-		if (this.host==null) this.host = seq.host;
+		if (this.getHost()==null) this.setHost(seq.getHost());
 		chain.add(seq);
 		return this;
 	}
@@ -239,7 +245,10 @@ public class ChainSequence extends Sequence {
 					.moveTo(acc);*/
 			Group conts = cs.makeControls(cf, cs.getClass().getSimpleName() + ": " + name + "    [n!: " + n + "]")
 					//.setPosition(0,n*30))
-					.setWidth(cp5.papplet.displayWidth/2);
+					.setWidth(cp5.papplet.displayWidth/2)
+					.setBarHeight(20)
+					.setBackgroundColor(cs.getGuiColour())//new Color(127+(127/n),128,255).getRGB())
+					;
 			Group g = conts;
 			//g.add(conts);
 			//g.setBackgroundHeight(conts.getBackgroundHeight());
@@ -256,7 +265,7 @@ public class ChainSequence extends Sequence {
 		//sequenceEditor.add(acc.moveTo(sequenceEditor));
 		//sequenceEditor.setBackgroundHeight(n * 30);
 		
-		sequenceEditor.setBackgroundHeight(sequenceEditor.getBackgroundHeight() + acc.getBackgroundHeight());
+		sequenceEditor.setBackgroundHeight(sequenceEditor.getBackgroundHeight() + acc.getBackgroundHeight() + 50);
 		
 		/*int n = 0;
 		int y = 40;
@@ -325,14 +334,13 @@ public class ChainSequence extends Sequence {
 								);
 						//final String selected = lstAddFilterSelector.getStringValue();
 						String classname = ((Class<Sequence>)getAvailableSequenceTypes().get(selected)).getName();
-						self.addSequence(Sequence.makeSequence(classname, host)); //Filter.createFilter(classname, self));
+						self.addSequence(Sequence.makeSequence(classname, getHost())); //Filter.createFilter(classname, self));
 						
 						cf.queueUpdate(new Runnable() {
 							@Override
 							public void run() {								
 								
 								try {
-									System.err.println("TODO: refresh gui after adding sequence");
 									//sequenceEditor.setupControls();cf.upd
 									((SequenceSequencer) APP.getApp().pr.getSequencer()).getGrpSequenceEditor().refreshControls();//.removeSequence(self);										
 

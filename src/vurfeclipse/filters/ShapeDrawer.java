@@ -1,28 +1,32 @@
 package vurfeclipse.filters;
 
 import java.util.HashMap;
-
 import processing.core.PGraphics;
 import processing.core.PShape;
+import processing.opengl.PShader;
 import vurfeclipse.*;
 import vurfeclipse.parameters.Parameter;
 import vurfeclipse.scenes.Scene;
 
-public class BlobDrawer extends SpiralDrawer {
+import surface.*;
 
-	Blob b = new Blob();
+public class ShapeDrawer extends SpiralDrawer {
 
+	Surface s;
+	PShape t;
+    private static PShader colorShader = APP.getApp().loadShader("surface-colorfrag.glsl", "surface-colorvert.glsl");;
+	
 	public Filter nextMode () {
 		b.nextShape();
 		this.changeParameterValue("shape", b.getShape());//(Integer)this.getParameterValue("shape")+1);
 		return this;
 	}
 
-	public BlobDrawer(Scene sc) {
+	public ShapeDrawer(Scene sc) {
 		super(sc);
 	}
 
-	public BlobDrawer(Scene sc, int ov_w, int ov_h) {
+	public ShapeDrawer(Scene sc, int ov_w, int ov_h) {
 		super(sc, ov_w, ov_h);
 	}
 
@@ -32,7 +36,7 @@ public class BlobDrawer extends SpiralDrawer {
 		return super.initialise();
 	}
 
-	public BlobDrawer setImage(String fn) {
+	public ShapeDrawer setImage(String fn) {
 		this.b.setImage(fn);
 		ImageRepository.IR.cacheLoad(fn);
 		return this;
@@ -126,27 +130,39 @@ public class BlobDrawer extends SpiralDrawer {
 	      p.scale(new_w,new_h);
 	      p.rotate(currentRadian);*/
 	      
-		b.setShape((Integer)getParameterValue("shape"));
+		/*b.setShape((Integer)getParameterValue("shape"));
 		b.setInput(sc.getCanvas("src").getSurf());//.getTexture()); // was "temp3" ..
 		b.setRadius(currRadius);// * (int)random(5));
-		b.setRotation((int)Math.toRadians((currentRadian)));
-		b.setRotationZ((float) Math.toRadians((float) getParameterValue("zRotate")));
+		b.setRotation((int)Math.toRadians((currentRadian)));*/
 		
-		return b.collectShape(in());
+		//return b.collectShape(in());
 		//return shapeCache;
 		//return b.collectShape(in());
+		//if (s==null) {
+			s = new surface.Horn(APP.getApp(),20,20);
+			//s = new surface.MoebiusStrip(APP.getApp(),20,20);
+			//s = new surface.Torus(APP.getApp(), 20, 20, 5, 5);
+	        s.setScale(1);
+	        s.initColors(APP.getApp().color(255, 125, 0));
+	        //s.setTexture(in());
+	        t = s.getSurface();
+	        //t.fill(APP.getApp().color(255, 125, 0));
+	        //t.scale(w/3);
+	        //t.rotateY((Float)getParameterValue("zRotate"));
+		//}
+		
+		t = s.getSurface();
+		
+		return t;
 	}
 
 	
-	@Deprecated //sort of, is only way to do the old method of texturing blobs -- doesnt appear to be called 2019-02-16? 
+	@Deprecated //sort of, is only way to do the old method of texturing blobs 
 	synchronized public void drawActualObject(PGraphics out, float currRadius, float currentRadian) {
 		b.setShape((Integer)getParameterValue("shape"));
 		b.setInput(sc.getCanvas("src").getSurf());//.getTexture()); // was "temp3" ..
 		b.setRadius(currRadius);// * (int)random(5));
 		b.setRotation((int)Math.toRadians((currentRadian)));
-		/*out.pushMatrix();
-		out.rotateY((float) getParameterValue("zrotate"));
-		out.popMatrix();*/
 		b.draw(out,in());
 	}
 

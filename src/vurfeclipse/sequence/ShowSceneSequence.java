@@ -32,7 +32,7 @@ public class ShowSceneSequence extends Sequence {
 	@Override public ArrayList<Mutable> getMutables () {
 		if (this.mutables==null) {
 			this.mutables = super.getMutables(); //new ArrayList<Mutable> ();
-			this.mutables.add(host);
+			this.mutables.add(getHost());
 		}
 		/*try {
 			System.out.println(host.host.getObjectForPath(this.filterPath).toString());

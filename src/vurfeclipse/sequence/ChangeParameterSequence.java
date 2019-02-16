@@ -1,5 +1,6 @@
 package vurfeclipse.sequence;
 
+import java.awt.Color;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import com.udojava.evalex.Expression.Function;
 
+import controlP5.CColor;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
@@ -31,6 +33,10 @@ import com.udojava.evalex.AbstractFunction;
 import com.udojava.evalex.Expression.*;
 
 public class ChangeParameterSequence extends Sequence {
+	
+	public int getGuiColour () {
+		return new Color(128,64,64).getRGB();
+	}
 
 	com.udojava.evalex.Expression evaluator;
 
@@ -152,8 +158,8 @@ public class ChangeParameterSequence extends Sequence {
 	@Override
 	public void start() {
 		if (targetPath!=null)
-			if (host.host.getObjectForPath(targetPath) instanceof Parameter) {
-				this.paramBuffer.setCircular((((Parameter)host.host.getObjectForPath(targetPath)).isCircular()));
+			if (getHost().host.getObjectForPath(targetPath) instanceof Parameter) {
+				this.paramBuffer.setCircular((((Parameter)getHost().host.getObjectForPath(targetPath)).isCircular()));
 			}
 	}
 
@@ -192,7 +198,7 @@ public class ChangeParameterSequence extends Sequence {
 		if (targetPath==null) 
 			return;
 		
-		Targetable t = (Targetable) host.host.getObjectForPath(targetPath);
+		Targetable t = (Targetable) getHost().host.getObjectForPath(targetPath);
 		if (this.getOutputMode()==Parameter.OUT_ABSOLUTE) {
 			t.target(targetPath, value.floatValue());
 		} else if (this.getOutputMode()==Parameter.OUT_NORMAL) {
@@ -226,7 +232,7 @@ public class ChangeParameterSequence extends Sequence {
 	@Override
 	public void onStart() {
 		if (value!=null)
-			((Targetable)host.host.getObjectForPath(targetPath)).target(targetPath, value);
+			((Targetable)getHost().host.getObjectForPath(targetPath)).target(targetPath, value);
 		/*		((Filter)host.host
 			.getObjectForPath(filterPath))
 			.changeParameterValue(parameterName, value);*/
@@ -236,7 +242,7 @@ public class ChangeParameterSequence extends Sequence {
 	public void onStop() {
 		try {
 			if (value!=null)
-				((Targetable)host.host.getObjectForPath(targetPath)).target(targetPath, value);
+				((Targetable)getHost().host.getObjectForPath(targetPath)).target(targetPath, value);
 
 			/*((Filter)host.host
 					.getObjectForPath(filterPath))
@@ -295,7 +301,7 @@ public class ChangeParameterSequence extends Sequence {
 			//pos_x += tglEnabled.getWidth() + margin_x;
 
 
-		int pos_x = 0, pos_y = 40, margin_x = 10, margin_y = 15;
+		int pos_x = 40, pos_y = 40, margin_x = 10, margin_y = 15;
 		SequenceEditor g = sequenceEditor;
 
 		ControlP5 cp5 = cf.control();
@@ -306,9 +312,6 @@ public class ChangeParameterSequence extends Sequence {
 
 		//println ("adding gui for " + c);
 		//if (c instanceof FormulaCallback) {
-
-
-
 
 		final ScrollableList lstTarget = cp5.addScrollableList(name + "_Target URL")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
@@ -335,11 +338,11 @@ public class ChangeParameterSequence extends Sequence {
 				//s.entrySet();
 				//TODO: might not be a Parameter,could just be a Targetable
 				String targetPath = (String)s.get("text");
-				Targetable target = (Targetable) host.host.getObjectForPath(targetPath);
+				Targetable target = (Targetable) getHost().host.getObjectForPath(targetPath);
 				if (target instanceof Parameter) {
 					Parameter p = (Parameter) target;//(Parameter) host.host.getObjectForPath((String)s.get("text"));
 					synchronized(sequence) {
-						sequence.setHost(((Filter)host.host.getObjectForPath(p.getFilterPath())).sc);
+						sequence.setHost(((Filter)getHost().host.getObjectForPath(p.getFilterPath())).sc);
 						sequence.setTargetPath(p.getPath());
 						//sequence.filterPath = p.getFilterPath();
 						//sequence.parameterName = p.getName();//((String) s.get("text")).substring(((String)s.get("text")).lastIndexOf('/')); //)//t.getsetTargetPath((String) s.get("text"));
@@ -430,9 +433,8 @@ public class ChangeParameterSequence extends Sequence {
 		g.add(lblOutputValue);
 
 		//sequenceEditor.setBackgroundHeight(sequenceEditor.getBackgroundHeight() + y);
-		g.setBackgroundHeight(g.getBackgroundHeight());// + 20);
-
-
+		//g.setBackgroundHeight(g.getBackgroundHeight());// + 20);
+		
 		return sequenceEditor;
 	}
 
@@ -510,7 +512,8 @@ public class ChangeParameterSequence extends Sequence {
 			if (targetPath==null) 
 				return;
 			
-			Targetable t = (Targetable) host.host.getObjectForPath(targetPath);
+			//println("looking for " + targetPath);
+			Targetable t = (Targetable) getHost().host.getObjectForPath(targetPath);
 			if (this.getOutputMode()==Parameter.OUT_ABSOLUTE) {
 				t.target(targetPath, value.floatValue());
 			} else if (this.getOutputMode()==Parameter.OUT_NORMAL) {

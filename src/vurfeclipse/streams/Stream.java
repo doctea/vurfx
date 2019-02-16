@@ -18,11 +18,16 @@ import vurfeclipse.APP;
 import vurfeclipse.Targetable;
 import vurfeclipse.VurfEclipse;
 import vurfeclipse.filters.Filter;
+import vurfeclipse.sequence.ChainSequence;
+import vurfeclipse.sequence.ChangeParameterSequence;
+import vurfeclipse.sequence.Sequence;
+import vurfeclipse.sequence.StreamChainSequence;
+import vurfeclipse.sequencers.SequenceSequencer;
 import vurfeclipse.ui.ControlFrame;
 
 abstract public class Stream implements Serializable {
 	boolean debug = false;
-	String streamName = "Unnamed";
+	public String streamName = "Unnamed";
 	
 	boolean enabled = true;
 
@@ -59,7 +64,9 @@ abstract public class Stream implements Serializable {
 		System.out.println("in " + this + " - registerEventListener(" + paramName + ", " + callback + ")");
 		List<Callback> dis = this.getListenerList(); //paramName);
 		callback.setStreamSource(paramName);
-		dis.add(callback);
+		synchronized(dis) {
+			dis.add(callback);
+		}
 		//dis = this.getListenerList(paramName);
 		System.out.println("listsize is now " + dis.size());
 		System.out.println("listener size is " + listeners.size());
@@ -74,7 +81,9 @@ abstract public class Stream implements Serializable {
 		}
 
 		return this.listeners.get(paramName);*/
-		return this.listeners;
+		synchronized(listeners) {
+			return this.listeners;
+		}
 	}
 	synchronized public List<Object> getMessagesList(String paramName) {
 		List<?> l;
@@ -385,13 +394,59 @@ abstract public class Stream implements Serializable {
 
 			println ("adding gui for " + callback);
 			
+			
+			// add '[->]' button to copy mapping to sequence
+			if (callback instanceof FormulaCallback) {
+				FormulaCallback callback_f = (FormulaCallback) callback;
+				g.add(new Button(cf.control(), this.toString() + "_" + callback_f + "_conv_"+n)
+						.setColorBackground(VurfEclipse.makeColour(255, 0,0)).setLabel("->")
+						.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
+							@Override
+							public void controlEvent(CallbackEvent theEvent) {
+								synchronized(listeners) {
+									//listeners.remove(callback);
+									
+									//cf.updateGuiStreamEditor(); // this causes crash for some reason ?
+									ChainSequence current = (ChainSequence) ((SequenceSequencer)APP.getApp().pr.getSequencer()).getActiveSequence();
+									//StreamChainSequence seq = Sequence.makeSequence(StreamChainSequence.class.getSimpleName(), current.getHost());
+									StreamChainSequence seq = new StreamChainSequence();
+
+									
+									seq.setHost(current.getHost());
+									ChangeParameterSequence cq = new ChangeParameterSequence();
+									cq.setTargetPath(callback_f.targetPath);
+									cq.setExpression(callback_f.getExpression());
+									cq.setOutputMode(callback_f.getOutputMode());
+									
+									cq.setHost(current.getHost());
+									seq.addSequence(cq);
+									seq.activateEmitter(self.streamName, callback_f.getStreamSource());
+									current.addSequence(seq);
+									
+									cf.queueUpdate(new Runnable() {
+										@Override
+										public void run() {								
+											try {
+												((SequenceSequencer) APP.getApp().pr.getSequencer()).getGrpSequenceEditor().refreshControls();										
+											} catch (Exception e) {
+												println("Caught exception trying to add a new filter " + e);
+												e.printStackTrace();
+											} 
+										}});
+									
+								}
+							}					
+						})
+						.moveTo(g).setPosition(0, pos_y).setWidth(margin_x/2));
+			}
+			
 			// add '[x]' button to remove mapping
 			g.add(new Button(cf.control(), this.toString() + "_" + callback + "_del_"+n)
 					.setColorBackground(VurfEclipse.makeColour(255, 0,0)).setLabel("[x]")
 					.addListenerFor(Button.ACTION_BROADCAST, new CallbackListener() {
 						@Override
 						public void controlEvent(CallbackEvent theEvent) {
-							synchronized(self) {
+							synchronized(listeners) {
 								listeners.remove(callback);
 								
 								cf.updateGuiStreamEditor(); // this causes crash for some reason ?

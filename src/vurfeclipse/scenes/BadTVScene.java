@@ -82,15 +82,15 @@ public class BadTVScene extends Scene {
 		}
 		@Override public ArrayList<Mutable> getMutables() {
 			ArrayList<Mutable> muts = new ArrayList<Mutable>();
-			muts.add(host);//.getFilter("BlendDrawer1"));
-			host.getFilter("BadTV").setMuted(!host.getFilter("BadTV").isMuted());
+			muts.add(getHost());//.getFilter("BlendDrawer1"));
+			getHost().getFilter("BadTV").setMuted(!getHost().getFilter("BadTV").isMuted());
 			return muts;
 		}
 		public void __setValuesForNorm(double norm, int iteration) {
 			//System.out.println(this+"#setValuesForNorm("+norm+","+iteration+"): BlendSequence1 " + norm);
 			if (iteration%2==0) norm = 1.0f-norm;	// go up and down again
 			//host.getFilter("BlendDrawer1").setParameterValue("Opacity", (float)norm);
-			host.getFilter("BadTV").changeParameterValue("iTime", norm * 1000.0f);
+			getHost().getFilter("BadTV").changeParameterValue("iTime", norm * 1000.0f);
 			/*host.getFilter("PhaseRGB").changeParameterValueFromSin("rshift", (float)Math.sin(norm));
 			host.getFilter("PhaseRGB").changeParameterValueFromSin("gshift", (float)Math.sin(norm*norm));
 			host.getFilter("PhaseRGB").changeParameterValueFromSin("bshift", (float)Math.sin(norm*norm*norm));*/
@@ -109,7 +109,7 @@ public class BadTVScene extends Scene {
 		@Override public void onStop() {	}
 		@Override
 		public boolean notifyRemoval(Filter newf) {
-			if (newf==host.getFilter("BadTV")) {
+			if (newf==getHost().getFilter("BadTV")) {
 				this.setEnabled(false);
 				return true;
 			}

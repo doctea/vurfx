@@ -54,7 +54,7 @@ public class TunnelScene extends SimpleScene {
 			// TODO Auto-generated method stub
 			for (int i = 1 ; i <= 6 ; i++) {
 			//for (float f = 0.1f ; f < 2.0f ; f+)
-				host.getFilter("Blend_"+i)
+				getHost().getFilter("Blend_"+i)
 					.changeParameterValueFromSin("Scale", (float)Math.sin(pc*(2.0f/(float)i))/2.0f)
 					.changeParameterValue("Opacity", (float)(1.0f/i))//(float)Math.sin(pc*(1.0/(float)i))-0.5f) //(float)pc*i)
 				;
@@ -64,13 +64,13 @@ public class TunnelScene extends SimpleScene {
 
 		@Override
 		public void onStart() {
-			if(host==null) {
+			if(getHost()==null) {
  				println("HEY!!! GOT A NULL HOST FOR " + this.getClass());
  				return;
 			}
 			for (int i = 1 ; i <= 6 ; i++) {
-				host.getFilter("Blend_"+i).changeParameterValue("Rotate", 0);
-				host.getFilter("Blend_"+i).updateAllParameterValues();
+				getHost().getFilter("Blend_"+i).changeParameterValue("Rotate", 0);
+				getHost().getFilter("Blend_"+i).updateAllParameterValues();
 			}
 		}
 
@@ -84,7 +84,7 @@ public class TunnelScene extends SimpleScene {
 		public boolean notifyRemoval(Filter newf) {
 			boolean relevant = false;
 			for (int i = 1 ; i <= 6 ; i++) {
-				if (host.getFilter("Blend_"+i)==newf) {
+				if (getHost().getFilter("Blend_"+i)==newf) {
 					this.setEnabled(false);
 					relevant = true;
 				}
@@ -124,7 +124,7 @@ public class TunnelScene extends SimpleScene {
 			for (int i = 1 ; i <= 6 ; i++) {
 			//for (float f = 0.1f ; f < 2.0f ; f+)
 				//this.host.getObjectForPath(this.host.getPath()+"/Blend_")
-				this.host.getFilter("Blend_"+i)
+				this.getHost().getFilter("Blend_"+i)
 					.changeParameterValue("Scale", (float)((2.0f/i) + (pc * i))) //(float)Math.sin(pc*(2.0f/(float)i))/2.0f)
 					.changeParameterValue("Opacity", (float)(1.0f/i))//(float)Math.sin(pc*(1.0/(float)i))-0.5f) //(float)pc*i)
 				;
@@ -155,11 +155,11 @@ public class TunnelScene extends SimpleScene {
 			// TODO Auto-generated method stub
 			for (int i = 1 ; i <= 6 ; i++) {
 			//for (float f = 0.1f ; f < 2.0f ; f+)
-				this.host.getFilter("Blend_"+i).resetParameters();
-				this.host.getFilter("Blend_"+i).changeParameterValue("Opacity", 0.1f + ((6-i)*0.125f));
+				this.getHost().getFilter("Blend_"+i).resetParameters();
+				this.getHost().getFilter("Blend_"+i).changeParameterValue("Opacity", 0.1f + ((6-i)*0.125f));
 				//getFilter("Blend_"+i).changeParameterValue("Rotate", i); //45 * i-1); //(i-1)*(/6));
-				this.host.getFilter("Blend_"+i).changeParameterValue("BlendMode", (i%2==0?8:3));
-				this.host.getFilter("Blend_"+i).updateAllParameterValues();
+				this.getHost().getFilter("Blend_"+i).changeParameterValue("BlendMode", (i%2==0?8:3));
+				this.getHost().getFilter("Blend_"+i).updateAllParameterValues();
 			}
 		}
 	}
@@ -185,11 +185,11 @@ public class TunnelScene extends SimpleScene {
 			// TODO Auto-generated method stub
 			for (int i = 1 ; i <= 6 ; i++) {
 			//for (float f = 0.1f ; f < 2.0f ; f+)
-				this.host.getFilter("Blend_"+i).resetParameters();
-				this.host.getFilter("Blend_"+i).changeParameterValue("Opacity", 0.1f + ((i)*0.125f));
+				this.getHost().getFilter("Blend_"+i).resetParameters();
+				this.getHost().getFilter("Blend_"+i).changeParameterValue("Opacity", 0.1f + ((i)*0.125f));
 				//getFilter("Blend_"+i).changeParameterValue("Rotate", i); //45 * i-1); //(i-1)*(/6));
-				this.host.getFilter("Blend_"+i).changeParameterValue("BlendMode", (i%2==0?8:3));
-				this.host.getFilter("Blend_"+i).updateAllParameterValues();
+				this.getHost().getFilter("Blend_"+i).changeParameterValue("BlendMode", (i%2==0?8:3));
+				this.getHost().getFilter("Blend_"+i).updateAllParameterValues();
 			}
 		}
 	}	
@@ -215,10 +215,10 @@ public class TunnelScene extends SimpleScene {
 			// TODO Auto-generated method stub
 			for (int i = 1 ; i <= 6 ; i++) {
 			//for (float f = 0.1f ; f < 2.0f ; f+)
-				this.host.getFilter("Blend_"+i).resetParameters();	
-				this.host.getFilter("Blend_"+i).changeParameterValue("Rotate", i * angle); //45 * i-1); //(i-1)*(/6));
-				this.host.getFilter("Blend_"+i).changeParameterValue("BlendMode", (i%2==0?8:3));
-				this.host.getFilter("Blend_"+i).updateAllParameterValues();
+				this.getHost().getFilter("Blend_"+i).resetParameters();	
+				this.getHost().getFilter("Blend_"+i).changeParameterValue("Rotate", i * angle); //45 * i-1); //(i-1)*(/6));
+				this.getHost().getFilter("Blend_"+i).changeParameterValue("BlendMode", (i%2==0?8:3));
+				this.getHost().getFilter("Blend_"+i).updateAllParameterValues();
 			}
 		}
 	}

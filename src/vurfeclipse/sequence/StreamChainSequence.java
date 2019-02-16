@@ -1,5 +1,6 @@
 package vurfeclipse.sequence;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,10 @@ import vurfeclipse.ui.SequenceEditor;
 
 public class StreamChainSequence extends ChainSequence /*implements Callback*/ implements Targetable {
 
+	public int getGuiColour () {
+		return new Color(64,64,128).getRGB();
+	}
+	
 	private String stream_name;
 	private String emitter;
 	private Object last_value;
@@ -39,7 +44,7 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 	
 	private void deactivateEmitter() {
 		if (eventAdapter!=null) {
-			Stream s = APP.getApp().pr.getSequencer().getStream(stream_name);
+			Stream s = APP.getApp().pr.getSequencer().getStream(getStreamName());
 			if (s!=null) {
 				println("removing " + eventAdapter + " from " + s);
 				s.removeEventListener(eventAdapter);
@@ -51,13 +56,13 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 	@Override
 	public void onStart() {
 		//APP.getApp().pr.getSequencer().getStream(stream_name).removeEventListener(eventAdapter);
-		activateEmitter(stream_name, emitter);
+		activateEmitter(getStreamName(), getEmitter());
 		super.onStart();
 	}
 	
 	// eventAdapter is registered as an event listener with Stream, so picks up events and passes them to here
 	// call alreayd 
-	FormulaCallback eventAdapter = (FormulaCallback) new FormulaCallback() { 
+	public FormulaCallback eventAdapter = (FormulaCallback) new FormulaCallback() { 
 			@Override
 			public void call(Object value) {
 				setExpressionVariable("pc", self.getPositionPC());
@@ -83,8 +88,8 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 	synchronized public Map<String,Object> collectParameters() {
 		Map<String,Object> params = super.collectParameters();
 		
-		params.put("stream", this.stream_name);
-		params.put("emitter", this.emitter);
+		params.put("stream", this.getStreamName());
+		params.put("emitter", this.getEmitter());
 		
 		params.put("callback", this.eventAdapter.collectParameters());
 
@@ -95,8 +100,8 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 	synchronized public void loadParameters(Map<String,Object> params) {
 		super.loadParameters(params);
 		
-		this.stream_name = (String) params.get("stream");
-		this.emitter = (String) params.get("emitter");
+		this.setStreamName((String) params.get("stream"));
+		this.setEmitter((String) params.get("emitter"));
 		
 		this.eventAdapter.readParameters((Map<String, Object>) params.get("callback"));
 		
@@ -120,7 +125,8 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 
 		ScrollableList lstStreamSelector = new ScrollableList(cf.control(), tabName + "_stream_selector")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-				.setLabel("[stream]") //((FormulaCallback)c).targetPath)
+				.setLabel(stream_name!=null?stream_name:"[stream]") //((FormulaCallback)c).targetPath)
+				//.setStringValue(stream_name)
 				.moveTo(sequenceEditor)
 				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
 				.addItems((String[]) streams)
@@ -149,8 +155,8 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 		
 		Stream selected;
 		String emitters[] = new String[0]; 
-		if (this.stream_name!=null) {
-			selected = APP.getApp().pr.getSequencer().getStream(stream_name);
+		if (this.getStreamName()!=null) {
+			selected = APP.getApp().pr.getSequencer().getStream(getStreamName());
 			if (selected!=null) {
 				emitters = selected.getEmitterNames();
 			}
@@ -158,7 +164,7 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 		
 		ScrollableList lstEmitterSelector = new ScrollableList(cf.control(), tabName + "_emitter_selector")
 				//.addItem(((FormulaCallback)c).targetPath, ((FormulaCallback)c).targetPath)
-				.setLabel("[emitter]") //((FormulaCallback)c).targetPath)
+				.setLabel(emitter!=null?emitter:"[emitter]") //((FormulaCallback)c).targetPath)
 				.moveTo(sequenceEditor)
 				//.addItems(APP.getApp().pr.getSceneUrls()) //.toArray(new String[0])) //.getTargetURLs().keySet().toArray(new String[0]))
 				.addItems((String[]) emitters)
@@ -193,9 +199,9 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 						
 						// switch to using that emitter's stream here
 						
-						APP.getApp().pr.getSequencer().getStream(stream_name).removeEventListener(eventAdapter);
+						APP.getApp().pr.getSequencer().getStream(getStreamName()).removeEventListener(eventAdapter);
 						deactivateEmitter();
-						activateEmitter(stream_name,selected);						
+						activateEmitter(getStreamName(),selected);						
 					}
 				})
 				;
@@ -213,20 +219,19 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 				
 				println("..selected stream is " + selected);
 				
-				stream_name = selected;
+				setStreamName(selected);
 				Stream stream;
 				String emitters[] = new String[0]; 
-				if (stream_name!=null) {
-					stream = APP.getApp().pr.getSequencer().getStream(stream_name);
+				if (getStreamName()!=null) {
+					stream = APP.getApp().pr.getSequencer().getStream(getStreamName());
 					if (selected!=null) {
 						emitters = stream.getEmitterNames();
 					}
 				}
 				
 				// update the other gui here
-				lstEmitterSelector.setItems(emitters);
-										
-
+				if (emitters!=null)
+					lstEmitterSelector.setItems(emitters);
 			}
 		})
 		;
@@ -243,17 +248,27 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 		
 	}
 
-	protected void activateEmitter(String stream_name, String emitter) {
+	public void activateEmitter(String stream_name, String emitter) {
+		if (emitter_activated)
+			this.deactivateEmitter();
 		if (!emitter_activated) {
-			this.stream_name = stream_name;
-			this.emitter = emitter;
+			this.setStreamName(stream_name);
+			this.setEmitter(emitter);
 			
 			Stream stream = APP.getApp().pr.getSequencer().getStream(stream_name);
-			if (stream==null)  
+			if (stream==null) { // if we didn't hit a stream, we might be getting passed the stream title instead of stream name..
+				println("Falling back to trying getStreamByTitle for '"+stream_name+"'");
+				stream = APP.getApp().pr.getSequencer().getStreamByTitle(stream_name);
+			}
+				
+			if (stream==null) {  
 				println("No stream for " + stream_name + " in activateEmitter?");
-			else if (!stream.getListenerList().contains(this.eventAdapter))
-			//else
+			} else if (!stream.getListenerList().contains(this.eventAdapter)) {
+				// only register event listener if not already listening
+				// this could cause problems if we were to re-use eventAdapters 
+				//else
 				stream.registerEventListener(emitter, this.eventAdapter);
+			}
 			
 			this.emitter_activated = true;
 		}
@@ -289,6 +304,22 @@ public class StreamChainSequence extends ChainSequence /*implements Callback*/ i
 				seq.setValuesAbsolute(d,iteration);
 			}
 		}
+	}
+
+	public String getStreamName() {
+		return stream_name;
+	}
+
+	public void setStreamName(String stream_name) {
+		this.stream_name = stream_name;
+	}
+
+	public String getEmitter() {
+		return emitter;
+	}
+
+	public void setEmitter(String emitter) {
+		this.emitter = emitter;
 	}
 
 	/*
