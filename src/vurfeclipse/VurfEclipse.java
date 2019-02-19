@@ -185,6 +185,7 @@ public class VurfEclipse extends PApplet {
 
 	static public final int global_fps = 60;
 
+	private static final PVector RES_1_1 	= new PVector( 1 ,  1 );
 	private static final PVector RES_4_3 	= new PVector( 4 ,  3 );
 	private static final PVector RES_16_9 	= new PVector( 16,  9 );
 	private static final PVector RES_16_10 	= new PVector( 16, 10 );
@@ -296,6 +297,8 @@ public class VurfEclipse extends PApplet {
 				config_aspect = RES_16_9;
 			} else if (args.contains("-aspect")) {
 				config_aspect = RES_16_10;
+			} else if (args.contains("-aspect11")) {
+				config_aspect = RES_1_1;
 			}
 			if (args.contains("-x")) {
 				config_x = Integer.parseInt(args.get(args.indexOf("-x")+1));
@@ -393,6 +396,7 @@ public class VurfEclipse extends PApplet {
 			println("Initialising size() at " + output_width + ", " + output_height + " using renderer"); //" + gfx_mode);
 			this.size(desired_width, desired_height, P3D);//(output_width, output_height, P3D); //, gfx_mode); // + gw_height, gfx_mode);
 		}
+		
 
 		System.out.println("Finished VurfEclipse#settings() - handing off to setup!");
 	}
@@ -500,6 +504,9 @@ public class VurfEclipse extends PApplet {
 
 		//pr.setupSequencer();
 		//pr.initialiseScenes();
+		
+
+
 
 		pr.initialise();
 
@@ -745,7 +752,7 @@ public class VurfEclipse extends PApplet {
 	}
 
 	public PGraphics getStaticGLBuff(int width, int height) {
-		PGraphics p = new PGraphics();
+		PGraphics p = new PGraphicsOpenGL();
 		p.setSize(width, height);;
 		return p;
 		//return new PGraphics(APP.getApp(), width, height);

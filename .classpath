@@ -97,8 +97,9 @@
 	<classpathentry kind="lib" path="lib/user/video/library/video.jar"/>
 	<classpathentry kind="lib" path="lib/user/video/library/gstreamer-java.jar"/>
 	<classpathentry kind="lib" path="lib/user/video/library/jna.jar"/>
-	<classpathentry excluding="vurfeclipse/filters/dlibKinectFilter.java|vurfeclipse/filters/GLColourDropper.java|vurfeclipse/filters/ImageDrawer.java|vurfeclipse/filters/PointDrawer.java|vurfeclipse/user/projects/AboveBoardsProject.java|vurfeclipse/user/projects/NozstockProject.java|vurfeclipse/scenes/Demo2Scene.java|vurfeclipse/scenes/DemoScene.java|vurfeclipse/user/projects/MagicDustProject.java|vurfeclipse/user/projects/ParadoxProject.java|vurfeclipse/projects/TestProject.java|vurfeclipse/scenes/FeedbackScene.java|vurfeclipse/scenes/VideoScene.java|vurfeclipse/scenes/WebcamScene.java|vurfeclipse/user/projects/NewJourneyProject.java|vurfeclipse/user/projects/PharmacyProject.java|vurfeclipse/user/projects/PostProject.java|vurfeclipse/user/projects/PsychNightProject.java|vurfeclipse/user/projects/SocioSukiProject.java|vurfeclipse/user/projects/SocioSukiVideo2Project.java|vurfeclipse/user/projects/TempSocioSukiVideoProject.java|vurfeclipse/projects/SimpleProject.java|vurfeclipse/filters/DiskWriterFilter.java|vurfeclipse/test/SimpleOpenNI_User_eclipse.java|vurfeclipse/user/projects/MinimalProject.java|vurfeclipse/user/projects/TestProject.java" kind="src" path="src"/>
+	<classpathentry excluding="vurfeclipse/filters/dlibKinectFilter.java|vurfeclipse/filters/GLColourDropper.java|vurfeclipse/filters/ImageDrawer.java|vurfeclipse/filters/PointDrawer.java|vurfeclipse/user/projects/AboveBoardsProject.java|vurfeclipse/user/projects/NozstockProject.java|vurfeclipse/scenes/Demo2Scene.java|vurfeclipse/scenes/DemoScene.java|vurfeclipse/user/projects/MagicDustProject.java|vurfeclipse/user/projects/ParadoxProject.java|vurfeclipse/projects/TestProject.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="lib/user/IceBreakRestServer_1_2.jar"/>
 	<classpathentry kind="lib" path="lib/user/guava/guava-18.0.jar"/>
 	<classpathentry kind="lib" path="lib/user/GSVideo/library/gstreamer-java.jar"/>
@@ -112,29 +113,18 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/SimpleOpenNI/library/SimpleOpenNI.jar"/>
-	<classpathentry kind="lib" path="lib/base/core-34/core.jar">
+	<classpathentry kind="lib" path="lib/user/spout/library/spout.jar" sourcepath="lib/user/spout/src">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-34"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="VurfEclipse/lib/user/spout/library"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/EvalEx-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/user/oscP5/library/oscP5.jar" sourcepath="lib/user/oscP5/src"/>
-	<classpathentry kind="lib" path="lib/base/core-34/gluegen-rt-natives-linux-amd64.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-34"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/core-34/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="lib/base/core-34/jogl-all-natives-linux-amd64.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-34"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/core-34/jogl-all.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="vurfx-p3/lib/base/core-34"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/controlP5"/>
+	<classpathentry kind="lib" path="lib/user/jackson-databind-2.9.8.jar"/>
+	<classpathentry kind="lib" path="lib/user/jackson-annotations-2.9.8.jar"/>
+	<classpathentry kind="lib" path="lib/user/jackson-core-2.9.8.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/processing-340"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/surfacelib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

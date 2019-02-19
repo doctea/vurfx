@@ -267,6 +267,8 @@ public class ChangeParameterSequence extends Sequence {
 	@Override
 	public SequenceEditor makeControls(final ControlFrame cf, String name) {
 		// add an accordion to hold the sub-sequences and recurse
+		name = "CPS: " + this.getTargetPath() + " ["+name+"]";
+		
 		SequenceEditor sequenceEditor = super.makeControls(cf, name);
 
 		final ChangeParameterSequence sequence = this;
