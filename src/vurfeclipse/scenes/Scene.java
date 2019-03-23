@@ -696,10 +696,6 @@ public abstract class Scene implements Serializable, Mutable, Targetable {
 	transient controlP5.Button saveButton;
 	transient controlP5.Button loadButton;
 
-
-
-
-
 	public void savePreset(String filename) {
 		((VurfEclipse)APP.getApp()).io.serialize(filename, this.collectParameters());
 	}

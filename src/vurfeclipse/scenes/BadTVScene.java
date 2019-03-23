@@ -120,6 +120,11 @@ public class BadTVScene extends Scene {
 			// TODO Auto-generated method stub
 			
 		}
+		@Override
+		public void __setValuesAbsolute(double pc, int iteration) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 }

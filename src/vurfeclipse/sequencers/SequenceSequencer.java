@@ -660,6 +660,24 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			}
 		});
 	}
+	
+
+	private void updateGuiSequences() {
+		if (APP.getApp().isReady()) APP.getApp().getCF().queueUpdate(new Runnable () {
+			@Override
+			public void run() {
+				/*if (self.getActiveSequence()!=null && APP.getApp().isReady() && self.lstHistory!=null) 
+					self.lstHistory.addItem(self.getCurrentSequenceName(), self.getCurrentSequenceName());
+				 */
+
+				// sync lstHistory with actual history
+				lstSequenceBank.clear();
+				String[] list = sequences.keySet().toArray(new String[0]);
+				Arrays.sort(list);
+				lstSequenceBank.addItems(list);
+			}
+		});		
+	}
 
 
 	private void updateGuiSequence() {
@@ -672,6 +690,30 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				//self.setupControls(cf, tabName);
 				println("DISABLED: updateGuiSequence about to call setSequence");
 				//grpSequenceEditor.setSequence(getCurrentSequenceName(), getActiveSequence());	// in case above doesn't set things up properly
+				
+				if (APP.getApp().isReady()) APP.getApp().getCF().queueUpdate(new Runnable () {
+					@Override
+					public void run() {
+						
+						txtSeed.setText(""+getActiveSequence().getSeed());
+									
+						if (!getCurrentSequenceName().equals("")) 
+							txtCurrentSequenceName.setValue(getCurrentSequenceName());
+
+						if (!getCurrentSequenceName().equals("")) {
+								/*this.grpSequenceEditor.remove();
+							this.grpSequenceEditor = (SequenceEditor) 
+							this.getActiveSequence()
+								.makeControls(APP.getApp().getCF().control(), getCurrentSequenceName())
+									.setSequence(this.getCurrentSequenceName(), getActiveSequence())
+									.moveTo(this.grpSequenceEditor)
+									.setPosition(0,20)
+							;*/
+							final Sequence sequence = getActiveSequence();
+							getGrpSequenceEditor().setSequence(getCurrentSequenceName(), sequence);
+						}
+					}
+				});
 			}
 		});
 		
@@ -1065,6 +1107,9 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				seq = Sequence.makeSequence("vurfeclipse.sequence.ChainSequence", host.getScenes().get(0));
 			seq.setSceneParameters(current_parameters);
 			seq.start();
+			
+			this.updateGuiSequences();	
+			
 		} else if (key=='U') {
 			println("starting oneshot!");
 			//this.startOneShot((String)this.sequences.keySet().toArray()[0]);
@@ -1092,6 +1137,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
     	loadSequence("test.xml");*/
 
 	}
+
 
 	private void removeActiveSequence() {
 		this.sequences.remove(this.getActiveSequence());
@@ -1198,6 +1244,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private StreamEditor grpStreamEditor;
 	private Textfield txtProjectName;
 	private String tabName;
+	private ListBox lstSequenceBank;
 	
 	@Override public void setupControls (ControlFrame cf, String tabName) {
 		super.setupControls(cf, tabName);
@@ -1232,13 +1279,25 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				//.setWidth(width/3)
 				.moveTo(sequencerTab);
 
-		lstHistory = new controlP5.ListBox(cp5, "sequence names")  	    		
+		lstHistory = new controlP5.ListBox(cp5, "sequence history")  	    		
+				.setPosition(width-(width/3), margin_y + 80)
+				.setSize(width/3, height-margin_y-80)
+				.setItemHeight(20)
+				.setBarHeight(15)
+				.moveTo(sequencerTab)
+				.setItems(this.historySequenceNames)
+				.setType(ListBox.LIST);
+		
+		String[] sorted_sequence_bank = this.sequences.keySet().toArray(new String[0]);
+		Arrays.sort(sorted_sequence_bank);
+		
+		lstSequenceBank = new controlP5.ListBox(cp5, "sequence bank")  	    		
 				.setPosition(width-(width/3), margin_y + 100)
 				.setSize(width/3, height-margin_y-100)
 				.setItemHeight(20)
 				.setBarHeight(15)
 				.moveTo(sequencerTab)
-				.setItems(this.historySequenceNames)
+				.setItems(sorted_sequence_bank)
 				.setType(ListBox.LIST);
 
 		sldProgress = new controlP5.Slider(cp5, "progress")
@@ -1428,6 +1487,22 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				println("got list-selected sequenceName " + sequenceName);
 				this.histMoveCursorAbsolute((int)this.lstHistory.getValue(),true); //distance, restart);
 				//this.changeSequence(sequenceName, false, true);
+		} else if (ev.getAction()==ListBox.ACTION_BROADCAST && ev.getController()==this.lstSequenceBank) {
+			//println("My name is: " + this.lstSequences.getValueLabel().getText());
+			String sequenceName = this.lstSequenceBank.getValueLabel().getText();
+
+			Map<String, Object> test = this.lstSequenceBank.getItem((int)this.lstSequenceBank.getValue());
+			sequenceName = (String) test.get("name");
+
+			//println("got sequencer bank selection value " + (int)this.SequenceBank.getValue());
+			println("got sequencer bank selected list-selected sequenceName " + sequenceName);
+			//this.histMoveCursorAbsolute((int)this.lstHistory.getValue(),true); //distance, restart);
+			//this.changeSequence(sequenceName, false, true);
+			
+			changeSequence(sequenceName, true, true);
+			
+			this.updateGuiSequence();
+
 		} else if (ev.getAction()==ControlP5.ACTION_BROADCAST) {
 			if (ev.getController()==this.sldProgress) {
 				this.getActiveSequence().setValuesForNorm(this.sldProgress.getValue()/100.0,this.getActiveSequence().getIteration());
@@ -1504,6 +1579,13 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	public void renameSequence(String currentSequenceName, String text) {
 		SequenceSequencer self = this;
+		String orig = text;
+		
+		int c = 1;
+		while(sequences.containsKey(text)) {
+			text = orig + "_" + c;
+			c++;
+		}
 
 		this.sequences.put(text, this.getActiveSequence());
 		this.activeSequenceName = text;
@@ -1514,9 +1596,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			place = this.historySequenceNames.indexOf(currentSequenceName);
 		}
 
+		sequences.remove(currentSequenceName);
 		historySequenceNames.remove(currentSequenceName);
 
 		this.updateGuiHistory();
+		updateGuiSequences();
 	}
 
 	//TODO: plumb this cloneSequence in so it can be activated, and test it!
