@@ -1,5 +1,6 @@
 package vurfeclipse.projects;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +86,18 @@ public class SavedProject extends Project {
 		
 		//this.sequencer.target("/seq/bank/sequences", this.inputAll.get("/seq").get("/seq/bank/sequences"));
 		//this.sequencer.target("/seq/bank/history", 	this.inputAll.get("/seq").get("/seq/bank/history"));
-		if (this.sequencer instanceof SequenceSequencer) ((SequenceSequencer) this.sequencer).bindSavedSequences("Saved Sequence ", 500, 1); //switcher.getSequenceCount());	// do this after everything has been created!
+		if (this.sequencer instanceof SequenceSequencer) { 
+			((SequenceSequencer) this.sequencer).bindSavedSequences("Saved Sequence ", 500, 1); //switcher.getSequenceCount());	// do this after everything has been created!
+			
+			//this.addHistorySequenceName(seq_name);
+			try {
+				((SequenceSequencer) this.sequencer).loadHistory(filename.replace(".json", ".history"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+			
 		
 		// add the sequence from the saved load file
 		this.sequencer.target("/seq/changeTo", this.inputAll.get("/seq").get("/seq/sequence"));

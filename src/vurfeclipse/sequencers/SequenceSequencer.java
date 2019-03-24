@@ -132,7 +132,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		this.saveHistory("history.txt");
 	}
 	public void saveHistory(String fileName) throws IOException {
-		FileOutputStream fos = new FileOutputStream(fileName);
+		FileOutputStream fos = new FileOutputStream(APP.getApp().sketchOutputPath(fileName));
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(this.historySequenceNames);
 		/*for (String seqname : this.historySequenceNames) {
@@ -151,7 +151,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		FileInputStream fis = new FileInputStream(fileName);
 		ObjectInputStream ois = new ObjectInputStream(fis);
 		try {
-			this.historySequenceNames = (LinkedList<String>) ois.readObject();
+			this.historySequenceNames = (List<String>) ois.readObject();
 			println("Loaded sequencer history from " + fileName + "!");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -986,7 +986,8 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 						.replace(".json","")
 						;
 				((Map<String, Sequence>) sequences).put(seq_name, newSeq);
-				this.addHistorySequenceName(seq_name);
+				
+				//this.addHistorySequenceName(seq_name);
 			}
 		}
 		//return textFiles;
@@ -1079,6 +1080,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		} else if (key=='o') { // HISTORY 'cut' between cursor/next (or do random if at end?)
 			cutSequence();
 		} else if (key=='b') { // save current sequence to separate .xml file
+			this.preserveCurrentSceneParameters();
 			this.getActiveSequence().saveSequencePreset(
 					this.host.getProjectFilename()
 						.replace(".xml", "")
@@ -1088,6 +1090,31 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 						this.getCurrentSequenceName());
 		} else if (key=='B') { // dump entire current sequencer bank to separate .xml files
 			this.saveBankSequences(this.host.getProjectFilename().replace(".xml", "")); //this.host.getClass().getSimpleName());
+		} else if (key=='G') { 
+			// loop over each sequence
+			// loop over each scene in sequence parameters
+			// if scene doesn't have a mute setting, set it to false
+			this.resetSequenceMutes();
+			try {
+				this.saveHistory(host.getProjectFilename().replace(".json", ".history"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (key=='g') { 
+			// loop over each sequence
+			// loop over each scene in sequence parameters
+			// if scene doesn't have a mute setting, set it to false
+			//this.resetSequenceMutes();
+			try {
+				this.loadHistory(host.getProjectFilename().replace(".json", ".history"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (this.historyCursor>=this.historySequenceNames.size()) this.historyCursor = this.historySequenceNames.size()-1;
+			this.updateGuiHistory();
+			this.histMoveCursor(0, true);
 		} else if (key=='X') {
 			this.removeActiveSequence();
 		} else if (key=='p') {
@@ -1139,10 +1166,36 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 
+	private void resetSequenceMutes() {
+		synchronized(this.sequences) { 
+			for (Sequence seq : this.sequences.values()) {
+				println("for sequence " + seq);
+				for (Scene sc : host.getScenes() ) {
+					println("	For scene " + sc + " (" + sc.getSceneName() + ")");
+					Map<String, Map<String, Object>> m = seq.getSceneParameters();//.get(key);
+					if (!m.containsKey(sc.getPath())) {
+						println("		got one needs adding?" + sc.getPath());
+					} else {
+						//println("so must contain " + sc.getPath() + "?");
+						println("		muted: " + m.get(sc.getPath()).get(sc.getPath()+"/mute"));
+						if (!m.get(sc.getPath()).containsKey(sc.getPath()+"/mute")) {
+							println("			found one without muted? " + sc.getPath());
+						}
+					}
+				}
+			}
+		}
+	}
+
 	private void removeActiveSequence() {
-		this.sequences.remove(this.getActiveSequence());
-		this.historySequenceNames.remove(this.getActiveSequence());
-		
+		//this.sequences.remove(this.getActiveSequence());
+		this.historySequenceNames.remove(this.historyCursor);
+		//.remove(this.getCurrentSequenceName()); //getActiveSequence());
+		this.historyCursor--;
+		if (this.historyCursor<0) historyCursor = 0;
+		//this.histMoveCursorAbsolute(this.historyCursor, true);
+		this.updateGuiHistory();
+		this.histMoveCursor(0, true);
 	}
 
 	//@Deprecated //no longer deprecated! - 2018-09-21
@@ -1461,14 +1514,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		//println("controlevent in " + this);
 		if (ev.getAction()==ControlP5.ACTION_RELEASE) {
 			Controller c = ev.getController();
-			if (ev.getController()==this.saveHistoryButton) {
+			if (this.saveHistoryButton!=null && ev.getController()==this.saveHistoryButton) {
 				try {
 					this.saveHistory();
 				} catch (IOException e) {
 					println("Problem saving history!");
 					e.printStackTrace();
 				}
-			} else if (ev.getController()==this.loadHistoryButton) {
+			} else if (this.saveHistoryButton!=null && ev.getController()==this.loadHistoryButton) {
 				try {
 					this.loadHistory();
 				} catch (IOException e) {

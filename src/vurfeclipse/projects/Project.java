@@ -651,6 +651,10 @@ public abstract class Project implements Serializable {
 			    writer.close();
 			}
 			
+			if (this.getSequencer() instanceof SequenceSequencer) {
+				((SequenceSequencer) this.getSequencer()).saveHistory(filename.replace(".json", ".history"));
+			}
+			
 			/*
 			// jackson version todo to try and preserve order of saving scenes https://stackoverflow.com/questions/6365851/how-to-keep-fields-sequence-in-gson-serialization
 			ObjectMapper om = new ObjectMapper();
