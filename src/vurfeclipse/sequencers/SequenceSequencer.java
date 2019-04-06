@@ -83,7 +83,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 
 	public boolean startOneShot(String sequenceName) {
 		this.oneshot = (Sequence) this.getSequence(sequenceName).clone();
-		this.oneshot.setLengthMillis(25); //this.oneshot.getLengthMillis()/4);
+		this.oneshot.setLengthMillis((int) (this.getTimeScale() * 1000.0f)); //this.oneshot.getLengthMillis()/4);
 		this.oneshot.start();	// reset to initial parameters but don't reset time
 		//this.oneshotStart = APP.getApp().timeMillis;
 		return this.oneshot != null;
@@ -496,12 +496,15 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 		//changeSequence((String)sequences.keySet().toArray()[chosen]);
 		println("Chose random element " + chosen + " of " + count + "('" + (String)randomPool.get(chosen) + "')");
 		
-		Sequence newseq = this.getSequence((String)randomPool.toArray()[chosen]);
+		/*Sequence newseq = this.getSequence((String)randomPool.toArray()[chosen]);
 		newseq = (Sequence)newseq.clone();
 		String newname = "r:" + (String)randomPool.toArray()[chosen];
 		this.addSequence(newname, newseq);
 		
-		changeSequence(newname); //(String)randomPool.toArray()[chosen]);
+		changeSequence(newname); //(String)randomPool.toArray()[chosen]);*/
+		
+		changeSequence((String)randomPool.toArray()[chosen]);
+		
 		/*} catch (Exception e) {
 		  	this.println("randomSequence() with chosen " + chosen + " (of count " + count + ") caught " + e);
 		  }*/
@@ -731,14 +734,11 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			@Override
 			public void run() {
 				
-				txtSeed.setText(""+getActiveSequence().getSeed());
+				if (getActiveSequence()!=null)
+					txtSeed.setText(""+getActiveSequence().getSeed());
 				
-				if (oldCursor>=0 && oldCursor<lstHistory.getItems().size() && oldCursor!=newCursor) 
-					lstHistory.getItem(oldCursor).put("state", false);
-
-				if (newCursor>=0 && newCursor<lstHistory.getItems().size()) 
-					lstHistory.getItem(newCursor).put("state", true);
-
+				self.updateGuiSequenceHighlight(oldCursor, newCursor);
+				
 				if (!getCurrentSequenceName().equals("")) 
 					txtCurrentSequenceName.setValue(getCurrentSequenceName());
 
@@ -756,6 +756,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				}
 			}
 		});
+	}
+
+	protected void updateGuiSequenceHighlight(int oldCursor, int newCursor) {
+		if (oldCursor>=0 && oldCursor<lstHistory.getItems().size())// && oldCursor!=newCursor) 
+			lstHistory.getItem(oldCursor).put("state", false);
+
+		if (newCursor>=0 && newCursor<lstHistory.getItems().size()) 
+			lstHistory.getItem(newCursor).put("state", true);
 	}
 
 	private void updateGuiProgress(Sequence activeSequence) {
@@ -1065,13 +1073,14 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	@Override 
 	public boolean sendKeyPressed(char key) {
 		//println("wtf?");
-		if (key=='e') {
+		/*if (key=='e') {
 			try {
 				loadHistory();
 			} catch (IOException e) {
 				System.out.println("Couldn't load history! " + e);
 			}
-		} else if (key=='j' || key=='J') {	// HISTORY BACK
+		} else */
+		if (key=='j' || key=='J') {	// HISTORY BACK
 			histPreviousSequence(1,key=='j'?true:false);
 		} else if (key=='k' || key=='K') { // HISTORY FORWARD
 			histNextSequence(1,key=='k'?true:false);
@@ -1090,7 +1099,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 						this.getCurrentSequenceName());
 		} else if (key=='B') { // dump entire current sequencer bank to separate .xml files
 			this.saveBankSequences(this.host.getProjectFilename().replace(".xml", "")); //this.host.getClass().getSimpleName());
-		} else if (key=='G') { 
+		} else if (key=='G') { // save playlist
 			// loop over each sequence
 			// loop over each scene in sequence parameters
 			// if scene doesn't have a mute setting, set it to false
@@ -1101,7 +1110,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if (key=='g') { 
+		} else if (key=='g') { 	// load playlist
 			// loop over each sequence
 			// loop over each scene in sequence parameters
 			// if scene doesn't have a mute setting, set it to false
@@ -1115,8 +1124,25 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			if (this.historyCursor>=this.historySequenceNames.size()) this.historyCursor = this.historySequenceNames.size()-1;
 			this.updateGuiHistory();
 			this.histMoveCursor(0, true);
+		} else if (key=='u') { // move current sequence history element upwards in list
+			if (historyCursor>0) {
+				String t = this.historySequenceNames.get(this.historyCursor);
+				this.historySequenceNames.set(historyCursor, this.historySequenceNames.get(historyCursor-1));
+				this.historySequenceNames.set(historyCursor-1, t);
+				this.histMoveCursor(-1, false);
+				this.updateGuiHistory();		
+			}
+		} else if (key=='i') { // move current sequence history element downwards in list
+			if (historyCursor<historySequenceNames.size()) {
+				String t = this.historySequenceNames.get(this.historyCursor);
+				this.historySequenceNames.set(historyCursor, this.historySequenceNames.get(historyCursor+1));
+				this.historySequenceNames.set(historyCursor+1, t);
+				this.histMoveCursor(1, false);
+				this.updateGuiHistory();
+			}			
 		} else if (key=='X') {
 			this.removeActiveSequence();
+
 		} else if (key=='p') {
 			this.togglePlaylist(!this.isHistoryMode());
 		} else if (key=='h') {
@@ -1124,19 +1150,55 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			this.host.accordion.close();
 		} else if (key=='d') {
 			this.preserveCurrentSceneParameters();
-		} else if (key=='v') {
+		} else if (key=='V') {
 			//this.preserveCurrentSceneParameters();
 			Map<String, Map<String, Object>> current_parameters = this.host.collectSceneParameters();
 			Sequence seq;
-			if (this.getActiveSequence()!=null)
-				seq = this.cloneSequence(this.activeSequenceName, "Copy of " + this.activeSequenceName);
-			else
+			if (this.getActiveSequence()!=null) {
+				int i = 1;
+				String n = this.activeSequenceName + " " + i;
+				while (this.sequences.containsKey(n)) {
+					i++;
+					n = this.activeSequenceName + " " + i;
+				}
+				seq = this.cloneSequence(this.activeSequenceName, n, true);
+			} else
 				seq = Sequence.makeSequence("vurfeclipse.sequence.ChainSequence", host.getScenes().get(0));
 			seq.setSceneParameters(current_parameters);
 			seq.start();
 			
-			this.updateGuiSequences();	
+			this.updateGuiHistory();
 			
+			this.updateGuiSequences();
+		} else if (key=='Z') {	// clone sequence in-place 'make unique'
+			
+			// get the current sequence settings so that we can save them to the clone
+			Map<String, Map<String, Object>> current_parameters = this.host.collectSceneParameters();
+			Sequence seq;
+			
+			int i = 1;
+			String n = this.activeSequenceName + " " + i;
+			// make the clone
+			if (this.getActiveSequence()!=null) {
+				while (this.sequences.containsKey(n)) {
+					i++;
+					n = this.activeSequenceName + " " + i;
+				}
+				seq = this.cloneSequence(this.activeSequenceName, n, false);
+			} else
+				seq = Sequence.makeSequence("vurfeclipse.sequence.ChainSequence", host.getScenes().get(0));
+			seq.setSceneParameters(current_parameters);
+			seq.start();
+			
+			// replace entry in playlist with the clone
+			this.historySequenceNames.set(historyCursor, n);
+			
+			this.updateGuiHistory();
+			
+			this.updateGuiSequences();
+		} else if (key=='v') {
+			this.historySequenceNames.add(historyCursor+1, this.getCurrentSequenceName());
+			this.updateGuiHistory();
 		} else if (key=='U') {
 			println("starting oneshot!");
 			//this.startOneShot((String)this.sequences.keySet().toArray()[0]);
@@ -1169,22 +1231,27 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	private void resetSequenceMutes() {
 		synchronized(this.sequences) { 
 			for (Sequence seq : this.sequences.values()) {
+				
 				println("for sequence " + seq);
-				for (Scene sc : host.getScenes() ) {
-					println("	For scene " + sc + " (" + sc.getSceneName() + ")");
-					Map<String, Map<String, Object>> m = seq.getSceneParameters();//.get(key);
-					if (!m.containsKey(sc.getPath())) {
-						println("		got one needs adding?" + sc.getPath());
-					} else {
-						//println("so must contain " + sc.getPath() + "?");
-						println("		muted: " + m.get(sc.getPath()).get(sc.getPath()+"/mute"));
-						if (!m.get(sc.getPath()).containsKey(sc.getPath()+"/mute")) {
-							println("			found one without muted? " + sc.getPath());
-						}
-					}
-				}
+				this.resetSequenceMute(seq);
 			}
 		}
+	}
+
+	private void resetSequenceMute(Sequence seq) {
+		for (Scene sc : host.getScenes() ) {
+			println("	For scene " + sc + " (" + sc.getSceneName() + ")");
+			Map<String, Map<String, Object>> m = seq.getSceneParameters();//.get(key);
+			if (!m.containsKey(sc.getPath())) {
+				println("		got one needs adding?" + sc.getPath());
+			} else {
+				//println("so must contain " + sc.getPath() + "?");
+				println("		muted: " + m.get(sc.getPath()).get(sc.getPath()+"/mute"));
+				if (!m.get(sc.getPath()).containsKey(sc.getPath()+"/mute")) {
+					println("			found one without muted? " + sc.getPath());
+				}
+			}
+		}		
 	}
 
 	private void removeActiveSequence() {
@@ -1657,14 +1724,15 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 	}
 
 	//TODO: plumb this cloneSequence in so it can be activated, and test it!
-	public Sequence cloneSequence(String sequenceName, String newName) {
+	public Sequence cloneSequence(String sequenceName, String newName, boolean change) {
 		Sequence sequence = this.getSequence(sequenceName);
 
 		// clone it and add it back to sequences under new name
 		sequence = (Sequence) sequence.clone();
 		// add it to history under new name by switching to it
 		this.addSequence(newName, sequence);
-		changeSequence(newName);
+		if (change)
+			changeSequence(newName);
 
 		return sequence;
 		// clone the play list entry...

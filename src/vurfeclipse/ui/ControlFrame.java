@@ -144,6 +144,7 @@ public class ControlFrame extends PApplet {
 			while (li.hasNext()) {
 				Runnable q = li.next();
 				q.run();
+				//println("got q " + q);
 				synchronized(updateQueue) {
 					updateQueue.remove(q);
 				}
