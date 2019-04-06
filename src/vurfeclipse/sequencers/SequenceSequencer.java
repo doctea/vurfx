@@ -1150,7 +1150,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			this.host.accordion.close();
 		} else if (key=='d') {
 			this.preserveCurrentSceneParameters();
-		} else if (key=='V') {
+		} else if (key=='V') {	// clone sequence and add to playlist
 			//this.preserveCurrentSceneParameters();
 			Map<String, Map<String, Object>> current_parameters = this.host.collectSceneParameters();
 			Sequence seq;
@@ -1170,8 +1170,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			this.updateGuiHistory();
 			
 			this.updateGuiSequences();
-		} else if (key=='Z') {	// clone sequence in-place 'make unique'
-			
+		} else if (key=='Z') {	// clone sequence in-place ie 'make unique'
 			// get the current sequence settings so that we can save them to the clone
 			Map<String, Map<String, Object>> current_parameters = this.host.collectSceneParameters();
 			Sequence seq;
@@ -1196,7 +1195,7 @@ public class SequenceSequencer extends Sequencer implements Targetable {
 			this.updateGuiHistory();
 			
 			this.updateGuiSequences();
-		} else if (key=='v') {
+		} else if (key=='v') {	// insert copy of this sequence into next position in playlist
 			this.historySequenceNames.add(historyCursor+1, this.getCurrentSequenceName());
 			this.updateGuiHistory();
 		} else if (key=='U') {
