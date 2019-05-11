@@ -63,6 +63,7 @@ public class SpiralDrawer extends Filter {
 		addParameter("numSections", 60.0f, 1.0f, 120.0f);
 		addParameter("totalRotate", 0.0f, 0.0f, 360.0f);
 		addParameter("totalZRotate", 0.0f, 0.0f, 360.0f);
+		addParameter("totalYRotate", 0.0f, 0.0f, 360.0f);
 		addParameter("zRotate", 0.0f, 0.0f, 360.0f);
 
 		addParameter("yRadianMod", 1.0f, 0.1f, 10.0f);
@@ -102,6 +103,9 @@ public class SpiralDrawer extends Filter {
 	//ArrayList<PShape> list = new ArrayList<PShape> ();
 	PShape list = APP.getApp().createShape(APP.getApp().GROUP);
 
+
+	protected float max_numsections = 100;
+
 	public PShape collectShapes() {
 		PVector pSpiralCenter = (PVector)getParameterValue("spiralCenter");
 		if (pSpiralCenter!=null) pSpiralCenter = new PVector(0.0f,0.0f);
@@ -115,6 +119,8 @@ public class SpiralDrawer extends Filter {
 		float endRadius = (Float)getParameterValue("endRadius");
 		//int numSections = (Integer)getParameterValue("numSections");
 		float numSections = (Float)getParameterValue("numSections");
+		if (numSections>=this.max_numsections )
+			numSections = max_numsections;
 		//float deltaMod = (Float)getParameterValue("deltaMod");
 		float totalRotate = (Float)getParameterValue("totalRotate");
 		float rotation = (Float)getParameterValue("rotation");
@@ -232,6 +238,8 @@ public class SpiralDrawer extends Filter {
 					s.translate(x, y);
 					//s.rotate(0.0f,0.0f,0.0f,PApplet.radians(zRotate));	// doesnt work?
 
+					//s.resetMatrix();	// added to try and fix shape going large 2019-05- 
+					
 					///////// set object location end
 
 				}
@@ -319,13 +327,14 @@ public class SpiralDrawer extends Filter {
 		//println("totalRotate is " + totalRotate);
 		out.rotate(PApplet.radians(totalRotate));  // rotate around the spiral point by the total rotation amount
 
-
 		out.translate(x, y);  // move to the plot point
 
 		//float new_w = /*sc.w/*/(sc.w/(currRadius)); //theta*thetaspeed);//theta; ///  radius. width.
 		//float new_h = /*sc.h/*/(sc.h/(currRadius)); //theta*thetaspeed);//theta;
 		out.rotate(PApplet.radians(rotation)+currentRadian);//+135);  // rotate around the plot point
 		//out.rotate(0.0f,0.0f,PApplet.radians(zRotate),0);
+		
+		out.rotateY(PApplet.radians(zRotate));//-PApplet.radians(rotation));
 
 		//drawActualObject(out, currRadius, radians(rotation)+currentRadian);
 		drawActualObject(out, currRadius, currentRadian);
@@ -417,13 +426,23 @@ public class SpiralDrawer extends Filter {
 
 		PGraphics out = out();
 		out.background(0,0,0,0);
+		
 
 		out.pushMatrix();
+		//out.translate(w/2, h/2);
+		//out.rotateY((float) Math.toRadians((float)this.getParameterValue("totalZRotate")));		// rotates whole spiral along depth
+		//out.popMatrix();
+		
+		
+		//out.pushMatrix();
 
 		out.translate(w/2, h/2);
 
+		out.rotateY((float) Math.toRadians((float)this.getParameterValue("totalZRotate")));		// rotates whole spiral along depth
+		
+		out.rotateX((float) Math.toRadians((float)this.getParameterValue("totalYRotate")));		// rotates whole spiral along depth
+		
 		out.rotate((float) Math.toRadians((float)this.getParameterValue("totalRotate")));		// rotate in 2d screen terms
-		out.rotateY((float) Math.toRadians((float)this.getParameterValue("totalZRotate")));		// rotates whole spiral along depth 
 
 		this.applyMeatToBuffers_shader(out);
 
@@ -481,7 +500,14 @@ public class SpiralDrawer extends Filter {
 		float rotation = (Float)getParameterValue("rotation");
 		float radius = (Float)getParameterValue("radius");
 		float zRotate = (Float)getParameterValue("zRotate");
+		float totalZRotate = (float)this.getParameterValue("totalZRotate");
+		float totalYRotate = (float)this.getParameterValue("totalYRotate");
 
+		out.rotateX((float) Math.toRadians(totalYRotate));		// rotates whole spiral along depth
+
+		
+		out.rotateY((float) Math.toRadians(totalZRotate));		// rotates whole spiral along depth
+		
 		float xRadianMod = (Float)getParameterValue("xRadianMod");
 		float yRadianMod = (Float)getParameterValue("yRadianMod");
 
@@ -518,8 +544,9 @@ public class SpiralDrawer extends Filter {
 				currRadius = PApplet.map(currentRadian, startRadian, endRadian, startRadius, endRadius) * radius;
 				x = (float) ((double)xRadianMod*(double)PApplet.cos(currentRadian) * ((double)currRadius / (double)radius));// / radius);
 				y = (float) ((double)yRadianMod*(double)PApplet.sin(currentRadian) * (double)((double)currRadius / (double)radius));// / radius);
-
+				
 				this.drawObject(x,y,spiralCenter,totalRotate,rotation,zRotate,currRadius,currentRadian,deltaAngle);
+				
 			}
 		} else {
 			int n = 0;

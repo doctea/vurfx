@@ -259,11 +259,13 @@ public class ChainSequence extends Sequence {
 			n++;
 		}
 		
-		if (n>0)
-			acc.open();
+		//if (n>0)
+			//acc.open();
 		
 		//sequenceEditor.add(acc.moveTo(sequenceEditor));
 		//sequenceEditor.setBackgroundHeight(n * 30);
+		
+		acc.recallOpen();
 		
 		sequenceEditor.setBackgroundHeight(sequenceEditor.getBackgroundHeight() + acc.getBackgroundHeight() + 50);
 		

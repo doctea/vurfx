@@ -1,9 +1,12 @@
 package vurfeclipse.ui;
 
+import controlP5.Accordion;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
 import controlP5.ControlP5;
+import controlP5.Controller;
 import controlP5.ControllerGroup;
+import controlP5.ControllerInterface;
 import controlP5.ControllerList;
 import controlP5.Group;
 import controlP5.Tab;
@@ -53,6 +56,14 @@ public class SequenceEditor extends Group {
 			sequence.println("skipping setup of controls for non-active sequence!");
 			return this;
 		}
+		
+		if (sequence!=null && isEnableControls()) {
+			if (this.controller!=null) {
+
+				this.rememberSequenceStatuses();
+			}
+		}
+				
 		//this.controllers.get().clear();
 		this.removeControllers();
 		//System.gc();
@@ -77,6 +88,7 @@ public class SequenceEditor extends Group {
 				//((SequenceSequencer)APP.getApp().pr.getSequencer()).getActiveSequence().seq = null;
 			}
 			this.controller = sequence.makeControls(APP.getApp().getCF(), sequence.getClass().getSimpleName() + ": " + sequenceName).moveTo(this).setPosition(0,10);
+			this.restoreSequenceStatuses();
 		} else {
 			System.out.println("SequenceEditor controls disabled, not creating!");
 		}
@@ -84,6 +96,26 @@ public class SequenceEditor extends Group {
 		return this;
 	}
 	
+	private void restoreSequenceStatuses() {
+		/*for (ControllerInterface<?> c : this.controller.controllers.get()) {
+			println("restore got c i " + c);
+		}*/		
+	}
+
+	private void rememberSequenceStatuses() {
+		/*for (ControllerInterface<?> c : this.controller.controllers.get()) {
+			println("remember got c i " + c + ", " + c.getName() + ", " + c.getAddress());
+			println("hidden is " + c.isVisible());
+			if (c.getName().contains("_acc")) {
+				Accordion a = (Accordion) c;
+				for (ControllerInterface<?> t : a.controllers.get()) {
+					println("ACC remember got c i " + c + ", " + a.getName() + ", " + a.getAddress());
+					println("ACC OPEN is " + a.isOpen());				
+				}
+			}
+		}*/		
+	}
+
 	boolean enableControls = false;
 	public boolean isEnableControls() {
 		return enableControls;

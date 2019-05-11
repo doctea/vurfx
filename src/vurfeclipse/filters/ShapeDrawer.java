@@ -1,8 +1,11 @@
 package vurfeclipse.filters;
 
 import java.util.HashMap;
+
+import de.dfki.km.text20.browserplugin.services.sessionrecorder.events.GeometryEvent;
 import processing.core.PGraphics;
 import processing.core.PShape;
+import processing.core.PVector;
 import processing.opengl.PShader;
 import vurfeclipse.*;
 import vurfeclipse.parameters.Parameter;
@@ -17,8 +20,8 @@ public class ShapeDrawer extends SpiralDrawer {
     private static PShader colorShader = APP.getApp().loadShader("surface-colorfrag.glsl", "surface-colorvert.glsl");;
 	
 	public Filter nextMode () {
-		b.nextShape();
-		this.changeParameterValue("shape", b.getShape());//(Integer)this.getParameterValue("shape")+1);
+		//b.nextShape();
+		this.changeParameterValue("shape", ((Integer)this.getParameterValue("shape")+1) % 8);
 		return this;
 	}
 
@@ -109,13 +112,22 @@ public class ShapeDrawer extends SpiralDrawer {
 	    		//s = this.getShapeIndex((Integer)value);
 	    		
 	    		this.clearList = true;//list.clear();
+				if ((int)this.getParameterValue("shape")==7) {
+					this.max_numsections = 3.0f;
+				} else {
+					this.max_numsections = 100f;
+				}
 			}
 		} else if(paramName.equals("shape_f1") 
 				|| paramName.equals("shape_f2")
 				|| paramName.equals("shape_f3")
 				|| paramName.equals("phi")
 				|| paramName.equals("theta")) {
-			this.clearList = true;
+			if ((int)this.getParameterValue("shape")==7) {
+				//println("not clearing list because we've got geometry instead of shape");
+			} else {
+				this.clearList = true;
+			}
 	    } else if(paramName.equals("colour")) {
 	    	value = (int)Float.parseFloat(value.toString());
 	    	//println("got colour change to" + value);
@@ -140,6 +152,7 @@ public class ShapeDrawer extends SpiralDrawer {
 	int colourSwitchEvery = 50; // frames
 
 	PShape shapeCache;
+	private PShape[] shape = new PShape[1];
 	@Override
 	synchronized public PShape collectActualObject(float currRadius, float currentRadian) {
 	      //b = new Blob();
@@ -159,20 +172,66 @@ public class ShapeDrawer extends SpiralDrawer {
 		//return shapeCache;
 		//return b.collectShape(in());
 		//if (s==null) {
-		s = this.getShapeIndex((int) this.getParameterValue("shape")); //)new surface.Horn(APP.getApp(),20,20);
-		//s = new surface.MoebiusStrip(APP.getApp(),20,20);
-		//s = new surface.Torus(APP.getApp(), 20, 20, 5, 5);
-        //s.setScale(1);
-        s.initColors(APP.getApp().color(255, 125, 0));
-        s.initColors((int)this.getParameterValue("colour1"),(int)this.getParameterValue("colour2"));
-        //s.setTexture(in());
-        t = s.getSurface();
-        //t.fill(APP.getApp().color(255, 125, 0));
-        //t.scale(w/3);
-        //t.rotateY((Float)getParameterValue("zRotate"));
-		//}
-		
-		t = s.getSurface();
+		if ((int) this.getParameterValue("shape")<7) {
+			s = this.getShapeIndex((int) this.getParameterValue("shape")); //)new surface.Horn(APP.getApp(),20,20);
+			//s = new surface.MoebiusStrip(APP.getApp(),20,20);
+			//s = new surface.Torus(APP.getApp(), 20, 20, 5, 5);
+	        //s.setScale(1);
+	        s.initColors(APP.getApp().color(255, 125, 0));
+	        s.initColors((int)this.getParameterValue("colour1"),(int)this.getParameterValue("colour2"));
+	        //s.setTexture(in());
+	        //t = s.getSurface();
+	        //t.fill(APP.getApp().color(255, 125, 0));
+	        //t.scale(w/3);
+	        //t.rotateY((Float)getParameterValue("zRotate"));
+			//}
+			
+			t = s.getSurface();
+		} else {
+			//this.shape[(int)this.getParameterValue("shape")-7] = null;
+			//this.shape = new PShape[1];
+				// once object is loaded this is ok until collectobject ruins things :/
+			if ((this.shape[(int)this.getParameterValue("shape")-7]==null)) {
+				println("loading head");
+				//PShape list = APP.getApp().createShape(APP.getApp().GROUP);
+				PShape p = APP.getApp().loadShape("head.obj");
+				//println("got shape " + p);
+				p.scale(20f);
+				
+				// clone the shape before use?
+				/*t = APP.getApp().createShape(PShape.GEOMETRY);
+				t.beginShape();
+				for ( int i = 0 ; i < p.getVertexCount() ; i++ ) {
+					PVector v = p.getVertex(i);
+					t.vertex(v.x, v.y);
+				}
+				t.endShape();*/
+				//t.setKind(p.getKind());
+				
+				//list.addChild(p);
+				//t = APP.getApp().copyShape(list);
+				//t = list;
+
+				this.shape[(int)this.getParameterValue("shape")-7] = p;//list; //list; //APP.getApp().loadShape("head.obj");
+				//this.shape[(int)this.getParameterValue("shape")-7].scale(1.0f);
+			}
+			
+			/*// clone the object
+			t = APP.getApp().createShape(PShape.GEOMETRY);
+			for ( int i = 0 ; i < t.getVertexCount() ; i++ ) {
+				PVector v = t.getVertex(i);
+				t.vertex(v.x, v.y);
+			}			*/
+			
+			//t = APP.getApp().copyShape(this.shape[(int)this.getParameterValue("shape")-7]);
+			t = this.shape[(int)this.getParameterValue("shape")-7];
+			//t.resetMatrix();
+			//t.scale(0.000001f);
+			println("got shape " + t);
+			//t.resetMatrix();
+			//println("shape is " + t.getName());
+			//this.shape[(int)this.getParameterValue("shape")-7].scale(0.0000000001f);
+		}
 		//t.setTexture(in());
 		//t.setTextureUV(0, -0.5f, 0.1f);
 		//t.scale(10f);
